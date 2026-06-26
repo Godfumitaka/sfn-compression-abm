@@ -93,7 +93,7 @@ def redact(
     bitmap や欠番 ID 列は返さない。
     """
 
-    base_graph = _base_graph_from_visibility(visibility_spec)
+    base_graph = _require_base_graph(visibility_spec)
     visible_relation_ids = _visible_relation_ids(G_star, held_out_edge, visibility_spec)
     visible_relations = tuple(
         relation for relation in G_star.relations if relation.relation_id in visible_relation_ids
@@ -133,14 +133,17 @@ def _visible_relation_ids(
     return visible_ids
 
 
-def _base_graph_from_visibility(
+def _require_base_graph(
     visibility_spec: Mapping[str, Any] | Iterable[str] | None,
 ) -> RelationGraph:
-    if isinstance(visibility_spec, Mapping):
-        base_graph = visibility_spec.get("base_graph")
-        if isinstance(base_graph, RelationGraph):
-            return base_graph
-    return RelationGraph(graph_id="base_graph")
+    if not isinstance(visibility_spec, Mapping):
+        raise TypeError("visibility_spec must be a mapping with base_graph")
+    if "base_graph" not in visibility_spec:
+        raise ValueError("visibility_spec must include base_graph")
+    base_graph = visibility_spec["base_graph"]
+    if not isinstance(base_graph, RelationGraph):
+        raise TypeError("visibility_spec['base_graph'] must be a RelationGraph")
+    return base_graph
 
 
 def _append_relation(graph: RelationGraph | None, relation: Relation) -> RelationGraph:
