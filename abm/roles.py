@@ -36,7 +36,11 @@ class ScoreResult:
 
 @dataclass(frozen=True, slots=True)
 class MetricVector:
-    """象限分類に渡す事前登録済み測度ベクトル。"""
+    """象限分類と後続可視化に渡す測度ベクトル。
+
+    `description_length` は記録・探索的可視化用に保持するが、BUILD ORDER 第3段の
+    `QuadrantClassifier` は §7.4 の二軸分類に合わせて使わない。
+    """
 
     transfer_gain: float
     coordination_gain: float
@@ -45,11 +49,10 @@ class MetricVector:
 
 @dataclass(frozen=True, slots=True)
 class Cutpoints:
-    """ラベル非依存の象限分類しきい値。"""
+    """ラベル非依存の二軸象限分類しきい値。"""
 
     transfer: float = 0.0
     coordination: float = 0.0
-    description_length: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -58,7 +61,6 @@ class ClassifiedPoint:
 
     transfer_high: bool
     coordination_high: bool
-    description_length_high: bool
     label: str
 
 
@@ -147,22 +149,24 @@ def QuadrantClassifier(
     metric_vector: MetricVector,
     preregistered_cutpoints: Cutpoints,
 ) -> ClassifiedPoint:
-    """ラベルや seed を使わず、事前登録 cutpoint だけで象限を分類する。"""
+    """ラベルや seed を使わず、二軸の事前登録 cutpoint だけで象限を分類する。
+
+    `description_length` は `MetricVector` に残すが、象限ラベル決定には使わない。
+    """
 
     transfer_high = metric_vector.transfer_gain >= preregistered_cutpoints.transfer
     coordination_high = metric_vector.coordination_gain >= preregistered_cutpoints.coordination
-    description_length_high = (
-        metric_vector.description_length >= preregistered_cutpoints.description_length
-    )
-    label = "T{0}_C{1}_D{2}".format(
-        int(transfer_high),
-        int(coordination_high),
-        int(description_length_high),
-    )
+    if transfer_high and coordination_high:
+        label = "useful_abstraction"
+    elif not transfer_high and coordination_high:
+        label = "myth"
+    elif transfer_high and not coordination_high:
+        label = "isolated_insight"
+    else:
+        label = "noise"
     return ClassifiedPoint(
         transfer_high=transfer_high,
         coordination_high=coordination_high,
-        description_length_high=description_length_high,
         label=label,
     )
 
