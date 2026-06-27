@@ -27,7 +27,7 @@ class MDLParams:
 
 @dataclass(frozen=True, slots=True)
 class CodeLengthBreakdown:
-    """加法的な記述長内訳。"""
+    """合計記述長を構成する加法的な内訳。"""
 
     hypothesis_cost: float
     observed_data_cost: float
@@ -45,6 +45,9 @@ class DescriptionLength:
 
     total: float
     breakdown: CodeLengthBreakdown
+
+    def __post_init__(self) -> None:
+        assert self.total == _breakdown_total(self.breakdown)
 
 
 @dataclass(frozen=True, slots=True)
@@ -123,8 +126,8 @@ def observed_data_cost(
     agent_input: AgentInput,
     mapping_or_alignment: MappingResult | Alignment | ThresholdDecision | None,
     params: MDLParams | None = None,
-) -> tuple[float, int, int, tuple[tuple[str, tuple[str, ...]], ...], tuple[tuple[str, tuple[str, ...]], ...]]:
-    """観測済み target relation だけを、候補対応で説明済みか未説明かに分ける。"""
+) -> tuple[float, float, int, int, tuple[tuple[str, tuple[str, ...]], ...], tuple[tuple[str, tuple[str, ...]], ...]]:
+    """観測済み target relation だけを、説明済みコストと未説明コストに分ける。"""
 
     codebook = params or MDLParams()
     observed_content = _relation_content(agent_input.target_graph_partial)
@@ -137,7 +140,7 @@ def observed_data_cost(
     unexplained = tuple(sorted(observed_content.difference(explained_content)))
     explained_cost = codebook.relation_base_cost * len(explained)
     unexplained_cost = codebook.unexplained_relation_cost * len(unexplained)
-    return explained_cost + unexplained_cost, len(explained), len(unexplained), explained, unexplained
+    return explained_cost, unexplained_cost, len(explained), len(unexplained), explained, unexplained
 
 
 def description_length(
@@ -153,12 +156,18 @@ def description_length(
         mapping_or_alignment,
         codebook,
     )
-    observed_cost, n_explained, n_unexplained, explained, unexplained = observed_data_cost(
+    (
+        observed_cost,
+        unexplained_cost,
+        n_explained,
+        n_unexplained,
+        explained,
+        unexplained,
+    ) = observed_data_cost(
         agent_input,
         mapping_or_alignment,
         codebook,
     )
-    unexplained_cost = codebook.unexplained_relation_cost * n_unexplained
     breakdown = CodeLengthBreakdown(
         hypothesis_cost=hypothesis,
         observed_data_cost=observed_cost,
@@ -166,7 +175,7 @@ def description_length(
         structural_complexity_cost=structural,
         details=hypothesis_details,
     )
-    total = hypothesis + observed_cost + structural
+    total = _breakdown_total(breakdown)
     return MDLResult(
         description_length=DescriptionLength(total=total, breakdown=breakdown),
         n_observed_relations=len(agent_input.target_graph_partial.relations),
@@ -185,6 +194,15 @@ def _extract_alignment(
     if isinstance(mapping_or_alignment, Alignment):
         return mapping_or_alignment
     return None
+
+
+def _breakdown_total(breakdown: CodeLengthBreakdown) -> float:
+    return (
+        breakdown.hypothesis_cost
+        + breakdown.observed_data_cost
+        + breakdown.unexplained_observation_cost
+        + breakdown.structural_complexity_cost
+    )
 
 
 def _explained_content(
