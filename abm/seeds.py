@@ -92,6 +92,7 @@ def water_heat_flow() -> SeedGraphs:
         Relation("water_r5", "requires_path", ("water_r3", "pipe")),
         Relation("water_r6", "source_role", ("upper_tank",)),
         Relation("water_r7", "sink_role", ("lower_tank",)),
+        Relation("water_r8", "carried_substance", ("water",)),
     )
 
     target_entities = (
@@ -108,6 +109,7 @@ def water_heat_flow() -> SeedGraphs:
         Relation("heat_r5", "requires_path", ("heat_r3", "thermal_contact")),
         Relation("heat_r6", "source_role", ("hot_object",)),
         Relation("heat_r7", "sink_role", ("cold_object",)),
+        Relation("heat_r8", "carried_substance", ("heat",)),
     )
 
     held_out = (target_relations[2], target_relations[4])
