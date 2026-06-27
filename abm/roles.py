@@ -128,11 +128,16 @@ def OracleEvaluator(agent_output: AgentOutput, scoring_key: ScoringKey) -> Evalu
 
     prediction = agent_output.prediction
     if isinstance(prediction, EdgePrediction):
-        predicted_id = prediction.edge.relation_id
+        predicted = prediction.edge
+        held_out = scoring_key.held_out_edge
+        content_hit = (
+            predicted.predicate == held_out.predicate
+            and tuple(predicted.arguments) == tuple(held_out.arguments)
+        )
         return EvaluationResult(
-            hit=int(predicted_id == scoring_key.held_out_edge.relation_id),
+            hit=int(content_hit),
             coverage=1,
-            predicted_edge=predicted_id,
+            predicted_edge=predicted.relation_id,
             abstain_reason=None,
         )
     if isinstance(prediction, Abstain):

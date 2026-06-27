@@ -98,6 +98,10 @@ def redact(
     visible_relations = tuple(
         relation for relation in G_star.relations if relation.relation_id in visible_relation_ids
     )
+    visible_relations = _drop_relations_referencing_hidden(
+        visible_relations,
+        {held_out_edge.relation_id},
+    )
     target_graph_partial = RelationGraph(
         graph_id=G_star.graph_id,
         entities=tuple(G_star.entities),
@@ -131,6 +135,25 @@ def _visible_relation_ids(
     visible_ids.intersection_update(all_ids)
     visible_ids.discard(hidden_relation.relation_id)
     return visible_ids
+
+
+def _drop_relations_referencing_hidden(
+    relations: tuple[Relation, ...],
+    hidden_ids: set[str],
+) -> tuple[Relation, ...]:
+    """不可視 relation_id を引数に持つ relation を推移的に可視集合から除く。"""
+
+    hidden = set(hidden_ids)
+    changed = True
+    while changed:
+        changed = False
+        for relation in relations:
+            if relation.relation_id in hidden:
+                continue
+            if any(argument in hidden for argument in relation.arguments):
+                hidden.add(relation.relation_id)
+                changed = True
+    return tuple(relation for relation in relations if relation.relation_id not in hidden)
 
 
 def _require_base_graph(
