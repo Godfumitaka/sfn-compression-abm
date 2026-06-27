@@ -73,7 +73,7 @@ def anti_analogy(seed: SeedGraphs, params: PerturbationParams) -> PerturbationRe
 
 def role_reversal(seed: SeedGraphs, params: PerturbationParams) -> PerturbationResult:
     target_full = _copy_graph(seed.target_graph, _graph_id(seed, params, "role_reversal"))
-    target_full = _reverse_first_matching_relation(target_full, params.reversible_predicates)
+    target_full = _reverse_primary_or_connected_relation(seed, target_full, params.reversible_predicates)
     held_out_edge = _primary_held_out_edge(seed, target_full)
     hidden_ids = _relation_ids_by_predicate(target_full, params.hidden_binding_predicates)
     visible_ids = _visible_ids(target_full, held_out_edge, hidden_ids)
@@ -83,10 +83,12 @@ def role_reversal(seed: SeedGraphs, params: PerturbationParams) -> PerturbationR
 def role_divergence(seed: SeedGraphs, params: PerturbationParams) -> PerturbationResult:
     _require_two_discriminating_relations(seed.target_graph, params.discriminating_predicates)
     target_full = _copy_graph(seed.target_graph, _graph_id(seed, params, "role_divergence"))
-    target_full = _swap_first_two_discriminating_arguments(
+    held_out_edge = _primary_held_out_edge(seed, target_full)
+    target_full, entity_replacements = _swap_first_two_discriminating_arguments(
         target_full,
         params.discriminating_predicates,
     )
+    target_full = _rewrite_relation_arguments(target_full, held_out_edge.relation_id, entity_replacements)
     held_out_edge = _primary_held_out_edge(seed, target_full)
     return _result(seed, target_full, held_out_edge, TargetType.ROLE_DIVERGENCE)
 
@@ -230,14 +232,25 @@ def _break_first_higher_order_premise(
     return _replace_relations(graph, tuple(changed))
 
 
-def _reverse_first_matching_relation(
+def _reverse_primary_or_connected_relation(
+    seed: SeedGraphs,
     graph: RelationGraph,
     predicates: tuple[str, ...],
 ) -> RelationGraph:
+    primary = _primary_held_out_edge(seed, graph)
+    connected_ids = _structurally_connected_relation_ids(graph, primary.relation_id)
+    candidate_ids = (primary.relation_id, *tuple(sorted(connected_ids)))
     changed: list[Relation] = []
-    replaced = False
+    replacement_id = ""
+    for relation_id in candidate_ids:
+        relation = _relation_by_id(graph, relation_id)
+        if relation.predicate in predicates and len(relation.arguments) >= 2:
+            replacement_id = relation.relation_id
+            break
+    if not replacement_id:
+        raise ValueError("role_reversal requires a reversible primary or connected relation")
     for relation in graph.relations:
-        if not replaced and relation.predicate in predicates and len(relation.arguments) >= 2:
+        if relation.relation_id == replacement_id:
             changed.append(
                 Relation(
                     relation.relation_id,
@@ -246,10 +259,28 @@ def _reverse_first_matching_relation(
                     relation.attributes,
                 )
             )
-            replaced = True
         else:
             changed.append(relation)
     return _replace_relations(graph, tuple(changed))
+
+
+def _relation_by_id(graph: RelationGraph, relation_id: str) -> Relation:
+    for relation in graph.relations:
+        if relation.relation_id == relation_id:
+            return relation
+    raise ValueError(f"relation not found: {relation_id}")
+
+
+def _structurally_connected_relation_ids(graph: RelationGraph, relation_id: str) -> frozenset[str]:
+    relation_ids = {relation.relation_id for relation in graph.relations}
+    connected: set[str] = set()
+    for relation in graph.relations:
+        if relation_id in relation.arguments:
+            connected = connected | {
+                argument for argument in relation.arguments if argument in relation_ids
+            }
+    connected.discard(relation_id)
+    return frozenset(connected)
 
 
 def _relation_ids_by_predicate(graph: RelationGraph, predicates: tuple[str, ...]) -> frozenset[str]:
@@ -280,9 +311,13 @@ def _discriminating_relations(
 def _swap_first_two_discriminating_arguments(
     graph: RelationGraph,
     predicates: tuple[str, ...],
-) -> RelationGraph:
+) -> tuple[RelationGraph, dict[str, str]]:
     discriminators = _discriminating_relations(graph, predicates)
     first, second = discriminators[0], discriminators[1]
+    entity_replacements = {
+        first.arguments[0]: second.arguments[0],
+        second.arguments[0]: first.arguments[0],
+    }
     replacements = {
         first.relation_id: Relation(
             first.relation_id,
@@ -297,10 +332,32 @@ def _swap_first_two_discriminating_arguments(
             second.attributes,
         ),
     }
-    return _replace_relations(
-        graph,
-        tuple(replacements.get(relation.relation_id, relation) for relation in graph.relations),
+    return (
+        _replace_relations(
+            graph,
+            tuple(replacements.get(relation.relation_id, relation) for relation in graph.relations),
+        ),
+        entity_replacements,
     )
+
+
+def _rewrite_relation_arguments(
+    graph: RelationGraph,
+    relation_id: str,
+    entity_replacements: dict[str, str],
+) -> RelationGraph:
+    changed = tuple(
+        Relation(
+            relation.relation_id,
+            relation.predicate,
+            tuple(entity_replacements.get(argument, argument) for argument in relation.arguments),
+            relation.attributes,
+        )
+        if relation.relation_id == relation_id
+        else relation
+        for relation in graph.relations
+    )
+    return _replace_relations(graph, changed)
 
 
 def _add_surplus_subgraph(graph: RelationGraph, params: PerturbationParams) -> RelationGraph:
