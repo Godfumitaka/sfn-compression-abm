@@ -174,7 +174,7 @@ def project(
     if not candidates:
         return Abstain(reason="no_projectable_relation")
     ordered = sorted(candidates, key=lambda item: (item[0], item[1]))
-    if len(ordered) > 1 and ordered[0][0] == ordered[1][0] and ordered[0][1] == ordered[1][1]:
+    if len(ordered) > 1 and ordered[0][0] == ordered[1][0]:
         return Abstain(reason="ambiguous_projection")
     _ = partial_relation_ids
     return EdgePrediction(edge=ordered[0][2])
