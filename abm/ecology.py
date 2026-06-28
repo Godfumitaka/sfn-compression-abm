@@ -185,7 +185,8 @@ def build_ecology_plan(
                 )
             )
     ordered = enforce_presentation_order(instances) if apply_order_policy else _reindex(instances)
-    plan = EcologyPlan(profile=profile, instances=ordered, expected_counts=counts)
+    expected_counts = {key: value for key, value in counts.items() if value}
+    plan = EcologyPlan(profile=profile, instances=ordered, expected_counts=expected_counts)
     validate_ecology_plan(plan, operator_names=known)
     return plan
 
@@ -226,9 +227,8 @@ def validate_ecology_plan(
         raise ValueError("isomorphic presentations must precede role_divergence presentations")
     if plan.expected_counts:
         observed = Counter(item.operator_name for item in plan.instances)
-        for operator_name, expected_count in plan.expected_counts.items():
-            if observed.get(operator_name, 0) != expected_count:
-                raise ValueError("plan counts do not match expected_counts")
+        if dict(observed) != dict(plan.expected_counts):
+            raise ValueError("plan counts do not match expected_counts")
 
 
 def _reindex(instances: tuple[InstancePlan, ...] | list[InstancePlan]) -> tuple[InstancePlan, ...]:

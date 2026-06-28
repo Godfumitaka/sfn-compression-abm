@@ -9,6 +9,7 @@ from abm.ecology import (
     ALPHA_PROFILE,
     BETA_PROFILE,
     DEFAULT_ECOLOGY_PROFILES,
+    DEFAULT_OPERATOR_NAMES,
     EcologyPlan,
     EcologyProfile,
     InstancePlan,
@@ -101,6 +102,25 @@ def test_module_source_has_no_forbidden_boundary_dependencies():
     source = inspect.getsource(ecology)
     for token in ("OracleView", "ScoringKey", "OracleEvaluator", "G_star", "held_out_edge", "AgentInput"):
         assert token not in source
+
+
+def test_validate_expected_counts_rejects_extra_observed_operator():
+    plan = EcologyPlan(
+        ALPHA_PROFILE,
+        (
+            InstancePlan("x1", "s", "isomorphic", 0),
+            InstancePlan("x2", "s", "surplus", 1),
+        ),
+        expected_counts={"isomorphic": 1},
+    )
+    with pytest.raises(ValueError, match="plan counts do not match expected_counts"):
+        validate_ecology_plan(plan)
+
+
+def test_default_operator_names_match_perturbation_registry():
+    from abm.perturbations import perturbations
+
+    assert set(DEFAULT_OPERATOR_NAMES) == {op.__name__ for op in perturbations()}
 
 
 def test_stratification_is_pure_metadata_grouping():
