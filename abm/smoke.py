@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from collections.abc import Callable, Mapping
+from typing import Literal
 
 from abm.domains import Abstain, AgentOutput, ScoringKey
 from abm.gains import (
@@ -25,7 +26,7 @@ from abm.gains import (
     transfer_metrics,
 )
 from abm.mdl import MDLParams, description_length
-from abm.perturbations import PerturbationOperator, PerturbationParams, anti_analogy, isomorphic
+from abm.perturbations import PerturbationOperator, PerturbationParams, anti_analogy, isomorphic, role_divergence as _role_divergence
 from abm.roles import OracleEvaluator
 from abm.seeds import SeedGraphs, solar_system_atom, water_heat_flow
 from abm.sme import SMEParams, apply_threshold, map_graphs, project
@@ -58,6 +59,46 @@ class SmokeTrialResult:
     flat_matcher_baseline_record: BaselineTrialRecord | None = None
 
 
+RoleDivergenceArm = Literal["prototype_absent", "prototype_present"]
+
+
+@dataclass(frozen=True, slots=True)
+class RoleDivergenceSmokeConfig:
+    seed_name: str
+    threshold: float = 0.0
+    sme_params: SMEParams | None = None
+    mdl_params: MDLParams | None = None
+    perturbation_params: PerturbationParams = PerturbationParams(instance_id="stage_11b_role_divergence_smoke")
+    trial_id_prefix: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class RoleDivergenceArmResult:
+    arm: RoleDivergenceArm
+    seed_name: str
+    preparation_trial: SmokeTrialResult | None
+    role_divergence_trial: SmokeTrialResult
+    prototype_present_at_presentation: bool
+    prototype_inert: bool
+    notes: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class RoleDivergenceArmDifference:
+    hit_delta: int
+    coverage_delta: int
+    description_length_delta: float
+    sme_total_score_delta: float
+
+
+@dataclass(frozen=True, slots=True)
+class RoleDivergenceSmokeResult:
+    seed_name: str
+    absent_arm: RoleDivergenceArmResult
+    present_arm: RoleDivergenceArmResult
+    arm_difference: RoleDivergenceArmDifference
+
+
 @dataclass(frozen=True, slots=True)
 class SmokeSuiteResult:
     results: tuple[SmokeTrialResult, ...]
@@ -82,52 +123,118 @@ _TRIAL_ORDER: tuple[tuple[str, str], ...] = (
 )
 
 
+def run_role_divergence_smoke_trial(config: RoleDivergenceSmokeConfig, *, trial_id: str | None = None) -> SmokeTrialResult:
+    """role_divergence 専用の単発 smoke trial を SME 経路だけで実行する。
+
+    Stage 11a の `run_smoke_trial()` は意図的に role_divergence を受け付けないため、
+    Stage 11b は専用入口を使う。AgentState.prototype は現在の SME 予測経路に
+    接続されていないので、ここでも prototype を写像・MDL・threshold に注入しない。
+    """
+
+    return _run_trial(
+        seed_name=config.seed_name,
+        operator_name="role_divergence",
+        operator=_role_divergence,
+        threshold=config.threshold,
+        sme_params=config.sme_params,
+        mdl_params=config.mdl_params,
+        perturbation_params=config.perturbation_params,
+        trial_id=trial_id or _stage_11b_trial_id(config, "prototype_absent", "role_divergence"),
+    )
+
+
+def run_role_divergence_two_arm_smoke(config: RoleDivergenceSmokeConfig) -> RoleDivergenceSmokeResult:
+    """role_divergence の prototype_absent / prototype_present 二腕を固定順で実行する。
+
+    実行順は absent role_divergence → present isomorphic preparation → present
+    role_divergence。準備と role_divergence の間に他 operator や ecology schedule は挟まない。
+    現在の予測配線は map_graphs→apply_threshold→project であり prototype を読まないため、
+    present 腕は「準備が直前にあった」ことだけを記録し、効果は偽装しない。
+    """
+
+    prefix = config.trial_id_prefix or f"stage_11b::{config.seed_name}"
+    absent_trial = run_role_divergence_smoke_trial(
+        config, trial_id=f"{prefix}::prototype_absent::role_divergence"
+    )
+    preparation_trial = _run_trial(
+        seed_name=config.seed_name,
+        operator_name="isomorphic",
+        operator=isomorphic,
+        threshold=config.threshold,
+        sme_params=config.sme_params,
+        mdl_params=config.mdl_params,
+        perturbation_params=config.perturbation_params,
+        trial_id=f"{prefix}::prototype_present::isomorphic_preparation",
+    )
+    present_trial = run_role_divergence_smoke_trial(
+        config, trial_id=f"{prefix}::prototype_present::role_divergence"
+    )
+    inert_note = "prototype is currently inert because no prototype-to-prediction path exists"
+    absent_arm = RoleDivergenceArmResult(
+        arm="prototype_absent",
+        seed_name=config.seed_name,
+        preparation_trial=None,
+        role_divergence_trial=absent_trial,
+        prototype_present_at_presentation=False,
+        prototype_inert=True,
+        notes=(inert_note,),
+    )
+    present_arm = RoleDivergenceArmResult(
+        arm="prototype_present",
+        seed_name=config.seed_name,
+        preparation_trial=preparation_trial,
+        role_divergence_trial=present_trial,
+        prototype_present_at_presentation=True,
+        prototype_inert=True,
+        notes=(
+            "isomorphic preparation immediately precedes role_divergence",
+            inert_note,
+        ),
+    )
+    return RoleDivergenceSmokeResult(
+        seed_name=config.seed_name,
+        absent_arm=absent_arm,
+        present_arm=present_arm,
+        arm_difference=_arm_difference(absent_trial, present_trial),
+    )
+
+
+def run_minimal_role_divergence_smoke_suite(
+    *,
+    threshold: float = 0.0,
+    sme_params: SMEParams | None = None,
+    mdl_params: MDLParams | None = None,
+    perturbation_params: PerturbationParams | None = None,
+) -> tuple[RoleDivergenceSmokeResult, ...]:
+    """既存 2 seed だけで Stage 11b 二腕 smoke を固定順に実行する。"""
+
+    params = perturbation_params or PerturbationParams(instance_id="stage_11b_role_divergence_smoke")
+    return tuple(
+        run_role_divergence_two_arm_smoke(
+            RoleDivergenceSmokeConfig(
+                seed_name=seed_name,
+                threshold=threshold,
+                sme_params=sme_params,
+                mdl_params=mdl_params,
+                perturbation_params=params,
+            )
+        )
+        for seed_name in _SEEDS
+    )
+
+
 def run_smoke_trial(config: SmokeTrialConfig) -> SmokeTrialResult:
     """1 seed × 1 operator を oracle-free な map→threshold→project→MDL で実行する。"""
 
-    seed_constructor = _seed_constructor(config.seed_name)
-    operator = _operator(config.operator_name)
-    perturbation = operator(seed_constructor(), config.perturbation_params)
-    agent_input = perturbation.agent_input
-    scoring_key = ScoringKey(held_out_edge=perturbation.oracle_view.held_out_edge)
-
-    mapping_result = map_graphs(agent_input.base_graph, agent_input.target_graph_partial, config.sme_params)
-    decision = apply_threshold(mapping_result, config.threshold)
-    if decision.accepted:
-        prediction = project(mapping_result.alignment, agent_input.base_graph, agent_input.target_graph_partial)
-    else:
-        prediction = Abstain(reason="below_threshold")
-    mdl_result = description_length(agent_input, mapping_result, config.mdl_params)
-
-    record = prediction_record(prediction, evaluator=OracleEvaluator, scoring_key=scoring_key)
-    frequency_prediction = frequency_baseline(agent_input)
-    frequency_record = baseline_record(
-        FREQUENCY_BASELINE,
-        frequency_prediction,
-        evaluator=OracleEvaluator,
-        scoring_key=scoring_key,
-    )
-    flat_prediction = flat_matcher_baseline(agent_input)
-    flat_record = baseline_record(
-        FLAT_MATCHER_BASELINE,
-        flat_prediction,
-        evaluator=OracleEvaluator,
-        scoring_key=scoring_key,
-    )
-
-    return SmokeTrialResult(
-        trial_id=config.trial_id or _trial_id(config.seed_name, config.operator_name),
+    return _run_trial(
         seed_name=config.seed_name,
         operator_name=config.operator_name,
-        prediction_kind=record.prediction_kind,
-        prediction_category=record.prediction_category,
-        hit=int(record.hit),
-        coverage=record.coverage,
-        description_length=mdl_result.description_length.total,
-        sme_total_score=mapping_result.alignment.total_score,
-        abstain_reason=record.abstain_reason,
-        frequency_baseline_record=frequency_record,
-        flat_matcher_baseline_record=flat_record,
+        operator=_operator(config.operator_name),
+        threshold=config.threshold,
+        sme_params=config.sme_params,
+        mdl_params=config.mdl_params,
+        perturbation_params=config.perturbation_params,
+        trial_id=config.trial_id or _trial_id(config.seed_name, config.operator_name),
     )
 
 
@@ -177,6 +284,76 @@ def summarize_smoke_suite(result: SmokeSuiteResult) -> Mapping[str, float | int 
         "frequency_lift": None if result.frequency_lift is None else result.frequency_lift.lift,
         "flat_matcher_lift": None if result.flat_matcher_lift is None else result.flat_matcher_lift.lift,
     }
+
+
+def _run_trial(
+    *,
+    seed_name: str,
+    operator_name: str,
+    operator: PerturbationOperator,
+    threshold: float,
+    sme_params: SMEParams | None,
+    mdl_params: MDLParams | None,
+    perturbation_params: PerturbationParams,
+    trial_id: str,
+) -> SmokeTrialResult:
+    seed_constructor = _seed_constructor(seed_name)
+    perturbation = operator(seed_constructor(), perturbation_params)
+    agent_input = perturbation.agent_input
+    scoring_key = ScoringKey(held_out_edge=perturbation.oracle_view.held_out_edge)
+
+    mapping_result = map_graphs(agent_input.base_graph, agent_input.target_graph_partial, sme_params)
+    decision = apply_threshold(mapping_result, threshold)
+    if decision.accepted:
+        prediction = project(mapping_result.alignment, agent_input.base_graph, agent_input.target_graph_partial)
+    else:
+        prediction = Abstain(reason="below_threshold")
+    mdl_result = description_length(agent_input, mapping_result, mdl_params)
+
+    record = prediction_record(prediction, evaluator=OracleEvaluator, scoring_key=scoring_key)
+    frequency_prediction = frequency_baseline(agent_input)
+    frequency_record = baseline_record(
+        FREQUENCY_BASELINE,
+        frequency_prediction,
+        evaluator=OracleEvaluator,
+        scoring_key=scoring_key,
+    )
+    flat_prediction = flat_matcher_baseline(agent_input)
+    flat_record = baseline_record(
+        FLAT_MATCHER_BASELINE,
+        flat_prediction,
+        evaluator=OracleEvaluator,
+        scoring_key=scoring_key,
+    )
+
+    return SmokeTrialResult(
+        trial_id=trial_id,
+        seed_name=seed_name,
+        operator_name=operator_name,
+        prediction_kind=record.prediction_kind,
+        prediction_category=record.prediction_category,
+        hit=int(record.hit),
+        coverage=record.coverage,
+        description_length=mdl_result.description_length.total,
+        sme_total_score=mapping_result.alignment.total_score,
+        abstain_reason=record.abstain_reason,
+        frequency_baseline_record=frequency_record,
+        flat_matcher_baseline_record=flat_record,
+    )
+
+
+def _stage_11b_trial_id(config: RoleDivergenceSmokeConfig, arm: RoleDivergenceArm, operator_name: str) -> str:
+    prefix = config.trial_id_prefix or f"stage_11b::{config.seed_name}"
+    return f"{prefix}::{arm}::{operator_name}"
+
+
+def _arm_difference(absent: SmokeTrialResult, present: SmokeTrialResult) -> RoleDivergenceArmDifference:
+    return RoleDivergenceArmDifference(
+        hit_delta=present.hit - absent.hit,
+        coverage_delta=present.coverage - absent.coverage,
+        description_length_delta=present.description_length - absent.description_length,
+        sme_total_score_delta=present.sme_total_score - absent.sme_total_score,
+    )
 
 
 def _seed_constructor(seed_name: str) -> Callable[[], SeedGraphs]:
