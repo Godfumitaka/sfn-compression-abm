@@ -146,6 +146,7 @@ class AgentConfig:
     threshold: float
     correction_mode: CorrectionMode
     lambda_: float = 1.0
+    prototype_prior_weight: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
