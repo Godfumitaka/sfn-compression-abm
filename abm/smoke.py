@@ -41,6 +41,7 @@ class SmokeTrialConfig:
     mdl_params: MDLParams | None = None
     perturbation_params: PerturbationParams = PerturbationParams(instance_id="stage_11a_smoke")
     trial_id: str | None = None
+    prototype_prior_weight: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -70,6 +71,7 @@ class RoleDivergenceSmokeConfig:
     mdl_params: MDLParams | None = None
     perturbation_params: PerturbationParams = PerturbationParams(instance_id="stage_11b_role_divergence_smoke")
     trial_id_prefix: str | None = None
+    prototype_prior_weight: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -123,7 +125,12 @@ _TRIAL_ORDER: tuple[tuple[str, str], ...] = (
 )
 
 
-def run_role_divergence_smoke_trial(config: RoleDivergenceSmokeConfig, *, trial_id: str | None = None) -> SmokeTrialResult:
+def run_role_divergence_smoke_trial(
+    config: RoleDivergenceSmokeConfig,
+    *,
+    trial_id: str | None = None,
+    use_prototype: bool = False,
+) -> SmokeTrialResult:
     """role_divergence 専用の単発 smoke trial を SME 経路だけで実行する。
 
     Stage 11a の `run_smoke_trial()` は意図的に role_divergence を受け付けないため、
@@ -140,6 +147,8 @@ def run_role_divergence_smoke_trial(config: RoleDivergenceSmokeConfig, *, trial_
         mdl_params=config.mdl_params,
         perturbation_params=config.perturbation_params,
         trial_id=trial_id or _stage_11b_trial_id(config, "prototype_absent", "role_divergence"),
+        prototype_prior_weight=config.prototype_prior_weight if use_prototype else 0.0,
+        use_prototype=use_prototype,
     )
 
 
@@ -165,11 +174,18 @@ def run_role_divergence_two_arm_smoke(config: RoleDivergenceSmokeConfig) -> Role
         mdl_params=config.mdl_params,
         perturbation_params=config.perturbation_params,
         trial_id=f"{prefix}::prototype_present::isomorphic_preparation",
+        prototype_prior_weight=config.prototype_prior_weight,
+        use_prototype=True,
     )
     present_trial = run_role_divergence_smoke_trial(
-        config, trial_id=f"{prefix}::prototype_present::role_divergence"
+        config,
+        trial_id=f"{prefix}::prototype_present::role_divergence",
+        use_prototype=True,
     )
-    inert_note = "prototype is currently inert because no prototype-to-prediction path exists"
+    inert_note = (
+        "prototype-to-prediction path remains inert unless prototype_prior_weight "
+        "is configured positive"
+    )
     absent_arm = RoleDivergenceArmResult(
         arm="prototype_absent",
         seed_name=config.seed_name,
@@ -205,6 +221,7 @@ def run_minimal_role_divergence_smoke_suite(
     sme_params: SMEParams | None = None,
     mdl_params: MDLParams | None = None,
     perturbation_params: PerturbationParams | None = None,
+    prototype_prior_weight: float = 0.0,
 ) -> tuple[RoleDivergenceSmokeResult, ...]:
     """既存 2 seed だけで Stage 11b 二腕 smoke を固定順に実行する。"""
 
@@ -217,6 +234,7 @@ def run_minimal_role_divergence_smoke_suite(
                 sme_params=sme_params,
                 mdl_params=mdl_params,
                 perturbation_params=params,
+                prototype_prior_weight=prototype_prior_weight,
             )
         )
         for seed_name in _SEEDS
@@ -244,6 +262,7 @@ def run_minimal_smoke_suite(
     sme_params: SMEParams | None = None,
     mdl_params: MDLParams | None = None,
     perturbation_params: PerturbationParams | None = None,
+    prototype_prior_weight: float = 0.0,
 ) -> SmokeSuiteResult:
     """Stage 11a の固定 2 seeds × 2 operators suite だけを実行する。"""
 
@@ -258,6 +277,7 @@ def run_minimal_smoke_suite(
                 mdl_params=mdl_params,
                 perturbation_params=params,
                 trial_id=_trial_id(seed_name, operator_name),
+                prototype_prior_weight=prototype_prior_weight,
             )
         )
         for seed_name, operator_name in _TRIAL_ORDER
@@ -296,16 +316,30 @@ def _run_trial(
     mdl_params: MDLParams | None,
     perturbation_params: PerturbationParams,
     trial_id: str,
+    prototype_prior_weight: float = 0.0,
+    use_prototype: bool = False,
 ) -> SmokeTrialResult:
     seed_constructor = _seed_constructor(seed_name)
     perturbation = operator(seed_constructor(), perturbation_params)
     agent_input = perturbation.agent_input
     scoring_key = ScoringKey(held_out_edge=perturbation.oracle_view.held_out_edge)
 
-    mapping_result = map_graphs(agent_input.base_graph, agent_input.target_graph_partial, sme_params)
+    prototype = seed_constructor().target_graph if use_prototype else None
+    mapping_result = map_graphs(
+        agent_input.base_graph,
+        agent_input.target_graph_partial,
+        sme_params,
+        prototype=prototype,
+        prototype_prior_weight=prototype_prior_weight,
+    )
     decision = apply_threshold(mapping_result, threshold)
     if decision.accepted:
-        prediction = project(mapping_result.alignment, agent_input.base_graph, agent_input.target_graph_partial)
+        prediction = project(
+            mapping_result.alignment,
+            agent_input.base_graph,
+            agent_input.target_graph_partial,
+            prototype_prior_weight=prototype_prior_weight,
+        )
     else:
         prediction = Abstain(reason="below_threshold")
     mdl_result = description_length(agent_input, mapping_result, mdl_params)
