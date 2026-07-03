@@ -196,6 +196,8 @@ def project(
     alignment: Alignment,
     base_graph: RelationGraph,
     target_graph_partial: RelationGraph,
+    *,
+    prototype_prior_weight: float = 0.0,
 ) -> Prediction:
     """alignment で partial 側へ写像可能な未観測一階 relation を投影する。"""
 
@@ -210,12 +212,14 @@ def project(
         if content in existing_content:
             continue
         contribution = _projection_support(relation, base_graph, alignment.relation_mapping)
+        prior_term = alignment.prototype_prior_terms.get(relation_id, 0.0)
+        rank = contribution + prototype_prior_weight * prior_term
         projected = Relation(
             relation_id=f"sme_projection__{relation.relation_id}",
             predicate=relation.predicate,
             arguments=mapped_arguments,
         )
-        candidates.append((-contribution, relation.relation_id, projected))
+        candidates.append((-rank, relation.relation_id, projected))
     if not candidates:
         return Abstain(reason="no_projectable_relation")
     ordered = sorted(candidates, key=lambda item: (item[0], item[1]))
@@ -245,7 +249,12 @@ def run_sme(
     decision = apply_threshold(mapping, threshold)
     if not decision.accepted:
         return Abstain(reason="below_threshold")
-    return project(mapping.alignment, agent_input.base_graph, agent_input.target_graph_partial)
+    return project(
+        mapping.alignment,
+        agent_input.base_graph,
+        agent_input.target_graph_partial,
+        prototype_prior_weight=prototype_prior_weight,
+    )
 
 
 def _alignment_candidates(
@@ -407,9 +416,10 @@ def prototype_prior_score(
 
     weights = params or PrototypePriorParams()
     base_relations = _relations_by_id(base_graph)
-    target_signatures = _role_signatures(target_graph_partial)
+    base_signatures = _role_signatures(base_graph)
     prototype_signatures = _role_signatures(prototype)
-    target_to_prototype = _role_correspondence(target_signatures, prototype_signatures)
+    base_to_prototype = _role_correspondence(base_signatures, prototype_signatures)
+    target_to_prototype = _aligned_target_to_prototype(entity_mapping, base_to_prototype)
     prototype_relation_patterns = _prototype_relation_patterns(prototype)
     predicate_frequencies = _predicate_frequencies(prototype, base_graph)
 
@@ -417,7 +427,7 @@ def prototype_prior_score(
     for relation_id in sorted(candidate_projections):
         relation = base_relations[relation_id]
         mapped = tuple(entity_mapping[arg] for arg in relation.arguments)
-        correspondent_options = tuple(target_to_prototype.get(entity, ()) for entity in mapped)
+        correspondent_options = tuple(base_to_prototype.get(entity, ()) for entity in relation.arguments)
         shared = False
         if correspondent_options and all(correspondent_options):
             for prototype_arguments in product(*correspondent_options):
@@ -449,19 +459,29 @@ def _role_signatures(graph: RelationGraph) -> dict[str, tuple[tuple[str, int], .
 
 
 def _role_correspondence(
-    target_signatures: Mapping[str, tuple[tuple[str, int], ...]],
+    base_signatures: Mapping[str, tuple[tuple[str, int], ...]],
     prototype_signatures: Mapping[str, tuple[tuple[str, int], ...]],
 ) -> dict[str, tuple[str, ...]]:
     result: dict[str, tuple[str, ...]] = {}
-    for target_entity, target_signature in sorted(target_signatures.items()):
-        target_roles = frozenset(target_signature)
+    for base_entity, base_signature in sorted(base_signatures.items()):
+        base_roles = frozenset(base_signature)
         matches = [
             prototype_entity
             for prototype_entity, prototype_signature in sorted(prototype_signatures.items())
-            if target_roles.issubset(frozenset(prototype_signature))
+            if base_roles.issubset(frozenset(prototype_signature))
         ]
-        result[target_entity] = tuple(sorted(matches))
+        result[base_entity] = tuple(sorted(matches))
     return result
+
+
+def _aligned_target_to_prototype(
+    entity_mapping: Mapping[str, str],
+    base_to_prototype: Mapping[str, tuple[str, ...]],
+) -> dict[str, tuple[str, ...]]:
+    return {
+        target_entity: tuple(base_to_prototype.get(base_entity, ()))
+        for base_entity, target_entity in sorted(entity_mapping.items())
+    }
 
 
 def _prototype_relation_patterns(prototype: RelationGraph) -> dict[str, frozenset[tuple[str, ...]]]:
@@ -493,15 +513,24 @@ def _has_visible_role_conflict(
     if not prototype_patterns:
         return False
     relation_ids = _relation_ids(target_graph_partial)
-    mapped_set = set(mapped_arguments)
     for relation in sorted(target_graph_partial.relations, key=_relation_key):
+        if not _is_visible_role_determining_relation(relation, relation_ids):
+            continue
         if relation.predicate != predicate or len(relation.arguments) != len(mapped_arguments):
             continue
         if any(argument in relation_ids for argument in relation.arguments):
             continue
-        if not mapped_set.intersection(relation.arguments):
-            continue
         options = tuple(target_to_prototype.get(argument, ()) for argument in relation.arguments)
-        if all(options) and not any(arguments in prototype_patterns for arguments in product(*options)):
+        mapped_options = tuple(target_to_prototype.get(argument, ()) for argument in mapped_arguments)
+        if (
+            all(options)
+            and all(mapped_options)
+            and any(arguments in prototype_patterns for arguments in product(*mapped_options))
+            and not any(arguments in prototype_patterns for arguments in product(*options))
+        ):
             return True
     return False
+
+
+def _is_visible_role_determining_relation(relation: Relation, relation_ids: frozenset[str]) -> bool:
+    return 0 < len(relation.arguments) <= 2 and all(argument not in relation_ids for argument in relation.arguments)
