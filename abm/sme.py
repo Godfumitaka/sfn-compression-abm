@@ -57,6 +57,9 @@ class PrototypePriorParams:
     theta: float = 1.0
     conflict_beta: float = 0.5
     size_exponent: float = 1.0
+    gamma: float = 1.0
+    lambda_: float = 1.0
+    embed_depth_cap: int = 3
 
 
 @dataclass(frozen=True, slots=True)
@@ -421,6 +424,8 @@ def prototype_prior_score(
     base_to_prototype = _role_correspondence(base_signatures, prototype_signatures)
     target_to_prototype = _aligned_target_to_prototype(entity_mapping, base_to_prototype)
     prototype_relation_patterns = _prototype_relation_patterns(prototype)
+    prototype_relation_ids_by_pattern = _prototype_relation_ids_by_pattern(prototype)
+    prototype_parents = _prototype_parent_relation_ids(prototype)
     predicate_frequencies = _predicate_frequencies(prototype, base_graph)
 
     terms: dict[str, float] = {}
@@ -429,10 +434,16 @@ def prototype_prior_score(
         mapped = tuple(entity_mapping[arg] for arg in relation.arguments)
         correspondent_options = tuple(base_to_prototype.get(entity, ()) for entity in relation.arguments)
         shared = False
+        matched_prototype_relation_id: str | None = None
         if correspondent_options and all(correspondent_options):
             for prototype_arguments in product(*correspondent_options):
                 if prototype_arguments in prototype_relation_patterns.get(relation.predicate, frozenset()):
                     shared = True
+                    matched_prototype_relation_id = _unique_prototype_relation_id(
+                        prototype_relation_ids_by_pattern,
+                        relation.predicate,
+                        prototype_arguments,
+                    )
                     break
         conflict = _has_visible_role_conflict(
             relation.predicate,
@@ -441,8 +452,21 @@ def prototype_prior_score(
             prototype_relation_patterns,
             target_graph_partial,
         )
+        embed = (
+            _prototype_relation_embed(
+                matched_prototype_relation_id,
+                prototype_parents,
+                weights.embed_depth_cap,
+                weights.lambda_,
+            )
+            if shared and matched_prototype_relation_id is not None
+            else 0.0
+        )
         size_weight = 1.0 / (predicate_frequencies.get(relation.predicate, 0) + 1.0) ** weights.size_exponent
-        terms[relation_id] = weights.theta * size_weight * float(shared) - weights.conflict_beta * float(conflict)
+        terms[relation_id] = (
+            weights.theta * size_weight * float(shared) * (1.0 + weights.gamma * embed)
+            - weights.conflict_beta * float(conflict)
+        )
     return PrototypePriorResult(sum(terms.values()), terms)
 
 
@@ -492,6 +516,65 @@ def _prototype_relation_patterns(prototype: RelationGraph) -> dict[str, frozense
             continue
         patterns.setdefault(relation.predicate, set()).add(tuple(relation.arguments))
     return {predicate: frozenset(sorted(arguments)) for predicate, arguments in sorted(patterns.items())}
+
+
+def _prototype_relation_ids_by_pattern(prototype: RelationGraph) -> dict[tuple[str, tuple[str, ...]], tuple[str, ...]]:
+    relation_ids = _relation_ids(prototype)
+    result: dict[tuple[str, tuple[str, ...]], list[str]] = {}
+    for relation in sorted(prototype.relations, key=_relation_key):
+        if any(argument in relation_ids for argument in relation.arguments):
+            continue
+        key = (relation.predicate, tuple(relation.arguments))
+        result.setdefault(key, []).append(relation.relation_id)
+    return {key: tuple(sorted(ids)) for key, ids in sorted(result.items())}
+
+
+def _unique_prototype_relation_id(
+    relation_ids_by_pattern: Mapping[tuple[str, tuple[str, ...]], tuple[str, ...]],
+    predicate: str,
+    arguments: tuple[str, ...],
+) -> str:
+    ids = relation_ids_by_pattern.get((predicate, tuple(arguments)), ())
+    if len(ids) != 1:
+        raise ValueError(
+            "prototype relation pattern must map to exactly one relation_id: "
+            f"predicate={predicate!r}, arguments={tuple(arguments)!r}, relation_ids={ids!r}"
+        )
+    return ids[0]
+
+
+def _prototype_parent_relation_ids(prototype: RelationGraph) -> dict[str, tuple[str, ...]]:
+    relation_ids = _relation_ids(prototype)
+    parents: dict[str, list[str]] = {relation_id: [] for relation_id in relation_ids}
+    for relation in sorted(prototype.relations, key=_relation_key):
+        for argument in relation.arguments:
+            if argument in relation_ids:
+                parents.setdefault(argument, []).append(relation.relation_id)
+    return {relation_id: tuple(sorted(values)) for relation_id, values in sorted(parents.items())}
+
+
+def _prototype_relation_embed(
+    relation_id: str,
+    parents: Mapping[str, tuple[str, ...]],
+    budget: int,
+    lambda_: float,
+    visited: frozenset[str] | None = None,
+) -> float:
+    if budget <= 0:
+        return 0.0
+    path = visited or frozenset({relation_id})
+    total = 0.0
+    for parent_id in parents.get(relation_id, ()):
+        if parent_id in path:
+            continue
+        total += 1.0 + lambda_ * _prototype_relation_embed(
+            parent_id,
+            parents,
+            budget - 1,
+            lambda_,
+            path | frozenset({parent_id}),
+        )
+    return total
 
 
 def _predicate_frequencies(prototype: RelationGraph, base_graph: RelationGraph) -> dict[str, int]:
