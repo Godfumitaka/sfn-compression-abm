@@ -58,7 +58,7 @@ class PrototypePriorParams:
     conflict_beta: float = 0.5
     size_exponent: float = 1.0
     gamma: float = 1.0
-    lambda_: float = 1.0
+    embed_lambda: float = 1.0
     embed_depth_cap: int = 3
 
 
@@ -457,7 +457,7 @@ def prototype_prior_score(
                 matched_prototype_relation_id,
                 prototype_parents,
                 weights.embed_depth_cap,
-                weights.lambda_,
+                weights.embed_lambda,
             )
             if shared and matched_prototype_relation_id is not None
             else 0.0
@@ -557,7 +557,7 @@ def _prototype_relation_embed(
     relation_id: str,
     parents: Mapping[str, tuple[str, ...]],
     budget: int,
-    lambda_: float,
+    embed_lambda: float,
     visited: frozenset[str] | None = None,
 ) -> float:
     if budget <= 0:
@@ -567,11 +567,11 @@ def _prototype_relation_embed(
     for parent_id in parents.get(relation_id, ()):
         if parent_id in path:
             continue
-        total += 1.0 + lambda_ * _prototype_relation_embed(
+        total += 1.0 + embed_lambda * _prototype_relation_embed(
             parent_id,
             parents,
             budget - 1,
-            lambda_,
+            embed_lambda,
             path | frozenset({parent_id}),
         )
     return total

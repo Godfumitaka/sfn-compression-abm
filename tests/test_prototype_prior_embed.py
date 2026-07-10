@@ -132,7 +132,7 @@ def _graph(relations):
     return RelationGraph("fixture", (Entity("a"), Entity("b")), tuple(relations))
 
 
-def _embed_term(prototype, lambda_=1.0, cap=3):
+def _embed_term(prototype, embed_lambda=1.0, cap=3):
     base = _graph((Relation("r1", "p", ("a",)),))
     target = _graph(())
     result = prototype_prior_score(
@@ -141,7 +141,7 @@ def _embed_term(prototype, lambda_=1.0, cap=3):
         prototype=prototype,
         base_graph=base,
         target_graph_partial=target,
-        params=PrototypePriorParams(theta=1.0, size_exponent=0.0, gamma=1.0, lambda_=lambda_, embed_depth_cap=cap),
+        params=PrototypePriorParams(theta=1.0, size_exponent=0.0, gamma=1.0, embed_lambda=embed_lambda, embed_depth_cap=cap),
     )
     return result.per_candidate["r1"] - 1.0
 
@@ -161,9 +161,9 @@ def test_embed_cascade_cap_cycle_and_diamond():
 
 def test_prototype_prior_embed_lambda_unit():
     fixture = _graph((Relation("r1", "p", ("a",)), Relation("r2", "h", ("r1",)), Relation("r3", "h", ("r2",))))
-    assert _embed_term(fixture, lambda_=0.0) == pytest.approx(1.0)
-    assert _embed_term(fixture, lambda_=0.5) == pytest.approx(1.5)
-    assert _embed_term(fixture, lambda_=1.0) == pytest.approx(2.0)
+    assert _embed_term(fixture, embed_lambda=0.0) == pytest.approx(1.0)
+    assert _embed_term(fixture, embed_lambda=0.5) == pytest.approx(1.5)
+    assert _embed_term(fixture, embed_lambda=1.0) == pytest.approx(2.0)
 
 
 def test_prototype_pattern_to_id_uniqueness():
