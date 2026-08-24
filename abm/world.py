@@ -85,7 +85,7 @@ def generate_trial(
     *,
     seed: Seed,
 ) -> WorldTrial:
-    motif = tuple(MOTIF_ROWS)[trial_index % len(MOTIF_ROWS)]
+    motif = _motif_for_trial(run_seed, trial_index)
     rng = _trial_rng(run_seed, trial_index)
     core1, core2, higher, peripheral_predicate, core_entity_roles = MOTIF_ROWS[motif]
     has_peripheral = rng.random() < float(seed.data["pi_A"][motif])
@@ -176,6 +176,18 @@ def world_hash(trials: Iterable[WorldTrial]) -> str:
 
 def _trial_rng(run_seed: str | int, trial_index: int) -> Random:
     material = f"{run_seed}\x1f{trial_index}\x1fworld".encode("utf-8")
+    return Random(int.from_bytes(sha256(material).digest(), "big"))
+
+
+def _motif_for_trial(run_seed: str | int, trial_index: int) -> str:
+    block_index, offset = divmod(trial_index, len(MOTIF_ROWS))
+    motifs = list(MOTIF_ROWS)
+    _block_rng(run_seed, block_index).shuffle(motifs)
+    return motifs[offset]
+
+
+def _block_rng(run_seed: str | int, block_index: int) -> Random:
+    material = f"{run_seed}\x1fblock:{block_index}\x1fmotif_order".encode("utf-8")
     return Random(int.from_bytes(sha256(material).digest(), "big"))
 
 

@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+from collections import Counter, defaultdict
+from statistics import mean, pstdev
+
+import pytest
+
 from abm.seed import load_seed
 from abm.world import MOTIF_ROWS, generate_world, one_minus_h, opaque_id
 
@@ -17,6 +22,37 @@ def test_world_is_deterministic_and_sweep_independent() -> None:
 
     assert first.world_hash == second.world_hash
     assert first.trials == second.trials
+
+
+def test_motifs_are_randomized_within_balanced_blocks() -> None:
+    world = generate_world("motif-blocks", 8_000, ("agent",))
+    motifs = [trial.motif for trial in world.trials]
+
+    assert Counter(motifs) == {motif: 2_000 for motif in MOTIF_ROWS}
+    for start in range(0, len(motifs), len(MOTIF_ROWS)):
+        assert set(motifs[start : start + len(MOTIF_ROWS)]) == set(MOTIF_ROWS)
+
+    positions: defaultdict[str, list[int]] = defaultdict(list)
+    for index, motif in enumerate(motifs):
+        positions[motif].append(index)
+    intervals = [
+        right - left
+        for motif_positions in positions.values()
+        for left, right in zip(motif_positions, motif_positions[1:])
+    ]
+    assert min(intervals) >= 1
+    assert max(intervals) <= 7
+    assert mean(intervals) == pytest.approx(4.0, abs=0.05)
+    assert pstdev(intervals) > 0.0
+
+
+def test_world_hash_depends_on_run_seed_and_repeats_for_same_seed() -> None:
+    first = generate_world("hash-seed-a", 128, ("agent",))
+    repeated = generate_world("hash-seed-a", 128, ("agent",))
+    different = generate_world("hash-seed-b", 128, ("agent",))
+
+    assert first.world_hash == repeated.world_hash
+    assert first.world_hash != different.world_hash
 
 
 def test_scene_contract_holdout_and_opaque_ids() -> None:
