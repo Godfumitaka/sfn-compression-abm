@@ -1,0 +1,40 @@
+--- repo/abm/sme.py	2026-08-23 07:28:01.207171745 +0000
++++ repo_f1/abm/sme.py	2026-08-23 09:58:04.486396687 +0000
+@@ -266,6 +266,7 @@
+ ) -> tuple[AlignmentCandidate, ...]:
+     base_relation_ids = _relation_ids(base_graph)
+     partial_relation_ids = _relation_ids(partial_graph)
++    partial_entity_ids = frozenset(e.entity_id for e in partial_graph.entities)
+     candidates: list[AlignmentCandidate] = []
+     for left in sorted(base_graph.relations, key=_relation_key):
+         for right in sorted(partial_graph.relations, key=_relation_key):
+@@ -277,6 +278,13 @@
+             for left_arg, right_arg in zip(left.arguments, right.arguments, strict=True):
+                 left_is_relation = left_arg in base_relation_ids
+                 right_is_relation = right_arg in partial_relation_ids
++                # F-1: 第三分岐（未観測スロット）
++                # target 側の引数が可視関係でも実体でもないなら、それは観測されていない
++                # スロットである。base 側の関係と照合可能にする。
++                right_is_unobserved = (not right_is_relation) and (right_arg not in partial_entity_ids)
++                if left_is_relation and right_is_unobserved:
++                    relation_pairs.append((left_arg, right_arg))
++                    continue
+                 if left_is_relation != right_is_relation:
+                     compatible = False
+                     break
+@@ -373,9 +381,13 @@
+ ) -> float:
+     partial_by_id = _relations_by_id(partial_graph)
+     score = 0.0
++    base_by_id = _relations_by_id(base_graph)
+     for left_id, right_id in sorted(relation_mapping.items()):
+-        left = _relations_by_id(base_graph)[left_id]
+-        right = partial_by_id[right_id]
++        left = base_by_id.get(left_id)
++        right = partial_by_id.get(right_id)
++        # F-1: 未観測スロットへの対応は体系性に寄与しない（中身が見えないため）
++        if left is None or right is None:
++            continue
+         for left_arg, right_arg in zip(left.arguments, right.arguments, strict=True):
+             if relation_mapping.get(left_arg) == right_arg:
+                 score += 1.0
