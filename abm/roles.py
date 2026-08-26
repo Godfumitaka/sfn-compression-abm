@@ -99,7 +99,7 @@ def ModelScorer(agent_input: AgentInput, agent_state: AgentState) -> ScoreResult
     """
 
     observed_edges = len(agent_input.target_graph_partial.relations)
-    prototype_edges = 0 if agent_state.prototype is None else len(agent_state.prototype.relations)
+    prototype_edges = sum(len(trace.scene.relations) for trace in agent_state.prototype.traces)
     L_H = float(prototype_edges)
     L_DgH = float(observed_edges)
     return ScoreResult(

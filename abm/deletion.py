@@ -6,7 +6,7 @@ from dataclasses import replace
 
 from abm.accounting import constituent_value, survives
 from abm.definition import NamedDefinition
-from abm.domains import AgentConfig, AgentState, RelationGraph, VerbatimClock
+from abm.domains import AgentConfig, AgentState, Prototype
 
 
 def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[AgentState, tuple[dict[str, object], ...]]:
@@ -50,26 +50,20 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
             definition.registered_at,
         )
     prototype = state.prototype
-    clock = state.verbatim_clock
-    if prototype is not None:
-        surviving = clock.surviving(trial, config.theta_prime)
-        expired = set(clock.written_at) - surviving
-        for relation_id in sorted(expired):
+    if prototype.traces:
+        surviving = prototype.alive(trial, config.theta_prime)
+        expired = tuple(trace for trace in prototype.traces if trace not in surviving)
+        for trace in expired:
             events.append({
                 "kind": "verbatim_deletion",
-                "relation_id": relation_id,
+                "graph_id": trace.scene.graph_id,
+                "written_at": trace.written_at,
                 "trial": trial,
-                "sigma": clock.sigma(relation_id, trial),
+                "sigma": trace.sigma(trial),
             })
-        prototype = RelationGraph(
-            prototype.graph_id,
-            prototype.entities,
-            tuple(relation for relation in prototype.relations if relation.relation_id in surviving),
-        )
-        clock = VerbatimClock({key: value for key, value in clock.written_at.items() if key in surviving})
+        prototype = Prototype(surviving)
     return replace(
         state,
         definitions=definitions,
         prototype=prototype,
-        verbatim_clock=clock,
     ), tuple(events)
