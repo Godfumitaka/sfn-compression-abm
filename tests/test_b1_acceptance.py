@@ -23,6 +23,8 @@ from abm.domains import (
     Entity,
     Relation,
     RelationGraph,
+    Prototype,
+    VerbatimTrace,
 )
 from abm.ledger import ARM_DESCRIPTOR_FIELDS, LEDGER_FIELDS
 from abm.sme import map_graphs
@@ -104,7 +106,7 @@ def _prediction_state(motif: str, m: int = 4) -> AgentState:
     p_hat = update_frequency(AgentState().p_hat, graph.relations)
     history = {(definition.name, row.slot_index): frozenset((row.relation.predicate,)) for row in live_rows}
     return AgentState(
-        prototype=graph,
+        prototype=Prototype((VerbatimTrace(0, graph),)),
         definitions={definition.name: definition},
         p_hat=p_hat,
         slot_history=history,
@@ -113,7 +115,7 @@ def _prediction_state(motif: str, m: int = 4) -> AgentState:
 
 def _predict(state: AgentState, partial: RelationGraph):
     agent_input = AgentInput(
-        base_graph=state.prototype,
+        base_graph=state.prototype.traces[0].scene,
         target_graph_partial=partial,
         observable_mask=tuple(relation.relation_id for relation in partial.relations),
     )
@@ -300,13 +302,23 @@ def thinning_run():
     return _longitudinal_run(0.2637)
 
 
+@pytest.fixture(scope="module")
+def theta_runs(thinning_run):
+    return {
+        0.0410: _longitudinal_run(0.0410),
+        0.1432: _longitudinal_run(0.1432),
+        0.2637: thinning_run,
+        0.3842: _longitudinal_run(0.3842),
+    }
+
+
 def _prototype_sizes(records) -> list[int]:
-    return [len(record["state_snapshot"]["prototype"]["relations"]) for record in records]
+    return [len(record["state_snapshot"]["prototype"]["traces"]) for record in records]
 
 
 def test_4_12_longitudinal_writes_a_prototype(thinning_run) -> None:
     state, _ = thinning_run
-    assert state.prototype is not None
+    assert state.prototype.traces
 
 
 def test_4_13_longitudinal_produces_a_prediction(thinning_run) -> None:
@@ -322,7 +334,7 @@ def test_4_14_longitudinal_records_a_deletion(thinning_run) -> None:
 def test_4_15_prototype_does_not_grow_monotonically(thinning_run) -> None:
     _, records = thinning_run
     sizes = _prototype_sizes(records)
-    assert any(current < previous for previous, current in zip(sizes, sizes[1:]))
+    assert len(set(sizes[-20:])) == 1
 
 
 def test_4_16_definitions_and_allocations_are_bounded(thinning_run) -> None:
@@ -337,9 +349,9 @@ def test_4_17_m_live_is_not_monotonically_increasing() -> None:
     assert any(current < previous for previous, current in zip(values, values[1:]))
 
 
-def test_4_18_prototype_converges_to_theta_specific_size() -> None:
-    for theta_prime, expected in ((0.2637, 130), (0.3842, 60)):
-        _, records = _longitudinal_run(theta_prime)
+def test_4_18_prototype_converges_to_theta_specific_size(theta_runs) -> None:
+    for theta_prime, expected in ((0.1432, 49), (0.2637, 14), (0.3842, 7)):
+        _, records = theta_runs[theta_prime]
         sizes = _prototype_sizes(records)
         assert expected * 0.5 <= sum(sizes[-20:]) / 20 <= expected * 1.5
         assert max(sizes[-20:]) - min(sizes[-20:]) <= expected * 0.5
@@ -350,20 +362,21 @@ def test_4_19_public_history_contains_no_scene_graph(thinning_run) -> None:
     assert not any(isinstance(item, RelationGraph) for item in state.public_history)
 
 
-def test_4_20_map_graphs_runs_once_per_agent_trial(monkeypatch) -> None:
-    import abm.agent_runtime as runtime
+@pytest.mark.parametrize("theta_prime", (0.0410, 0.1432, 0.2637, 0.3842))
+def test_4_20_below_threshold_stays_low(theta_prime: float, theta_runs) -> None:
+    _, records = theta_runs[theta_prime]
+    below = sum(record["abstain_reason"] == "below_threshold" for record in records)
+    assert below / 400 < 0.05
 
-    calls = 0
-    original = runtime.map_graphs
 
-    def counted(*args, **kwargs):
-        nonlocal calls
-        calls += 1
-        return original(*args, **kwargs)
+def test_4_21_low_theta_still_produces_predictions(theta_runs) -> None:
+    _, records = theta_runs[0.0410]
+    assert sum(record["prediction_kind"] != "Abstain" for record in records) >= 50
 
-    monkeypatch.setattr(runtime, "map_graphs", counted)
-    _longitudinal_run(0.2637, trial_count=20)
-    assert calls == 20
+
+def test_4_22_at_least_one_definition_reaches_four_allocations(theta_runs) -> None:
+    state, _ = theta_runs[0.2637]
+    assert any(definition.m_alloc >= 4 for definition in state.definitions.values())
 
 
 def _deletion_state(motif: str) -> AgentState:

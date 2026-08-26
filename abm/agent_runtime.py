@@ -22,7 +22,8 @@ from abm.domains import (
     Relation,
     RelationGraph,
     RevealedEdge,
-    VerbatimClock,
+    Prototype,
+    VerbatimTrace,
 )
 from abm.filling import fill_missing_slots
 from abm.accounting import update_frequency
@@ -59,13 +60,18 @@ def predict(
 ) -> tuple[AgentOutput, PendingState]:
     """公開入力と不変状態だけから P1〜P7 を実行する。"""
 
-    base = state.prototype if state.prototype is not None else agent_input.base_graph
-    mapping = map_graphs(
-        base,
-        agent_input.target_graph_partial,
-        prototype=state.prototype,
-        prototype_prior_weight=config.prototype_prior_weight,
-    )
+    if not state.prototype.traces:
+        output = AgentOutput(prediction=Abstain(reason="no_prototype"), trace={})
+        return output, PendingState(state, output, agent_input, _snapshot_rng_state(rng, state.rng_state))
+    ranked = []
+    for trace in state.prototype.traces:
+        result = map_graphs(trace.scene, agent_input.target_graph_partial)
+        ranked.append((result, trace))
+    mapping, selected_trace = sorted(
+        ranked,
+        key=lambda item: (-item[0].alignment.total_score, -item[1].written_at, item[1].scene.graph_id),
+    )[0]
+    base = selected_trace.scene
     threshold = apply_threshold(mapping, config.threshold)
     trace: dict[str, Any] = {
         "alignment": mapping.alignment,
@@ -74,6 +80,7 @@ def predict(
         "m_live": 0,
         "filled_slots": (),
         "entity_map_covered": False,
+        "selected_scene": base,
     }
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
@@ -183,21 +190,19 @@ def update(pending: PendingState, feedback: Feedback) -> AgentState:
     written = pending.agent_input.target_graph_partial if pending.agent_input is not None else None
     history = (*state.public_history, pending.output)
     p_hat = update_frequency(state.p_hat, written.relations if written is not None else ())
-    trial = max(state.verbatim_clock.written_at.values(), default=-1) + 1
-    prototype, clock = _write_graph(state.prototype, state.verbatim_clock, written, trial)
+    trial = max((trace.written_at for trace in state.prototype.traces), default=-1) + 1
+    prototype = _write_graph(state.prototype, written, trial)
     next_state = replace(
         state,
         public_history=history,
         prototype=prototype,
-        verbatim_clock=clock,
         rng_state=pending.rng_state,
         p_hat=p_hat,
     )
 
     if isinstance(feedback, RevealedEdge):
-        prototype, clock = _write_relation(
+        prototype = _write_relation(
             next_state.prototype,
-            next_state.verbatim_clock,
             feedback.edge,
             trial,
         )
@@ -205,7 +210,6 @@ def update(pending: PendingState, feedback: Feedback) -> AgentState:
             next_state,
             public_history=(*next_state.public_history, feedback.edge),
             prototype=prototype,
-            verbatim_clock=clock,
             p_hat=update_frequency(next_state.p_hat, (feedback.edge,)),
         )
     if isinstance(feedback, CorrectnessBit) or feedback is None:
@@ -300,9 +304,7 @@ def _require_base_graph(
     return base_graph
 
 
-def _append_relation(graph: RelationGraph | None, relation: Relation) -> RelationGraph:
-    if graph is None:
-        return RelationGraph(graph_id="prototype", relations=(relation,))
+def _append_relation(graph: RelationGraph, relation: Relation) -> RelationGraph:
     if any(existing.relation_id == relation.relation_id for existing in graph.relations):
         return graph
     return RelationGraph(
@@ -312,40 +314,28 @@ def _append_relation(graph: RelationGraph | None, relation: Relation) -> Relatio
     )
 
 
-def _append_graph(graph: RelationGraph | None, observed: RelationGraph) -> RelationGraph:
-    result = graph
-    for relation in observed.relations:
-        result = _append_relation(result, relation)
-    return result if result is not None else RelationGraph("prototype")
-
-
 def _write_graph(
-    graph: RelationGraph | None,
-    clock: VerbatimClock,
+    prototype: Prototype,
     observed: RelationGraph | None,
     trial: int,
-) -> tuple[RelationGraph | None, VerbatimClock]:
+) -> Prototype:
     if observed is None:
-        return graph, clock
-    result = _append_graph(graph, observed)
-    entities = {entity.entity_id: entity for entity in (graph.entities if graph else ())}
-    entities.update({entity.entity_id: entity for entity in observed.entities})
-    result = RelationGraph(result.graph_id, tuple(entities.values()), result.relations)
-    times = dict(clock.written_at)
-    times.update({relation.relation_id: trial for relation in observed.relations})
-    return result, VerbatimClock(times)
+        return prototype
+    return Prototype((*prototype.traces, VerbatimTrace(trial, observed)))
 
 
 def _write_relation(
-    graph: RelationGraph | None,
-    clock: VerbatimClock,
+    prototype: Prototype,
     relation: Relation,
     trial: int,
-) -> tuple[RelationGraph, VerbatimClock]:
-    result = _append_relation(graph, relation)
-    times = dict(clock.written_at)
-    times[relation.relation_id] = trial
-    return result, VerbatimClock(times)
+) -> Prototype:
+    traces = list(prototype.traces)
+    if not traces or traces[-1].written_at != trial:
+        traces.append(VerbatimTrace(trial, RelationGraph(f"scene-{trial}", relations=(relation,))))
+    else:
+        trace = traces[-1]
+        traces[-1] = VerbatimTrace(trace.written_at, _append_relation(trace.scene, relation))
+    return Prototype(tuple(traces))
 
 
 def _snapshot_rng_state(

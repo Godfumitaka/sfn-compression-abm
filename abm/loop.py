@@ -68,10 +68,10 @@ def run_longitudinal(
                     trial.trial,
                     name=str(used_name),
                 )
-            elif before.prototype is not None:
+            elif output.trace.get("selected_scene") is not None:
                 after, registration = m1(
                     after,
-                    before.prototype,
+                    output.trace["selected_scene"],
                     agent_input.target_graph_partial,
                     output.trace["alignment"],
                     trial.trial,
@@ -130,10 +130,9 @@ def _update_merit(
 
 
 def _agent_input(trial: Any, state: AgentState):
-    from abm.domains import AgentInput, RelationGraph
+    from abm.domains import AgentInput
 
-    base = state.prototype or trial.target_graph_partial
-    return AgentInput(base, trial.target_graph_partial, tuple(r.relation_id for r in trial.target_graph_partial.relations))
+    return AgentInput(trial.target_graph_partial, trial.target_graph_partial, tuple(r.relation_id for r in trial.target_graph_partial.relations))
 
 
 def _definition_graph(definition: Any):
