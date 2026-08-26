@@ -276,6 +276,96 @@ def test_4_11_longitudinal_m_alloc_is_bounded() -> None:
     assert total_alloc <= len(state.p_hat.alive_vocab)
 
 
+class _MemoryLedger:
+    def __init__(self) -> None:
+        self.records = []
+
+    def append(self, record) -> None:
+        self.records.append(record)
+
+
+def _longitudinal_run(theta_prime: float, trial_count: int = 400):
+    ledger = _MemoryLedger()
+    result = run_longitudinal(
+        generate_world(1, trial_count, ("agent",)),
+        {"agent": AgentState()},
+        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=theta_prime)},
+        ledger,
+    )
+    return result.states["agent"], ledger.records
+
+
+@pytest.fixture(scope="module")
+def thinning_run():
+    return _longitudinal_run(0.2637)
+
+
+def _prototype_sizes(records) -> list[int]:
+    return [len(record["state_snapshot"]["prototype"]["relations"]) for record in records]
+
+
+def test_4_12_longitudinal_writes_a_prototype(thinning_run) -> None:
+    state, _ = thinning_run
+    assert state.prototype is not None
+
+
+def test_4_13_longitudinal_produces_a_prediction(thinning_run) -> None:
+    _, records = thinning_run
+    assert any(record["prediction_kind"] != "Abstain" for record in records)
+
+
+def test_4_14_longitudinal_records_a_deletion(thinning_run) -> None:
+    _, records = thinning_run
+    assert any(record["deletion_event"] for record in records)
+
+
+def test_4_15_prototype_does_not_grow_monotonically(thinning_run) -> None:
+    _, records = thinning_run
+    sizes = _prototype_sizes(records)
+    assert any(current < previous for previous, current in zip(sizes, sizes[1:]))
+
+
+def test_4_16_definitions_and_allocations_are_bounded(thinning_run) -> None:
+    state, _ = thinning_run
+    assert len(state.definitions) <= 4
+    assert all(definition.m_alloc <= 6 for definition in state.definitions.values())
+
+
+def test_4_17_m_live_is_not_monotonically_increasing() -> None:
+    _, records = _longitudinal_run(0.3842)
+    values = [record["m_live"] for record in records]
+    assert any(current < previous for previous, current in zip(values, values[1:]))
+
+
+def test_4_18_prototype_converges_to_theta_specific_size() -> None:
+    for theta_prime, expected in ((0.2637, 130), (0.3842, 60)):
+        _, records = _longitudinal_run(theta_prime)
+        sizes = _prototype_sizes(records)
+        assert expected * 0.5 <= sum(sizes[-20:]) / 20 <= expected * 1.5
+        assert max(sizes[-20:]) - min(sizes[-20:]) <= expected * 0.5
+
+
+def test_4_19_public_history_contains_no_scene_graph(thinning_run) -> None:
+    state, _ = thinning_run
+    assert not any(isinstance(item, RelationGraph) for item in state.public_history)
+
+
+def test_4_20_map_graphs_runs_once_per_agent_trial(monkeypatch) -> None:
+    import abm.agent_runtime as runtime
+
+    calls = 0
+    original = runtime.map_graphs
+
+    def counted(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(runtime, "map_graphs", counted)
+    _longitudinal_run(0.2637, trial_count=20)
+    assert calls == 20
+
+
 def _deletion_state(motif: str) -> AgentState:
     graph = _graph(motif, definition=True)
     extra = Relation("peripheral", PERIPHERAL[motif], ("a", "e"))
