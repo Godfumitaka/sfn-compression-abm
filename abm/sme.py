@@ -137,6 +137,23 @@ def map_graphs(
         used_relations[pair.partial_relation_id] = pair.base_relation_id
         accepted.append(pair)
 
+    # 伝播パッチ: 写像済みの関係対から、引数の実体対応を（述語が違っても）伝播させる
+    _bid = {r.relation_id: r for r in base_graph.relations}
+    _tid = {r.relation_id: r for r in target_graph_partial.relations}
+    changed = True
+    while changed:
+        changed = False
+        for lrel, rrel in sorted(relation_mapping.items()):
+            lb, rb = _bid.get(lrel), _tid.get(rrel)
+            if lb is None or rb is None or len(lb.arguments) != len(rb.arguments):
+                continue
+            for la, ra in zip(lb.arguments, rb.arguments):
+                if la in base_relation_ids or ra in partial_relation_ids:
+                    continue
+                if la in entity_mapping or ra in used_entities:
+                    continue
+                entity_mapping[la] = ra; used_entities[ra] = la; changed = True
+
     systematicity = _systematicity_score(base_graph, target_graph_partial, relation_mapping)
     matched = len(accepted)
     unmatched = _unmatched_count(base_graph, relation_mapping)
@@ -341,7 +358,8 @@ def _projectable_base_relation_ids(
     existing = _relation_content(partial_graph)
     result: list[str] = []
     for relation in sorted(base_graph.relations, key=_relation_key):
-        if relation.relation_id in relation_mapping:
+        mapped_rel = relation_mapping.get(relation.relation_id)
+        if mapped_rel is not None and mapped_rel in partial_relation_ids:
             continue
         if any(argument in base_relation_ids for argument in relation.arguments):
             continue
