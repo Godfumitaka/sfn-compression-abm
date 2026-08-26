@@ -4,12 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
+from math import exp
 import json
 from random import Random
 from typing import Any, Callable, Mapping, Protocol
 
 from abm.abstraction import m1
-from abm.accounting import score_prediction
+from abm.accounting import score_prediction, update_merit
 from abm.agent_runtime import predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
@@ -21,7 +22,6 @@ from abm.domains import (
 )
 from abm.feedback import FeedbackFrequency, evaluate_feedback_coin, f
 from abm.ledger import LEDGER_FIELDS, Ledger, empty_record
-from abm.sme import map_graphs
 from abm.world import WorldSequence
 
 
@@ -43,7 +43,6 @@ def run_longitudinal(
     """共通世界列を順方向に一度だけ走査する。"""
 
     current = dict(states)
-    pending_scenes: dict[str, list[Any]] = {agent_id: [] for agent_id in current}
     for trial in world.trials:
         for agent_id in sorted(current):
             config = configs[agent_id]
@@ -54,6 +53,7 @@ def run_longitudinal(
             coin = evaluate_feedback_coin(agent_id, trial.trial, trial.u_coins[agent_id], frequency)
             feedback = RevealedEdge(trial.held_out_edge) if coin.f_fired else None
             after = update(pending, feedback)
+            after = _update_merit(after, output, agent_input.target_graph_partial, config, len(world.trials))
 
             registration = None
             used_name = output.trace.get("R_identified")
@@ -68,24 +68,14 @@ def run_longitudinal(
                     trial.trial,
                     name=str(used_name),
                 )
-                pending_scenes[agent_id].clear()
-            else:
-                for previous in pending_scenes[agent_id]:
-                    cross_alignment = map_graphs(previous, agent_input.target_graph_partial).alignment
-                    candidate_state, candidate_event = m1(
-                        after,
-                        previous,
-                        agent_input.target_graph_partial,
-                        cross_alignment,
-                        trial.trial,
-                    )
-                    if candidate_event is not None:
-                        after, registration = candidate_state, candidate_event
-                        break
-                if registration is not None:
-                    pending_scenes[agent_id].clear()
-                else:
-                    pending_scenes[agent_id].append(agent_input.target_graph_partial)
+            elif before.prototype is not None:
+                after, registration = m1(
+                    after,
+                    before.prototype,
+                    agent_input.target_graph_partial,
+                    output.trace["alignment"],
+                    trial.trial,
+                )
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after
             ledger.append(_ledger_record(
@@ -101,6 +91,42 @@ def run_longitudinal(
                 world.world_hash,
             ))
     return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))
+
+
+def _update_merit(
+    state: AgentState,
+    output: Any,
+    scene: Any,
+    config: AgentConfig,
+    horizon: int,
+) -> AgentState:
+    """U3〜U5: 可視場面での述語充足を全生存行へ一度だけ反映する。"""
+
+    from dataclasses import replace
+
+    merit = dict(state.merit)
+    visible_predicates = {relation.predicate for relation in scene.relations}
+    filled = {relation.predicate for relation in output.trace.get("filled_slots", ())}
+    decay = tuple(
+        exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))
+        for index in range(16)
+    )
+    for name, definition in state.definitions.items():
+        for row in definition.constituents:
+            if not row.alive:
+                continue
+            key = (name, row.slot_index)
+            accumulator = merit.get(key)
+            if accumulator is None:
+                continue
+            merit[key] = update_merit(
+                accumulator,
+                decay,
+                matched=row.relation.predicate in visible_predicates,
+                filled_scored=row.relation.predicate in filled,
+                alpha=config.alpha,
+            )
+    return replace(state, merit=merit)
 
 
 def _agent_input(trial: Any, state: AgentState):

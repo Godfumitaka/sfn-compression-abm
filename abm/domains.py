@@ -166,6 +166,30 @@ class AgentConfig:
 
 
 @dataclass(frozen=True, slots=True)
+class VerbatimClock:
+    """prototype 内の逐語関係について、単回露出の書込時刻を保持する。"""
+
+    written_at: Mapping[str, int] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "written_at", MappingProxyType(dict(self.written_at)))
+
+    def sigma(self, relation_id: str, now: int) -> float:
+        written = self.written_at.get(relation_id)
+        if written is None:
+            return 0.0
+        elapsed = now - written
+        return float("inf") if elapsed <= 0 else elapsed ** -0.5
+
+    def surviving(self, now: int, theta_prime: float) -> frozenset[str]:
+        return frozenset(
+            relation_id
+            for relation_id in self.written_at
+            if self.sigma(relation_id, now) >= theta_prime
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class AgentState:
     prototype: RelationGraph | None = None
     public_history: tuple[Any, ...] = ()
@@ -176,6 +200,7 @@ class AgentState:
     exceptions: ExceptionAccumulator = ExceptionAccumulator(0.0, 0)
     p_hat: FrequencyTable = FrequencyTable.empty()
     slot_history: Mapping[tuple[str, int], frozenset[str]] = field(default_factory=dict)
+    verbatim_clock: VerbatimClock = VerbatimClock()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "public_history", tuple(self.public_history))

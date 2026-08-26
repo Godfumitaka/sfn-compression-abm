@@ -22,6 +22,7 @@ from abm.domains import (
     Relation,
     RelationGraph,
     RevealedEdge,
+    VerbatimClock,
 )
 from abm.filling import fill_missing_slots
 from abm.accounting import update_frequency
@@ -83,29 +84,29 @@ def predict(
             agent_input.target_graph_partial,
             prototype_prior_weight=config.prototype_prior_weight,
         )
-        selected = _select_definition(state, agent_input.target_graph_partial)
+        selected = _select_definition(state, mapping)
         if selected is not None:
-            name, definition, definition_mapping, support = selected
+            name, definition, support = selected
             trace.update(
                 m_live=definition.m_live,
                 support_at_adoption=support,
-                definition_alignment=definition_mapping.alignment,
+                definition_alignment=mapping.alignment,
             )
             if support >= min(2, definition.m_live):
                 trace["R_identified"] = name
             if support >= _need(config.tau_acc, definition.m_live):
                 trace["R_used"] = name
                 prediction = project(
-                    definition_mapping.alignment,
-                    _definition_graph(definition),
+                    mapping.alignment,
+                    base,
                     agent_input.target_graph_partial,
                     prototype_prior_weight=0.0,
                 )
                 filling = fill_missing_slots(
                     definition,
                     agent_input.target_graph_partial,
-                    definition_mapping.alignment.entity_mapping,
-                    definition_mapping.alignment.relation_mapping,
+                    mapping.alignment.entity_mapping,
+                    mapping.alignment.relation_mapping,
                     state.slot_history,
                     state.p_hat,
                 )
@@ -114,8 +115,8 @@ def predict(
                     filled_slot_indices=filling.slot_indices,
                     filling_fallback=filling.used_fallback,
                     entity_map_covered=all(
-                        argument in definition_mapping.alignment.entity_mapping
-                        or argument in definition_mapping.alignment.relation_mapping
+                        argument in mapping.alignment.entity_mapping
+                        or argument in mapping.alignment.relation_mapping
                         for row in definition.constituents
                         for argument in row.relation.arguments
                     ),
@@ -140,23 +141,22 @@ def _need(tau_acc: float, m_live: int) -> int:
     return ceil(tau_acc * m_live)
 
 
-def _select_definition(state: AgentState, target: RelationGraph):
+def _select_definition(state: AgentState, mapping: Any):
     ranked = []
     for name, definition in state.definitions.items():
-        definition_mapping = map_graphs(_definition_graph(definition), target)
-        relation_mapping = definition_mapping.alignment.relation_mapping
+        relation_mapping = mapping.alignment.relation_mapping
         support = sum(
             1 for constituent in definition.constituents
             if constituent.alive and constituent.relation.relation_id in relation_mapping
         )
         if support:
-            ranked.append((-support, name, definition, definition_mapping, support))
+            ranked.append((-support, name, definition, support))
     if not ranked:
         return None
-    _, name, definition, definition_mapping, support = sorted(
+    _, name, definition, support = sorted(
         ranked, key=lambda item: (item[0], item[1])
     )[0]
-    return name, definition, definition_mapping, support
+    return name, definition, support
 
 
 def _definition_graph(definition: Any) -> RelationGraph:
@@ -181,19 +181,31 @@ def update(pending: PendingState, feedback: Feedback) -> AgentState:
 
     state = pending.previous_state
     written = pending.agent_input.target_graph_partial if pending.agent_input is not None else None
-    history = (*state.public_history, *((written,) if written is not None else ()), pending.output)
+    history = (*state.public_history, pending.output)
     p_hat = update_frequency(state.p_hat, written.relations if written is not None else ())
+    trial = max(state.verbatim_clock.written_at.values(), default=-1) + 1
+    prototype, clock = _write_graph(state.prototype, state.verbatim_clock, written, trial)
     next_state = replace(
         state,
         public_history=history,
+        prototype=prototype,
+        verbatim_clock=clock,
         rng_state=pending.rng_state,
         p_hat=p_hat,
     )
 
     if isinstance(feedback, RevealedEdge):
+        prototype, clock = _write_relation(
+            next_state.prototype,
+            next_state.verbatim_clock,
+            feedback.edge,
+            trial,
+        )
         return replace(
             next_state,
             public_history=(*next_state.public_history, feedback.edge),
+            prototype=prototype,
+            verbatim_clock=clock,
             p_hat=update_frequency(next_state.p_hat, (feedback.edge,)),
         )
     if isinstance(feedback, CorrectnessBit) or feedback is None:
@@ -305,6 +317,35 @@ def _append_graph(graph: RelationGraph | None, observed: RelationGraph) -> Relat
     for relation in observed.relations:
         result = _append_relation(result, relation)
     return result if result is not None else RelationGraph("prototype")
+
+
+def _write_graph(
+    graph: RelationGraph | None,
+    clock: VerbatimClock,
+    observed: RelationGraph | None,
+    trial: int,
+) -> tuple[RelationGraph | None, VerbatimClock]:
+    if observed is None:
+        return graph, clock
+    result = _append_graph(graph, observed)
+    entities = {entity.entity_id: entity for entity in (graph.entities if graph else ())}
+    entities.update({entity.entity_id: entity for entity in observed.entities})
+    result = RelationGraph(result.graph_id, tuple(entities.values()), result.relations)
+    times = dict(clock.written_at)
+    times.update({relation.relation_id: trial for relation in observed.relations})
+    return result, VerbatimClock(times)
+
+
+def _write_relation(
+    graph: RelationGraph | None,
+    clock: VerbatimClock,
+    relation: Relation,
+    trial: int,
+) -> tuple[RelationGraph, VerbatimClock]:
+    result = _append_relation(graph, relation)
+    times = dict(clock.written_at)
+    times[relation.relation_id] = trial
+    return result, VerbatimClock(times)
 
 
 def _snapshot_rng_state(

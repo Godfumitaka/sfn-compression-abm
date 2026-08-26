@@ -97,16 +97,19 @@ def _extend_definition(
 ) -> NamedDefinition:
     existing = {constituent.relation.predicate for constituent in old.constituents if constituent.alive}
     additions = [left for left, _ in pairs if left.predicate not in existing]
-    if not additions:
+    tombstones = [row for row in old.constituents if not row.alive]
+    if not additions or not tombstones:
         return old
     rows = list(old.constituents)
-    tombstones = [row.slot_index for row in rows if not row.alive]
-    m_alloc = old.m_alloc + max(0, len(additions) - len(tombstones))
-    for relation in additions:
-        slot = tombstones.pop(0) if tombstones else len({row.slot_index for row in rows})
-        price = freeze_price(state.p_hat, relation, _new_slot_count(relation, tuple(additions)), m_alloc)
-        rows.append(Constituent(slot, trial, relation, price))
-    return NamedDefinition(old.name, tuple(rows), m_alloc, old.registered_at)
+    for relation, tombstone in zip(additions, tombstones):
+        price = freeze_price(
+            state.p_hat,
+            relation,
+            _new_slot_count(relation, tuple(additions)),
+            old.m_alloc,
+        )
+        rows.append(Constituent(tombstone.slot_index, trial, relation, price))
+    return NamedDefinition(old.name, tuple(rows), old.m_alloc, old.registered_at)
 
 
 def _new_slot_count(relation: Relation, relations: tuple[Relation, ...]) -> int:
@@ -130,7 +133,7 @@ def _matching_definition_name(
     for name, definition in state.definitions.items():
         existing = {row.relation.predicate for row in definition.constituents if row.alive}
         overlap = len(predicates & existing)
-        if overlap >= 2:
+        if overlap:
             ranked.append((-overlap, name))
     return min(ranked)[1] if ranked else None
 
