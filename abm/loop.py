@@ -21,6 +21,7 @@ from abm.domains import (
 )
 from abm.feedback import FeedbackFrequency, evaluate_feedback_coin, f
 from abm.ledger import LEDGER_FIELDS, Ledger, empty_record
+from abm.sme import map_graphs
 from abm.world import WorldSequence
 
 
@@ -42,7 +43,7 @@ def run_longitudinal(
     """共通世界列を順方向に一度だけ走査する。"""
 
     current = dict(states)
-    alignment_counts = {agent_id: 0 for agent_id in current}
+    pending_scenes: dict[str, list[Any]] = {agent_id: [] for agent_id in current}
     for trial in world.trials:
         for agent_id in sorted(current):
             config = configs[agent_id]
@@ -54,18 +55,37 @@ def run_longitudinal(
             feedback = RevealedEdge(trial.held_out_edge) if coin.f_fired else None
             after = update(pending, feedback)
 
-            alignment = output.trace.get("alignment")
             registration = None
-            if alignment is not None:
-                alignment_counts[agent_id] += 1
-                if alignment_counts[agent_id] >= 2:
-                    after, registration = m1(
+            used_name = output.trace.get("R_identified")
+            definition_alignment = output.trace.get("definition_alignment")
+            if used_name is not None and definition_alignment is not None:
+                definition = after.definitions[str(used_name)]
+                after, registration = m1(
+                    after,
+                    _definition_graph(definition),
+                    agent_input.target_graph_partial,
+                    definition_alignment,
+                    trial.trial,
+                    name=str(used_name),
+                )
+                pending_scenes[agent_id].clear()
+            else:
+                for previous in pending_scenes[agent_id]:
+                    cross_alignment = map_graphs(previous, agent_input.target_graph_partial).alignment
+                    candidate_state, candidate_event = m1(
                         after,
-                        agent_input.base_graph,
+                        previous,
                         agent_input.target_graph_partial,
-                        alignment,
+                        cross_alignment,
                         trial.trial,
                     )
+                    if candidate_event is not None:
+                        after, registration = candidate_state, candidate_event
+                        break
+                if registration is not None:
+                    pending_scenes[agent_id].clear()
+                else:
+                    pending_scenes[agent_id].append(agent_input.target_graph_partial)
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after
             ledger.append(_ledger_record(
@@ -88,6 +108,23 @@ def _agent_input(trial: Any, state: AgentState):
 
     base = state.prototype or trial.target_graph_partial
     return AgentInput(base, trial.target_graph_partial, tuple(r.relation_id for r in trial.target_graph_partial.relations))
+
+
+def _definition_graph(definition: Any):
+    from abm.domains import Entity, RelationGraph
+
+    relation_ids = {row.relation.relation_id for row in definition.constituents}
+    entity_ids = sorted({
+        argument
+        for row in definition.constituents
+        for argument in row.relation.arguments
+        if argument not in relation_ids
+    })
+    return RelationGraph(
+        graph_id=f"definition:{definition.name}",
+        entities=tuple(Entity(entity_id) for entity_id in entity_ids),
+        relations=tuple(row.relation for row in definition.constituents),
+    )
 
 
 def _ledger_record(
@@ -140,7 +177,7 @@ def _ledger_record(
         "theta_prime": config.theta_prime,
         "tau": config.tau_acc,
         "constituent_states": _constituent_states(state),
-        "entity_map_covered": bool(output.trace.get("filled_slots", ())),
+        "entity_map_covered": bool(output.trace.get("entity_map_covered", False)),
         "slot_history_size": sum(len(values) for values in state.slot_history.values()),
         "filled_predicate": [r.predicate for r in output.trace.get("filled_slots", ())],
         "slot_signature": [list(r.arguments) for r in output.trace.get("filled_slots", ())],

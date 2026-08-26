@@ -26,14 +26,19 @@ def m1(
 
     base_by_id = {relation.relation_id: relation for relation in base.relations}
     target_by_id = {relation.relation_id: relation for relation in target.relations}
-    pairs = [
+    raw_pairs = [
         (base_by_id[left], target_by_id[right])
         for left, right in sorted(alignment.relation_mapping.items())
         if left in base_by_id and right in target_by_id
     ]
+    structural_ids = _structural_relation_ids(base)
+    pairs = [
+        pair for pair in raw_pairs
+        if pair[0].relation_id in structural_ids and pair[0].predicate == pair[1].predicate
+    ]
     if len(pairs) < 2:
         return state, None
-    definition_name = name or _definition_name(pairs)
+    definition_name = name or _matching_definition_name(state, pairs) or _definition_name(pairs)
     old = state.definitions.get(definition_name)
     if old is None:
         common_relations = tuple(left for left, _ in pairs)
@@ -112,10 +117,41 @@ def _new_slot_count(relation: Relation, relations: tuple[Relation, ...]) -> int:
 
 
 def _definition_name(pairs: list[tuple[Relation, Relation]]) -> str:
-    material = "\x1f".join(left.predicate for left, _ in pairs).encode()
+    material = "\x1f".join(sorted(left.predicate for left, _ in pairs)).encode()
     return f"R_{sha256(material).hexdigest()[:16]}"
+
+
+def _matching_definition_name(
+    state: AgentState,
+    pairs: list[tuple[Relation, Relation]],
+) -> str | None:
+    predicates = {left.predicate for left, _ in pairs}
+    ranked: list[tuple[int, str]] = []
+    for name, definition in state.definitions.items():
+        existing = {row.relation.predicate for row in definition.constituents if row.alive}
+        overlap = len(predicates & existing)
+        if overlap >= 2:
+            ranked.append((-overlap, name))
+    return min(ranked)[1] if ranked else None
 
 
 def _alignment_event_id(alignment: Alignment) -> str:
     material = repr(sorted(alignment.relation_mapping.items())).encode()
     return sha256(material).hexdigest()[:16]
+
+
+def _structural_relation_ids(graph: RelationGraph) -> frozenset[str]:
+    relation_ids = {relation.relation_id for relation in graph.relations}
+    higher_order = {
+        relation.relation_id
+        for relation in graph.relations
+        if any(argument in relation_ids for argument in relation.arguments)
+    }
+    referenced = {
+        argument
+        for relation in graph.relations
+        if relation.relation_id in higher_order
+        for argument in relation.arguments
+        if argument in relation_ids
+    }
+    return frozenset(higher_order | referenced)

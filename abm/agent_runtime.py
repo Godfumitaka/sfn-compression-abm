@@ -72,6 +72,7 @@ def predict(
         "R_used": None,
         "m_live": 0,
         "filled_slots": (),
+        "entity_map_covered": False,
     }
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
@@ -82,16 +83,29 @@ def predict(
             agent_input.target_graph_partial,
             prototype_prior_weight=config.prototype_prior_weight,
         )
-        selected = _select_definition(state, mapping.alignment.relation_mapping)
+        selected = _select_definition(state, agent_input.target_graph_partial)
         if selected is not None:
-            name, definition, support = selected
-            trace.update(R_used=name, m_live=definition.m_live, support_at_adoption=support)
+            name, definition, definition_mapping, support = selected
+            trace.update(
+                m_live=definition.m_live,
+                support_at_adoption=support,
+                definition_alignment=definition_mapping.alignment,
+            )
+            if support >= min(2, definition.m_live):
+                trace["R_identified"] = name
             if support >= _need(config.tau_acc, definition.m_live):
+                trace["R_used"] = name
+                prediction = project(
+                    definition_mapping.alignment,
+                    _definition_graph(definition),
+                    agent_input.target_graph_partial,
+                    prototype_prior_weight=0.0,
+                )
                 filling = fill_missing_slots(
                     definition,
                     agent_input.target_graph_partial,
-                    mapping.alignment.entity_mapping,
-                    mapping.alignment.relation_mapping,
+                    definition_mapping.alignment.entity_mapping,
+                    definition_mapping.alignment.relation_mapping,
                     state.slot_history,
                     state.p_hat,
                 )
@@ -99,6 +113,12 @@ def predict(
                     filled_slots=filling.relations,
                     filled_slot_indices=filling.slot_indices,
                     filling_fallback=filling.used_fallback,
+                    entity_map_covered=all(
+                        argument in definition_mapping.alignment.entity_mapping
+                        or argument in definition_mapping.alignment.relation_mapping
+                        for row in definition.constituents
+                        for argument in row.relation.arguments
+                    ),
                 )
                 if filling.ambiguous:
                     prediction = Abstain(reason="ambiguous_projection")
@@ -120,19 +140,40 @@ def _need(tau_acc: float, m_live: int) -> int:
     return ceil(tau_acc * m_live)
 
 
-def _select_definition(state: AgentState, relation_mapping: Mapping[str, str]):
+def _select_definition(state: AgentState, target: RelationGraph):
     ranked = []
     for name, definition in state.definitions.items():
+        definition_mapping = map_graphs(_definition_graph(definition), target)
+        relation_mapping = definition_mapping.alignment.relation_mapping
         support = sum(
             1 for constituent in definition.constituents
             if constituent.alive and constituent.relation.relation_id in relation_mapping
         )
         if support:
-            ranked.append((-support, name, definition, support))
+            ranked.append((-support, name, definition, definition_mapping, support))
     if not ranked:
         return None
-    _, name, definition, support = sorted(ranked, key=lambda item: (item[0], item[1]))[0]
-    return name, definition, support
+    _, name, definition, definition_mapping, support = sorted(
+        ranked, key=lambda item: (item[0], item[1])
+    )[0]
+    return name, definition, definition_mapping, support
+
+
+def _definition_graph(definition: Any) -> RelationGraph:
+    relation_ids = {row.relation.relation_id for row in definition.constituents}
+    entity_ids = sorted({
+        argument
+        for row in definition.constituents
+        for argument in row.relation.arguments
+        if argument not in relation_ids
+    })
+    from abm.domains import Entity
+
+    return RelationGraph(
+        graph_id=f"definition:{definition.name}",
+        entities=tuple(Entity(entity_id) for entity_id in entity_ids),
+        relations=tuple(row.relation for row in definition.constituents),
+    )
 
 
 def update(pending: PendingState, feedback: Feedback) -> AgentState:
@@ -142,10 +183,8 @@ def update(pending: PendingState, feedback: Feedback) -> AgentState:
     written = pending.agent_input.target_graph_partial if pending.agent_input is not None else None
     history = (*state.public_history, *((written,) if written is not None else ()), pending.output)
     p_hat = update_frequency(state.p_hat, written.relations if written is not None else ())
-    prototype = _append_graph(state.prototype, written) if written is not None else state.prototype
     next_state = replace(
         state,
-        prototype=prototype,
         public_history=history,
         rng_state=pending.rng_state,
         p_hat=p_hat,
@@ -154,7 +193,7 @@ def update(pending: PendingState, feedback: Feedback) -> AgentState:
     if isinstance(feedback, RevealedEdge):
         return replace(
             next_state,
-            prototype=_append_relation(next_state.prototype, feedback.edge),
+            public_history=(*next_state.public_history, feedback.edge),
             p_hat=update_frequency(next_state.p_hat, (feedback.edge,)),
         )
     if isinstance(feedback, CorrectnessBit) or feedback is None:
