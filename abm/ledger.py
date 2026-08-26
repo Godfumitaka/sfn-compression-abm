@@ -66,11 +66,11 @@ class RunHeader:
     arm_repair_scope: str
     arm_holdout_repr: str
     arm_f_profile: str
-    arm_lambda_mix: float = 0.1
-    arm_abstain_charge: bool = False
-    arm_temperature: float | None = None
-    arm_d_shared: float | None = None
-    arm_adaptation_table: str | None = None
+    arm_lambda_mix: float
+    arm_abstain_charge: bool
+    arm_temperature: float | None
+    arm_d_shared: float | None
+    arm_adaptation_table: str | None
 
     def to_dict(self) -> dict[str, Any]:
         return {field: getattr(self, field) for field in ARM_DESCRIPTOR_FIELDS}

@@ -18,7 +18,10 @@ from abm.logging_schema import LOGGING_SCHEMA_FIELDS
 
 
 def _header() -> RunHeader:
-    return RunHeader(0.3, 0.2, 0.1, 4.0, "tower", "removed", "constant")
+    return RunHeader(
+        0.3, 0.2, 0.1, 4.0, "tower", "removed", "constant",
+        0.1, False, None, None, None,
+    )
 
 
 def _record(trial: int) -> dict:
