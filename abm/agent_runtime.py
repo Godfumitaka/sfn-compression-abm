@@ -23,6 +23,9 @@ from abm.domains import (
     RelationGraph,
     RevealedEdge,
 )
+from abm.filling import fill_missing_slots
+from abm.accounting import update_frequency
+from abm.sme import apply_threshold, map_graphs, project
 
 
 class RNG(Protocol):
@@ -43,6 +46,7 @@ class PendingState:
 
     previous_state: FrozenAgentState
     output: AgentOutput
+    agent_input: AgentInput | None = None
     rng_state: str | int | tuple[Any, ...] | None = None
 
 
@@ -52,31 +56,107 @@ def predict(
     config: AgentConfig,
     rng: RNG,
 ) -> tuple[AgentOutput, PendingState]:
-    """公開入力だけから予測を確定し、フィードバック前の状態を返す。
+    """公開入力と不変状態だけから P1〜P7 を実行する。"""
 
-    第2段では SME/MDL 未接続なので、正解挙動を stipulate せず一律に棄却する。
-    `config` と `rng` は境界契約を固定するために受け取るが、oracle 情報は受け取らない。
-    """
-
-    _ = (agent_input, config, rng)
-    output = AgentOutput(prediction=Abstain(reason="model_not_implemented"))
+    base = state.prototype if state.prototype is not None else agent_input.base_graph
+    mapping = map_graphs(
+        base,
+        agent_input.target_graph_partial,
+        prototype=state.prototype,
+        prototype_prior_weight=config.prototype_prior_weight,
+    )
+    threshold = apply_threshold(mapping, config.threshold)
+    trace: dict[str, Any] = {
+        "alignment": mapping.alignment,
+        "support_at_adoption": 0,
+        "R_used": None,
+        "m_live": 0,
+        "filled_slots": (),
+    }
+    if not threshold.accepted:
+        prediction = Abstain(reason="below_threshold")
+    else:
+        prediction = project(
+            mapping.alignment,
+            base,
+            agent_input.target_graph_partial,
+            prototype_prior_weight=config.prototype_prior_weight,
+        )
+        selected = _select_definition(state, mapping.alignment.relation_mapping)
+        if selected is not None:
+            name, definition, support = selected
+            trace.update(R_used=name, m_live=definition.m_live, support_at_adoption=support)
+            if support >= _need(config.tau_acc, definition.m_live):
+                filling = fill_missing_slots(
+                    definition,
+                    agent_input.target_graph_partial,
+                    mapping.alignment.entity_mapping,
+                    mapping.alignment.relation_mapping,
+                    state.slot_history,
+                    state.p_hat,
+                )
+                trace.update(
+                    filled_slots=filling.relations,
+                    filled_slot_indices=filling.slot_indices,
+                    filling_fallback=filling.used_fallback,
+                )
+                if filling.ambiguous:
+                    prediction = Abstain(reason="ambiguous_projection")
+                elif isinstance(prediction, Abstain) and filling.relations:
+                    prediction = EdgePrediction(filling.relations[0])
+    output = AgentOutput(prediction=prediction, trace=trace)
     pending = PendingState(
         previous_state=state,
         output=output,
+        agent_input=agent_input,
         rng_state=_snapshot_rng_state(rng, state.rng_state),
     )
     return output, pending
+
+
+def _need(tau_acc: float, m_live: int) -> int:
+    from math import ceil
+
+    return ceil(tau_acc * m_live)
+
+
+def _select_definition(state: AgentState, relation_mapping: Mapping[str, str]):
+    ranked = []
+    for name, definition in state.definitions.items():
+        support = sum(
+            1 for constituent in definition.constituents
+            if constituent.alive and constituent.relation.relation_id in relation_mapping
+        )
+        if support:
+            ranked.append((-support, name, definition, support))
+    if not ranked:
+        return None
+    _, name, definition, support = sorted(ranked, key=lambda item: (item[0], item[1]))[0]
+    return name, definition, support
 
 
 def update(pending: PendingState, feedback: Feedback) -> AgentState:
     """保留状態と予測後フィードバックだけから次の `AgentState` を返す。"""
 
     state = pending.previous_state
-    history = (*state.public_history, pending.output)
-    next_state = replace(state, public_history=history, rng_state=pending.rng_state)
+    written = pending.agent_input.target_graph_partial if pending.agent_input is not None else None
+    history = (*state.public_history, *((written,) if written is not None else ()), pending.output)
+    p_hat = update_frequency(state.p_hat, written.relations if written is not None else ())
+    prototype = _append_graph(state.prototype, written) if written is not None else state.prototype
+    next_state = replace(
+        state,
+        prototype=prototype,
+        public_history=history,
+        rng_state=pending.rng_state,
+        p_hat=p_hat,
+    )
 
     if isinstance(feedback, RevealedEdge):
-        return replace(next_state, prototype=_append_relation(next_state.prototype, feedback.edge))
+        return replace(
+            next_state,
+            prototype=_append_relation(next_state.prototype, feedback.edge),
+            p_hat=update_frequency(next_state.p_hat, (feedback.edge,)),
+        )
     if isinstance(feedback, CorrectnessBit) or feedback is None:
         return next_state
     raise TypeError("unknown feedback variant")
@@ -179,6 +259,13 @@ def _append_relation(graph: RelationGraph | None, relation: Relation) -> Relatio
         entities=tuple(graph.entities),
         relations=(*graph.relations, relation),
     )
+
+
+def _append_graph(graph: RelationGraph | None, observed: RelationGraph) -> RelationGraph:
+    result = graph
+    for relation in observed.relations:
+        result = _append_relation(result, relation)
+    return result if result is not None else RelationGraph("prototype")
 
 
 def _snapshot_rng_state(

@@ -6,7 +6,6 @@ import pytest
 
 from abm.ledger import (
     ARM_DESCRIPTOR_FIELDS,
-    AUGUST_23_FIELDS,
     D23_FIELDS,
     LEDGER_FIELDS,
     MECHANISM_FIELDS,
@@ -34,14 +33,13 @@ def _record(trial: int) -> dict:
     )
 
 
-def test_ledger_field_accounting_is_38_22_15_5_5_minus_two() -> None:
+def test_ledger_field_accounting_is_38_22_23_5_minus_three() -> None:
     assert len(LOGGING_SCHEMA_FIELDS) == 38
     assert len(D23_FIELDS) == 22
-    assert len(MECHANISM_FIELDS) == 15
-    assert len(AUGUST_23_FIELDS) == 5
+    assert len(MECHANISM_FIELDS) == 23
     assert len(RESEARCH_FIELDS) == 5
-    assert len(LEDGER_FIELDS) == 83
-    assert len(ARM_DESCRIPTOR_FIELDS) == 7
+    assert len(LEDGER_FIELDS) == 85
+    assert len(ARM_DESCRIPTOR_FIELDS) == 12
     assert LEDGER_FIELDS.count("agent_state_snapshot_hash") == 1
     assert LEDGER_FIELDS.count("abstain_reason") == 1
 
@@ -64,7 +62,7 @@ def test_ledger_rejects_missing_and_null_required_fields(tmp_path) -> None:
     path = tmp_path / "ledger.jsonl"
     with Ledger(path, _header()) as ledger:
         missing = _record(0)
-        missing.pop("world_hash")
+        missing.pop("scene_G_star_ref")
         with pytest.raises(ValueError, match="missing"):
             ledger.append(missing)
         with pytest.raises(ValueError, match="non-null"):

@@ -11,6 +11,14 @@ from enum import Enum
 from types import MappingProxyType
 from typing import Any, Mapping
 
+from abm.definition import (
+    EmbedState,
+    ExceptionAccumulator,
+    FrequencyTable,
+    MeritAccumulator,
+    NamedDefinition,
+)
+
 
 class TargetType(str, Enum):
     ISOMORPHIC = "isomorphic"
@@ -147,13 +155,27 @@ class AgentConfig:
     correction_mode: CorrectionMode
     lambda_: float = 1.0
     prototype_prior_weight: float = 0.0
+    theta_prime: float = 0.0410
+    tau_acc: float = 0.67
+    alpha: float = 0.0
+    beta: float = 0.0
+    w: float = 0.0
+    kappa: float = 1.0
+    lambda_mix: float = 0.1
+    abstain_charge: bool = False
 
 
 @dataclass(frozen=True, slots=True)
 class AgentState:
     prototype: RelationGraph | None = None
-    public_history: tuple[AgentOutput, ...] = ()
+    public_history: tuple[Any, ...] = ()
     rng_state: str | int | tuple[Any, ...] | None = None
+    definitions: Mapping[str, NamedDefinition] = field(default_factory=dict)
+    merit: Mapping[tuple[str, int], MeritAccumulator] = field(default_factory=dict)
+    embed: Mapping[tuple[str, int], EmbedState] = field(default_factory=dict)
+    exceptions: ExceptionAccumulator = ExceptionAccumulator(0.0, 0)
+    p_hat: FrequencyTable = FrequencyTable.empty()
+    slot_history: Mapping[tuple[str, int], frozenset[str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "public_history", tuple(self.public_history))

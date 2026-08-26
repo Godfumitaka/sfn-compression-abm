@@ -14,9 +14,19 @@ FeedbackFrequency = Callable[[str, int], float]
 class FeedbackCoinResult:
     agent_id: str
     t: int
-    u_t: float
-    f_setting: float
+    coin_t: float
+    f_realized: float
     f_fired: bool
+
+    @property
+    def u_t(self) -> float:
+        """層Aの旧名を読み取りのみ互換として残す。"""
+
+        return self.coin_t
+
+    @property
+    def f_setting(self) -> float:
+        return self.f_realized
 
 
 def f(agent_id: str, t: int) -> float:
@@ -29,14 +39,14 @@ def f(agent_id: str, t: int) -> float:
 def evaluate_feedback_coin(
     agent_id: str,
     t: int,
-    u_t: float,
+    coin_t: float,
     frequency: FeedbackFrequency = f,
 ) -> FeedbackCoinResult:
     """世界列の共通乱数と実際の f を記録し、発火を判定する。"""
 
-    if not 0.0 <= u_t < 1.0:
-        raise ValueError("u_t は 0 <= u_t < 1 である必要がある")
+    if not 0.0 <= coin_t < 1.0:
+        raise ValueError("coin_t は 0 <= coin_t < 1 である必要がある")
     setting = float(frequency(agent_id, t))
     if not 0.0 <= setting <= 1.0:
         raise ValueError("f(agent_id, t) は 0 <= f <= 1 である必要がある")
-    return FeedbackCoinResult(agent_id, t, u_t, setting, u_t < setting)
+    return FeedbackCoinResult(agent_id, t, coin_t, setting, coin_t < setting)

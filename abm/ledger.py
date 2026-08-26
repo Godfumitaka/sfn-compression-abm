@@ -12,24 +12,25 @@ from abm.logging_schema import LOGGING_SCHEMA_FIELDS
 
 
 D23_FIELDS = (
-    "u_t", "f_setting", "f_fired", "feedback_content", "held_out_content",
+    "coin_t", "f_realized", "f_fired", "feedback_content", "held_out_content",
     "expansion_and_filling_all", "constituent_reason_123", "type2_fired",
     "predictions_all_slots", "oracle_verdict", "registration_event", "deletion_event",
     "deletion_ell", "tie_event", "dangling_ref_onset", "dangling_ref_duration", "R_used",
     "def_R_diff", "agent_state_snapshot_hash", "state_snapshot", "transmission_event", "scene_G_star_ref",
 )
 MECHANISM_FIELDS = (
-    "m_alloc", "m_live", "theta_prime", "tau", "constituent_states", "exception_bits_charged",
+    "m_alloc", "m_live", "theta_prime", "tau", "constituent_states", "entity_map_covered",
+    "slot_history_size", "filled_predicate", "slot_signature", "support_at_adoption",
+    "charge_source", "verbatim_written", "reg_del_events", "exception_bits_charged",
     "M051_balance", "matcher", "abstain_reason", "n_tie_candidates", "candidate_distribution",
     "enumeration_version", "V_vocab", "merit_event_times", "outcome_category",
-)
-AUGUST_23_FIELDS = (
-    "charge_source", "verbatim_written", "world_hash", "seed_hash", "support_at_adoption",
 )
 RESEARCH_FIELDS = ("p1", "p0", "Sel", "OA", "f_realized")
 ARM_DESCRIPTOR_FIELDS = (
     "arm_alpha", "arm_beta", "arm_w", "arm_kappa", "arm_repair_scope",
     "arm_holdout_repr", "arm_f_profile",
+    "arm_lambda_mix", "arm_abstain_charge", "arm_temperature", "arm_d_shared",
+    "arm_adaptation_table",
 )
 NON_NULL_FIELDS = frozenset(
     ("exception_bits_charged", "constituent_reason_123", "oracle_verdict", "m_live", "support_at_adoption")
@@ -41,19 +42,19 @@ def _unique_fields(*groups: tuple[str, ...]) -> tuple[str, ...]:
 
 
 LEDGER_FIELDS = _unique_fields(
-    LOGGING_SCHEMA_FIELDS, D23_FIELDS, MECHANISM_FIELDS, AUGUST_23_FIELDS, RESEARCH_FIELDS
+    LOGGING_SCHEMA_FIELDS, D23_FIELDS, MECHANISM_FIELDS, RESEARCH_FIELDS
 )
 if len(LOGGING_SCHEMA_FIELDS) != 38:
     raise RuntimeError(f"層A台帳欄は38本ではない: {len(LOGGING_SCHEMA_FIELDS)}")
-if len(LEDGER_FIELDS) != 83:
+if len(LEDGER_FIELDS) != 85:
     raise RuntimeError(
-        "台帳欄は83本ではない: "
+        "台帳欄は85本ではない: "
         f"A={len(LOGGING_SCHEMA_FIELDS)}, D23={len(D23_FIELDS)}, "
-        f"mechanism={len(MECHANISM_FIELDS)}, aug23={len(AUGUST_23_FIELDS)}, "
+        f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
     )
-if len(ARM_DESCRIPTOR_FIELDS) != 7:
-    raise RuntimeError(f"腕記述子は7本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
+if len(ARM_DESCRIPTOR_FIELDS) != 12:
+    raise RuntimeError(f"腕記述子は12本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +66,11 @@ class RunHeader:
     arm_repair_scope: str
     arm_holdout_repr: str
     arm_f_profile: str
+    arm_lambda_mix: float = 0.1
+    arm_abstain_charge: bool = False
+    arm_temperature: float | None = None
+    arm_d_shared: float | None = None
+    arm_adaptation_table: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {field: getattr(self, field) for field in ARM_DESCRIPTOR_FIELDS}
