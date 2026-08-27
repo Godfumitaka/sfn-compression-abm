@@ -43,6 +43,7 @@ class NamedDefinition:
     constituents: tuple[Constituent, ...]
     m_alloc: int
     registered_at: int
+    assimilation_count: int = 1
 
     @property
     def m_live(self) -> int:

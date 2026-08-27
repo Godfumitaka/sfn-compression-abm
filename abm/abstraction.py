@@ -10,7 +10,40 @@ from abm.accounting import freeze_price, initial_merit
 from abm.definition import Constituent, EmbedState, NamedDefinition
 from abm.domains import AgentState, Relation, RelationGraph
 from abm.filling import observe_slot
-from abm.sme import Alignment
+from abm.sme import Alignment, map_graphs
+
+
+def _identify_definition(
+    state: AgentState,
+    scene: RelationGraph,
+    threshold: float,
+    self_score_cache: dict[str, float] | None = None,
+) -> str | None:
+    """SEQL/GEL の NSIM 閾値を最初に満たす生存 def(R) を同定する。"""
+
+    cache = self_score_cache if self_score_cache is not None else {}
+    definitions = sorted(
+        (definition for definition in state.definitions.values() if definition.m_live > 0),
+        key=lambda definition: (-definition.assimilation_count, -definition.registered_at),
+    )
+    for definition in definitions:
+        graph = _definition_graph(definition)
+        live_signature = tuple(
+            (row.slot_index, row.registered_at)
+            for row in definition.constituents
+            if row.alive
+        )
+        cache_key = repr((definition.name, live_signature))
+        self_score = cache.get(cache_key)
+        if self_score is None:
+            self_score = map_graphs(graph, graph).alignment.total_score
+            cache[cache_key] = self_score
+        if self_score <= 0:
+            continue
+        score = map_graphs(graph, scene).alignment.total_score
+        if score / self_score >= threshold:
+            return definition.name
+    return None
 
 
 def m1(
@@ -38,7 +71,7 @@ def m1(
     ]
     if len(pairs) < 2:
         return state, None
-    definition_name = name or _matching_definition_name(state, pairs) or _definition_name(pairs)
+    definition_name = name or _definition_name(pairs)
     old = state.definitions.get(definition_name)
     if old is None:
         common_relations = tuple(left for left, _ in pairs)
@@ -49,6 +82,10 @@ def m1(
         definition = NamedDefinition(definition_name, constituents, len(constituents), trial)
     else:
         definition = _extend_definition(old, pairs, state, trial)
+        definition = replace(
+            definition,
+            assimilation_count=old.assimilation_count + 1,
+        )
 
     definitions = dict(state.definitions)
     definitions[definition_name] = definition
@@ -109,7 +146,13 @@ def _extend_definition(
             old.m_alloc,
         )
         rows.append(Constituent(tombstone.slot_index, trial, relation, price))
-    return NamedDefinition(old.name, tuple(rows), old.m_alloc, old.registered_at)
+    return NamedDefinition(
+        old.name,
+        tuple(rows),
+        old.m_alloc,
+        old.registered_at,
+        old.assimilation_count,
+    )
 
 
 def _new_slot_count(relation: Relation, relations: tuple[Relation, ...]) -> int:
@@ -122,20 +165,6 @@ def _new_slot_count(relation: Relation, relations: tuple[Relation, ...]) -> int:
 def _definition_name(pairs: list[tuple[Relation, Relation]]) -> str:
     material = "\x1f".join(sorted(left.predicate for left, _ in pairs)).encode()
     return f"R_{sha256(material).hexdigest()[:16]}"
-
-
-def _matching_definition_name(
-    state: AgentState,
-    pairs: list[tuple[Relation, Relation]],
-) -> str | None:
-    predicates = {left.predicate for left, _ in pairs}
-    ranked: list[tuple[int, str]] = []
-    for name, definition in state.definitions.items():
-        existing = {row.relation.predicate for row in definition.constituents if row.alive}
-        overlap = len(predicates & existing)
-        if overlap:
-            ranked.append((-overlap, name))
-    return min(ranked)[1] if ranked else None
 
 
 def _alignment_event_id(alignment: Alignment) -> str:
@@ -158,3 +187,22 @@ def _structural_relation_ids(graph: RelationGraph) -> frozenset[str]:
         if argument in relation_ids
     }
     return frozenset(higher_order | referenced)
+
+
+def _definition_graph(definition: NamedDefinition) -> RelationGraph:
+    """墓石を含む def(R) を SME 入力グラフへ変換する。"""
+
+    relation_ids = {row.relation.relation_id for row in definition.constituents}
+    entity_ids = sorted({
+        argument
+        for row in definition.constituents
+        for argument in row.relation.arguments
+        if argument not in relation_ids
+    })
+    from abm.domains import Entity
+
+    return RelationGraph(
+        graph_id=f"definition:{definition.name}",
+        entities=tuple(Entity(entity_id) for entity_id in entity_ids),
+        relations=tuple(row.relation for row in definition.constituents),
+    )
