@@ -52,6 +52,9 @@ def run_longitudinal(
     _CANONICAL_KEEP.clear()
     _REPR_CACHE.clear()
     current = dict(states)
+    self_score_caches: dict[str, dict[str, float]] = {
+        agent_id: {} for agent_id in current
+    }
     for trial in world.trials:
         for agent_id in sorted(current):
             config = configs[agent_id]
@@ -71,6 +74,7 @@ def run_longitudinal(
                     after,
                     agent_input.target_graph_partial,
                     config.nsim_threshold,
+                    self_score_caches[agent_id],
                 )
                 after, registration = m1(
                     after,
