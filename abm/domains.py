@@ -35,6 +35,12 @@ class CorrectionMode(str, Enum):
     REVEALED_EDGE = "revealed_edge"
 
 
+class RepairScope(str, Enum):
+    FIRST_ORDER = "first_order"
+    SECOND_ORDER = "second_order"
+    ALL = "all"
+
+
 class SendingPolicy(str, Enum):
     RAW_INSTANCE_RANDOM = "raw_instance_random"
 
@@ -164,6 +170,7 @@ class AgentConfig:
     kappa: float = 1.0
     lambda_mix: float = 0.1
     abstain_charge: bool = False
+    repair_scope: RepairScope = RepairScope.FIRST_ORDER
 
 
 @dataclass(frozen=True, slots=True)
@@ -199,7 +206,7 @@ class AgentState:
     definitions: Mapping[str, NamedDefinition] = field(default_factory=dict)
     merit: Mapping[tuple[str, int], MeritAccumulator] = field(default_factory=dict)
     embed: Mapping[tuple[str, int], EmbedState] = field(default_factory=dict)
-    exceptions: ExceptionAccumulator = ExceptionAccumulator(0.0, 0)
+    exceptions: Mapping[tuple[str, int], ExceptionAccumulator] = field(default_factory=dict)
     p_hat: FrequencyTable = FrequencyTable.empty()
     slot_history: Mapping[tuple[str, int], frozenset[str]] = field(default_factory=dict)
 

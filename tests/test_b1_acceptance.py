@@ -382,7 +382,11 @@ def test_4_13_longitudinal_produces_a_prediction(thinning_run) -> None:
 
 def test_4_14_longitudinal_records_a_deletion(thinning_run) -> None:
     _, records = thinning_run
-    assert any(record["deletion_event"] for record in records)
+    assert any(
+        event["kind"] == "deletion"
+        for record in records
+        for event in record["deletion_event"]
+    )
 
 
 def test_4_15_prototype_does_not_grow_monotonically(thinning_run) -> None:
@@ -472,9 +476,7 @@ def test_5_13_nsim_self_similarity_is_one() -> None:
     state = _prediction_state("M1")
     definition = next(iter(state.definitions.values()))
     graph = _graph("M1", definition=True)
-    self_score = map_graphs(graph, graph).alignment.total_score
-    assert self_score > 0
-    assert map_graphs(graph, graph).alignment.total_score / self_score == pytest.approx(1.0)
+    assert _identify_definition(state, graph, threshold=0.95) == definition.name
 
 
 def test_5_14_universal_predicate_alone_does_not_identify() -> None:

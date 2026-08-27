@@ -8,6 +8,7 @@ from typing import Iterable
 
 from abm.definition import (
     EmbedState,
+    ExceptionAccumulator,
     FrequencyTable,
     FrozenPrice,
     MeritAccumulator,
@@ -116,12 +117,17 @@ def embed_value(embed: EmbedState, kappa: float) -> float:
 def constituent_value(
     price: FrozenPrice,
     accumulator: MeritAccumulator,
+    exceptions: ExceptionAccumulator,
     embed: EmbedState,
     *,
     w: float,
     kappa: float,
 ) -> float:
-    return participation(accumulator) * price.a0 + w * embed_value(embed, kappa) / price.ell_frozen
+    denominator = sum(accumulator.basis)
+    charged = sum(exceptions.basis)
+    delta_l = price.saving - (charged / denominator if denominator > 0.0 else 0.0)
+    a = delta_l / price.ell_frozen
+    return participation(accumulator) * a + w * embed_value(embed, kappa) / price.ell_frozen
 
 
 def survives(value: float, theta_prime: float) -> bool:

@@ -7,7 +7,7 @@ from hashlib import sha256
 from typing import Mapping
 
 from abm.accounting import freeze_price, initial_merit
-from abm.definition import Constituent, EmbedState, NamedDefinition
+from abm.definition import Constituent, EmbedState, ExceptionAccumulator, NamedDefinition
 from abm.domains import AgentState, Relation, RelationGraph
 from abm.filling import observe_slot
 from abm.sme import Alignment, map_graphs
@@ -93,6 +93,7 @@ def m1(
     definitions[definition_name] = definition
     merit = dict(state.merit)
     embed = dict(state.embed)
+    exceptions = dict(state.exceptions)
     history = dict(state.slot_history)
     for constituent in definition.constituents:
         key = (definition_name, constituent.slot_index)
@@ -101,6 +102,7 @@ def m1(
                 constituent.slot_index, trial, trial - base_written_at, horizon
             )
             embed[key] = EmbedState(constituent.slot_index, 0.0, 0.0)
+            exceptions[key] = ExceptionAccumulator((0.0,) * 16, 0.0, 0)
         matching = next(
             (right for left, right in pairs if left.relation_id == constituent.relation.relation_id),
             None,
@@ -108,7 +110,10 @@ def m1(
         if matching is not None:
             history = observe_slot(history, definition_name, constituent.slot_index, matching.predicate)
     event_id = _alignment_event_id(alignment)
-    next_state = replace(state, definitions=definitions, merit=merit, embed=embed, slot_history=history)
+    next_state = replace(
+        state, definitions=definitions, merit=merit, embed=embed,
+        exceptions=exceptions, slot_history=history,
+    )
     return next_state, {
         "kind": "registration",
         "R": definition_name,
