@@ -11,7 +11,7 @@ from typing import Any, Callable, Mapping, Protocol
 
 from abm.abstraction import m1
 from abm.accounting import score_prediction, update_merit
-from abm.agent_runtime import predict, update
+from abm.agent_runtime import _definition_graph, predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
     Abstain,
@@ -23,6 +23,12 @@ from abm.domains import (
 from abm.feedback import FeedbackFrequency, evaluate_feedback_coin, f
 from abm.ledger import LEDGER_FIELDS, Ledger, empty_record
 from abm.world import WorldSequence
+from abm.sme import project
+
+
+_CANONICAL_CACHE: dict[int, Any] = {}
+_CANONICAL_KEEP: list[Any] = []
+_REPR_CACHE: dict[int, str] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -42,6 +48,9 @@ def run_longitudinal(
 ) -> LoopResult:
     """共通世界列を順方向に一度だけ走査する。"""
 
+    _CANONICAL_CACHE.clear()
+    _CANONICAL_KEEP.clear()
+    _REPR_CACHE.clear()
     current = dict(states)
     for trial in world.trials:
         for agent_id in sorted(current):
@@ -49,6 +58,7 @@ def run_longitudinal(
             before = current[agent_id]
             agent_input = _agent_input(trial, before)
             output, pending = predict(agent_input, before, config, Random(_rng_seed(agent_id, trial.trial)))
+            verbatim_baseline = _verbatim_baseline(output, agent_input.target_graph_partial)
             score = score_prediction(output, trial.held_out_edge, len(before.p_hat.alive_vocab))
             coin = evaluate_feedback_coin(agent_id, trial.trial, trial.u_coins[agent_id], frequency)
             feedback = RevealedEdge(trial.held_out_edge) if coin.f_fired else None
@@ -89,6 +99,7 @@ def run_longitudinal(
                 registration,
                 deletion_events,
                 world.world_hash,
+                verbatim_baseline,
             ))
     return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))
 
@@ -135,21 +146,15 @@ def _agent_input(trial: Any, state: AgentState):
     return AgentInput(trial.target_graph_partial, trial.target_graph_partial, tuple(r.relation_id for r in trial.target_graph_partial.relations))
 
 
-def _definition_graph(definition: Any):
-    from abm.domains import Entity, RelationGraph
+def _verbatim_baseline(output: Any, target: Any) -> EdgePrediction | None:
+    """採用した逐語枚の反実仮想予測を研究者側で再構成する。"""
 
-    relation_ids = {row.relation.relation_id for row in definition.constituents}
-    entity_ids = sorted({
-        argument
-        for row in definition.constituents
-        for argument in row.relation.arguments
-        if argument not in relation_ids
-    })
-    return RelationGraph(
-        graph_id=f"definition:{definition.name}",
-        entities=tuple(Entity(entity_id) for entity_id in entity_ids),
-        relations=tuple(row.relation for row in definition.constituents),
-    )
+    base = output.trace.get("selected_scene")
+    alignment = output.trace.get("alignment")
+    if base is None or alignment is None:
+        return None
+    prediction = project(alignment, base, target, prototype_prior_weight=0.0)
+    return prediction if isinstance(prediction, EdgePrediction) else None
 
 
 def _ledger_record(
@@ -163,6 +168,7 @@ def _ledger_record(
     registration: Any,
     deletions: tuple[dict[str, object], ...],
     world_hash: str,
+    verbatim_baseline: EdgePrediction | None,
 ) -> dict[str, Any]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
@@ -184,6 +190,14 @@ def _ledger_record(
         "hit": int(score.hit),
         "coverage": int(not isinstance(prediction, Abstain)),
         "accuracy": float(score.hit),
+        "verbatim_baseline_prediction": (
+            verbatim_baseline.edge.to_dict() if verbatim_baseline is not None else None
+        ),
+        "verbatim_baseline_hit": int(
+            verbatim_baseline is not None
+            and verbatim_baseline.edge.predicate == trial.held_out_edge.predicate
+            and verbatim_baseline.edge.arguments == trial.held_out_edge.arguments
+        ),
         "coin_t": coin.coin_t,
         "f_realized": coin.f_realized,
         "f_fired": coin.f_fired,
@@ -192,6 +206,7 @@ def _ledger_record(
         "oracle_verdict": score.outcome_category,
         "registration_event": registration,
         "deletion_event": list(deletions),
+        "tie_event": bool(output.trace.get("tie_event", False)),
         "R_used": output.trace.get("R_used"),
         "def_R_diff": registration,
         "agent_state_snapshot_hash": sha256(_json_bytes(snapshot)).hexdigest(),
@@ -243,14 +258,40 @@ def _constituent_states(state: AgentState) -> list[dict[str, Any]]:
 
 
 def _canonical(value: Any) -> Any:
+    if is_dataclass(value) or isinstance(value, (tuple, frozenset)):
+        key = id(value)
+        if key in _CANONICAL_CACHE:
+            return _CANONICAL_CACHE[key]
+        result = _canonical_build(value)
+        _CANONICAL_CACHE[key] = result
+        _CANONICAL_KEEP.append(value)
+        return result
+    return _canonical_build(value)
+
+
+def _canonical_build(value: Any) -> Any:
     if is_dataclass(value):
         return {field.name: _canonical(getattr(value, field.name)) for field in fields(value)}
     if isinstance(value, Mapping):
         return {str(key): _canonical(item) for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))}
     if isinstance(value, (tuple, list, frozenset, set)):
-        return [_canonical(item) for item in sorted(value, key=repr) if item is not None]
+        return [_canonical(item) for item in sorted(value, key=_canonical_sort_key) if item is not None]
     if isinstance(value, (str, int, float, bool)) or value is None:
         return value
+    return repr(value)
+
+
+def _canonical_sort_key(value: Any) -> str:
+    """不変要素の repr を再利用し、既存の整列順を保つ。"""
+
+    if is_dataclass(value) or isinstance(value, (tuple, frozenset)):
+        key = id(value)
+        cached = _REPR_CACHE.get(key)
+        if cached is not None:
+            return cached
+        rendered = repr(value)
+        _REPR_CACHE[key] = rendered
+        return rendered
     return repr(value)
 
 

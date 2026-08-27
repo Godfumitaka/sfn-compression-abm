@@ -18,6 +18,7 @@ from abm.domains import (
     AgentOutput,
     AgentState,
     CorrectnessBit,
+    EdgePrediction,
     Feedback,
     Relation,
     RelationGraph,
@@ -85,53 +86,56 @@ def predict(
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
     else:
-        prediction = project(
-            mapping.alignment,
-            base,
-            agent_input.target_graph_partial,
-            prototype_prior_weight=config.prototype_prior_weight,
-        )
-        selected = _select_definition(state, mapping)
-        if selected is not None:
-            name, definition, support = selected
-            trace.update(
-                m_live=definition.m_live,
-                support_at_adoption=support,
-                definition_alignment=mapping.alignment,
-            )
-            if support >= min(2, definition.m_live):
-                trace["R_identified"] = name
-            if support >= _need(config.tau_acc, definition.m_live):
-                trace["R_used"] = name
-                prediction = project(
-                    mapping.alignment,
-                    base,
-                    agent_input.target_graph_partial,
-                    prototype_prior_weight=0.0,
-                )
-                filling = fill_missing_slots(
-                    definition,
-                    agent_input.target_graph_partial,
-                    mapping.alignment.entity_mapping,
-                    mapping.alignment.relation_mapping,
-                    state.slot_history,
-                    state.p_hat,
-                )
-                trace.update(
-                    filled_slots=filling.relations,
-                    filled_slot_indices=filling.slot_indices,
-                    filling_fallback=filling.used_fallback,
-                    entity_map_covered=all(
-                        argument in mapping.alignment.entity_mapping
-                        or argument in mapping.alignment.relation_mapping
-                        for row in definition.constituents
-                        for argument in row.relation.arguments
-                    ),
-                )
-                if filling.ambiguous:
-                    prediction = Abstain(reason="ambiguous_projection")
-                elif isinstance(prediction, Abstain) and filling.relations:
-                    prediction = EdgePrediction(filling.relations[0])
+        if not state.definitions:
+            prediction = Abstain(reason="no_definition")
+        else:
+            selected = _select_definition(state, agent_input.target_graph_partial, config)
+            if selected is None:
+                prediction = Abstain(reason="no_definition")
+            else:
+                _, support, definition, graph, definition_alignment, tie_event = selected
+                name = definition.name
+                trace["support_at_adoption"] = support
+                trace["m_live"] = definition.m_live
+                trace["definition_alignment"] = definition_alignment
+                trace["tie_event"] = tie_event
+                if support >= min(2, definition.m_live):
+                    trace["R_identified"] = name
+                if support < _need(config.tau_acc, definition.m_live):
+                    prediction = Abstain(reason="below_tau")
+                else:
+                    trace["R_used"] = name
+                    prediction = project(
+                        definition_alignment,
+                        graph,
+                        agent_input.target_graph_partial,
+                        prototype_prior_weight=0.0,
+                    )
+                    filling = fill_missing_slots(
+                        definition,
+                        agent_input.target_graph_partial,
+                        definition_alignment.entity_mapping,
+                        definition_alignment.relation_mapping,
+                        state.slot_history,
+                        state.p_hat,
+                    )
+                    trace.update(
+                        filled_slots=filling.relations,
+                        filled_slot_indices=filling.slot_indices,
+                        filling_fallback=filling.used_fallback,
+                        entity_map_covered=all(
+                            argument in definition_alignment.entity_mapping
+                            or argument in definition_alignment.relation_mapping
+                            for row in definition.constituents
+                            for argument in row.relation.arguments
+                        ),
+                    )
+                    if filling.ambiguous:
+                        prediction = Abstain(reason="ambiguous_projection")
+                    elif isinstance(prediction, Abstain) and filling.relations:
+                        prediction = EdgePrediction(filling.relations[0])
+                    elif isinstance(prediction, Abstain):
+                        prediction = Abstain(reason="no_projectable_relation")
     output = AgentOutput(prediction=prediction, trace=trace)
     pending = PendingState(
         previous_state=state,
@@ -148,22 +152,41 @@ def _need(tau_acc: float, m_live: int) -> int:
     return ceil(tau_acc * m_live)
 
 
-def _select_definition(state: AgentState, mapping: Any):
+def _select_definition(
+    state: AgentState,
+    scene: RelationGraph,
+    config: AgentConfig,
+) -> tuple[float, int, Any, RelationGraph, Any, bool] | None:
+    """各 def(R) を場面に当て、支持比が最大のものを返す。"""
+
+    del config  # def(R) の採択に絶対 threshold は適用しない。
     ranked = []
-    for name, definition in state.definitions.items():
-        relation_mapping = mapping.alignment.relation_mapping
+    for definition in state.definitions.values():
+        if definition.m_live == 0:
+            continue
+        graph = _definition_graph(definition)
+        alignment = map_graphs(graph, scene).alignment
+        if alignment is None:
+            continue
         support = sum(
             1 for constituent in definition.constituents
-            if constituent.alive and constituent.relation.relation_id in relation_mapping
+            if constituent.alive
+            and constituent.relation.relation_id in alignment.relation_mapping
         )
-        if support:
-            ranked.append((-support, name, definition, support))
+        ranked.append((support / definition.m_live, support, definition, graph, alignment))
     if not ranked:
         return None
-    _, name, definition, support = sorted(
-        ranked, key=lambda item: (item[0], item[1])
-    )[0]
-    return name, definition, support
+    ranked.sort(
+        key=lambda item: (-item[0], -item[2].m_live, -item[2].registered_at, item[2].name)
+    )
+    best = ranked[0]
+    tie_event = sum(
+        item[0] == best[0]
+        and item[2].m_live == best[2].m_live
+        and item[2].registered_at == best[2].registered_at
+        for item in ranked
+    ) > 1
+    return (*best, tie_event)
 
 
 def _definition_graph(definition: Any) -> RelationGraph:
