@@ -54,6 +54,8 @@ def m1(
     trial: int,
     *,
     name: str | None = None,
+    base_written_at: int,
+    horizon: int,
 ) -> tuple[AgentState, dict[str, object] | None]:
     """整列の共通部分からサイズ2以上の def(R) を登録・更新する。"""
 
@@ -95,7 +97,9 @@ def m1(
     for constituent in definition.constituents:
         key = (definition_name, constituent.slot_index)
         if constituent.registered_at == trial:
-            merit[key] = initial_merit(constituent.slot_index, trial, (2.0,) * 16)
+            merit[key] = initial_merit(
+                constituent.slot_index, trial, trial - base_written_at, horizon
+            )
             embed[key] = EmbedState(constituent.slot_index, 0.0, 0.0)
         matching = next(
             (right for left, right in pairs if left.relation_id == constituent.relation.relation_id),

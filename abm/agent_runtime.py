@@ -82,6 +82,7 @@ def predict(
         "filled_slots": (),
         "entity_map_covered": False,
         "selected_scene": base,
+        "selected_scene_written_at": selected_trace.written_at,
     }
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
