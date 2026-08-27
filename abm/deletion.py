@@ -48,6 +48,7 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
             tuple(rows),
             definition.m_alloc,
             definition.registered_at,
+            definition.assimilation_count,
         )
     prototype = state.prototype
     if prototype.traces:

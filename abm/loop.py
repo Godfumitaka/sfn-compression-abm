@@ -9,9 +9,9 @@ import json
 from random import Random
 from typing import Any, Callable, Mapping, Protocol
 
-from abm.abstraction import m1
+from abm.abstraction import _identify_definition, m1
 from abm.accounting import score_prediction, update_merit
-from abm.agent_runtime import _definition_graph, predict, update
+from abm.agent_runtime import predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
     Abstain,
@@ -52,6 +52,9 @@ def run_longitudinal(
     _CANONICAL_KEEP.clear()
     _REPR_CACHE.clear()
     current = dict(states)
+    self_score_caches: dict[str, dict[str, float]] = {
+        agent_id: {} for agent_id in current
+    }
     for trial in world.trials:
         for agent_id in sorted(current):
             config = configs[agent_id]
@@ -66,25 +69,20 @@ def run_longitudinal(
             after = _update_merit(after, output, agent_input.target_graph_partial, config, len(world.trials))
 
             registration = None
-            used_name = output.trace.get("R_identified")
-            definition_alignment = output.trace.get("definition_alignment")
-            if used_name is not None and definition_alignment is not None:
-                definition = after.definitions[str(used_name)]
-                after, registration = m1(
+            if output.trace.get("selected_scene") is not None:
+                identified = _identify_definition(
                     after,
-                    _definition_graph(definition),
                     agent_input.target_graph_partial,
-                    definition_alignment,
-                    trial.trial,
-                    name=str(used_name),
+                    config.nsim_threshold,
+                    self_score_caches[agent_id],
                 )
-            elif output.trace.get("selected_scene") is not None:
                 after, registration = m1(
                     after,
                     output.trace["selected_scene"],
                     agent_input.target_graph_partial,
                     output.trace["alignment"],
                     trial.trial,
+                    name=identified,
                 )
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after

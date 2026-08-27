@@ -157,6 +157,7 @@ class AgentConfig:
     prototype_prior_weight: float = 0.0
     theta_prime: float = 0.0410
     tau_acc: float = 0.67
+    nsim_threshold: float = 0.95
     alpha: float = 0.0
     beta: float = 0.0
     w: float = 0.0
