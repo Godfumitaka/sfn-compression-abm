@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from math import log2
+from math import exp, log2
 from typing import Iterable
 
 from abm.definition import (
@@ -51,11 +51,24 @@ def update_frequency(table: FrequencyTable, relations: Iterable[Relation]) -> Fr
     return FrequencyTable(counts, table.total + added, table.lambda_mix, frozenset(counts))
 
 
-def initial_merit(slot_index: int, registered_at: int, strengths: Iterable[float]) -> MeritAccumulator:
-    basis = tuple(float(value) for value in strengths)
-    if len(basis) != 16:
-        raise ValueError("指数基底は16本である必要がある")
-    return MeritAccumulator(slot_index, registered_at, basis, max(basis, default=0.0), 0)
+def decay_ladder(horizon: int) -> tuple[float, ...]:
+    """U-001: tau in geomspace(0.3, T*3, 16)。走行長に合わせて 16 本の時定数を返す。"""
+
+    return tuple(
+        exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))
+        for index in range(16)
+    )
+
+
+def initial_merit(
+    slot_index: int,
+    registered_at: int,
+    base_age: int,
+    horizon: int,
+) -> MeritAccumulator:
+    ladder = decay_ladder(horizon)
+    seed = tuple(factor ** max(base_age, 0) + 1.0 for factor in ladder)
+    return MeritAccumulator(slot_index, registered_at, seed, seed, 2.0, 0)
 
 
 def update_merit(
@@ -65,27 +78,34 @@ def update_merit(
     matched: bool,
     filled_scored: bool,
     alpha: float,
+    applied: bool,
     external_use: bool = False,
 ) -> MeritAccumulator:
     """照合と採点済み充填の二チャネルを一試行一回だけ加算する。"""
 
-    increment = 1.0 if matched else alpha if filled_scored else 0.0
+    increment = (1.0 if matched else alpha if filled_scored else 0.0) if applied else 0.0
     factors = tuple(float(value) for value in decay)
     if len(factors) != len(accumulator.basis):
         raise ValueError("減衰係数と基底の本数が異なる")
     basis = tuple(old * factor + increment for old, factor in zip(accumulator.basis, factors))
+    opportunity_basis = tuple(
+        old * factor + float(applied)
+        for old, factor in zip(accumulator.opportunity_basis, factors)
+    )
     return replace(
         accumulator,
         basis=basis,
+        opportunity_basis=opportunity_basis,
         use_count=accumulator.use_count + increment,
         ext_use_count=accumulator.ext_use_count + int(external_use),
     )
 
 
 def participation(accumulator: MeritAccumulator) -> float:
-    if accumulator.use_count <= 0:
+    denominator = sum(accumulator.opportunity_basis)
+    if denominator <= 0.0:
         return 0.0
-    return sum(accumulator.basis) / (len(accumulator.basis) * accumulator.use_count)
+    return sum(accumulator.basis) / denominator
 
 
 def embed_value(embed: EmbedState, kappa: float) -> float:

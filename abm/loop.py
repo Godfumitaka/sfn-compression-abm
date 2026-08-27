@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
-from math import exp
 import json
 from random import Random
 from typing import Any, Callable, Mapping, Protocol
 
 from abm.abstraction import _identify_definition, m1
-from abm.accounting import score_prediction, update_merit
+from abm.accounting import decay_ladder, score_prediction, update_merit
 from abm.agent_runtime import predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
@@ -83,6 +82,8 @@ def run_longitudinal(
                     output.trace["alignment"],
                     trial.trial,
                     name=identified,
+                    base_written_at=output.trace["selected_scene_written_at"],
+                    horizon=len(world.trials),
                 )
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after
@@ -116,10 +117,8 @@ def _update_merit(
     merit = dict(state.merit)
     visible_predicates = {relation.predicate for relation in scene.relations}
     filled = {relation.predicate for relation in output.trace.get("filled_slots", ())}
-    decay = tuple(
-        exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))
-        for index in range(16)
-    )
+    decay = decay_ladder(horizon)
+    used_name = output.trace.get("R_used")
     for name, definition in state.definitions.items():
         for row in definition.constituents:
             if not row.alive:
@@ -134,6 +133,7 @@ def _update_merit(
                 matched=row.relation.predicate in visible_predicates,
                 filled_scored=row.relation.predicate in filled,
                 alpha=config.alpha,
+                applied=used_name == name,
             )
     return replace(state, merit=merit)
 

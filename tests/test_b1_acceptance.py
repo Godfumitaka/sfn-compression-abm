@@ -8,7 +8,7 @@ from random import Random
 import pytest
 
 from abm.abstraction import _identify_definition, m1
-from abm.accounting import participation, update_frequency
+from abm.accounting import decay_ladder, initial_merit, participation, update_frequency
 from abm.deletion import apply_theta
 from abm.definition import EmbedState, MeritAccumulator
 from abm.agent_runtime import predict
@@ -171,6 +171,8 @@ def test_2_7_mediator_initial_participation_is_at_least_half() -> None:
         map_graphs(base, target).alignment,
         trial=1,
         name="R",
+        base_written_at=0,
+        horizon=400,
     )
     assert event is not None
     assert state.definitions["R"].constituents
@@ -235,7 +237,10 @@ def test_3_14_slot_history_is_nonempty_immediately_after_registration() -> None:
     base = _graph("M1", definition=True)
     target = _graph("M1", definition=False)
     state = AgentState(p_hat=update_frequency(AgentState().p_hat, target.relations))
-    registered, event = m1(state, base, target, map_graphs(base, target).alignment, 1, name="R")
+    registered, event = m1(
+        state, base, target, map_graphs(base, target).alignment, 1,
+        name="R", base_written_at=0, horizon=400,
+    )
     assert event is not None
     assert registered.slot_history
     assert all(len(predicates) >= 1 for predicates in registered.slot_history.values())
@@ -245,6 +250,56 @@ def test_3_15_v0_never_uses_signature_fallback(
     prediction_counts: dict[str, dict[str, int]],
 ) -> None:
     assert sum(values["fallback"] for values in prediction_counts.values()) == 0
+
+
+def _synthetic_merit(k: int) -> MeritAccumulator:
+    ladder = decay_ladder(400)
+    basis = (0.0,) * 16
+    opportunity_basis = (0.0,) * 16
+    for trial in range(1, 401):
+        basis = tuple(value * factor + float(trial % k == 0) for value, factor in zip(basis, ladder))
+        opportunity_basis = tuple(value * factor + 1.0 for value, factor in zip(opportunity_basis, ladder))
+    return MeritAccumulator(0, 0, basis, opportunity_basis, 0.0, 0)
+
+
+@pytest.mark.parametrize(
+    ("k", "expected"),
+    ((1, 1.000000), (2, 0.503055), (5, 0.205210), (10, 0.106179), (50, 0.027628)),
+)
+def test_5_17_participation_tracks_independent_opportunities(k: int, expected: float) -> None:
+    assert participation(_synthetic_merit(k)) == pytest.approx(expected, rel=1e-4)
+
+
+def test_5_18_participation_preserves_fulfilment_rate_difference() -> None:
+    assert participation(_synthetic_merit(1)) / participation(_synthetic_merit(10)) >= 9.0
+
+
+@pytest.mark.parametrize("base_age", (0, 100))
+def test_5_19_d_cold_initial_participation_is_one(base_age: int) -> None:
+    base = _graph("M1", definition=True)
+    target = _graph("M1", definition=False)
+    state = AgentState(p_hat=update_frequency(AgentState().p_hat, target.relations))
+    registered, event = m1(
+        state,
+        base,
+        target,
+        map_graphs(base, target).alignment,
+        trial=base_age,
+        name="R",
+        base_written_at=0,
+        horizon=400,
+    )
+    assert event is not None
+    for row in registered.definitions["R"].constituents:
+        assert participation(registered.merit[("R", row.slot_index)]) == pytest.approx(1.0, abs=1e-9)
+
+
+@pytest.mark.parametrize(
+    ("base_age", "expected"),
+    ((0, 32.000000), (1, 28.276717), (5, 25.373605), (20, 22.883322), (100, 20.061277)),
+)
+def test_5_20_d_cold_strength_reflects_base_age(base_age: int, expected: float) -> None:
+    assert sum(initial_merit(0, 0, base_age, 400).basis) == pytest.approx(expected, rel=1e-6)
 
 
 @pytest.mark.parametrize(
@@ -466,7 +521,7 @@ def _deletion_state(motif: str) -> AgentState:
     for index, row in enumerate(rows):
         participation_level = 0.20 if index < survivor_count else 0.02
         merit[("R", index)] = MeritAccumulator(
-            index, 0, (participation_level * 2,) * 16, 2.0, 0
+            index, 0, (participation_level * 2,) * 16, (2.0,) * 16, 2.0, 0
         )
         embed[("R", index)] = EmbedState(index, 0.0, 0.0)
     return AgentState(definitions={"R": definition}, merit=merit, embed=embed)

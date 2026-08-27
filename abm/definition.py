@@ -55,8 +55,13 @@ class MeritAccumulator:
     slot_index: int
     registered_at: int
     basis: tuple[float, ...]
+    opportunity_basis: tuple[float, ...]
     use_count: float
     ext_use_count: int
+
+    def __post_init__(self) -> None:
+        if len(self.basis) != 16 or len(self.opportunity_basis) != 16:
+            raise ValueError("指数基底は分子・分母とも16本である必要がある")
 
 
 @dataclass(frozen=True, slots=True)
