@@ -25,7 +25,10 @@ MECHANISM_FIELDS = (
     "M051_balance", "matcher", "abstain_reason", "n_tie_candidates", "candidate_distribution",
     "enumeration_version", "V_vocab", "merit_event_times", "outcome_category",
 )
-RESEARCH_FIELDS = ("p1", "p0", "Sel", "OA", "f_realized")
+RESEARCH_FIELDS = (
+    "p1", "p0", "Sel", "OA", "f_realized",
+    "verbatim_baseline_prediction", "verbatim_baseline_hit",
+)
 ARM_DESCRIPTOR_FIELDS = (
     "arm_alpha", "arm_beta", "arm_w", "arm_kappa", "arm_repair_scope",
     "arm_holdout_repr", "arm_f_profile",
@@ -46,9 +49,9 @@ LEDGER_FIELDS = _unique_fields(
 )
 if len(LOGGING_SCHEMA_FIELDS) != 38:
     raise RuntimeError(f"層A台帳欄は38本ではない: {len(LOGGING_SCHEMA_FIELDS)}")
-if len(LEDGER_FIELDS) != 85:
+if len(LEDGER_FIELDS) != 87:
     raise RuntimeError(
-        "台帳欄は85本ではない: "
+        "台帳欄は87本ではない: "
         f"A={len(LOGGING_SCHEMA_FIELDS)}, D23={len(D23_FIELDS)}, "
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"

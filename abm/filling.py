@@ -57,8 +57,12 @@ def fill_missing_slots(
     ambiguous = False
     fallback_used = False
     definition_graph = RelationGraph("definition", relations=tuple(c.relation for c in definition.constituents))
+    scene_relation_ids = {relation.relation_id for relation in target.relations}
     for constituent in definition.constituents:
-        if not constituent.alive or constituent.relation.relation_id in relation_mapping:
+        if not constituent.alive:
+            continue
+        mapped_to = relation_mapping.get(constituent.relation.relation_id)
+        if mapped_to is not None and mapped_to in scene_relation_ids:
             continue
         mapped_arguments = _mapped_arguments(constituent.relation, entity_mapping, relation_mapping)
         if mapped_arguments is None:

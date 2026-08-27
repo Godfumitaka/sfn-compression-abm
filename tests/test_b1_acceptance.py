@@ -152,8 +152,8 @@ def prediction_counts() -> dict[str, dict[str, int]]:
     return {motif: dict(values) for motif, values in counts.items()}
 
 
-def test_1_11_ledger_has_85_unique_fields() -> None:
-    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 85
+def test_1_11_ledger_has_87_unique_fields() -> None:
+    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 87
 
 
 def test_1_12_run_header_has_12_arm_descriptors() -> None:
@@ -369,14 +369,48 @@ def test_4_20_below_threshold_stays_low(theta_prime: float, theta_runs) -> None:
     assert below / 400 < 0.05
 
 
-def test_4_21_low_theta_still_produces_predictions(theta_runs) -> None:
-    _, records = theta_runs[0.0410]
-    assert sum(record["prediction_kind"] != "Abstain" for record in records) >= 50
+def test_4_21_prediction_count_is_stable_across_theta(theta_runs) -> None:
+    counts = [
+        sum(record["prediction_kind"] != "Abstain" for record in records)
+        for _, records in theta_runs.values()
+    ]
+    assert max(counts) - min(counts) <= 0.2 * max(counts)
 
 
 def test_4_22_at_least_one_definition_reaches_four_allocations(theta_runs) -> None:
     state, _ = theta_runs[0.2637]
     assert any(definition.m_alloc >= 4 for definition in state.definitions.values())
+
+
+def test_5_1_and_5_2_definitions_are_adopted_longitudinally(thinning_run) -> None:
+    _, records = thinning_run
+    adopted = sum(record["R_used"] is not None for record in records)
+    assert adopted >= 100
+    assert adopted / len(records) >= 0.10
+
+
+def test_5_3_predictions_never_fall_back_to_verbatim(thinning_run) -> None:
+    _, records = thinning_run
+    assert all(
+        record["R_used"] is not None or record["prediction_kind"] == "Abstain"
+        for record in records
+    )
+
+
+def test_5_4_to_5_7_abstention_and_filling_paths_are_observable(thinning_run) -> None:
+    _, records = thinning_run
+    reasons = {record["abstain_reason"] for record in records}
+    assert "below_tau" in reasons
+    assert "no_definition" in reasons
+    assert any(record["entity_map_covered"] for record in records)
+    assert any(record["filled_predicate"] for record in records)
+
+
+def test_5_12_filled_predictions_hit_the_held_out_edge(thinning_run) -> None:
+    _, records = thinning_run
+    filled = [record for record in records if record["filled_predicate"]]
+    assert filled
+    assert all(record["hit"] == 1 for record in filled)
 
 
 def _deletion_state(motif: str) -> AgentState:
