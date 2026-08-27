@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 
 from abm.accounting import constituent_value, survives
-from abm.definition import NamedDefinition
+from abm.definition import ExceptionAccumulator, NamedDefinition
 from abm.domains import AgentConfig, AgentState, Prototype
 
 
@@ -27,6 +27,7 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
             value = constituent_value(
                 constituent.frozen_price,
                 accumulator,
+                state.exceptions.get(key, ExceptionAccumulator((0.0,) * 16, 0.0, 0)),
                 embed,
                 w=config.w,
                 kappa=config.kappa,

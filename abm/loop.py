@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, fields, is_dataclass
+from dataclasses import dataclass, fields, is_dataclass, replace
 from hashlib import sha256
 import json
 from random import Random
 from typing import Any, Callable, Mapping, Protocol
 
 from abm.abstraction import _identify_definition, m1
-from abm.accounting import decay_ladder, score_prediction, update_merit
+from abm.accounting import decay_ladder, exception_cost, score_prediction, update_merit
+from abm.definition import ExceptionAccumulator
 from abm.agent_runtime import predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
@@ -17,12 +18,14 @@ from abm.domains import (
     AgentConfig,
     AgentState,
     EdgePrediction,
+    RepairScope,
     RevealedEdge,
 )
 from abm.feedback import FeedbackFrequency, evaluate_feedback_coin, f
 from abm.ledger import LEDGER_FIELDS, Ledger, empty_record
 from abm.world import WorldSequence
 from abm.sme import project
+from abm.filling import _mapped_arguments
 
 
 _CANONICAL_CACHE: dict[int, Any] = {}
@@ -65,7 +68,10 @@ def run_longitudinal(
             coin = evaluate_feedback_coin(agent_id, trial.trial, trial.u_coins[agent_id], frequency)
             feedback = RevealedEdge(trial.held_out_edge) if coin.f_fired else None
             after = update(pending, feedback)
-            after = _update_merit(after, output, agent_input.target_graph_partial, config, len(world.trials))
+            after, accounting = _update_accounting(
+                after, output, agent_input.target_graph_partial, config,
+                len(world.trials), score, coin, trial.held_out_edge,
+            )
 
             registration = None
             if output.trace.get("selected_scene") is not None:
@@ -99,26 +105,54 @@ def run_longitudinal(
                 deletion_events,
                 world.world_hash,
                 verbatim_baseline,
+                accounting,
             ))
     return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))
 
 
-def _update_merit(
+def classify_row(row: Any, scene: Any, entity_mapping: Mapping[str, str], relation_mapping: Mapping[str, str]) -> str:
+    """rev6 §C.5.2b の四値分類を一箇所で行う。"""
+
+    position = _mapped_arguments(row.relation, entity_mapping, relation_mapping)
+    if position is None:
+        return "判定不能"
+    visible_content = {(relation.predicate, relation.arguments) for relation in scene.relations}
+    if (row.relation.predicate, position) in visible_content:
+        return "充足"
+    if position in {relation.arguments for relation in scene.relations}:
+        return "②"
+    return "③"
+
+
+def _update_accounting(
     state: AgentState,
     output: Any,
     scene: Any,
     config: AgentConfig,
     horizon: int,
-) -> AgentState:
-    """U3〜U5: 可視場面での述語充足を全生存行へ一度だけ反映する。"""
-
-    from dataclasses import replace
+    score: Any,
+    coin: Any,
+    revealed_edge: Any,
+) -> tuple[AgentState, dict[str, Any]]:
+    """功績と例外費用を同じ減衰梯子で一試行ぶん更新する。"""
 
     merit = dict(state.merit)
-    visible_predicates = {relation.predicate for relation in scene.relations}
+    exceptions = dict(state.exceptions)
     filled = {relation.predicate for relation in output.trace.get("filled_slots", ())}
     decay = decay_ladder(horizon)
     used_name = output.trace.get("R_used")
+    alignment = output.trace.get("definition_alignment")
+    reasons: dict[str, dict[int, str]] = {}
+    sources: dict[str, list[Any]] = {"①": [], "②": [], "衝突": []}
+    charged_total = 0.0
+
+    # R が適用されない行も、蓄積した例外費用の減衰だけは進む。
+    for key, accumulator in exceptions.items():
+        exceptions[key] = replace(
+            accumulator,
+            basis=tuple(old * factor for old, factor in zip(accumulator.basis, decay)),
+        )
+
     for name, definition in state.definitions.items():
         for row in definition.constituents:
             if not row.alive:
@@ -127,15 +161,84 @@ def _update_merit(
             accumulator = merit.get(key)
             if accumulator is None:
                 continue
+            applied = used_name == name
+            reason = None
+            if applied and alignment is not None:
+                reason = classify_row(row, scene, alignment.entity_mapping, alignment.relation_mapping)
+                reasons.setdefault(name, {})[row.slot_index] = reason
             merit[key] = update_merit(
                 accumulator,
                 decay,
-                matched=row.relation.predicate in visible_predicates,
+                matched=reason == "充足",
                 filled_scored=row.relation.predicate in filled,
                 alpha=config.alpha,
-                applied=used_name == name,
+                applied=applied,
             )
-    return replace(state, merit=merit)
+            if reason == "②":
+                position = _mapped_arguments(row.relation, alignment.entity_mapping, alignment.relation_mapping)
+                candidates = [relation for relation in scene.relations if relation.arguments == position]
+                lengths = [state.p_hat.code_length(relation.predicate) for relation in candidates]
+                ell_r = sum(lengths) / len(lengths)
+                cost = exception_cost(definition.m_live, ell_r)
+                exceptions[key] = _charge(exceptions[key], cost)
+                charged_total += cost
+                sources["②"].append((name, row.slot_index))
+                if len(candidates) >= 2:
+                    sources["衝突"].append({
+                        "R": name, "slot_index": row.slot_index,
+                        "候補": [relation.predicate for relation in candidates], "符号長": lengths,
+                        "最短": min(lengths), "平均": ell_r, "合計": sum(lengths),
+                    })
+
+    # ①は非棄権の誤答が開示された試行だけに立つ。
+    if used_name is not None and alignment is not None and not isinstance(output.prediction, Abstain) and not score.hit and coin.f_fired:
+        definition = state.definitions[used_name]
+        base_ids = {
+            row.relation.relation_id for row in definition.constituents
+            if row.alive and row.relation.relation_id in alignment.relation_mapping
+        }
+        charged_ids = _repair_targets(definition, base_ids, config.repair_scope)
+        cost = exception_cost(definition.m_live, state.p_hat.code_length(revealed_edge.predicate))
+        for row in definition.constituents:
+            if row.alive and row.relation.relation_id in charged_ids:
+                key = (used_name, row.slot_index)
+                exceptions[key] = _charge(exceptions[key], cost)
+                charged_total += cost
+                sources["①"].append(key)
+
+    next_state = replace(state, merit=merit, exceptions=exceptions)
+    return next_state, {
+        "constituent_reason_123": reasons,
+        "charge_source": sources if sources["①"] or sources["②"] else None,
+        "type2_fired": bool(sources["②"]),
+        "exception_bits_charged": charged_total,
+    }
+
+
+def _charge(accumulator: ExceptionAccumulator, cost: float) -> ExceptionAccumulator:
+    return replace(
+        accumulator,
+        basis=tuple(value + cost for value in accumulator.basis),
+        bits=accumulator.bits + cost,
+        event_count=accumulator.event_count + 1,
+    )
+
+
+def _repair_targets(definition: Any, base_ids: set[str], scope: RepairScope) -> set[str]:
+    alive = [row for row in definition.constituents if row.alive]
+    reached = set(base_ids)
+    frontier = set(base_ids)
+    depth = 1 if scope is RepairScope.FIRST_ORDER else 2 if scope is RepairScope.SECOND_ORDER else None
+    steps = 0
+    while frontier and (depth is None or steps < depth):
+        parents = {
+            row.relation.relation_id for row in alive
+            if any(argument in frontier for argument in row.relation.arguments)
+        } - reached
+        reached.update(parents)
+        frontier = parents
+        steps += 1
+    return reached
 
 
 def _agent_input(trial: Any, state: AgentState):
@@ -167,6 +270,7 @@ def _ledger_record(
     deletions: tuple[dict[str, object], ...],
     world_hash: str,
     verbatim_baseline: EdgePrediction | None,
+    accounting: Mapping[str, Any],
 ) -> dict[str, Any]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
@@ -222,8 +326,8 @@ def _ledger_record(
         "support_at_adoption": support,
         "verbatim_written": True,
         "reg_del_events": [event for event in (registration, *deletions) if event is not None],
-        "exception_bits_charged": 0.0,
-        "M051_balance": state.exceptions.bits,
+        "exception_bits_charged": accounting["exception_bits_charged"],
+        "M051_balance": sum(value.bits for value in state.exceptions.values()),
         "matcher": "sme",
         "n_tie_candidates": 0,
         "candidate_distribution": [],
@@ -231,7 +335,10 @@ def _ledger_record(
         "V_vocab": len(state.p_hat.alive_vocab),
         "merit_event_times": [],
         "outcome_category": score.outcome_category,
-        "constituent_reason_123": {},
+        "constituent_reason_123": accounting["constituent_reason_123"],
+        "charge_source": accounting["charge_source"],
+        "type2_fired": accounting["type2_fired"],
+        "arm_repair_scope": config.repair_scope.value,
         "world_hash": world_hash,
     }
     return empty_record(**{key: value for key, value in required.items() if key in LEDGER_FIELDS})
