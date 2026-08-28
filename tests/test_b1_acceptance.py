@@ -33,7 +33,7 @@ from abm.domains import (
 from abm.ledger import ARM_DESCRIPTOR_FIELDS, LEDGER_FIELDS
 from abm.sme import map_graphs
 from abm.world import generate_world
-from abm.loop import run_longitudinal
+from abm.loop import _repair_targets, run_longitudinal
 
 
 MOTIFS = {
@@ -532,13 +532,40 @@ def test_5_27_and_5_28_collision_accounting_uses_mean(theta_runs) -> None:
     assert all(item["平均"] == pytest.approx(sum(item["符号長"]) / len(item["符号長"])) for item in collisions)
 
 
-def test_5_25_repair_scope_changes_total_charge(theta_runs) -> None:
-    first = sum(record["exception_bits_charged"] for record in theta_runs[0.3842][1])
-    _, second_records = _longitudinal_run(
-        0.3842, repair_scope=RepairScope.SECOND_ORDER,
+@pytest.mark.parametrize(
+    ("base_ids", "scope", "expected"),
+    (
+        ({"rid_core1", "rid_core2"}, RepairScope.FIRST_ORDER,
+         {"rid_core1", "rid_core2", "rid_higher"}),
+        ({"rid_core1", "rid_core2"}, RepairScope.SECOND_ORDER,
+         {"rid_core1", "rid_core2", "rid_higher", "rid_tower"}),
+        ({"rid_core1", "rid_core2"}, RepairScope.ALL,
+         {"rid_core1", "rid_core2", "rid_higher", "rid_tower"}),
+        ({"rid_med"}, RepairScope.FIRST_ORDER, {"rid_med", "rid_tower"}),
+        ({"rid_med"}, RepairScope.SECOND_ORDER, {"rid_med", "rid_tower"}),
+        ({"rid_med"}, RepairScope.ALL, {"rid_med", "rid_tower"}),
+    ),
+)
+def test_5_25_repair_scope_reaches_expected_relations(
+    base_ids: set[str], scope: RepairScope, expected: set[str],
+) -> None:
+    relations = (
+        Relation("rid_core1", "break", ("a", "b")),
+        Relation("rid_core2", "cut", ("a", "b")),
+        Relation("rid_higher", "cause", ("rid_core1", "rid_core2")),
+        Relation("rid_med", "stone", ("a", "e")),
+        Relation("rid_tower", "allow", ("rid_med", "rid_higher")),
     )
-    second = sum(record["exception_bits_charged"] for record in second_records)
-    assert first != second
+    rows = tuple(
+        Constituent(index, 0, relation, FrozenPrice(4.0, 7, 11.0, 6))
+        for index, relation in enumerate(relations)
+    )
+    definition = NamedDefinition("R", rows, 5, 0)
+
+    reached = _repair_targets(definition, base_ids, scope)
+
+    assert len(reached) == len(expected)
+    assert reached == expected
 
 
 def test_5_14_universal_predicate_alone_does_not_identify() -> None:
