@@ -3,6 +3,9 @@ from __future__ import annotations
 from hashlib import sha256
 import json
 import re
+from time import perf_counter
+
+import pytest
 
 from abm.domains import AgentConfig, AgentState, CorrectionMode
 from abm.ledger import LEDGER_FIELDS, RUN_INPUT_FIELDS, RunHeader, _code_commit
@@ -16,11 +19,12 @@ class MemoryLedger:
     def append(self, record): self.records.append(record)
 
 
-def _run(mode="delta", counterfactuals=True):
+def _run(mode="delta", counterfactuals=True, *, trials=60, snapshot_every=None):
     ledger = MemoryLedger()
-    run_longitudinal(generate_world(1, 60, ("agent",)), {"agent": AgentState()},
+    kwargs = {} if snapshot_every is None else {"snapshot_every": snapshot_every}
+    run_longitudinal(generate_world(1, trials, ("agent",)), {"agent": AgentState()},
                      {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=.1432)}, ledger,
-                     snapshot_mode=mode, calculate_counterfactuals=counterfactuals)
+                     snapshot_mode=mode, calculate_counterfactuals=counterfactuals, **kwargs)
     return ledger.records
 
 
@@ -52,3 +56,65 @@ def test_f5_f6_f13_f14_f16_modes_purity_schema_and_determinism():
     assert all(r["state_snapshot"] is None for r in hash_only)
     assert len(LEDGER_FIELDS) == 89
     assert json.dumps(delta, sort_keys=True, default=str) == json.dumps(_run(), sort_keys=True, default=str)
+
+
+def test_g1_snapshot_every_one_preserves_delta_jsonl():
+    assert json.dumps(_run(), sort_keys=True, default=str) == json.dumps(
+        _run(snapshot_every=1), sort_keys=True, default=str
+    )
+
+
+def test_g2_g3_g4_g5_sparse_delta_schedule_base_hash_and_round_trip():
+    records = _run(snapshot_every=10)
+    captured = [record for record in records if record["state_snapshot"]["kind"] != "skipped"]
+    assert [record["prediction_order"] for record in captured] == [0, 10, 20, 30, 40, 50, 59]
+    assert all(record["agent_state_snapshot_hash"] is not None for record in records)
+
+    captured_hash = None
+    state = None
+    for record in records:
+        item = record["state_snapshot"]
+        if item["kind"] == "skipped":
+            assert item == {"kind": "skipped", "base_hash": captured_hash}
+            continue
+        if item["kind"] == "delta":
+            assert item["base_hash"] == captured_hash
+        else:
+            assert item["kind"] == "full"
+        state = item["value"] if item["kind"] == "full" else _apply(state, item["changes"])
+        captured_hash = record["agent_state_snapshot_hash"]
+        assert sha256(_json_bytes(state)).hexdigest() == captured_hash
+
+
+def test_g6_snapshot_every_does_not_change_state_hashes():
+    hashes = [
+        [record["agent_state_snapshot_hash"] for record in _run(trials=200, snapshot_every=every)]
+        for every in (1, 5, 10)
+    ]
+    assert hashes[0] == hashes[1] == hashes[2]
+
+
+@pytest.mark.parametrize("mode", ["full", "hash_only"])
+def test_g7_non_delta_mode_rejects_snapshot_every(mode):
+    with pytest.raises(ValueError):
+        _run(mode, snapshot_every=10)
+
+
+@pytest.mark.parametrize("snapshot_every", [0, -1])
+def test_g8_non_positive_snapshot_every_is_rejected(snapshot_every):
+    with pytest.raises(ValueError):
+        _run(snapshot_every=snapshot_every)
+
+
+def test_g9_g10_sparse_delta_is_faster_and_at_most_one_fifth_the_size():
+    started = perf_counter()
+    every_one = _run(trials=400, snapshot_every=1)
+    every_one_seconds = perf_counter() - started
+    started = perf_counter()
+    every_ten = _run(trials=400, snapshot_every=10)
+    every_ten_seconds = perf_counter() - started
+
+    every_one_size = len(json.dumps(every_one, sort_keys=True, default=str).encode())
+    every_ten_size = len(json.dumps(every_ten, sort_keys=True, default=str).encode())
+    assert every_ten_seconds < every_one_seconds
+    assert every_ten_size <= every_one_size / 5
