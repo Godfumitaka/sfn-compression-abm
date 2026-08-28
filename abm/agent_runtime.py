@@ -62,7 +62,7 @@ def predict(
     """公開入力と不変状態だけから P1〜P7 を実行する。"""
 
     if not state.prototype.traces:
-        output = AgentOutput(prediction=Abstain(reason="no_prototype"), trace={})
+        output = AgentOutput(prediction=Abstain(reason="no_prototype"), trace={"tau_passed_defs": []})
         return output, PendingState(state, output, agent_input, _snapshot_rng_state(rng, state.rng_state))
     ranked = []
     for trace in state.prototype.traces:
@@ -83,6 +83,7 @@ def predict(
         "entity_map_covered": False,
         "selected_scene": base,
         "selected_scene_written_at": selected_trace.written_at,
+        "tau_passed_defs": [],
     }
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
@@ -94,7 +95,8 @@ def predict(
             if selected is None:
                 prediction = Abstain(reason="no_definition")
             else:
-                _, support, definition, graph, definition_alignment, tie_event = selected
+                _, support, definition, graph, definition_alignment, tie_event, passed = selected
+                trace["tau_passed_defs"] = passed
                 name = definition.name
                 trace["support_at_adoption"] = support
                 trace["m_live"] = definition.m_live
@@ -157,10 +159,10 @@ def _select_definition(
     state: AgentState,
     scene: RelationGraph,
     config: AgentConfig,
-) -> tuple[float, int, Any, RelationGraph, Any, bool] | None:
+) -> tuple[float, int, Any, RelationGraph, Any, bool, list[dict[str, Any]]] | None:
     """各 def(R) を場面に当て、支持比が最大のものを返す。"""
 
-    del config  # def(R) の採択に絶対 threshold は適用しない。
+    # def(R) の採択に絶対 threshold は適用しない。
     ranked = []
     for definition in state.definitions.values():
         if definition.m_live == 0:
@@ -187,7 +189,12 @@ def _select_definition(
         and item[2].registered_at == best[2].registered_at
         for item in ranked
     ) > 1
-    return (*best, tie_event)
+    best_name = best[2].name
+    passed = [{"R": definition.name, "support": support, "m_live": definition.m_live,
+               "ratio": ratio, "selected": definition.name == best_name}
+              for ratio, support, definition, _graph, _alignment in ranked
+              if support >= _need(config.tau_acc, definition.m_live)]
+    return (*best, tie_event, passed)
 
 
 def _definition_graph(definition: Any) -> RelationGraph:

@@ -11,7 +11,7 @@ from typing import Any, Callable, Mapping, Protocol
 from abm.abstraction import _identify_definition, m1
 from abm.accounting import decay_ladder, exception_cost, score_prediction, update_merit
 from abm.definition import ExceptionAccumulator
-from abm.agent_runtime import predict, update
+from abm.agent_runtime import _definition_graph, predict, update
 from abm.deletion import apply_theta
 from abm.domains import (
     Abstain,
@@ -24,13 +24,14 @@ from abm.domains import (
 from abm.feedback import FeedbackFrequency, evaluate_feedback_coin, f
 from abm.ledger import LEDGER_FIELDS, Ledger, empty_record
 from abm.world import WorldSequence
-from abm.sme import project
-from abm.filling import _mapped_arguments
+from abm.sme import map_graphs, project
+from abm.filling import _mapped_arguments, fill_missing_slots
 
 
 _CANONICAL_CACHE: dict[int, Any] = {}
 _CANONICAL_KEEP: list[Any] = []
 _REPR_CACHE: dict[int, str] = {}
+_DELETED = "__deleted__"
 
 
 @dataclass(frozen=True, slots=True)
@@ -47,13 +48,19 @@ def run_longitudinal(
     ledger: Ledger,
     *,
     frequency: FeedbackFrequency = f,
+    snapshot_mode: str = "delta",
+    calculate_counterfactuals: bool = True,
 ) -> LoopResult:
     """共通世界列を順方向に一度だけ走査する。"""
 
     _CANONICAL_CACHE.clear()
     _CANONICAL_KEEP.clear()
     _REPR_CACHE.clear()
+    if snapshot_mode not in {"delta", "full", "hash_only"}:
+        raise ValueError(f"未知の snapshot_mode: {snapshot_mode}")
     current = dict(states)
+    previous_snapshots: dict[str, Any] = {}
+    previous_hashes: dict[str, str] = {}
     self_score_caches: dict[str, dict[str, float]] = {
         agent_id: {} for agent_id in current
     }
@@ -63,6 +70,8 @@ def run_longitudinal(
             before = current[agent_id]
             agent_input = _agent_input(trial, before)
             output, pending = predict(agent_input, before, config, Random(_rng_seed(agent_id, trial.trial)))
+            counterfactuals = (_counterfactual_predictions(before, agent_input.target_graph_partial, output, trial.held_out_edge)
+                               if calculate_counterfactuals else [])
             verbatim_baseline = _verbatim_baseline(output, agent_input.target_graph_partial)
             score = score_prediction(output, trial.held_out_edge, len(before.p_hat.alive_vocab))
             coin = evaluate_feedback_coin(agent_id, trial.trial, trial.u_coins[agent_id], frequency)
@@ -93,7 +102,7 @@ def run_longitudinal(
                 )
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after
-            ledger.append(_ledger_record(
+            record, snapshot, snapshot_hash = _ledger_record(
                 agent_id,
                 trial,
                 config,
@@ -106,7 +115,11 @@ def run_longitudinal(
                 world.world_hash,
                 verbatim_baseline,
                 accounting,
-            ))
+                snapshot_mode, previous_snapshots.get(agent_id), previous_hashes.get(agent_id), counterfactuals,
+            )
+            ledger.append(record)
+            previous_snapshots[agent_id] = snapshot
+            previous_hashes[agent_id] = snapshot_hash
     return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))
 
 
@@ -258,6 +271,30 @@ def _verbatim_baseline(output: Any, target: Any) -> EdgePrediction | None:
     return prediction if isinstance(prediction, EdgePrediction) else None
 
 
+def _counterfactual_predictions(state: AgentState, target: Any, output: Any, held_out: Any) -> list[dict[str, Any]]:
+    results = []
+    for item in output.trace.get("tau_passed_defs", []):
+        if item["selected"]:
+            continue
+        definition = state.definitions[item["R"]]
+        graph = _definition_graph(definition)
+        alignment = map_graphs(graph, target).alignment
+        prediction = project(alignment, graph, target, prototype_prior_weight=0.0)
+        filling = fill_missing_slots(definition, target, alignment.entity_mapping, alignment.relation_mapping,
+                                     state.slot_history, state.p_hat)
+        if filling.ambiguous:
+            prediction = Abstain(reason="ambiguous_projection")
+        elif isinstance(prediction, Abstain) and filling.relations:
+            prediction = EdgePrediction(filling.relations[0])
+        elif isinstance(prediction, Abstain):
+            prediction = Abstain(reason="no_projectable_relation")
+        edge = prediction.edge if isinstance(prediction, EdgePrediction) else None
+        results.append({"R": definition.name, "predicted_edge": edge.to_dict() if edge else None,
+                        "hit": int(edge is not None and edge.predicate == held_out.predicate and edge.arguments == held_out.arguments),
+                        "abstain_reason": prediction.reason if isinstance(prediction, Abstain) else None})
+    return results
+
+
 def _ledger_record(
     agent_id: str,
     trial: Any,
@@ -271,7 +308,9 @@ def _ledger_record(
     world_hash: str,
     verbatim_baseline: EdgePrediction | None,
     accounting: Mapping[str, Any],
-) -> dict[str, Any]:
+    snapshot_mode: str, previous_snapshot: Any, previous_hash: str | None,
+    counterfactuals: list[dict[str, Any]],
+) -> tuple[dict[str, Any], Any, str]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
     predicted = prediction.edge.to_dict() if isinstance(prediction, EdgePrediction) else None
@@ -280,6 +319,14 @@ def _ledger_record(
     m_live = sum(definition.m_live for definition in definitions)
     support = int(output.trace.get("support_at_adoption", 0))
     snapshot = _canonical(state)
+    snapshot_hash = sha256(_json_bytes(snapshot)).hexdigest()
+    if snapshot_mode == "hash_only":
+        stored_snapshot = None
+    elif snapshot_mode == "full" or previous_snapshot is None:
+        stored_snapshot = {"kind": "full", "value": snapshot}
+    else:
+        stored_snapshot = {"kind": "delta", "base_hash": previous_hash,
+                           "changes": _diff(previous_snapshot, snapshot) or {}}
     required = {
         "run_id": world_hash,
         "agent_id": agent_id,
@@ -300,6 +347,7 @@ def _ledger_record(
             and verbatim_baseline.edge.predicate == trial.held_out_edge.predicate
             and verbatim_baseline.edge.arguments == trial.held_out_edge.arguments
         ),
+        "counterfactual_predictions": counterfactuals,
         "coin_t": coin.coin_t,
         "f_realized": coin.f_realized,
         "f_fired": coin.f_fired,
@@ -311,8 +359,8 @@ def _ledger_record(
         "tie_event": bool(output.trace.get("tie_event", False)),
         "R_used": output.trace.get("R_used"),
         "def_R_diff": registration,
-        "agent_state_snapshot_hash": sha256(_json_bytes(snapshot)).hexdigest(),
-        "state_snapshot": snapshot,
+        "agent_state_snapshot_hash": snapshot_hash,
+        "state_snapshot": stored_snapshot,
         "scene_G_star_ref": trial.G_star.graph_id,
         "m_alloc": m_alloc,
         "m_live": m_live,
@@ -335,13 +383,74 @@ def _ledger_record(
         "V_vocab": len(state.p_hat.alive_vocab),
         "merit_event_times": [],
         "outcome_category": score.outcome_category,
+        "tau_passed_defs": output.trace.get("tau_passed_defs", []),
         "constituent_reason_123": accounting["constituent_reason_123"],
         "charge_source": accounting["charge_source"],
         "type2_fired": accounting["type2_fired"],
         "arm_repair_scope": config.repair_scope.value,
         "world_hash": world_hash,
     }
-    return empty_record(**{key: value for key, value in required.items() if key in LEDGER_FIELDS})
+    return empty_record(**{key: value for key, value in required.items() if key in LEDGER_FIELDS}), snapshot, snapshot_hash
+
+
+def _key(value: object) -> str:
+    return json.dumps(value, sort_keys=True, default=str, separators=(",", ":"))
+
+
+def _diff(old: object, new: object) -> object | None:
+    if isinstance(old, dict) and isinstance(new, dict):
+        out = {}
+        for key in new:
+            if key not in old:
+                out[key] = {"set": new[key]}
+            else:
+                difference = _diff(old[key], new[key])
+                if difference is not None:
+                    out[key] = difference
+        for key in old:
+            if key not in new:
+                out[key] = _DELETED
+        return out or None
+    if isinstance(old, list) and isinstance(new, list):
+        from collections import Counter
+        old_keys, new_keys = [_key(x) for x in old], [_key(x) for x in new]
+        if old_keys == new_keys:
+            return None
+        old_counts, new_counts = Counter(old_keys), Counter(new_keys)
+        needed = new_counts - old_counts
+        insertions = []
+        for index, key in enumerate(new_keys):
+            if needed[key] > 0:
+                insertions.append([index, new[index]]); needed[key] -= 1
+        needed = old_counts - new_counts
+        deletions = []
+        for index, key in enumerate(old_keys):
+            if needed[key] > 0:
+                deletions.append(index); needed[key] -= 1
+        current = list(old)
+        for index in sorted(deletions, reverse=True): current.pop(index)
+        for index, value in insertions: current.insert(index, value)
+        if [_key(x) for x in current] != new_keys:
+            return {"set": new}
+        return {"ld": {"d": deletions, "i": insertions}}
+    if old == new:
+        return None
+    return {"set": new}
+
+
+def _apply(old: object, delta: object) -> object:
+    if delta is None: return old
+    if isinstance(delta, dict) and set(delta) == {"set"}: return delta["set"]
+    if isinstance(delta, dict) and set(delta) == {"ld"}:
+        current = list(old)
+        for index in sorted(delta["ld"]["d"], reverse=True): current.pop(index)
+        for index, value in delta["ld"]["i"]: current.insert(index, value)
+        return current
+    out = dict(old) if isinstance(old, dict) else {}
+    for key, value in delta.items():
+        if value == _DELETED: out.pop(key, None)
+        else: out[key] = _apply(out.get(key), value)
+    return out
 
 
 def _constituent_states(state: AgentState) -> list[dict[str, Any]]:

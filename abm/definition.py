@@ -97,8 +97,12 @@ class FrequencyTable:
 
     def prob(self, predicate: str) -> float:
         vocabulary_size = max(len(self.alive_vocab), 1)
-        empirical = self.counts.get(predicate, 0) / self.total if self.total else 0.0
-        return (1 - self.lambda_mix) * empirical + self.lambda_mix / vocabulary_size
+        if self.total == 0:
+            return 1.0 / vocabulary_size
+        empirical = self.counts.get(predicate, 0) / self.total
+        if empirical == 0.0:
+            return self.lambda_mix / vocabulary_size
+        return empirical
 
     def code_length(self, predicate: str) -> float:
         return -math.log2(self.prob(predicate))

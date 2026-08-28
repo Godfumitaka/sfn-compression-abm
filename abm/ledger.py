@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import json
 import os
 from pathlib import Path
+import subprocess
 from typing import Any, Mapping
 
 from abm.logging_schema import LOGGING_SCHEMA_FIELDS
@@ -23,11 +24,11 @@ MECHANISM_FIELDS = (
     "slot_history_size", "filled_predicate", "slot_signature", "support_at_adoption",
     "charge_source", "verbatim_written", "reg_del_events", "exception_bits_charged",
     "M051_balance", "matcher", "abstain_reason", "n_tie_candidates", "candidate_distribution",
-    "enumeration_version", "V_vocab", "merit_event_times", "outcome_category",
+    "enumeration_version", "V_vocab", "merit_event_times", "outcome_category", "tau_passed_defs",
 )
 RESEARCH_FIELDS = (
     "p1", "p0", "Sel", "OA", "f_realized",
-    "verbatim_baseline_prediction", "verbatim_baseline_hit",
+    "verbatim_baseline_prediction", "verbatim_baseline_hit", "counterfactual_predictions",
 )
 ARM_DESCRIPTOR_FIELDS = (
     "arm_alpha", "arm_beta", "arm_w", "arm_kappa", "arm_repair_scope",
@@ -49,9 +50,9 @@ LEDGER_FIELDS = _unique_fields(
 )
 if len(LOGGING_SCHEMA_FIELDS) != 38:
     raise RuntimeError(f"層A台帳欄は38本ではない: {len(LOGGING_SCHEMA_FIELDS)}")
-if len(LEDGER_FIELDS) != 87:
+if len(LEDGER_FIELDS) != 89:
     raise RuntimeError(
-        "台帳欄は87本ではない: "
+        "台帳欄は89本ではない: "
         f"A={len(LOGGING_SCHEMA_FIELDS)}, D23={len(D23_FIELDS)}, "
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
@@ -74,17 +75,44 @@ class RunHeader:
     arm_temperature: float | None
     arm_d_shared: float | None
     arm_adaptation_table: str | None
+    run_seed: str | int
+    trial_count: int
+    agent_ids: tuple[str, ...]
+    seed_file_sha256: str
+    world_hash: str
+    code_commit: str
+    theta_prime: float
+    tau_acc: float
+    f_setting: float | str
 
     def to_dict(self) -> dict[str, Any]:
-        return {field: getattr(self, field) for field in ARM_DESCRIPTOR_FIELDS}
+        return {field: getattr(self, field) for field in (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)}
+
+
+RUN_INPUT_FIELDS = (
+    "run_seed", "trial_count", "agent_ids", "seed_file_sha256", "world_hash",
+    "code_commit", "theta_prime", "tau_acc", "f_setting",
+)
+
+
+def _code_commit() -> str:
+    try:
+        return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return "unknown"
 
 
 class Ledger:
     """新規台帳を作り、runヘッダと試行行を同期追記する。"""
 
-    def __init__(self, path: str | Path, header: RunHeader) -> None:
+    def __init__(self, path: str | Path, header: RunHeader, *, compress: bool = False) -> None:
         self._path = Path(path)
-        self._stream = self._path.open("x", encoding="utf-8")
+        self._compress = compress
+        if compress:
+            import gzip
+            self._stream = gzip.open(self._path, "xt", encoding="utf-8", compresslevel=6)
+        else:
+            self._stream = self._path.open("x", encoding="utf-8")
         self._write_line({"record_type": "run_header", **header.to_dict()})
 
     def append(self, record: Mapping[str, Any]) -> None:
@@ -112,7 +140,8 @@ class Ledger:
     def _write_line(self, value: Mapping[str, Any]) -> None:
         self._stream.write(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n")
         self._stream.flush()
-        os.fsync(self._stream.fileno())
+        if not self._compress:
+            os.fsync(self._stream.fileno())
 
 
 def empty_record(**values: Any) -> dict[str, Any]:
