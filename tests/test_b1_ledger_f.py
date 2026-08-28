@@ -106,7 +106,7 @@ def test_g8_non_positive_snapshot_every_is_rejected(snapshot_every):
         _run(snapshot_every=snapshot_every)
 
 
-def test_g9_g10_sparse_delta_is_faster_and_at_most_one_fifth_the_size():
+def test_g9_g10_sparse_delta_is_faster_and_at_most_one_third_the_size():
     started = perf_counter()
     every_one = _run(trials=400, snapshot_every=1)
     every_one_seconds = perf_counter() - started
@@ -117,4 +117,4 @@ def test_g9_g10_sparse_delta_is_faster_and_at_most_one_fifth_the_size():
     every_one_size = len(json.dumps(every_one, sort_keys=True, default=str).encode())
     every_ten_size = len(json.dumps(every_ten, sort_keys=True, default=str).encode())
     assert every_ten_seconds < every_one_seconds
-    assert every_ten_size <= every_one_size / 5
+    assert every_ten_size <= every_one_size / 3

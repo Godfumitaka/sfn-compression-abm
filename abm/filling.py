@@ -45,7 +45,7 @@ def fill_missing_slots(
     target: RelationGraph,
     entity_mapping: Mapping[str, str],
     relation_mapping: Mapping[str, str],
-    slot_history: Mapping[tuple[str, int], frozenset[str]],
+    slot_history: Mapping[tuple[str, int, int], frozenset[str]],
     p_hat: FrequencyTable,
 ) -> FillingResult:
     """未充足かつ可視部に答えがない生存スロットを充填する。"""
@@ -69,7 +69,10 @@ def fill_missing_slots(
             continue
         if (constituent.relation.predicate, mapped_arguments) in visible_content:
             continue
-        pool = slot_history.get((definition.name, constituent.slot_index), frozenset())
+        pool = slot_history.get(
+            (definition.name, constituent.slot_index, constituent.registered_at),
+            frozenset(),
+        )
         used_fallback = not pool
         if used_fallback:
             signature = slot_signature(constituent.relation, definition_graph)
@@ -92,13 +95,14 @@ def fill_missing_slots(
 
 
 def observe_slot(
-    history: Mapping[tuple[str, int], frozenset[str]],
+    history: Mapping[tuple[str, int, int], frozenset[str]],
     name: str,
     slot_index: int,
+    registered_at: int,
     predicate: str,
-) -> dict[tuple[str, int], frozenset[str]]:
+) -> dict[tuple[str, int, int], frozenset[str]]:
     updated = dict(history)
-    key = (name, slot_index)
+    key = (name, slot_index, registered_at)
     updated[key] = frozenset((*updated.get(key, frozenset()), predicate))
     return updated
 
