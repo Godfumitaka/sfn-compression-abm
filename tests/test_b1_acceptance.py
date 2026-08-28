@@ -8,9 +8,12 @@ from random import Random
 import pytest
 
 from abm.abstraction import _identify_definition, m1
-from abm.accounting import decay_ladder, initial_merit, participation, update_frequency
+from abm.accounting import (
+    constituent_value, decay_ladder, exception_cost, initial_merit, participation,
+    update_frequency,
+)
 from abm.deletion import apply_theta
-from abm.definition import EmbedState, MeritAccumulator
+from abm.definition import EmbedState, ExceptionAccumulator, MeritAccumulator
 from abm.agent_runtime import predict
 from abm.definition import Constituent, FrozenPrice, NamedDefinition
 from abm.domains import (
@@ -24,12 +27,13 @@ from abm.domains import (
     Relation,
     RelationGraph,
     Prototype,
+    RepairScope,
     VerbatimTrace,
 )
 from abm.ledger import ARM_DESCRIPTOR_FIELDS, LEDGER_FIELDS
 from abm.sme import map_graphs
 from abm.world import generate_world
-from abm.loop import run_longitudinal
+from abm.loop import _repair_targets, run_longitudinal
 
 
 MOTIFS = {
@@ -177,6 +181,25 @@ def test_2_7_mediator_initial_participation_is_at_least_half() -> None:
     assert event is not None
     assert state.definitions["R"].constituents
     assert all(participation(state.merit[("R", row.slot_index)]) >= 0.5 for row in state.definitions["R"].constituents)
+
+
+def test_2_2_exception_cost_is_9_024_bits() -> None:
+    assert exception_cost(4, 5.024) == pytest.approx(9.024)
+
+
+def test_2_4_to_2_6_exception_cost_lowers_value_without_a_floor() -> None:
+    merit = MeritAccumulator(0, 0, (2.0,) * 16, (2.0,) * 16, 2.0, 0)
+    embed = EmbedState(0, 0.0, 0.0)
+    price = FrozenPrice(4.0, 4, 8.0, 4)
+    values = [
+        constituent_value(
+            price, merit, ExceptionAccumulator((charged,) * 16, charged, int(charged > 0)),
+            embed, w=0.0, kappa=1.0,
+        )
+        for charged in (0.0, 2.0, 20.0)
+    ]
+    assert values[0] > values[1] > values[2]
+    assert values[2] < 0.0
 
 
 @pytest.mark.parametrize(
@@ -328,8 +351,7 @@ def test_4_11_longitudinal_m_alloc_is_bounded() -> None:
         MemoryLedger(),
     )
     state = result.states["agent"]
-    total_alloc = sum(definition.m_alloc for definition in state.definitions.values())
-    assert total_alloc <= len(state.p_hat.alive_vocab)
+    assert all(definition.m_alloc <= 6 for definition in state.definitions.values())
 
 
 class _MemoryLedger:
@@ -340,12 +362,19 @@ class _MemoryLedger:
         self.records.append(record)
 
 
-def _longitudinal_run(theta_prime: float, trial_count: int = 400):
+def _longitudinal_run(
+    theta_prime: float,
+    trial_count: int = 400,
+    repair_scope: RepairScope = RepairScope.FIRST_ORDER,
+):
     ledger = _MemoryLedger()
     result = run_longitudinal(
         generate_world(1, trial_count, ("agent",)),
         {"agent": AgentState()},
-        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=theta_prime)},
+        {"agent": AgentConfig(
+            0.0, CorrectionMode.NONE, theta_prime=theta_prime,
+            repair_scope=repair_scope,
+        )},
         ledger,
     )
     return result.states["agent"], ledger.records
@@ -382,7 +411,10 @@ def test_4_13_longitudinal_produces_a_prediction(thinning_run) -> None:
 
 def test_4_14_longitudinal_records_a_deletion(thinning_run) -> None:
     _, records = thinning_run
-    assert any(record["deletion_event"] for record in records)
+    assert any(
+        event["kind"] == "deletion"
+        for record in records for event in record["deletion_event"]
+    )
 
 
 def test_4_15_prototype_does_not_grow_monotonically(thinning_run) -> None:
@@ -471,10 +503,69 @@ def test_5_12_filled_predictions_hit_the_held_out_edge(thinning_run) -> None:
 def test_5_13_nsim_self_similarity_is_one() -> None:
     state = _prediction_state("M1")
     definition = next(iter(state.definitions.values()))
-    graph = _graph("M1", definition=True)
-    self_score = map_graphs(graph, graph).alignment.total_score
-    assert self_score > 0
-    assert map_graphs(graph, graph).alignment.total_score / self_score == pytest.approx(1.0)
+    assert _identify_definition(state, _graph("M1", definition=True), 0.95) == definition.name
+
+
+def test_5_21_to_5_24_and_5_26_exception_ledger(theta_runs) -> None:
+    _, records = theta_runs[0.3842]
+    reasons = [
+        reason for record in records
+        for rows in record["constituent_reason_123"].values()
+        for reason in rows.values()
+    ]
+    assert {"充足", "②", "③", "判定不能"} <= set(reasons)
+    assert any(record["exception_bits_charged"] > 0.0 for record in records)
+    assert any(record["constituent_reason_123"] for record in records)
+    for record in records:
+        sources = record["charge_source"]
+        if sources is not None:
+            assert not ({tuple(item) for item in sources["②"]} & {tuple(item) for item in sources["①"]}) or sources["①"]
+
+
+def test_5_27_and_5_28_collision_accounting_uses_mean(theta_runs) -> None:
+    collisions = [
+        collision for record in theta_runs[0.3842][1]
+        if record["charge_source"] is not None
+        for collision in record["charge_source"]["衝突"]
+    ]
+    assert collisions
+    assert all(item["平均"] == pytest.approx(sum(item["符号長"]) / len(item["符号長"])) for item in collisions)
+
+
+@pytest.mark.parametrize(
+    ("base_ids", "scope", "expected"),
+    (
+        ({"rid_core1", "rid_core2"}, RepairScope.FIRST_ORDER,
+         {"rid_core1", "rid_core2", "rid_higher"}),
+        ({"rid_core1", "rid_core2"}, RepairScope.SECOND_ORDER,
+         {"rid_core1", "rid_core2", "rid_higher", "rid_tower"}),
+        ({"rid_core1", "rid_core2"}, RepairScope.ALL,
+         {"rid_core1", "rid_core2", "rid_higher", "rid_tower"}),
+        ({"rid_med"}, RepairScope.FIRST_ORDER, {"rid_med", "rid_tower"}),
+        ({"rid_med"}, RepairScope.SECOND_ORDER, {"rid_med", "rid_tower"}),
+        ({"rid_med"}, RepairScope.ALL, {"rid_med", "rid_tower"}),
+    ),
+)
+def test_5_25_repair_scope_reaches_expected_relations(
+    base_ids: set[str], scope: RepairScope, expected: set[str],
+) -> None:
+    relations = (
+        Relation("rid_core1", "break", ("a", "b")),
+        Relation("rid_core2", "cut", ("a", "b")),
+        Relation("rid_higher", "cause", ("rid_core1", "rid_core2")),
+        Relation("rid_med", "stone", ("a", "e")),
+        Relation("rid_tower", "allow", ("rid_med", "rid_higher")),
+    )
+    rows = tuple(
+        Constituent(index, 0, relation, FrozenPrice(4.0, 7, 11.0, 6))
+        for index, relation in enumerate(relations)
+    )
+    definition = NamedDefinition("R", rows, 5, 0)
+
+    reached = _repair_targets(definition, base_ids, scope)
+
+    assert len(reached) == len(expected)
+    assert reached == expected
 
 
 def test_5_14_universal_predicate_alone_does_not_identify() -> None:

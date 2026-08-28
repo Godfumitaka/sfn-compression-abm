@@ -66,8 +66,13 @@ class MeritAccumulator:
 
 @dataclass(frozen=True, slots=True)
 class ExceptionAccumulator:
+    basis: tuple[float, ...]
     bits: float
     event_count: int
+
+    def __post_init__(self) -> None:
+        if len(self.basis) != 16:
+            raise ValueError("例外費用の基底は16本である必要がある")
 
 
 @dataclass(frozen=True, slots=True)
