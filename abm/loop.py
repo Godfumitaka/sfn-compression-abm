@@ -49,6 +49,7 @@ def run_longitudinal(
     *,
     frequency: FeedbackFrequency = f,
     snapshot_mode: str = "delta",
+    snapshot_every: int = 1,
     calculate_counterfactuals: bool = True,
 ) -> LoopResult:
     """共通世界列を順方向に一度だけ走査する。"""
@@ -58,6 +59,10 @@ def run_longitudinal(
     _REPR_CACHE.clear()
     if snapshot_mode not in {"delta", "full", "hash_only"}:
         raise ValueError(f"未知の snapshot_mode: {snapshot_mode}")
+    if snapshot_every < 1:
+        raise ValueError("snapshot_every は 1 以上でなければなりません")
+    if snapshot_mode != "delta" and snapshot_every != 1:
+        raise ValueError("snapshot_every は snapshot_mode='delta' でのみ指定できます")
     current = dict(states)
     previous_snapshots: dict[str, Any] = {}
     previous_hashes: dict[str, str] = {}
@@ -102,6 +107,14 @@ def run_longitudinal(
                 )
             after, deletion_events = apply_theta(after, config, trial.trial)
             current[agent_id] = after
+            capture_snapshot = (
+                snapshot_mode == "delta"
+                and (
+                    agent_id not in previous_snapshots
+                    or trial.trial % snapshot_every == 0
+                    or trial.trial == len(world.trials) - 1
+                )
+            )
             record, snapshot, snapshot_hash = _ledger_record(
                 agent_id,
                 trial,
@@ -115,11 +128,13 @@ def run_longitudinal(
                 world.world_hash,
                 verbatim_baseline,
                 accounting,
-                snapshot_mode, previous_snapshots.get(agent_id), previous_hashes.get(agent_id), counterfactuals,
+                snapshot_mode, previous_snapshots.get(agent_id), previous_hashes.get(agent_id),
+                capture_snapshot, counterfactuals,
             )
             ledger.append(record)
-            previous_snapshots[agent_id] = snapshot
-            previous_hashes[agent_id] = snapshot_hash
+            if capture_snapshot:
+                previous_snapshots[agent_id] = snapshot
+                previous_hashes[agent_id] = snapshot_hash
     return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))
 
 
@@ -309,6 +324,7 @@ def _ledger_record(
     verbatim_baseline: EdgePrediction | None,
     accounting: Mapping[str, Any],
     snapshot_mode: str, previous_snapshot: Any, previous_hash: str | None,
+    capture_snapshot: bool,
     counterfactuals: list[dict[str, Any]],
 ) -> tuple[dict[str, Any], Any, str]:
     prediction = output.prediction
@@ -324,6 +340,8 @@ def _ledger_record(
         stored_snapshot = None
     elif snapshot_mode == "full" or previous_snapshot is None:
         stored_snapshot = {"kind": "full", "value": snapshot}
+    elif not capture_snapshot:
+        stored_snapshot = {"kind": "skipped", "base_hash": previous_hash}
     else:
         stored_snapshot = {"kind": "delta", "base_hash": previous_hash,
                            "changes": _diff(previous_snapshot, snapshot) or {}}
