@@ -204,11 +204,11 @@ class AgentState:
     public_history: tuple[Any, ...] = ()
     rng_state: str | int | tuple[Any, ...] | None = None
     definitions: Mapping[str, NamedDefinition] = field(default_factory=dict)
-    merit: Mapping[tuple[str, int], MeritAccumulator] = field(default_factory=dict)
-    embed: Mapping[tuple[str, int], EmbedState] = field(default_factory=dict)
+    merit: Mapping[tuple[str, int, int], MeritAccumulator] = field(default_factory=dict)
+    embed: Mapping[tuple[str, int, int], EmbedState] = field(default_factory=dict)
     exceptions: Mapping[tuple[str, int], ExceptionAccumulator] = field(default_factory=dict)
     p_hat: FrequencyTable = FrequencyTable.empty()
-    slot_history: Mapping[tuple[str, int], frozenset[str]] = field(default_factory=dict)
+    slot_history: Mapping[tuple[str, int, int], frozenset[str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "public_history", tuple(self.public_history))

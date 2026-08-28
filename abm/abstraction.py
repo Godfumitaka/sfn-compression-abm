@@ -96,19 +96,26 @@ def m1(
     exceptions = dict(state.exceptions)
     history = dict(state.slot_history)
     for constituent in definition.constituents:
-        key = (definition_name, constituent.slot_index)
+        key = (definition_name, constituent.slot_index, constituent.registered_at)
+        exception_key = (definition_name, constituent.slot_index)
         if constituent.registered_at == trial:
             merit[key] = initial_merit(
                 constituent.slot_index, trial, trial - base_written_at, horizon
             )
             embed[key] = EmbedState(constituent.slot_index, 0.0, 0.0)
-            exceptions[key] = ExceptionAccumulator((0.0,) * 16, 0.0, 0)
+            exceptions[exception_key] = ExceptionAccumulator((0.0,) * 16, 0.0, 0)
         matching = next(
             (right for left, right in pairs if left.relation_id == constituent.relation.relation_id),
             None,
         )
         if matching is not None:
-            history = observe_slot(history, definition_name, constituent.slot_index, matching.predicate)
+            history = observe_slot(
+                history,
+                definition_name,
+                constituent.slot_index,
+                constituent.registered_at,
+                matching.predicate,
+            )
     event_id = _alignment_event_id(alignment)
     next_state = replace(
         state, definitions=definitions, merit=merit, embed=embed,

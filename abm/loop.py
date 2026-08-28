@@ -185,7 +185,7 @@ def _update_accounting(
         for row in definition.constituents:
             if not row.alive:
                 continue
-            key = (name, row.slot_index)
+            key = (name, row.slot_index, row.registered_at)
             accumulator = merit.get(key)
             if accumulator is None:
                 continue
@@ -208,7 +208,8 @@ def _update_accounting(
                 lengths = [state.p_hat.code_length(relation.predicate) for relation in candidates]
                 ell_r = sum(lengths) / len(lengths)
                 cost = exception_cost(definition.m_live, ell_r)
-                exceptions[key] = _charge(exceptions[key], cost)
+                exception_key = (name, row.slot_index)
+                exceptions[exception_key] = _charge(exceptions[exception_key], cost)
                 charged_total += cost
                 sources["②"].append((name, row.slot_index))
                 if len(candidates) >= 2:
@@ -229,10 +230,10 @@ def _update_accounting(
         cost = exception_cost(definition.m_live, state.p_hat.code_length(revealed_edge.predicate))
         for row in definition.constituents:
             if row.alive and row.relation.relation_id in charged_ids:
-                key = (used_name, row.slot_index)
-                exceptions[key] = _charge(exceptions[key], cost)
+                exception_key = (used_name, row.slot_index)
+                exceptions[exception_key] = _charge(exceptions[exception_key], cost)
                 charged_total += cost
-                sources["①"].append(key)
+                sources["①"].append(exception_key)
 
     next_state = replace(state, merit=merit, exceptions=exceptions)
     return next_state, {
@@ -475,8 +476,9 @@ def _constituent_states(state: AgentState) -> list[dict[str, Any]]:
     result = []
     for name, definition in sorted(state.definitions.items()):
         for row in definition.constituents:
-            merit = state.merit.get((name, row.slot_index))
-            embed = state.embed.get((name, row.slot_index))
+            key = (name, row.slot_index, row.registered_at)
+            merit = state.merit.get(key)
+            embed = state.embed.get(key)
             result.append({
                 "R": name,
                 "slot_index": row.slot_index,

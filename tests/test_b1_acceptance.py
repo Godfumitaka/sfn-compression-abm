@@ -108,7 +108,10 @@ def _prediction_state(motif: str, m: int = 4) -> AgentState:
     rows = (*live_rows, tombstone)
     definition = NamedDefinition(f"R-{motif}", rows, m + 1, 0)
     p_hat = update_frequency(AgentState().p_hat, graph.relations)
-    history = {(definition.name, row.slot_index): frozenset((row.relation.predicate,)) for row in live_rows}
+    history = {
+        (definition.name, row.slot_index, row.registered_at): frozenset((row.relation.predicate,))
+        for row in live_rows
+    }
     return AgentState(
         prototype=Prototype((VerbatimTrace(0, graph),)),
         definitions={definition.name: definition},
@@ -180,7 +183,10 @@ def test_2_7_mediator_initial_participation_is_at_least_half() -> None:
     )
     assert event is not None
     assert state.definitions["R"].constituents
-    assert all(participation(state.merit[("R", row.slot_index)]) >= 0.5 for row in state.definitions["R"].constituents)
+    assert all(
+        participation(state.merit[("R", row.slot_index, row.registered_at)]) >= 0.5
+        for row in state.definitions["R"].constituents
+    )
 
 
 def test_2_2_exception_cost_is_9_024_bits() -> None:
@@ -314,7 +320,9 @@ def test_5_19_d_cold_initial_participation_is_one(base_age: int) -> None:
     )
     assert event is not None
     for row in registered.definitions["R"].constituents:
-        assert participation(registered.merit[("R", row.slot_index)]) == pytest.approx(1.0, abs=1e-9)
+        assert participation(
+            registered.merit[("R", row.slot_index, row.registered_at)]
+        ) == pytest.approx(1.0, abs=1e-9)
 
 
 @pytest.mark.parametrize(
@@ -613,8 +621,8 @@ def _deletion_state(motif: str) -> AgentState:
     embed = {}
     for index, row in enumerate(rows):
         participation_level = 0.20 if index < survivor_count else 0.02
-        merit[("R", index)] = MeritAccumulator(
+        merit[("R", index, row.registered_at)] = MeritAccumulator(
             index, 0, (participation_level * 2,) * 16, (2.0,) * 16, 2.0, 0
         )
-        embed[("R", index)] = EmbedState(index, 0.0, 0.0)
+        embed[("R", index, row.registered_at)] = EmbedState(index, 0.0, 0.0)
     return AgentState(definitions={"R": definition}, merit=merit, embed=embed)

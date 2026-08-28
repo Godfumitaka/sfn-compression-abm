@@ -18,7 +18,8 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
             if not constituent.alive:
                 rows.append(constituent)
                 continue
-            key = (name, constituent.slot_index)
+            key = (name, constituent.slot_index, constituent.registered_at)
+            exception_key = (name, constituent.slot_index)
             accumulator = state.merit.get(key)
             embed = state.embed.get(key)
             if accumulator is None or embed is None:
@@ -27,7 +28,7 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
             value = constituent_value(
                 constituent.frozen_price,
                 accumulator,
-                state.exceptions.get(key, ExceptionAccumulator((0.0,) * 16, 0.0, 0)),
+                state.exceptions.get(exception_key, ExceptionAccumulator((0.0,) * 16, 0.0, 0)),
                 embed,
                 w=config.w,
                 kappa=config.kappa,
