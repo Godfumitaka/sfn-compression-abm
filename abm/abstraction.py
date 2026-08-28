@@ -114,11 +114,21 @@ def m1(
         state, definitions=definitions, merit=merit, embed=embed,
         exceptions=exceptions, slot_history=history,
     )
+    relation_ids = {row.relation.relation_id for row in definition.constituents}
     return next_state, {
         "kind": "registration",
         "R": definition_name,
         "alignment_event_id": event_id,
         "trial": trial,
+        "constituents": [{
+            "slot_index": row.slot_index, "registered_at": row.registered_at,
+            "predicate": row.relation.predicate, "arity": len(row.relation.arguments),
+            "arguments": list(row.relation.arguments),
+            "arg_kinds": ["relation" if argument in relation_ids else "entity" for argument in row.relation.arguments],
+            "alive": row.alive,
+        } for row in definition.constituents],
+        "m_alloc": definition.m_alloc,
+        "m_live": definition.m_live,
     }
 
 

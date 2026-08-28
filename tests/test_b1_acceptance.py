@@ -156,8 +156,8 @@ def prediction_counts() -> dict[str, dict[str, int]]:
     return {motif: dict(values) for motif, values in counts.items()}
 
 
-def test_1_11_ledger_has_87_unique_fields() -> None:
-    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 87
+def test_1_11_ledger_has_89_unique_fields() -> None:
+    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 89
 
 
 def test_1_12_run_header_has_12_arm_descriptors() -> None:
@@ -376,6 +376,8 @@ def _longitudinal_run(
             repair_scope=repair_scope,
         )},
         ledger,
+        snapshot_mode="full",
+        calculate_counterfactuals=False,
     )
     return result.states["agent"], ledger.records
 
@@ -396,7 +398,7 @@ def theta_runs(thinning_run):
 
 
 def _prototype_sizes(records) -> list[int]:
-    return [len(record["state_snapshot"]["prototype"]["traces"]) for record in records]
+    return [len(record["state_snapshot"]["value"]["prototype"]["traces"]) for record in records]
 
 
 def test_4_12_longitudinal_writes_a_prototype(thinning_run) -> None:

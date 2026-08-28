@@ -10,6 +10,7 @@ from abm.ledger import (
     LEDGER_FIELDS,
     MECHANISM_FIELDS,
     RESEARCH_FIELDS,
+    RUN_INPUT_FIELDS,
     Ledger,
     RunHeader,
     empty_record,
@@ -21,6 +22,7 @@ def _header() -> RunHeader:
     return RunHeader(
         0.3, 0.2, 0.1, 4.0, "tower", "removed", "constant",
         0.1, False, None, None, None,
+        1, 2, ("agent",), "seed", "world", "commit", 0.1, 0.8, 0.5,
     )
 
 
@@ -36,12 +38,12 @@ def _record(trial: int) -> dict:
     )
 
 
-def test_ledger_field_accounting_is_38_22_23_7_minus_three() -> None:
+def test_ledger_field_accounting_is_38_22_24_8_minus_three() -> None:
     assert len(LOGGING_SCHEMA_FIELDS) == 38
     assert len(D23_FIELDS) == 22
-    assert len(MECHANISM_FIELDS) == 23
-    assert len(RESEARCH_FIELDS) == 7
-    assert len(LEDGER_FIELDS) == 87
+    assert len(MECHANISM_FIELDS) == 24
+    assert len(RESEARCH_FIELDS) == 8
+    assert len(LEDGER_FIELDS) == 89
     assert len(ARM_DESCRIPTOR_FIELDS) == 12
     assert LEDGER_FIELDS.count("agent_state_snapshot_hash") == 1
     assert LEDGER_FIELDS.count("abstain_reason") == 1
@@ -56,7 +58,7 @@ def test_ledger_writes_one_header_and_one_line_per_trial(tmp_path) -> None:
     lines = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
     assert len(lines) == 3
     assert lines[0]["record_type"] == "run_header"
-    assert set(lines[0]) == {"record_type", *ARM_DESCRIPTOR_FIELDS}
+    assert set(lines[0]) == {"record_type", *ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS}
     assert [line["record_type"] for line in lines[1:]] == ["trial", "trial"]
     assert all(set(line) == {"record_type", *LEDGER_FIELDS} for line in lines[1:])
 

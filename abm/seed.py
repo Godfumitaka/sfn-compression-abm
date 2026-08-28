@@ -24,6 +24,7 @@ class Seed:
 
     data: Mapping[str, Any]
     sha256: str
+    file_sha256: str
 
 
 def canonical_seed_bytes(data: Mapping[str, Any]) -> bytes:
@@ -41,7 +42,8 @@ def seed_hash(data: Mapping[str, Any]) -> str:
 def load_seed(path: str | Path = DEFAULT_SEED_PATH) -> Seed:
     """種を読み、ハッシュと内部整合を検査してから固定する。"""
 
-    raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    raw_bytes = Path(path).read_bytes()
+    raw = json.loads(raw_bytes)
     if not isinstance(raw, dict):
         raise SeedValidationError("種のルートは object である必要がある")
     expected_hash = raw.get("sha256")
@@ -49,7 +51,7 @@ def load_seed(path: str | Path = DEFAULT_SEED_PATH) -> Seed:
     if expected_hash != actual_hash:
         raise SeedValidationError(f"種の sha256 が不一致: expected={expected_hash}, actual={actual_hash}")
     validate_seed(raw)
-    return Seed(data=_freeze(raw), sha256=actual_hash)
+    return Seed(data=_freeze(raw), sha256=actual_hash, file_sha256=sha256(raw_bytes).hexdigest())
 
 
 def validate_seed(data: Mapping[str, Any]) -> None:
