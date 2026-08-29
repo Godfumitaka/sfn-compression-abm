@@ -127,6 +127,7 @@ def m1(
         "R": definition_name,
         "alignment_event_id": event_id,
         "trial": trial,
+        "base_written_at": base_written_at,
         "constituents": [{
             "slot_index": row.slot_index, "registered_at": row.registered_at,
             "predicate": row.relation.predicate, "arity": len(row.relation.arguments),
