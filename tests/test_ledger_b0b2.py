@@ -44,7 +44,7 @@ def test_ledger_field_accounting_is_38_22_24_8_minus_three() -> None:
     assert len(MECHANISM_FIELDS) == 24
     assert len(RESEARCH_FIELDS) == 8
     assert len(LEDGER_FIELDS) == 89
-    assert len(ARM_DESCRIPTOR_FIELDS) == 12
+    assert len(ARM_DESCRIPTOR_FIELDS) == 13
     assert LEDGER_FIELDS.count("agent_state_snapshot_hash") == 1
     assert LEDGER_FIELDS.count("abstain_reason") == 1
 

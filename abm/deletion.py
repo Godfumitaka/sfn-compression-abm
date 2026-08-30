@@ -54,7 +54,7 @@ def apply_theta(state: AgentState, config: AgentConfig, trial: int) -> tuple[Age
         )
     prototype = state.prototype
     if prototype.traces:
-        surviving = prototype.alive(trial, config.theta_prime)
+        surviving = prototype.alive(trial, config.verbatim_threshold)
         expired = tuple(trace for trace in prototype.traces if trace not in surviving)
         for trace in expired:
             events.append({

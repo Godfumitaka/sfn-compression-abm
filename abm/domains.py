@@ -171,6 +171,12 @@ class AgentConfig:
     lambda_mix: float = 0.1
     abstain_charge: bool = False
     repair_scope: RepairScope = RepairScope.FIRST_ORDER
+    verbatim_theta: float | None = None
+
+    @property
+    def verbatim_threshold(self) -> float:
+        """逐語痕跡の削除閾値。未指定なら theta_prime に落ちる（後方互換）。"""
+        return self.theta_prime if self.verbatim_theta is None else self.verbatim_theta
 
 
 @dataclass(frozen=True, slots=True)

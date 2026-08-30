@@ -32,7 +32,7 @@ def test_f1_f2_f3_header_and_reproducibility_inputs():
     seed = load_seed()
     header = RunHeader(.3,.2,.1,4.,"tower","removed","constant",.1,False,None,None,None,
                        1,60,("agent",),seed.file_sha256,"world",_code_commit(),.1432,.8,.5)
-    assert len(header.to_dict()) == 21 and set(RUN_INPUT_FIELDS) <= set(header.to_dict())
+    assert len(header.to_dict()) == 22 and set(RUN_INPUT_FIELDS) <= set(header.to_dict())
     assert seed.file_sha256 == sha256(DEFAULT_SEED_PATH.read_bytes()).hexdigest() != seed.sha256
     assert _code_commit() == "unknown" or re.fullmatch(r"[0-9a-f]{40}", _code_commit())
 

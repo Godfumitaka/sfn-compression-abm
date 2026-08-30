@@ -407,6 +407,7 @@ def _ledger_record(
         "charge_source": accounting["charge_source"],
         "type2_fired": accounting["type2_fired"],
         "arm_repair_scope": config.repair_scope.value,
+        "arm_verbatim_theta": config.verbatim_theta,
         "world_hash": world_hash,
     }
     return empty_record(**{key: value for key, value in required.items() if key in LEDGER_FIELDS}), snapshot, snapshot_hash

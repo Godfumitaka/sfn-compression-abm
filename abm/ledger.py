@@ -31,7 +31,7 @@ RESEARCH_FIELDS = (
     "verbatim_baseline_prediction", "verbatim_baseline_hit", "counterfactual_predictions",
 )
 ARM_DESCRIPTOR_FIELDS = (
-    "arm_alpha", "arm_beta", "arm_w", "arm_kappa", "arm_repair_scope",
+    "arm_alpha", "arm_beta", "arm_w", "arm_kappa", "arm_repair_scope", "arm_verbatim_theta",
     "arm_holdout_repr", "arm_f_profile",
     "arm_lambda_mix", "arm_abstain_charge", "arm_temperature", "arm_d_shared",
     "arm_adaptation_table",
@@ -57,8 +57,8 @@ if len(LEDGER_FIELDS) != 89:
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
     )
-if len(ARM_DESCRIPTOR_FIELDS) != 12:
-    raise RuntimeError(f"腕記述子は12本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
+if len(ARM_DESCRIPTOR_FIELDS) != 13:
+    raise RuntimeError(f"腕記述子は13本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,6 +84,7 @@ class RunHeader:
     theta_prime: float
     tau_acc: float
     f_setting: float | str
+    arm_verbatim_theta: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {field: getattr(self, field) for field in (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)}
