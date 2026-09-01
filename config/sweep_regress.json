@@ -1,0 +1,29 @@
+{
+  "name": "regress_2026-08-31",
+  "trial_count": 200,
+  "agent_ids": ["agent"],
+  "seeds": {"start": 1, "count": 2},
+  "axes": {
+    "f": [0.0],
+    "theta_prime": [0.1432],
+    "repair_scope": ["first_order"]
+  },
+  "fixed": {
+    "threshold": 0.0,
+    "correction_mode": "none",
+    "tau_acc": 0.67,
+    "nsim_threshold": 0.95,
+    "alpha": 0.0,
+    "beta": 0.0,
+    "w": 0.0,
+    "kappa": 1.0,
+    "lambda_mix": 0.1,
+    "abstain_charge": false
+  },
+  "output": {
+    "dir": "runs/regress_TAG",
+    "snapshot_mode": "delta",
+    "snapshot_every": 10,
+    "compress": true
+  }
+}

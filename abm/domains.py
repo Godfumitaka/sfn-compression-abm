@@ -171,6 +171,16 @@ class AgentConfig:
     lambda_mix: float = 0.1
     abstain_charge: bool = False
     repair_scope: RepairScope = RepairScope.FIRST_ORDER
+    verbatim_theta: float | None = None
+    # 仕様 (E) 未決の主張。false のとき第二の経路は一切動かない（既存走行と bit 一致）。
+    pending_claims: bool = False
+    pending_gamma: float = 0.0
+    pending_hold_cost: float = 0.0
+
+    @property
+    def verbatim_threshold(self) -> float:
+        """逐語痕跡の削除閾値。未指定なら theta_prime に落ちる（後方互換）。"""
+        return self.theta_prime if self.verbatim_theta is None else self.verbatim_theta
 
 
 @dataclass(frozen=True, slots=True)
@@ -209,9 +219,14 @@ class AgentState:
     exceptions: Mapping[tuple[str, int], ExceptionAccumulator] = field(default_factory=dict)
     p_hat: FrequencyTable = FrequencyTable.empty()
     slot_history: Mapping[tuple[str, int, int], frozenset[str]] = field(default_factory=dict)
+    # 仕様 (E) 未決の主張。要素は (述語, 引数の束縛, 持ち主の鍵)。
+    # 引数の束縛は縛られていない位置を None（ワイルドカード）で表す。
+    # ★ pending_claims=false のとき空のまま。_SNAPSHOT_OMIT_IF_EMPTY が正準形から省く。
+    pending_claims: tuple[Any, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "public_history", tuple(self.public_history))
+        object.__setattr__(self, "pending_claims", tuple(self.pending_claims))
 
 
 @dataclass(frozen=True, slots=True)

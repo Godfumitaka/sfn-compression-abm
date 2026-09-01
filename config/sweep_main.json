@@ -1,0 +1,30 @@
+{
+  "name": "main_2026-08-31",
+  "trial_count": 1740,
+  "agent_ids": ["agent"],
+  "seeds": {"start": 1, "count": 40},
+  "axes": {
+    "f": [0.0, 0.0714285714, 0.1428571429, 0.2142857143,
+          0.2857142857, 0.3571428571, 0.4285714286, 0.5],
+    "theta_prime": [0.0410, 0.1432, 0.2637, 0.3842],
+    "repair_scope": ["first_order", "all"]
+  },
+  "fixed": {
+    "threshold": 0.0,
+    "correction_mode": "none",
+    "tau_acc": 0.67,
+    "nsim_threshold": 0.95,
+    "alpha": 0.0,
+    "beta": 0.0,
+    "w": 0.0,
+    "kappa": 1.0,
+    "lambda_mix": 0.1,
+    "abstain_charge": false
+  },
+  "output": {
+    "dir": "runs/main_2026-08-31",
+    "snapshot_mode": "delta",
+    "snapshot_every": 10,
+    "compress": true
+  }
+}

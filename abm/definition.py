@@ -58,10 +58,16 @@ class MeritAccumulator:
     opportunity_basis: tuple[float, ...]
     use_count: float
     ext_use_count: int
+    # M-018 の R 外使用を、P と同じ 16 本の減衰基底で σ加重して貯める欄。
+    # ★ 空 () は「一度も R 外使用が立っていない」を表す。零を減衰させても零なので
+    #   値としては (0.0,)*16 と同じであり、β=0 の走行では台帳のバイト列が変わらない。
+    ext_basis: tuple[float, ...] = ()
 
     def __post_init__(self) -> None:
         if len(self.basis) != 16 or len(self.opportunity_basis) != 16:
             raise ValueError("指数基底は分子・分母とも16本である必要がある")
+        if self.ext_basis and len(self.ext_basis) != 16:
+            raise ValueError("R外使用の基底は16本である必要がある")
 
 
 @dataclass(frozen=True, slots=True)

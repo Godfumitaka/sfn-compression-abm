@@ -32,6 +32,10 @@ _CANONICAL_CACHE: dict[int, Any] = {}
 _CANONICAL_KEEP: list[Any] = []
 _REPR_CACHE: dict[int, str] = {}
 _DELETED = "__deleted__"
+# ★ 空のときだけ正準形から省く欄。β=0 の走行で ext_basis は必ず () であり、
+#   既存 4,322 走行の agent_state_snapshot_hash をそのまま保つ。
+#   β≠0 では最初の R 外使用で (0.0,)*16 が立ち、以後は必ず記録される。
+_SNAPSHOT_OMIT_IF_EMPTY = frozenset({"ext_basis", "pending_claims"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,7 +109,7 @@ def run_longitudinal(
                     base_written_at=output.trace["selected_scene_written_at"],
                     horizon=len(world.trials),
                 )
-            after, deletion_events = apply_theta(after, config, trial.trial)
+            after, deletion_events = apply_theta(after, config, trial.trial, horizon=len(world.trials))
             current[agent_id] = after
             capture_snapshot = (
                 snapshot_mode == "delta"
@@ -130,6 +134,7 @@ def run_longitudinal(
                 accounting,
                 snapshot_mode, previous_snapshots.get(agent_id), previous_hashes.get(agent_id),
                 capture_snapshot, counterfactuals,
+                pending.projected_edge,
             )
             ledger.append(record)
             if capture_snapshot:
@@ -152,6 +157,17 @@ def classify_row(row: Any, scene: Any, entity_mapping: Mapping[str, str], relati
     return "③"
 
 
+def _claim_matches(predicate: str, binding: tuple[Any, ...], visible: set[tuple[str, tuple[str, ...]]]) -> bool:
+    """未決の主張が場面の可視部に現れたか。None の位置は何とでも一致する（§2-3）。"""
+
+    for seen_predicate, arguments in visible:
+        if seen_predicate != predicate or len(arguments) != len(binding):
+            continue
+        if all(slot is None or slot == argument for slot, argument in zip(binding, arguments)):
+            return True
+    return False
+
+
 def _update_accounting(
     state: AgentState,
     output: Any,
@@ -168,11 +184,39 @@ def _update_accounting(
     exceptions = dict(state.exceptions)
     filled = {relation.predicate for relation in output.trace.get("filled_slots", ())}
     decay = decay_ladder(horizon)
+    # M-018 の R 外使用は「その def が採択されなかった試行で、その構成素の述語が
+    # 場面に書かれたか」で判定する。★ 場面は観測できた部分グラフだけを見る
+    # （開示辺は f 依存なので混ぜない）。★ β=0 では数えない。既存走行と台帳を一致させるため。
+    written = (
+        {relation.predicate for relation in scene.relations} if config.beta else frozenset()
+    )
     used_name = output.trace.get("R_used")
     alignment = output.trace.get("definition_alignment")
     reasons: dict[str, dict[int, str]] = {}
     sources: dict[str, list[Any]] = {"①": [], "②": [], "衝突": []}
     charged_total = 0.0
+    # 棄権課金（SPEC §C.5.4）。空のときは sources に鍵を足さない。
+    # ★ 足すと abstain_charge=false でも charge_source のバイト列が変わるため。
+    abstain_charges: list[Any] = []
+
+    # 仕様 (E) 未決の主張。★ pending_claims=false のとき以下は一切動かない。
+    # 確認は「可視部に主張と一致する関係が現れたか」だけを見る。★ 伏せ辺と G* は使わない（D4・D1・D22(c)）。
+    # 一度確認されても主張は閉じない（§2-4）。上限は置かない（§2-7）。
+    pending_open = list(state.pending_claims)
+    pending_new = 0
+    pending_confirmed = 0
+    pending_awarded = 0.0
+    pending_by_key: dict[tuple[str, int, int], float] = {}
+    if config.pending_claims and pending_open:
+        visible = {(relation.predicate, relation.arguments) for relation in scene.relations}
+        for predicate, binding, owner in pending_open:
+            if not _claim_matches(predicate, binding, visible):
+                continue
+            # ℓ ＝ 主張の述語の符号長のみ（判断1・2026-09-02。引数は加算しない）。
+            award = state.p_hat.code_length(predicate) ** config.pending_gamma
+            pending_by_key[owner] = pending_by_key.get(owner, 0.0) + award
+            pending_awarded += award
+            pending_confirmed += 1
 
     # R が適用されない行も、蓄積した例外費用の減衰だけは進む。
     for key, accumulator in exceptions.items():
@@ -201,7 +245,20 @@ def _update_accounting(
                 filled_scored=row.relation.predicate in filled,
                 alpha=config.alpha,
                 applied=applied,
+                external_use=not applied and row.relation.predicate in written,
+                pending_increment=pending_by_key.get(key, 0.0),
             )
+            # 仕様 (E)：③ の行から未決の主張を立てる。★ 既存の ③ の会計は変えない
+            # （分子 0・分母 +1・課金なし のまま）。ここは記録を足すだけ。
+            if config.pending_claims and reason == "③":
+                # 引数の束縛は entity_mapping に載っている実体のみ。
+                # 載っていない位置は None（ワイルドカード）。§2-2 の読み替え・2026-09-02。
+                bound = tuple(
+                    alignment.entity_mapping.get(argument)
+                    for argument in row.relation.arguments
+                )
+                pending_open.append((row.relation.predicate, bound, key))
+                pending_new += 1
             if reason == "②":
                 position = _mapped_arguments(row.relation, alignment.entity_mapping, alignment.relation_mapping)
                 candidates = [relation for relation in scene.relations if relation.arguments == position]
@@ -235,12 +292,53 @@ def _update_accounting(
                 charged_total += cost
                 sources["①"].append(exception_key)
 
-    next_state = replace(state, merit=merit, exceptions=exceptions)
+    # 棄権課金（SPEC §C.5.4）。no_projectable_relation と ambiguous_projection の二つだけ。
+    # 他の四つ（no_prototype・no_definition・below_threshold・below_tau）は腕によらず課金しない。
+    # 宛先は①と同じ「照合に参加した構成素とその上の塔」（判断2 の広い読み）。
+    # ℓ_r は②と同じ「その位置に実在した述語の符号長」（衝突時は平均・M-071）。新しい定数は置かない。
+    if (
+        config.abstain_charge
+        and used_name is not None
+        and alignment is not None
+        and isinstance(output.prediction, Abstain)
+        and output.prediction.reason in ("no_projectable_relation", "ambiguous_projection")
+    ):
+        definition = state.definitions[used_name]
+        base_ids = {
+            row.relation.relation_id for row in definition.constituents
+            if row.alive and row.relation.relation_id in alignment.relation_mapping
+        }
+        charged_ids = _repair_targets(definition, base_ids, config.repair_scope)
+        for row in definition.constituents:
+            if not (row.alive and row.relation.relation_id in charged_ids):
+                continue
+            position = _mapped_arguments(row.relation, alignment.entity_mapping, alignment.relation_mapping)
+            candidates = ([relation for relation in scene.relations if relation.arguments == position]
+                          if position is not None else [])
+            if not candidates:
+                continue          # 位置に何も無い行（③・判定不能）は ℓ_r が定義されない。§3.4.1 も課金しない
+            lengths = [state.p_hat.code_length(relation.predicate) for relation in candidates]
+            ell_r = sum(lengths) / len(lengths)
+            cost = exception_cost(definition.m_live, ell_r)
+            exception_key = (used_name, row.slot_index)
+            exceptions[exception_key] = _charge(exceptions[exception_key], cost)
+            charged_total += cost
+            abstain_charges.append({"R": used_name, "slot_index": row.slot_index,
+                                    "棄権理由": output.prediction.reason})
+    if abstain_charges:
+        sources["棄権"] = abstain_charges
+
+    next_state = replace(state, merit=merit, exceptions=exceptions,
+                         pending_claims=tuple(pending_open))
     return next_state, {
         "constituent_reason_123": reasons,
-        "charge_source": sources if sources["①"] or sources["②"] else None,
+        "charge_source": sources if sources["①"] or sources["②"] or abstain_charges else None,
         "type2_fired": bool(sources["②"]),
         "exception_bits_charged": charged_total,
+        "pending_claims_open": len(pending_open),
+        "pending_claims_new": pending_new,
+        "pending_claims_confirmed": pending_confirmed,
+        "pending_merit_awarded": pending_awarded,
     }
 
 
@@ -327,10 +425,19 @@ def _ledger_record(
     snapshot_mode: str, previous_snapshot: Any, previous_hash: str | None,
     capture_snapshot: bool,
     counterfactuals: list[dict[str, Any]],
+    projected_edge: Any = None,
 ) -> tuple[dict[str, Any], Any, str]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
     predicted = prediction.edge.to_dict() if isinstance(prediction, EdgePrediction) else None
+    # ★ predicted_edge は模型の出力（一試行一本・採点対象）。
+    #   predictions_all_slots は内部で生成された全候補（採点しない・診断用）。★ 意味が違う。
+    #   生成順は 投影（project）→ 充填（fill_missing_slots）。並べ替えない。候補ゼロなら空リスト。
+    all_slots = [
+        edge.to_dict()
+        for edge in (*((projected_edge,) if projected_edge is not None else ()),
+                     *output.trace.get("filled_slots", ()))
+    ]
     definitions = tuple(state.definitions.values())
     m_alloc = sum(definition.m_alloc for definition in definitions)
     m_live = sum(definition.m_live for definition in definitions)
@@ -372,6 +479,11 @@ def _ledger_record(
         "f_fired": coin.f_fired,
         "feedback_content": trial.held_out_edge.to_dict() if coin.f_fired else None,
         "held_out_content": trial.held_out_edge.to_dict(),
+        "predictions_all_slots": all_slots,
+        "pending_claims_open": accounting["pending_claims_open"],
+        "pending_claims_new": accounting["pending_claims_new"],
+        "pending_claims_confirmed": accounting["pending_claims_confirmed"],
+        "pending_merit_awarded": accounting["pending_merit_awarded"],
         "oracle_verdict": score.outcome_category,
         "registration_event": registration,
         "deletion_event": list(deletions),
@@ -407,6 +519,7 @@ def _ledger_record(
         "charge_source": accounting["charge_source"],
         "type2_fired": accounting["type2_fired"],
         "arm_repair_scope": config.repair_scope.value,
+        "arm_verbatim_theta": config.verbatim_theta,
         "world_hash": world_hash,
     }
     return empty_record(**{key: value for key, value in required.items() if key in LEDGER_FIELDS}), snapshot, snapshot_hash
@@ -505,7 +618,10 @@ def _canonical(value: Any) -> Any:
 
 def _canonical_build(value: Any) -> Any:
     if is_dataclass(value):
-        return {field.name: _canonical(getattr(value, field.name)) for field in fields(value)}
+        return {
+            field.name: _canonical(getattr(value, field.name)) for field in fields(value)
+            if not (field.name in _SNAPSHOT_OMIT_IF_EMPTY and not getattr(value, field.name))
+        }
     if isinstance(value, Mapping):
         return {str(key): _canonical(item) for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))}
     if isinstance(value, (tuple, list, frozenset, set)):

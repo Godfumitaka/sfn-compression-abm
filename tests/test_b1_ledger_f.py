@@ -32,7 +32,7 @@ def test_f1_f2_f3_header_and_reproducibility_inputs():
     seed = load_seed()
     header = RunHeader(.3,.2,.1,4.,"tower","removed","constant",.1,False,None,None,None,
                        1,60,("agent",),seed.file_sha256,"world",_code_commit(),.1432,.8,.5)
-    assert len(header.to_dict()) == 21 and set(RUN_INPUT_FIELDS) <= set(header.to_dict())
+    assert len(header.to_dict()) == 22 and set(RUN_INPUT_FIELDS) <= set(header.to_dict())
     assert seed.file_sha256 == sha256(DEFAULT_SEED_PATH.read_bytes()).hexdigest() != seed.sha256
     assert _code_commit() == "unknown" or re.fullmatch(r"[0-9a-f]{40}", _code_commit())
 
@@ -54,7 +54,7 @@ def test_f5_f6_f13_f14_f16_modes_purity_schema_and_determinism():
     hashes = lambda records: [r["agent_state_snapshot_hash"] for r in records]
     assert hashes(delta) == hashes(full) == hashes(hash_only) == hashes(_run(counterfactuals=False))
     assert all(r["state_snapshot"] is None for r in hash_only)
-    assert len(LEDGER_FIELDS) == 89
+    assert len(LEDGER_FIELDS) == 93
     assert json.dumps(delta, sort_keys=True, default=str) == json.dumps(_run(), sort_keys=True, default=str)
 
 

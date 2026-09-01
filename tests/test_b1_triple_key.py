@@ -102,7 +102,7 @@ def test_h4_h5_constituent_state_schema_and_ledger_width() -> None:
     rows = [row for record in records for row in record["constituent_states"]]
     assert rows
     assert all(set(row) == expected for row in rows)
-    assert len(LEDGER_FIELDS) == 89
+    assert len(LEDGER_FIELDS) == 93
 
 
 def test_h7_same_input_produces_identical_ledger() -> None:

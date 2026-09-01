@@ -160,11 +160,11 @@ def prediction_counts() -> dict[str, dict[str, int]]:
 
 
 def test_1_11_ledger_has_89_unique_fields() -> None:
-    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 89
+    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 93
 
 
-def test_1_12_run_header_has_12_arm_descriptors() -> None:
-    assert len(ARM_DESCRIPTOR_FIELDS) == len(set(ARM_DESCRIPTOR_FIELDS)) == 12
+def test_1_12_run_header_has_13_arm_descriptors() -> None:
+    assert len(ARM_DESCRIPTOR_FIELDS) == len(set(ARM_DESCRIPTOR_FIELDS)) == 13
 
 
 def test_2_7_mediator_initial_participation_is_at_least_half() -> None:

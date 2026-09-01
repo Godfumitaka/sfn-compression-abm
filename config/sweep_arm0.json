@@ -1,0 +1,29 @@
+{
+  "name": "arm0_2026-08-31",
+  "trial_count": 1740,
+  "agent_ids": ["agent"],
+  "seeds": {"start": 1, "count": 40},
+  "axes": {
+    "f": [1.0],
+    "theta_prime": [0.0410, 0.1432, 0.2637, 0.3842],
+    "repair_scope": ["all"]
+  },
+  "fixed": {
+    "threshold": 0.0,
+    "correction_mode": "none",
+    "tau_acc": 0.67,
+    "nsim_threshold": 0.95,
+    "alpha": 1.0,
+    "beta": 0.0,
+    "w": 0.0,
+    "kappa": 1.0,
+    "lambda_mix": 0.1,
+    "abstain_charge": false
+  },
+  "output": {
+    "dir": "runs/arm0_2026-08-31",
+    "snapshot_mode": "delta",
+    "snapshot_every": 10,
+    "compress": true
+  }
+}

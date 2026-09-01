@@ -51,6 +51,9 @@ class PendingState:
     output: AgentOutput
     agent_input: AgentInput | None = None
     rng_state: str | int | tuple[Any, ...] | None = None
+    # ★ 記録専用（D23）。投影が出した候補を、一本に絞る前に控える。
+    #   trace には入れない。trace は public_history 経由で状態ハッシュに入るため。
+    projected_edge: Any = None
 
 
 def predict(
@@ -85,6 +88,7 @@ def predict(
         "selected_scene_written_at": selected_trace.written_at,
         "tau_passed_defs": [],
     }
+    projected_edge = None          # ★ 記録専用（D23）。振る舞いには使わない
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
     else:
@@ -114,6 +118,10 @@ def predict(
                         agent_input.target_graph_partial,
                         prototype_prior_weight=0.0,
                     )
+                    # ★ 記録専用（D23）。下で一本に絞る前の投影候補を控える。
+                    #   ambiguous_projection の棄権でも候補を失わないため、ここで取る。
+                    if isinstance(prediction, EdgePrediction):
+                        projected_edge = prediction.edge
                     filling = fill_missing_slots(
                         definition,
                         agent_input.target_graph_partial,
@@ -145,6 +153,7 @@ def predict(
         output=output,
         agent_input=agent_input,
         rng_state=_snapshot_rng_state(rng, state.rng_state),
+        projected_edge=projected_edge,
     )
     return output, pending
 
