@@ -157,15 +157,14 @@ def classify_row(row: Any, scene: Any, entity_mapping: Mapping[str, str], relati
     return "③"
 
 
-def _claim_matches(predicate: str, binding: tuple[Any, ...], visible: set[tuple[str, tuple[str, ...]]]) -> bool:
-    """未決の主張が場面の可視部に現れたか。None の位置は何とでも一致する（§2-3）。"""
+def _claim_matches(predicate: str, context: tuple[str, ...], visible: frozenset[str]) -> bool:
+    """未決の主張が場面の可視部で確認されたか（§2-3 の差し替え・2026-09-02）。
 
-    for seen_predicate, arguments in visible:
-        if seen_predicate != predicate or len(arguments) != len(binding):
-            continue
-        if all(slot is None or slot == argument for slot, argument in zip(binding, arguments)):
-            return True
-    return False
+    主張の述語と、記録された他の生存構成素の述語がすべて場面に現れていれば確認。
+    ★ 実体の対応は見ない（「対応はどうにでもつく」）。★ 伏せ辺と G* は使わない。
+    """
+
+    return predicate in visible and all(item in visible for item in context)
 
 
 def _update_accounting(
@@ -208,7 +207,7 @@ def _update_accounting(
     pending_awarded = 0.0
     pending_by_key: dict[tuple[str, int, int], float] = {}
     if config.pending_claims and pending_open:
-        visible = {(relation.predicate, relation.arguments) for relation in scene.relations}
+        visible = frozenset(relation.predicate for relation in scene.relations)
         for predicate, binding, owner in pending_open:
             if not _claim_matches(predicate, binding, visible):
                 continue
@@ -251,13 +250,15 @@ def _update_accounting(
             # 仕様 (E)：③ の行から未決の主張を立てる。★ 既存の ③ の会計は変えない
             # （分子 0・分母 +1・課金なし のまま）。ここは記録を足すだけ。
             if config.pending_claims and reason == "③":
-                # 引数の束縛は entity_mapping に載っている実体のみ。
-                # 載っていない位置は None（ワイルドカード）。§2-2 の読み替え・2026-09-02。
-                bound = tuple(
-                    alignment.entity_mapping.get(argument)
-                    for argument in row.relation.arguments
-                )
-                pending_open.append((row.relation.predicate, bound, key))
+                # 主張 ＝ （その構成素の述語, その時点の 他の生存構成素の述語の集合）。
+                # ★ 実体 ID は一切使わない（§2-2 の差し替え・2026-09-02。錯誤相関）。
+                # 薄い def ほど共起条件が緩み、確認されやすくなる。
+                context = tuple(sorted({
+                    other.relation.predicate
+                    for other in definition.constituents
+                    if other.alive and other.relation.relation_id != row.relation.relation_id
+                }))
+                pending_open.append((row.relation.predicate, context, key))
                 pending_new += 1
             if reason == "②":
                 position = _mapped_arguments(row.relation, alignment.entity_mapping, alignment.relation_mapping)

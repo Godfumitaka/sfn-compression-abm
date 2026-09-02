@@ -148,6 +148,9 @@ def run_one(task: dict) -> dict:
         alpha=fixed["alpha"], beta=fixed["beta"], w=fixed["w"], kappa=fixed["kappa"],
         lambda_mix=fixed["lambda_mix"], abstain_charge=fixed["abstain_charge"],
         repair_scope=RepairScope(task["repair_scope"]),
+        pending_claims=fixed.get("pending_claims", False),
+        pending_gamma=fixed.get("pending_gamma", 0.0),
+        pending_hold_cost=fixed.get("pending_hold_cost", 0.0),
     ) for a in cfg["agent_ids"]}
 
     t0 = time.time()
