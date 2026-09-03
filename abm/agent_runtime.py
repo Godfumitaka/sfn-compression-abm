@@ -159,8 +159,17 @@ def predict(
 
 
 def _need(tau_acc: float, m_live: int) -> int:
+    """採択に必要な支持数。
+
+    tau_acc >= 1.0 のとき「絶対数読み」に切り替える（T-038 の反実仮想）。
+      tau_acc = 1.0 + k  →  未一致 k 本まで許す  →  必要支持数 = m_live - k
+    それ未満は従来どおり比読み ceil(tau_acc * m_live)。
+    """
     from math import ceil
 
+    if tau_acc >= 1.0:
+        k = int(round(tau_acc - 1.0))
+        return max(m_live - k, 1)
     return ceil(tau_acc * m_live)
 
 
