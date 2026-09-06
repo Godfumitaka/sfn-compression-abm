@@ -15,7 +15,7 @@ def _raw_seed() -> dict:
 def test_seed_hash_and_five_internal_checks_pass() -> None:
     seed = load_seed()
 
-    assert seed.sha256 == "ddc0e4ae928c08ce252c6f9456eb74e9e8044716a4b4e4c84d6c36daa974d858"
+    assert seed.sha256 == "5d9abee14d895ae72264ca78f76928d2c880334a056d94a49127c90fe435c3c4"
     validate_seed(seed.data)
 
 
@@ -30,6 +30,7 @@ def test_seed_is_deeply_read_only() -> None:
 
 def test_load_seed_stops_on_hash_mismatch(tmp_path) -> None:
     raw = _raw_seed()
+    raw["sha256"] = seed_hash(raw)
     raw["version"] = "tampered"
     path = tmp_path / "seed.json"
     path.write_text(json.dumps(raw), encoding="utf-8")

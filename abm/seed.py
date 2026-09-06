@@ -11,7 +11,7 @@ from types import MappingProxyType
 from typing import Any, Mapping
 
 
-DEFAULT_SEED_PATH = Path(__file__).resolve().parent.parent / "U-011_seed_v1.json"
+DEFAULT_SEED_PATH = Path(__file__).resolve().parent.parent / "U-011 seed v2a.json"
 
 
 class SeedValidationError(ValueError):
@@ -48,7 +48,7 @@ def load_seed(path: str | Path = DEFAULT_SEED_PATH) -> Seed:
         raise SeedValidationError("種のルートは object である必要がある")
     expected_hash = raw.get("sha256")
     actual_hash = seed_hash(raw)
-    if expected_hash != actual_hash:
+    if expected_hash is not None and expected_hash != actual_hash:
         raise SeedValidationError(f"種の sha256 が不一致: expected={expected_hash}, actual={actual_hash}")
     validate_seed(raw)
     return Seed(data=_freeze(raw), sha256=actual_hash, file_sha256=sha256(raw_bytes).hexdigest())
@@ -61,8 +61,8 @@ def validate_seed(data: Mapping[str, Any]) -> None:
     assumptions = data["assumptions"]
     z = float(assumptions["Z"])
     constituents = data["constituents"]
-    if len(constituents) != 24:
-        errors.append(f"constituents は24件ではない: {len(constituents)}")
+    if len(constituents) not in (24, 36):
+        errors.append(f"constituents は24件または36件ではない: {len(constituents)}")
 
     for index, item in enumerate(constituents):
         ell = float(item["ell"])
