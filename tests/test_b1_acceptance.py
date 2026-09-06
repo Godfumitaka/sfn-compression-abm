@@ -37,29 +37,32 @@ from abm.loop import _repair_targets, run_longitudinal
 
 
 MOTIFS = {
-    "M1": (("hold", ("a", "b")), ("push", ("b", "a")), ("require", ("core1", "core2"))),
-    "M2": (("carry", ("a", "b")), ("lift", ("a", "b")), ("cause", ("core2", "core1"))),
-    "M3": (("break", ("a", "b")), ("cut", ("a", "b")), ("cause", ("core2", "core1"))),
-    "M4": (("push", ("a", "b")), ("turn", ("b", "c")), ("cause", ("core1", "core2"))),
+    "M1": (("hold", "push"), ("carry", "lift"), ("cause", "require"), "allow"),
+    "M2": (("carry", "lift"), ("break", "cut"), ("require", "enable"), "depend"),
+    "M3": (("break", "cut"), ("turn", "press"), ("enable", "avert"), "prevent"),
+    "M4": (("turn", "press"), ("hold", "push"), ("avert", "cause"), "block"),
 }
-LIVE_IDS = frozenset(("core1", "core2", "higher", "tower"))
-PI_A = {"M1": 0.060701, "M2": 0.081710, "M3": 0.130073, "M4": 0.265404}
-PERIPHERAL = {"M1": "carry", "M2": "cold", "M3": "carry", "M4": "hard"}
-GLUE = ("near", "above", "below", "beside", "behind", "inside")
+LIVE_IDS = frozenset(("fo_1", "fo_2", "fo_3", "fo_4", "higher_1", "higher_2", "third"))
+PI_A = {"M1": 0.075555, "M2": 0.080697, "M3": 0.155859, "M4": 0.263846}
+PERIPHERAL = {"M1": "cold", "M2": "wet", "M3": "hard", "M4": "dry"}
+GLUE = ("near", "above", "below", "beside", "behind", "inside", "outside", "across", "under", "over", "along", "toward")
 
 
 def _graph(motif: str, *, definition: bool) -> RelationGraph:
-    core1, core2, higher = MOTIFS[motif]
-    entity_ids = ("a", "b", "c", "e") if motif == "M4" else ("a", "b", "e")
+    first_1, first_2, higher, third = MOTIFS[motif]
+    entity_ids = ("a", "b", "e")
     return RelationGraph(
         graph_id=f"{'definition' if definition else 'scene'}-{motif}",
         entities=tuple(Entity(entity_id) for entity_id in entity_ids),
         relations=(
-            Relation("core1", core1[0], core1[1]),
-            Relation("core2", core2[0], core2[1]),
-            Relation("higher", higher[0], higher[1]),
+            Relation("fo_1", first_1[0], ("a", "b")),
+            Relation("fo_2", first_1[1], ("a", "b")),
+            Relation("fo_3", first_2[0], ("a", "b")),
+            Relation("fo_4", first_2[1], ("a", "b")),
+            Relation("higher_1", higher[0], ("fo_1", "fo_2")),
+            Relation("higher_2", higher[1], ("fo_3", "fo_4")),
+            Relation("third", third, ("higher_1", "higher_2")),
             Relation("mediator", "tombstone" if definition else "stone", ("a", "e")),
-            Relation("tower", "allow", ("mediator", "core1")),
         ),
     )
 
@@ -68,7 +71,7 @@ def _with_holdout(motif: str, rng: Random) -> RelationGraph:
     scene = _graph(motif, definition=False)
     entities = list(scene.entities)
     relations = list(scene.relations)
-    candidates = ["core1", "core2", "mediator"]
+    candidates = ["fo_1", "fo_2", "fo_3", "fo_4", "mediator"]
     if rng.random() < PI_A[motif]:
         entities.append(Entity("peripheral_entity"))
         relations.append(Relation("peripheral", PERIPHERAL[motif], ("a", "peripheral_entity")))
@@ -87,7 +90,7 @@ def _with_holdout(motif: str, rng: Random) -> RelationGraph:
 
 def _prediction_state(motif: str, m: int = 4) -> AgentState:
     graph = _graph(motif, definition=True)
-    selected_ids = ("core1", "core2", "higher", "tower")[:m]
+    selected_ids = ("fo_1", "fo_2", "fo_3", "fo_4", "higher_1", "higher_2", "third")[:m]
     live_rows = tuple(
         Constituent(
             slot_index=index,
@@ -359,7 +362,7 @@ def test_4_11_longitudinal_m_alloc_is_bounded() -> None:
         MemoryLedger(),
     )
     state = result.states["agent"]
-    assert all(definition.m_alloc <= 6 for definition in state.definitions.values())
+    assert all(definition.m_alloc <= 9 for definition in state.definitions.values())
 
 
 class _MemoryLedger:
@@ -435,7 +438,7 @@ def test_4_15_prototype_does_not_grow_monotonically(thinning_run) -> None:
 
 def test_4_16_definitions_and_allocations_are_bounded(thinning_run) -> None:
     state, _ = thinning_run
-    assert all(definition.m_alloc <= 6 for definition in state.definitions.values())
+    assert all(definition.m_alloc <= 9 for definition in state.definitions.values())
 
 
 def test_4_17_m_live_is_not_monotonically_increasing() -> None:

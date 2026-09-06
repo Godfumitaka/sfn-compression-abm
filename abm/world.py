@@ -17,14 +17,6 @@ from abm.domains import Entity, Relation, RelationGraph
 from abm.seed import Seed, load_seed
 
 
-MOTIF_ROWS = {
-    "M1": (("hold", ("a", "b")), ("push", ("b", "a")), ("require", ("core1", "core2")), "carry", ("a", "b")),
-    "M2": (("carry", ("a", "b")), ("lift", ("a", "b")), ("cause", ("core2", "core1")), "cold", ("a", "b")),
-    "M3": (("break", ("a", "b")), ("cut", ("a", "b")), ("cause", ("core2", "core1")), "carry", ("a", "b")),
-    "M4": (("push", ("a", "b")), ("turn", ("b", "c")), ("cause", ("core1", "core2")), "hard", ("a", "b", "c")),
-}
-
-
 @dataclass(frozen=True, slots=True)
 class WorldTrial:
     trial: int
@@ -57,7 +49,7 @@ def one_minus_h(pi_a: float) -> float:
 
 
 def validate_holdout_rates(seed: Seed) -> None:
-    for motif in MOTIF_ROWS:
+    for motif in seed.data["motif_structure"]:
         calculated = one_minus_h(float(seed.data["pi_A"][motif]))
         expected = float(seed.data["one_minus_h"][motif])
         if abs(calculated - expected) > 1e-6:
@@ -85,19 +77,23 @@ def generate_trial(
     *,
     seed: Seed,
 ) -> WorldTrial:
-    motif = _motif_for_trial(run_seed, trial_index)
+    motif = _motif_for_trial(run_seed, trial_index, tuple(seed.data["motif_structure"]))
     rng = _trial_rng(run_seed, trial_index)
-    core1, core2, higher, peripheral_predicate, core_entity_roles = MOTIF_ROWS[motif]
+    motif_row = seed.data["motif_structure"][motif]
+    subtree_1, subtree_2 = (seed.data["subtrees"][name] for name in motif_row["subtrees"])
     has_peripheral = rng.random() < float(seed.data["pi_A"][motif])
     glue_count = rng.randint(1, 3)
 
-    entity_roles = [*core_entity_roles, "mediator_entity"]
+    entity_roles = ["a", "b", "mediator_entity"]
     if has_peripheral:
         entity_roles.append("peripheral_entity")
     entity_ids = {role: opaque_id(run_seed, trial_index, f"entity:{role}") for role in entity_roles}
     relation_ids = {
         role: opaque_id(run_seed, trial_index, f"relation:{role}")
-        for role in ("core1", "core2", "higher", "mediator", "tower", "role_unary")
+        for role in (
+            "fo_1", "fo_2", "fo_3", "fo_4", "higher_1", "higher_2", "third",
+            "mediator", "role_unary",
+        )
     }
 
     def args(values: tuple[str, ...]) -> tuple[str, ...]:
@@ -105,18 +101,24 @@ def generate_trial(
 
     bag = tuple(word for word, motifs in seed.data["bags"].items() if motif in motifs)
     relations = [
-        Relation(relation_ids["core1"], core1[0], args(core1[1])),
-        Relation(relation_ids["core2"], core2[0], args(core2[1])),
-        Relation(relation_ids["higher"], higher[0], args(higher[1])),
+        Relation(relation_ids["fo_1"], str(subtree_1["first_order"][0]), args(("a", "b"))),
+        Relation(relation_ids["fo_2"], str(subtree_1["first_order"][1]), args(("a", "b"))),
+        Relation(relation_ids["fo_3"], str(subtree_2["first_order"][0]), args(("a", "b"))),
+        Relation(relation_ids["fo_4"], str(subtree_2["first_order"][1]), args(("a", "b"))),
+        Relation(relation_ids["higher_1"], str(subtree_1["higher"]), args(("fo_1", "fo_2"))),
+        Relation(relation_ids["higher_2"], str(subtree_2["higher"]), args(("fo_3", "fo_4"))),
+        Relation(relation_ids["third"], str(motif_row["third"]), args(("higher_1", "higher_2"))),
         Relation(relation_ids["mediator"], rng.choice(bag), (entity_ids["a"], entity_ids["mediator_entity"])),
-        Relation(relation_ids["tower"], "allow", (relation_ids["mediator"], relation_ids["core1"])),
         Relation(relation_ids["role_unary"], str(seed.data["role_unary"][motif]), (entity_ids["b"],)),
     ]
-    holdout_candidates = [relation_ids["core1"], relation_ids["core2"], relation_ids["mediator"]]
+    holdout_candidates = [
+        relation_ids["fo_1"], relation_ids["fo_2"], relation_ids["fo_3"], relation_ids["fo_4"],
+        relation_ids["mediator"],
+    ]
     if has_peripheral:
         peripheral_id = opaque_id(run_seed, trial_index, "relation:peripheral")
         relations.append(
-            Relation(peripheral_id, peripheral_predicate, (entity_ids["a"], entity_ids["peripheral_entity"]))
+            Relation(peripheral_id, str(motif_row["peripheral"]), (entity_ids["a"], entity_ids["peripheral_entity"]))
         )
         holdout_candidates.append(peripheral_id)
 
@@ -179,9 +181,9 @@ def _trial_rng(run_seed: str | int, trial_index: int) -> Random:
     return Random(int.from_bytes(sha256(material).digest(), "big"))
 
 
-def _motif_for_trial(run_seed: str | int, trial_index: int) -> str:
-    block_index, offset = divmod(trial_index, len(MOTIF_ROWS))
-    motifs = list(MOTIF_ROWS)
+def _motif_for_trial(run_seed: str | int, trial_index: int, motif_names: tuple[str, ...]) -> str:
+    block_index, offset = divmod(trial_index, len(motif_names))
+    motifs = list(motif_names)
     _block_rng(run_seed, block_index).shuffle(motifs)
     return motifs[offset]
 

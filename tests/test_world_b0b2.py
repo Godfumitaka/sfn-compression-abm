@@ -6,13 +6,13 @@ from statistics import mean, pstdev
 import pytest
 
 from abm.seed import load_seed
-from abm.world import MOTIF_ROWS, generate_world, one_minus_h, opaque_id
+from abm.world import generate_world, one_minus_h, opaque_id
 
 
 def test_one_minus_h_matches_all_seed_values() -> None:
     seed = load_seed()
 
-    for motif in MOTIF_ROWS:
+    for motif in seed.data["motif_structure"]:
         assert abs(one_minus_h(float(seed.data["pi_A"][motif])) - float(seed.data["one_minus_h"][motif])) <= 1e-6
 
 
@@ -27,10 +27,11 @@ def test_world_is_deterministic_and_sweep_independent() -> None:
 def test_motifs_are_randomized_within_balanced_blocks() -> None:
     world = generate_world("motif-blocks", 8_000, ("agent",))
     motifs = [trial.motif for trial in world.trials]
+    motif_names = tuple(load_seed().data["motif_structure"])
 
-    assert Counter(motifs) == {motif: 2_000 for motif in MOTIF_ROWS}
-    for start in range(0, len(motifs), len(MOTIF_ROWS)):
-        assert set(motifs[start : start + len(MOTIF_ROWS)]) == set(MOTIF_ROWS)
+    assert Counter(motifs) == {motif: 2_000 for motif in motif_names}
+    for start in range(0, len(motifs), len(motif_names)):
+        assert set(motifs[start : start + len(motif_names)]) == set(motif_names)
 
     positions: defaultdict[str, list[int]] = defaultdict(list)
     for index, motif in enumerate(motifs):
@@ -63,7 +64,13 @@ def test_scene_contract_holdout_and_opaque_ids() -> None:
         full_ids = {relation.relation_id for relation in trial.G_star.relations}
         visible_ids = {relation.relation_id for relation in trial.target_graph_partial.relations}
         assert full_ids - visible_ids == {trial.held_out_edge.relation_id}
-        assert trial.held_out_edge.predicate not in {"allow", str(load_seed().data["role_unary"][trial.motif])}
+        motif_row = load_seed().data["motif_structure"][trial.motif]
+        higher_predicates = {
+            load_seed().data["subtrees"][name]["higher"] for name in motif_row["subtrees"]
+        }
+        assert trial.held_out_edge.predicate not in {
+            motif_row["third"], *higher_predicates, str(load_seed().data["role_unary"][trial.motif])
+        }
         assert all(len(entity.entity_id) == 16 for entity in trial.G_star.entities)
         glue_counts.add(sum(relation.predicate in load_seed().data["glue"] for relation in trial.G_star.relations))
 
