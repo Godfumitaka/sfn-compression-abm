@@ -219,7 +219,7 @@ def _definition_graph(definition: Any) -> RelationGraph:
     return RelationGraph(
         graph_id=f"definition:{definition.name}",
         entities=tuple(Entity(entity_id) for entity_id in entity_ids),
-        relations=tuple(row.relation for row in definition.constituents),
+        relations=tuple(row.relation for row in definition.constituents if row.alive),
     )
 
 
