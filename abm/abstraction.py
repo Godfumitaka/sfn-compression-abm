@@ -4,12 +4,10 @@ from __future__ import annotations
 
 from dataclasses import replace
 from hashlib import sha256
-from typing import Mapping
-
 from abm.accounting import freeze_price, initial_merit
 from abm.definition import Constituent, EmbedState, ExceptionAccumulator, NamedDefinition
 from abm.domains import AgentState, Relation, RelationGraph
-from abm.filling import observe_slot
+from abm.filling import _mapped_arguments, observe_slot
 from abm.sme import Alignment, map_graphs
 
 
@@ -104,18 +102,25 @@ def m1(
             )
             embed[key] = EmbedState(constituent.slot_index, 0.0, 0.0)
             exceptions[exception_key] = ExceptionAccumulator((0.0,) * 16, 0.0, 0)
-        matching = next(
-            (right for left, right in pairs if left.relation_id == constituent.relation.relation_id),
-            None,
+    # slot_history は充足した述語だけでなく、def(R) の各位置に実際に観測された
+    # 述語を持つ。位置は §C.5.2b と同じ写像済み引数タプルで同定する。
+    definition_alignment = map_graphs(_definition_graph(definition), target).alignment
+    for constituent in definition.constituents:
+        position = _mapped_arguments(
+            constituent.relation,
+            definition_alignment.entity_mapping,
+            definition_alignment.relation_mapping,
         )
-        if matching is not None:
-            history = observe_slot(
-                history,
-                definition_name,
-                constituent.slot_index,
-                constituent.registered_at,
-                matching.predicate,
-            )
+        if position is None:
+            continue
+        for observed in target.relations:
+            if observed.arguments == position:
+                history = observe_slot(
+                    history,
+                    definition_name,
+                    constituent.slot_index,
+                    observed.predicate,
+                )
     event_id = _alignment_event_id(alignment)
     next_state = replace(
         state, definitions=definitions, merit=merit, embed=embed,
