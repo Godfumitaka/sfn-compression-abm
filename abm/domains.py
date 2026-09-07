@@ -218,7 +218,7 @@ class AgentState:
     embed: Mapping[tuple[str, int, int], EmbedState] = field(default_factory=dict)
     exceptions: Mapping[tuple[str, int], ExceptionAccumulator] = field(default_factory=dict)
     p_hat: FrequencyTable = FrequencyTable.empty()
-    slot_history: Mapping[tuple[str, int, int], frozenset[str]] = field(default_factory=dict)
+    slot_history: Mapping[tuple[str, int], frozenset[str]] = field(default_factory=dict)
     # 仕様 (E) 未決の主張。要素は (述語, 引数の束縛, 持ち主の鍵)。
     # 引数の束縛は縛られていない位置を None（ワイルドカード）で表す。
     # ★ pending_claims=false のとき空のまま。_SNAPSHOT_OMIT_IF_EMPTY が正準形から省く。

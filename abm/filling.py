@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from collections import Counter
 from dataclasses import dataclass
-from typing import Iterable, Mapping
+from typing import Callable, Iterable, Mapping
 
 from abm.definition import Constituent, FrequencyTable, NamedDefinition
 from abm.domains import Relation, RelationGraph
@@ -16,6 +15,7 @@ class FillingResult:
     slot_indices: tuple[int, ...]
     ambiguous: bool = False
     used_fallback: bool = False
+    source_by_slot: tuple[str, ...] = ()
 
 
 def slot_signature(relation: Relation, graph: RelationGraph) -> tuple[int, tuple[str, ...]]:
@@ -45,34 +45,60 @@ def fill_missing_slots(
     target: RelationGraph,
     entity_mapping: Mapping[str, str],
     relation_mapping: Mapping[str, str],
-    slot_history: Mapping[tuple[str, int, int], frozenset[str]],
+    slot_history: Mapping[tuple[str, int], frozenset[str]],
     p_hat: FrequencyTable,
 ) -> FillingResult:
-    """未充足かつ可視部に答えがない生存スロットを充填する。"""
+    """可視部に答えがないスロットを、依存先から再帰的に充填する。"""
 
-    visible_content = {(item.predicate, item.arguments) for item in target.relations}
     all_predicates = tuple(p_hat.alive_vocab)
     relations: list[Relation] = []
     indices: list[int] = []
     ambiguous = False
     fallback_used = False
+    sources: list[str] = []
     definition_graph = RelationGraph("definition", relations=tuple(c.relation for c in definition.constituents))
     scene_relation_ids = {relation.relation_id for relation in target.relations}
-    for constituent in definition.constituents:
-        if not constituent.alive:
-            continue
+    definition_by_id = {
+        constituent.relation.relation_id: constituent
+        for constituent in definition.constituents
+    }
+    filled_by_id: dict[str, Relation] = {}
+    visiting: set[str] = set()
+
+    def fill(constituent: Constituent) -> Relation | None:
+        nonlocal ambiguous, fallback_used
+        relation_id = constituent.relation.relation_id
+        if relation_id in filled_by_id:
+            return filled_by_id[relation_id]
+        if relation_id in visiting:
+            raise ValueError("def(R) の充填依存に循環がある")
         mapped_to = relation_mapping.get(constituent.relation.relation_id)
         if mapped_to is not None and mapped_to in scene_relation_ids:
-            continue
-        mapped_arguments = _mapped_arguments(constituent.relation, entity_mapping, relation_mapping)
-        if mapped_arguments is None:
-            continue
-        if (constituent.relation.predicate, mapped_arguments) in visible_content:
-            continue
-        pool = slot_history.get(
-            (definition.name, constituent.slot_index, constituent.registered_at),
-            frozenset(),
+            return None
+        visiting.add(relation_id)
+        mapped_arguments = _mapped_arguments_recursive(
+            constituent.relation,
+            entity_mapping,
+            relation_mapping,
+            definition_by_id,
+            scene_relation_ids,
+            fill,
         )
+        if mapped_arguments is None:
+            visiting.remove(relation_id)
+            return None
+        visible = next(
+            (
+                item for item in target.relations
+                if item.predicate == constituent.relation.predicate
+                and item.arguments == mapped_arguments
+            ),
+            None,
+        )
+        if visible is not None:
+            visiting.remove(relation_id)
+            return visible
+        pool = slot_history.get((definition.name, constituent.slot_index), frozenset())
         used_fallback = not pool
         if used_fallback:
             signature = slot_signature(constituent.relation, definition_graph)
@@ -84,25 +110,38 @@ def fill_missing_slots(
         ambiguous = ambiguous or tied
         fallback_used = fallback_used or used_fallback
         if predicate is None:
-            continue
-        relations.append(Relation(
-            relation_id=f"filling__{definition.name}__{constituent.slot_index}",
+            visiting.remove(relation_id)
+            return None
+        filled = Relation(
+            relation_id=(
+                f"filling__{definition.name}__{constituent.slot_index}"
+                f"__{constituent.registered_at}"
+            ),
             predicate=predicate,
             arguments=mapped_arguments,
-        ))
+        )
+        filled_by_id[relation_id] = filled
+        relations.append(filled)
         indices.append(constituent.slot_index)
-    return FillingResult(tuple(relations), tuple(indices), ambiguous, fallback_used)
+        sources.append("signature_fallback" if used_fallback else "slot_history")
+        visiting.remove(relation_id)
+        return filled
+
+    for constituent in definition.constituents:
+        fill(constituent)
+    return FillingResult(
+        tuple(relations), tuple(indices), ambiguous, fallback_used, tuple(sources)
+    )
 
 
 def observe_slot(
-    history: Mapping[tuple[str, int, int], frozenset[str]],
+    history: Mapping[tuple[str, int], frozenset[str]],
     name: str,
     slot_index: int,
-    registered_at: int,
     predicate: str,
-) -> dict[tuple[str, int, int], frozenset[str]]:
+) -> dict[tuple[str, int], frozenset[str]]:
     updated = dict(history)
-    key = (name, slot_index, registered_at)
+    key = (name, slot_index)
     updated[key] = frozenset((*updated.get(key, frozenset()), predicate))
     return updated
 
@@ -118,6 +157,33 @@ def _mapped_arguments(
         if target is None:
             return None
         mapped.append(target)
+    return tuple(mapped)
+
+
+def _mapped_arguments_recursive(
+    relation: Relation,
+    entity_mapping: Mapping[str, str],
+    relation_mapping: Mapping[str, str],
+    definition_by_id: Mapping[str, Constituent],
+    scene_relation_ids: set[str],
+    fill: Callable[[Constituent], Relation | None],
+) -> tuple[str, ...] | None:
+    """削除済み関係への参照を先に充填し、上位の引数へ接続する。"""
+
+    mapped: list[str] = []
+    for argument in relation.arguments:
+        referenced = definition_by_id.get(argument)
+        scene_id = relation_mapping.get(argument)
+        if referenced is not None and (scene_id is None or scene_id not in scene_relation_ids):
+            filled = fill(referenced)
+            if filled is None:
+                return None
+            mapped.append(filled.relation_id)
+            continue
+        target_id = scene_id if scene_id is not None else entity_mapping.get(argument)
+        if target_id is None:
+            return None
+        mapped.append(target_id)
     return tuple(mapped)
 
 
