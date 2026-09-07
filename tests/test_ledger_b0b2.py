@@ -38,13 +38,13 @@ def _record(trial: int) -> dict:
     )
 
 
-def test_ledger_field_accounting_is_38_22_24_8_minus_three() -> None:
+def test_ledger_field_accounting_is_38_26_24_8_minus_three() -> None:
     assert len(LOGGING_SCHEMA_FIELDS) == 38
     assert len(D23_FIELDS) == 26
     assert len(MECHANISM_FIELDS) == 24
     assert len(RESEARCH_FIELDS) == 8
     assert len(LEDGER_FIELDS) == 93
-    assert len(ARM_DESCRIPTOR_FIELDS) == 13
+    assert len(ARM_DESCRIPTOR_FIELDS) == 14
     assert LEDGER_FIELDS.count("agent_state_snapshot_hash") == 1
     assert LEDGER_FIELDS.count("abstain_reason") == 1
 
