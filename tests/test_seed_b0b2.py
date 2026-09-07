@@ -15,7 +15,7 @@ def _raw_seed() -> dict:
 def test_seed_hash_and_five_internal_checks_pass() -> None:
     seed = load_seed()
 
-    assert seed.sha256 == "5d9abee14d895ae72264ca78f76928d2c880334a056d94a49127c90fe435c3c4"
+    assert seed.sha256 == "e993b7c92d1bcc54f3c79d14fa39252b740174acfd00e36001be1114bcf68c63"
     validate_seed(seed.data)
 
 

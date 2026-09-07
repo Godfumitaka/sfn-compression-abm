@@ -155,25 +155,23 @@
     0.3734
   ],
   "marginal": {
+    "allow": 0.04486724,
     "cause": 0.04486724,
     "require": 0.04486724,
     "hold": 0.04486724,
     "push": 0.04486724,
     "carry": 0.04486724,
     "lift": 0.04486724,
+    "depend": 0.04486724,
     "enable": 0.04486724,
     "break": 0.04486724,
     "cut": 0.04486724,
     "avert": 0.04486724,
     "turn": 0.04486724,
     "press": 0.04486724,
-    "allow": 0.02243362,
     "supported": 0.02243362,
-    "depend": 0.02243362,
     "carried": 0.02243362,
-    "prevent": 0.02243362,
     "broken": 0.02243362,
-    "block": 0.02243362,
     "moved": 0.02243362,
     "near": 0.01495575,
     "above": 0.01495575,
@@ -226,11 +224,11 @@
       "arity": 2,
       "new_slots": 0,
       "c": 7,
-      "rate": 0.25,
-      "ell": 5.4782,
-      "a": 2.2778,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
       "pi": 1.0,
-      "u": 1.815727
+      "u": 2.043181
     },
     {
       "motif": "M1",
@@ -343,11 +341,11 @@
       "arity": 2,
       "new_slots": 0,
       "c": 7,
-      "rate": 0.25,
-      "ell": 5.4782,
-      "a": 2.2778,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
       "pi": 1.0,
-      "u": 1.816145
+      "u": 2.043652
     },
     {
       "motif": "M2",
@@ -455,16 +453,16 @@
     },
     {
       "motif": "M3",
-      "predicate": "prevent",
+      "predicate": "allow",
       "layer": "三階",
       "arity": 2,
       "new_slots": 0,
       "c": 7,
-      "rate": 0.25,
-      "ell": 5.4782,
-      "a": 2.2778,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
       "pi": 1.0,
-      "u": 1.822259
+      "u": 2.050532
     },
     {
       "motif": "M3",
@@ -572,16 +570,16 @@
     },
     {
       "motif": "M4",
-      "predicate": "block",
+      "predicate": "depend",
       "layer": "三階",
       "arity": 2,
       "new_slots": 0,
       "c": 7,
-      "rate": 0.25,
-      "ell": 5.4782,
-      "a": 2.2778,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
       "pi": 1.0,
-      "u": 1.831044
+      "u": 2.060417
     },
     {
       "motif": "M4",
@@ -706,7 +704,7 @@
       "peripheral": "wet"
     },
     "M3": {
-      "third": "prevent",
+      "third": "allow",
       "subtrees": [
         "C",
         "D"
@@ -714,7 +712,7 @@
       "peripheral": "hard"
     },
     "M4": {
-      "third": "block",
+      "third": "depend",
       "subtrees": [
         "D",
         "A"

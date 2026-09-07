@@ -12,7 +12,7 @@ SUBTREE = {                     # 名前: (二階述語, 一階述語 2 本)
     "D": ("avert",   ("turn",  "press")),
 }
 MOTIF_SUBTREES = {"M1": ("A","B"), "M2": ("B","C"), "M3": ("C","D"), "M4": ("D","A")}
-THIRD = {"M1":"allow", "M2":"depend", "M3":"prevent", "M4":"block"}   # 三階・モチーフ固有
+THIRD = {"M1":"allow", "M2":"depend", "M3":"allow", "M4":"depend"}   # 三階・モチーフ間で共有
 PERIPHERAL = {"M1":"cold", "M2":"wet", "M3":"hard", "M4":"dry"}       # ★ 他層と重ならない語
 ROLE_UNARY = g.ROLE_UNARY
 PI_A = {"M1":0.075555,"M2":0.080697,"M3":0.155859,"M4":0.263846}  # u_target を満たすよう解いた
