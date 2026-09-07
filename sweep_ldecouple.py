@@ -62,11 +62,13 @@ def code_commit() -> str:
 
 
 def cell_name(f_value: float, theta: float, scope: str,
-              verbatim_theta: float | None = None) -> str:
+              verbatim_theta: float | None = None,
+              fill_selection: str = "most_frequent") -> str:
     base = f"f{f_value:.4f}_th{theta:.4f}"
     if verbatim_theta is not None and verbatim_theta != theta:
         base += f"_vt{verbatim_theta:.4f}"
-    return f"{base}_{scope}"
+    suffix = "" if fill_selection == "most_frequent" else f"_fill-{fill_selection}"
+    return f"{base}_{scope}{suffix}"
 
 
 def parse_cell_name(name: str) -> dict:
@@ -76,8 +78,10 @@ def parse_cell_name(name: str) -> dict:
     if rest and rest[0].startswith("vt"):
         verbatim = float(rest[0][2:])
         rest = rest[1:]
+    fill_part = rest.pop() if rest and rest[-1].startswith("fill-") else "fill-most_frequent"
     return {"f": float(f_part[1:]), "theta_prime": float(th_part[2:]),
-            "repair_scope": "_".join(rest), "verbatim_theta": verbatim}
+            "repair_scope": "_".join(rest), "verbatim_theta": verbatim,
+            "fill_selection": fill_part.removeprefix("fill-")}
 
 
 def enumerate_runs(cfg: dict) -> list[dict]:
@@ -88,11 +92,13 @@ def enumerate_runs(cfg: dict) -> list[dict]:
         for theta in ax["theta_prime"]:
             for f_value in ax["f"]:
                 for verbatim in ax.get("verbatim_theta", [None]):
-                    cell = cell_name(f_value, theta, scope, verbatim)
-                    for i in range(seeds["count"]):
-                        out.append({"cell": cell, "f": f_value, "theta_prime": theta,
-                                    "repair_scope": scope, "verbatim_theta": verbatim,
-                                    "seed": seeds["start"] + i})
+                    for fill_selection in ax.get("fill_selection", ["most_frequent"]):
+                        cell = cell_name(f_value, theta, scope, verbatim, fill_selection)
+                        for i in range(seeds["count"]):
+                            out.append({"cell": cell, "f": f_value, "theta_prime": theta,
+                                        "repair_scope": scope, "verbatim_theta": verbatim,
+                                        "fill_selection": fill_selection,
+                                        "seed": seeds["start"] + i})
     # ★ 割り当ての順序を決定的にする（並列で完了する順序は変わってよい）
     out.sort(key=lambda r: (r["cell"], r["seed"]))
     return out
@@ -125,6 +131,7 @@ def run_one(task: dict) -> dict:
         arm_alpha=fixed["alpha"], arm_beta=fixed["beta"], arm_w=fixed["w"],
         arm_kappa=fixed["kappa"], arm_repair_scope=task["repair_scope"],
         arm_verbatim_theta=task["verbatim_theta"],
+        arm_fill_selection=task["fill_selection"],
         arm_holdout_repr=fixed.get("holdout_repr", "first_order_binary"),
         arm_f_profile=f"uniform:{task['f']:.6f}",
         arm_lambda_mix=fixed["lambda_mix"],
@@ -148,6 +155,7 @@ def run_one(task: dict) -> dict:
         alpha=fixed["alpha"], beta=fixed["beta"], w=fixed["w"], kappa=fixed["kappa"],
         lambda_mix=fixed["lambda_mix"], abstain_charge=fixed["abstain_charge"],
         repair_scope=RepairScope(task["repair_scope"]),
+        fill_selection=task["fill_selection"],
     ) for a in cfg["agent_ids"]}
 
     t0 = time.time()
@@ -199,6 +207,10 @@ def validate(cfg: dict) -> None:
             RepairScope(scope)
         except ValueError:
             raise SystemExit(f"★ 未知の repair_scope: {scope}")
+    invalid_fill = sorted(set(ax.get("fill_selection", ["most_frequent"]))
+                          - {"most_frequent", "sample"})
+    if invalid_fill:
+        raise SystemExit(f"★ 未知の fill_selection: {invalid_fill}")
     if cfg["seeds"]["count"] < 1 or cfg["trial_count"] < 1:
         raise SystemExit("★ seeds.count と trial_count は 1 以上")
     try:
@@ -259,9 +271,10 @@ def main() -> None:
         runs = runs[:args.calibrate]
 
     print(f"設定        {args.config}")
+    fill_count = len(cfg["axes"].get("fill_selection", ["most_frequent"]))
     print(f"格子        f {len(cfg['axes']['f'])}点 × θ′ {len(cfg['axes']['theta_prime'])}点"
-          f" × 射程 {len(cfg['axes']['repair_scope'])}点"
-          f" = {len(cfg['axes']['f'])*len(cfg['axes']['theta_prime'])*len(cfg['axes']['repair_scope'])} セル")
+          f" × 射程 {len(cfg['axes']['repair_scope'])}点 × 充填選択 {fill_count}点"
+          f" = {len(cfg['axes']['f'])*len(cfg['axes']['theta_prime'])*len(cfg['axes']['repair_scope'])*fill_count} セル")
     print(f"シード      {cfg['seeds']['start']}〜{cfg['seeds']['start']+cfg['seeds']['count']-1}"
           f"（{cfg['seeds']['count']} 本）")
     print(f"T           {cfg['trial_count']}")

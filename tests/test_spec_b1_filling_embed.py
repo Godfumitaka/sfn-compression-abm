@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from random import Random
+
 from abm.definition import Constituent, EmbedState, FrequencyTable, FrozenPrice, NamedDefinition
 from abm.deletion import _embed_immediately_before_deletion
 from abm.domains import AgentState, Entity, Relation, RelationGraph
@@ -39,6 +41,60 @@ def test_dangling_dependency_is_filled_before_its_parent() -> None:
     assert [relation.predicate for relation in result.relations] == ["hold", "allow"]
     assert result.relations[1].arguments == (result.relations[0].relation_id, "c")
     assert result.source_by_slot == ("slot_history", "slot_history")
+
+
+def test_sample_uses_normalized_weights_and_does_not_abstain_on_tie() -> None:
+    row = Constituent(3, 1, Relation("row", "hold", ("x", "y")), PRICE, False)
+    definition = NamedDefinition("R", (row,), 1, 1)
+    p_hat = FrequencyTable(
+        {"hold": 3, "push": 2}, 5, 0.1, frozenset({"hold", "push"})
+    )
+
+    result = fill_missing_slots(
+        definition,
+        RelationGraph("scene", (Entity("a"), Entity("b")), ()),
+        {"x": "a", "y": "b"},
+        {},
+        {("R", 3): frozenset({"push", "hold"})},
+        p_hat,
+        "sample",
+        Random(7),
+    )
+
+    assert result.ambiguous is False
+    assert result.slot_history_size == 2
+    assert result.n_tie_candidates == 0
+    assert result.candidate_distribution == ({
+        "slot_index": 3,
+        "candidates": [["hold", 0.6], ["push", 0.4]],
+    },)
+    assert [relation.predicate for relation in result.relations] == ["hold"]
+
+
+def test_sample_is_deterministic_and_most_frequent_does_not_consume_rng() -> None:
+    row = Constituent(0, 1, Relation("row", "hold", ("x", "y")), PRICE, False)
+    definition = NamedDefinition("R", (row,), 1, 1)
+    target = RelationGraph("scene", (Entity("a"), Entity("b")), ())
+    p_hat = FrequencyTable(
+        {"hold": 1, "push": 1}, 2, 0.1, frozenset({"hold", "push"})
+    )
+    arguments = (
+        definition, target, {"x": "a", "y": "b"}, {},
+        {("R", 0): frozenset({"hold", "push"})}, p_hat,
+    )
+
+    first = fill_missing_slots(*arguments, "sample", Random(11))
+    second = fill_missing_slots(*arguments, "sample", Random(11))
+    assert first == second
+    assert first.ambiguous is False
+    assert first.n_tie_candidates == 2
+
+    rng = Random(11)
+    before = rng.getstate()
+    frequent = fill_missing_slots(*arguments, "most_frequent", rng)
+    assert rng.getstate() == before
+    assert frequent.ambiguous is True
+    assert frequent.relations == ()
 
 
 def test_recursive_filling_rejects_cycles() -> None:

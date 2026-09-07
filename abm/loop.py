@@ -135,6 +135,9 @@ def run_longitudinal(
                 snapshot_mode, previous_snapshots.get(agent_id), previous_hashes.get(agent_id),
                 capture_snapshot, counterfactuals,
                 pending.projected_edge,
+                pending.filling_slot_history_size,
+                pending.filling_n_tie_candidates,
+                pending.filling_candidate_distribution,
             )
             ledger.append(record)
             if capture_snapshot:
@@ -427,6 +430,9 @@ def _ledger_record(
     capture_snapshot: bool,
     counterfactuals: list[dict[str, Any]],
     projected_edge: Any = None,
+    filling_slot_history_size: int = 0,
+    filling_n_tie_candidates: int = 0,
+    filling_candidate_distribution: tuple[dict[str, object], ...] = (),
 ) -> tuple[dict[str, Any], Any, str]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
@@ -500,7 +506,7 @@ def _ledger_record(
         "tau": config.tau_acc,
         "constituent_states": _constituent_states(state),
         "entity_map_covered": bool(output.trace.get("entity_map_covered", False)),
-        "slot_history_size": sum(len(values) for values in state.slot_history.values()),
+        "slot_history_size": filling_slot_history_size,
         "filled_predicate": [r.predicate for r in output.trace.get("filled_slots", ())],
         "slot_signature": [list(r.arguments) for r in output.trace.get("filled_slots", ())],
         "support_at_adoption": support,
@@ -509,8 +515,8 @@ def _ledger_record(
         "exception_bits_charged": accounting["exception_bits_charged"],
         "M051_balance": sum(value.bits for value in state.exceptions.values()),
         "matcher": "sme",
-        "n_tie_candidates": 0,
-        "candidate_distribution": [],
+        "n_tie_candidates": filling_n_tie_candidates,
+        "candidate_distribution": list(filling_candidate_distribution),
         "enumeration_version": "B1-v0",
         "V_vocab": len(state.p_hat.alive_vocab),
         "merit_event_times": [],

@@ -176,6 +176,7 @@ class AgentConfig:
     pending_claims: bool = False
     pending_gamma: float = 0.0
     pending_hold_cost: float = 0.0
+    fill_selection: str = "most_frequent"
 
     @property
     def verbatim_threshold(self) -> float:
