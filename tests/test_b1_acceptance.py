@@ -39,8 +39,8 @@ from abm.loop import _repair_targets, run_longitudinal
 MOTIFS = {
     "M1": (("hold", "push"), ("carry", "lift"), ("cause", "require"), "allow"),
     "M2": (("carry", "lift"), ("break", "cut"), ("require", "enable"), "depend"),
-    "M3": (("break", "cut"), ("turn", "press"), ("enable", "avert"), "prevent"),
-    "M4": (("turn", "press"), ("hold", "push"), ("avert", "cause"), "block"),
+    "M3": (("break", "cut"), ("turn", "press"), ("enable", "avert"), "allow"),
+    "M4": (("turn", "press"), ("hold", "push"), ("avert", "cause"), "depend"),
 }
 LIVE_IDS = frozenset(("fo_1", "fo_2", "fo_3", "fo_4", "higher_1", "higher_2", "third"))
 PI_A = {"M1": 0.075555, "M2": 0.080697, "M3": 0.155859, "M4": 0.263846}
