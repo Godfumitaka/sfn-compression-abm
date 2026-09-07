@@ -54,6 +54,9 @@ class PendingState:
     # ★ 記録専用（D23）。投影が出した候補を、一本に絞る前に控える。
     #   trace には入れない。trace は public_history 経由で状態ハッシュに入るため。
     projected_edge: Any = None
+    filling_slot_history_size: int = 0
+    filling_n_tie_candidates: int = 0
+    filling_candidate_distribution: tuple[dict[str, object], ...] = ()
 
 
 def predict(
@@ -89,6 +92,7 @@ def predict(
         "tau_passed_defs": [],
     }
     projected_edge = None          # ★ 記録専用（D23）。振る舞いには使わない
+    filling = None
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
     else:
@@ -129,6 +133,8 @@ def predict(
                         definition_alignment.relation_mapping,
                         state.slot_history,
                         state.p_hat,
+                        config.fill_selection,
+                        rng,
                     )
                     trace.update(
                         filled_slots=filling.relations,
@@ -154,6 +160,11 @@ def predict(
         agent_input=agent_input,
         rng_state=_snapshot_rng_state(rng, state.rng_state),
         projected_edge=projected_edge,
+        filling_slot_history_size=filling.slot_history_size if filling is not None else 0,
+        filling_n_tie_candidates=filling.n_tie_candidates if filling is not None else 0,
+        filling_candidate_distribution=(
+            filling.candidate_distribution if filling is not None else ()
+        ),
     )
     return output, pending
 

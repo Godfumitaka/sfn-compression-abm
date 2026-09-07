@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, Iterable, Mapping
+from typing import Callable, Iterable, Mapping, Protocol
 
 from abm.definition import Constituent, FrequencyTable, NamedDefinition
 from abm.domains import Relation, RelationGraph
@@ -16,6 +16,13 @@ class FillingResult:
     ambiguous: bool = False
     used_fallback: bool = False
     source_by_slot: tuple[str, ...] = ()
+    slot_history_size: int = 0
+    n_tie_candidates: int = 0
+    candidate_distribution: tuple[dict[str, object], ...] = ()
+
+
+class RNG(Protocol):
+    def random(self) -> float: ...
 
 
 def slot_signature(relation: Relation, graph: RelationGraph) -> tuple[int, tuple[str, ...]]:
@@ -40,6 +47,34 @@ def most_frequent(candidates: Iterable[str], p_hat: FrequencyTable) -> tuple[str
     return winners[0], False
 
 
+def _distribution(
+    candidates: Iterable[str], p_hat: FrequencyTable
+) -> tuple[tuple[str, float], ...]:
+    weighted = tuple((predicate, p_hat.prob(predicate)) for predicate in sorted(set(candidates)))
+    total = sum(weight for _, weight in weighted)
+    if total == 0:
+        return tuple((predicate, 0.0) for predicate, _ in weighted)
+    return tuple((predicate, weight / total) for predicate, weight in weighted)
+
+
+def sample_predicate(
+    distribution: tuple[tuple[str, float], ...], rng: RNG
+) -> str | None:
+    """正規化済みの候補分布から一本を抽出する。"""
+
+    if not distribution or sum(weight for _, weight in distribution) == 0:
+        return None
+    if len(distribution) == 1:
+        return distribution[0][0]
+    draw = rng.random()
+    cumulative = 0.0
+    for predicate, weight in distribution:
+        cumulative += weight
+        if draw < cumulative:
+            return predicate
+    return distribution[-1][0]
+
+
 def fill_missing_slots(
     definition: NamedDefinition,
     target: RelationGraph,
@@ -47,6 +82,8 @@ def fill_missing_slots(
     relation_mapping: Mapping[str, str],
     slot_history: Mapping[tuple[str, int], frozenset[str]],
     p_hat: FrequencyTable,
+    fill_selection: str = "most_frequent",
+    rng: RNG | None = None,
 ) -> FillingResult:
     """可視部に答えがないスロットを、依存先から再帰的に充填する。"""
 
@@ -56,6 +93,13 @@ def fill_missing_slots(
     ambiguous = False
     fallback_used = False
     sources: list[str] = []
+    history_size = 0
+    tie_candidates = 0
+    distributions: list[dict[str, object]] = []
+    if fill_selection not in {"most_frequent", "sample"}:
+        raise ValueError(f"未知の fill_selection: {fill_selection}")
+    if fill_selection == "sample" and rng is None:
+        raise ValueError("fill_selection='sample' には rng が必要です")
     definition_graph = RelationGraph("definition", relations=tuple(c.relation for c in definition.constituents))
     scene_relation_ids = {relation.relation_id for relation in target.relations}
     definition_by_id = {
@@ -66,7 +110,7 @@ def fill_missing_slots(
     visiting: set[str] = set()
 
     def fill(constituent: Constituent) -> Relation | None:
-        nonlocal ambiguous, fallback_used
+        nonlocal ambiguous, fallback_used, history_size, tie_candidates
         relation_id = constituent.relation.relation_id
         if relation_id in filled_by_id:
             return filled_by_id[relation_id]
@@ -106,8 +150,22 @@ def fill_missing_slots(
                 predicate for predicate in all_predicates
                 if _predicate_has_signature(predicate, signature, target, definition_graph)
             )
-        predicate, tied = most_frequent(pool, p_hat)
-        ambiguous = ambiguous or tied
+        distribution = _distribution(pool, p_hat)
+        maximum = max((weight for _, weight in distribution), default=0.0)
+        tied_count = sum(weight == maximum for _, weight in distribution) if maximum > 0 else 0
+        history_size += len(pool)
+        tie_candidates += tied_count if tied_count > 1 else 0
+        distributions.append({
+            "slot_index": constituent.slot_index,
+            "candidates": [[predicate, weight] for predicate, weight in distribution],
+        })
+        if fill_selection == "sample":
+            assert rng is not None
+            predicate = sample_predicate(distribution, rng)
+            tied = False
+        else:
+            predicate, tied = most_frequent(pool, p_hat)
+            ambiguous = ambiguous or tied
         fallback_used = fallback_used or used_fallback
         if predicate is None:
             visiting.remove(relation_id)
@@ -127,10 +185,11 @@ def fill_missing_slots(
         visiting.remove(relation_id)
         return filled
 
-    for constituent in definition.constituents:
+    for constituent in sorted(definition.constituents, key=lambda row: row.slot_index):
         fill(constituent)
     return FillingResult(
-        tuple(relations), tuple(indices), ambiguous, fallback_used, tuple(sources)
+        tuple(relations), tuple(indices), ambiguous, fallback_used, tuple(sources),
+        history_size, tie_candidates, tuple(distributions),
     )
 
 
