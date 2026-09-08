@@ -177,6 +177,16 @@ class AgentConfig:
     pending_gamma: float = 0.0
     pending_hold_cost: float = 0.0
     fill_selection: str = "most_frequent"
+    # 識別に使う def(R) グラフ。"all" のとき墓石込み（既存走行と bit 一致）。
+    identification_graph: str = "all"
+    # 自己点数の再利用。"legacy" のとき生存署名を鍵に再利用（既存走行と bit 一致）。
+    self_score_cache: str = "legacy"
+
+    def __post_init__(self) -> None:
+        if self.identification_graph not in {"all", "live"}:
+            raise ValueError(f"未知の identification_graph: {self.identification_graph}")
+        if self.self_score_cache not in {"legacy", "off"}:
+            raise ValueError(f"未知の self_score_cache: {self.self_score_cache}")
 
     @property
     def verbatim_threshold(self) -> float:

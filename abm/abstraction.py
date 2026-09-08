@@ -16,26 +16,37 @@ def _identify_definition(
     scene: RelationGraph,
     threshold: float,
     self_score_cache: dict[str, float] | None = None,
+    *,
+    identification_graph: str = "all",
+    self_score_cache_mode: str = "legacy",
 ) -> str | None:
     """SEQL/GEL の NSIM 閾値を最初に満たす生存 def(R) を同定する。"""
 
+    if identification_graph not in {"all", "live"}:
+        raise ValueError(f"未知の identification_graph: {identification_graph}")
+    if self_score_cache_mode not in {"legacy", "off"}:
+        raise ValueError(f"未知の self_score_cache: {self_score_cache_mode}")
     cache = self_score_cache if self_score_cache is not None else {}
     definitions = sorted(
         (definition for definition in state.definitions.values() if definition.m_live > 0),
         key=lambda definition: (-definition.assimilation_count, -definition.registered_at),
     )
     for definition in definitions:
-        graph = _definition_graph(definition)
-        live_signature = tuple(
-            (row.slot_index, row.registered_at)
-            for row in definition.constituents
-            if row.alive
-        )
-        cache_key = repr((definition.name, live_signature))
-        self_score = cache.get(cache_key)
-        if self_score is None:
+        graph = _definition_graph(definition, mode=identification_graph)
+        if self_score_cache_mode == "off":
+            # ★ 渡された辞書は読まず書かず、毎回 map_graphs で計算する。
             self_score = map_graphs(graph, graph).alignment.total_score
-            cache[cache_key] = self_score
+        else:
+            live_signature = tuple(
+                (row.slot_index, row.registered_at)
+                for row in definition.constituents
+                if row.alive
+            )
+            cache_key = repr((definition.name, live_signature))
+            self_score = cache.get(cache_key)
+            if self_score is None:
+                self_score = map_graphs(graph, graph).alignment.total_score
+                cache[cache_key] = self_score
         if self_score <= 0:
             continue
         score = map_graphs(graph, scene).alignment.total_score
@@ -104,7 +115,10 @@ def m1(
             exceptions[exception_key] = ExceptionAccumulator((0.0,) * 16, 0.0, 0)
     # slot_history は充足した述語だけでなく、def(R) の各位置に実際に観測された
     # 述語を持つ。位置は §C.5.2b と同じ写像済み引数タプルで同定する。
-    definition_alignment = map_graphs(_definition_graph(definition), target).alignment
+    # ★ 履歴観測は墓石込みで据え置く。識別の identification_graph を持ち込まない。
+    definition_alignment = map_graphs(
+        _definition_graph(definition, mode="all"), target
+    ).alignment
     for constituent in definition.constituents:
         position = _mapped_arguments(
             constituent.relation,
@@ -221,9 +235,16 @@ def _structural_relation_ids(graph: RelationGraph) -> frozenset[str]:
     return frozenset(higher_order | referenced)
 
 
-def _definition_graph(definition: NamedDefinition) -> RelationGraph:
-    """墓石を含む def(R) を SME 入力グラフへ変換する。"""
+def _definition_graph(definition: NamedDefinition, *, mode: str = "all") -> RelationGraph:
+    """def(R) を SME 入力グラフへ変換する。
 
+    mode="all"   墓石を含む全構成素を関係として並べる（既定。履歴観測はこちら）。
+    mode="live"  関係だけを row.alive で絞る。relation_ids と entities は
+                 墓石を含む全構成素から作る。agent_runtime._definition_graph と同じ規則。
+    """
+
+    if mode not in {"all", "live"}:
+        raise ValueError(f"未知の identification_graph: {mode}")
     relation_ids = {row.relation.relation_id for row in definition.constituents}
     entity_ids = sorted({
         argument
@@ -236,5 +257,8 @@ def _definition_graph(definition: NamedDefinition) -> RelationGraph:
     return RelationGraph(
         graph_id=f"definition:{definition.name}",
         entities=tuple(Entity(entity_id) for entity_id in entity_ids),
-        relations=tuple(row.relation for row in definition.constituents),
+        relations=tuple(
+            row.relation for row in definition.constituents
+            if mode == "all" or row.alive
+        ),
     )

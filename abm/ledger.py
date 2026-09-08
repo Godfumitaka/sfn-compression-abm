@@ -39,6 +39,7 @@ ARM_DESCRIPTOR_FIELDS = (
     "arm_holdout_repr", "arm_f_profile",
     "arm_lambda_mix", "arm_abstain_charge", "arm_temperature", "arm_d_shared",
     "arm_adaptation_table",
+    "arm_identification_graph", "arm_self_score_cache",
 )
 NON_NULL_FIELDS = frozenset(
     ("exception_bits_charged", "constituent_reason_123", "oracle_verdict", "m_live", "support_at_adoption")
@@ -61,8 +62,8 @@ if len(LEDGER_FIELDS) != 93:
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
     )
-if len(ARM_DESCRIPTOR_FIELDS) != 14:
-    raise RuntimeError(f"腕記述子は14本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
+if len(ARM_DESCRIPTOR_FIELDS) != 16:
+    raise RuntimeError(f"腕記述子は16本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +91,8 @@ class RunHeader:
     f_setting: float | str
     arm_verbatim_theta: float | None = None
     arm_fill_selection: str = "most_frequent"
+    arm_identification_graph: str = "all"
+    arm_self_score_cache: str = "legacy"
 
     def to_dict(self) -> dict[str, Any]:
         return {field: getattr(self, field) for field in (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)}

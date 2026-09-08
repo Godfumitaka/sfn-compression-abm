@@ -98,6 +98,8 @@ def run_longitudinal(
                     agent_input.target_graph_partial,
                     config.nsim_threshold,
                     self_score_caches[agent_id],
+                    identification_graph=config.identification_graph,
+                    self_score_cache_mode=config.self_score_cache,
                 )
                 after, registration = m1(
                     after,

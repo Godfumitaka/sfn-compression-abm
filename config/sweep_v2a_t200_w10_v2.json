@@ -1,0 +1,45 @@
+{
+  "name": "v2a_t200_w10_2026-09-08",
+  "trial_count": 1740,
+  "agent_ids": [
+    "agent"
+  ],
+  "seeds": {
+    "start": 1,
+    "count": 20
+  },
+  "axes": {
+    "f": [
+      0.5
+    ],
+    "theta_prime": [
+      0.1,
+      0.9,
+      1.2
+    ],
+    "repair_scope": [
+      "first_order"
+    ],
+    "fill_selection": [
+      "most_frequent",
+      "sample"
+    ]
+  },
+  "fixed": {
+    "threshold": 0.0,
+    "correction_mode": "none",
+    "tau_acc": 2.0,
+    "nsim_threshold": 0.95,
+    "alpha": 0.0,
+    "beta": 0.0,
+    "w": 1.0,
+    "kappa": 1.0,
+    "lambda_mix": 0.1,
+    "abstain_charge": false
+  },
+  "output": {
+    "dir": "runs/v2a_t200_w10_2026-09-08",
+    "snapshot_mode": "delta",
+    "snapshot_every": 1
+  }
+}
