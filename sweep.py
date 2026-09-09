@@ -51,6 +51,27 @@ class UniformF:
         return self.value
 
 
+class DecayF:
+    """時間的に非一様な f。★ 平均を保ったまま形だけを変える。
+
+    f(t) = f0 + (f1 - f0) * min(t / T, 1.0)
+    ★ f0 > f1 のとき単調減衰。t は 0 起点（abm/world.py の range(trial_count)）。
+    ★ クロージャは pickle できないためクラスにする（UniformF と同じ理由）。
+    """
+
+    def __init__(self, f0: float, f1: float, T: int):
+        if not (0.0 <= f0 <= 1.0 and 0.0 <= f1 <= 1.0):
+            raise ValueError("f0, f1 は 0..1")
+        if T <= 0:
+            raise ValueError("T は正")
+        self.f0 = f0
+        self.f1 = f1
+        self.T = T
+
+    def __call__(self, agent_id: str, t: int) -> float:
+        return self.f0 + (self.f1 - self.f0) * min(t / self.T, 1.0)
+
+
 # --------------------------------------------------------------------------
 def code_commit() -> str:
     try:
@@ -127,13 +148,20 @@ def run_one(task: dict) -> dict:
     seed = load_seed()
     world = generate_world(task["seed"], cfg["trial_count"], tuple(cfg["agent_ids"]), seed=seed)
 
+    # ★ f の形。f_shape が無い／"uniform" のときは現行の挙動と bit 一致する
+    decay = fixed.get("f_shape") == "decay"
+    frequency = (DecayF(fixed["f0"], fixed["f1"], cfg["trial_count"])
+                 if decay else UniformF(task["f"]))
+    arm_f_profile = (f"decay:{fixed['f0']:.6f}->{fixed['f1']:.6f}"
+                     if decay else f"uniform:{task['f']:.6f}")
+
     header = RunHeader(
         arm_alpha=fixed["alpha"], arm_beta=fixed["beta"], arm_w=fixed["w"],
         arm_kappa=fixed["kappa"], arm_repair_scope=task["repair_scope"],
         arm_verbatim_theta=task["verbatim_theta"],
         arm_fill_selection=task["fill_selection"],
         arm_holdout_repr=fixed.get("holdout_repr", "first_order_binary"),
-        arm_f_profile=f"uniform:{task['f']:.6f}",
+        arm_f_profile=arm_f_profile,
         arm_lambda_mix=fixed["lambda_mix"],
         arm_abstain_charge=fixed["abstain_charge"],
         arm_temperature=fixed.get("temperature"), arm_d_shared=fixed.get("d_shared"),
@@ -169,7 +197,7 @@ def run_one(task: dict) -> dict:
     with Ledger(ledger_path, header, compress=compress) as ledger:
         result = run_longitudinal(
             world, states, configs, ledger,
-            frequency=UniformF(task["f"]),
+            frequency=frequency,
             snapshot_mode=cfg["output"].get("snapshot_mode", "delta"),
             snapshot_every=int(cfg["output"].get("snapshot_every", 1)),
         )
@@ -226,7 +254,8 @@ def validate(cfg: dict) -> None:
         raise SystemExit(f"★ 未知の correction_mode: {cfg['fixed']['correction_mode']}")
     known = set(AgentConfig.__dataclass_fields__)
     unknown = sorted(set(cfg["fixed"]) - known - {"holdout_repr", "temperature",
-                                                  "d_shared", "adaptation_table"})
+                                                  "d_shared", "adaptation_table",
+                                                  "f_shape", "f0", "f1"})
     if unknown:
         raise SystemExit(f"★ fixed に AgentConfig に無いキー: {unknown}")
     mode = cfg["output"].get("snapshot_mode", "delta")
