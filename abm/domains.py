@@ -177,10 +177,10 @@ class AgentConfig:
     pending_gamma: float = 0.0
     pending_hold_cost: float = 0.0
     fill_selection: str = "most_frequent"
-    # 識別に使う def(R) グラフ。"all" のとき墓石込み（既存走行と bit 一致）。
-    identification_graph: str = "all"
-    # 自己点数の再利用。"legacy" のとき生存署名を鍵に再利用（既存走行と bit 一致）。
-    self_score_cache: str = "legacy"
+    # 識別に使う def(R) グラフ。"all" のとき墓石込み（2026-09-10 まで既定）。
+    identification_graph: str = "live"
+    # 自己点数の再利用。"legacy" のとき生存署名を鍵に再利用（2026-09-10 まで既定）。
+    self_score_cache: str = "off"
     # 価格の意味論。"legacy" のとき関係IDへの参照も新規スロットと数える（既存走行と bit 一致）。
     pricing_rule: str = "legacy"
 

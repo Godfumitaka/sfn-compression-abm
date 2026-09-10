@@ -1,5 +1,5 @@
 {
-  "name": "abstain_v2a_2026-09-09_t200_w10",
+  "name": "live_2026-09-10_t067_w00",
   "trial_count": 1740,
   "agent_ids": [
     "agent"
@@ -13,9 +13,9 @@
       0.5
     ],
     "theta_prime": [
-      0.1,
-      0.9,
-      1.2
+      2.1,
+      2.3,
+      2.45
     ],
     "repair_scope": [
       "first_order"
@@ -28,19 +28,20 @@
   "fixed": {
     "threshold": 0.0,
     "correction_mode": "none",
-    "tau_acc": 2.0,
+    "tau_acc": 0.67,
     "nsim_threshold": 0.95,
     "alpha": 0.0,
     "beta": 0.0,
-    "w": 1.0,
+    "w": 0.0,
     "kappa": 1.0,
     "lambda_mix": 0.1,
-    "abstain_charge": true,
-    "identification_graph": "all",
-    "self_score_cache": "legacy"
+    "abstain_charge": false,
+    "pricing_rule": "spec",
+    "identification_graph": "live",
+    "self_score_cache": "off"
   },
   "output": {
-    "dir": "runs/abstain_v2a_2026-09-09/t200_w10",
+    "dir": "runs/live_2026-09-10/t067_w00",
     "snapshot_mode": "delta",
     "snapshot_every": 1
   }
