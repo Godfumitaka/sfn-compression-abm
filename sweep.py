@@ -168,6 +168,7 @@ def run_one(task: dict) -> dict:
         arm_adaptation_table=fixed.get("adaptation_table"),
         arm_identification_graph=fixed.get("identification_graph", "all"),
         arm_self_score_cache=fixed.get("self_score_cache", "legacy"),
+        arm_pricing_rule=fixed.get("pricing_rule", "legacy"),
         run_seed=task["seed"], trial_count=cfg["trial_count"],
         agent_ids=tuple(cfg["agent_ids"]),
         seed_file_sha256=getattr(seed, "file_sha256", None) or task["seed_file_sha256"],
@@ -191,6 +192,7 @@ def run_one(task: dict) -> dict:
         fill_selection=task["fill_selection"],
         identification_graph=fixed.get("identification_graph", "all"),
         self_score_cache=fixed.get("self_score_cache", "legacy"),
+        pricing_rule=fixed.get("pricing_rule", "legacy"),
     ) for a in cfg["agent_ids"]}
 
     t0 = time.time()

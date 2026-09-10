@@ -181,12 +181,16 @@ class AgentConfig:
     identification_graph: str = "all"
     # 自己点数の再利用。"legacy" のとき生存署名を鍵に再利用（既存走行と bit 一致）。
     self_score_cache: str = "legacy"
+    # 価格の意味論。"legacy" のとき関係IDへの参照も新規スロットと数える（既存走行と bit 一致）。
+    pricing_rule: str = "legacy"
 
     def __post_init__(self) -> None:
         if self.identification_graph not in {"all", "live"}:
             raise ValueError(f"未知の identification_graph: {self.identification_graph}")
         if self.self_score_cache not in {"legacy", "off"}:
             raise ValueError(f"未知の self_score_cache: {self.self_score_cache}")
+        if self.pricing_rule not in {"legacy", "spec"}:
+            raise ValueError(f"未知の pricing_rule: {self.pricing_rule}")
 
     @property
     def verbatim_threshold(self) -> float:

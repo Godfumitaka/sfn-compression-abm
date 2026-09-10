@@ -65,6 +65,7 @@ def m1(
     name: str | None = None,
     base_written_at: int,
     horizon: int,
+    pricing_rule: str = "legacy",
 ) -> tuple[AgentState, dict[str, object] | None]:
     """整列の共通部分からサイズ2以上の def(R) を登録・更新する。"""
 
@@ -87,12 +88,14 @@ def m1(
     if old is None:
         common_relations = tuple(left for left, _ in pairs)
         constituents = tuple(
-            _constituent(index, trial, left, common_relations, state, len(pairs))
+            _constituent(index, trial, left, common_relations, state, len(pairs),
+                         pricing_rule=pricing_rule)
             for index, (left, _) in enumerate(pairs)
         )
         definition = NamedDefinition(definition_name, constituents, len(constituents), trial)
     else:
-        definition = _extend_definition(old, pairs, state, trial)
+        definition = _extend_definition(old, pairs, state, trial,
+                                        pricing_rule=pricing_rule)
         definition = replace(
             definition,
             assimilation_count=old.assimilation_count + 1,
@@ -166,8 +169,10 @@ def _constituent(
     relations: tuple[Relation, ...],
     state: AgentState,
     m_alloc: int,
+    *,
+    pricing_rule: str = "legacy",
 ) -> Constituent:
-    new_slots = _new_slot_count(relation, relations)
+    new_slots = _new_slot_count(relation, relations, pricing_rule=pricing_rule)
     price = freeze_price(state.p_hat, relation, new_slots, m_alloc)
     return Constituent(index, trial, relation, price)
 
@@ -177,6 +182,8 @@ def _extend_definition(
     pairs: list[tuple[Relation, Relation]],
     state: AgentState,
     trial: int,
+    *,
+    pricing_rule: str = "legacy",
 ) -> NamedDefinition:
     existing = {constituent.relation.predicate for constituent in old.constituents if constituent.alive}
     additions = [left for left, _ in pairs if left.predicate not in existing]
@@ -188,7 +195,7 @@ def _extend_definition(
         price = freeze_price(
             state.p_hat,
             relation,
-            _new_slot_count(relation, tuple(additions)),
+            _new_slot_count(relation, tuple(additions), pricing_rule=pricing_rule),
             old.m_alloc,
         )
         rows.append(Constituent(tombstone.slot_index, trial, relation, price))
@@ -201,10 +208,20 @@ def _extend_definition(
     )
 
 
-def _new_slot_count(relation: Relation, relations: tuple[Relation, ...]) -> int:
+def _new_slot_count(
+    relation: Relation,
+    relations: tuple[Relation, ...],
+    *,
+    pricing_rule: str = "legacy",
+) -> int:
+    skip: set[str] = set()
+    if pricing_rule == "spec":
+        # ★ 比較集合の中に実体として存在する行への参照は、新規スロットではない
+        skip = {item.relation_id for item in relations}
     return sum(
         1 for argument in relation.arguments
-        if sum(argument in item.arguments for item in relations) == 1
+        if argument not in skip
+        and sum(argument in item.arguments for item in relations) == 1
     )
 
 
