@@ -54,6 +54,22 @@ def load_seed(path: str | Path = DEFAULT_SEED_PATH) -> Seed:
     return Seed(data=_freeze(raw), sha256=actual_hash, file_sha256=sha256(raw_bytes).hexdigest())
 
 
+def higher_order_predicates(seed: Seed) -> frozenset[str]:
+    """その種で高階に現れる述語を作る。
+
+    高階＝他の関係を引数に取る位置の述語。種では次の 2 欄がそれにあたる。
+      motif_structure[*].third   塔の頂（abm/world.py:110 が higher_1/higher_2 を引数に取る）
+      subtrees[*].higher         部分木の頂（abm/world.py:108-109 が fo_* を引数に取る）
+    ★ 走行のたびに、読み込んだ種から作る。値をコードに凍結しない（C-33）。
+    """
+
+    data = seed.data
+    return frozenset(
+        {str(row["third"]) for row in data["motif_structure"].values()}
+        | {str(sub["higher"]) for sub in data["subtrees"].values()}
+    )
+
+
 def validate_seed(data: Mapping[str, Any]) -> None:
     """§B.2.2 の5検算を行い、不一致をまとめて報告する。"""
 

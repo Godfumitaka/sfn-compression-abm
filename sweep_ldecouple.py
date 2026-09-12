@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT))
 from abm.domains import AgentConfig, AgentState, CorrectionMode, RepairScope
 from abm.ledger import Ledger, RunHeader
 from abm.loop import run_longitudinal
-from abm.seed import load_seed
+from abm.seed import higher_order_predicates, load_seed
 from abm.world import generate_world
 
 
@@ -156,6 +156,7 @@ def run_one(task: dict) -> dict:
         lambda_mix=fixed["lambda_mix"], abstain_charge=fixed["abstain_charge"],
         repair_scope=RepairScope(task["repair_scope"]),
         fill_selection=task["fill_selection"],
+            higher_order_predicates=higher_order_predicates(seed),
     ) for a in cfg["agent_ids"]}
 
     t0 = time.time()

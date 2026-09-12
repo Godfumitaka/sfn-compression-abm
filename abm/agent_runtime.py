@@ -141,6 +141,7 @@ def predict(
                         state.p_hat,
                         config.fill_selection,
                         rng,
+                        higher_order_predicates=config.higher_order_predicates,
                     )
                     trace.update(
                         filled_slots=filling.relations,

@@ -8,6 +8,10 @@ import sys
 from abm import perturbations, seeds
 from abm.domains import AgentConfig, CorrectionMode, RelationGraph
 from abm.sme import apply_threshold, map_graphs, prototype_prior_score
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 def _solar_inputs():
@@ -21,7 +25,7 @@ def _solar_inputs():
 
 
 def test_agent_config_adds_inert_prototype_prior_weight():
-    config = AgentConfig(threshold=1.0, correction_mode=CorrectionMode.NONE)
+    config = AgentConfig(threshold=1.0, correction_mode=CorrectionMode.NONE, higher_order_predicates=HIGH)
 
     assert config.lambda_ == 1.0
     assert config.prototype_prior_weight == 0.0

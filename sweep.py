@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT))
 from abm.domains import AgentConfig, AgentState, CorrectionMode, RepairScope
 from abm.ledger import Ledger, RunHeader
 from abm.loop import run_longitudinal
-from abm.seed import load_seed
+from abm.seed import higher_order_predicates, load_seed
 from abm.world import generate_world
 
 
@@ -193,6 +193,9 @@ def run_one(task: dict) -> dict:
         identification_graph=fixed.get("identification_graph", "live"),
         self_score_cache=fixed.get("self_score_cache", "off"),
         pricing_rule=fixed.get("pricing_rule", "legacy"),
+        # ★ 走行のたびに、読み込んだ種から高階の語を作る（C-33 を避ける）。
+        #   世界を組むのと同じ seed オブジェクトから作るので、食い違いようがない。
+        higher_order_predicates=higher_order_predicates(seed),
     ) for a in cfg["agent_ids"]}
 
     t0 = time.time()

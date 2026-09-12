@@ -11,6 +11,10 @@ from abm.domains import AgentConfig, AgentState, CorrectionMode
 from abm.ledger import LEDGER_FIELDS
 from abm.loop import run_longitudinal
 from abm.world import generate_world
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 class MemoryLedger:
@@ -31,7 +35,7 @@ def _run(trials: int, *, snapshot_mode: str = "delta", snapshot_every: int = 1):
                 threshold=0.0,
                 correction_mode=CorrectionMode.NONE,
                 theta_prime=0.1432,
-            )
+            higher_order_predicates=HIGH)
         },
         ledger,
         snapshot_mode=snapshot_mode,

@@ -34,6 +34,10 @@ from abm.ledger import ARM_DESCRIPTOR_FIELDS, LEDGER_FIELDS
 from abm.sme import map_graphs
 from abm.world import generate_world
 from abm.loop import _repair_targets, run_longitudinal
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 MOTIFS = {
@@ -132,7 +136,7 @@ def _predict(state: AgentState, partial: RelationGraph):
     output, _ = predict(
         agent_input,
         state,
-        AgentConfig(threshold=0.0, correction_mode=CorrectionMode.NONE, tau_acc=0.67),
+        AgentConfig(threshold=0.0, correction_mode=CorrectionMode.NONE, tau_acc=0.67, higher_order_predicates=HIGH),
         Random(0),
     )
     return output
@@ -344,7 +348,7 @@ def test_4_8_theta_02637_reaches_expected_live_size(motif: str, expected_live: i
     state = _deletion_state(motif)
     deleted, _ = apply_theta(
         state,
-        AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.2637),
+        AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.2637, higher_order_predicates=HIGH),
         trial=10,
     )
     assert deleted.definitions["R"].m_live == expected_live
@@ -358,7 +362,7 @@ def test_4_11_longitudinal_m_alloc_is_bounded() -> None:
     result = run_longitudinal(
         generate_world(7, 120, ("agent",)),
         {"agent": AgentState()},
-        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.041)},
+        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.041, higher_order_predicates=HIGH)},
         MemoryLedger(),
     )
     state = result.states["agent"]
@@ -385,7 +389,7 @@ def _longitudinal_run(
         {"agent": AgentConfig(
             0.0, CorrectionMode.NONE, theta_prime=theta_prime,
             repair_scope=repair_scope,
-        )},
+        higher_order_predicates=HIGH)},
         ledger,
         snapshot_mode="full",
         calculate_counterfactuals=False,

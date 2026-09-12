@@ -32,6 +32,10 @@ from abm.deletion import apply_theta
 from abm.domains import AgentConfig, AgentState, CorrectionMode, Relation
 from abm.loop import run_longitudinal
 from abm.world import generate_world
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 HORIZON = 200
@@ -136,7 +140,7 @@ def test_c4_2_beta_changes_the_longitudinal_trajectory() -> None:
         run_longitudinal(
             generate_world(1, trials, ("agent",)),
             {"agent": AgentState()},
-            {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=beta)},
+            {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=beta, higher_order_predicates=HIGH)},
             ledger,
         )
         return ledger.rows
@@ -211,7 +215,7 @@ def test_c4_4_loop_never_counts_the_adopted_definition_as_external() -> None:
     run_longitudinal(
         generate_world(3, 120, ("agent",)),
         {"agent": AgentState()},
-        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=1.0)},
+        {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=1.0, higher_order_predicates=HIGH)},
         ledger,
     )
     assert ledger.checked > 0, "R_used が一度も立たない設定では検収にならない"
@@ -310,9 +314,9 @@ def test_c2_4_beta_run_without_horizon_stops() -> None:
         embed={("R", 0, 0): NO_EMBED},
     )
     with pytest.raises(ValueError, match="horizon"):
-        apply_theta(state, AgentConfig(0.0, CorrectionMode.NONE, beta=1.0), trial=5)
+        apply_theta(state, AgentConfig(0.0, CorrectionMode.NONE, beta=1.0, higher_order_predicates=HIGH), trial=5)
     # β=0 なら走行長なしでも従来どおり通る。
-    apply_theta(state, AgentConfig(0.0, CorrectionMode.NONE, beta=0.0), trial=5)
+    apply_theta(state, AgentConfig(0.0, CorrectionMode.NONE, beta=0.0, higher_order_predicates=HIGH), trial=5)
 
 
 # --------------------------------------------- §2-5 削除イベントに V の成分を残す
@@ -333,7 +337,7 @@ def test_c2_5_deletion_event_carries_the_four_value_terms() -> None:
         run_longitudinal(
             generate_world(1, 120, ("agent",)),
             {"agent": AgentState()},
-            {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=beta)},
+            {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, beta=beta, higher_order_predicates=HIGH)},
             ledger,
         )
         return ledger.events

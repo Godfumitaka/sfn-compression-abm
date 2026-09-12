@@ -12,6 +12,10 @@ from abm.ledger import LEDGER_FIELDS, RUN_INPUT_FIELDS, RunHeader, _code_commit
 from abm.loop import _apply, _json_bytes, run_longitudinal
 from abm.seed import DEFAULT_SEED_PATH, load_seed
 from abm.world import generate_world
+from abm.seed import higher_order_predicates
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 class MemoryLedger:
@@ -23,7 +27,7 @@ def _run(mode="delta", counterfactuals=True, *, trials=60, snapshot_every=None):
     ledger = MemoryLedger()
     kwargs = {} if snapshot_every is None else {"snapshot_every": snapshot_every}
     run_longitudinal(generate_world(1, trials, ("agent",)), {"agent": AgentState()},
-                     {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=.1432)}, ledger,
+                     {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=.1432, higher_order_predicates=HIGH)}, ledger,
                      snapshot_mode=mode, calculate_counterfactuals=counterfactuals, **kwargs)
     return ledger.records
 

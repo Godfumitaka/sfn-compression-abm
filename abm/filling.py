@@ -25,17 +25,6 @@ class FillingResult:
     empty_pool_slots: int = 0
 
 
-# 高階の述語。他の関係を引数に取る位置に現れる述語を列挙する。
-# ★ 種ファイル "U-011 seed v2a.json" の motif_structure[*].third と
-#   subtrees[*].higher から取った値を、ここで凍結している（実行時には種を読まない）。
-#   abm/world.py:108-110 が世界を組むときに使うのと同じ欄である。
-# ★ 種を差し替えたらこの定数も直す必要がある（C-33 と同じ形の危うさ）。
-#   ずれていないかは analysis_orderonly_2026-09-12/check_high.py で確かめられる。
-HIGHER_ORDER_PREDICATES: frozenset[str] = frozenset(
-    {"allow", "avert", "cause", "depend", "enable", "require"}
-)
-
-
 class RNG(Protocol):
     def random(self) -> float: ...
 
@@ -99,9 +88,21 @@ def fill_missing_slots(
     p_hat: FrequencyTable,
     fill_selection: str = "most_frequent",
     rng: RNG | None = None,
+    *,
+    higher_order_predicates: frozenset[str] | None,
 ) -> FillingResult:
-    """可視部に答えがないスロットを、依存先から再帰的に充填する。"""
+    """可視部に答えがないスロットを、依存先から再帰的に充填する。
 
+    higher_order_predicates は、その走行の種から作った高階の述語の集合。
+    ★ キーワード必須で既定値を置かない。渡し忘れは TypeError で落ちる。
+      None が渡された場合もここで落とす。黙って空集合として扱わない（C-33）。
+    """
+
+    if higher_order_predicates is None:
+        raise ValueError(
+            "higher_order_predicates が渡されていない。"
+            "abm.seed.higher_order_predicates(seed) から作って渡すこと（C-33）"
+        )
     all_predicates = tuple(p_hat.alive_vocab)
     relations: list[Relation] = []
     indices: list[int] = []
@@ -172,7 +173,8 @@ def fill_missing_slots(
         pool_before_order = pool
         want_higher = _is_higher(constituent.relation, definition_relation_ids)
         pool = frozenset(
-            predicate for predicate in pool if _same_order(predicate, want_higher)
+            predicate for predicate in pool
+            if _same_order(predicate, want_higher, higher_order_predicates)
         )
         if pool_before_order and not pool:
             empty_pool_slots += 1  # ★ 記録専用。階数の制約で候補が全部落ちた
@@ -280,16 +282,19 @@ def _is_higher(relation: Relation, graph_relation_ids: set[str]) -> bool:
     return any(argument in graph_relation_ids for argument in relation.arguments)
 
 
-def _same_order(predicate: str, want_higher: bool) -> bool:
+def _same_order(
+    predicate: str, want_higher: bool, higher_order_predicates: frozenset[str]
+) -> bool:
     """候補の述語の階数が、そのスロットの階数と一致するか。
 
+    higher_order_predicates はその走行の種から作る（abm/seed.py higher_order_predicates）。
     ★ 観測は要求しない。充填が埋めようとしているのは「いま場面に見えていない」位置
       であり、そこに入れる述語が場面に現れていることを求めるのは趣旨に反する。
       2026-09-12 以前はこの関数が target と definition_graph への観測を課しており、
       落とされた 116 件のうち 76 件は一階の述語だった（analysis_layeronly_2026-09-12 §4）。
     """
 
-    return (predicate in HIGHER_ORDER_PREDICATES) == want_higher
+    return (predicate in higher_order_predicates) == want_higher
 
 
 def _predicate_has_signature(

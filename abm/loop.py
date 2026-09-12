@@ -79,7 +79,8 @@ def run_longitudinal(
             before = current[agent_id]
             agent_input = _agent_input(trial, before)
             output, pending = predict(agent_input, before, config, Random(_rng_seed(agent_id, trial.trial)))
-            counterfactuals = (_counterfactual_predictions(before, agent_input.target_graph_partial, output, trial.held_out_edge)
+            counterfactuals = (_counterfactual_predictions(before, agent_input.target_graph_partial, output,
+                                                           trial.held_out_edge, config.higher_order_predicates)
                                if calculate_counterfactuals else [])
             verbatim_baseline = _verbatim_baseline(output, agent_input.target_graph_partial)
             score = score_prediction(output, trial.held_out_edge, len(before.p_hat.alive_vocab))
@@ -394,7 +395,8 @@ def _verbatim_baseline(output: Any, target: Any) -> EdgePrediction | None:
     return prediction if isinstance(prediction, EdgePrediction) else None
 
 
-def _counterfactual_predictions(state: AgentState, target: Any, output: Any, held_out: Any) -> list[dict[str, Any]]:
+def _counterfactual_predictions(state: AgentState, target: Any, output: Any, held_out: Any,
+                                higher_order_predicates: frozenset[str] | None) -> list[dict[str, Any]]:
     results = []
     for item in output.trace.get("tau_passed_defs", []):
         if item["selected"]:
@@ -404,7 +406,8 @@ def _counterfactual_predictions(state: AgentState, target: Any, output: Any, hel
         alignment = map_graphs(graph, target).alignment
         prediction = project(alignment, graph, target, prototype_prior_weight=0.0)
         filling = fill_missing_slots(definition, target, alignment.entity_mapping, alignment.relation_mapping,
-                                     state.slot_history, state.p_hat)
+                                     state.slot_history, state.p_hat,
+                                     higher_order_predicates=higher_order_predicates)
         if filling.ambiguous:
             prediction = Abstain(reason="ambiguous_projection")
         elif isinstance(prediction, Abstain) and filling.relations:

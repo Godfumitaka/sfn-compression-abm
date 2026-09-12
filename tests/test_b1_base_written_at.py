@@ -13,6 +13,10 @@ from abm.domains import AgentConfig, AgentState, CorrectionMode, RepairScope
 from abm.ledger import LEDGER_FIELDS
 from abm.loop import run_longitudinal
 from abm.world import generate_world
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 THETA_PRIMES = (0.0410, 0.1432, 0.2637, 0.3842)
 TRIAL_COUNT = 150
@@ -37,7 +41,7 @@ def _registration_events(theta_prime: float) -> list[dict]:
             generate_world(RUN_SEED, TRIAL_COUNT, ("agent",)),
             {"agent": AgentState()},
             {"agent": AgentConfig(0.0, CorrectionMode.NONE, theta_prime=theta_prime,
-                                  repair_scope=RepairScope.ALL)},
+                                  repair_scope=RepairScope.ALL, higher_order_predicates=HIGH)},
             memory,
             snapshot_mode="hash_only",
         )

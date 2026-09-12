@@ -8,10 +8,14 @@ from abm.domains import (
     VerbatimTrace,
 )
 from sweep import cell_name, enumerate_runs, parse_cell_name
+from abm.seed import higher_order_predicates, load_seed
+
+# ★ 高階の語は種から作る。コードに凍結しない（C-33）。
+HIGH = higher_order_predicates(load_seed())
 
 
 def test_verbatim_threshold_falls_back_to_theta_prime() -> None:
-    config = AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432)
+    config = AgentConfig(0.0, CorrectionMode.NONE, theta_prime=0.1432, higher_order_predicates=HIGH)
 
     assert config.verbatim_threshold == config.theta_prime
 
@@ -22,7 +26,7 @@ def test_verbatim_threshold_uses_explicit_value() -> None:
         CorrectionMode.NONE,
         theta_prime=0.1432,
         verbatim_theta=0.3842,
-    )
+    higher_order_predicates=HIGH)
 
     assert config.verbatim_threshold == 0.3842
 

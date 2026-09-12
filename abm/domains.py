@@ -183,6 +183,10 @@ class AgentConfig:
     self_score_cache: str = "off"
     # 価格の意味論。"legacy" のとき関係IDへの参照も新規スロットと数える（既存走行と bit 一致）。
     pricing_rule: str = "legacy"
+    # 充填で階数を揃えるときに使う、高階の述語の集合。
+    # ★ 走行のたびに abm.seed.higher_order_predicates(seed) から作って渡す。
+    #   None のまま充填に入ると fill_missing_slots が例外を出す（C-33 を避けるため黙って進まない）。
+    higher_order_predicates: frozenset[str] | None = None
 
     def __post_init__(self) -> None:
         if self.identification_graph not in {"all", "live"}:

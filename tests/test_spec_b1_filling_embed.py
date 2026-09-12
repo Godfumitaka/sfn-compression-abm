@@ -36,6 +36,8 @@ def test_dangling_dependency_is_filled_before_its_parent() -> None:
         {},
         {("R", 0): frozenset({"hold"}), ("R", 1): frozenset({"allow"})},
         p_hat,
+        # parent は child（関係ID）を引数に取る高階の行。種から来る集合を明示して渡す。
+        higher_order_predicates=frozenset({"allow"}),
     )
 
     assert [relation.predicate for relation in result.relations] == ["hold", "allow"]
@@ -59,6 +61,7 @@ def test_sample_uses_normalized_weights_and_does_not_abstain_on_tie() -> None:
         p_hat,
         "sample",
         Random(7),
+        higher_order_predicates=frozenset(),
     )
 
     assert result.ambiguous is False
@@ -83,15 +86,16 @@ def test_sample_is_deterministic_and_most_frequent_does_not_consume_rng() -> Non
         {("R", 0): frozenset({"hold", "push"})}, p_hat,
     )
 
-    first = fill_missing_slots(*arguments, "sample", Random(11))
-    second = fill_missing_slots(*arguments, "sample", Random(11))
+    first = fill_missing_slots(*arguments, "sample", Random(11), higher_order_predicates=frozenset())
+    second = fill_missing_slots(*arguments, "sample", Random(11), higher_order_predicates=frozenset())
     assert first == second
     assert first.ambiguous is False
     assert first.n_tie_candidates == 2
 
     rng = Random(11)
     before = rng.getstate()
-    frequent = fill_missing_slots(*arguments, "most_frequent", rng)
+    frequent = fill_missing_slots(*arguments, "most_frequent", rng,
+                                  higher_order_predicates=frozenset())
     assert rng.getstate() == before
     assert frequent.ambiguous is True
     assert frequent.relations == ()
@@ -111,6 +115,7 @@ def test_recursive_filling_rejects_cycles() -> None:
             {},
             {("R", 0): frozenset({"p"}), ("R", 1): frozenset({"q"})},
             p_hat,
+            higher_order_predicates=frozenset(),
         )
     except ValueError as error:
         assert str(error) == "def(R) の充填依存に循環がある"
