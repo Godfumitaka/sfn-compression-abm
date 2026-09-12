@@ -101,6 +101,7 @@ def fill_missing_slots(
     if fill_selection == "sample" and rng is None:
         raise ValueError("fill_selection='sample' には rng が必要です")
     definition_graph = RelationGraph("definition", relations=tuple(c.relation for c in definition.constituents))
+    definition_relation_ids = {c.relation.relation_id for c in definition.constituents}
     scene_relation_ids = {relation.relation_id for relation in target.relations}
     definition_by_id = {
         constituent.relation.relation_id: constituent
@@ -154,6 +155,12 @@ def fill_missing_slots(
                 predicate for predicate in all_predicates
                 if _predicate_has_signature(predicate, signature, target, definition_graph)
             )
+        # 階数を揃える。高階＝その構成素の引数が定義グラフの関係IDを含む（Gentner 1983）
+        pool = frozenset(
+            predicate for predicate in pool
+            if _same_order(predicate, _is_higher(constituent.relation, definition_relation_ids),
+                           target, definition_graph)
+        )
         distribution = _distribution(pool, p_hat)
         maximum = max((weight for _, weight in distribution), default=0.0)
         tied_count = sum(weight == maximum for _, weight in distribution) if maximum > 0 else 0
@@ -250,6 +257,28 @@ def _mapped_arguments_recursive(
             return None
         mapped.append(target_id)
     return tuple(mapped)
+
+
+def _is_higher(relation: Relation, graph_relation_ids: set[str]) -> bool:
+    """高階かどうか。引数に同じグラフの関係IDを含むなら高階（SPEC_B1:247/316）。"""
+
+    return any(argument in graph_relation_ids for argument in relation.arguments)
+
+
+def _same_order(
+    predicate: str,
+    want_higher: bool,
+    target: RelationGraph,
+    definition_graph: RelationGraph,
+) -> bool:
+    """その述語が、求める階数で観測されているか。観測が無ければ通さない。"""
+
+    for graph in (target, definition_graph):
+        ids = {item.relation_id for item in graph.relations}
+        for relation in graph.relations:
+            if relation.predicate == predicate and _is_higher(relation, ids) == want_higher:
+                return True
+    return False
 
 
 def _predicate_has_signature(
