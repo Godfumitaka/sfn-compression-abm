@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from hashlib import sha256
 import json
@@ -77,8 +78,21 @@ def validate_seed(data: Mapping[str, Any]) -> None:
     assumptions = data["assumptions"]
     z = float(assumptions["Z"])
     constituents = data["constituents"]
-    if len(constituents) not in (24, 36):
-        errors.append(f"constituents は24件または36件ではない: {len(constituents)}")
+    # 件数は「モチーフ数 × 1 モチーフあたりの層数」であること。
+    # ★ 24（v1 の 4×6）と 36（v2 系の 4×9）を決め打ちすると、層の数やモチーフの数が
+    #   違う種が落ちる（v2f は 8 モチーフ × 9 層 = 72 件）。
+    # ★ constituents の motif 欄だけで確かめる。motif_structure には依存しない
+    #   （v1 の種には motif_structure 欄が無い）。
+    per_motif = Counter(item.get("motif") for item in constituents)
+    if not per_motif:
+        errors.append("constituents が空である")
+    elif None in per_motif:
+        errors.append("constituents に motif 欄が無い行がある")
+    elif len(set(per_motif.values())) != 1:
+        errors.append(
+            "モチーフごとの constituents の件数が揃っていない: "
+            f"{dict(sorted(per_motif.items()))}"
+        )
 
     for index, item in enumerate(constituents):
         ell = float(item["ell"])
