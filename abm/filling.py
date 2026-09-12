@@ -111,6 +111,10 @@ def fill_missing_slots(
 
     def fill(constituent: Constituent) -> Relation | None:
         nonlocal ambiguous, fallback_used, history_size, tie_candidates
+        # SPEC_B1 §C.3.4（SPEC_B1_impl_2026-08-28.md:563-566）は構成素の走査全体で
+        # 墓石を飛ばすよう定める。再帰（_mapped_arguments_recursive の fill）もここを通る。
+        if not constituent.alive:
+            return None
         relation_id = constituent.relation.relation_id
         if relation_id in filled_by_id:
             return filled_by_id[relation_id]
@@ -186,6 +190,8 @@ def fill_missing_slots(
         return filled
 
     for constituent in sorted(definition.constituents, key=lambda row: row.slot_index):
+        if not constituent.alive:
+            continue
         fill(constituent)
     return FillingResult(
         tuple(relations), tuple(indices), ambiguous, fallback_used, tuple(sources),
