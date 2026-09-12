@@ -95,7 +95,7 @@ def m1(
         definition = NamedDefinition(definition_name, constituents, len(constituents), trial)
     else:
         definition = _extend_definition(old, pairs, state, trial,
-                                        pricing_rule=pricing_rule)
+                                        pricing_rule=pricing_rule, base=base)
         definition = replace(
             definition,
             assimilation_count=old.assimilation_count + 1,
@@ -184,6 +184,7 @@ def _extend_definition(
     trial: int,
     *,
     pricing_rule: str = "legacy",
+    base: RelationGraph | None = None,
 ) -> NamedDefinition:
     existing = {constituent.relation.predicate for constituent in old.constituents if constituent.alive}
     additions = [left for left, _ in pairs if left.predicate not in existing]
@@ -191,11 +192,24 @@ def _extend_definition(
     if not additions or not tombstones:
         return old
     rows = list(old.constituents)
+    # ★ 新規スロット数の比較集合は def(R) 全体である（SPEC_B1_impl_2026-08-28.md:310 と
+    #   :1387「`turn(b,c)` の `c` が def(M4) の中でこの行にしか現れないため」）。
+    #   今回足す行だけを見ると、既に定義にある行への参照が新規スロットに数えられ、
+    #   「既にあるほど価格が不利になる」逆向きになる。生存構成素を比較集合に入れる。
+    #   ★ 墓石は入れない。
+    scope = tuple(additions) + tuple(
+        constituent.relation for constituent in old.constituents if constituent.alive
+    )
+    predicate_of = (
+        {item.relation_id: item.predicate for item in base.relations}
+        if base is not None else None
+    )
     for relation, tombstone in zip(additions, tombstones):
         price = freeze_price(
             state.p_hat,
             relation,
-            _new_slot_count(relation, tuple(additions), pricing_rule=pricing_rule),
+            _new_slot_count(relation, scope, pricing_rule=pricing_rule,
+                            predicate_of=predicate_of),
             old.m_alloc,
         )
         rows.append(Constituent(tombstone.slot_index, trial, relation, price))
@@ -213,11 +227,22 @@ def _new_slot_count(
     relations: tuple[Relation, ...],
     *,
     pricing_rule: str = "legacy",
+    predicate_of: dict[str, str] | None = None,
 ) -> int:
     skip: set[str] = set()
     if pricing_rule == "spec":
         # ★ 比較集合の中に実体として存在する行への参照は、新規スロットではない
         skip = {item.relation_id for item in relations}
+        if predicate_of is not None:
+            # ★ 比較集合に別の場面から来た行（定義の生存構成素）が混ざるとき、
+            #   関係IDは場面ごとに作られる（abm/world.py:39-41 opaque_id に trial_index が入る）
+            #   ので ID では照合できない。述語で照合する。
+            #   引数が実体のときは predicate_of に無いので、扱いは変わらない。
+            scope = {item.predicate for item in relations}
+            skip |= {
+                relation_id for relation_id, predicate in predicate_of.items()
+                if predicate in scope
+            }
     return sum(
         1 for argument in relation.arguments
         if argument not in skip
