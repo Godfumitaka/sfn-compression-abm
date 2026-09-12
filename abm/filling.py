@@ -25,6 +25,17 @@ class FillingResult:
     empty_pool_slots: int = 0
 
 
+# 高階の述語。他の関係を引数に取る位置に現れる述語を列挙する。
+# ★ 種ファイル "U-011 seed v2a.json" の motif_structure[*].third と
+#   subtrees[*].higher から取った値を、ここで凍結している（実行時には種を読まない）。
+#   abm/world.py:108-110 が世界を組むときに使うのと同じ欄である。
+# ★ 種を差し替えたらこの定数も直す必要がある（C-33 と同じ形の危うさ）。
+#   ずれていないかは analysis_orderonly_2026-09-12/check_high.py で確かめられる。
+HIGHER_ORDER_PREDICATES: frozenset[str] = frozenset(
+    {"allow", "avert", "cause", "depend", "enable", "require"}
+)
+
+
 class RNG(Protocol):
     def random(self) -> float: ...
 
@@ -159,10 +170,9 @@ def fill_missing_slots(
             )
         # 階数を揃える。高階＝その構成素の引数が定義グラフの関係IDを含む（Gentner 1983）
         pool_before_order = pool
+        want_higher = _is_higher(constituent.relation, definition_relation_ids)
         pool = frozenset(
-            predicate for predicate in pool
-            if _same_order(predicate, _is_higher(constituent.relation, definition_relation_ids),
-                           target, definition_graph)
+            predicate for predicate in pool if _same_order(predicate, want_higher)
         )
         if pool_before_order and not pool:
             empty_pool_slots += 1  # ★ 記録専用。階数の制約で候補が全部落ちた
@@ -270,20 +280,16 @@ def _is_higher(relation: Relation, graph_relation_ids: set[str]) -> bool:
     return any(argument in graph_relation_ids for argument in relation.arguments)
 
 
-def _same_order(
-    predicate: str,
-    want_higher: bool,
-    target: RelationGraph,
-    definition_graph: RelationGraph,
-) -> bool:
-    """その述語が、求める階数で観測されているか。観測が無ければ通さない。"""
+def _same_order(predicate: str, want_higher: bool) -> bool:
+    """候補の述語の階数が、そのスロットの階数と一致するか。
 
-    for graph in (target, definition_graph):
-        ids = {item.relation_id for item in graph.relations}
-        for relation in graph.relations:
-            if relation.predicate == predicate and _is_higher(relation, ids) == want_higher:
-                return True
-    return False
+    ★ 観測は要求しない。充填が埋めようとしているのは「いま場面に見えていない」位置
+      であり、そこに入れる述語が場面に現れていることを求めるのは趣旨に反する。
+      2026-09-12 以前はこの関数が target と definition_graph への観測を課しており、
+      落とされた 116 件のうち 76 件は一階の述語だった（analysis_layeronly_2026-09-12 §4）。
+    """
+
+    return (predicate in HIGHER_ORDER_PREDICATES) == want_higher
 
 
 def _predicate_has_signature(
