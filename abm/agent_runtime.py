@@ -57,6 +57,11 @@ class PendingState:
     filling_slot_history_size: int = 0
     filling_n_tie_candidates: int = 0
     filling_candidate_distribution: tuple[dict[str, object], ...] = ()
+    # ★ 記録専用。予測がどの経路から出たか。
+    #   projection / filling_live / filling_tombstone / None（棄権）
+    prediction_path: str | None = None
+    # ★ 記録専用。階数の制約で候補が空になり埋まらなかったスロット数。
+    filling_empty_pool_slots: int = 0
 
 
 def predict(
@@ -92,6 +97,7 @@ def predict(
         "tau_passed_defs": [],
     }
     projected_edge = None          # ★ 記録専用（D23）。振る舞いには使わない
+    prediction_path: str | None = None   # ★ 記録専用。振る舞いには使わない
     filling = None
     if not threshold.accepted:
         prediction = Abstain(reason="below_threshold")
@@ -151,8 +157,15 @@ def predict(
                         prediction = Abstain(reason="ambiguous_projection")
                     elif isinstance(prediction, Abstain) and filling.relations:
                         prediction = EdgePrediction(filling.relations[0])
+                        # ★ 記録専用。埋めた行の構成素が生きていたか墓石だったか。
+                        alive = filling.alive_by_slot[0] if filling.alive_by_slot else None
+                        prediction_path = (
+                            "filling_live" if alive else "filling_tombstone"
+                        )
                     elif isinstance(prediction, Abstain):
                         prediction = Abstain(reason="no_projectable_relation")
+                    elif isinstance(prediction, EdgePrediction):
+                        prediction_path = "projection"
     output = AgentOutput(prediction=prediction, trace=trace)
     pending = PendingState(
         previous_state=state,
@@ -160,6 +173,8 @@ def predict(
         agent_input=agent_input,
         rng_state=_snapshot_rng_state(rng, state.rng_state),
         projected_edge=projected_edge,
+        prediction_path=prediction_path,
+        filling_empty_pool_slots=filling.empty_pool_slots if filling is not None else 0,
         filling_slot_history_size=filling.slot_history_size if filling is not None else 0,
         filling_n_tie_candidates=filling.n_tie_candidates if filling is not None else 0,
         filling_candidate_distribution=(

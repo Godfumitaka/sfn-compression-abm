@@ -54,7 +54,7 @@ def test_f5_f6_f13_f14_f16_modes_purity_schema_and_determinism():
     hashes = lambda records: [r["agent_state_snapshot_hash"] for r in records]
     assert hashes(delta) == hashes(full) == hashes(hash_only) == hashes(_run(counterfactuals=False))
     assert all(r["state_snapshot"] is None for r in hash_only)
-    assert len(LEDGER_FIELDS) == 93
+    assert len(LEDGER_FIELDS) == 95
     assert json.dumps(delta, sort_keys=True, default=str) == json.dumps(_run(), sort_keys=True, default=str)
 
 

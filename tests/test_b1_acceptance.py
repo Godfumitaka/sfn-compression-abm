@@ -163,7 +163,7 @@ def prediction_counts() -> dict[str, dict[str, int]]:
 
 
 def test_1_11_ledger_has_89_unique_fields() -> None:
-    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 93
+    assert len(LEDGER_FIELDS) == len(set(LEDGER_FIELDS)) == 95
 
 
 def test_1_12_run_header_has_16_arm_descriptors() -> None:

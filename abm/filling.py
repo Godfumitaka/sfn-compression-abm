@@ -19,6 +19,10 @@ class FillingResult:
     slot_history_size: int = 0
     n_tie_candidates: int = 0
     candidate_distribution: tuple[dict[str, object], ...] = ()
+    # ★ 記録専用。充填した各行の構成素が生存していたか（relations と同じ並び）。
+    alive_by_slot: tuple[bool, ...] = ()
+    # ★ 記録専用。階数の制約（2-B）で候補が全部落ち、埋まらなかったスロット数。
+    empty_pool_slots: int = 0
 
 
 class RNG(Protocol):
@@ -93,6 +97,8 @@ def fill_missing_slots(
     ambiguous = False
     fallback_used = False
     sources: list[str] = []
+    alive_flags: list[bool] = []
+    empty_pool_slots = 0
     history_size = 0
     tie_candidates = 0
     distributions: list[dict[str, object]] = []
@@ -111,7 +117,7 @@ def fill_missing_slots(
     visiting: set[str] = set()
 
     def fill(constituent: Constituent) -> Relation | None:
-        nonlocal ambiguous, fallback_used, history_size, tie_candidates
+        nonlocal ambiguous, fallback_used, history_size, tie_candidates, empty_pool_slots
         relation_id = constituent.relation.relation_id
         if relation_id in filled_by_id:
             return filled_by_id[relation_id]
@@ -152,11 +158,14 @@ def fill_missing_slots(
                 if _predicate_has_signature(predicate, signature, target, definition_graph)
             )
         # 階数を揃える。高階＝その構成素の引数が定義グラフの関係IDを含む（Gentner 1983）
+        pool_before_order = pool
         pool = frozenset(
             predicate for predicate in pool
             if _same_order(predicate, _is_higher(constituent.relation, definition_relation_ids),
                            target, definition_graph)
         )
+        if pool_before_order and not pool:
+            empty_pool_slots += 1  # ★ 記録専用。階数の制約で候補が全部落ちた
         distribution = _distribution(pool, p_hat)
         maximum = max((weight for _, weight in distribution), default=0.0)
         tied_count = sum(weight == maximum for _, weight in distribution) if maximum > 0 else 0
@@ -189,6 +198,7 @@ def fill_missing_slots(
         relations.append(filled)
         indices.append(constituent.slot_index)
         sources.append("signature_fallback" if used_fallback else "slot_history")
+        alive_flags.append(bool(constituent.alive))  # ★ 記録専用
         visiting.remove(relation_id)
         return filled
 
@@ -197,6 +207,7 @@ def fill_missing_slots(
     return FillingResult(
         tuple(relations), tuple(indices), ambiguous, fallback_used, tuple(sources),
         history_size, tie_candidates, tuple(distributions),
+        tuple(alive_flags), empty_pool_slots,
     )
 
 

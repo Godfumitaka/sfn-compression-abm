@@ -28,6 +28,11 @@ MECHANISM_FIELDS = (
     "charge_source", "verbatim_written", "reg_del_events", "exception_bits_charged",
     "M051_balance", "matcher", "abstain_reason", "n_tie_candidates", "candidate_distribution",
     "enumeration_version", "V_vocab", "merit_event_times", "outcome_category", "tau_passed_defs",
+    # 予測がどの経路から出たか（2026-09-12 追加）。
+    #   projection / filling_live / filling_tombstone / null（棄権）
+    "prediction_path",
+    # 階数の制約で候補が空になり、埋まらなかったスロット数（2026-09-12 追加）。
+    "filling_empty_pool_slots",
 )
 RESEARCH_FIELDS = (
     "p1", "p0", "Sel", "OA", "f_realized",
@@ -56,9 +61,9 @@ LEDGER_FIELDS = _unique_fields(
 )
 if len(LOGGING_SCHEMA_FIELDS) != 38:
     raise RuntimeError(f"層A台帳欄は38本ではない: {len(LOGGING_SCHEMA_FIELDS)}")
-if len(LEDGER_FIELDS) != 93:
+if len(LEDGER_FIELDS) != 95:
     raise RuntimeError(
-        "台帳欄は93本ではない: "
+        "台帳欄は95本ではない: "
         f"A={len(LOGGING_SCHEMA_FIELDS)}, D23={len(D23_FIELDS)}, "
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"

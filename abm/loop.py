@@ -141,6 +141,8 @@ def run_longitudinal(
                 pending.filling_slot_history_size,
                 pending.filling_n_tie_candidates,
                 pending.filling_candidate_distribution,
+                pending.prediction_path,
+                pending.filling_empty_pool_slots,
             )
             ledger.append(record)
             if capture_snapshot:
@@ -436,6 +438,8 @@ def _ledger_record(
     filling_slot_history_size: int = 0,
     filling_n_tie_candidates: int = 0,
     filling_candidate_distribution: tuple[dict[str, object], ...] = (),
+    prediction_path: str | None = None,
+    filling_empty_pool_slots: int = 0,
 ) -> tuple[dict[str, Any], Any, str]:
     prediction = output.prediction
     abstain_reason = prediction.reason if isinstance(prediction, Abstain) else None
@@ -525,6 +529,8 @@ def _ledger_record(
         "merit_event_times": [],
         "outcome_category": score.outcome_category,
         "tau_passed_defs": output.trace.get("tau_passed_defs", []),
+        "prediction_path": prediction_path,
+        "filling_empty_pool_slots": filling_empty_pool_slots,
         "constituent_reason_123": accounting["constituent_reason_123"],
         "charge_source": accounting["charge_source"],
         "type2_fired": accounting["type2_fired"],
