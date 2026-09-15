@@ -177,6 +177,11 @@ class AgentConfig:
     pending_gamma: float = 0.0
     pending_hold_cost: float = 0.0
     fill_selection: str = "most_frequent"
+    # 局所頻度の指数（U-085 の v1）。0.0 のとき現行と厳密に一致する。
+    local_lambda: float = 0.0
+    # ★ 保持辺の候補に二階を入れるか（仮U-42・仮D-59）。世界の生成で使う旗で、
+    #   エージェント自身は読まない。config の配線を一本化するために置く。
+    holdout_include_second_order: bool = False
     # 識別に使う def(R) グラフ。"all" のとき墓石込み（2026-09-10 まで既定）。
     identification_graph: str = "live"
     # 自己点数の再利用。"legacy" のとき生存署名を鍵に再利用（2026-09-10 まで既定）。

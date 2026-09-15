@@ -66,6 +66,7 @@ def m1(
     base_written_at: int,
     horizon: int,
     pricing_rule: str = "legacy",
+    local_lambda: float = 0.0,
 ) -> tuple[AgentState, dict[str, object] | None]:
     """整列の共通部分からサイズ2以上の def(R) を登録・更新する。"""
 
@@ -137,6 +138,7 @@ def m1(
                     definition_name,
                     constituent.slot_index,
                     observed.predicate,
+                    local_lambda,
                 )
     event_id = _alignment_event_id(alignment)
     next_state = replace(

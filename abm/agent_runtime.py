@@ -142,6 +142,7 @@ def predict(
                         config.fill_selection,
                         rng,
                         higher_order_predicates=config.higher_order_predicates,
+                        local_lambda=config.local_lambda,
                     )
                     trace.update(
                         filled_slots=filling.relations,

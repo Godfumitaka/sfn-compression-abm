@@ -171,7 +171,7 @@ def test_1_11_ledger_has_89_unique_fields() -> None:
 
 
 def test_1_12_run_header_has_16_arm_descriptors() -> None:
-    assert len(ARM_DESCRIPTOR_FIELDS) == len(set(ARM_DESCRIPTOR_FIELDS)) == 17
+    assert len(ARM_DESCRIPTOR_FIELDS) == len(set(ARM_DESCRIPTOR_FIELDS)) == 19
 
 
 def test_2_7_mediator_initial_participation_is_at_least_half() -> None:

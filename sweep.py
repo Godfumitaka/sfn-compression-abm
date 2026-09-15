@@ -145,8 +145,11 @@ def run_one(task: dict) -> dict:
         ledger_path.unlink()
 
     fixed = cfg["fixed"]
-    seed = load_seed()
-    world = generate_world(task["seed"], cfg["trial_count"], tuple(cfg["agent_ids"]), seed=seed)
+    # ★ config の seed_file を読む。無ければ従来どおり既定の種（仮C-55 の据え置き）。
+    _seed_file = cfg.get("seed_file")
+    seed = load_seed(_seed_file) if _seed_file else load_seed()
+    world = generate_world(task["seed"], cfg["trial_count"], tuple(cfg["agent_ids"]), seed=seed,
+                           holdout_include_second_order=fixed.get("holdout_include_second_order", False))
 
     # ★ f の形。f_shape が無い／"uniform" のときは現行の挙動と bit 一致する
     decay = fixed.get("f_shape") == "decay"
@@ -166,6 +169,8 @@ def run_one(task: dict) -> dict:
         arm_abstain_charge=fixed["abstain_charge"],
         arm_temperature=fixed.get("temperature"), arm_d_shared=fixed.get("d_shared"),
         arm_adaptation_table=fixed.get("adaptation_table"),
+        arm_local_lambda=fixed.get("local_lambda", 0.0),
+        arm_holdout_second_order=fixed.get("holdout_include_second_order", False),
         arm_identification_graph=fixed.get("identification_graph", "live"),
         arm_self_score_cache=fixed.get("self_score_cache", "off"),
         arm_pricing_rule=fixed.get("pricing_rule", "legacy"),
@@ -193,6 +198,8 @@ def run_one(task: dict) -> dict:
         identification_graph=fixed.get("identification_graph", "live"),
         self_score_cache=fixed.get("self_score_cache", "off"),
         pricing_rule=fixed.get("pricing_rule", "legacy"),
+        local_lambda=fixed.get("local_lambda", 0.0),
+        holdout_include_second_order=fixed.get("holdout_include_second_order", False),
         # ★ 走行のたびに、読み込んだ種から高階の語を作る（C-33 を避ける）。
         #   世界を組むのと同じ seed オブジェクトから作るので、食い違いようがない。
         higher_order_predicates=higher_order_predicates(seed),

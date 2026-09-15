@@ -80,7 +80,8 @@ def run_longitudinal(
             agent_input = _agent_input(trial, before)
             output, pending = predict(agent_input, before, config, Random(_rng_seed(agent_id, trial.trial)))
             counterfactuals = (_counterfactual_predictions(before, agent_input.target_graph_partial, output,
-                                                           trial.held_out_edge, config.higher_order_predicates)
+                                                           trial.held_out_edge, config.higher_order_predicates,
+                                                           config.local_lambda)
                                if calculate_counterfactuals else [])
             verbatim_baseline = _verbatim_baseline(output, agent_input.target_graph_partial)
             score = score_prediction(output, trial.held_out_edge, len(before.p_hat.alive_vocab))
@@ -112,6 +113,7 @@ def run_longitudinal(
                     base_written_at=output.trace["selected_scene_written_at"],
                     horizon=len(world.trials),
                     pricing_rule=config.pricing_rule,
+                    local_lambda=config.local_lambda,
                 )
             after, deletion_events = apply_theta(after, config, trial.trial, horizon=len(world.trials))
             current[agent_id] = after
@@ -396,7 +398,8 @@ def _verbatim_baseline(output: Any, target: Any) -> EdgePrediction | None:
 
 
 def _counterfactual_predictions(state: AgentState, target: Any, output: Any, held_out: Any,
-                                higher_order_predicates: frozenset[str] | None) -> list[dict[str, Any]]:
+                                higher_order_predicates: frozenset[str] | None,
+                                local_lambda: float = 0.0) -> list[dict[str, Any]]:
     results = []
     for item in output.trace.get("tau_passed_defs", []):
         if item["selected"]:
@@ -407,7 +410,8 @@ def _counterfactual_predictions(state: AgentState, target: Any, output: Any, hel
         prediction = project(alignment, graph, target, prototype_prior_weight=0.0)
         filling = fill_missing_slots(definition, target, alignment.entity_mapping, alignment.relation_mapping,
                                      state.slot_history, state.p_hat,
-                                     higher_order_predicates=higher_order_predicates)
+                                     higher_order_predicates=higher_order_predicates,
+                                     local_lambda=local_lambda)
         if filling.ambiguous:
             prediction = Abstain(reason="ambiguous_projection")
         elif isinstance(prediction, Abstain) and filling.relations:
@@ -549,6 +553,10 @@ def _key(value: object) -> str:
 
 
 def _diff(old: object, new: object) -> object | None:
+    # A-3 ★ 同一物の短絡。_canonical が不変の部分木を同じオブジェクトで返すため
+    #   ここで降りずに済む。dict/list に限るのは NaN が old == new を満たさないため。
+    if old is new and isinstance(old, (dict, list)):
+        return None
     if isinstance(old, dict) and isinstance(new, dict):
         out = {}
         for key in new:
@@ -570,18 +578,23 @@ def _diff(old: object, new: object) -> object | None:
         old_counts, new_counts = Counter(old_keys), Counter(new_keys)
         needed = new_counts - old_counts
         insertions = []
+        insertion_keys = []
         for index, key in enumerate(new_keys):
             if needed[key] > 0:
-                insertions.append([index, new[index]]); needed[key] -= 1
+                insertions.append([index, new[index]]); insertion_keys.append(key); needed[key] -= 1
         needed = old_counts - new_counts
         deletions = []
         for index, key in enumerate(old_keys):
             if needed[key] > 0:
                 deletions.append(index); needed[key] -= 1
-        current = list(old)
-        for index in sorted(deletions, reverse=True): current.pop(index)
-        for index, value in insertions: current.insert(index, value)
-        if [_key(x) for x in current] != new_keys:
+        # A-2 ★ 検算を要素ではなくキー列で行う。current を組み直して _key を
+        #   もう一周かける必要が無くなる（json.dumps が 3n 回 → 2n 回）。
+        #   current は old / new の要素だけで組まれ _key は決定的なので、
+        #   [_key(x) for x in current] == current_keys が構成上成り立つ。
+        current_keys = list(old_keys)
+        for index in sorted(deletions, reverse=True): current_keys.pop(index)
+        for (index, _value), key in zip(insertions, insertion_keys): current_keys.insert(index, key)
+        if current_keys != new_keys:
             return {"set": new}
         return {"ld": {"d": deletions, "i": insertions}}
     if old == new:

@@ -46,6 +46,8 @@ ARM_DESCRIPTOR_FIELDS = (
     "arm_adaptation_table",
     "arm_identification_graph", "arm_self_score_cache",
     "arm_pricing_rule",
+    "arm_local_lambda",
+    "arm_holdout_second_order",
 )
 NON_NULL_FIELDS = frozenset(
     ("exception_bits_charged", "constituent_reason_123", "oracle_verdict", "m_live", "support_at_adoption")
@@ -68,8 +70,8 @@ if len(LEDGER_FIELDS) != 95:
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
     )
-if len(ARM_DESCRIPTOR_FIELDS) != 17:
-    raise RuntimeError(f"腕記述子は17本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
+if len(ARM_DESCRIPTOR_FIELDS) != 19:
+    raise RuntimeError(f"腕記述子は19本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -100,9 +102,17 @@ class RunHeader:
     arm_identification_graph: str = "all"
     arm_self_score_cache: str = "legacy"
     arm_pricing_rule: str = "legacy"
+    arm_local_lambda: float = 0.0
+    arm_holdout_second_order: bool = False
 
     def to_dict(self) -> dict[str, Any]:
-        return {field: getattr(self, field) for field in (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)}
+        # ★ local_lambda = 0.0（現行の挙動）のときは欄を書かない。
+        #   既存 走行の台帳とヘッダをバイト一致させるため（段2 門a）。
+        fields = (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)
+        # ★ 既定値（現行の挙動）の欄は書かない。既存台帳とヘッダをバイト一致させるため。
+        omit = {"arm_local_lambda": 0.0, "arm_holdout_second_order": False}
+        return {field: getattr(self, field) for field in fields
+                if not (field in omit and getattr(self, field) == omit[field])}
 
 
 RUN_INPUT_FIELDS = (

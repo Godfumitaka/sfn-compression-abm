@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from hashlib import blake2b, sha256
 import json
 from random import Random
-from typing import Iterable, Mapping
+from typing import Any, Iterable, Mapping
 
 from abm.domains import Entity, Relation, RelationGraph
 from abm.seed import Seed, load_seed
@@ -41,16 +41,45 @@ def opaque_id(run_seed: str | int, trial_index: int, role_name: str) -> str:
     return blake2b(b"\x1f".join(parts), digest_size=8).hexdigest()
 
 
-def one_minus_h(pi_a: float) -> float:
-    """``1 - E[1/n]`` を返す。``1/E[n]`` ではない。"""
+def one_minus_h(pi_a: float, first_order_count: int = 2, higher_count: int = 0) -> float:
+    """``1 - E[1/n]`` を返す。``1/E[n]`` ではない。
 
-    h_bar = sum((1.0 - pi_a) / (3 + glue_count) + pi_a / (4 + glue_count) for glue_count in (1, 2, 3)) / 3
+    ``n = F + H + 1 + Bernoulli(pi_A) + Uniform{1,2,3}``。
+    F は展開した一階の本数、H は保持辺の候補に入れる二階の本数。
+    既定の ``F=2, H=0`` は従来式 ``(1-pi)/(3+g) + pi/(4+g)`` と同一である。
+    ★ SPEC_B0B2:165 の改訂（仮U-42・仮D-59）。H>0 は新種でのみ使う。
+    """
+
+    f = int(first_order_count) + int(higher_count)
+    h_bar = sum((1.0 - pi_a) / (f + 1 + glue_count) + pi_a / (f + 2 + glue_count) for glue_count in (1, 2, 3)) / 3
     return 1.0 - h_bar
 
 
+HOLDOUT_RATE_MODEL_STRUCTURAL = "structural_first_order_v1"
+HOLDOUT_RATE_MODEL_SECOND_ORDER = "structural_with_second_order_v1"
+
+
+def _second_order_count(data: Mapping[str, Any], motif: str) -> int:
+    return sum(1 for _, node in _expand_motif(data, motif) if node[0] == 2)
+
+
 def validate_holdout_rates(seed: Seed) -> None:
+    model = seed.data.get("holdout_rate_model")
+    known = (HOLDOUT_RATE_MODEL_STRUCTURAL, HOLDOUT_RATE_MODEL_SECOND_ORDER)
+    if model is not None and model not in known:
+        raise ValueError(f"未知の holdout_rate_model: {model}")
     for motif in seed.data["motif_structure"]:
-        calculated = one_minus_h(float(seed.data["pi_A"][motif]))
+        higher_count = 0
+        if model == HOLDOUT_RATE_MODEL_SECOND_ORDER:
+            # ★ 仮D-59  実態に合わせた式。保持辺の候補に二階を入れる新種でのみ使う。
+            first_order_count = len(_first_order_paths(seed.data, motif))
+            higher_count = _second_order_count(seed.data, motif)
+        elif model == HOLDOUT_RATE_MODEL_STRUCTURAL:
+            first_order_count = len(_first_order_paths(seed.data, motif))
+        else:
+            # ★ 欄が無い既存の種は従来式（F=2）のまま。値も検算も変えない。
+            first_order_count = 2
+        calculated = one_minus_h(float(seed.data["pi_A"][motif]), first_order_count, higher_count)
         expected = float(seed.data["one_minus_h"][motif])
         if abs(calculated - expected) > 1e-6:
             raise ValueError(f"{motif} の one_minus_h が不一致: {calculated} != {expected}")
@@ -62,12 +91,93 @@ def generate_world(
     agent_ids: Iterable[str],
     *,
     seed: Seed | None = None,
+    holdout_include_second_order: bool = False,
 ) -> WorldSequence:
     checked_seed = seed or load_seed()
     validate_holdout_rates(checked_seed)
     agents = tuple(sorted(agent_ids))
-    trials = tuple(generate_trial(run_seed, index, agents, seed=checked_seed) for index in range(trial_count))
+    trials = tuple(generate_trial(run_seed, index, agents, seed=checked_seed,
+                                  holdout_include_second_order=holdout_include_second_order)
+                   for index in range(trial_count))
     return WorldSequence(trials=trials, world_hash=world_hash(trials))
+
+
+#: 旧形状（根＋部分木 2・各 first_order 2）の役割名。★ 一文字も変えない。
+_LEGACY_ROLE_BY_PATH = {
+    "0.0": "fo_1", "0.1": "fo_2", "1.0": "fo_3", "1.1": "fo_4",
+    "0": "higher_1", "1": "higher_2", "root": "third",
+}
+
+
+def _expand_node(subtrees: Mapping[str, Any], name: str, path: str, nodes: list) -> int:
+    """``subtrees`` の 1 ノードを展開し、その階数を返す。★ 乱数を消費しない。"""
+
+    node = subtrees[name]
+    has_first_order = "first_order" in node
+    has_children = "subtrees" in node
+    if has_first_order == has_children:
+        raise ValueError(f"subtrees[{name}] は first_order と subtrees のちょうど一方を持つ必要がある")
+    if has_first_order:
+        first_order_paths = []
+        for index, predicate in enumerate(node["first_order"]):
+            child_path = f"{path}.{index}"
+            nodes.append((1, child_path, str(predicate), None))
+            first_order_paths.append(child_path)
+        if not first_order_paths:
+            raise ValueError(f"subtrees[{name}].first_order が空である")
+        nodes.append((2, path, str(node["higher"]), tuple(first_order_paths)))
+        return 2
+    child_paths: list[str] = []
+    child_levels: list[int] = []
+    for index, child_name in enumerate(node["subtrees"]):
+        child_path = f"{path}.{index}"
+        child_levels.append(_expand_node(subtrees, child_name, child_path, nodes))
+        child_paths.append(child_path)
+    if not child_paths:
+        raise ValueError(f"subtrees[{name}].subtrees が空である")
+    level = 1 + max(child_levels)
+    nodes.append((level, path, str(node["higher"]), tuple(child_paths)))
+    return level
+
+
+def _expand_motif(data: Mapping[str, Any], motif: str) -> tuple:
+    """モチーフ 1 つの関係の骨格を返す。階数の昇順、階内は左からの出現順。
+
+    ★ 階数は参照構造から導く。述語名や版名では分岐しない。
+    ★ ``third`` は「根の述語」の互換フィールドとして読む。
+    """
+
+    motif_row = data["motif_structure"][motif]
+    subtrees = data["subtrees"]
+    nodes: list = []
+    child_paths: list[str] = []
+    child_levels: list[int] = []
+    for index, child_name in enumerate(motif_row["subtrees"]):
+        child_path = str(index)
+        child_levels.append(_expand_node(subtrees, child_name, child_path, nodes))
+        child_paths.append(child_path)
+    nodes.append((1 + max(child_levels), "root", str(motif_row["third"]), tuple(child_paths)))
+    return tuple(sorted(enumerate(nodes), key=lambda pair: (pair[1][0], pair[0])))
+
+
+def _first_order_paths(data: Mapping[str, Any], motif: str) -> tuple[str, ...]:
+    return tuple(node[1] for _, node in _expand_motif(data, motif) if node[0] == 1)
+
+
+def _is_legacy_shape(data: Mapping[str, Any], motif: str) -> bool:
+    """旧形状かどうかを構造だけで判定する。"""
+
+    motif_row = data["motif_structure"][motif]
+    names = tuple(motif_row["subtrees"])
+    if len(names) != 2:
+        return False
+    for name in names:
+        node = data["subtrees"][name]
+        if "subtrees" in node or "first_order" not in node:
+            return False
+        if len(node["first_order"]) != 2:
+            return False
+    return True
 
 
 def generate_trial(
@@ -76,11 +186,14 @@ def generate_trial(
     agent_ids: Iterable[str],
     *,
     seed: Seed,
+    holdout_include_second_order: bool = False,
 ) -> WorldTrial:
     motif = _motif_for_trial(run_seed, trial_index, tuple(seed.data["motif_structure"]))
     rng = _trial_rng(run_seed, trial_index)
     motif_row = seed.data["motif_structure"][motif]
-    subtree_1, subtree_2 = (seed.data["subtrees"][name] for name in motif_row["subtrees"])
+    # ★ 構造の展開では乱数を消費しない（B-2）。周縁コインより前に置いてよい。
+    skeleton = _expand_motif(seed.data, motif)
+    legacy = _is_legacy_shape(seed.data, motif)
     has_peripheral = rng.random() < float(seed.data["pi_A"][motif])
     glue_count = rng.randint(1, 3)
 
@@ -88,33 +201,42 @@ def generate_trial(
     if has_peripheral:
         entity_roles.append("peripheral_entity")
     entity_ids = {role: opaque_id(run_seed, trial_index, f"entity:{role}") for role in entity_roles}
+
+    def role_name(path: str) -> str:
+        # 旧形状は fo_1..fo_4 / higher_1 / higher_2 / third をそのまま使う（B-3）。
+        if legacy:
+            return _LEGACY_ROLE_BY_PATH[path]
+        return f"tree:{path}"
+
     relation_ids = {
-        role: opaque_id(run_seed, trial_index, f"relation:{role}")
-        for role in (
-            "fo_1", "fo_2", "fo_3", "fo_4", "higher_1", "higher_2", "third",
-            "mediator", "role_unary",
-        )
+        path: opaque_id(run_seed, trial_index, f"relation:{role_name(path)}")
+        for _, (_, path, _, _) in skeleton
     }
+    for role in ("mediator", "role_unary"):
+        relation_ids[role] = opaque_id(run_seed, trial_index, f"relation:{role}")
 
     def args(values: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(relation_ids[value] if value in relation_ids else entity_ids[value] for value in values)
 
     bag = tuple(word for word, motifs in seed.data["bags"].items() if motif in motifs)
+    # ★ 階数の昇順・階内は左からの出現順（B-4）。一階は (a,b)、親は子の関係 ID を取る。
     relations = [
-        Relation(relation_ids["fo_1"], str(subtree_1["first_order"][0]), args(("a", "b"))),
-        Relation(relation_ids["fo_2"], str(subtree_1["first_order"][1]), args(("a", "b"))),
-        Relation(relation_ids["fo_3"], str(subtree_2["first_order"][0]), args(("a", "b"))),
-        Relation(relation_ids["fo_4"], str(subtree_2["first_order"][1]), args(("a", "b"))),
-        Relation(relation_ids["higher_1"], str(subtree_1["higher"]), args(("fo_1", "fo_2"))),
-        Relation(relation_ids["higher_2"], str(subtree_2["higher"]), args(("fo_3", "fo_4"))),
-        Relation(relation_ids["third"], str(motif_row["third"]), args(("higher_1", "higher_2"))),
-        Relation(relation_ids["mediator"], rng.choice(bag), (entity_ids["a"], entity_ids["mediator_entity"])),
-        Relation(relation_ids["role_unary"], str(seed.data["role_unary"][motif]), (entity_ids["b"],)),
+        Relation(relation_ids[path], predicate,
+                 args(("a", "b")) if children is None else args(children))
+        for _, (_, path, predicate, children) in skeleton
     ]
-    holdout_candidates = [
-        relation_ids["fo_1"], relation_ids["fo_2"], relation_ids["fo_3"], relation_ids["fo_4"],
-        relation_ids["mediator"],
-    ]
+    relations.append(
+        Relation(relation_ids["mediator"], rng.choice(bag), (entity_ids["a"], entity_ids["mediator_entity"]))
+    )
+    relations.append(
+        Relation(relation_ids["role_unary"], str(seed.data["role_unary"][motif]), (entity_ids["b"],))
+    )
+    # ★ 保持辺の候補は展開した一階リストの順序。二階以上と役割ユナリーは候補にしない（B-5）。
+    # ★ 仮U-42／仮D-59  旗が True のとき二階も保持辺の候補に入れる（SPEC_B0B2:151 の改訂）。
+    #   既定は False で、従来どおり一階だけ。★ 役割ユナリーは依然として候補にしない。
+    _holdout_levels = (1, 2) if holdout_include_second_order else (1,)
+    holdout_candidates = [relation_ids[path] for _, (level, path, _, _) in skeleton if level in _holdout_levels]
+    holdout_candidates.append(relation_ids["mediator"])
     if has_peripheral:
         peripheral_id = opaque_id(run_seed, trial_index, "relation:peripheral")
         relations.append(

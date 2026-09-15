@@ -1,0 +1,43 @@
+{
+  "name": "scan5_2026-09-10_w200",
+  "trial_count": 1740,
+  "agent_ids": [
+    "agent"
+  ],
+  "seeds": {
+    "start": 1,
+    "count": 3
+  },
+  "axes": {
+    "f": [
+      0.5
+    ],
+    "theta_prime": [
+      1.5
+    ],
+    "repair_scope": [
+      "first_order"
+    ],
+    "fill_selection": [
+      "most_frequent"
+    ]
+  },
+  "fixed": {
+    "threshold": 0.0,
+    "correction_mode": "none",
+    "tau_acc": 0.67,
+    "nsim_threshold": 0.95,
+    "alpha": 0.0,
+    "beta": 0.0,
+    "w": 2.0,
+    "kappa": 1.0,
+    "lambda_mix": 0.1,
+    "abstain_charge": false,
+    "pricing_rule": "spec"
+  },
+  "output": {
+    "dir": "runs/scan5_2026-09-10/w200",
+    "snapshot_mode": "delta",
+    "snapshot_every": 1
+  }
+}

@@ -44,7 +44,7 @@ def test_ledger_field_accounting_is_38_26_24_8_minus_three() -> None:
     assert len(MECHANISM_FIELDS) == 24
     assert len(RESEARCH_FIELDS) == 8
     assert len(LEDGER_FIELDS) == 95
-    assert len(ARM_DESCRIPTOR_FIELDS) == 17
+    assert len(ARM_DESCRIPTOR_FIELDS) == 19
     assert LEDGER_FIELDS.count("agent_state_snapshot_hash") == 1
     assert LEDGER_FIELDS.count("abstain_reason") == 1
 
@@ -58,7 +58,9 @@ def test_ledger_writes_one_header_and_one_line_per_trial(tmp_path) -> None:
     lines = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
     assert len(lines) == 3
     assert lines[0]["record_type"] == "run_header"
-    assert set(lines[0]) == {"record_type", *ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS}
+    # ★ arm_local_lambda は λ=0 のとき書かれない（既存台帳との互換のため）
+    assert set(lines[0]) == ({"record_type", *ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS}
+                             - {"arm_local_lambda", "arm_holdout_second_order"})
     assert [line["record_type"] for line in lines[1:]] == ["trial", "trial"]
     assert all(set(line) == {"record_type", *LEDGER_FIELDS} for line in lines[1:])
 

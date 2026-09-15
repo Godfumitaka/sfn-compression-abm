@@ -37,13 +37,42 @@ def slot_signature(relation: Relation, graph: RelationGraph) -> tuple[int, tuple
     return len(relation.arguments), argument_types
 
 
-def most_frequent(candidates: Iterable[str], p_hat: FrequencyTable) -> tuple[str | None, bool]:
-    """p-hat 最頻を返す。最大値が同点なら内容を選ばない。"""
+def _weights(
+    names: list[str], p_hat: FrequencyTable,
+    local_lambda: float = 0.0, local_counts: Mapping[str, int] | None = None,
+) -> list[tuple[str, float]]:
+    """正規化前の重み  (局所相対頻度)^λ × p̂（U-085 v1・SPEC:588 改訂）。
+
+    ★ λ = 0.0 のときは p̂ そのものを返す。正規化を挟まないので、
+      most_frequent の argmax と同点判定が 現行と浮動小数点まで一致する。
+    ★ 署名適合フォールバック（SPEC:589）は回数を持たないので λ を効かせない。
+    """
+
+    if local_lambda == 0.0 or not local_counts:
+        return [(predicate, p_hat.prob(predicate)) for predicate in names]
+    denominator = sum(local_counts.get(predicate, 0) for predicate in names)
+    if denominator <= 0:
+        return [(predicate, p_hat.prob(predicate)) for predicate in names]
+    return [
+        (predicate,
+         ((local_counts.get(predicate, 0) / denominator) ** local_lambda) * p_hat.prob(predicate))
+        for predicate in names
+    ]
+
+
+def most_frequent(
+    candidates: Iterable[str], p_hat: FrequencyTable,
+    local_lambda: float = 0.0, local_counts: Mapping[str, int] | None = None,
+) -> tuple[str | None, bool]:
+    """重みの最頻を返す。最大値が同点なら内容を選ばない。
+    ★ SPEC:588 改訂（仮U-41）。λ=0 は従来の p̂ 最頻と厳密に一致する。
+    ★ 並び順（sorted）と同点の扱いは変えていない。"""
 
     unique = sorted(set(candidates))
     if not unique:
         return None, False
-    scored = [(p_hat.prob(predicate), predicate) for predicate in unique]
+    scored = [(weight, predicate) for predicate, weight in
+              _weights(unique, p_hat, local_lambda, local_counts)]
     maximum = max(score for score, _ in scored)
     winners = [predicate for score, predicate in scored if score == maximum]
     if len(winners) != 1:
@@ -52,9 +81,16 @@ def most_frequent(candidates: Iterable[str], p_hat: FrequencyTable) -> tuple[str
 
 
 def _distribution(
-    candidates: Iterable[str], p_hat: FrequencyTable
+    candidates: Iterable[str], p_hat: FrequencyTable,
+    local_lambda: float = 0.0, local_counts: Mapping[str, int] | None = None,
 ) -> tuple[tuple[str, float], ...]:
-    weighted = tuple((predicate, p_hat.prob(predicate)) for predicate in sorted(set(candidates)))
+    """U-085 v1  重み ＝ (局所相対頻度)^λ × p̂。
+    ★ λ = 0.0 のとき (局所)^0 = 1 なので、現行と厳密に一致する経路を通す。
+    ★ 局所相対頻度 ＝ そのスロットでの出現回数 ÷ そのスロットの総出現回数。
+    ★ 履歴に載る＝回数 1 以上 なのでゼロ確率は起きない。
+      署名適合フォールバック（SPEC:589）は回数を持たないので λ を効かせない。"""
+    names = sorted(set(candidates))
+    weighted = tuple(_weights(names, p_hat, local_lambda, local_counts))
     total = sum(weight for _, weight in weighted)
     if total == 0:
         return tuple((predicate, 0.0) for predicate, _ in weighted)
@@ -90,6 +126,7 @@ def fill_missing_slots(
     rng: RNG | None = None,
     *,
     higher_order_predicates: frozenset[str] | None,
+    local_lambda: float = 0.0,
 ) -> FillingResult:
     """可視部に答えがないスロットを、依存先から再帰的に充填する。
 
@@ -161,9 +198,12 @@ def fill_missing_slots(
         if visible is not None:
             visiting.remove(relation_id)
             return visible
-        pool = slot_history.get((definition.name, constituent.slot_index), frozenset())
+        raw_history = slot_history.get((definition.name, constituent.slot_index))
+        pool = raw_history if raw_history else frozenset()
+        local_counts = raw_history if isinstance(raw_history, Mapping) else None
         used_fallback = not pool
         if used_fallback:
+            local_counts = None   # ★ 署名適合には回数が無い
             signature = slot_signature(constituent.relation, definition_graph)
             pool = frozenset(
                 predicate for predicate in all_predicates
@@ -178,7 +218,7 @@ def fill_missing_slots(
         )
         if pool_before_order and not pool:
             empty_pool_slots += 1  # ★ 記録専用。階数の制約で候補が全部落ちた
-        distribution = _distribution(pool, p_hat)
+        distribution = _distribution(pool, p_hat, local_lambda, local_counts)
         maximum = max((weight for _, weight in distribution), default=0.0)
         tied_count = sum(weight == maximum for _, weight in distribution) if maximum > 0 else 0
         history_size += len(pool)
@@ -192,7 +232,7 @@ def fill_missing_slots(
             predicate = sample_predicate(distribution, rng)
             tied = False
         else:
-            predicate, tied = most_frequent(pool, p_hat)
+            predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
             ambiguous = ambiguous or tied
         fallback_used = fallback_used or used_fallback
         if predicate is None:
@@ -224,14 +264,25 @@ def fill_missing_slots(
 
 
 def observe_slot(
-    history: Mapping[tuple[str, int], frozenset[str]],
+    history: Mapping[tuple[str, int], object],
     name: str,
     slot_index: int,
     predicate: str,
-) -> dict[tuple[str, int], frozenset[str]]:
+    local_lambda: float = 0.0,
+) -> dict[tuple[str, int], object]:
+    """★ local_lambda == 0.0 のときは従来どおり frozenset に add する。
+    λ > 0 のときだけ出現回数のカウンタに積む（U-085 の v1）。
+    ★ 型を λ で切り替えるのは、λ=0 の台帳を既存走行とバイト一致させるため。"""
     updated = dict(history)
     key = (name, slot_index)
-    updated[key] = frozenset((*updated.get(key, frozenset()), predicate))
+    current = updated.get(key)
+    if local_lambda == 0.0:
+        base = current if isinstance(current, frozenset) else frozenset(current or ())
+        updated[key] = frozenset((*base, predicate))
+        return updated
+    counts = dict(current) if isinstance(current, Mapping) else {q: 1 for q in (current or ())}
+    counts[predicate] = counts.get(predicate, 0) + 1
+    updated[key] = counts
     return updated
 
 

@@ -1,0 +1,755 @@
+{
+  "version": "U-011_seed_v2a",
+  "generated": "2026-09-03",
+  "assumptions": {
+    "reading": "alpha (p̂ = 場面生成の設計値)",
+    "pool": "global",
+    "Z": 11.143989,
+    "Z_composition": "一階4 + 二階2 + 三階1 + 周縁A + 媒介1 + glue2 + 役割ユナリー1",
+    "K_ROLE": 1.0,
+    "glue_mean": 2.0,
+    "bag_sizes": {
+      "M1": 15,
+      "M2": 14,
+      "M3": 7,
+      "M4": 4
+    },
+    "m": 9
+  },
+  "bags": {
+    "stone": [
+      "M1",
+      "M2",
+      "M3",
+      "M4"
+    ],
+    "water": [
+      "M2",
+      "M3",
+      "M4"
+    ],
+    "chain": [
+      "M1",
+      "M4"
+    ],
+    "rope": [
+      "M4"
+    ],
+    "wood": [
+      "M1",
+      "M2",
+      "M3"
+    ],
+    "bridge": [
+      "M2",
+      "M3"
+    ],
+    "wall": [
+      "M1",
+      "M3"
+    ],
+    "gate": [
+      "M3"
+    ],
+    "pipe": [
+      "M3"
+    ],
+    "river": [
+      "M1",
+      "M2"
+    ],
+    "road": [
+      "M1",
+      "M2"
+    ],
+    "cable": [
+      "M1",
+      "M2"
+    ],
+    "wire": [
+      "M1",
+      "M2"
+    ],
+    "board": [
+      "M2"
+    ],
+    "beam": [
+      "M2"
+    ],
+    "post": [
+      "M2"
+    ],
+    "cord": [
+      "M2"
+    ],
+    "plank": [
+      "M2"
+    ],
+    "rail": [
+      "M2"
+    ],
+    "strap": [
+      "M1"
+    ],
+    "brick": [
+      "M1"
+    ],
+    "shaft": [
+      "M1"
+    ],
+    "frame": [
+      "M1"
+    ],
+    "panel": [
+      "M1"
+    ],
+    "band": [
+      "M1"
+    ],
+    "hook": [
+      "M1"
+    ]
+  },
+  "glue": [
+    "near",
+    "above",
+    "below",
+    "beside",
+    "behind",
+    "inside",
+    "outside",
+    "across",
+    "under",
+    "over",
+    "along",
+    "toward"
+  ],
+  "role_unary": {
+    "M1": "supported",
+    "M2": "carried",
+    "M3": "broken",
+    "M4": "moved"
+  },
+  "canon": {
+    "M1": "stone",
+    "M2": "stone",
+    "M3": "stone",
+    "M4": "stone"
+  },
+  "pi_A": {
+    "M1": 0.075555,
+    "M2": 0.080697,
+    "M3": 0.155859,
+    "M4": 0.263846
+  },
+  "one_minus_h": {
+    "M1": 0.797143,
+    "M2": 0.797326,
+    "M3": 0.800011,
+    "M4": 0.803868
+  },
+  "theta_grid": [
+    0.0432,
+    0.1392,
+    0.2563,
+    0.3734
+  ],
+  "marginal": {
+    "cause": 0.04486724,
+    "require": 0.04486724,
+    "hold": 0.04486724,
+    "push": 0.04486724,
+    "carry": 0.04486724,
+    "lift": 0.04486724,
+    "enable": 0.04486724,
+    "break": 0.04486724,
+    "cut": 0.04486724,
+    "avert": 0.04486724,
+    "turn": 0.04486724,
+    "press": 0.04486724,
+    "allow": 0.02243362,
+    "supported": 0.02243362,
+    "depend": 0.02243362,
+    "carried": 0.02243362,
+    "prevent": 0.02243362,
+    "broken": 0.02243362,
+    "block": 0.02243362,
+    "moved": 0.02243362,
+    "near": 0.01495575,
+    "above": 0.01495575,
+    "below": 0.01495575,
+    "beside": 0.01495575,
+    "behind": 0.01495575,
+    "inside": 0.01495575,
+    "outside": 0.01495575,
+    "across": 0.01495575,
+    "under": 0.01495575,
+    "over": 0.01495575,
+    "along": 0.01495575,
+    "toward": 0.01495575,
+    "stone": 0.01191118,
+    "water": 0.01041561,
+    "chain": 0.00710398,
+    "wood": 0.00630278,
+    "dry": 0.00591902,
+    "rope": 0.0056084,
+    "bridge": 0.0048072,
+    "wall": 0.00470038,
+    "hard": 0.00349648,
+    "gate": 0.0032048,
+    "pipe": 0.0032048,
+    "river": 0.00309798,
+    "road": 0.00309798,
+    "cable": 0.00309798,
+    "wire": 0.00309798,
+    "wet": 0.00181033,
+    "cold": 0.00169497,
+    "board": 0.0016024,
+    "beam": 0.0016024,
+    "post": 0.0016024,
+    "cord": 0.0016024,
+    "plank": 0.0016024,
+    "rail": 0.0016024,
+    "strap": 0.00149557,
+    "brick": 0.00149557,
+    "shaft": 0.00149557,
+    "frame": 0.00149557,
+    "panel": 0.00149557,
+    "band": 0.00149557,
+    "hook": 0.00149557
+  },
+  "constituents": [
+    {
+      "motif": "M1",
+      "predicate": "allow",
+      "layer": "三階",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.25,
+      "ell": 5.4782,
+      "a": 2.2778,
+      "pi": 1.0,
+      "u": 1.815727
+    },
+    {
+      "motif": "M1",
+      "predicate": "cause",
+      "layer": "二階1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "require",
+      "layer": "二階2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "hold",
+      "layer": "一階1-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "push",
+      "layer": "一階1-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "carry",
+      "layer": "一階2-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "lift",
+      "layer": "一階2-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043181
+    },
+    {
+      "motif": "M1",
+      "predicate": "stone",
+      "layer": "媒介",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.132738,
+      "ell": 6.3915,
+      "a": 1.6258,
+      "pi": 0.066667,
+      "u": 0.086401
+    },
+    {
+      "motif": "M1",
+      "predicate": "cold",
+      "layer": "周縁A",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.018889,
+      "ell": 9.2045,
+      "a": 1.4346,
+      "pi": 0.075555,
+      "u": 0.086401
+    },
+    {
+      "motif": "M2",
+      "predicate": "depend",
+      "layer": "三階",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.25,
+      "ell": 5.4782,
+      "a": 2.2778,
+      "pi": 1.0,
+      "u": 1.816145
+    },
+    {
+      "motif": "M2",
+      "predicate": "require",
+      "layer": "二階1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "enable",
+      "layer": "二階2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "carry",
+      "layer": "一階1-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "lift",
+      "layer": "一階1-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "break",
+      "layer": "一階2-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "cut",
+      "layer": "一階2-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.043652
+    },
+    {
+      "motif": "M2",
+      "predicate": "stone",
+      "layer": "媒介",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.132738,
+      "ell": 6.3915,
+      "a": 1.6258,
+      "pi": 0.071429,
+      "u": 0.092594
+    },
+    {
+      "motif": "M2",
+      "predicate": "wet",
+      "layer": "周縁A",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.020174,
+      "ell": 9.1095,
+      "a": 1.4391,
+      "pi": 0.080697,
+      "u": 0.092594
+    },
+    {
+      "motif": "M3",
+      "predicate": "prevent",
+      "layer": "三階",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.25,
+      "ell": 5.4782,
+      "a": 2.2778,
+      "pi": 1.0,
+      "u": 1.822259
+    },
+    {
+      "motif": "M3",
+      "predicate": "enable",
+      "layer": "二階1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "avert",
+      "layer": "二階2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "break",
+      "layer": "一階1-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "cut",
+      "layer": "一階1-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "turn",
+      "layer": "一階2-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "press",
+      "layer": "一階2-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.050532
+    },
+    {
+      "motif": "M3",
+      "predicate": "stone",
+      "layer": "媒介",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.132738,
+      "ell": 6.3915,
+      "a": 1.6258,
+      "pi": 0.142857,
+      "u": 0.185811
+    },
+    {
+      "motif": "M3",
+      "predicate": "hard",
+      "layer": "周縁A",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.038965,
+      "ell": 8.1599,
+      "a": 1.4902,
+      "pi": 0.155859,
+      "u": 0.185812
+    },
+    {
+      "motif": "M4",
+      "predicate": "block",
+      "layer": "三階",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.25,
+      "ell": 5.4782,
+      "a": 2.2778,
+      "pi": 1.0,
+      "u": 1.831044
+    },
+    {
+      "motif": "M4",
+      "predicate": "avert",
+      "layer": "二階1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "cause",
+      "layer": "二階2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "turn",
+      "layer": "一階1-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "press",
+      "layer": "一階1-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "hold",
+      "layer": "一階2-1",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "push",
+      "layer": "一階2-2",
+      "arity": 2,
+      "new_slots": 0,
+      "c": 7,
+      "rate": 0.5,
+      "ell": 4.4782,
+      "a": 2.5631,
+      "pi": 1.0,
+      "u": 2.060417
+    },
+    {
+      "motif": "M4",
+      "predicate": "stone",
+      "layer": "媒介",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.132738,
+      "ell": 6.3915,
+      "a": 1.6258,
+      "pi": 0.25,
+      "u": 0.326737
+    },
+    {
+      "motif": "M4",
+      "predicate": "dry",
+      "layer": "周縁A",
+      "arity": 2,
+      "new_slots": 1,
+      "c": 4,
+      "rate": 0.065962,
+      "ell": 7.4004,
+      "a": 1.5405,
+      "pi": 0.263846,
+      "u": 0.326738
+    }
+  ],
+  "motif_structure": {
+    "M1": {
+      "third": "allow",
+      "subtrees": [
+        "A",
+        "B"
+      ],
+      "peripheral": "cold"
+    },
+    "M2": {
+      "third": "depend",
+      "subtrees": [
+        "B",
+        "C"
+      ],
+      "peripheral": "wet"
+    },
+    "M3": {
+      "third": "prevent",
+      "subtrees": [
+        "C",
+        "D"
+      ],
+      "peripheral": "hard"
+    },
+    "M4": {
+      "third": "block",
+      "subtrees": [
+        "D",
+        "A"
+      ],
+      "peripheral": "dry"
+    }
+  },
+  "subtrees": {
+    "A": {
+      "higher": "cause",
+      "first_order": [
+        "hold",
+        "push"
+      ]
+    },
+    "B": {
+      "higher": "require",
+      "first_order": [
+        "carry",
+        "lift"
+      ]
+    },
+    "C": {
+      "higher": "enable",
+      "first_order": [
+        "break",
+        "cut"
+      ]
+    },
+    "D": {
+      "higher": "avert",
+      "first_order": [
+        "turn",
+        "press"
+      ]
+    }
+  }
+}

@@ -71,6 +71,68 @@ def higher_order_predicates(seed: Seed) -> frozenset[str]:
     )
 
 
+def _node_depth(subtrees: Mapping[str, Any], name: str, chain: tuple[str, ...], errors: list[str]) -> int | None:
+    """subtrees の 1 ノードを検査し、その階数を返す。壊れていれば None を返す。"""
+
+    if name in chain:
+        errors.append(f"subtrees に循環がある: {' -> '.join(chain + (name,))}")
+        return None
+    if name not in subtrees:
+        errors.append(f"subtrees[{name}] が存在しない（未知ノードを暗黙補完しない）")
+        return None
+    node = subtrees[name]
+    if not isinstance(node, Mapping):
+        errors.append(f"subtrees[{name}] が object ではない")
+        return None
+    if "higher" not in node:
+        errors.append(f"subtrees[{name}] に higher が無い")
+    has_first_order = "first_order" in node
+    has_children = "subtrees" in node
+    if has_first_order == has_children:
+        errors.append(f"subtrees[{name}] は first_order と subtrees のちょうど一方を持つ必要がある")
+        return None
+    if has_first_order:
+        if not node["first_order"]:
+            errors.append(f"subtrees[{name}].first_order が空である")
+            return None
+        return 2
+    children = node["subtrees"]
+    if not children:
+        errors.append(f"subtrees[{name}].subtrees が空である")
+        return None
+    depths = [_node_depth(subtrees, str(child), chain + (name,), errors) for child in children]
+    if any(depth is None for depth in depths):
+        return None
+    if len(set(depths)) != 1:
+        errors.append(f"subtrees[{name}] の子の階数が揃っていない: {depths}")
+    return 1 + max(depths)
+
+
+def validate_structure(data: Mapping[str, Any], errors: list[str]) -> None:
+    """参照・循環・順序・ちょうど一方の契約を検査する。★ v1 の種（motif_structure 無し）は対象外。"""
+
+    if "motif_structure" not in data or "subtrees" not in data:
+        return
+    subtrees = data["subtrees"]
+    depths: dict[str, int] = {}
+    for motif, row in data["motif_structure"].items():
+        if "third" not in row:
+            errors.append(f"motif_structure[{motif}] に third（根の述語）が無い")
+        children = row.get("subtrees")
+        if not children:
+            errors.append(f"motif_structure[{motif}].subtrees が空である")
+            continue
+        child_depths = [_node_depth(subtrees, str(child), (), errors) for child in children]
+        if any(depth is None for depth in child_depths):
+            continue
+        if len(set(child_depths)) != 1:
+            errors.append(f"motif_structure[{motif}] の子の階数が揃っていない: {child_depths}")
+        depths[motif] = 1 + max(child_depths)
+    if data.get("holdout_rate_model") == "structural_first_order_v1" and depths:
+        if len(set(depths.values())) != 1:
+            errors.append(f"モチーフごとの階数が揃っていない: {dict(sorted(depths.items()))}")
+
+
 def validate_seed(data: Mapping[str, Any]) -> None:
     """§B.2.2 の5検算を行い、不一致をまとめて報告する。"""
 
@@ -110,6 +172,8 @@ def validate_seed(data: Mapping[str, Any]) -> None:
             errors.append(f"constituents[{index}].ell: {ell} != {expected_ell}")
         if item["layer"] in ("媒介", "周縁A") and (arity != 2 or new_slots != 1 or c != 4):
             errors.append(f"constituents[{index}] は (a,e) 型の c=4 ではない")
+
+    validate_structure(data, errors)
 
     marginal_sum = sum(float(value) for value in data["marginal"].values())
     if abs(marginal_sum - 1.0) > 5e-7:
