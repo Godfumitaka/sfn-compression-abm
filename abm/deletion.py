@@ -74,6 +74,25 @@ def apply_theta(
             definition.registered_at,
             definition.assimilation_count,
         )
+    # ★★ 計装1（2026-09-20）  m_live が 0 になった定義を 貯蔵から消す。
+    #   ★ 名前が空くので、同じ述語多重集合の定義は 次から新規登録として入る
+    #     （abstraction.py:88 の get が None を返す）。★ 名前の衝突による復活を塞ぐ。
+    #   ★ slot_history も同時に消す。★ 残すと 同名の新規登録が 古い履歴を引き継ぐ。
+    #   ★ merit・embed・exceptions も 同じ名前の鍵を消す（孤児を残さない）。
+    dead = tuple(sorted(name for name, definition in definitions.items() if definition.m_live == 0))
+    merit = state.merit
+    exceptions_out = state.exceptions
+    slot_history = state.slot_history
+    if dead:
+        dead_set = set(dead)
+        definitions = {k: v for k, v in definitions.items() if k not in dead_set}
+        embed = {k: v for k, v in embed.items() if k[0] not in dead_set}
+        merit = {k: v for k, v in merit.items() if k[0] not in dead_set}
+        exceptions_out = {k: v for k, v in exceptions_out.items() if k[0] not in dead_set}
+        slot_history = {k: v for k, v in slot_history.items() if k[0] not in dead_set}
+        for name in dead:
+            events.append({"kind": "definition_removed", "R": name, "trial": trial})
+
     prototype = state.prototype
     if prototype.traces:
         surviving = prototype.alive(trial, config.verbatim_threshold)
@@ -91,6 +110,9 @@ def apply_theta(
         state,
         definitions=definitions,
         embed=embed,
+        merit=merit,
+        exceptions=exceptions_out,
+        slot_history=slot_history,
         prototype=prototype,
     ), tuple(events)
 

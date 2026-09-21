@@ -149,10 +149,18 @@ def m1(
     return next_state, {
         "kind": "registration",
         "R": definition_name,
+        # ★★ 計装2（2026-09-20）  名前の出どころ。★ nsim ＝ 経路A ／ hash ＝ 経路B。
+        #   ★ loop.py:112 が渡す name が NSIM の返り値（_identify_definition）。
+        "name_source": "nsim" if name else "hash",
+        "was_extension": old is not None,
+        # ★ 計装5  定義の変更版 ID。★ assimilation_count は m1 が触るたびに増える。
+        "definition_version": definition.assimilation_count,
         "alignment_event_id": event_id,
         "trial": trial,
         "base_written_at": base_written_at,
         "constituents": [{
+            # ★ 計装4  構成素の一意 ID。★ SPEC_B1:312 の同一性 (slot_index, registered_at) に R を足した三つ組。
+            "uid": f"{definition_name}#{row.slot_index}#{row.registered_at}",
             "slot_index": row.slot_index, "registered_at": row.registered_at,
             "predicate": row.relation.predicate, "arity": len(row.relation.arguments),
             "arguments": list(row.relation.arguments),
