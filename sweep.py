@@ -174,6 +174,7 @@ def run_one(task: dict) -> dict:
         arm_identification_graph=fixed.get("identification_graph", "live"),
         arm_self_score_cache=fixed.get("self_score_cache", "off"),
         arm_pricing_rule=fixed.get("pricing_rule", "legacy"),
+        arm_refill_rule=fixed.get("refill_rule", "legacy"),
         run_seed=task["seed"], trial_count=cfg["trial_count"],
         agent_ids=tuple(cfg["agent_ids"]),
         seed_file_sha256=getattr(seed, "file_sha256", None) or task["seed_file_sha256"],
@@ -198,6 +199,7 @@ def run_one(task: dict) -> dict:
         identification_graph=fixed.get("identification_graph", "live"),
         self_score_cache=fixed.get("self_score_cache", "off"),
         pricing_rule=fixed.get("pricing_rule", "legacy"),
+        refill_rule=fixed.get("refill_rule", "legacy"),
         local_lambda=fixed.get("local_lambda", 0.0),
         holdout_include_second_order=fixed.get("holdout_include_second_order", False),
         # ★ 走行のたびに、読み込んだ種から高階の語を作る（C-33 を避ける）。

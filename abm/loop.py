@@ -113,6 +113,7 @@ def run_longitudinal(
                     base_written_at=output.trace["selected_scene_written_at"],
                     horizon=len(world.trials),
                     pricing_rule=config.pricing_rule,
+                    refill_rule=config.refill_rule,
                     local_lambda=config.local_lambda,
                 )
             after, deletion_events = apply_theta(after, config, trial.trial, horizon=len(world.trials))

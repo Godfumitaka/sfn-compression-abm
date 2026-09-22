@@ -66,6 +66,7 @@ def m1(
     base_written_at: int,
     horizon: int,
     pricing_rule: str = "legacy",
+    refill_rule: str = "legacy",
     local_lambda: float = 0.0,
 ) -> tuple[AgentState, dict[str, object] | None]:
     """整列の共通部分からサイズ2以上の def(R) を登録・更新する。"""
@@ -96,7 +97,8 @@ def m1(
         definition = NamedDefinition(definition_name, constituents, len(constituents), trial)
     else:
         definition = _extend_definition(old, pairs, state, trial,
-                                        pricing_rule=pricing_rule, base=base)
+                                        pricing_rule=pricing_rule, base=base,
+                                        refill_rule=refill_rule)
         definition = replace(
             definition,
             assimilation_count=old.assimilation_count + 1,
@@ -195,10 +197,24 @@ def _extend_definition(
     *,
     pricing_rule: str = "legacy",
     base: RelationGraph | None = None,
+    refill_rule: str = "legacy",
 ) -> NamedDefinition:
     existing = {constituent.relation.predicate for constituent in old.constituents if constituent.alive}
     additions = [left for left, _ in pairs if left.predicate not in existing]
     tombstones = [row for row in old.constituents if not row.alive]
+    if refill_rule == "one_per_slot":
+        # ★ 案イ′（2026-09-22 決裁）。生存行のいない slot にだけ、同じ slot は一度だけ足す。
+        #   ★ 並び順は old.constituents の順のまま（新しい規則を足さない）。
+        #   ★ あふれた行は足さない（m_alloc は伸ばさない。SPEC_B1_impl:313）。
+        occupied = {row.slot_index for row in old.constituents if row.alive}
+        seen: set[int] = set()
+        picked = []
+        for row in tombstones:
+            if row.slot_index in occupied or row.slot_index in seen:
+                continue
+            seen.add(row.slot_index)
+            picked.append(row)
+        tombstones = picked
     if not additions or not tombstones:
         return old
     rows = list(old.constituents)

@@ -188,6 +188,14 @@ class AgentConfig:
     self_score_cache: str = "off"
     # 価格の意味論。"legacy" のとき関係IDへの参照も新規スロットと数える（既存走行と bit 一致）。
     pricing_rule: str = "legacy"
+    # 補充（拡張）で墓石をどう選ぶか。
+    # "legacy"        これまでの挙動。墓石の並び順にそのまま足す。
+    #                 ★ 同じ slot の墓石が複数あると、同じ slot・同じ試行に二行が入る。
+    #                 ★ 生存行のいる slot の古い墓石にも足すので、一つの位置に複数の生存行が同居する。
+    # "one_per_slot"  ★ 案イ′（2026-09-22 決裁）。生存行のいない slot にだけ、同じ slot は一度だけ足す。
+    #                 → SPEC_B1_impl_2026-08-28.md:313「位置は再利用され m_alloc は伸びない」と
+    #                   :466-467 の m_live <= m_alloc を回復する。
+    refill_rule: str = "legacy"
     # 充填で階数を揃えるときに使う、高階の述語の集合。
     # ★ 走行のたびに abm.seed.higher_order_predicates(seed) から作って渡す。
     #   None のまま充填に入ると fill_missing_slots が例外を出す（C-33 を避けるため黙って進まない）。
@@ -200,6 +208,8 @@ class AgentConfig:
             raise ValueError(f"未知の self_score_cache: {self.self_score_cache}")
         if self.pricing_rule not in {"legacy", "spec"}:
             raise ValueError(f"未知の pricing_rule: {self.pricing_rule}")
+        if self.refill_rule not in {"legacy", "one_per_slot"}:
+            raise ValueError(f"未知の refill_rule: {self.refill_rule}")
 
     @property
     def verbatim_threshold(self) -> float:

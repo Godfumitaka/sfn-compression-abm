@@ -46,6 +46,7 @@ ARM_DESCRIPTOR_FIELDS = (
     "arm_adaptation_table",
     "arm_identification_graph", "arm_self_score_cache",
     "arm_pricing_rule",
+    "arm_refill_rule",
     "arm_local_lambda",
     "arm_holdout_second_order",
 )
@@ -70,8 +71,9 @@ if len(LEDGER_FIELDS) != 95:
         f"mechanism={len(MECHANISM_FIELDS)}, "
         f"research={len(RESEARCH_FIELDS)}, unique={len(LEDGER_FIELDS)}"
     )
-if len(ARM_DESCRIPTOR_FIELDS) != 19:
-    raise RuntimeError(f"腕記述子は19本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
+# ★ 2026-09-22  arm_refill_rule（案イ′ の旗）を足したので 19 → 20。
+if len(ARM_DESCRIPTOR_FIELDS) != 20:
+    raise RuntimeError(f"腕記述子は20本ではない: {len(ARM_DESCRIPTOR_FIELDS)}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,6 +104,7 @@ class RunHeader:
     arm_identification_graph: str = "all"
     arm_self_score_cache: str = "legacy"
     arm_pricing_rule: str = "legacy"
+    arm_refill_rule: str = "legacy"
     arm_local_lambda: float = 0.0
     arm_holdout_second_order: bool = False
 
@@ -110,7 +113,8 @@ class RunHeader:
         #   既存 走行の台帳とヘッダをバイト一致させるため（段2 門a）。
         fields = (*ARM_DESCRIPTOR_FIELDS, *RUN_INPUT_FIELDS)
         # ★ 既定値（現行の挙動）の欄は書かない。既存台帳とヘッダをバイト一致させるため。
-        omit = {"arm_local_lambda": 0.0, "arm_holdout_second_order": False}
+        omit = {"arm_local_lambda": 0.0, "arm_holdout_second_order": False,
+                "arm_refill_rule": "legacy"}
         return {field: getattr(self, field) for field in fields
                 if not (field in omit and getattr(self, field) == omit[field])}
 
