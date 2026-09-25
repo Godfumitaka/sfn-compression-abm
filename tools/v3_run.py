@@ -5,6 +5,8 @@
    --nohash       名前の一致の経路を使わない（nohash_run.py と同じ包み方）
    --nsim X       同定の基準 nsim_threshold を X にする（既定は config の 0.95）
    --vt X         逐語の枚の閾値 verbatim_theta を X にする（既定は無し＝θ′ に落ちる）
+   --extend-rule R  v3.1 の取り込み（tools/v31.py）：v2（今のまま、既定）／profit（v3.1a、Σ(V−θ′) が増える限り一本ずつ足す）／none（v3.1b、足さない）
+   --charge1 C      v3.1 の ① の罰（tools/v31.py）：v2（今のまま、既定）／d32（投影は予測した行だけ・穴埋めは slot_history を一つ減らす）
    --lowmem       状態の正準形の控えを、前の試行で触った物だけに絞る（tools/lowmem.py）。★ 2026-09-25 から既定。
                   7 本で台帳が一字一句同じと確かめた。外すときは --no-lowmem
    --compare-to D 指定した走行根の同じ台帳と、全試行の指紋・台帳全体を比べる（旗の組み合わせによらず）
@@ -29,7 +31,7 @@ import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
-ROOT = Path("/Users/tatsu-admin/sfn/sfn-compression-abm")
+ROOT = Path(__file__).resolve().parent.parent   # ★ v3.1：置き場所から決める（worktree・クラウドでも同じ）
 sys.path.insert(0, str(ROOT))
 
 _REAL = {}
@@ -207,6 +209,8 @@ def _install(side_path: Path, nohash: bool, prune: bool = False, extgreedy: bool
 
     def wrapped(state, base, target, alignment, trial, **kw):
         name = kw.get("name")
+        if "v31" in sys.modules:
+            sys.modules["v31"].CFG["target"] = target   # ★ v3.1a の席の照合に使う（今の場面）
         renamed_from = None
         sel = None
         if prune and name is None:
@@ -281,7 +285,15 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import lowmem
         lowmem.install()
+    if task.get("extend_rule", "v2") != "v2" or task.get("charge1", "v2") != "v2":
+        sys.path.insert(0, str(ROOT / "tools"))
+        import v31
+        fx = task["cfg"]["fixed"]
+        v31.install(task.get("extend_rule", "v2"), task.get("charge1", "v2"), float(task["theta_prime"]),
+                    float(fx.get("w", 0.0)), float(fx.get("kappa", 1.0)), float(fx.get("beta", 0.0)), fo=fo)
     rec = sweep.run_one(task)
+    if "v31" in sys.modules:
+        rec["v31"] = dict(sys.modules["v31"].STATS)
     if task.get("lowmem"):
         rec["lowmem"] = {"evictions": lowmem.STATE["evictions"], "max_cache": lowmem.STATE["max_cache"]}
     import resource
@@ -334,6 +346,9 @@ def main() -> None:
     ap.add_argument("--lowmem", dest="lowmem", action="store_true", default=True, help="状態の正準形の控えを絞る（既定）")
     ap.add_argument("--no-lowmem", dest="lowmem", action="store_false", help="控えを絞らない（書き直し前の持ち方）")
     ap.add_argument("--compare-to", default=None, help="比べる相手の走行根（ledgers の親）")
+    ap.add_argument("--extend-rule", default="v2", choices=["v2", "profit", "none"])
+    ap.add_argument("--charge1", default="v2", choices=["v2", "d32"])
+    ap.add_argument("--trial-count", type=int, default=None, help="試しの短い走行だけに使う（比べはしない）")
     args = ap.parse_args()
     import sweep
     cfg = json.load(open(args.config, encoding="utf-8"))
@@ -341,6 +356,9 @@ def main() -> None:
     out_root = Path(args.out_root).resolve()
     cfg2 = copy.deepcopy(cfg)
     cfg2["output"]["dir"] = str(out_root / "ledgers")
+    if args.trial_count is not None:
+        cfg2["trial_count"] = args.trial_count
+        args.no_compare = True
     if args.nsim is not None:
         cfg2["fixed"]["nsim_threshold"] = args.nsim
     if args.vt is not None:
@@ -359,23 +377,26 @@ def main() -> None:
     runs.sort(key=lambda r: (r["seed"], r["cell"]))
     seed = sweep.load_seed(cfg["seed_file"])
     commit = sweep.code_commit()
-    all_off = (not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
+    all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
+               and args.extend_rule == "v2" and args.charge1 == "v2")
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
     tasks = [{**r, "cfg": cfg2, "code_commit": commit, "orig_dir": orig_dir, "out_root": str(out_root),
               "seed_file_sha256": getattr(seed, "file_sha256", None),
               "nohash": args.nohash, "prune": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
+              "extend_rule": args.extend_rule, "charge1": args.charge1,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
+                                                    "extend_rule": args.extend_rule, "charge1": args.charge1,
                                                     "compare_to": args.compare_to, "config": args.config,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
