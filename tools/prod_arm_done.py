@@ -4,6 +4,7 @@
 表：定義の表（tools/defs_table_spoke_v7.py、版 7 の列まで）、まとめ.md（台帳ごとの数え・物差しごとの世界偽の率・通過群の見ていない型の誤りの分布）。
 図：tools/prod_arm_fig.R（Rscript があるときだけ。無ければ飛ばして README に書く）。
 上げる物（台帳本体は上げない）：<結果>/<機械>/<腕>/ に defs_spoke7.csv.gz・まとめ.md・counts.json・sha256.jsonl・flag.json・図・README.md。
+★ 上げる段は tools/results_push.py（コミットの失敗を記録し、はじかれたら pull --rebase して上げ直し、リモートにそろったかを確かめる。失敗なら終わりの番号 3）。
 使い方  python3.12 tools/prod_arm_done.py <腕の走行根> <腕名> <結果の作業場所（results ブランチ）> <機械の名前> <旗の説明> [--no-push]"""
 import collections, glob, gzip, json, os, pathlib, shutil, subprocess, sys, time
 
@@ -144,15 +145,13 @@ kept = sorted({(r_["cell"], r_["seed"]) for r_ in sha if not r_["deleted"]})
     f"- 図：{fig.name if fig else '無し（Rscript が無い、または描けなかった）'}",
     f"- 作った時刻：{time.strftime('%Y-%m-%d %H:%M')}", ""]), encoding="utf-8")
 if PUSH:
-    g = ["git", "-C", str(resdir)]
-    subprocess.run(g + ["add", "-A", f"{host}/{arm}"], check=True)
-    r = subprocess.run(g + ["commit", "-q", "-m", f"結果：{host} の {arm}（台帳 {len(posts)} 本、{desc}）"], capture_output=True, text=True)
-    for i in range(5):
-        subprocess.run(g + ["pull", "-q", "--rebase", "origin", "results-2026-09-27"], capture_output=True, text=True)
-        r = subprocess.run(g + ["push", "-q", "origin", "HEAD:results-2026-09-27"], capture_output=True, text=True)
-        if r.returncode == 0:
-            print("上げた", dst); break
-        time.sleep(10 * (i + 1))
-    else:
-        print("★ 上げられなかった（あとで手で git push）", r.stderr[-300:])
+    # ★ 2026-09-26 夜の直し：コミットの失敗を捨てず、はじかれたら取り直して上げ直し、最後にリモートにそろったかを確かめる（tools/results_push.py）。
+    sys.path.insert(0, str(REPO / "tools"))
+    from results_push import push_arm
+    ok, lines = push_arm(resdir, host, arm, f"結果：{host} の {arm}（台帳 {len(posts)} 本、{desc}）")
+    print("\n".join(lines))
+    if not ok:
+        print("★ 上げられなかった（結果の作業場所に残してある）", dst)
+        sys.exit(3)
+    print("上げた（確かめ済み）", dst)
 print("->", dst)
