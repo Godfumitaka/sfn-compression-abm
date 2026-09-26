@@ -81,7 +81,7 @@ setup_results() {   # 結果のブランチの作業場所（無ければ作る�
     git fetch -q origin results-2026-09-27 && git worktree add -q -B results-2026-09-27 "$RESULTS" origin/results-2026-09-27
   else
     git worktree add -q --detach "$RESULTS" HEAD && git -C "$RESULTS" checkout -q --orphan results-2026-09-27 \
-      && git -C "$RESULTS" rm -rq . && printf '# 本番の結果（2026-09-27）\n\n機械ごと・腕ごとに、表と図と README を置く。台帳本体は置かない。\n' > "$RESULTS/README.md" \
+      && git -C "$RESULTS" rm -rfq . && git -C "$RESULTS" clean -fdq && printf '# 本番の結果（2026-09-27）\n\n機械ごと・腕ごとに、表と図と README を置く。台帳本体は置かない。\n' > "$RESULTS/README.md" \
       && git -C "$RESULTS" add README.md && git -C "$RESULTS" commit -qm "結果のブランチを作る" \
       && git -C "$RESULTS" push -q origin results-2026-09-27
   fi
