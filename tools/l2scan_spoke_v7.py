@@ -79,7 +79,7 @@ ARM,RD,SEEDP,OUT=args[0],args[1],args[2],pathlib.Path(args[3]); WK=int(args[4]) 
 #   flag.json が無ければ、どちらもオフとみる（それより前の台帳）。
 _FLAGP=pathlib.Path(RD).resolve().parent/"flag.json"
 RUNFLAGS=json.load(open(_FLAGP)) if _FLAGP.exists() else {}
-FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2=bool(RUNFLAGS.get("fix2"))
+FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2=bool(RUNFLAGS.get("fix2")); PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
 sys.path.insert(0,str(ROOT/"tools"))
 if FIX_ORDER:
     import fixorder; fixorder.install()
@@ -111,7 +111,7 @@ def out_fixed(state,scene,cfg,Rn,*,trial):
     f=fill_missing_slots(d,scene,al.entity_mapping,al.relation_mapping,state.slot_history,
         state.p_hat,cfg.fill_selection,Random(_rng_seed("agent",trial)),
         higher_order_predicates=cfg.higher_order_predicates,local_lambda=cfg.local_lambda)
-    if f.ambiguous: return (None,"ambiguous_projection",f,None)
+    if f.ambiguous and not (PROJ_FIRST and isinstance(pred,EdgePrediction)): return (None,"ambiguous_projection",f,None)   # ★ 版 7：--proj-first の台帳では、投影が出ていれば同点でも投影
     if isinstance(pred,Abstain) and f.relations:
         sl=f.slot_indices[0] if f.slot_indices else None
         alive={c.slot_index:c.alive for c in d.constituents}
@@ -258,7 +258,7 @@ def main():
     json.dump({"__版":dict(script="tools/l2scan_spoke_v7.py",md5=hashlib.md5(pathlib.Path(__file__).read_bytes()).hexdigest(),
         写し元=str(ORIG),写し元md5=hashlib.md5(ORIG.read_bytes()).hexdigest() if ORIG.exists() else None,
         起動=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t0)),腕=ARM,走行根=RD,種=SEEDP,
-        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
+        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"proj_first":PROJ_FIRST,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
         注="l2scan2 の a/b はそのまま。話内/話外＝t より前に話した（R_used かつ棄権しない）場面の型か。開内/開外＝そのうち f_fired のもの。源*＝主張の出どころ（投影・生きている行の充填・墓石の充填）。全*＝走行全体で決めた内外。後*＝後半（t>=870）の主張だけ。型*＝場面の型ごと。訂正内/訂正外＝t より前に、その型で ① か ② の罰を受けたか（版 7）。全訂正*・後訂正*・源*訂正* も同じ"),
         "台帳":res},open(OUT,"w"),ensure_ascii=False)
     print(f"  完了 {time.time()-t0:.0f}秒 -> {OUT}",flush=True)
