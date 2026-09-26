@@ -32,7 +32,7 @@ SEEDS=${SEEDS:-$(seq 1 20)}
 MINFREE_GB=${MINFREE_GB:-20}
 if [[ -z "${DFPATH:-}" ]]; then if [[ -d /mnt/c ]]; then DFPATH=/mnt/c; else DFPATH=$OUT; fi; fi
 HOST=${HOST:-$(hostname -s 2>/dev/null || hostname)}
-FIXES=${FIXES:-"--fix2-full --fix-order --proj-first"}   # ★ 直し②（予測と会計にも）・名前の順番の直し・穴埋めの同点で投影を捨てない
+FIXES=${FIXES:-"--fix2-full --fix-order2 --proj-first"}   # ★ 直し②（予測と会計にも）・名前・番号に依らない写し（案 1）・穴埋めの同点で投影を捨てない
 EXTRA=${EXTRA:-}
 RESULTS=${RESULTS:-$OUT/results}
 DRY=${DRY:-0}

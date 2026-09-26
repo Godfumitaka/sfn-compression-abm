@@ -20,8 +20,15 @@ from abm.seed import load_seed
 from abm.domains import Entity, RelationGraph
 from abm.abstraction import _definition_graph
 import abm.sme as sme
-import fixorder
-fixorder.install()
+# ★ 写しの判定に使う写しは、走行の旗（走行根の一つ上の flag.json）に合わせる：--fix-order2 の台帳なら案 1（tools/fixorder2.py）、それ以外は名前の順番の直し。
+_fl = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else ".").resolve().parent / "flag.json"
+_rf = json.load(open(_fl)) if _fl.exists() else {}
+if _rf.get("fix_order2"):
+    import fixorder2
+    fixorder2.install()
+else:
+    import fixorder
+    fixorder.install()
 from recon_removed import MultisetReconstructorWithRemoval
 
 _a = [x for x in sys.argv[1:]]

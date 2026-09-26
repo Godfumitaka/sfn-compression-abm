@@ -8,7 +8,7 @@
    計に足したもの：①の試行・②の試行・①記録あり（charge_source に ①・①_穴埋め・①_その他 のどれかがある試行。①の試行と同じはず）。
 ★ ROOT は、このファイルの置き場所（リポジトリの tools/ の一つ上）から決める（版 6 まではこのマックの場所に決め打ち）。
 ★ 種の探し方の補い（api_current の探し場所に無いとき、引数の種ファイルと seeds/ を sha で探す）。下の注を参照。
-★ 走行の旗（flag.json）で --fix-order・--fix2 がオンなら、走査の中でも同じ直しを入れる。計に「発話の作り直し_一致／不一致」（話した試行で、作り直した発話が台帳の発話と同じか）を足した。
+★ 走行の旗（flag.json）で --fix-order・--fix-order2・--fix2・--fix2-full・--proj-first がオンなら、走査の中でも同じ直しを入れる。計に「発話の作り直し_一致／不一致」（話した試行で、作り直した発話が台帳の発話と同じか）を足した。
 ★ 以下は版 6 の説明のまま。
 ★★ 版 6（2026-09-26 昼、アストラさんの指示）：tools/l2scan_spoke.py の版 5（md5 95c98e43472d6f51127f7181eb1f9228、クラウドの Code が作ったもの）に、
    列を二つ足しただけ。版 5 の数え方（a/b・話・開・全・後・四・五・源・型）は一字も変えていない。
@@ -79,11 +79,14 @@ ARM,RD,SEEDP,OUT=args[0],args[1],args[2],pathlib.Path(args[3]); WK=int(args[4]) 
 #   flag.json が無ければ、どちらもオフとみる（それより前の台帳）。
 _FLAGP=pathlib.Path(RD).resolve().parent/"flag.json"
 RUNFLAGS=json.load(open(_FLAGP)) if _FLAGP.exists() else {}
-FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2_FULL=bool(RUNFLAGS.get("fix2_full")); FIX2=bool(RUNFLAGS.get("fix2")) or FIX2_FULL; PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
+FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX_ORDER2=bool(RUNFLAGS.get("fix_order2")); FIX2_FULL=bool(RUNFLAGS.get("fix2_full")); FIX2=bool(RUNFLAGS.get("fix2")) or FIX2_FULL; PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
 sys.path.insert(0,str(ROOT/"tools"))
 if FIX_ORDER:
     import fixorder; fixorder.install()
     import abm.sme as _sme; map_graphs=_sme.map_graphs     # ★ このファイルの名前も差し替えた写しにする
+if FIX_ORDER2:                                              # ★ 案 1（名前・番号に依らない写し、tools/fixorder2.py）
+    import fixorder2; fixorder2.install()
+    import abm.sme as _sme; map_graphs=_sme.map_graphs
 if FIX2:
     import fix2 as _fix2; _fix2.install()   # ★ 控え（REG）を読む _alignment_candidates の差し替えを入れる（支持の数え方）
 if OUT.exists(): sys.exit(f"既存 {OUT} あり。上書きしない")
@@ -258,7 +261,7 @@ def main():
     json.dump({"__版":dict(script="tools/l2scan_spoke_v7.py",md5=hashlib.md5(pathlib.Path(__file__).read_bytes()).hexdigest(),
         写し元=str(ORIG),写し元md5=hashlib.md5(ORIG.read_bytes()).hexdigest() if ORIG.exists() else None,
         起動=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t0)),腕=ARM,走行根=RD,種=SEEDP,
-        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"fix2_full":FIX2_FULL,"proj_first":PROJ_FIRST,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
+        走行の旗={"fix_order":FIX_ORDER,"fix_order2":FIX_ORDER2,"fix2":FIX2,"fix2_full":FIX2_FULL,"proj_first":PROJ_FIRST,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
         注="l2scan2 の a/b はそのまま。話内/話外＝t より前に話した（R_used かつ棄権しない）場面の型か。開内/開外＝そのうち f_fired のもの。源*＝主張の出どころ（投影・生きている行の充填・墓石の充填）。全*＝走行全体で決めた内外。後*＝後半（t>=870）の主張だけ。型*＝場面の型ごと。訂正内/訂正外＝t より前に、その型で ① か ② の罰を受けたか（版 7）。全訂正*・後訂正*・源*訂正* も同じ"),
         "台帳":res},open(OUT,"w"),ensure_ascii=False)
     print(f"  完了 {time.time()-t0:.0f}秒 -> {OUT}",flush=True)
