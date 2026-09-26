@@ -7,6 +7,7 @@
    --vt X         逐語の枚の閾値 verbatim_theta を X にする（既定は無し＝θ′ に落ちる）
    --extend-rule R  v3.1 の取り込み（tools/v31.py）：v2（今のまま、既定）／profit（v3.1a、Σ(V−θ′) が増える限り一本ずつ足す）／none（v3.1b、足さない）
    --charge1 C      v3.1 の ① の罰（tools/v31.py）：v2（今のまま、既定）／d32（投影は予測した行だけ・穴埋めは slot_history を一つ減らす）
+   --dump-slot-history  走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（v3.1-slotdump。記録だけ）
    --lowmem       状態の正準形の控えを、前の試行で触った物だけに絞る（tools/lowmem.py）。★ 2026-09-25 から既定。
                   7 本で台帳が一字一句同じと確かめた。外すときは --no-lowmem
    --compare-to D 指定した走行根の同じ台帳と、全試行の指紋・台帳全体を比べる（旗の組み合わせによらず）
@@ -30,12 +31,14 @@ import sys
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
+from typing import Mapping
 
 ROOT = Path(__file__).resolve().parent.parent   # ★ v3.1：置き場所から決める（worktree・クラウドでも同じ）
 sys.path.insert(0, str(ROOT))
 
 _REAL = {}
 _LAST_ALIVE: dict = {}
+_LAST_STATE: dict = {}   # ★ --dump-slot-history：各試行の削除の後の状態を指すだけ（写しは作らない。台帳には何も書かない）
 _STATS: dict = {}
 
 EPS = 1e-9
@@ -267,6 +270,7 @@ def _install(side_path: Path, nohash: bool, prune: bool = False, extgreedy: bool
             if d.m_live > 0:
                 _LAST_ALIVE[R] = sorted(row.relation.predicate for row in d.constituents if row.alive)
         _LAST_ALIVE["__alive__"] = sorted(R for R, d in after.definitions.items() if d.m_live > 0)
+        _LAST_STATE["state"] = after
         return after, events
 
     loop.m1 = wrapped
@@ -299,8 +303,24 @@ def worker(task: dict) -> dict:
     import resource
     rec["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 1)  # macOS はバイト
     alive_end = _LAST_ALIVE.pop("__alive__", [])
-    fo.write(json.dumps({"kind": "final", "alive_end": alive_end, "removed_defs": _STATS["removed"],
-                         "last_alive_preds": _LAST_ALIVE}, ensure_ascii=False) + "\n")
+    final = {"kind": "final", "alive_end": alive_end, "removed_defs": _STATS["removed"],
+             "last_alive_preds": _LAST_ALIVE}
+    if task.get("dump_slot_history"):
+        # ★ v3.1-slotdump（2026-09-26）：走行末の全定義の slot_history（墓石の席も含む）と、各定義の行（位置・登録試行・述語・生死）を
+        #   side の最後の行に書く。記録だけ。台帳（ledgers/）には何も書かない。
+        st_end = _LAST_STATE.get("state")
+        sh = {}
+        cons = {}
+        if st_end is not None:
+            for (R, slot), val in st_end.slot_history.items():
+                sh.setdefault(R, {})[str(slot)] = (dict(sorted(val.items())) if isinstance(val, Mapping)
+                                                   else sorted(val))
+            for R, d in st_end.definitions.items():
+                cons[R] = [[row.slot_index, row.registered_at, row.relation.predicate, bool(row.alive)]
+                           for row in d.constituents]
+        final["slot_history_end"] = sh
+        final["constituents_end"] = cons
+    fo.write(json.dumps(final, ensure_ascii=False) + "\n")
     fo.close()
     rec["nohash"] = task["nohash"]
     if task["compare"]:
@@ -349,6 +369,8 @@ def main() -> None:
     ap.add_argument("--extend-rule", default="v2", choices=["v2", "profit", "none"])
     ap.add_argument("--charge1", default="v2", choices=["v2", "d32"])
     ap.add_argument("--trial-count", type=int, default=None, help="試しの短い走行だけに使う（比べはしない）")
+    ap.add_argument("--dump-slot-history", action="store_true",
+                    help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
     args = ap.parse_args()
     import sweep
     cfg = json.load(open(args.config, encoding="utf-8"))
@@ -386,12 +408,13 @@ def main() -> None:
               "seed_file_sha256": getattr(seed, "file_sha256", None),
               "nohash": args.nohash, "prune": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
               "extend_rule": args.extend_rule, "charge1": args.charge1,
+              "dump_slot_history": args.dump_slot_history,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
-                                                    "compare_to": args.compare_to, "config": args.config,
+                                                    "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
