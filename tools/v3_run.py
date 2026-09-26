@@ -15,6 +15,9 @@
    --proj-first   穴埋めの同点で投影を捨てない（2026-09-26 夜）：投影が一本出ていれば、穴埋めが同点でも投影を使う。tools/projfirst.py
    --fix-order    名前の順番の直し（2026-09-26 夜）：親の中身として一緒に対になった子も、述語が一致していれば、
                   自分の番で対にしたのと同じ点を数える。map_graphs を差し替え、使っている所すべてに効く。tools/fixorder.py
+   --fix-order2   名前・番号に依らない写し（2026-09-26 夜、案 1）。--fix-order の代わりに使う（両方は付けない）。
+                  候補の順番を構造だけで決め（子が先・構造に埋まった対が先）、同じ順位で食い違う候補は、最大の組すべてに共通するものだけ採る。
+                  伝播は一通りに決まる対応だけ。tools/fixorder2.py
    --rename-check 確かめ：同定のたびに述語の名前を付け替えて（二通り）判断をやり直し、違った回を数える（記録だけ）
    --fix2-full    直し②を予測と会計にも広げる（2026-09-26 夜）：選んだ定義の投影・穴埋め・会計にも直し②の写しを渡す。--fix2 を含む
    --fix2         直し②（2026-09-26 夕）：墓石を子に持つ高階の行を、墓石の席の slot_history で照らす。
@@ -339,6 +342,13 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import fixorder
         fixorder.install()
+    if task.get("fix_order2"):
+        # ★ 名前・番号に依らない写し（2026-09-26 夜、案 1）：map_graphs を差し替える（tools/fixorder2.py）。--fix-order の代わり。
+        if task.get("fix_order"):
+            raise ValueError("--fix-order と --fix-order2 は一緒に使わない")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import fixorder2
+        fixorder2.install()
     if task.get("fix2") or task.get("fix2_full"):
         # ★ 直し②（2026-09-26 夕）：墓石を子に持つ高階の行の照らし方（tools/fix2.py）。話すときの支持はここで差し替え、
         #   同定の側は tools/v32.py の同定の中で使う（下で v32 を必ず入れる）。--fix2-full は予測と会計にも同じ写しを渡す。
@@ -361,6 +371,8 @@ def worker(task: dict) -> dict:
         rec["fixorder"] = dict(sys.modules["fixorder"].STATS)
     if "projfirst" in sys.modules:
         rec["projfirst"] = dict(sys.modules["projfirst"].STATS)
+    if "fixorder2" in sys.modules:
+        rec["fixorder2"] = dict(sys.modules["fixorder2"].STATS)
     if "v31" in sys.modules:
         rec["v31"] = dict(sys.modules["v31"].STATS)
     if task.get("fast"):
@@ -449,6 +461,8 @@ def main() -> None:
                     help="穴埋めが同点でも、投影が一本出ていれば投影を使う（tools/projfirst.py）")
     ap.add_argument("--fix-order", action="store_true",
                     help="名前の順番の直し：親の中身として一緒に対になった子も、述語が一致すれば自分の番の点を数える（tools/fixorder.py）")
+    ap.add_argument("--fix-order2", action="store_true",
+                    help="名前・番号に依らない写し（--fix-order の代わり。tools/fixorder2.py）")
     ap.add_argument("--rename-check", action="store_true",
                     help="確かめ：同定のたびに、述語の名前を付け替えて判断をやり直し、違った回を数える（記録だけ。tools/v32.py）")
     ap.add_argument("--fix2-full", action="store_true",
@@ -491,7 +505,7 @@ def main() -> None:
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
                and args.extend_rule == "v2" and args.charge1 == "v2"
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
-               and not args.fix2 and not args.fix2_full and not args.fix_order and not args.rename_check and not args.proj_first
+               and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -504,7 +518,7 @@ def main() -> None:
               "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
               "ident_commons": args.ident_commons,
               "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
-              "fix_order": args.fix_order, "rename_check": args.rename_check, "proj_first": args.proj_first,
+              "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
               "fix2_full": args.fix2_full,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
@@ -515,13 +529,13 @@ def main() -> None:
                                                     "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
                                                     "ident_commons": args.ident_commons,
                                                     "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
-                                                    "fix_order": args.fix_order, "rename_check": args.rename_check, "proj_first": args.proj_first,
+                                                    "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
                                                     "fix2_full": args.fix2_full,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} proj_first={args.proj_first} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
