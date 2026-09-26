@@ -8,6 +8,7 @@
    計に足したもの：①の試行・②の試行・①記録あり（charge_source に ①・①_穴埋め・①_その他 のどれかがある試行。①の試行と同じはず）。
 ★ ROOT は、このファイルの置き場所（リポジトリの tools/ の一つ上）から決める（版 6 まではこのマックの場所に決め打ち）。
 ★ 種の探し方の補い（api_current の探し場所に無いとき、引数の種ファイルと seeds/ を sha で探す）。下の注を参照。
+★ 走行の旗（flag.json）で --fix-order・--fix2 がオンなら、走査の中でも同じ直しを入れる。計に「発話の作り直し_一致／不一致」（話した試行で、作り直した発話が台帳の発話と同じか）を足した。
 ★ 以下は版 6 の説明のまま。
 ★★ 版 6（2026-09-26 昼、アストラさんの指示）：tools/l2scan_spoke.py の版 5（md5 95c98e43472d6f51127f7181eb1f9228、クラウドの Code が作ったもの）に、
    列を二つ足しただけ。版 5 の数え方（a/b・話・開・全・後・四・五・源・型）は一字も変えていない。
@@ -73,6 +74,18 @@ args=[a for a in sys.argv[1:] if not a.startswith("--")]
 LIMIT=int(sys.argv[sys.argv.index("--limit")+1]) if "--limit" in sys.argv else None
 if LIMIT is not None: args=[a for a in args if a!=str(LIMIT)]
 ARM,RD,SEEDP,OUT=args[0],args[1],args[2],pathlib.Path(args[3]); WK=int(args[4]) if len(args)>4 else 3
+# ★ 版 7（2026-09-26 夜）：走行の旗（走行根 RD の一つ上の flag.json）を読み、模型の写しを変える直しがオンなら、走査の中でも同じ直しを入れる。
+#   --fix-order（tools/fixorder.py）：map_graphs を差し替える。--fix2（tools/fix2.py）：支持（τ の門）だけを直し②の写しで数える。
+#   flag.json が無ければ、どちらもオフとみる（それより前の台帳）。
+_FLAGP=pathlib.Path(RD).resolve().parent/"flag.json"
+RUNFLAGS=json.load(open(_FLAGP)) if _FLAGP.exists() else {}
+FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2=bool(RUNFLAGS.get("fix2"))
+sys.path.insert(0,str(ROOT/"tools"))
+if FIX_ORDER:
+    import fixorder; fixorder.install()
+    import abm.sme as _sme; map_graphs=_sme.map_graphs     # ★ このファイルの名前も差し替えた写しにする
+if FIX2:
+    import fix2 as _fix2; _fix2.install()   # ★ 控え（REG）を読む _alignment_candidates の差し替えを入れる（支持の数え方）
 if OUT.exists(): sys.exit(f"既存 {OUT} あり。上書きしない")
 ORIG=ROOT/"analysis_pred_2026-09-22/l2scan2.py"
 SRC={"投影":"源投影","充填(生存行)":"源生充","充填(墓石)":"源墓充"}   # out_fixed の 4 つ目の値（path）
@@ -83,7 +96,11 @@ def sel_fixed(state,scene,Rn):
     if d is None or d.m_live==0: return None
     g=_definition_graph(d);al=map_graphs(g,scene).alignment
     if al is None: return None
-    sup=sum(1 for c in d.constituents if c.alive and c.relation.relation_id in al.relation_mapping)
+    sal=al
+    if FIX2 and _fix2.register(g,d,state.slot_history):   # ★ 版 7：直し②の支持（投影・穴埋めには今の写しを渡す。tools/fix2.py と同じ）
+        try: sal=map_graphs(g,scene).alignment
+        finally: _fix2.unregister(g)
+    sup=sum(1 for c in d.constituents if c.alive and c.relation.relation_id in sal.relation_mapping)
     return sup,d,g,al
 def out_fixed(state,scene,cfg,Rn,*,trial):
     s=sel_fixed(state,scene,Rn)
@@ -121,6 +138,7 @@ def one(p):
     TK=collections.defaultdict(set)                     # ★ 足した（2026-09-26 0:20）：R -> t より前に行を取り込んだ場面の型
     TK2=collections.defaultdict(set)                    # ★ 足した（2026-09-26 0:40、版 5）：R -> t より前に登録（誕生・同化。行が入らない同化も）があった場面の型
     COR=collections.defaultdict(set)                    # ★ 版 7：R -> t より前に ① か ② の罰を受けた場面の型
+    MISS=[]                                             # ★ 版 7：発話の作り直しが台帳と違った試行の例（10 まで）
     with gzip.open(p,"rt",encoding="utf-8") as f:
         next(f)
         for line in f:
@@ -130,6 +148,16 @@ def one(p):
             replay.advance({"prediction_order":t,"partial":wtr.target_graph_partial.to_dict(),
                             "f_fired":r["f_fired"],"held_out":wtr.held_out_edge.to_dict(),
                             "reg_del_events":r.get("reg_del_events") or []})
+            # ★ 版 7：走査の作り直しが模型と同じかの確かめ。話した試行（R_used・棄権なし）で、前の状態から R_used の発話を作り直し、
+            #   台帳の実際の発話（predicted_edge の述語と引数）と比べる。
+            if t>0 and r.get("R_used") is not None and r.get("coverage")==1 and r.get("predicted_edge"):
+                _ed=out_fixed(REC.state,wtr.target_graph_partial,cfg,r["R_used"],trial=t)[0]
+                _pe=r["predicted_edge"]
+                _ok=(_ed is not None and _ed.predicate==_pe["predicate"] and list(_ed.arguments)==list(_pe["arguments"]))
+                C["発話の作り直し_一致" if _ok else "発話の作り直し_不一致"]+=1
+                if not _ok and len(MISS)<10:
+                    MISS.append({"t":t,"R":r["R_used"],"台帳":[_pe["predicate"],list(_pe["arguments"])],"経路":r.get("prediction_path"),
+                                 "作り直し":[_ed.predicate,list(_ed.arguments)] if _ed is not None else None})
             REC.consume(r, verify_world=False)
             st=REC.state; scene=wtr.target_graph_partial
             for Rn,dd in st.definitions.items():
@@ -216,7 +244,7 @@ def one(p):
             a[k7+"_主張"]+=n; a[k7+"_"+tag]+=n
         a["話した型_全体"]=len(SPK[Rn])
         a["訂正された型_全体"]=len(COR[Rn])
-    return dict(cell=cell,seed=seed,秒=time.time()-t0,計=dict(C),
+    return dict(cell=cell,seed=seed,秒=time.time()-t0,計=dict(C),作り直しの不一致の例=MISS,
                 定義={Rn:{**dict(v),"最後の生存述語":LASTP.get(Rn,[])} for Rn,v in ACC.items()})
 def main():
     fs=sorted(glob.glob(f"{RD}/cells/*/seed*.jsonl.gz")); assert fs,RD
@@ -230,6 +258,7 @@ def main():
     json.dump({"__版":dict(script="tools/l2scan_spoke_v7.py",md5=hashlib.md5(pathlib.Path(__file__).read_bytes()).hexdigest(),
         写し元=str(ORIG),写し元md5=hashlib.md5(ORIG.read_bytes()).hexdigest() if ORIG.exists() else None,
         起動=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t0)),腕=ARM,走行根=RD,種=SEEDP,
+        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
         注="l2scan2 の a/b はそのまま。話内/話外＝t より前に話した（R_used かつ棄権しない）場面の型か。開内/開外＝そのうち f_fired のもの。源*＝主張の出どころ（投影・生きている行の充填・墓石の充填）。全*＝走行全体で決めた内外。後*＝後半（t>=870）の主張だけ。型*＝場面の型ごと。訂正内/訂正外＝t より前に、その型で ① か ② の罰を受けたか（版 7）。全訂正*・後訂正*・源*訂正* も同じ"),
         "台帳":res},open(OUT,"w"),ensure_ascii=False)
     print(f"  完了 {time.time()-t0:.0f}秒 -> {OUT}",flush=True)
