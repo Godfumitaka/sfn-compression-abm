@@ -14,7 +14,7 @@ import gzip, hashlib, json, os, pathlib, shutil, subprocess, sys, time
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MAC = pathlib.Path("/Users/tatsu-admin/sfn/sfn-compression-abm")
-KEEP = {1, 2}
+KEEP = {int(x) for x in os.environ.get("PROD_KEEP_SEEDS", "1 2").split()}   # ★ 残す種（既定 1・2。明日の並びの s21 の腕は 21・22 を渡す）
 
 
 def body_sha(p):

@@ -140,7 +140,7 @@ kept = sorted({(r_["cell"], r_["seed"]) for r_ in sha if not r_["deleted"]})
     f"- 旗：{flagdesc}",
     f"- コード：{desc}（{commit}）",
     f"- 台帳：{len(posts)} 本（解析と sha の控えが済んだもの）。台帳本体は上げていない。本体の sha256 は sha256.jsonl。",
-    f"- 残した台帳（seed001・002）：{len(kept)} 本（走らせた機械の {arm_root}/ledgers）",
+    f"- 残した台帳（その腕の最初の二つの種）：{len(kept)} 本（走らせた機械の {arm_root}/ledgers）",
     "- 表：defs_spoke7_*.csv.gz（定義の表、版 7 の列まで）、まとめ.md（台帳ごとの数え・物差しごとの世界偽の率・通過群の見ていない型の誤りの分布）、counts.json",
     f"- 図：{fig.name if fig else '無し（Rscript が無い、または描けなかった）'}",
     f"- 作った時刻：{time.strftime('%Y-%m-%d %H:%M')}", ""]), encoding="utf-8")

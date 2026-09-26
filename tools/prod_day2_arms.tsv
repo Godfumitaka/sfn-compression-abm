@@ -1,0 +1,27 @@
+# 明日（2026-09-27）の並び。上から優先。腕ごとに全部（設定の種 × セル）を走らせてから次へ。直しの旗は v3.3-main 一式（tools/prod_day2.sh の FIXES）。
+# 列（タブ区切り）：機械	腕の名前	設定ファイル	基準（NSIM）	腕の種類	試行数
+# 腕の種類：new ＝ 主（ρ＝0.5、旗 A・B・C）／rho025 ＝ ρ＝0.25（B・C オン）／rho0 ＝ ρ＝0（B・C オン）／rho10 ＝ ρ＝1.0（B・C オン）／cur ＝ 今の同化（A・B・C オフ）
+desktop	v33new_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	new	1740
+desktop	v33rho025_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	rho025	1740
+desktop	v33new_n60_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.6	new	1740
+desktop	v33new_n80_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.8	new	1740
+desktop	v33new_n70_hide_a1	config/sweep_b2_hide_s1_alpha1_2026-09-27.json	0.7	new	1740
+desktop	v33new_n70_hide_T870	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	870
+desktop	v33new_n70_hide_T3480	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	3480
+desktop	v33new_n70_hide_th19	config/sweep_b2_hide_s1_th19_2026-09-27.json	0.7	new	1740
+desktop	v33new_n70_hide_th25	config/sweep_b2_hide_s1_th25_2026-09-27.json	0.7	new	1740
+desktop	v33rho0_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	rho0	1740
+desktop	v33cur_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	cur	1740
+desktop	v33rho10_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	rho10	1740
+desktop	v33new_n70_hide_ho2off	config/sweep_b2_hide_s1_ho2off_2026-09-27.json	0.7	new	1740
+mac	v33new_n70_f025	config/sweep_b2_f025_s1_2026-09-22.json	0.7	new	1740
+mac	v33rho0_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho0	1740
+mac	v33rho0_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	rho0	1740
+mac	v33rho0_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho0	1740
+mac	v33cur_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	cur	1740
+mac	v33cur_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	cur	1740
+mac	v33cur_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	cur	1740
+mac	v33rho025_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho025	1740
+mac	v33rho025_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho025	1740
+mac	v33rho10_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho10	1740
+mac	v33rho10_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho10	1740
