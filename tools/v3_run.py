@@ -8,6 +8,10 @@
    --extend-rule R  v3.1 の取り込み（tools/v31.py）：v2（今のまま、既定）／profit（v3.1a、Σ(V−θ′) が増える限り一本ずつ足す）／none（v3.1b、足さない）
    --charge1 C      v3.1 の ① の罰（tools/v31.py）：v2（今のまま、既定）／d32（投影は予測した行だけ・穴埋めは slot_history を一つ減らす）
    --dump-slot-history  走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（v3.1-slotdump。記録だけ）
+   --ident-rho ρ  旗A（二つ目の実験、2026-09-26）両側で測る：比 ＝ 点(定義,相手) ÷（点(定義,定義) ＋ ρ × 相手の側だけの点）。tools/v32.py
+   --ident-argmax 旗B 候補すべての比を出し、一番高い定義が基準に届けば同化・届かなければ誕生（同点は今の走査順）。tools/v32.py
+   --ident-commons 旗C 照らす相手を、土台と今の場面で一致した構造（案 C1）にする。tools/v32.py
+   --ident-shadow 確かめ：元の同定も毎回呼んで比べる（旗A・B・C が切れていれば、違えば止める）
    --lowmem       状態の正準形の控えを、前の試行で触った物だけに絞る（tools/lowmem.py）。★ 2026-09-25 から既定。
                   7 本で台帳が一字一句同じと確かめた。外すときは --no-lowmem
    --compare-to D 指定した走行根の同じ台帳と、全試行の指紋・台帳全体を比べる（旗の組み合わせによらず）
@@ -212,6 +216,13 @@ def _install(side_path: Path, nohash: bool, prune: bool = False, extgreedy: bool
 
     def wrapped(state, base, target, alignment, trial, **kw):
         name = kw.get("name")
+        v32m = sys.modules.get("v32")
+        if v32m is not None and v32m.STATS.get("commons") and v32m.STATS.get("shadow"):
+            # ★ 確かめ（旗C ＋ shadow のときだけ）：同定に使った共通構造の行 ＝ m1 の対の今の場面の側の行（2 行以上のとき）。誕生の削りより前で見る
+            pool_ids = frozenset(t.relation_id for _, t in _pool_pairs(base, target, alignment))
+            if len(pool_ids) >= 2 and pool_ids != v32m.LAST.get("commons_ids"):
+                raise RuntimeError(f"共通構造が m1 の対と食い違う 試行 {trial}")
+            v32m.STATS["commons_checked"] = v32m.STATS.get("commons_checked", 0) + (len(pool_ids) >= 2)
         if "v31" in sys.modules:
             sys.modules["v31"].CFG["target"] = target   # ★ v3.1a の席の照合に使う（今の場面）
         renamed_from = None
@@ -295,7 +306,16 @@ def worker(task: dict) -> dict:
         fx = task["cfg"]["fixed"]
         v31.install(task.get("extend_rule", "v2"), task.get("charge1", "v2"), float(task["theta_prime"]),
                     float(fx.get("w", 0.0)), float(fx.get("kappa", 1.0)), float(fx.get("beta", 0.0)), fo=fo)
+    if (task.get("ident_rho") is not None or task.get("ident_argmax") or task.get("ident_commons")
+            or task.get("ident_shadow")):
+        # ★ 二つ目の実験（2026-09-26）：同化先の決め方の旗 A・B・C（tools/v32.py）
+        sys.path.insert(0, str(ROOT / "tools"))
+        import v32
+        v32.install(task.get("ident_rho"), bool(task.get("ident_argmax")), bool(task.get("ident_shadow")),
+                    bool(task.get("ident_commons")))
     rec = sweep.run_one(task)
+    if "v32" in sys.modules:
+        rec["v32"] = dict(sys.modules["v32"].STATS)
     if "v31" in sys.modules:
         rec["v31"] = dict(sys.modules["v31"].STATS)
     if task.get("lowmem"):
@@ -369,6 +389,14 @@ def main() -> None:
     ap.add_argument("--extend-rule", default="v2", choices=["v2", "profit", "none"])
     ap.add_argument("--charge1", default="v2", choices=["v2", "d32"])
     ap.add_argument("--trial-count", type=int, default=None, help="試しの短い走行だけに使う（比べはしない）")
+    ap.add_argument("--ident-rho", type=float, default=None,
+                    help="旗A 両側で測る：比 ＝ 点(定義,相手) ÷（点(定義,定義) ＋ ρ × 相手の側だけの点）（tools/v32.py）")
+    ap.add_argument("--ident-argmax", action="store_true",
+                    help="旗B 一番高い定義を選び、基準に届けば同化・届かなければ誕生（tools/v32.py）")
+    ap.add_argument("--ident-commons", action="store_true",
+                    help="旗C 照らす相手を、今の場面全体ではなく、土台と今の場面で一致した構造（案 C1）にする（tools/v32.py）")
+    ap.add_argument("--ident-shadow", action="store_true",
+                    help="確かめ：元の同定も毎回呼んで比べる（旗A・B が切れていれば、違えば止める）")
     ap.add_argument("--dump-slot-history", action="store_true",
                     help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
     args = ap.parse_args()
@@ -400,7 +428,8 @@ def main() -> None:
     seed = sweep.load_seed(cfg["seed_file"])
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
-               and args.extend_rule == "v2" and args.charge1 == "v2")
+               and args.extend_rule == "v2" and args.charge1 == "v2"
+               and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow)
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
@@ -409,17 +438,21 @@ def main() -> None:
               "nohash": args.nohash, "prune": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
               "extend_rule": args.extend_rule, "charge1": args.charge1,
               "dump_slot_history": args.dump_slot_history,
+              "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
+              "ident_commons": args.ident_commons,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
                                                     "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,
+                                                    "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
+                                                    "ident_commons": args.ident_commons,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
