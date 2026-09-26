@@ -1,9 +1,9 @@
 #!/bin/bash
 # 本番の流れの台本（2026-09-26 夜、アストラさんの指示）。デスクトップ（WSL の Ubuntu）とマックの両方で使う。
 #
-# 腕の並び：ARMS の順に、腕ごとに全部（20 種 × 4 セル）を走らせてから次の腕へ。
-#   デスクトップ（NSIM は決まってから）：ARMS="new:hide rho0:hide cur:hide rho10:hide new:f00 new:f10 rho0:f00 rho0:f10 cur:f00 cur:f10"
-#   マック（NSIM 0.95）：ARMS="new:hide rho0:hide cur:hide rho10:hide"
+# 腕の並び：ARMS の順に、腕ごとに全部（20 種 × 4 セル）を走らせてから次の腕へ。基準は 0.7（2026-09-26 夜の決定）。
+#   デスクトップ（並列 14）：ARMS="new:hide rho0:hide cur:hide rho10:hide"（既定）
+#   マック（並列 6）：ARMS="new:f00 new:hide new:f10"（マックの hide はデスクトップの主の hide と同じ設定。二台の分布を比べるため）
 #   腕の種類：new ＝ 主（旗 A・B・C、ρ＝0.5）／rho0 ＝ ρ だけ 0（B・C オン）／cur ＝ 今の同化（A・B・C オフ）／rho10 ＝ ρ＝1.0（B・C オン）
 # 台帳が一本できるたびに（tools/prod_post_one.py）：台帳を読む解析を全部かける → 本体の sha256 を控える → 台帳を消す（seed001・002 は残す）。
 # ディスクの空きが MINFREE_GB（既定 20）を切ったら、新しい走行を始めずに待つ（解析と消すのは続ける）。
@@ -13,8 +13,8 @@
 # ★ 決まりごとの検査の旗（--rename-check・--ident-shadow）は付けない。--dump-slot-history は付ける。
 #
 # 使い方（リポジトリの根で）
-#   NSIM=0.8 JOBS=14 OUT=~/v32prod PY=$(uv python find 3.12.13) bash tools/prod_run.sh          … デスクトップ
-#   NSIM=0.95 JOBS=6 OUT=~/v32prod ARMS="new:hide rho0:hide cur:hide rho10:hide" bash tools/prod_run.sh   … マック
+#   NSIM=0.7 JOBS=14 OUT=~/v33prod PY=$(uv python find 3.12.13) bash tools/prod_run.sh                 … デスクトップ
+#   NSIM=0.7 JOBS=6 OUT=~/v33prod ARMS="new:f00 new:hide new:f10" bash tools/prod_run.sh                … マック
 #   DRY=1 を付けると、仕事の並びを書き出すだけ。
 # 変数
 #   NSIM（必須）・JOBS（並列の数）・OUT（出力の根）・PY・ARMS・SEEDS（既定 1〜20）・MINFREE_GB（既定 20）・DFPATH・HOST（既定 hostname）
@@ -25,14 +25,14 @@ cd "$(dirname "$0")/.."
 REPO=$(pwd)
 PY=${PY:-python3.12}
 : "${NSIM:?NSIM（基準）を渡してください（例 NSIM=0.8）}"
-OUT=${OUT:-$HOME/v32prod}
+OUT=${OUT:-$HOME/v33prod}
 JOBS=${JOBS:-6}
-ARMS=${ARMS:-"new:hide rho0:hide cur:hide rho10:hide new:f00 new:f10 rho0:f00 rho0:f10 cur:f00 cur:f10"}
+ARMS=${ARMS:-"new:hide rho0:hide cur:hide rho10:hide"}
 SEEDS=${SEEDS:-$(seq 1 20)}
 MINFREE_GB=${MINFREE_GB:-20}
 if [[ -z "${DFPATH:-}" ]]; then if [[ -d /mnt/c ]]; then DFPATH=/mnt/c; else DFPATH=$OUT; fi; fi
 HOST=${HOST:-$(hostname -s 2>/dev/null || hostname)}
-FIXES=${FIXES:-"--fix2 --fix-order"}
+FIXES=${FIXES:-"--fix2-full --fix-order --proj-first"}   # ★ 直し②（予測と会計にも）・名前の順番の直し・穴埋めの同点で投影を捨てない
 EXTRA=${EXTRA:-}
 RESULTS=${RESULTS:-$OUT/results}
 DRY=${DRY:-0}
@@ -93,7 +93,7 @@ say "腕 $ARMS"
 say "旗 $BASE $FIXES --nsim $NSIM  EXTRA「$EXTRA」"
 [[ "$DRY" == "1" || "${NOPUSH:-0}" == "1" ]] || setup_results
 for spec in $ARMS; do
-  k=${spec%%:*}; f=${spec#*:}; arm="v32${k}_$(nname "$NSIM")_${f}"
+  k=${spec%%:*}; f=${spec#*:}; arm="v33${k}_$(nname "$NSIM")_${f}"
   JL=$(mktemp)
   for s in $SEEDS; do for c in $CELLS; do echo "$arm|$k|$f|$s|${c%%:*}|${c#*:}" >> "$JL"; done; done
   if [[ "$DRY" == "1" ]]; then echo "$arm：仕事 $(wc -l < "$JL" | tr -d ' ')（旗 $(ident "$k")）"; rm -f "$JL"; continue; fi
