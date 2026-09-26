@@ -11,6 +11,11 @@
    --lowmem       状態の正準形の控えを、前の試行で触った物だけに絞る（tools/lowmem.py）。★ 2026-09-25 から既定。
                   7 本で台帳が一字一句同じと確かめた。外すときは --no-lowmem
    --compare-to D 指定した走行根の同じ台帳と、全試行の指紋・台帳全体を比べる（旗の組み合わせによらず）
+   --fast         台帳の記録を速くする（tools/fastledger.py。lowmem の控え方を含む）。★ 台帳は一字一句同じ（2026-09-26、
+                  v3.1a・v3.1b・v3 の各 1 本で、展開した台帳の sha256 が旗なしと一致することを確かめた）
+   --no-public-history  public_history を状態から外す（tools/nohist.py）。★ 指紋と state_snapshot が変わるので、
+                  今までの台帳と一字一句を比べる確かめでは付けない（本番の走行だけで使う）。
+                  外した版の指紋は「外す前の状態から public_history の欄を除いたもの」の指紋と全試行で一致する（2026-09-26）
    --greedy       生まれ方：共通構造の全体から、外すと儲けの合計 Σ(V−θ′) が一番増える行を一本ずつ外す（2026-09-25 決定）
    --extgreedy    比べ：取り込み（空いた位置への足し込み）で、儲けの合計が増える限り一本ずつ足す
 ★ 全部オフ（--nohash なし・--nsim なし・--vt なし・--greedy なし）のときだけ、既存の台帳（runs/）と全試行の指紋を比べ、
@@ -285,7 +290,17 @@ def worker(task: dict) -> dict:
     side_dir.mkdir(parents=True, exist_ok=True)
     fo = _install(side_dir / f"seed{task['seed']:03d}.jsonl", task["nohash"],
                   task.get("prune", False), task.get("extgreedy", False), float(task["theta_prime"]))
-    if task.get("lowmem"):
+    if task.get("nohist"):
+        # ★ 2026-09-26 の試し：public_history を状態から外す（tools/nohist.py）。lowmem・fast より先に入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import nohist
+        nohist.install()
+    if task.get("fast"):
+        # ★ 2026-09-26 の試し：台帳の記録を速くする書き直し（tools/fastledger.py）。lowmem の控え方を含むので、lowmem の代わりに入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import fastledger
+        fastledger.install()
+    elif task.get("lowmem"):
         sys.path.insert(0, str(ROOT / "tools"))
         import lowmem
         lowmem.install()
@@ -298,8 +313,11 @@ def worker(task: dict) -> dict:
     rec = sweep.run_one(task)
     if "v31" in sys.modules:
         rec["v31"] = dict(sys.modules["v31"].STATS)
-    if task.get("lowmem"):
+    if task.get("fast"):
+        rec["fast"] = {"evictions": fastledger.STATE["evictions"], "max_cache": fastledger.STATE["max_cache"]}
+    elif task.get("lowmem"):
         rec["lowmem"] = {"evictions": lowmem.STATE["evictions"], "max_cache": lowmem.STATE["max_cache"]}
+    rec["nohist"] = bool(task.get("nohist"))
     import resource
     rec["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 1)  # macOS はバイト
     alive_end = _LAST_ALIVE.pop("__alive__", [])
@@ -369,6 +387,9 @@ def main() -> None:
     ap.add_argument("--extend-rule", default="v2", choices=["v2", "profit", "none"])
     ap.add_argument("--charge1", default="v2", choices=["v2", "d32"])
     ap.add_argument("--trial-count", type=int, default=None, help="試しの短い走行だけに使う（比べはしない）")
+    ap.add_argument("--fast", action="store_true", help="2026-09-26 の試し：台帳の記録を速くする（台帳は同じ。tools/fastledger.py）")
+    ap.add_argument("--no-public-history", dest="nohist", action="store_true",
+                    help="2026-09-26 の試し：public_history を状態から外す（指紋と state_snapshot が変わる。tools/nohist.py）")
     ap.add_argument("--dump-slot-history", action="store_true",
                     help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
     args = ap.parse_args()
@@ -400,7 +421,8 @@ def main() -> None:
     seed = sweep.load_seed(cfg["seed_file"])
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
-               and args.extend_rule == "v2" and args.charge1 == "v2")
+               and args.extend_rule == "v2" and args.charge1 == "v2"
+               and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
@@ -409,12 +431,14 @@ def main() -> None:
               "nohash": args.nohash, "prune": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
               "extend_rule": args.extend_rule, "charge1": args.charge1,
               "dump_slot_history": args.dump_slot_history,
+              "fast": args.fast, "nohist": args.nohist,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
                                                     "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,
+                                                    "fast": args.fast, "nohist": args.nohist,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
