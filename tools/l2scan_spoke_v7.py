@@ -79,7 +79,7 @@ ARM,RD,SEEDP,OUT=args[0],args[1],args[2],pathlib.Path(args[3]); WK=int(args[4]) 
 #   flag.json が無ければ、どちらもオフとみる（それより前の台帳）。
 _FLAGP=pathlib.Path(RD).resolve().parent/"flag.json"
 RUNFLAGS=json.load(open(_FLAGP)) if _FLAGP.exists() else {}
-FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2=bool(RUNFLAGS.get("fix2")); PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
+FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX2_FULL=bool(RUNFLAGS.get("fix2_full")); FIX2=bool(RUNFLAGS.get("fix2")) or FIX2_FULL; PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
 sys.path.insert(0,str(ROOT/"tools"))
 if FIX_ORDER:
     import fixorder; fixorder.install()
@@ -101,7 +101,7 @@ def sel_fixed(state,scene,Rn):
         try: sal=map_graphs(g,scene).alignment
         finally: _fix2.unregister(g)
     sup=sum(1 for c in d.constituents if c.alive and c.relation.relation_id in sal.relation_mapping)
-    return sup,d,g,al
+    return sup,d,g,(sal if FIX2_FULL else al)   # ★ --fix2-full の台帳では、投影・穴埋めにも直し②の写しを渡す（模型と同じ）
 def out_fixed(state,scene,cfg,Rn,*,trial):
     s=sel_fixed(state,scene,Rn)
     if s is None: return (None,"no_definition",None,None)
@@ -258,7 +258,7 @@ def main():
     json.dump({"__版":dict(script="tools/l2scan_spoke_v7.py",md5=hashlib.md5(pathlib.Path(__file__).read_bytes()).hexdigest(),
         写し元=str(ORIG),写し元md5=hashlib.md5(ORIG.read_bytes()).hexdigest() if ORIG.exists() else None,
         起動=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t0)),腕=ARM,走行根=RD,種=SEEDP,
-        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"proj_first":PROJ_FIRST,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
+        走行の旗={"fix_order":FIX_ORDER,"fix2":FIX2,"fix2_full":FIX2_FULL,"proj_first":PROJ_FIRST,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
         注="l2scan2 の a/b はそのまま。話内/話外＝t より前に話した（R_used かつ棄権しない）場面の型か。開内/開外＝そのうち f_fired のもの。源*＝主張の出どころ（投影・生きている行の充填・墓石の充填）。全*＝走行全体で決めた内外。後*＝後半（t>=870）の主張だけ。型*＝場面の型ごと。訂正内/訂正外＝t より前に、その型で ① か ② の罰を受けたか（版 7）。全訂正*・後訂正*・源*訂正* も同じ"),
         "台帳":res},open(OUT,"w"),ensure_ascii=False)
     print(f"  完了 {time.time()-t0:.0f}秒 -> {OUT}",flush=True)

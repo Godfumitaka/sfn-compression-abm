@@ -16,6 +16,7 @@
    --fix-order    名前の順番の直し（2026-09-26 夜）：親の中身として一緒に対になった子も、述語が一致していれば、
                   自分の番で対にしたのと同じ点を数える。map_graphs を差し替え、使っている所すべてに効く。tools/fixorder.py
    --rename-check 確かめ：同定のたびに述語の名前を付け替えて（二通り）判断をやり直し、違った回を数える（記録だけ）
+   --fix2-full    直し②を予測と会計にも広げる（2026-09-26 夜）：選んだ定義の投影・穴埋め・会計にも直し②の写しを渡す。--fix2 を含む
    --fix2         直し②（2026-09-26 夕）：墓石を子に持つ高階の行を、墓石の席の slot_history で照らす。
                   見えている子は、その述語が席の履歴に回数 1 以上なら当てはまる。伏せられた子は「見えていない枠」。
                   同定と、話すときの支持（定義の選び方・τ の門）にだけ効く。tools/fix2.py
@@ -338,19 +339,19 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import fixorder
         fixorder.install()
-    if task.get("fix2"):
+    if task.get("fix2") or task.get("fix2_full"):
         # ★ 直し②（2026-09-26 夕）：墓石を子に持つ高階の行の照らし方（tools/fix2.py）。話すときの支持はここで差し替え、
-        #   同定の側は tools/v32.py の同定の中で使う（下で v32 を必ず入れる）。
+        #   同定の側は tools/v32.py の同定の中で使う（下で v32 を必ず入れる）。--fix2-full は予測と会計にも同じ写しを渡す。
         sys.path.insert(0, str(ROOT / "tools"))
         import fix2
-        fix2.install()
+        fix2.install(full=bool(task.get("fix2_full")))
     if (task.get("ident_rho") is not None or task.get("ident_argmax") or task.get("ident_commons")
-            or task.get("ident_shadow") or task.get("fix2") or task.get("rename_check")):
+            or task.get("ident_shadow") or task.get("fix2") or task.get("fix2_full") or task.get("rename_check")):
         # ★ 二つ目の実験（2026-09-26）：同化先の決め方の旗 A・B・C（tools/v32.py）
         sys.path.insert(0, str(ROOT / "tools"))
         import v32
         v32.install(task.get("ident_rho"), bool(task.get("ident_argmax")), bool(task.get("ident_shadow")),
-                    bool(task.get("ident_commons")), bool(task.get("fix2")), bool(task.get("rename_check")))
+                    bool(task.get("ident_commons")), bool(task.get("fix2") or task.get("fix2_full")), bool(task.get("rename_check")))
     rec = sweep.run_one(task)
     if "v32" in sys.modules:
         rec["v32"] = dict(sys.modules["v32"].STATS)
@@ -450,6 +451,8 @@ def main() -> None:
                     help="名前の順番の直し：親の中身として一緒に対になった子も、述語が一致すれば自分の番の点を数える（tools/fixorder.py）")
     ap.add_argument("--rename-check", action="store_true",
                     help="確かめ：同定のたびに、述語の名前を付け替えて判断をやり直し、違った回を数える（記録だけ。tools/v32.py）")
+    ap.add_argument("--fix2-full", action="store_true",
+                    help="直し②を予測と会計にも広げる（選び方・投影・穴埋め・会計が同じ写しを使う。--fix2 を含む。tools/fix2.py）")
     ap.add_argument("--fix2", action="store_true",
                     help="直し②：墓石を子に持つ高階の行を、墓石の席の slot_history で照らす（同定と話すときの支持。tools/fix2.py）")
     ap.add_argument("--fast", action="store_true", help="2026-09-26 の試し：台帳の記録を速くする（台帳は同じ。tools/fastledger.py）")
@@ -488,7 +491,7 @@ def main() -> None:
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
                and args.extend_rule == "v2" and args.charge1 == "v2"
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
-               and not args.fix2 and not args.fix_order and not args.rename_check and not args.proj_first
+               and not args.fix2 and not args.fix2_full and not args.fix_order and not args.rename_check and not args.proj_first
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -502,6 +505,7 @@ def main() -> None:
               "ident_commons": args.ident_commons,
               "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
               "fix_order": args.fix_order, "rename_check": args.rename_check, "proj_first": args.proj_first,
+              "fix2_full": args.fix2_full,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -512,11 +516,12 @@ def main() -> None:
                                                     "ident_commons": args.ident_commons,
                                                     "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
                                                     "fix_order": args.fix_order, "rename_check": args.rename_check, "proj_first": args.proj_first,
+                                                    "fix2_full": args.fix2_full,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix_order={args.fix_order} proj_first={args.proj_first} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} proj_first={args.proj_first} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):

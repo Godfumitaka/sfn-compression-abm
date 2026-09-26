@@ -16,7 +16,11 @@
   入れる所は二つだけ（アストラさんの指示）
     1 同化の照らし（同定）：tools/v32.py の同定の中で、定義のグラフに墓石の子の情報を付ける（自己の点にも同じ規則が効く）。
     2 話すときの支持：agent_runtime._select_definition を差し替え、支持（と支持比による定義の選び方・τ の門）だけを直し②の写しで数える。
-      ★ 選んだ定義の投影・穴埋め・会計に渡す写しは、今と同じ写し（直し②なし）のまま。
+      ★ --fix2 では、選んだ定義の投影・穴埋め・会計に渡す写しは、今と同じ写し（直し②なし）のまま。
+    3 予測と会計（--fix2-full、2026-09-26 夜、アストラさんの決定）：選んだ定義の写しとして、直し②の写しをそのまま渡す。
+      投影（agent_runtime.py:125-130）・穴埋め（:135-146）・会計（loop.py:205 の definition_alignment。classify_row・②・①）が同じ写しを使う。
+      → 墓石を子に持つ親の行は、子が見えていて席の履歴にあれば、選ぶときも会計でも「当てはまる」（充足）。
+      → その墓石の子の行は、見えている関係に写るので、穴埋め（filling.py:175-196「写った先が見えている行は埋めない」）の対象から外れる。
   墓石の子の無い定義のグラフは、今と同じ（同じ写しを使う）。
 仕組み：墓石の子の情報は、グラフの物そのもの（id と参照の一致）に結びつけて REG に控え、差し替えた _alignment_candidates が読む。
   控えは使い終わったらすぐ消す。REG に無いグラフの写しは、元の _alignment_candidates をそのまま呼ぶ。
@@ -63,14 +67,14 @@ def unregister(graph) -> None:
     REG.pop(id(graph), None)
 
 
-def install() -> None:
+def install(full: bool = False) -> None:
     import abm.agent_runtime as ar
     import abm.sme as sme
     from abm.sme import AlignmentCandidate
 
     STATS.clear()
     STATS.update(registered=0, tomb_child_links=0, visible_ok=0, visible_ng=0, hidden=0, entity_ng=0,
-                 select_calls=0, select_changed_support=0)
+                 select_calls=0, select_changed_support=0, full=full)
     original = sme._alignment_candidates
 
     def _alignment_candidates(base_graph, partial_graph):
@@ -161,7 +165,8 @@ def install() -> None:
                 old = sum(1 for c in definition.constituents
                           if c.alive and c.relation.relation_id in alignment.relation_mapping)
                 STATS["select_changed_support"] += int(old != support)
-            ranked.append((support / definition.m_live, support, definition, graph, alignment))
+            # ★ --fix2-full：予測と会計にも直し②の写しを渡す。--fix2：今と同じ写しを渡す
+            ranked.append((support / definition.m_live, support, definition, graph, support_alignment if full else alignment))
         if not ranked:
             return None
         ranked.sort(
