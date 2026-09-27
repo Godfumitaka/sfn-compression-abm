@@ -10,6 +10,11 @@ v3.4 の --fill-unseen（tools/fillunseen.py）とは別の旗。二つを一緒
   同じ物の組にほかの述語の関係が見えていても、選んだ述語そのものが見えていなければ、今までどおり埋める（伏せ辺を当てる穴埋めは残る）。
   述語を選ぶ段（候補の分布・同点・乱数の引き）は今のまま。同点のときは今も述語を選ばない（most_frequent が None）ので、そこは変わらない。
   埋めなかった席を引数に持つ上の階の行は、その席を使えないので埋まらない（v3.4 と同じ扱い）。その数を STATS["skipped_with_parent_waiting"] に数える（記録だけ）。
+★ v3.6（2026-09-27、control/判断_0927_1630.md の 1）：旗 --fill-pass-visible（--fill-norestate と一緒に使う。install(pass_visible=True)）。
+  上の判定で埋めなかった席について、その見えている関係（述語も引数の組も同じもの）を返す（埋めた行には入れない）。
+  その席を引数に持つ上の階の行は、見えている関係を子として使える。形は、行の元の述語が見えているときの今の扱い（abm/filling.py:190-200）と同じ。
+  旗を切れば（pass_visible=False）、v3.5 と同じ（None を返す）。数え（記録だけ）：parent_blocked（上の階の行が待っていたのに None を返した回）・
+  passed_visible_to_parent（上の階の行が待っていて見えている関係を渡した回）・parent_filled_via_passed（渡した見えている関係を子に持つ行を埋めた回）。
 入れ方：下の fill_missing_slots は abm/filling.py:118-263 の写し（md5 39837cf1d3fa33bb33324302853ad554 の版）に、上の判定の 9 行（説明の 3 行を含む）と数えの 1 行を足しただけ。
   install() で abm.filling・abm.agent_runtime・abm.loop の名前 fill_missing_slots をこの写しに差し替える（予測・穴埋め・反実仮想の予測のすべて）。
   ★ tools/projfirst.py は install の時点の agent_runtime.fill_missing_slots を包むので、この install を先に入れる（tools/v3_run.py）。
@@ -25,7 +30,9 @@ from abm.filling import (
     _same_order, most_frequent, sample_predicate, slot_signature,
 )
 
-STATS: dict = {"calls": 0, "skipped_restatement": 0, "skipped_with_parent_waiting": 0}
+STATS: dict = {"calls": 0, "skipped_restatement": 0, "skipped_with_parent_waiting": 0,
+               "parent_blocked": 0, "passed_visible_to_parent": 0, "parent_filled_via_passed": 0}
+CFG: dict = {"pass_visible": False}   # ★ v3.6：True なら、言い直しで埋めなかった席の見えている関係を上の階の行に渡す
 
 
 def fill_missing_slots(
@@ -77,6 +84,7 @@ def fill_missing_slots(
         for constituent in definition.constituents
     }
     filled_by_id: dict[str, Relation] = {}
+    passed_ids: set[str] = set()   # ★ v3.6 の記録だけ：この呼び出しで上の階の行に渡した見えている関係の ID
     visiting: set[str] = set()
 
     def fill(constituent: Constituent) -> Relation | None:
@@ -155,11 +163,23 @@ def fill_missing_slots(
         # ★ v3.5 --fill-norestate（2026-09-27 判断 1、案 B）：選んだ述語が、写した位置（引数の組）で見えている関係と同じ
         #   （述語も引数の組も同じ）なら、その席は埋めない（選び直さない）。同じ物の組にほかの述語の関係が見えていても、
         #   選んだ述語そのものが見えていなければ、今までどおり埋める。
-        if any(item.predicate == predicate and item.arguments == mapped_arguments for item in target.relations):
+        visible_chosen = next(
+            (item for item in target.relations if item.predicate == predicate and item.arguments == mapped_arguments),
+            None,
+        )
+        if visible_chosen is not None:
             visiting.remove(relation_id)
             STATS["skipped_restatement"] += 1
             if visiting:
                 STATS["skipped_with_parent_waiting"] += 1   # ★ 記録だけ。この席を引数に持つ上の階の行が、埋めるのを待っていた
+            if CFG["pass_visible"]:
+                # ★ v3.6 --fill-pass-visible：見えている関係を返す（埋めた行には入れない）。上の階の行はそれを子として使える
+                if visiting:
+                    STATS["passed_visible_to_parent"] += 1
+                    passed_ids.add(visible_chosen.relation_id)
+                return visible_chosen
+            if visiting:
+                STATS["parent_blocked"] += 1
             return None
         filled = Relation(
             relation_id=(
@@ -169,6 +189,8 @@ def fill_missing_slots(
             predicate=predicate,
             arguments=mapped_arguments,
         )
+        if passed_ids and any(argument in passed_ids for argument in mapped_arguments):
+            STATS["parent_filled_via_passed"] += 1   # ★ v3.6 の記録だけ
         filled_by_id[relation_id] = filled
         relations.append(filled)
         indices.append(constituent.slot_index)
@@ -186,12 +208,14 @@ def fill_missing_slots(
     )
 
 
-def install() -> None:
+def install(pass_visible: bool = False) -> None:
     import abm.agent_runtime as ar
     import abm.filling as fl
     import abm.loop as lp
 
-    STATS.update(calls=0, skipped_restatement=0, skipped_with_parent_waiting=0)
+    STATS.update(calls=0, skipped_restatement=0, skipped_with_parent_waiting=0,
+                 parent_blocked=0, passed_visible_to_parent=0, parent_filled_via_passed=0)
+    CFG["pass_visible"] = bool(pass_visible)
     fl.fill_missing_slots = fill_missing_slots
     ar.fill_missing_slots = fill_missing_slots
     lp.fill_missing_slots = fill_missing_slots

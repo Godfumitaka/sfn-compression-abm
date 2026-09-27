@@ -1,0 +1,45 @@
+# v3.6 の走らせ直しの並び（2026-09-27、control/判断_0927_1630.md）。腕は v3.4・v3.5 と同じで、名前の頭を v36 にした。直しの旗は v3.6 一式（tools/prod_v36.sh の FIXES）。
+# 列（タブ区切り）：機械	腕の名前	設定ファイル	基準（NSIM）	腕の種類	試行数	残す（all＝台帳を全部残す／2＝最初の二つの種だけ）
+# 腕の種類：new ＝ 主（ρ＝0.5、旗 A・B・C）／rho025 ＝ ρ＝0.25（B・C オン）／rho0 ＝ ρ＝0（B・C オン）／rho10 ＝ ρ＝1.0（B・C オン）／cur ＝ 今の同化（A・B・C オフ）
+# 確かめの種（s21・s41）はすべてデスクトップ。台帳：デスクトップの主の hide の s1・s21 は全部残す。マックは全部残す。
+desktop	v36new_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all
+desktop	v36new_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	new	1740	all
+desktop	v36rho0_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	rho0	1740	2
+desktop	v36cur_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	cur	1740	2
+desktop	v36rho025_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	rho025	1740	2
+desktop	v36rho10_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	rho10	1740	2
+desktop	v36rho0_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	rho0	1740	2
+desktop	v36cur_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	cur	1740	2
+desktop	v36rho025_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	rho025	1740	2
+desktop	v36rho10_n70_hide_s21	config/sweep_b2_hide_s21_2026-09-22.json	0.7	rho10	1740	2
+desktop	v36new_n70_f00_s21	config/sweep_b2_f00_s21_2026-09-22.json	0.7	new	1740	2
+desktop	v36new_n70_f10_s21	config/sweep_b2_f10_s21_2026-09-22.json	0.7	new	1740	2
+desktop	v36new_n70_hide_s41	config/sweep_b2_hide_s41_2026-09-27.json	0.7	new	1740	2
+desktop	v36rho0_n70_hide_s41	config/sweep_b2_hide_s41_2026-09-27.json	0.7	rho0	1740	2
+desktop	v36cur_n70_hide_s41	config/sweep_b2_hide_s41_2026-09-27.json	0.7	cur	1740	2
+desktop	v36rho10_n70_hide_s41	config/sweep_b2_hide_s41_2026-09-27.json	0.7	rho10	1740	2
+desktop	v36new_n60_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.6	new	1740	2
+desktop	v36new_n80_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.8	new	1740	2
+desktop	v36new_n70_hide_a1	config/sweep_b2_hide_s1_alpha1_2026-09-27.json	0.7	new	1740	2
+desktop	v36new_n70_hide_T870	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	870	2
+desktop	v36new_n70_hide_T3480	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	3480	2
+desktop	v36new_n70_hide_th19	config/sweep_b2_hide_s1_th19_2026-09-27.json	0.7	new	1740	2
+desktop	v36new_n70_hide_th25	config/sweep_b2_hide_s1_th25_2026-09-27.json	0.7	new	1740	2
+desktop	v36new_n70_hide_ho2off	config/sweep_b2_hide_s1_ho2off_2026-09-27.json	0.7	new	1740	2
+mac	v36new_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	new	1740	all
+mac	v36new_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all
+mac	v36new_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	new	1740	all
+mac	v36new_n70_f025	config/sweep_b2_f025_s1_2026-09-22.json	0.7	new	1740	all
+mac	v36rho0_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho0	1740	all
+mac	v36rho0_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho0	1740	all
+mac	v36cur_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	cur	1740	all
+mac	v36cur_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	cur	1740	all
+mac	v36rho025_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho025	1740	all
+mac	v36rho025_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho025	1740	all
+mac	v36rho10_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	rho10	1740	all
+mac	v36rho10_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	rho10	1740	all
+mac	v36new_n70_hide_w2	config/sweep_b2_hide_s1_w2_2026-09-27.json	0.7	new	1740	all
+mac	v36new_n70_hide_charge	config/sweep_b2_hide_s1_charge_2026-09-27.json	0.7	new	1740	all
+mac	v36new_n70_hide_flat2	config/sweep_b2_hide_s1_flat2_2026-09-27.json	0.7	new	1740	all
+mac	v36new_n70_hide_v2f	config/sweep_b2_hide_s1_v2f_2026-09-27.json	0.7	new	1740	all
+mac	v36new_n70_hide_v2f_T3480	config/sweep_b2_hide_s1_v2f_2026-09-27.json	0.7	new	3480	all
