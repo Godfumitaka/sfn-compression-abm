@@ -13,6 +13,12 @@ v3.4 の --fill-unseen（tools/fillunseen.py）とは別の旗。二つを一緒
 入れ方：下の fill_missing_slots は abm/filling.py:118-263 の写し（md5 39837cf1d3fa33bb33324302853ad554 の版）に、上の判定の 9 行（説明の 3 行を含む）と数えの 1 行を足しただけ。
   install() で abm.filling・abm.agent_runtime・abm.loop の名前 fill_missing_slots をこの写しに差し替える（予測・穴埋め・反実仮想の予測のすべて）。
   ★ tools/projfirst.py は install の時点の agent_runtime.fill_missing_slots を包むので、この install を先に入れる（tools/v3_run.py）。
+★ 比べの腕 C（2026-09-27、control/判断_0927_1950.md の 5）：旗 --fill-exclude-visible（--fill-norestate と一緒に使う。install(exclude_visible=True)）。
+  席を写した位置（写した引数の組）で見えている述語を、先に候補から外し、残りから選ぶ（最頻は残りの一番上、抽出は残りの割合で引く）。
+  見えている候補しか無ければ埋めない。候補の分布・同点の数え・乱数の引きは、残りの候補で行う。
+  行の元の述語が見えているときの扱い（abm/filling.py:190-200）と、親の行への渡し（しない）は v3.5 と同じ。
+  外すので、選んだ述語が見えていることは起きず、B の判定は働かない。旗を切れば（exclude_visible=False）、v3.5 と同じ。
+  数え（記録だけ）：excluded_visible_slots（候補から見えている述語を外した席）・only_visible_slots（外したら候補が無くなった席）。
 """
 from __future__ import annotations
 
@@ -25,7 +31,9 @@ from abm.filling import (
     _same_order, most_frequent, sample_predicate, slot_signature,
 )
 
-STATS: dict = {"calls": 0, "skipped_restatement": 0, "skipped_with_parent_waiting": 0}
+STATS: dict = {"calls": 0, "skipped_restatement": 0, "skipped_with_parent_waiting": 0,
+               "excluded_visible_slots": 0, "only_visible_slots": 0}
+CFG: dict = {"exclude_visible": False}   # ★ 比べの腕 C：True なら、写した位置で見えている述語を先に候補から外す
 
 
 def fill_missing_slots(
@@ -132,6 +140,14 @@ def fill_missing_slots(
         )
         if pool_before_order and not pool:
             empty_pool_slots += 1  # ★ 記録専用。階数の制約で候補が全部落ちた
+        if CFG["exclude_visible"]:
+            # ★ 比べの腕 C（--fill-exclude-visible）：写した位置で見えている述語を、先に候補から外す。残りが無ければ下で埋めない
+            seen_here = {item.predicate for item in target.relations if item.arguments == mapped_arguments}
+            if pool & seen_here:
+                STATS["excluded_visible_slots"] += 1
+                pool = frozenset(predicate for predicate in pool if predicate not in seen_here)
+                if not pool:
+                    STATS["only_visible_slots"] += 1
         distribution = _distribution(pool, p_hat, local_lambda, local_counts)
         maximum = max((weight for _, weight in distribution), default=0.0)
         tied_count = sum(weight == maximum for _, weight in distribution) if maximum > 0 else 0
@@ -186,12 +202,13 @@ def fill_missing_slots(
     )
 
 
-def install() -> None:
+def install(exclude_visible: bool = False) -> None:
     import abm.agent_runtime as ar
     import abm.filling as fl
     import abm.loop as lp
 
-    STATS.update(calls=0, skipped_restatement=0, skipped_with_parent_waiting=0)
+    STATS.update(calls=0, skipped_restatement=0, skipped_with_parent_waiting=0, excluded_visible_slots=0, only_visible_slots=0)
+    CFG["exclude_visible"] = bool(exclude_visible)
     fl.fill_missing_slots = fill_missing_slots
     ar.fill_missing_slots = fill_missing_slots
     lp.fill_missing_slots = fill_missing_slots

@@ -14,6 +14,8 @@
    --ident-shadow 確かめ：元の同定も毎回呼んで比べる（旗A・B・C・直し② が切れていれば、違えば止める）
    --fill-norestate v3.5 の穴埋めの直し（2026-09-27 判断 1、案 B）：選んだ述語が、席を写した位置で見えている関係と同じなら、その席を埋めない
                   （選び直さない）。同じ物の組にほかの関係が見えていても、選んだ述語が見えていなければ埋める。--fill-unseen とは一緒に使わない。tools/fillnorestate.py
+   --fill-exclude-visible 比べの腕 C（2026-09-27 判断 0927_1950 の 5）：--fill-norestate と一緒に使う。席を写した位置で見えている述語を
+                  先に候補から外し、残りから選ぶ（残りが無ければ埋めない）。tools/fillnorestate.py
    --fill-unseen  v3.4 の穴埋めの直し（2026-09-27）：席を写した位置に見えている関係が一本でもあれば、述語によらずその席を埋めない。
                   伏せ辺の位置（見えていない位置）は今までどおり埋める。tools/fillunseen.py
    --proj-first   穴埋めの同点で投影を捨てない（2026-09-26 夜）：投影が一本出ていれば、穴埋めが同点でも投影を使う。tools/projfirst.py
@@ -342,7 +344,9 @@ def worker(task: dict) -> dict:
             raise ValueError("--fill-unseen と --fill-norestate は一緒に使わない")
         sys.path.insert(0, str(ROOT / "tools"))
         import fillnorestate
-        fillnorestate.install()
+        fillnorestate.install(exclude_visible=bool(task.get("fill_exclude_visible")))   # ★ 比べの腕 C
+    if task.get("fill_exclude_visible") and not task.get("fill_norestate"):
+        raise ValueError("--fill-exclude-visible は --fill-norestate と一緒に使う")
     if task.get("fill_unseen"):
         # ★ v3.4 の穴埋めの直し（2026-09-27）：tools/fillunseen.py。projfirst は install の時点の穴埋めを包むので、その前に入れる。
         sys.path.insert(0, str(ROOT / "tools"))
@@ -479,6 +483,8 @@ def main() -> None:
                     help="確かめ：元の同定も毎回呼んで比べる（旗A・B が切れていれば、違えば止める）")
     ap.add_argument("--fill-norestate", action="store_true",
                     help="v3.5：選んだ述語が、席を写した位置で見えている関係と同じなら埋めない（tools/fillnorestate.py）")
+    ap.add_argument("--fill-exclude-visible", action="store_true",
+                    help="比べの腕 C：--fill-norestate と一緒に。写した位置で見えている述語を先に候補から外す（tools/fillnorestate.py）")
     ap.add_argument("--fill-unseen", action="store_true",
                     help="v3.4：席を写した位置に見えている関係があれば、述語によらず埋めない（tools/fillunseen.py）")
     ap.add_argument("--proj-first", action="store_true",
@@ -530,7 +536,7 @@ def main() -> None:
                and args.extend_rule == "v2" and args.charge1 == "v2"
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
-               and not args.fill_unseen and not args.fill_norestate
+               and not args.fill_unseen and not args.fill_norestate and not args.fill_exclude_visible
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -544,7 +550,7 @@ def main() -> None:
               "ident_commons": args.ident_commons,
               "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
               "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
-              "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+              "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate, "fill_exclude_visible": args.fill_exclude_visible,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -555,12 +561,12 @@ def main() -> None:
                                                     "ident_commons": args.ident_commons,
                                                     "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
                                                     "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
-                                                    "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+                                                    "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate, "fill_exclude_visible": args.fill_exclude_visible,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} fill_exclude_visible={args.fill_exclude_visible} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):

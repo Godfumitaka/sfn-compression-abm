@@ -10,7 +10,7 @@
        （max_end>=8 ／ drops>=1（案イ θ=8）／ 単調なし ／ 停留 N>=50）。L=2 は newlabel_R の 新θ8 と同じ条件。
        走行末に生きているか・走行末の生存述語も、同一性ごとに走行末の状態から出す（rows2 と同じ：生存行が一つ以上）。
    (4) 定義の出力は、主張しなかった同一性も含めて全部出す（主張あり＝0/1）。腕のまとめで、通過群なのに一度も主張しなかった定義を「主張なし」に数えるため。
-   ほか：走行の旗に --fill-unseen（v3.4）か --fill-norestate（v3.5、2026-09-27 に足した）があれば、走査の中でも同じ穴埋めの直しを入れる。後半の境目は試行数の半分（1,740 なら 870、版 7 と同じ）。
+   ほか：走行の旗に --fill-unseen（v3.4）か --fill-norestate（v3.5、2026-09-27 に足した。--fill-exclude-visible は比べの腕 C）があれば、走査の中でも同じ穴埋めの直しを入れる。後半の境目は試行数の半分（1,740 なら 870、版 7 と同じ）。
    計に「状態と記録の名前の食い違い」（取り込む前の状態の定義の名前と、前の試行の記録の名前が違った試行の数。0 のはず）を足した。
 ★ 版 7 の数え方（a/b・話・開・全・後・四・五・源・訂正）は、上の (1)〜(3) のほかは変えていない。
 ★ 以下は版 7 の説明のまま。
@@ -98,6 +98,7 @@ RUNFLAGS=json.load(open(_FLAGP)) if _FLAGP.exists() else {}
 FIX_ORDER=bool(RUNFLAGS.get("fix_order")); FIX_ORDER2=bool(RUNFLAGS.get("fix_order2")); FIX2_FULL=bool(RUNFLAGS.get("fix2_full")); FIX2=bool(RUNFLAGS.get("fix2")) or FIX2_FULL; PROJ_FIRST=bool(RUNFLAGS.get("proj_first"))
 FILL_UNSEEN=bool(RUNFLAGS.get("fill_unseen"))   # ★ 版 8：v3.4 の穴埋めの直し（tools/fillunseen.py）
 FILL_NORESTATE=bool(RUNFLAGS.get("fill_norestate"))   # ★ 版 8（v3.5 で足した）：v3.5 の穴埋めの直し（tools/fillnorestate.py）
+FILL_EXCLUDE_VISIBLE=bool(RUNFLAGS.get("fill_exclude_visible"))   # ★ 版 8（比べの腕 C で足した）：見えている述語を先に候補から外す
 sys.path.insert(0,str(ROOT/"tools"))
 if FIX_ORDER:
     import fixorder; fixorder.install()
@@ -106,7 +107,7 @@ if FIX_ORDER2:                                              # ★ 案 1（名前
     import fixorder2; fixorder2.install()
     import abm.sme as _sme; map_graphs=_sme.map_graphs
 if FILL_NORESTATE:                                          # ★ v3.5：模型と同じ穴埋めの直し（案 B）を入れ、この走査の名前も差し替えた写しにする
-    import fillnorestate; fillnorestate.install(); fill_missing_slots=fillnorestate.fill_missing_slots
+    import fillnorestate; fillnorestate.install(exclude_visible=FILL_EXCLUDE_VISIBLE); fill_missing_slots=fillnorestate.fill_missing_slots
 if FILL_UNSEEN:                                             # ★ 版 8：模型と同じ穴埋めの直しを入れ、この走査の名前も差し替えた写しにする
     import fillunseen; fillunseen.install(); fill_missing_slots=fillunseen.fill_missing_slots
 if FIX2:
@@ -329,7 +330,7 @@ def main():
     json.dump({"__版":dict(script="tools/l2scan_spoke_v8.py",md5=hashlib.md5(pathlib.Path(__file__).read_bytes()).hexdigest(),
         写し元=str(ORIG),写し元md5=hashlib.md5(ORIG.read_bytes()).hexdigest() if ORIG.exists() else None,
         起動=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t0)),腕=ARM,走行根=RD,種=SEEDP,
-        走行の旗={"fix_order":FIX_ORDER,"fix_order2":FIX_ORDER2,"fix2":FIX2,"fix2_full":FIX2_FULL,"proj_first":PROJ_FIRST,"fill_unseen":FILL_UNSEEN,"fill_norestate":FILL_NORESTATE,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
+        走行の旗={"fix_order":FIX_ORDER,"fix_order2":FIX_ORDER2,"fix2":FIX2,"fix2_full":FIX2_FULL,"proj_first":PROJ_FIRST,"fill_unseen":FILL_UNSEEN,"fill_norestate":FILL_NORESTATE,"fill_exclude_visible":FILL_EXCLUDE_VISIBLE,"flag.json":str(_FLAGP) if _FLAGP.exists() else None},
         注="版 8：主張は試行 t を取り込む前の状態で作る。言い直し（場面で見えている関係と同じ中身の主張）は *_言い直し に別に数える（*_主張 には入る）。定義の鍵は「名前@生まれた試行」。系列＝中心的過程のラベル（lsweep と同じ式、同一性ごと）。主張あり＝0 の同一性も出す。ほかの列は版 7 と同じ意味"),
         "台帳":res},open(OUT,"w"),ensure_ascii=False)
     print(f"  完了 {time.time()-t0:.0f}秒 -> {OUT}",flush=True)
