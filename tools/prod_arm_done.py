@@ -103,7 +103,7 @@ L_ += [f"| 計 | | {tot['誕生']} | {tot['写し']} | {tot['写し']/max(tot['�
        f"{tot['話した定義']/max(tot['生まれた定義'],1):.3f} | {tot['L3']} | {tot['L6']} | {tot['主張']} | {tot['言い直し']} | {tot['言い直し']/max(tot['主張'],1):.4f} | "
        f"{tot['発話の作り直し_一致']} | {tot['発話の作り直し_不一致']} | {tot['状態と記録の名前の食い違い']+tot['組み立て直しと記録の名前の食い違い']} | {tot['同じ名前で生まれ直した']} |", ""]
 groups = {"全定義": lambda k: True, "L=6": lambda k: k in PASS[6], "L=3": lambda k: k in PASS[3]}
-hist = {L: collections.Counter() for L in (3, 6)}; none = {3: 0, 6: 0}; never = {3: 0, 6: 0}
+hist = {L: collections.Counter() for L in (3, 6)}; none = {3: 0, 6: 0}; never = {3: 0, 6: 0}; dead = {3: 0, 6: 0}
 agg = {g: collections.Counter() for g in groups}; nd = collections.Counter(); ndc = collections.Counter()
 for key, v in ALLDEF.items():
     for g, f in groups.items():
@@ -114,6 +114,7 @@ for key, v in ALLDEF.items():
                     agg[g][k] += n
     for L in (3, 6):
         if key in PASS[L]:
+            dead[L] += int(not v.get("走行末に生きている"))   # ★ v3.5：通過群は生きているかを問わない。死んでいる数は別の列
             if not v.get("主張あり"):
                 never[L] += 1; continue
             w = v.get("五未見未話_世界偽", 0) + v.get("五未見話_世界偽", 0); t = v.get("五未見未話_世界真", 0) + v.get("五未見話_世界真", 0)
@@ -134,10 +135,11 @@ for g in groups:
            f"| 世界偽の率 | {rate(c,'五見話')} | {rate(c,'五見未話')} | {rate(c,'五未見未話')} | {rate(c,'五未見話')} |",
            f"| 言い直しの数 | {c['五見話_言い直し']:,} | {c['五見未話_言い直し']:,} | {c['五未見未話_言い直し']:,} | {c['五未見話_言い直し']:,} |", ""]
 L_ += ["## 通過群の定義の、見ていない型での世界偽の率の分布（版 5、定義の同一性ごと、言い直しを除いた率、10 の区切り。左を含み右を含まない。最後だけ 1.0 を含む）", "",
-       "「見ていない型の主張なし」＝ 主張はしたが、見ていない型の主張（言い直しを除く）が無い定義。「一度も主張しなかった」＝ 通過群なのに、走行中に一度も主張しなかった定義（版 8 で足した）。", "",
-       "| | " + " | ".join(f"{i/10:.1f}〜{(i+1)/10:.1f}" for i in range(10)) + " | 見ていない型の主張なし | 一度も主張しなかった |", "|---|" + "---:|" * 12]
+       "「見ていない型の主張なし」＝ 主張はしたが、見ていない型の主張（言い直しを除く）が無い定義。「一度も主張しなかった」＝ 通過群なのに、走行中に一度も主張しなかった定義（版 8 で足した）。",
+       "通過群は、走行末に生きているかを問わずに数える（v3.5、control/判断_0927_1250.md の 3。定義の表の L も同じ）。「うち走行末に生きていない」は通過群のうち走行末に生きていない定義の数（ほかの欄にも入っている）。", "",
+       "| | " + " | ".join(f"{i/10:.1f}〜{(i+1)/10:.1f}" for i in range(10)) + " | 見ていない型の主張なし | 一度も主張しなかった | うち走行末に生きていない |", "|---|" + "---:|" * 13]
 for L in (6, 3):
-    L_.append(f"| L={L}（{len(PASS[L])}） | " + " | ".join(str(hist[L][i]) for i in range(10)) + f" | {none[L]} | {never[L]} |")
+    L_.append(f"| L={L}（{len(PASS[L])}） | " + " | ".join(str(hist[L][i]) for i in range(10)) + f" | {none[L]} | {never[L]} | {dead[L]} |")
 (mg / "まとめ.md").write_text("\n".join(L_) + "\n", encoding="utf-8")
 
 # ---- 図 ----

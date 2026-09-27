@@ -2,8 +2,10 @@
 版 7（tools/defs_table_spoke_v7.py）との違い
   ・一行 ＝ 定義の同一性（「名前@生まれた試行」）。defid ＝ <セル>/<種>/<名前>@<生まれた試行>。主張しなかった同一性も行にする（claimed＝0）。
   ・走行末に生きているか（alive）・走行末の生存述語・通過群 L=2〜6 は、走査の版 8 が同一性ごとに出したもの
-    （版 7 は rows2・lsweep・newlabelR の名前ごとの値）。L は版 7 と同じく、走行末に生きている定義だけに付ける。
-    群 P は、走行末に生きていて L=2 を通ったもの（newlabel_R の 新θ8 と同じ条件）。群 S・N は版 7 と同じ（またぎの組が 1 組以上か）。
+    （版 7 は rows2・lsweep・newlabelR の名前ごとの値）。
+  ★ v3.5（2026-09-27、control/判断_0927_1250.md の 3）：通過群 L=2〜6 と群 P は、走行末に生きているかを問わずに付ける
+    （v3.4 までの版 8 の表は、走行末に生きている定義だけに付けていた。まとめ.md の数え方と揃えた）。生きているかは alive の列。
+    群 P は L=2 を通ったもの（newlabel_R の 新θ8 と同じ条件）。群 S・N は版 7 と同じ（またぎの組が 1 組以上か）。
   ・またぎの組の表は、引数 --pairs で渡す（世界ごと。tools/make_pairs.py で作る。v3a2 は analysis_sbe_2026-09-19/pairs252_v3a2.json と同じ集まり）。
   ・率は版 7 と同じく 世界偽 ÷（世界偽＋世界真）＝ 言い直しを除いた率。n_* も世界偽＋世界真（言い直しを含まない）。
     言い直しの数は右の rs_* の列（版 7 の列と同じ並び）。含めた率 ＝ wf ÷（n ＋ rs）。
@@ -79,11 +81,11 @@ with open(OUT, "w", newline="", encoding="utf-8") as fo:
             preds = v.get("走行末の生存述語") if alive else v.get("最後の生存述語", [])
             mat = 1 if crossings(preds or []) >= 1 else 0
             ps = set((v.get("系列") or {}).get("pass", []))
-            g = "P" if (alive and 2 in ps) else ("S" if mat else "N")
+            g = "P" if 2 in ps else ("S" if mat else "N")   # ★ v3.5：生きているかを問わない
             ni, wi, no, wo, ri, ro = pair(v, "a", "b")
             dg = (ro - ri) if (ni and no) else ""
             row = [ARM, x["seed"], f"{x['cell']}/{x['seed']}/{K}", alive, g, mat,
-                   *[1 if (alive and L in ps) else 0 for L in (2, 3, 4, 5, 6)],
+                   *[1 if L in ps else 0 for L in (2, 3, 4, 5, 6)],   # ★ v3.5：生きているかを問わない（alive は別の列）
                    ni, wi, no, wo, ri, ro, dg, ni + no,
                    *pair(v, "話内", "話外"), *pair(v, "開内", "開外"), *src(v),
                    *pair(v, "全話内", "全話外"), *pair(v, "後話内", "後話外"), *pair(v, "後a", "後b"),
