@@ -37,7 +37,7 @@ if "--lsweep" in _a:
     i = _a.index("--lsweep"); LSW = pathlib.Path(_a[i + 1]); _a = _a[:i] + _a[i + 2:]
 ARM, RD, OUT = _a[0], _a[1], pathlib.Path(_a[2])
 WK = int(_a[3]) if len(_a) > 3 else 4
-SEEDP = str(CODE / "seeds/U-011_seed_v3a2.json")
+SEEDP = os.environ.get("PROD_SEED_FILE") or str(CODE / "seeds/U-011_seed_v3a2.json")   # ★ v3.4：世界ごとの種は prod_post_one.py が渡す
 
 
 def graph_of(relations, all_ids, gid):

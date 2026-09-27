@@ -12,6 +12,8 @@
    --ident-argmax 旗B 候補すべての比を出し、一番高い定義が基準に届けば同化・届かなければ誕生（同点は今の走査順）。tools/v32.py
    --ident-commons 旗C 照らす相手を、土台と今の場面で一致した構造（案 C1）にする。tools/v32.py
    --ident-shadow 確かめ：元の同定も毎回呼んで比べる（旗A・B・C・直し② が切れていれば、違えば止める）
+   --fill-unseen  v3.4 の穴埋めの直し（2026-09-27）：席を写した位置に見えている関係が一本でもあれば、述語によらずその席を埋めない。
+                  伏せ辺の位置（見えていない位置）は今までどおり埋める。tools/fillunseen.py
    --proj-first   穴埋めの同点で投影を捨てない（2026-09-26 夜）：投影が一本出ていれば、穴埋めが同点でも投影を使う。tools/projfirst.py
    --fix-order    名前の順番の直し（2026-09-26 夜）：親の中身として一緒に対になった子も、述語が一致していれば、
                   自分の番で対にしたのと同じ点を数える。map_graphs を差し替え、使っている所すべてに効く。tools/fixorder.py
@@ -332,6 +334,11 @@ def worker(task: dict) -> dict:
         fx = task["cfg"]["fixed"]
         v31.install(task.get("extend_rule", "v2"), task.get("charge1", "v2"), float(task["theta_prime"]),
                     float(fx.get("w", 0.0)), float(fx.get("kappa", 1.0)), float(fx.get("beta", 0.0)), fo=fo)
+    if task.get("fill_unseen"):
+        # ★ v3.4 の穴埋めの直し（2026-09-27）：tools/fillunseen.py。projfirst は install の時点の穴埋めを包むので、その前に入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import fillunseen
+        fillunseen.install()
     if task.get("proj_first"):
         # ★ 穴埋めの同点で投影を捨てない（2026-09-26 夜）：tools/projfirst.py
         sys.path.insert(0, str(ROOT / "tools"))
@@ -369,6 +376,8 @@ def worker(task: dict) -> dict:
         rec["fix2"] = dict(sys.modules["fix2"].STATS)
     if "fixorder" in sys.modules:
         rec["fixorder"] = dict(sys.modules["fixorder"].STATS)
+    if "fillunseen" in sys.modules:
+        rec["fillunseen"] = dict(sys.modules["fillunseen"].STATS)
     if "projfirst" in sys.modules:
         rec["projfirst"] = dict(sys.modules["projfirst"].STATS)
     if "fixorder2" in sys.modules:
@@ -457,6 +466,8 @@ def main() -> None:
                     help="旗C 照らす相手を、今の場面全体ではなく、土台と今の場面で一致した構造（案 C1）にする（tools/v32.py）")
     ap.add_argument("--ident-shadow", action="store_true",
                     help="確かめ：元の同定も毎回呼んで比べる（旗A・B が切れていれば、違えば止める）")
+    ap.add_argument("--fill-unseen", action="store_true",
+                    help="v3.4：席を写した位置に見えている関係があれば、述語によらず埋めない（tools/fillunseen.py）")
     ap.add_argument("--proj-first", action="store_true",
                     help="穴埋めが同点でも、投影が一本出ていれば投影を使う（tools/projfirst.py）")
     ap.add_argument("--fix-order", action="store_true",
@@ -506,6 +517,7 @@ def main() -> None:
                and args.extend_rule == "v2" and args.charge1 == "v2"
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
+               and not args.fill_unseen
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -519,7 +531,7 @@ def main() -> None:
               "ident_commons": args.ident_commons,
               "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
               "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
-              "fix2_full": args.fix2_full,
+              "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -530,12 +542,12 @@ def main() -> None:
                                                     "ident_commons": args.ident_commons,
                                                     "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
                                                     "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
-                                                    "fix2_full": args.fix2_full,
+                                                    "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):

@@ -9,12 +9,17 @@
   ★ 道具に渡す腕名は「<腕>__<セル>__seedNNN」（台帳ごとに別の名前。道具は既にある出力を上書きしないため）。
 控え：<腕の走行根>/post/sha256.jsonl に一行（腕・セル・種・本体〔見出しを除く〕の sha256・行数・台帳の大きさ・見出しの code_commit・消したか）。
 やり直し：POSTDONE があれば何もしない。解析の出力が既にあれば、その解析は飛ばす。台帳が無く POSTDONE も無ければ、止めて知らせる。
+★ v3.4（2026-09-27）：走査は版 8（tools/l2scan_spoke_v8.py、出力 l2s8.json）に替えた（版 7 はかけない）。
+  種ファイルは、走行の旗（<腕の走行根>/flag.json）の config の seed_file（無ければ seeds/U-011_seed_v3a2.json）。世界を横に広げる腕のため。
+  残す種：環境変数 PROD_KEEP_SEEDS（既定 "1 2"）。"all" なら台帳を消さない（デスクトップの主の hide の s1・s21、マックの全部の腕）。
 使い方  python3.12 tools/prod_post_one.py <腕の走行根> <腕名> <セル（台帳の置き場所の名前）> <種の番号>"""
 import gzip, hashlib, json, os, pathlib, shutil, subprocess, sys, time
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MAC = pathlib.Path("/Users/tatsu-admin/sfn/sfn-compression-abm")
-KEEP = {int(x) for x in os.environ.get("PROD_KEEP_SEEDS", "1 2").split()}   # ★ 残す種（既定 1・2。明日の並びの s21 の腕は 21・22 を渡す）
+_KS = os.environ.get("PROD_KEEP_SEEDS", "1 2").strip()
+KEEP_ALL = _KS == "all"                                                     # ★ v3.4：台帳を全部残す
+KEEP = set() if KEEP_ALL else {int(x) for x in _KS.split()}               # ★ 残す種（既定 1・2。s21 の腕は 21・22 を渡す）
 
 
 def body_sha(p):
@@ -31,6 +36,13 @@ def main():
     arm_root, arm, cell, seed = pathlib.Path(sys.argv[1]).resolve(), sys.argv[2], sys.argv[3], int(sys.argv[4])
     py = sys.executable
     seedf = str(REPO / "seeds/U-011_seed_v3a2.json")
+    _fj = arm_root / "flag.json"                        # ★ v3.4：世界ごとの種（走行の設定の seed_file）
+    if _fj.exists():
+        _cfgp = json.load(open(_fj, encoding="utf-8")).get("config")
+        if _cfgp and (REPO / _cfgp).exists():
+            _sf = json.load(open(REPO / _cfgp, encoding="utf-8")).get("seed_file")
+            if _sf:
+                seedf = str(REPO / _sf)
     sd = f"seed{seed:03d}"
     led = arm_root / "ledgers" / "cells" / cell / f"{sd}.jsonl.gz"
     done = arm_root / "ledgers" / "cells" / cell / f"{sd}.done"
@@ -61,7 +73,7 @@ def main():
          MAC / f"analysis_pred_2026-09-22/lsweep_{tag}.json"),
         ("newlabelR", [py, str(REPO / "analysis_newlabel_2026-09-19/newlabel_R.py"), tag, RD, "1"],
          MAC / f"analysis_newlabel_2026-09-19/newlabelR_{tag}.json"),
-        ("l2s7", [py, str(REPO / "tools/l2scan_spoke_v7.py"), tag, RD, seedf, str(post / "l2s7.json"), "1"], None),
+        ("l2s8", [py, str(REPO / "tools/l2scan_spoke_v8.py"), tag, RD, seedf, str(post / "l2s8.json"), "1"], None),   # ★ v3.4：版 8
         ("counts", [py, str(REPO / "tools/prod_readcounts.py"), tag, RD, str(post / "counts.json"), "1",
                     "--lsweep", str(post / "lsweep.json")], None),
     ]
@@ -76,7 +88,7 @@ def main():
         if written is not None and written.exists():
             written.unlink()                              # この台帳だけの名前の、前の途中の残り
         t1 = time.time()
-        r = subprocess.run(cmd, cwd=str(REPO), capture_output=True, text=True)
+        r = subprocess.run(cmd, cwd=str(REPO), capture_output=True, text=True, env={**os.environ, "PROD_SEED_FILE": seedf})
         (post / f"{name}.log").write_text(r.stdout + r.stderr, encoding="utf-8")
         if written is not None and written.exists():
             shutil.move(str(written), str(out))
@@ -88,11 +100,11 @@ def main():
     rec = dict(arm=arm, cell=cell, seed=seed, body_sha256=sha, n_body=n, ledger_bytes=led.stat().st_size,
                code_commit=(header or {}).get("code_commit"), run_seed=(header or {}).get("run_seed"),
                analyses=[s[0] for s in steps], analysis_secs=secs, post_secs=round(time.time() - t0, 1),
-               deleted=seed not in KEEP, at=time.strftime("%Y-%m-%d %H:%M:%S"))
+               deleted=(not KEEP_ALL) and seed not in KEEP, seed_file=seedf, at=time.strftime("%Y-%m-%d %H:%M:%S"))
     (post / "sha.json").write_text(json.dumps(rec, ensure_ascii=False) + "\n", encoding="utf-8")
     with open(arm_root / "post" / "sha256.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-    if seed not in KEEP:
+    if not KEEP_ALL and seed not in KEEP:
         led.unlink()
     (post / "POSTDONE").write_text(rec["at"] + "\n")
     return 0
