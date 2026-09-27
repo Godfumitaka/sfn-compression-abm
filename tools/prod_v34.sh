@@ -12,6 +12,7 @@
 #   MACHINE=desktop JOBS=14 OUT=~/v34prod PY=$(uv python find 3.12.13) HOST=<機械の名前> bash tools/prod_v34.sh
 #   MACHINE=mac JOBS=6 OUT=~/v34prod HOST=mac bash tools/prod_v34.sh
 #   DRY=1 を付けると、腕と仕事の数を書き出すだけ。ONLY="腕の名前 ..." で腕を絞れる。
+# RESULTS（結果のブランチの作業場所）：既定 $OUT/results。results-2026-09-27 を既に別の場所（例 ~/v33prod/results）に取り出しているなら、その場所を渡す。
 # 試しのときだけ：SEEDS_LIMIT=1（各腕の最初の種だけ）・CELLS_LIMIT=2（各腕の最初の 2 セルだけ）・TRIALS=25（試行数を置き換える）・NOPUSH=1・RESULTS=<結果の作業場所>
 set -u
 cd "$(dirname "$0")/.."
@@ -93,7 +94,9 @@ setup_results() {
 [[ -d /Users/tatsu-admin/sfn/sfn-compression-abm ]] || { echo "★ /Users/tatsu-admin/sfn/sfn-compression-abm が無い（リポジトリへのリンクとして作ってください）"; exit 2; }
 say "開始 $HOST（$MACHINE）  コード $(git describe --tags --always) 未コミット $(git status --short | wc -l | tr -d ' ')  JOBS $JOBS  空き $(freegb) GB（$DFPATH）"
 say "旗 $BASE $FIXES  試しの置き換え：種 ${SEEDS_LIMIT}・セル ${CELLS_LIMIT}・試行数「${TRIALS}」"
-[[ "$DRY" == "1" || "${NOPUSH:-0}" == "1" ]] || setup_results
+if [[ "$DRY" != "1" && "${NOPUSH:-0}" != "1" ]]; then
+  setup_results || { say "★ 結果の作業場所 $RESULTS を作れなかった。results-2026-09-27 を既に取り出している作業場所があれば RESULTS=<その場所> を渡してください（git worktree list で分かる）"; exit 2; }
+fi
 while IFS=$'\t' read -r -u 3 mach arm cfg nsim kind trials keepc; do
   [[ -z "$mach" || "$mach" == \#* || "$mach" != "$MACHINE" ]] && continue
   [[ -n "$ONLY" && " $ONLY " != *" $arm "* ]] && continue
