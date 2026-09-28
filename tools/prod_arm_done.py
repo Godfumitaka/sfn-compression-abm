@@ -140,6 +140,38 @@ L_ += ["## 通過群の定義の、見ていない型での世界偽の率の分
        "| | " + " | ".join(f"{i/10:.1f}〜{(i+1)/10:.1f}" for i in range(10)) + " | 見ていない型の主張なし | 一度も主張しなかった | うち走行末に生きていない |", "|---|" + "---:|" * 13]
 for L in (6, 3):
     L_.append(f"| L={L}（{len(PASS[L])}） | " + " | ".join(str(hist[L][i]) for i in range(10)) + f" | {none[L]} | {never[L]} | {dead[L]} |")
+# ---- 死因（v3.7、2026-09-28：台帳ごとの post/*/death.json〔tools/death_cause.py〕をまとめる。全台帳にあるときだけ） ----
+_dj = [p / "death.json" for p in posts]
+if _dj and all(x.exists() for x in _dj):
+    _C = ("②", "①", "棄権", "参加率だけ")
+    _cnt = collections.Counter(); _z0 = collections.Counter(); _n = _zall = _seat = _withterms = 0
+    _vals = {c: {"V": [], "P": [], "pt": []} for c in _C}
+    for x in _dj:
+        _d = load(x); _s = _d["要約"]
+        _n += _s["削除"]; _zall += _s["寿命0"]; _seat += _s["席に①_穴埋めがあった行"]; _withterms += _s["項がある行"]
+        for c in _C:
+            _cnt[c] += _s["死因"].get(c, 0); _z0[c] += _s["寿命0の死因"].get(c, 0)
+        for row in _d["行"]:
+            _v = _vals[row["cause"]]; _v["V"].append(row["V"])
+            if row["P"] is not None:
+                _v["P"].append(row["P"]); _v["pt"].append(row["participation_term"])
+
+    def _med(xs):
+        xs = sorted(xs)
+        return f"{xs[len(xs) // 2] if len(xs) % 2 else (xs[len(xs) // 2 - 1] + xs[len(xs) // 2]) / 2:.4f}" if xs else "—"
+
+    L_ += ["## 死因（deletion_event の kind＝deletion の行。tools/death_cause.py）", "",
+           "死因は、その行が生きていたあいだ（登録から削除の試行まで）に受けた罰で一つに分ける：② ＞ ① ＞ 棄権（棄権課金）＞ 参加率だけ（罰を一度も受けていない）。"
+           "①_穴埋め（席の履歴を減らす罰）は行の V に入らないので死因に数えない。V の項は side の death_terms（旗 --death-terms）から。", "",
+           f"★ 削除 {_n:,} 本（台帳 {len(_dj)} 本）。寿命 0（生まれた試行のうちに死んだ行）{_zall:,} 本。V の項がある行 {_withterms:,} 本。"
+           f"（参考）席に ①_穴埋め があった行 {_seat:,} 本。", "",
+           "| 死因 | 行 | 割合 | うち寿命 0 | 死んだときの V（中央値） | 参加率 P（中央値） | 参加率の項 P·a（中央値） |", "|---|---:|---:|---:|---:|---:|---:|"]
+    for c in _C:
+        L_.append(f"| {c} | {_cnt[c]:,} | {(_cnt[c] / _n if _n else 0):.3f} | {_z0[c]:,} | {_med(_vals[c]['V'])} | {_med(_vals[c]['P'])} | {_med(_vals[c]['pt'])} |")
+    L_.append("")
+    json.dump({"削除": _n, "死因": dict(_cnt), "寿命0": _zall, "寿命0の死因": dict(_z0), "席に①_穴埋めがあった行": _seat,
+               "台帳ごと": [dict(load(x)["要約"], 台帳=load(x)["台帳"]) for x in _dj]},
+              open(mg / f"死因_{arm}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 (mg / "まとめ.md").write_text("\n".join(L_) + "\n", encoding="utf-8")
 
 # ---- 図 ----
@@ -157,7 +189,7 @@ desc = subprocess.run(["git", "-C", str(REPO), "describe", "--tags", "--always"]
 dst = resdir / host / arm; dst.mkdir(parents=True, exist_ok=True)
 with open(csv, "rb") as fi, gzip.open(dst / f"defs_spoke8_{arm}.csv.gz", "wb") as fo:
     shutil.copyfileobj(fi, fo)
-for p in (mg / "まとめ.md", mg / "sha256.jsonl"):
+for p in (mg / "まとめ.md", mg / "sha256.jsonl") + ((mg / f"死因_{arm}.json",) if (mg / f"死因_{arm}.json").exists() else ()):
     shutil.copy(p, dst / p.name)
 json.dump(cnt, open(dst / "counts.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 if (arm_root / "flag.json").exists():

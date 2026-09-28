@@ -14,6 +14,9 @@
    --ident-shadow 確かめ：元の同定も毎回呼んで比べる（旗A・B・C・直し② が切れていれば、違えば止める）
    --fill-norestate v3.5 の穴埋めの直し（2026-09-27 判断 1、案 B）：選んだ述語が、席を写した位置で見えている関係と同じなら、その席を埋めない
                   （選び直さない）。同じ物の組にほかの関係が見えていても、選んだ述語が見えていなければ埋める。--fill-unseen とは一緒に使わない。tools/fillnorestate.py
+   --no-charge2   v3.7 の直し（2026-09-28、案1）：② の罰をやめる（classify_row の ② を ③ と同じに扱う。tools/nocharge2.py）
+   --death-terms  v3.7：死んだ行の V の項（参加率など）を side に書く。記録だけ（tools/deathterms.py）
+   --checks       v3.7：決まりごとの検査（罰を受けた行の写し先が伏せ辺そのものでない・当たりの試行に罰が付かない）。記録だけ（tools/checks_v37.py）
    --fill-unseen  v3.4 の穴埋めの直し（2026-09-27）：席を写した位置に見えている関係が一本でもあれば、述語によらずその席を埋めない。
                   伏せ辺の位置（見えていない位置）は今までどおり埋める。tools/fillunseen.py
    --proj-first   穴埋めの同点で投影を捨てない（2026-09-26 夜）：投影が一本出ていれば、穴埋めが同点でも投影を使う。tools/projfirst.py
@@ -378,7 +381,28 @@ def worker(task: dict) -> dict:
         import v32
         v32.install(task.get("ident_rho"), bool(task.get("ident_argmax")), bool(task.get("ident_shadow")),
                     bool(task.get("ident_commons")), bool(task.get("fix2") or task.get("fix2_full")), bool(task.get("rename_check")))
+    if task.get("no_charge2"):
+        # ★ v3.7（2026-09-28、委任書「v3.7（② の罰をやめる）」、案1）：classify_row の ② を ③ にする（tools/nocharge2.py）。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import nocharge2
+        nocharge2.install()
+    if task.get("death_terms"):
+        # ★ v3.7：死んだ行の V の項を side に書く（記録だけ）。apply_theta の一番外側を包むので、ほかの差し替えのあとに入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import deathterms
+        deathterms.install(fo)
+    if task.get("checks"):
+        # ★ v3.7：決まりごとの検査（記録だけ）。_update_accounting の一番外側（v31 の d32 のあと）を包むので、最後に入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import checks_v37
+        checks_v37.install()
     rec = sweep.run_one(task)
+    if "nocharge2" in sys.modules:
+        rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
+    if "deathterms" in sys.modules:
+        rec["deathterms"] = dict(sys.modules["deathterms"].STATS)
+    if "checks_v37" in sys.modules:
+        rec["checks_v37"] = dict(sys.modules["checks_v37"].STATS)
     if "v32" in sys.modules:
         rec["v32"] = dict(sys.modules["v32"].STATS)
     if "fix2" in sys.modules:
@@ -479,6 +503,12 @@ def main() -> None:
                     help="確かめ：元の同定も毎回呼んで比べる（旗A・B が切れていれば、違えば止める）")
     ap.add_argument("--fill-norestate", action="store_true",
                     help="v3.5：選んだ述語が、席を写した位置で見えている関係と同じなら埋めない（tools/fillnorestate.py）")
+    ap.add_argument("--no-charge2", action="store_true",
+                    help="v3.7：② の罰をやめる（classify_row の ② を ③ にする。tools/nocharge2.py）")
+    ap.add_argument("--death-terms", action="store_true",
+                    help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
+    ap.add_argument("--checks", action="store_true",
+                    help="v3.7：決まりごとの検査（罰の写し先が伏せ辺そのものでない・当たりの試行に罰が付かない。記録だけ。tools/checks_v37.py）")
     ap.add_argument("--fill-unseen", action="store_true",
                     help="v3.4：席を写した位置に見えている関係があれば、述語によらず埋めない（tools/fillunseen.py）")
     ap.add_argument("--proj-first", action="store_true",
@@ -530,7 +560,7 @@ def main() -> None:
                and args.extend_rule == "v2" and args.charge1 == "v2"
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
-               and not args.fill_unseen and not args.fill_norestate
+               and not args.fill_unseen and not args.fill_norestate and not args.no_charge2
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -545,6 +575,7 @@ def main() -> None:
               "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
               "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
               "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+              "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -556,11 +587,12 @@ def main() -> None:
                                                     "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
                                                     "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
                                                     "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+                                                    "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):

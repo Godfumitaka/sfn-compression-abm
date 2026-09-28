@@ -12,6 +12,7 @@
 ★ v3.4（2026-09-27）：走査は版 8（tools/l2scan_spoke_v8.py、出力 l2s8.json）に替えた（版 7 はかけない）。
   種ファイルは、走行の旗（<腕の走行根>/flag.json）の config の seed_file（無ければ seeds/U-011_seed_v3a2.json）。世界を横に広げる腕のため。
   残す種：環境変数 PROD_KEEP_SEEDS（既定 "1 2"）。"all" なら台帳を消さない（デスクトップの主の hide の s1・s21、マックの全部の腕）。
+★ v3.7（2026-09-28）：死因の数え（tools/death_cause.py、出力 death.json）を足した。
 使い方  python3.12 tools/prod_post_one.py <腕の走行根> <腕名> <セル（台帳の置き場所の名前）> <種の番号>"""
 import gzip, hashlib, json, os, pathlib, shutil, subprocess, sys, time
 
@@ -76,6 +77,9 @@ def main():
         ("l2s8", [py, str(REPO / "tools/l2scan_spoke_v8.py"), tag, RD, seedf, str(post / "l2s8.json"), "1"], None),   # ★ v3.4：版 8
         ("counts", [py, str(REPO / "tools/prod_readcounts.py"), tag, RD, str(post / "counts.json"), "1",
                     "--lsweep", str(post / "lsweep.json")], None),
+        # ★ v3.7（2026-09-28）：死因の数え（tools/death_cause.py。台帳と side の death_terms を読むだけ）
+        ("death", [py, str(REPO / "tools/death_cause.py"), str(led), str(arm_root / "side" / cell / f"{sd}.jsonl"),
+                   str(post / "death.json")], None),
     ]
     if os.environ.get("PROD_L2SCAN2") == "1":
         steps.append(("l2b", [py, str(REPO / "analysis_pred_2026-09-22/l2scan2.py"), tag, RD, seedf, "1"],
