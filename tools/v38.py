@@ -51,7 +51,7 @@ def install(fo) -> None:
     STATS.clear()
     STATS.update(trials=0, received=0, confirmed_visible=0, confirmed_disclosure=0, confirmed_by_prediction=0,
                  refuted=0, unconfirmed=0, undetermined=0, seat_obs_added=0, seat_obs_skipped=0,
-                 lazy_init=0, active_from=start)
+                 lazy_init=0, seat_reg_mismatch=0, active_from=start)
 
     @dataclass(frozen=True, slots=True)
     class MeritAccumulatorV38(MeritAccumulator):
@@ -155,12 +155,15 @@ def install(fo) -> None:
             after = history.get(key)
             next_state = replace(next_state, slot_history=history)
             STATS["seat_obs_added"] += 1
-            alive = None
+            alive = None; reg_now = None
             d = next_state.definitions.get(R)
             if d is not None:
                 c = next((c for c in d.constituents if c.slot_index == slot), None)
                 alive = None if c is None else bool(c.alive)
-            seat = {"R": R, "slot": slot, "reg": int(reg), "述語": p.edge.predicate, "生きている行": alive,
+                reg_now = None if c is None else c.registered_at
+            if reg_now != int(reg):
+                STATS["seat_reg_mismatch"] += 1   # ★ マックの差分の読み 5 の 5：予測の ID の登録時点と、その席の今の行の登録時点の照合（記録だけ）
+            seat = {"R": R, "slot": slot, "reg": int(reg), "今の行の登録": reg_now, "述語": p.edge.predicate, "生きている行": alive,
                     "前": (dict(before) if hasattr(before, "items") else sorted(before or ())),
                     "後": (dict(after) if hasattr(after, "items") else sorted(after or ()))}
         if rows or seat or received is not None:

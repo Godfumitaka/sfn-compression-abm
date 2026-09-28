@@ -603,6 +603,7 @@ def main() -> None:
                                                     "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
                                                     "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
                                                     "own_evidence": args.own_evidence,
+                                                    "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
