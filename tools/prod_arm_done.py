@@ -44,6 +44,12 @@ with open(mg / "sha256.jsonl", "w", encoding="utf-8") as f:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")
 # ★ v3.4：またぎの組の表は世界ごと（台帳の種ファイルの名前から。tools/make_pairs.py で作った worlds_2026-09-27/pairs_<種の名前>.json）
 seedfs = sorted({r_.get("seed_file") or str(REPO / "seeds/U-011_seed_v3a2.json") for r_ in sha})
+# ★ 2026-09-28 夜（マック）：同じ腕を二つの作業場所で続きから走らせると、種ファイルの場所（絶対パス）だけが違う。中身（sha256）と名前が同じなら一つとみる。
+import hashlib as _hl
+_seedkeys = {(pathlib.Path(x).name, _hl.sha256(open(x, "rb").read()).hexdigest() if os.path.exists(x) else x) for x in seedfs}
+if len(_seedkeys) == 1 and len(seedfs) > 1:
+    print("種ファイルの場所が二つ以上あるが、名前と中身が同じなので一つとみる：", seedfs)
+    seedfs = seedfs[:1]
 if len(seedfs) != 1:
     print("★ 一つの腕に種ファイルが二つ以上", seedfs); sys.exit(2)
 pairsf = REPO / "worlds_2026-09-27" / f"pairs_{pathlib.Path(seedfs[0]).stem}.json"
