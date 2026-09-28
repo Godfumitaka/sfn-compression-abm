@@ -1,0 +1,12 @@
+# v3.9 のマックの分（2026-09-29 深夜の委任書「記憶予算・三段階の忘却（v3.9）の走行（マックの分）」の 2）。上から順に。旗は tools/prod_v39.sh の既定（v3.9 一式）に、最後の列の腕の旗を足す。
+# 評価：s1（種 1〜20）、最頻のセル一つ（f0.5000_th2.1000_first_order）、各腕 20 本。予算は control/2026-09-29_予算の較正_B_ref.md の値（B_ref＝55344.5）。台帳は全部残す（マック）。
+# 比べの 2（履歴を保持＝H→U を禁止）と 3（旧い点数と履歴の保持）は、v3.9-main に旗が無いので作っていない（control/ に書いた）。
+# 列：機械	腕	設定	基準	腕の種類	試行数	残す	セル	腕の旗
+mac	v39new_n70_hide_Binf	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-budget inf
+mac	v39new_n70_hide_B100	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-budget 55345
+mac	v39new_n70_hide_B075	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-budget 41509
+mac	v39new_n70_hide_B050	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-budget 27673
+mac	v39new_n70_hide_B025	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-budget 13837
+mac	v39new_n70_hide_Uabs_Binf	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-u abstain --v39-budget inf
+mac	v39new_n70_hide_Uabs_B050	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-u abstain --v39-budget 27673
+mac	v39new_n70_hide_Uabs_B025	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all	f0.5000_th2.1000_first_order	--v39-u abstain --v39-budget 13837
