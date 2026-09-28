@@ -9,6 +9,9 @@
 #   追記の 3 腕（hide の残り・f00・f025）は、始める前に空きを見る：空き − その腕の見込みの大きさ ＜ 30 GB なら、そこで止めてログに書く。
 # ログ：~/v38prod/mac_v38.log（この台本）・~/v38prod/prod_v38.log（本番の台本）。止まったか：ps -axo pid,command | grep mac_v38_chain
 set -u
+# ★ 切り離しの道具（Python）が足す文字の設定（LC_CTYPE＝C.UTF-8、PEP 538）を外す。macOS の bash 3.2 はこの設定のもとで "$HOST（" の全角の字を
+#   変数名に含めて読み、tools/prod_v38.sh が unbound variable で止まる（2026-09-28 18:46 に起きた）。
+unset LC_CTYPE LC_ALL LANG
 W=/Users/tatsu-admin/sfn/sfn-compression-abm-v38mac2
 OUT=$HOME/v38prod; RES=$HOME/v33prod/results; LOG=$OUT/mac_v38.log
 MAINPID=${MAINPID:-}; RUNPID=${RUNPID:-}
@@ -77,7 +80,7 @@ say "引き継ぎ：前の台本の本体（${MAINPID:-無し}）を止め、走
 [[ -n "$MAINPID" ]] && kill -TERM $MAINPID 2>/dev/null
 if [[ -n "$RUNPID" ]]; then while kill -0 $RUNPID 2>/dev/null; do sleep 30; done; fi
 say "前の台本の腕が終わった（または無かった）"
-run_arm v38new_n70_hide 2; note v38new_n70_hide "（8 本）"
+# ★ v38new_n70_hide（8 本）は 18:45 に上がり、前の台本が control/ に書いた。ここでは走らせない。
 run_arm v38new_n70_f10 0; note v38new_n70_f10 ""
 run_arm v38new_n50_hide 0; note v38new_n50_hide ""
 run_arm v38new_n40_hide 0; note v38new_n40_hide ""
