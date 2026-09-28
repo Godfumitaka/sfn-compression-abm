@@ -131,9 +131,10 @@ def structure_bits(d) -> int:
 
 # ---------------------------------------------------------------- 席
 def seat_state(d, row, slot_history) -> str:
+    """F＝生きている行。H＝墓石で履歴欄がある（空の表も H。仕様 6 節「空表も含め履歴欄全体を外す」）。U＝墓石で履歴欄が無い。"""
     if row.alive:
         return "F"
-    return "H" if slot_history.get((d.name, row.slot_index)) else "U"
+    return "H" if (d.name, row.slot_index) in slot_history else "U"
 
 
 def n_FH(d, slot_history) -> int:
@@ -210,22 +211,26 @@ def rec_add(rec: SeatRec, t: int, inc: tuple) -> SeatRec:
 
 
 # ---------------------------------------------------------------- 状態の型（v39 の席の記録を足す）
+_STATE_CLS: list = []
+
+
 def _state_class():
     from abm.domains import AgentState
-    cls = CTX.get("state_cls")
-    if cls is None:
+    if not _STATE_CLS:
         @dataclass(frozen=True, slots=True)
         class AgentStateV39(AgentState):
             v39_seats: Mapping = field(default_factory=dict)
-        cls = CTX["state_cls"] = AgentStateV39
-    return cls
+        _STATE_CLS.append(AgentStateV39)
+    return _STATE_CLS[0]
 
 
 def ensure(state):
     cls = _state_class()
     if isinstance(state, cls):
         return state
-    return cls(**{f.name: getattr(state, f.name) for f in fields(state)}, v39_seats={})
+    kw = {f.name: getattr(state, f.name) for f in fields(state)}
+    kw.setdefault("v39_seats", {})
+    return cls(**kw)
 
 
 # ---------------------------------------------------------------- グラフと照合の候補
@@ -380,6 +385,27 @@ def three_answers(d, alignment, state, config, scene):
     return out
 
 
+def score_answers(seats, ans, received, t):
+    """控えた三答え（開示前）を、受け取った開示で採点する。名前と引数が一致すれば 1、ほかは 0。E に 1。
+    写しが決まらない席（ans が無い）・U の席は全列を更新しない。席の世代・状態が変わっていれば採点しない。"""
+    seats = dict(seats)
+    scored = []
+    for it in ans["items"]:
+        if "ans" not in it:
+            continue
+        key = (ans["R"], it["slot"])
+        rec = seats.get(key)
+        if rec is None or rec.gen != it["gen"] or rec.state != it["st"]:
+            STATS["score_skipped_changed"] = STATS.get("score_skipped_changed", 0) + 1
+            continue
+        pos_ok = tuple(it["pos"]) == tuple(received.arguments)
+        s = {x: float(pos_ok and it["ans"].get(x) == received.predicate) for x in ("F", "H", "U")}
+        inc = (s["F"] if it["st"] == "F" else 0.0, s["H"], s["U"], 1.0)
+        seats[key] = rec_add(rec, t, inc)
+        scored.append([it["slot"], it["st"], int(s["F"]), int(s["H"]), int(s["U"])])
+    return seats, scored
+
+
 # ---------------------------------------------------------------- 穴埋め（F＝固定名・H＝履歴・U＝全体最頻。言い直し禁止）
 def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history, p_hat, fill_selection="most_frequent",
              rng=None, *, higher_order_predicates, local_lambda=0.0):
@@ -494,6 +520,7 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
 # ---------------------------------------------------------------- 定義の選び方（支持＝写った F と H の席、分母＝F＋H）
 def select_definition(state, scene, config):
     import abm.agent_runtime as ar
+    STATS["select_calls"] = STATS.get("select_calls", 0) + 1
     ranked = []
     for d in state.definitions.values():
         n = n_FH(d, state.slot_history)
@@ -779,13 +806,13 @@ def _convert(state, kind, R, slot, trial):
         seats[(R, slot)] = replace(rec, state="H", init=(ZERO16, rec.init[1], rec.init[2], rec.init[3]),
                                    post=(ZERO16, rec.post[1], rec.post[2], rec.post[3]))
         state = replace(state, definitions=defs, v39_seats=seats)
-        if not state.slot_history.get((R, slot)):
-            # ★ 履歴の無い F 席（まれ）：F→H のあと候補が無いので、そのまま U と同じ（H の中身が空）。記録して U として扱う
-            STATS["FH_without_history"] = STATS.get("FH_without_history", 0) + 1
-            seats = dict(state.v39_seats)
-            seats[(R, slot)] = replace(seats[(R, slot)], state="U", init=ZERO4, post=ZERO4)
-            state = replace(state, v39_seats=seats)
-            return _retire_if_all_U(state, R, trial)
+        if (R, slot) not in state.slot_history:
+            # ★ 履歴欄の無い F 席（誕生の観察で写らなかった席）：F の中身は空の表（I(0)）＋固定名の指定なので、
+            #   F→H で固定名の指定だけを捨てると、空の表の H になる（仕様 6 節）。
+            STATS["FH_empty_table"] = STATS.get("FH_empty_table", 0) + 1
+            hist = dict(state.slot_history)
+            hist[(R, slot)] = {}
+            state = replace(state, slot_history=hist)
         return state, None
     hist = dict(state.slot_history)
     hist.pop((R, slot), None)
@@ -804,7 +831,7 @@ def _retire_if_all_U(state, R, trial):
                         exceptions={k: v for k, v in state.exceptions.items() if k[0] != R},
                         slot_history={k: v for k, v in state.slot_history.items() if k[0] != R},
                         v39_seats={k: v for k, v in state.v39_seats.items() if k[0] != R})
-        return state, {"kind": "v39_retire", "R": R, "registered_at": d.registered_at, "trial": trial}
+        return state, {"kind": "definition_removed", "R": R, "trial": trial, "v39": "retire", "registered_at": d.registered_at}
     return state, None
 
 
@@ -851,10 +878,18 @@ def run_conversions(state, trial):
             if phase == "cap":
                 boundary["同点で選んだ"] += 1
         V, kind, R, slot, dc, sc = c
+        rec0 = state.v39_seats[(R, slot)]
+        d0 = state.definitions[R]
+        w0 = _pow(max(trial - rec0.t0, 0))
+        split = [[round(sum(x * k for x, k in zip(col, w0)) / 16.0, 6) for col in rec0.init],
+                 [round(sum(x * k for x, k in zip(col, w0)) / 16.0, 6) for col in rec0.post]]
         state, ev = _convert(state, kind, R, slot, trial)
         rec = state.v39_seats.get((R, slot))
-        e = {"kind": f"v39_{kind}", "R": R, "slot_index": slot, "trial": trial, "V": V, "dC": dc, "why": phase,
-             "tie_n": nt, "S": list(sc), "gen": rec.gen if rec is not None else None}
+        reg_at = next((r.registered_at for r in (state.definitions.get(R) or d0).constituents if r.slot_index == slot), None)
+        # ★ F→H は、今の解析の道具が読む行の死（kind＝"deletion"）として書く。H→U は新しい種類
+        e = {"kind": "deletion" if kind == "FH" else "v39_HU", "v39": kind, "R": R, "slot_index": slot,
+             "registered_at": reg_at, "trial": trial, "V": V, "dC": dc, "why": phase,
+             "tie_n": nt, "S": list(sc), "S_init_post": split, "gen": rec.gen if rec is not None else None}
         events.append(e)
         conv.append(e)
         if phase == "cap":
@@ -924,22 +959,10 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         next_state = reconcile(next_state, t, "会計")
         ans = CTX.pop("answers", None)
         scored = []
-        if ans is not None and coin.f_fired:
-            rv = revealed_edge
-            seats = dict(next_state.v39_seats)
-            for it in ans["items"]:
-                if "ans" not in it:
-                    continue
-                key = (ans["R"], it["slot"])
-                rec = seats.get(key)
-                if rec is None or rec.gen != it["gen"] or rec.state != it["st"]:
-                    STATS["score_skipped_changed"] = STATS.get("score_skipped_changed", 0) + 1
-                    continue
-                pos_ok = tuple(it["pos"]) == tuple(rv.arguments)
-                s = {x: float(pos_ok and it["ans"].get(x) == rv.predicate) for x in ("F", "H", "U")}
-                inc = (s["F"] if it["st"] == "F" else 0.0, s["H"], s["U"], 1.0)
-                seats[key] = rec_add(rec, t, inc)
-                scored.append([it["slot"], it["st"], int(s["F"]), int(s["H"]), int(s["U"])])
+        # ★ 本人が開示を受けた試行だけ（研究者用の伏せ辺は、開示が無ければ読まない）
+        received = revealed_edge if coin.f_fired else None
+        if ans is not None and received is not None:
+            seats, scored = score_answers(next_state.v39_seats, ans, received, t)
             next_state = replace(next_state, v39_seats=seats)
             STATS["scored_trials"] += bool(scored)
             STATS["scored_seats"] += len(scored)
@@ -1033,13 +1056,14 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         STATS["trials"] += 1
         STATS["max_usage"] = max(STATS["max_usage"], after)
         for e in conv_events:
-            if e["kind"] == "v39_FH":
+            k = e.get("v39")
+            if k == "FH":
                 STATS["conv_FH"] += 1
-            elif e["kind"] == "v39_HU":
+            elif k == "HU":
                 STATS["conv_HU"] += 1
-            elif e["kind"] == "v39_retire":
+            elif k == "retire":
                 STATS["retire"] += 1
-            if e["kind"] in ("v39_FH", "v39_HU"):
+            if k in ("FH", "HU"):
                 STATS["neg_conv" if e["why"] == "neg" else "cap_conv"] += 1
         STATS["ties"] += ties
         nF = nH = nU = 0
@@ -1050,9 +1074,9 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         tr = CTX.get("trial_rec") or {}
         rec = {"kind": "v39", "trial": trial, "F": nF, "H": nH, "U": nU, "defs": len(state.definitions),
                "bits_before": before, "bits_after": after, "B": CFG["budget"],
-               "conv": [[e["kind"][4:], e["R"], e["slot_index"], e["V"], e["dC"], e["why"], e["tie_n"]]
-                        for e in conv_events if e["kind"] != "v39_retire"],
-               "retire": [e["R"] for e in conv_events if e["kind"] == "v39_retire"],
+               "conv": [[e["v39"], e["R"], e["slot_index"], e["V"], e["dC"], e["why"], e["tie_n"]]
+                        for e in conv_events if e.get("v39") in ("FH", "HU")],
+               "retire": [e["R"] for e in conv_events if e.get("v39") == "retire"],
                "boundary": boundary, "scored": tr.get("scored"), "m1": CTX.get("m1_rec")}
         ans = tr.get("answers")
         if ans is not None:

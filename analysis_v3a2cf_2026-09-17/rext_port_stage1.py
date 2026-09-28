@@ -31,6 +31,9 @@ def row_identity(c):return raw_identity(constituent_raw(c))
 def ordered_signature(c):return (c.slot_index,c.registered_at,c.relation.predicate,tuple(c.relation.arguments))
 def event_ordered_signature(e):return (e['slot_index'],e['registered_at'],e['predicate'],tuple(e['arguments']))
 
+_V39_ERASED = "⟨消去⟩"   # ★ tools/v39.py の ERASED と同じ
+
+
 class MultisetReconstructor(LedgerReconstructor):
  """既知行の物理順序を維持。新規同payload異内容の並びは推測しない。"""
  def _materialize(self,t):
@@ -41,13 +44,21 @@ class MultisetReconstructor(LedgerReconstructor):
    d=raw_defs[name];events=self.registration_rows[name];old=self.state.definitions.get(name)
    previous=old.constituents if old else ()
    if len(events)!=len(d['constituents']) or len(previous)>len(events):raise ReconstructionError(f'{t}/{name}: 行数が単調でない')
-   if any(ordered_signature(c)!=event_ordered_signature(e) for c,e in zip(previous,events)):
+   # ★ v3.9（2026-09-29）：F→H で行の述語を消す（tools/v39.py の ERASED）。消えた行は述語を除いて照らす（古い台帳では働かない）
+   if any((ordered_signature(c) if c.relation.predicate!=_V39_ERASED else ordered_signature(c)[:2]+ordered_signature(c)[3:])
+          !=(event_ordered_signature(e) if c.relation.predicate!=_V39_ERASED else event_ordered_signature(e)[:2]+event_ordered_signature(e)[3:])
+          for c,e in zip(previous,events)):
     raise ReconstructionError(f'{t}/{name}: 登録イベントが既知物理行順序を変更')
    pool=collections.defaultdict(list)
    for x in d['constituents']:pool[raw_identity(x)].append(x)
    materialized=[]
    for i,c in enumerate(previous):
     candidates=pool.get(row_identity(c),[])
+    if not candidates and c.relation.predicate!=_V39_ERASED:
+     # ★ v3.9：述語だけが消えた同じ行（F→H）。以後は消えた述語で持つ
+     ce=Constituent(c.slot_index,c.registered_at,Relation(c.relation.relation_id,_V39_ERASED,tuple(c.relation.arguments),c.relation.attributes),c.frozen_price,c.alive)
+     candidates=pool.get(row_identity(ce),[])
+     if candidates:c=ce;self.statistics['v39_erased_rows']=self.statistics.get('v39_erased_rows',0)+1
     if not candidates:raise ReconstructionError(f'{t}/{name}/{i}: 既知物理行がsnapshotから消失')
     if len({x['alive'] for x in candidates})>1:
      raise ReconstructionError(f'{t}/{name}/{i}: 同一物理内容の生死割当が非一意')
@@ -58,6 +69,10 @@ class MultisetReconstructor(LedgerReconstructor):
    for i,e in enumerate(events[len(previous):],len(previous)):
     if e['registered_at']!=t:raise ReconstructionError(f'{t}/{name}/{i}: 新行の登録時刻不一致')
     candidates=[(k,xs) for k,xs in pool.items() if raw_event_key(xs[0])==event_key(e)]
+    if not candidates:
+     # ★ v3.9：生まれた試行のうちに F→H で述語が消えた新しい行（予算の変換）。述語を消した鍵で照らす（古い台帳では働かない）
+     candidates=[(k,xs) for k,xs in pool.items() if xs[0]['relation']['predicate']==_V39_ERASED and raw_event_key(xs[0])==event_key({**e,'predicate':_V39_ERASED})]
+     if candidates:self.statistics['v39_erased_new_rows']=self.statistics.get('v39_erased_new_rows',0)+1
     if len(candidates)!=1:raise ReconstructionError(f'{t}/{name}/{i}: 新行のID/価格/順序を登録情報から一意復元できない ({len(candidates)}候補)')
     k,xs=candidates[0]
     if len({x['alive'] for x in xs})>1:raise ReconstructionError(f'{t}/{name}/{i}: 新同内容行の生死割当が非一意')
@@ -65,7 +80,7 @@ class MultisetReconstructor(LedgerReconstructor):
     if not xs:pool.pop(k)
     r=x['relation']
     self.statistics['ordered_argument_repairs']+=int(r['arguments']!=e['arguments'])
-    rel=Relation(r['relation_id'],e['predicate'],tuple(e['arguments']),r.get('attributes',{}))
+    rel=Relation(r['relation_id'],(_V39_ERASED if r['predicate']==_V39_ERASED else e['predicate']),tuple(e['arguments']),r.get('attributes',{}))
     materialized.append(Constituent(e['slot_index'],e['registered_at'],rel,FrozenPrice(**x['frozen_price']),x['alive']))
    if pool:raise ReconstructionError(f'{t}/{name}: snapshotに未対応行が残った')
    # 三つ組ではなく全内容の多重集合で照合する。
