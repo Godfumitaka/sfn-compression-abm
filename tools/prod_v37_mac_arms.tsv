@@ -1,0 +1,10 @@
+# v3.7 のマックの分（2026-09-28 午後の判断「v3.7 の走行（マックの分）」の 2）。上から順に。旗は tools/prod_v37.sh の既定（v3.7 一式）。台帳はすべて残す。
+# 列は tools/prod_v37_arms.tsv と同じ：機械	腕の名前	設定ファイル	基準（NSIM）	腕の種類	試行数	残す
+# NSIM 0.6・0.5・0.4 の腕：同化の基準を下げただけで、ほかは主と同じ（ねらい：半分ほど重なる別の型の場面が同化され、別の型から削られる薄化が起きるか）。
+mac	v37new_n70_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.7	new	1740	all
+mac	v37new_n60_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.6	new	1740	all
+mac	v37new_n50_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.5	new	1740	all
+mac	v37new_n40_hide	config/sweep_b2_hide_s1_2026-09-22.json	0.4	new	1740	all
+mac	v37new_n70_f00	config/sweep_b2_f00_s1_2026-09-22.json	0.7	new	1740	all
+mac	v37new_n70_f10	config/sweep_b2_f10_s1_2026-09-22.json	0.7	new	1740	all
+mac	v37new_n70_f025	config/sweep_b2_f025_s1_2026-09-22.json	0.7	new	1740	all
