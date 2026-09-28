@@ -17,6 +17,10 @@
    --no-charge2   v3.7 の直し（2026-09-28、案1）：② の罰をやめる（classify_row の ② を ③ と同じに扱う。tools/nocharge2.py）
    --own-evidence v3.8（2026-09-28 夕）：本人が受け取った証拠だけで学ぶ会計（D-08〜D-11。--no-charge2 と一緒に。tools/v38.py）
    --death-terms  v3.7：死んだ行の V の項（参加率など）を side に書く。記録だけ（tools/deathterms.py）
+   --v39          v3.9（2026-09-29 深夜）：記憶予算・三段階の忘却（F・H・U の席、局所の三答え、ビットの費用と予算。tools/v39.py）。
+                  v3.8 の旗一式（--own-evidence・--no-charge2・--charge1 d32・--fix2-full・--fix-order2・--extend-rule none）と一緒に、--greedy なしで使う。
+                  --v39-budget inf|<ビット>（既定 inf）・--v39-init two|zero（生まれたときの初期成績、既定 two）・--v39-a 0.5|1（既定 0.5）・
+                  --v39-u global|abstain（U の答え、既定 global）
    --checks       v3.7：決まりごとの検査（罰を受けた行の写し先が伏せ辺そのものでない・当たりの試行に罰が付かない）。記録だけ（tools/checks_v37.py）
    --fill-unseen  v3.4 の穴埋めの直し（2026-09-27）：席を写した位置に見えている関係が一本でもあれば、述語によらずその席を埋めない。
                   伏せ辺の位置（見えていない位置）は今までどおり埋める。tools/fillunseen.py
@@ -298,8 +302,11 @@ def _install(side_path: Path, nohash: bool, prune: bool = False, extgreedy: bool
                                  "m_alloc": reg.get("m_alloc"), "m_live": reg.get("m_live")}) + "\n")
         return out_state, reg
 
+    _REAL.pop("theta_impl", None)
+
     def theta_wrapped(state, *a, **kw):
-        after, events = real_theta(state, *a, **kw)
+        # ★ v3.9（--v39）：削除の段を tools/v39.py の apply に差し替える（旗を切れば real_theta のまま）
+        after, events = (_REAL.get("theta_impl") or real_theta)(state, *a, **kw)
         _STATS["removed"] += sum(1 for R in state.definitions if R not in after.definitions)
         for R, d in after.definitions.items():
             if d.m_live > 0:
@@ -405,7 +412,29 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import checks_v37
         checks_v37.install()
-    rec = sweep.run_one(task)
+    if task.get("v39"):
+        # ★ v3.9（2026-09-29 深夜）：記憶予算・三段階の忘却（tools/v39.py）。ほかの差し替えのあとに入れる（予測・同定・会計・m1 の一番外）。
+        if (not task.get("own_evidence") or not task.get("no_charge2") or task.get("charge1") != "d32" or not task.get("fix2_full")
+                or not task.get("fix_order2") or task.get("extend_rule") != "none" or task.get("prune")):
+            raise ValueError("--v39 は v3.8 の旗一式（--own-evidence --no-charge2 --charge1 d32 --fix2-full --fix-order2 --extend-rule none）と、"
+                             "--greedy なしで使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import v39
+        v39.install(fo, seed=int(task["seed"]), horizon=int(task["cfg"]["trial_count"]),
+                    seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
+                    a=task["v39_a"], u=task["v39_u"])
+        _REAL["theta_impl"] = v39.CTX["apply"]
+    try:
+        rec = sweep.run_one(task)
+    except Exception as e:  # noqa
+        if task.get("v39") and type(e).__name__ == "Unfit":
+            # ★ 容量不適合（仕様 8 節）：走行を止めて記録する。台帳は途中まで（完走分だけで成功を主張しない）
+            fo.write(json.dumps({"kind": "v39_unfit", "detail": str(e)}, ensure_ascii=False) + "\n")
+            fo.close()
+            return {"cell": task["cell"], "seed": task["seed"], "v39_unfit": str(e), "v39": dict(sys.modules["v39"].STATS)}
+        raise
+    if "v39" in sys.modules:
+        rec["v39"] = dict(sys.modules["v39"].STATS)
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -518,6 +547,12 @@ def main() -> None:
                     help="v3.7：② の罰をやめる（classify_row の ② を ③ にする。tools/nocharge2.py）")
     ap.add_argument("--own-evidence", action="store_true",
                     help="v3.8：本人が受け取った証拠だけで学ぶ会計（D-08〜D-11。--no-charge2 と一緒に。tools/v38.py）")
+    ap.add_argument("--v39", action="store_true",
+                    help="v3.9：記憶予算・三段階の忘却（tools/v39.py）")
+    ap.add_argument("--v39-budget", default="inf", help="v3.9 の予算（ビット）。inf は無限")
+    ap.add_argument("--v39-init", default="two", choices=["two", "zero"], help="v3.9 の生まれたときの初期成績（二場面／0）")
+    ap.add_argument("--v39-a", default="0.5", choices=["0.5", "1"], help="v3.9 の a（少量の成績の補正）")
+    ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
     ap.add_argument("--death-terms", action="store_true",
                     help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
     ap.add_argument("--checks", action="store_true",
@@ -574,6 +609,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
+               and not args.v39
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -590,6 +626,8 @@ def main() -> None:
               "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
               "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
               "own_evidence": args.own_evidence,
+              "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
+              "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -603,12 +641,14 @@ def main() -> None:
                                                     "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
                                                     "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
                                                     "own_evidence": args.own_evidence,
+                                                    "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
+                                                    "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
-          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
