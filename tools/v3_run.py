@@ -426,11 +426,10 @@ def worker(task: dict) -> dict:
                     seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
                     a=task["v39_a"], u=task["v39_u"], decay_mode=task.get("v39_decay", "uniform"), price=task.get("v39_price"),
                     dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None))
-        if task.get("v310_merge"):
-            # ★ v3.10 E（委任書「D と E」の第 2 部、マック）：同化か誕生かを記述の長さで選ぶ（tools/v310merge.py）。v39 の上、削除の段を取る前に入れる
-            import v310merge
-            v310merge.install(fo, seed=int(task["seed"]), alpha=float(task["v310_alpha"]), select=task["v310_merge_select"],
-                              opts=task["v310_opts"])
+        if task.get("v310_be"):
+            # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
+            import v310be
+            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]))
         _REAL["theta_impl"] = v39.CTX["apply"]
     try:
         rec = sweep.run_one(task)
@@ -443,8 +442,8 @@ def worker(task: dict) -> dict:
         raise
     if "v39" in sys.modules:
         rec["v39"] = dict(sys.modules["v39"].STATS)
-    if task.get("v310_merge"):
-        rec["v310E"] = dict(sys.modules["v310merge"].STATS)
+    if task.get("v310_be"):
+        rec["v310be"] = dict(sys.modules["v310be"].STATS)
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -565,10 +564,7 @@ def main() -> None:
     ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
-    ap.add_argument("--v310-merge", action="store_true", help="v3.10 E：同化か誕生かを記述の長さで選ぶ（tools/v310merge.py）")
-    ap.add_argument("--v310-alpha", type=float, default=None, help="v3.10 E：新しい定義の重み α")
-    ap.add_argument("--v310-merge-select", default="argmin", choices=["argmin", "sample"], help="v3.10 E：選び方")
-    ap.add_argument("--v310-opts", default=None, help="v3.10 E：委任書で一つに決まらない点 q1〜q6（control/2026-09-29_E_仕様の問い_マック.md）")
+    ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
     ap.add_argument("--death-terms", action="store_true",
                     help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
@@ -619,8 +615,8 @@ def main() -> None:
                                                    r["fill_selection"]) in keep_c]
     # ★ 種の順に並べる（締め切りで打ち切っても、終わった種は 4 セルがそろいやすいように）。
     runs.sort(key=lambda r: (r["seed"], r["cell"]))
-    if args.v310_merge and (not args.v39 or args.v310_alpha is None or not args.v310_opts):
-        raise SystemExit("--v310-merge は --v39・--v310-alpha・--v310-opts と一緒に使う")
+    if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
+        raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
     seed = sweep.load_seed(cfg["seed_file"])
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
@@ -648,8 +644,7 @@ def main() -> None:
               "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
-              "v310_merge": args.v310_merge, "v310_alpha": args.v310_alpha, "v310_merge_select": args.v310_merge_select,
-              "v310_opts": args.v310_opts,
+              "v310_be": args.v310_be,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -666,8 +661,7 @@ def main() -> None:
                                                     "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
-                                                    "v310_merge": args.v310_merge, "v310_alpha": args.v310_alpha,
-                                                    "v310_merge_select": args.v310_merge_select, "v310_opts": args.v310_opts,
+                                                    "v310_be": args.v310_be,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
