@@ -20,7 +20,7 @@
   q4＝a|b（使われたことを数える時点：a その試行の会計、b E の選択と登録のあと）
   q5＝a|b（新しい定義が 2 行未満になるとき：a 選択肢から外す、b 外す前の行で費用を計り、選ばれたら登録しない）
   q6＝a|b|c（argmin の同点で新しい定義を：a 回数 0・今の試行の誕生として並べる、b 既存より先、c 既存より後）
-追記（2026-09-29 朝）--v310-merge-price：新しい定義の費用に λ ×（新しい定義を持ち続けるビット）を足す。λ は --v39-price と同じ、α は 1。
+（B＋E の --v310-merge-price は、2 本目の追記「単位の設計が決まるまで実装しない」により外した。）
 使い方：tools/v3_run.py --v39 ... --v310-merge --v310-alpha α --v310-merge-select argmin|sample --v310-opts q1=a,q2=a,q3=a,q4=a,q5=a,q6=a
 """
 from __future__ import annotations
@@ -210,10 +210,6 @@ def cost_new(rows, N, L):
         h = {r.predicate: 1}
         bits += 2 + v39.hcost(h, L) + v39.fixed_spec_bits(r.predicate, h, L)
     choose = -math.log2(alpha / (N + alpha))
-    if CFG.get("merge_price"):
-        # ★ 追記（--v310-merge-price）：λ ×（新しい定義を持ち続けるビット＝上の仕様 6 節の定義のビット）。λ は --v39-price と同じ値
-        lam = CFG["lam"]
-        return choose + bits + lam * bits, {"選ぶ": choose, "定義のビット": bits, "値段": lam * bits}
     return choose + bits, {"選ぶ": choose, "定義のビット": bits}
 
 
@@ -311,7 +307,7 @@ def prune(state):
 
 
 # ---------------------------------------------------------------- 入れる所
-def install(fo, *, seed: int, alpha: float, select: str, opts: str, merge_price: bool = False) -> None:
+def install(fo, *, seed: int, alpha: float, select: str, opts: str) -> None:
     import abm.loop as loop
     import v39
     if select not in ("argmin", "sample"):
@@ -322,16 +318,8 @@ def install(fo, *, seed: int, alpha: float, select: str, opts: str, merge_price:
     CFG.clear()
     CTX.clear()
     CFG.update(seed=seed, alpha=float(alpha), select=select, opts=parse_opts(opts))
-    if merge_price:
-        # ★ 追記（2026-09-29 朝）：値段がまとめも強いる形。λ は B と同じ（--v39-price）、α は 1 に固定
-        if v39.CFG.get("price") is None:
-            raise ValueError("--v310-merge-price は --v39-price λ と一緒に使う")
-        if float(alpha) != 1.0:
-            raise ValueError("--v310-merge-price では --v310-alpha は 1")
-        CFG.update(merge_price=True, lam=float(v39.CFG["price"]))
     STATS.update(calls=0, commons_lt2=0, chose_new=0, chose_existing=0, ties=0, new_excluded=0, use_counted=0,
-                 assim_counted=0, cfg={"alpha": float(alpha), "select": select, "opts": dict(CFG["opts"]),
-                                        "merge_price": bool(merge_price), "lam": CFG.get("lam")})
+                 assim_counted=0, cfg={"alpha": float(alpha), "select": select, "opts": dict(CFG["opts"])})
     _install_state_class()
 
     # 同定の差し替え：NSIM の代わりに記述の長さで選ぶ（threshold は使わない）

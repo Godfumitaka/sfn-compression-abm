@@ -1,5 +1,5 @@
 """v3.10 E（旗 --v310-merge、tools/v310merge.py）の小例（委任書「D と E」第 2 部の 3 検査）。
-走行を使う検査（旗なしで v3.10 と同じ・λ＝0 の --v310-merge-price が --v310-merge α＝1 と同じ・T02）は tools/v310_checks/ で別に確かめる。
+走行を使う検査（旗なしで v3.10 と同じ・T02）は tools/v310_checks/ で別に確かめる。
 例：定義一つ R_x（F fold(x,y) 履歴 {fold:2, wrap:1}、F lock(y,z) 履歴 {lock:1}、H push(x,z) 履歴 {push:1}）、
     場面の共通構造 C＝fold(a,b)・lock(b,c)・pull(a,c)。全体の表 fold 5・wrap 3・lock 2・push 1・pull 1（計 12）。
 """
@@ -26,13 +26,11 @@ PH = dict(fold=5, wrap=3, lock=2, push=1, pull=1)
 OPTS = "q1=a,q2=a,q3=a,q4=a,q5=a,q6=a"
 
 
-def setup(alpha=1.0, select="argmin", opts=OPTS, merge_price=False, lam=None):
-    T.setup(price=lam)
+def setup(alpha=1.0, select="argmin", opts=OPTS):
+    T.setup()
     for d in (E.STATS, E.CFG, E.CTX):
         d.clear()
     E.CFG.update(seed=1, alpha=alpha, select=select, opts=E.parse_opts(opts))
-    if merge_price:
-        E.CFG.update(merge_price=True, lam=float(lam))
     E.STATS.update(calls=0, commons_lt2=0, chose_new=0, chose_existing=0, ties=0, new_excluded=0, use_counted=0, assim_counted=0)
     return E._install_state_class()
 
@@ -65,7 +63,7 @@ def test_01_cost_existing_by_hand():
     assert abs(c - (choose + fit + unm + absent)) < 1e-12
 
 
-def test_02_cost_new_by_hand_and_price():
+def test_02_cost_new_by_hand():
     setup()
     rows = [Relation("b_fold", "fold", ("a", "b")), Relation("b_lock", "lock", ("b", "c"))]
     L = v39.code_lengths(T.p_hat(**PH))
@@ -74,12 +72,6 @@ def test_02_cost_new_by_hand_and_price():
     # 席：2 ＋ Hcost(I(1)＋L＋I(1)) ＋ 指定 I(1)。fold L＝2 → 2＋8＋3＝13、lock L＝3 → 2＋9＋3＝14
     assert parts["定義のビット"] == 33 + 13 + 14
     assert parts["選ぶ"] == 1.0 and c == 61.0
-    setup(merge_price=True, lam=0.5)
-    c2, parts2 = E.cost_new(rows, 1, L)
-    assert c2 == 61.0 + 0.5 * 60 and parts2["値段"] == 30.0
-    setup(merge_price=True, lam=0.0)
-    c3, _ = E.cost_new(rows, 1, L)
-    assert c3 == 61.0                                             # λ＝0 なら足す量は 0
 
 
 def test_03_all_terms_finite_with_unseen_predicate():
