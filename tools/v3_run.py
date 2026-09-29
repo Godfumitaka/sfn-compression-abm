@@ -459,3 +459,349 @@ def worker(task: dict) -> dict:
         import answerlog
         answerlog.install(side_dir / f"seed{task['seed']:03d}.answers.csv", seed=int(task["seed"]),
                           seed_file=str(ROOT / task["cfg"]["seed_file"]))
+    try:
+        rec = sweep.run_one(task)
+    except Exception as e:  # noqa
+        if task.get("v39") and type(e).__name__ == "Unfit":
+            # ★ 容量不適合（仕様 8 節）：走行を止めて記録する。台帳は途中まで（完走分だけで成功を主張しない）
+            fo.write(json.dumps({"kind": "v39_unfit", "detail": str(e)}, ensure_ascii=False) + "\n")
+            fo.close()
+            return {"cell": task["cell"], "seed": task["seed"], "v39_unfit": str(e), "v39": dict(sys.modules["v39"].STATS)}
+        raise
+    if "v39" in sys.modules:
+        rec["v39"] = dict(sys.modules["v39"].STATS)
+    if task.get("v310_be"):
+        rec["v310be"] = dict(sys.modules["v310be"].STATS)
+    if task.get("v311c"):
+        rec["v311c"] = dict(sys.modules["v311c"].STATS)
+    if task.get("hist_role"):
+        rec["histrole"] = dict(sys.modules["histrole"].STATS)
+    if task.get("world_cue"):
+        rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
+    if task.get("dump_answers"):
+        rec["answerlog"] = sys.modules["answerlog"].close()
+    if "nocharge2" in sys.modules:
+        rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
+    if "v38" in sys.modules:
+        rec["v38"] = dict(sys.modules["v38"].STATS)
+    if "deathterms" in sys.modules:
+        rec["deathterms"] = dict(sys.modules["deathterms"].STATS)
+    if "checks_v37" in sys.modules:
+        rec["checks_v37"] = dict(sys.modules["checks_v37"].STATS)
+    if "v32" in sys.modules:
+        rec["v32"] = dict(sys.modules["v32"].STATS)
+    if "fix2" in sys.modules:
+        rec["fix2"] = dict(sys.modules["fix2"].STATS)
+    if "fixorder" in sys.modules:
+        rec["fixorder"] = dict(sys.modules["fixorder"].STATS)
+    if "fillnorestate" in sys.modules:
+        rec["fillnorestate"] = dict(sys.modules["fillnorestate"].STATS)
+    if "fillunseen" in sys.modules:
+        rec["fillunseen"] = dict(sys.modules["fillunseen"].STATS)
+    if "projfirst" in sys.modules:
+        rec["projfirst"] = dict(sys.modules["projfirst"].STATS)
+    if "fixorder2" in sys.modules:
+        rec["fixorder2"] = dict(sys.modules["fixorder2"].STATS)
+    if "v31" in sys.modules:
+        rec["v31"] = dict(sys.modules["v31"].STATS)
+    if task.get("fast"):
+        rec["fast"] = {"evictions": fastledger.STATE["evictions"], "max_cache": fastledger.STATE["max_cache"]}
+    elif task.get("lowmem"):
+        rec["lowmem"] = {"evictions": lowmem.STATE["evictions"], "max_cache": lowmem.STATE["max_cache"]}
+    rec["nohist"] = bool(task.get("nohist"))
+    import resource
+    rec["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 1)  # macOS はバイト
+    alive_end = _LAST_ALIVE.pop("__alive__", [])
+    final = {"kind": "final", "alive_end": alive_end, "removed_defs": _STATS["removed"],
+             "last_alive_preds": _LAST_ALIVE}
+    if task.get("dump_slot_history"):
+        # ★ v3.1-slotdump（2026-09-26）：走行末の全定義の slot_history（墓石の席も含む）と、各定義の行（位置・登録試行・述語・生死）を
+        #   side の最後の行に書く。記録だけ。台帳（ledgers/）には何も書かない。
+        st_end = _LAST_STATE.get("state")
+        sh = {}
+        cons = {}
+        if st_end is not None:
+            for (R, slot), val in st_end.slot_history.items():
+                sh.setdefault(R, {})[str(slot)] = (dict(sorted(val.items())) if isinstance(val, Mapping)
+                                                   else sorted(val))
+            for R, d in st_end.definitions.items():
+                cons[R] = [[row.slot_index, row.registered_at, row.relation.predicate, bool(row.alive)]
+                           for row in d.constituents]
+        final["slot_history_end"] = sh
+        final["constituents_end"] = cons
+    fo.write(json.dumps(final, ensure_ascii=False) + "\n")
+    fo.close()
+    rec["nohash"] = task["nohash"]
+    if task["compare"]:
+        rec["compare"] = compare(task)
+    return rec
+
+
+def _snap_hashes(path: Path):
+    hs, body = [], hashlib.sha256()
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        for i, line in enumerate(f):
+            if i == 0:
+                continue
+            body.update(line.encode())
+            hs.append(json.loads(line).get("agent_state_snapshot_hash"))
+    return hs, body.hexdigest()
+
+
+def compare(task: dict) -> dict:
+    stem = f"seed{task['seed']:03d}.jsonl.gz"
+    h1, b1 = _snap_hashes(Path(task["cfg"]["output"]["dir"]) / "cells" / task["cell"] / stem)
+    h2, b2 = _snap_hashes(Path(task["orig_dir"]) / "cells" / task["cell"] / stem)
+    return {"records_new": len(h1), "records_old": len(h2), "snapshot_hash_equal": h1 == h2,
+            "first_diff_record": next((i for i, (a, b) in enumerate(zip(h1, h2)) if a != b), None),
+            "body_sha_equal": b1 == b2}
+
+
+def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
+    """★ v3.11c：集団の走行。走行（集団）ごとに、まとめ役を一つのプロセスで動かし、その中で個体ごとのプロセスを歩調を合わせて走らせる。"""
+    import multiprocessing as mp
+    import v311c
+    if len({t["cell"] for t in tasks}) != 1:
+        raise SystemExit(f"--v311c はセルを一つに絞って使う（--cells）。いま {len({t['cell'] for t in tasks})} セル")
+    tmpl = tasks[0]
+    fs = [float(x) for x in args.v311c_f.split(",")]
+    n = len(fs)
+    groups = [int(x) for x in args.v311c_groups.split(",")] if args.v311c_groups else [0] * n
+    if len(groups) != n:
+        raise SystemExit("--v311c-groups の長さが個体の数と違う")
+    comm = out_root / "comm"
+    comm.mkdir(parents=True, exist_ok=True)
+    pops = []
+    for r in [int(x) for x in args.v311c_runs.split(",")]:
+        ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
+                   v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
+                          "groups": groups, "tags": not args.v311c_no_tags, "b_n": args.v311c_b_n}) for i in range(n)]
+        pops.append((r, ts))
+
+    def one(r, ts):
+        s = v311c.coordinate(ts, comm / f"run{r:03d}.jsonl", probe_every=args.v311c_probe_every)
+        (comm / f"run{r:03d}.summary.json").write_text(json.dumps(s, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
+
+    ctx = mp.get_context("fork")
+    running = []
+    queue = list(pops)
+    while queue or running:
+        while queue and len(running) < max(1, args.workers):
+            r, ts = queue.pop(0)
+            p = ctx.Process(target=one, args=(r, ts))
+            p.start()
+            running.append((r, p))
+            print(f"{time.strftime('%F %T')} 集団 run{r:03d} を始めた（個体 {n}）", flush=True)
+        r, p = running.pop(0)
+        p.join()
+        sp = comm / f"run{r:03d}.summary.json"
+        s = json.loads(sp.read_text(encoding="utf-8")) if sp.exists() else {"errors": ["summary が無い"], "exitcode": p.exitcode}
+        with open(man, "a", encoding="utf-8") as fm:
+            for i, a in enumerate(s.get("agents") or []):
+                fm.write(json.dumps({"run": r, "agent": i, **(a if isinstance(a, dict) else {"raw": str(a)})}, ensure_ascii=False, default=str) + "\n")
+        print(f"{time.strftime('%F %T')} 集団 run{r:03d} 終わり 試行 {s.get('trials')} 束 {s.get('bundles')} 送信 {s.get('sent')} "
+              f"受信 {s.get('recv')} 失敗 {len(s.get('errors') or [])}", flush=True)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("config")
+    ap.add_argument("out_root")
+    ap.add_argument("--nohash", action="store_true")
+    ap.add_argument("--workers", type=int, default=2)
+    ap.add_argument("--seeds", default=None)
+    ap.add_argument("--cells", default=None)
+    ap.add_argument("--no-compare", action="store_true")
+    ap.add_argument("--nsim", type=float, default=None)
+    ap.add_argument("--vt", type=float, default=None)
+    ap.add_argument("--greedy", action="store_true", help="生まれ方：共通構造の全体から儲けが増える限り外す（2026-09-25 決定）")
+    ap.add_argument("--extgreedy", action="store_true", help="比べ：取り込みで儲けが増える限り一本ずつ足す")
+    # ★ 2026-09-25 アストラさんの決定：--lowmem を既定にする（7 本で台帳が一字一句同じと確かめたため）。
+    #   外すときは --no-lowmem。--lowmem は後方互換のために残す（付けても付けなくても同じ）。
+    ap.add_argument("--lowmem", dest="lowmem", action="store_true", default=True, help="状態の正準形の控えを絞る（既定）")
+    ap.add_argument("--no-lowmem", dest="lowmem", action="store_false", help="控えを絞らない（書き直し前の持ち方）")
+    ap.add_argument("--compare-to", default=None, help="比べる相手の走行根（ledgers の親）")
+    ap.add_argument("--extend-rule", default="v2", choices=["v2", "profit", "none"])
+    ap.add_argument("--charge1", default="v2", choices=["v2", "d32"])
+    ap.add_argument("--trial-count", type=int, default=None, help="試しの短い走行だけに使う（比べはしない）")
+    ap.add_argument("--ident-rho", type=float, default=None,
+                    help="旗A 両側で測る：比 ＝ 点(定義,相手) ÷（点(定義,定義) ＋ ρ × 相手の側だけの点）（tools/v32.py）")
+    ap.add_argument("--ident-argmax", action="store_true",
+                    help="旗B 一番高い定義を選び、基準に届けば同化・届かなければ誕生（tools/v32.py）")
+    ap.add_argument("--ident-commons", action="store_true",
+                    help="旗C 照らす相手を、今の場面全体ではなく、土台と今の場面で一致した構造（案 C1）にする（tools/v32.py）")
+    ap.add_argument("--ident-shadow", action="store_true",
+                    help="確かめ：元の同定も毎回呼んで比べる（旗A・B が切れていれば、違えば止める）")
+    ap.add_argument("--fill-norestate", action="store_true",
+                    help="v3.5：選んだ述語が、席を写した位置で見えている関係と同じなら埋めない（tools/fillnorestate.py）")
+    ap.add_argument("--no-charge2", action="store_true",
+                    help="v3.7：② の罰をやめる（classify_row の ② を ③ にする。tools/nocharge2.py）")
+    ap.add_argument("--own-evidence", action="store_true",
+                    help="v3.8：本人が受け取った証拠だけで学ぶ会計（D-08〜D-11。--no-charge2 と一緒に。tools/v38.py）")
+    ap.add_argument("--v39", action="store_true",
+                    help="v3.9：記憶予算・三段階の忘却（tools/v39.py）")
+    ap.add_argument("--v39-budget", default="inf", help="v3.9 の予算（ビット）。inf は無限")
+    ap.add_argument("--v39-init", default="two", choices=["two", "zero"], help="v3.9 の生まれたときの初期成績（二場面／0）")
+    ap.add_argument("--v39-a", default="0.5", choices=["0.5", "1"], help="v3.9 の a（少量の成績の補正）")
+    ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
+    ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
+    ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
+    ap.add_argument("--v311c", action="store_true", help="v3.11c：集団化・事例伝達（tools/v311c.py）。B＋E の旗一式と一緒に")
+    ap.add_argument("--v311c-f", default="0.5,0.5", help="v3.11c：個体ごとの f（開示の確率）。個体の数はこの並びの長さ")
+    ap.add_argument("--v311c-groups", default=None, help="v3.11c：個体ごとの組（既定は全員 0）")
+    ap.add_argument("--v311c-q", type=float, default=0.2, help="v3.11c：実際に答えた人が束を送る確率 q")
+    ap.add_argument("--v311c-m", type=float, default=0.0, help="v3.11c：別の組の相手を選ぶ確率 m（二体では使わない）")
+    ap.add_argument("--v311c-recv", default="B", choices=["A", "B"], help="v3.11c：受信 A（名前を使わない）／受信 B（同じ名札を優先）")
+    ap.add_argument("--v311c-runs", default="1", help="v3.11c：走行（集団）の番号。個体 i の世界の種は 走行＋1000×i")
+    ap.add_argument("--v311c-b-n", type=int, default=None, help="v3.11c：名札の固定長 b を決める個体の数（既定は集団の個体数。単独の比べの走行で集団と同じ b にするとき）")
+    ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
+    ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
+    ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--dump-answers", action="store_true",
+                    help="答えごとの記録（記録だけ）：実際に答えた試行ごとに side/<セル>/seed<種>.answers.csv へ一行（tools/answerlog.py）")
+    ap.add_argument("--world-cue", action="store_true",
+                    help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
+    ap.add_argument("--score-role", action="store_true",
+                    help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
+    ap.add_argument("--hist-role", action="store_true",
+                    help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
+    ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
+    ap.add_argument("--death-terms", action="store_true",
+                    help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
+    ap.add_argument("--checks", action="store_true",
+                    help="v3.7：決まりごとの検査（罰の写し先が伏せ辺そのものでない・当たりの試行に罰が付かない。記録だけ。tools/checks_v37.py）")
+    ap.add_argument("--fill-unseen", action="store_true",
+                    help="v3.4：席を写した位置に見えている関係があれば、述語によらず埋めない（tools/fillunseen.py）")
+    ap.add_argument("--proj-first", action="store_true",
+                    help="穴埋めが同点でも、投影が一本出ていれば投影を使う（tools/projfirst.py）")
+    ap.add_argument("--fix-order", action="store_true",
+                    help="名前の順番の直し：親の中身として一緒に対になった子も、述語が一致すれば自分の番の点を数える（tools/fixorder.py）")
+    ap.add_argument("--fix-order2", action="store_true",
+                    help="名前・番号に依らない写し（--fix-order の代わり。tools/fixorder2.py）")
+    ap.add_argument("--rename-check", action="store_true",
+                    help="確かめ：同定のたびに、述語の名前を付け替えて判断をやり直し、違った回を数える（記録だけ。tools/v32.py）")
+    ap.add_argument("--fix2-full", action="store_true",
+                    help="直し②を予測と会計にも広げる（選び方・投影・穴埋め・会計が同じ写しを使う。--fix2 を含む。tools/fix2.py）")
+    ap.add_argument("--fix2", action="store_true",
+                    help="直し②：墓石を子に持つ高階の行を、墓石の席の slot_history で照らす（同定と話すときの支持。tools/fix2.py）")
+    ap.add_argument("--fast", action="store_true", help="2026-09-26 の試し：台帳の記録を速くする（台帳は同じ。tools/fastledger.py）")
+    ap.add_argument("--no-public-history", dest="nohist", action="store_true",
+                    help="2026-09-26 の試し：public_history を状態から外す（指紋と state_snapshot が変わる。tools/nohist.py）")
+    ap.add_argument("--dump-slot-history", action="store_true",
+                    help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
+    args = ap.parse_args()
+    import sweep
+    cfg = json.load(open(args.config, encoding="utf-8"))
+    orig_dir = cfg["output"]["dir"]
+    out_root = Path(args.out_root).resolve()
+    cfg2 = copy.deepcopy(cfg)
+    cfg2["output"]["dir"] = str(out_root / "ledgers")
+    if args.trial_count is not None:
+        cfg2["trial_count"] = args.trial_count
+        args.no_compare = True
+    if args.nsim is not None:
+        cfg2["fixed"]["nsim_threshold"] = args.nsim
+    if args.vt is not None:
+        cfg2["axes"]["verbatim_theta"] = [args.vt]
+    assert not cfg2["output"]["dir"].startswith(str(ROOT / "runs")), "runs/ に書かない"
+    runs = sweep.enumerate_runs(cfg2)
+    if args.seeds:
+        keep = {int(s) for s in args.seeds.split(",")}
+        runs = [r for r in runs if r["seed"] in keep]
+    if args.cells:
+        # ★ v2 のセル名（vt を付けない名前）で選ぶ
+        keep_c = set(args.cells.split(","))
+        runs = [r for r in runs if sweep.cell_name(r["f"], r["theta_prime"], r["repair_scope"], None,
+                                                   r["fill_selection"]) in keep_c]
+    # ★ 種の順に並べる（締め切りで打ち切っても、終わった種は 4 セルがそろいやすいように）。
+    runs.sort(key=lambda r: (r["seed"], r["cell"]))
+    if args.score_role and not args.v310_be:
+        raise SystemExit("--score-role は --v310-be と一緒に使う")
+    if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
+        raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
+    seed = sweep.load_seed(cfg["seed_file"])
+    commit = sweep.code_commit()
+    all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
+               and args.extend_rule == "v2" and args.charge1 == "v2"
+               and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
+               and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
+               and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
+               and not args.v39 and not args.hist_role and not args.world_cue
+               and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
+    do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
+    if args.compare_to is not None:
+        orig_dir = str(Path(args.compare_to).resolve())
+    tasks = [{**r, "cfg": cfg2, "code_commit": commit, "orig_dir": orig_dir, "out_root": str(out_root),
+              "seed_file_sha256": getattr(seed, "file_sha256", None),
+              "nohash": args.nohash, "prune": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
+              "extend_rule": args.extend_rule, "charge1": args.charge1,
+              "dump_slot_history": args.dump_slot_history,
+              "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
+              "ident_commons": args.ident_commons,
+              "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
+              "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
+              "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+              "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
+              "own_evidence": args.own_evidence,
+              "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
+              "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
+              "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
+              "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
+              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers,
+              "compare": do_compare} for r in runs]
+    if args.v311c and not args.v310_be:
+        raise SystemExit("--v311c は B＋E（--v310-be）の旗一式と一緒に使う")
+    out_root.mkdir(parents=True, exist_ok=True)
+    (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
+                                                    "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
+                                                    "extend_rule": args.extend_rule, "charge1": args.charge1,
+                                                    "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,
+                                                    "ident_rho": args.ident_rho, "ident_argmax": args.ident_argmax, "ident_shadow": args.ident_shadow,
+                                                    "ident_commons": args.ident_commons,
+                                                    "fast": args.fast, "nohist": args.nohist, "fix2": args.fix2,
+                                                    "fix_order": args.fix_order, "fix_order2": args.fix_order2, "rename_check": args.rename_check, "proj_first": args.proj_first,
+                                                    "fix2_full": args.fix2_full, "fill_unseen": args.fill_unseen, "fill_norestate": args.fill_norestate,
+                                                    "no_charge2": args.no_charge2, "death_terms": args.death_terms, "checks": args.checks,
+                                                    "own_evidence": args.own_evidence,
+                                                    "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
+                                                    "v39_a": args.v39_a, "v39_u": args.v39_u,
+                                                    "v39_decay": args.v39_decay, "v39_price": args.v39_price,
+                                                    "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
+                                                    "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers,
+                                                    "v311c": ({"f": args.v311c_f, "groups": args.v311c_groups, "q": args.v311c_q, "m": args.v311c_m,
+                                                               "recv": args.v311c_recv, "runs": args.v311c_runs, "no_tags": args.v311c_no_tags,
+                                                               "probe_every": args.v311c_probe_every} if args.v311c else None),
+                                                    "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
+                                                    "commit": commit, "driver": "tools/v3_run.py",
+                                                    "workers": args.workers}) + "\n")
+    man = out_root / "manifest.jsonl"
+    print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
+          f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+    if args.v311c:
+        _run_collective(args, tasks, out_root, man)
+        print(f"{time.strftime('%F %T')} ALLDONE {cfg['name']}", flush=True)
+        return
+    with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
+        futs = {ex.submit(worker, t): t for t in tasks}
+        for fu in as_completed(futs):
+            t = futs[fu]
+            try:
+                rec = fu.result()
+            except Exception as e:  # noqa
+                rec = {"cell": t["cell"], "seed": t["seed"], "error": repr(e)}
+            with open(man, "a", encoding="utf-8") as fm:
+                fm.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            c = rec.get("compare", {})
+            print(f"{time.strftime('%F %T')} {rec['cell']} seed{rec['seed']:03d} 秒={rec.get('elapsed_sec')} "
+                  f"最大メモリMB={rec.get('peak_rss_mb')} 定義末={rec.get('final_def_count')} "
+                  f"一致={c.get('snapshot_hash_equal')} err={rec.get('error')}", flush=True)
+            if rec.get("error") or (c and not c.get("snapshot_hash_equal")):
+                print("★★ エラーまたは不一致。止める", flush=True)
+                ex.shutdown(wait=False, cancel_futures=True)
+                sys.exit(3)
+    print(f"{time.strftime('%F %T')} ALLDONE {cfg['name']}", flush=True)
+
+
+if __name__ == "__main__":
+    main()

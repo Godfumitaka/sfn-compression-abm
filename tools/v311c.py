@@ -102,7 +102,7 @@ def new_tag() -> str:
     STATS["new_tags"] += 1
     if STATS["new_tags"] > CFG["tag_limit"]:
         raise RuntimeError(f"新しい名札が上限 {CFG['tag_limit']} を超えた（検査の失敗。b を途中で変えない）")
-    return "n" + opaque("tag", CFG["run"], CFG["agent"], CTX["tag_counter"])
+    return "n" + opaque("tag", CFG["wseed"], CTX["tag_counter"])
 
 
 def sample_tag(tags, rng):
@@ -115,6 +115,55 @@ def sample_tag(tags, rng):
         if x < acc:
             return tag
     return items[-1][0]
+
+
+def tagged_total_bits(real_total, state, L):
+    """v39 の総費用 ＋ 生きている定義の名札表の費用。"""
+    tags = getattr(state, "c_tags", {})
+    return real_total(state, L) + sum(tag_cost(tags.get(R, {})) for R in state.definitions)
+
+
+def tagged_candidates(real_cands, state, d, t, L, n_defs):
+    """最後の席の変換（H→U で定義が消える）の解放量に、その定義の名札表を足す。"""
+    import v39
+    out = real_cands(state, d, t, L, n_defs)
+    nonU = sum(1 for row in d.constituents if v39.seat_state(d, row, state.slot_history) != "U")
+    extra = tag_cost(getattr(state, "c_tags", {}).get(d.name, {})) if nonU == 1 else 0
+    if not extra:
+        return out
+    res = []
+    for c_ in out:
+        V, kind, R, slot, dc, sc = c_
+        if kind == "HU":
+            c_ = (V * dc / (dc + extra), kind, R, slot, dc + extra, sc)
+        res.append(c_)
+    return res
+
+
+def tag_update(tags, R, was_extension, rtag, new_tag_fn):
+    """名札の更新：世界からの誕生＝新しい名札 1、報告からの誕生＝受けた名札 1、名札付きの束の同化＝その名札に 1。世界の場面への同化は変えない。"""
+    tags = dict(tags)
+    if not was_extension:
+        tags[R] = {(rtag if rtag is not None else new_tag_fn()): 1}
+    elif rtag is not None:
+        t0 = dict(tags.get(R, {}))
+        t0[rtag] = t0.get(rtag, 0) + 1
+        tags[R] = t0
+    return tags
+
+
+def choose_partner(state, G, tag, mode):
+    """受信 A／B の比べる相手（仕様 4 節）。返り値：(土台の逐語, 写し, 同じ名札の候補の数, B を使ったか)。記憶が空なら土台は None。"""
+    from abm.sme import map_graphs
+    traces = state.prototype.traces
+    same = [tr for tr in traces if state.c_trace_tags.get(tr.scene.graph_id) == tag]
+    use_B = mode == "B" and bool(same)
+    cand = same if use_B else list(traces)
+    if not cand:
+        return None, None, len(same), use_B
+    ranked = [(map_graphs(tr.scene, G), tr) for tr in cand]
+    mapping, base_tr = sorted(ranked, key=lambda it: (-it[0].alignment.total_score, -it[1].written_at, it[1].scene.graph_id))[0]
+    return base_tr, mapping, len(same), use_B
 
 
 # ---------------------------------------------------------------- 束（仕様 3 節）
@@ -190,11 +239,11 @@ def build_bundle(state, output, scene, t):
         return {"empty": True, "initial": len(initial), "excluded": len(excluded), "pred_excluded": pred.relation_id in bad}
     # 識別子を付け直す（束の中の対応は保つ）
     ent_used = sorted({a for rid in final for a in rels[rid].arguments if a in ents})
-    emap = {e: "e" + opaque(CFG["run"], CFG["agent"], t, "e", e) for e in ent_used}
-    rmap = {rid: "r" + opaque(CFG["run"], CFG["agent"], t, "r", rid) for rid in final}
+    emap = {e: "e" + opaque(CFG["wseed"], t, "e", e) for e in ent_used}
+    rmap = {rid: "r" + opaque(CFG["wseed"], t, "r", rid) for rid in final}
     new_rels = tuple(Relation(rmap[rid], rels[rid].predicate,
                               tuple(emap.get(a, rmap.get(a, a)) for a in rels[rid].arguments)) for rid in final)
-    gid = "b" + opaque(CFG["run"], CFG["agent"], t, "bundle")
+    gid = "b" + opaque(CFG["wseed"], t, "bundle")
     graph = RelationGraph(graph_id=gid, entities=tuple(Entity(emap[e]) for e in ent_used), relations=new_rels)
     origin = {rmap[rid]: ("予測" if rid == pred.relation_id else "見えた（定義が写した）" if rid in aligned else "見えた（参照先として加えた）")
               for rid in final}
@@ -284,18 +333,11 @@ def choose_and_register(state, base, target, alignment, trial, kw, inner_m1):
     out = ensure(out)
     if reg is not None:
         # ★ 名札の更新
-        tags = dict(out.c_tags)
-        Rr = reg["R"]
+        out = replace(out, c_tags=tag_update(out.c_tags, reg["R"], reg["was_extension"], rtag, new_tag))
         if not reg["was_extension"]:
-            tag = rtag if rtag is not None else new_tag()
-            tags[Rr] = {tag: 1}
             STATS["birth_report" if rtag is not None else "birth_world"] += 1
         elif rtag is not None:
-            t0 = dict(tags.get(Rr, {}))
-            t0[rtag] = t0.get(rtag, 0) + 1
-            tags[Rr] = t0
             STATS["assim_report"] += 1
-        out = replace(out, c_tags=tags)
     C1 = v39.total_bits(out, L)
     if reg is not None and abs((C1 - C0) - pick["dC"]) > 1e-9:
         v310be.STATS["dC_mismatch"] += 1
@@ -329,15 +371,10 @@ def receive_one(state, msg, t, config):
     G = plain_to_graph(msg["graph"]) if isinstance(msg["graph"], dict) else msg["graph"]
     tag = msg["tag"]
     traces = state.prototype.traces
-    same = [tr for tr in traces if state.c_trace_tags.get(tr.scene.graph_id) == tag]
-    use_B = CFG["recv"] == "B" and bool(same)
-    cand = same if use_B else list(traces)
-    rec = {"t": t, "bundle": G.graph_id, "tag": tag, "recv": CFG["recv"], "same_tag_candidates": len(same),
+    base_tr, mapping, n_same, use_B = choose_partner(state, G, tag, CFG["recv"])
+    rec = {"t": t, "bundle": G.graph_id, "tag": tag, "recv": CFG["recv"], "same_tag_candidates": n_same,
            "used_B": use_B, "memory_empty": not traces}
-    base_tr = mapping = None
-    if cand:
-        ranked = [(map_graphs(tr.scene, G), tr) for tr in cand]
-        mapping, base_tr = sorted(ranked, key=lambda it: (-it[0].alignment.total_score, -it[1].written_at, it[1].scene.graph_id))[0]
+    if base_tr is not None:
         rec["base"] = base_tr.scene.graph_id
         rec["base_is_report"] = base_tr.scene.graph_id in state.c_trace_tags
         rec["base_tag"] = state.c_trace_tags.get(base_tr.scene.graph_id)
@@ -351,6 +388,8 @@ def receive_one(state, msg, t, config):
         rec["result"] = "記憶が空（個体版の初めの扱い：登録しない）"
         STATS["recv_memory_empty"] += 1
         return state, rec
+    seats0 = state.v39_seats
+    merit0 = state.merit
     v39.CTX["output"] = SimpleNamespace(trace={"selected_scene": base_tr.scene, "alignment": mapping.alignment}, prediction=None)
     v39.CTX["m1_rec"] = None
     CTX["recv"] = {"tag": tag}
@@ -365,6 +404,41 @@ def receive_one(state, msg, t, config):
     rec["E"] = side
     rec["m1"] = v39.CTX.get("m1_rec")
     v39.CTX["m1_rec"] = None
+    # ★ 個体版の m1 は「この試行に登録された行」の功績・埋込・例外を初期値に置き直す（一試行に m1 は一回の前提）。
+    #   受け取りで、この試行に生まれた定義が同化の先になると置き直しが重なるので、受け取りの前の値に戻す（採点をしない）
+    out = ensure(out)
+    if reg is not None and reg["was_extension"]:
+        emb0 = state.embed
+        exc0 = state.exceptions
+        fix = {k: merit0[k] for k in out.merit if k in merit0 and out.merit[k] is not merit0[k]}
+        if fix or any(k in emb0 and out.embed[k] is not emb0[k] for k in out.embed) or any(
+                k in exc0 and out.exceptions[k] is not exc0[k] for k in out.exceptions):
+            STATS["recv_reinit_restored"] = STATS.get("recv_reinit_restored", 0) + 1
+            out = replace(out, merit={**out.merit, **fix},
+                          embed={**out.embed, **{k: emb0[k] for k in out.embed if k in emb0}},
+                          exceptions={**out.exceptions, **{k: exc0[k] for k in out.exceptions if k in exc0}})
+    # ★ 検査 ⑨：受け取りは採点しない。誕生した定義の席の初期値と、覚え直し（U→H、新しい世代は成績 0 から）のほかは、
+    #   席の成績も行の功績も変わらないことを毎回確かめる
+    born = reg["R"] if (reg is not None and not reg["was_extension"]) else None
+    for k, v in out.v39_seats.items():
+        if k[0] != born and k in seats0 and seats0[k] != v:
+            a0 = seats0[k]
+            if a0.state == "U" and v.state == "H" and v.gen == a0.gen + 1 and v.init == v.post:
+                STATS["recv_relearn"] = STATS.get("recv_relearn", 0) + 1
+                continue
+            STATS["recv_score_changed"] += 1
+            if len(STATS.setdefault("recv_changed_examples", [])) < 6:
+                a0 = seats0[k]
+                STATS["recv_changed_examples"].append({"seat": list(k), "before": [a0.gen, a0.state, a0.t0, a0.n_scored],
+                                                       "after": [v.gen, v.state, v.t0, v.n_scored], "reg": reg["R"] if reg else None,
+                                                       "ext": bool(reg["was_extension"]) if reg else None})
+    for k, v in out.merit.items():
+        if k[0] != born and k in merit0 and merit0[k] != v:
+            STATS["recv_merit_changed"] += 1
+            if len(STATS.setdefault("recv_merit_examples", [])) < 4:
+                STATS["recv_merit_examples"].append({"key": list(k), "reg": reg["R"] if reg else None,
+                                                     "ext": bool(reg["was_extension"]) if reg else None,
+                                                     "same_obj": merit0[k] is v, "b0": merit0[k].basis[:2], "b1": v.basis[:2]})
     if reg is None:
         rec["result"] = "不成立"
         STATS["recv_none"] += 1
@@ -423,12 +497,13 @@ def install(fo, task, REAL) -> None:
     STATS.clear()
     CFG.clear()
     CTX.clear()
-    CFG.update(run=c["run"], agent=c["agent"], n=c["n"], T=int(task["cfg"]["trial_count"]), q=float(c["q"]), m=float(c["m"]),
+    CFG.update(run=c["run"], agent=c["agent"], wseed=int(task["seed"]), n=c["n"], T=int(task["cfg"]["trial_count"]), q=float(c["q"]), m=float(c["m"]),
                recv=c["recv"], groups=list(c["groups"]), tags=bool(c.get("tags", True)),
-               b=max(1, math.ceil(math.log2(max(2, c["n"] * int(task["cfg"]["trial_count"]))))),
+               b=max(1, math.ceil(math.log2(max(2, int(c.get("b_n") or c["n"]) * int(task["cfg"]["trial_count"]))))),
                tag_limit=int(task["cfg"]["trial_count"]), conn=c.get("conn"))
     STATS.update(speak=0, bundles=0, bundle_empty=0, sent=0, new_tags=0, birth_world=0, birth_report=0, assim_report=0,
                  recv=0, recv_assim=0, recv_birth=0, recv_none=0, recv_memory_empty=0, dC_mismatch=0, probes=0,
+                 recv_score_changed=0, recv_merit_changed=0,
                  cfg={k: CFG[k] for k in ("run", "agent", "n", "T", "q", "m", "recv", "groups", "tags", "b")})
     CTX.update(t=0, tag_counter=0, bundle=None, recv=None, fo=fo)
     if CFG["tags"]:
@@ -441,33 +516,10 @@ def install(fo, task, REAL) -> None:
     else:
         # 総費用に名札表を足す（v39 の総費用・最後の席の変換の解放量）
         real_total = v39.total_bits
-
-        def total_bits(state, L):
-            tags = getattr(state, "c_tags", {})
-            return real_total(state, L) + sum(tag_cost(tags.get(R, {})) for R in state.definitions)
-
-        v39.total_bits = total_bits
+        v39.total_bits = lambda state, L: tagged_total_bits(real_total, state, L)
         real_cands = v39._candidates
-
-        def _candidates(state, d, t, L, n_defs):
-            out = real_cands(state, d, t, L, n_defs)
-            nonU = sum(1 for row in d.constituents if v39.seat_state(d, row, state.slot_history) != "U")
-            if nonU != 1:
-                return out
-            extra = tag_cost(getattr(state, "c_tags", {}).get(d.name, {}))
-            if not extra:
-                return out
-            res = []
-            for c_ in out:
-                V, kind, R, slot, dc, sc = c_
-                if kind == "HU":   # ★ 最後の席の変換で定義が消える：名札表も空くビットに入れる
-                    num = V * dc
-                    dc2 = dc + extra
-                    c_ = (num / dc2, kind, R, slot, dc2, sc)
-                res.append(c_)
-            return res
-
-        v39._candidates = _candidates
+        # ★ 最後の席の変換で定義が消える：名札表も空くビットに入れる
+        v39._candidates = lambda state, d, t, L, n_defs: tagged_candidates(real_cands, state, d, t, L, n_defs)
 
         # E：名札の費用と更新を入れた写しで選ぶ
         inner_m1 = REAL["m1_before_be"]
@@ -498,11 +550,11 @@ def install(fo, task, REAL) -> None:
             if b is not None and not b.get("empty"):
                 R = output.trace["R_used"]
                 tags = st.c_tags.get(R, {})
-                tag = sample_tag(tags, rng_for("tag", CFG["run"], CFG["agent"], t)) if tags else None
-                send = rng_for("send", CFG["run"], CFG["agent"], t).random() < CFG["q"] if tag is not None else False
+                tag = sample_tag(tags, rng_for("tag", CFG["wseed"], t)) if tags else None
+                send = rng_for("send", CFG["wseed"], t).random() < CFG["q"] if tag is not None else False
                 to = None
                 if send:
-                    rr = rng_for("to", CFG["run"], CFG["agent"], t)
+                    rr = rng_for("to", CFG["wseed"], t)
                     others = [j for j in range(CFG["n"]) if j != CFG["agent"]]
                     g = CFG["groups"][CFG["agent"]]
                     same = [j for j in others if CFG["groups"][j] == g]
@@ -553,7 +605,7 @@ def install(fo, task, REAL) -> None:
             _dbg("agent", CFG["agent"], "t", trial, "got deliver", len(msg.get("deliver", [])))
             deliver = msg.get("deliver", [])
             order = list(range(len(deliver)))
-            rng_for("order", CFG["run"], CFG["agent"], trial).shuffle(order)
+            rng_for("order", CFG["wseed"], trial).shuffle(order)
             for k in order:
                 STATS["recv"] += 1
                 _dbg("agent", CFG["agent"], "t", trial, "receive", k)
@@ -753,9 +805,15 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
             c.send({"type": "go"})
         summ["trials"] = t + 1
     for i, c in enumerate(conns):
-        if done[i] is None and procs[i].is_alive():
+        # ★ 先に終わった個体の知らせも取りこぼさない（プロセスが終わっていても、届いた知らせは読める）
+        while done[i] is None:
             try:
-                done[i] = c.recv()
+                if c.poll(5):
+                    m = c.recv()
+                    if m.get("type") in ("done", "error"):
+                        done[i] = m
+                elif not procs[i].is_alive():
+                    done[i] = {"type": "error", "error": "終わりの知らせが無いまま個体のプロセスが終わった"}
             except EOFError:
                 done[i] = {"type": "error", "error": "EOF"}
     for p in procs:
