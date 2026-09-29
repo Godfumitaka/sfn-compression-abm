@@ -426,11 +426,18 @@ def worker(task: dict) -> dict:
                     seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
                     a=task["v39_a"], u=task["v39_u"], decay_mode=task.get("v39_decay", "uniform"), price=task.get("v39_price"),
                     dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None))
+        if task.get("v311c"):
+            import abm.loop as _loop
+            _REAL["m1_before_be"] = _loop.m1   # ★ v3.11c：B＋E の包みの内側（v39 の m1）を控える（集団化の E が名札の費用を足して呼ぶ）
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
             v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]))
         _REAL["theta_impl"] = v39.CTX["apply"]
+        if task.get("v311c"):
+            # ★ v3.11c（集団化・事例伝達、2026-09-29 夕）：tools/v311c.py。予測・m1（E）・削除の段の一番外を包む（個体ごとのプロセスで）
+            import v311c
+            v311c.install(fo, task, _REAL)
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -444,6 +451,8 @@ def worker(task: dict) -> dict:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("v310_be"):
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
+    if task.get("v311c"):
+        rec["v311c"] = dict(sys.modules["v311c"].STATS)
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -521,6 +530,52 @@ def compare(task: dict) -> dict:
             "body_sha_equal": b1 == b2}
 
 
+def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
+    """★ v3.11c：集団の走行。走行（集団）ごとに、まとめ役を一つのプロセスで動かし、その中で個体ごとのプロセスを歩調を合わせて走らせる。"""
+    import multiprocessing as mp
+    import v311c
+    if len({t["cell"] for t in tasks}) != 1:
+        raise SystemExit(f"--v311c はセルを一つに絞って使う（--cells）。いま {len({t['cell'] for t in tasks})} セル")
+    tmpl = tasks[0]
+    fs = [float(x) for x in args.v311c_f.split(",")]
+    n = len(fs)
+    groups = [int(x) for x in args.v311c_groups.split(",")] if args.v311c_groups else [0] * n
+    if len(groups) != n:
+        raise SystemExit("--v311c-groups の長さが個体の数と違う")
+    comm = out_root / "comm"
+    comm.mkdir(parents=True, exist_ok=True)
+    pops = []
+    for r in [int(x) for x in args.v311c_runs.split(",")]:
+        ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
+                   v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
+                          "groups": groups, "tags": not args.v311c_no_tags}) for i in range(n)]
+        pops.append((r, ts))
+
+    def one(r, ts):
+        s = v311c.coordinate(ts, comm / f"run{r:03d}.jsonl", probe_every=args.v311c_probe_every)
+        (comm / f"run{r:03d}.summary.json").write_text(json.dumps(s, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
+
+    ctx = mp.get_context("fork")
+    running = []
+    queue = list(pops)
+    while queue or running:
+        while queue and len(running) < max(1, args.workers):
+            r, ts = queue.pop(0)
+            p = ctx.Process(target=one, args=(r, ts))
+            p.start()
+            running.append((r, p))
+            print(f"{time.strftime('%F %T')} 集団 run{r:03d} を始めた（個体 {n}）", flush=True)
+        r, p = running.pop(0)
+        p.join()
+        sp = comm / f"run{r:03d}.summary.json"
+        s = json.loads(sp.read_text(encoding="utf-8")) if sp.exists() else {"errors": ["summary が無い"], "exitcode": p.exitcode}
+        with open(man, "a", encoding="utf-8") as fm:
+            for i, a in enumerate(s.get("agents") or []):
+                fm.write(json.dumps({"run": r, "agent": i, **(a if isinstance(a, dict) else {"raw": str(a)})}, ensure_ascii=False, default=str) + "\n")
+        print(f"{time.strftime('%F %T')} 集団 run{r:03d} 終わり 試行 {s.get('trials')} 束 {s.get('bundles')} 送信 {s.get('sent')} "
+              f"受信 {s.get('recv')} 失敗 {len(s.get('errors') or [])}", flush=True)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
@@ -564,6 +619,15 @@ def main() -> None:
     ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
+    ap.add_argument("--v311c", action="store_true", help="v3.11c：集団化・事例伝達（tools/v311c.py）。B＋E の旗一式と一緒に")
+    ap.add_argument("--v311c-f", default="0.5,0.5", help="v3.11c：個体ごとの f（開示の確率）。個体の数はこの並びの長さ")
+    ap.add_argument("--v311c-groups", default=None, help="v3.11c：個体ごとの組（既定は全員 0）")
+    ap.add_argument("--v311c-q", type=float, default=0.2, help="v3.11c：実際に答えた人が束を送る確率 q")
+    ap.add_argument("--v311c-m", type=float, default=0.0, help="v3.11c：別の組の相手を選ぶ確率 m（二体では使わない）")
+    ap.add_argument("--v311c-recv", default="B", choices=["A", "B"], help="v3.11c：受信 A（名前を使わない）／受信 B（同じ名札を優先）")
+    ap.add_argument("--v311c-runs", default="1", help="v3.11c：走行（集団）の番号。個体 i の世界の種は 走行＋1000×i")
+    ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
+    ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
     ap.add_argument("--death-terms", action="store_true",
@@ -646,6 +710,8 @@ def main() -> None:
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be,
               "compare": do_compare} for r in runs]
+    if args.v311c and not args.v310_be:
+        raise SystemExit("--v311c は B＋E（--v310-be）の旗一式と一緒に使う")
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -662,12 +728,19 @@ def main() -> None:
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be,
+                                                    "v311c": ({"f": args.v311c_f, "groups": args.v311c_groups, "q": args.v311c_q, "m": args.v311c_m,
+                                                               "recv": args.v311c_recv, "runs": args.v311c_runs, "no_tags": args.v311c_no_tags,
+                                                               "probe_every": args.v311c_probe_every} if args.v311c else None),
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+    if args.v311c:
+        _run_collective(args, tasks, out_root, man)
+        print(f"{time.strftime('%F %T')} ALLDONE {cfg['name']}", flush=True)
+        return
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
