@@ -53,7 +53,8 @@ L25=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['25']
 L50=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['50']))")
 L75=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['75']))")
 L90=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['90']))")
-ARMS="v310BEh_L0_s21:0 v310BEh_L25_s21:$L25 v310BEh_L50_s21:$L50 v310BEh_L75_s21:$L75 v310BEh_L90_s21:$L90 v310BEh_L1_s21:1 v310BEh_L50_Uabs_s21:$L50:abstain"
+ARMS="v310BEh_L0_s21:0 v310BEh_L25_s21:$L25 v310BEh_L50_s21:$L50 v310BEh_L75_s21:$L75 v310BEh_L90_s21:$L90 v310BEh_L1_s21:1 v310BEh_L50_Uabs_s21:$L50:abstain v310BEh_L0p2_s21:0.2 v310BEh_L0p3_s21:0.3 v310BEh_L0p5_s21:0.5 v310BEh_L0p7_s21:0.7"
+# ★ 追記（2026-09-30 深夜）：7 腕のあとに、同じ直した版で λ＝0.2・0.3・0.5・0.7 の 4 腕（種 21〜40）。要約は書かない
 say "腕：$ARMS"
 for A in $ARMS; do
   ARM=${A%%:*}; rest=${A#*:}; LAM=${rest%%:*}; U=""; [[ "$rest" == *:abstain ]] && U="--v39-u abstain"
@@ -106,4 +107,4 @@ P
   ctl_line "- $(date '+%H:%M') 腕 $ARM（λ＝$LAM${U:+、U 棄権}）：20 本のうち $n_done 本が走り終わった（rc＝$rc）。台帳は ~/v310hprod/$ARM。"
 done
 say "H21DONE"
-ctl_line "- $(date '+%H:%M') 7 腕が終わった。"
+ctl_line "- $(date '+%H:%M') 11 腕（7 腕と、追記の λ＝0.2・0.3・0.5・0.7 の 4 腕）が終わった。"
