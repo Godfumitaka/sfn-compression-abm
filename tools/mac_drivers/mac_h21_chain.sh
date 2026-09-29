@@ -1,6 +1,8 @@
 #!/bin/bash
 # 委任書「物の組で見分ける箇所の洗い出し・席の履歴の直し・直した B＋E の走らせ直し（2026-09-29 夜）」の 5（マック）：
 #   デスクトップのタグ v3.10h-main が control/ に知らされたら、B＋E（--v310-be --hist-role）の 7 腕を確かめ用の種 s21（種 21〜40）で走らせる。
+# ★ 2026-09-30 の追加・置換指示：履歴と採点の両方を直した新しいタグで走らせる。タグと足す旗は、マックの Code が control/ の知らせを読んで
+#   確かめてから、環境変数で渡して始める（自動では待たない）：TAG＝<新しいタグ>  EXTRA＝"--hist-role <採点の直しの旗>"
 #   ★ 結果は上げるが、要約は書かない（アストラが見分ける量を決めるまで読まないため）。上げるのは flag.json・台帳の本体の sha256 の一覧・README だけ。
 #     台帳・side はマックの ~/v310hprod/<腕> に全部残す。control/ には腕ごとに「走り終わった」ことだけを書く（数は書かない）。
 #   ★ 空きが 15 GB を切りそうなら（腕を始める前に、空き − 腕一つの大きさの見込み 2 GB ＜ 15 GB なら）、腕の区切りで止めて control/ に書く。
@@ -9,9 +11,12 @@
 set -u
 unset LC_CTYPE LC_ALL LANG
 REPO=/Users/tatsu-admin/sfn/sfn-compression-abm
-W=/Users/tatsu-admin/sfn/sfn-compression-abm-v310h
+TAG=${TAG:?新しいタグを TAG に渡す}
+EXTRA=${EXTRA:?両方の直しの旗を EXTRA に渡す}
+export TAG EXTRA
+W=/Users/tatsu-admin/sfn/sfn-compression-abm-${TAG}
 OUT=$HOME/v310hprod; RES=$HOME/v33prod/results; LOG=$OUT/mac_h21.log; mkdir -p $OUT
-CTRL=control/2026-09-30_BEh_s21_走行_マック.md
+CTRL=control/2026-09-30_BE直し_s21_走行_マック.md
 say() { echo "$(date '+%F %T') [h21] $*" >> "$LOG"; }
 freegb() { df -Pk "$HOME" | awk 'NR==2 {printf "%d", $4/1048576}'; }
 pushctl() {
@@ -21,31 +26,29 @@ pushctl() {
 ctl_line() {   # control/ の一行を足して上げる
   ( cd $RES && git pull -q --rebase origin results-2026-09-27 ) >> "$LOG" 2>&1
   if [[ ! -e "$RES/$CTRL" ]]; then
-    printf '%s\n' "# B＋E（--hist-role）の確かめ用の種 s21 の走行（マック）　要約は書かない" "" \
+    printf '%s\n' "# B＋E（履歴と採点を直した版）の確かめ用の種 s21 の走行（マック）　要約は書かない" "" \
       "委任書「物の組で見分ける箇所の洗い出し・席の履歴の直し・直した B＋E の走らせ直し（2026-09-29 夜）」の 5。台本 tools/mac_drivers/mac_h21_chain.sh（ブランチ v3.10mac-2026-09-29）。" \
-      "設定 config/sweep_b2_hide_s21_2026-09-22.json（種 21〜40）、セル f0.5000_th2.1000_first_order（最頻）、1,740 試行、各腕 20 本。コードはデスクトップのタグ v3.10h-main。λ は control/2026-09-29_BE_較正.md のまま。" \
+      "設定 config/sweep_b2_hide_s21_2026-09-22.json（種 21〜40）、セル f0.5000_th2.1000_first_order（最頻）、1,740 試行、各腕 20 本。コードはデスクトップのタグ $TAG、足す旗 $EXTRA。λ は control/2026-09-29_BE_較正.md のまま。" \
       "★ 委任書により、結果の数・要約は書かない。結果のブランチの mac/<腕>/ には flag.json・台帳の本体の sha256 の一覧（sha256.jsonl）・README だけを上げる。台帳と side はマックの ~/v310hprod/<腕> に全部残す。" "" > "$RES/$CTRL"
   fi
   echo "$1" >> "$RES/$CTRL"
   pushctl "$CTRL"
 }
-say "タグ v3.10h-main と control/ の知らせを待つ"
-until git -C $REPO ls-remote --tags origin 2>/dev/null | grep -q "refs/tags/v3.10h-main$" \
-      && git -C $RES fetch -q origin results-2026-09-27 2>/dev/null \
-      && git -C $RES grep -l "v3.10h-main" origin/results-2026-09-27 -- control/ 2>/dev/null | grep -q "走行の係"; do sleep 120; done
-say "タグと知らせがそろった：$(git -C $RES grep -l "v3.10h-main" origin/results-2026-09-27 -- control/ | grep "走行の係" | tr '\n' ' ')"
+say "タグ $TAG・足す旗 $EXTRA で始める（マックの Code が control/ の知らせを確かめて渡した）"
 git -C $REPO fetch -q origin --tags >> "$LOG" 2>&1
-[[ -d $W ]] || git -C $REPO worktree add -q --detach $W v3.10h-main >> "$LOG" 2>&1
+[[ -d $W ]] || git -C $REPO worktree add -q --detach $W $TAG >> "$LOG" 2>&1
 cd $W
 TAGC=$(git rev-parse --short HEAD)
 say "作業場所 $W（$TAGC、$(git describe --tags)）"
-if ! python3.12 tools/v3_run.py --help 2>/dev/null | grep -q -- "--hist-role"; then
-  say "★ v3.10h-main の tools/v3_run.py に --hist-role が無い。走らせずに止める"
-  ctl_line "- $(date '+%H:%M') ★ タグ v3.10h-main（$TAGC）の tools/v3_run.py に旗 --hist-role が見つからないので、走らせずに止めた。"
-  exit 3
-fi
+for f in $EXTRA; do
+  if ! python3.12 tools/v3_run.py --help 2>/dev/null | grep -q -- "$f"; then
+    say "★ $TAG の tools/v3_run.py に旗 $f が無い。走らせずに止める"
+    ctl_line "- $(date '+%H:%M') ★ タグ $TAG（$TAGC）の tools/v3_run.py に旗 $f が見つからないので、走らせずに止めた。"
+    exit 3
+  fi
+done
 LAMJ=$HOME/v310prod/be_calib.json
-FL="--nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-decay actr --v39-budget inf --v310-be --hist-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --workers 8 --no-compare"
+FL="--nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-decay actr --v39-budget inf --v310-be $EXTRA --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --workers 8 --no-compare"
 L25=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['25']))")
 L50=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['50']))")
 L75=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['75']))")
@@ -94,7 +97,7 @@ with open(os.path.join(dest, "sha256.jsonl"), "w", encoding="utf-8") as f:
 shutil.copy(os.path.join(root, "flag.json"), os.path.join(dest, "flag.json"))
 open(os.path.join(dest, "README.md"), "w", encoding="utf-8").write(
     f"# {arm}（マック）\n\n委任書「物の組で見分ける箇所の洗い出し・席の履歴の直し・直した B＋E の走らせ直し（2026-09-29 夜）」の 5。"
-    f"コード v3.10h-main（{tagc}）。確かめ用の種 s21（種 21〜40）。\n\n★ 委任書により要約は書かない。ここにあるのは flag.json と台帳の本体の sha256 の一覧（{len(rows)} 本）だけ。"
+    f"（2026-09-30 の追加・置換指示）コード {os.environ.get('TAG')}（{tagc}）、足す旗 {os.environ.get('EXTRA')}。確かめ用の種 s21（種 21〜40）。\n\n★ 委任書により要約は書かない。ここにあるのは flag.json と台帳の本体の sha256 の一覧（{len(rows)} 本）だけ。"
     f"台帳と side はマックの ~/v310hprod/{arm} に全部残している。\n")
 print("sha", arm, len(rows))
 P
