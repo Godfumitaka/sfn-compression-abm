@@ -431,6 +431,13 @@ def worker(task: dict) -> dict:
             import v310be
             v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]))
         _REAL["theta_impl"] = v39.CTX["apply"]
+    if task.get("world_cue"):
+        # ★ 世界 v4（2026-09-29 夜）：手がかりで中身が変わる世界（tools/worldcue.py）。世界を作る前に入れる。v39 の固定辞書に新しい述語を足す
+        sys.path.insert(0, str(ROOT / "tools"))
+        import worldcue
+        worldcue.install(float(task.get("world_cue_p", 0.8)))
+        if "v39" in sys.modules:
+            worldcue.extend_dictionary()
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -444,6 +451,8 @@ def worker(task: dict) -> dict:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("v310_be"):
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
+    if task.get("world_cue"):
+        rec["worldcue"] = dict(sys.modules["worldcue"].STATS)
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -564,6 +573,8 @@ def main() -> None:
     ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
+    ap.add_argument("--world-cue", action="store_true", help="世界 v4：手がかりで中身が変わる世界（tools/worldcue.py）")
+    ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4：手がかりが縦になる確率（既定 0.8）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
     ap.add_argument("--death-terms", action="store_true",
@@ -624,7 +635,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39
+               and not args.v39 and not args.world_cue
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -645,6 +656,7 @@ def main() -> None:
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be,
+              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -662,6 +674,7 @@ def main() -> None:
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be,
+                                                    "world_cue": (args.world_cue_p if args.world_cue else None),
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
