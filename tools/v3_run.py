@@ -327,6 +327,12 @@ def worker(task: dict) -> dict:
     out_root = Path(task["out_root"])
     side_dir = out_root / "side" / task["cell"]
     side_dir.mkdir(parents=True, exist_ok=True)
+    if task.get("hist_role"):
+        # ★ v3.10h（2026-09-29 夜）：m1 の一階の席の履歴を、親の行の写しで集める（tools/histrole.py）。
+        #   abm.abstraction.m1 そのものを包むので、loop.m1 を控える _install より前に入れる。
+        sys.path.insert(0, str(ROOT / "tools"))
+        import histrole
+        histrole.install()
     fo = _install(side_dir / f"seed{task['seed']:03d}.jsonl", task["nohash"],
                   task.get("prune", False), task.get("extgreedy", False), float(task["theta_prime"]))
     if task.get("nohist"):
@@ -444,6 +450,8 @@ def worker(task: dict) -> dict:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("v310_be"):
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
+    if task.get("hist_role"):
+        rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -565,6 +573,8 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--hist-role", action="store_true",
+                    help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
     ap.add_argument("--death-terms", action="store_true",
                     help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
@@ -624,7 +634,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39
+               and not args.v39 and not args.hist_role
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -644,7 +654,7 @@ def main() -> None:
               "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
-              "v310_be": args.v310_be,
+              "v310_be": args.v310_be, "hist_role": args.hist_role,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -661,7 +671,7 @@ def main() -> None:
                                                     "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
-                                                    "v310_be": args.v310_be,
+                                                    "v310_be": args.v310_be, "hist_role": args.hist_role,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
