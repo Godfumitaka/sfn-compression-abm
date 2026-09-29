@@ -548,7 +548,7 @@ def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
     for r in [int(x) for x in args.v311c_runs.split(",")]:
         ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
                    v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
-                          "groups": groups, "tags": not args.v311c_no_tags}) for i in range(n)]
+                          "groups": groups, "tags": not args.v311c_no_tags, "b_n": args.v311c_b_n}) for i in range(n)]
         pops.append((r, ts))
 
     def one(r, ts):
@@ -626,6 +626,7 @@ def main() -> None:
     ap.add_argument("--v311c-m", type=float, default=0.0, help="v3.11c：別の組の相手を選ぶ確率 m（二体では使わない）")
     ap.add_argument("--v311c-recv", default="B", choices=["A", "B"], help="v3.11c：受信 A（名前を使わない）／受信 B（同じ名札を優先）")
     ap.add_argument("--v311c-runs", default="1", help="v3.11c：走行（集団）の番号。個体 i の世界の種は 走行＋1000×i")
+    ap.add_argument("--v311c-b-n", type=int, default=None, help="v3.11c：名札の固定長 b を決める個体の数（既定は集団の個体数。単独の比べの走行で集団と同じ b にするとき）")
     ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
     ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
