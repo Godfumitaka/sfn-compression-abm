@@ -333,6 +333,16 @@ def test_17_price_converts_below_lambda_until_none():
     assert all(c[0] >= 1e-9 for c in cands)                           # 候補がなくなるまで
 
 
+# D：ACT-R の基礎の活性 B(t) ＝ ln Σⱼ max(t − tⱼ, 1)^(−0.5)（手計算と照らす）
+def test_18_actr_activation_hand_calc():
+    import math
+    # 使用 0・5・9、t＝10：10^(−0.5)＝0.316228、5^(−0.5)＝0.447214、1^(−0.5)＝1 → 和 1.763441 → ln ＝ 0.567267
+    assert abs(v39.activation([0, 5, 9], 10) - 0.567267) < 1e-6
+    assert v39.activation([10], 10) == 0.0                          # 生まれた試行：max(0, 1)＝1 → ln 1 ＝ 0
+    assert abs(v39.activation([0], 100) - math.log(0.1)) < 1e-12     # 一度も使われない：−0.5 ln(t−t₀)
+    assert abs(v39.activation([3, 3], 4) - math.log(2.0)) < 1e-12    # 同じ試行の二つの記録は二回数える
+
+
 if __name__ == "__main__":
     for mode in ("uniform", "actr"):
         MODE["decay"] = mode

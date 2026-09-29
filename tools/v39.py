@@ -217,6 +217,12 @@ def rec_means(rec: SeatRec, t: int) -> tuple:
     return tuple(out)
 
 
+def activation(trials, t) -> float:
+    """--v39-forget-actr（D、2026-09-29）：ACT-R の基礎の活性 B(t) ＝ ln Σⱼ max(t − tⱼ, 1)^(−0.5)。
+    tⱼ は、定義が生まれた試行・選ばれて使われた試行（R_used）・同化の先になった試行（同じ試行に二つあれば二回数える）。"""
+    return math.log(sum(max(t - tj, 1) ** -0.5 for tj in trials))
+
+
 def actr_weights(horizon: int) -> tuple:
     """--v39-decay actr の平均の重み：abm/accounting.py の decay_ladder と同じ時定数 τₖ（0.3〜3T の等比 16 本）に対し τₖ^(−0.5) ∝、合計 1。"""
     taus = [0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (k / 15)) for k in range(16)]
@@ -943,7 +949,7 @@ def run_conversions(state, trial):
 
 # ---------------------------------------------------------------- 入れる所
 def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a: float, u: str,
-            decay_mode: str = "uniform", price=None, dump_cands=None) -> None:
+            decay_mode: str = "uniform", price=None, dump_cands=None, forget_tau=None, dump_act=None) -> None:
     import abm.abstraction as ab
     import abm.agent_runtime as ar
     import abm.loop as loop
@@ -972,11 +978,16 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         CFG["price"] = float(price)
     if dump_cands:
         CFG["dump_cands"] = open(dump_cands, "wb")
+    # ★ D：ACT-R の忘却。使用の記録は状態の外（CTX["act"]）に持つ（τ が十分小さければ台帳は v3.10 と一字一句同じ）
+    if forget_tau is not None:
+        CFG["forget_tau"] = float(forget_tau)
+    if dump_act:
+        CFG["dump_act"] = open(dump_act, "wb")
     STATS.update(trials=0, scored_trials=0, scored_seats=0, births=0, birth_noop=0, birth_childless_dropped=0,
                  conv_FH=0, conv_HU=0, retire=0, neg_conv=0, cap_conv=0, ties=0, max_usage=0, relearn=0,
                  price_conv=0, cfg={**{k: CFG[k] for k in ("budget", "init", "a", "u_abstain", "D", "T", "rho", "argmax", "commons")},
-                                    "decay_mode": decay_mode, "price": price})
-    CTX.update(struct_cache={}, births_rec=[], relearn=[], drift=[], cost_mismatch=[], answers=None, output=None)
+                                    "decay_mode": decay_mode, "price": price, "forget_tau": forget_tau}, forget_actr=0)
+    CTX.update(struct_cache={}, births_rec=[], relearn=[], drift=[], cost_mismatch=[], answers=None, output=None, act={})
     _install_candidates()
 
     # 状態の型（席の記録を足す）
@@ -995,6 +1006,9 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         CTX["drift"] = []
         next_state, acc = real_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge)
         t = coin.t
+        ru = output.trace.get("R_used")
+        if ru is not None and ru in next_state.definitions:
+            CTX["act"].setdefault((ru, next_state.definitions[ru].registered_at), []).append(t)
         next_state = reconcile(next_state, t, "会計")
         ans = CTX.pop("answers", None)
         scored = []
@@ -1049,6 +1063,13 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
             for g in made:
                 unregister(g)
         out = ensure(out)
+        if reg is not None:
+            d_reg = out.definitions[reg["R"]]
+            key = (reg["R"], d_reg.registered_at)
+            if reg["was_extension"]:
+                CTX["act"].setdefault(key, []).append(trial)
+            else:
+                CTX["act"][key] = [trial]
         if reg is not None and not reg["was_extension"]:
             R = reg["R"]
             d = out.definitions[R]
@@ -1091,6 +1112,34 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
             state = replace(state, prototype=Prototype(surviving))
         CTX["cost_mismatch"] = []
         state, conv_events, before, after, ties, boundary = run_conversions(state, trial)
+        forgot = []
+        if "forget_tau" in CFG or "dump_act" in CFG:
+            alive_keys = {(R, d.registered_at) for R, d in state.definitions.items()}
+            for k in [k for k in CTX["act"] if k not in alive_keys]:
+                CTX["act"].pop(k)
+            acts = {R: activation(CTX["act"].get((R, d.registered_at), ()) or (trial,), trial)
+                    for R, d in state.definitions.items()}
+            if "forget_tau" in CFG:
+                tau = CFG["forget_tau"]
+                for R in sorted(R for R, b in acts.items() if b < tau):
+                    d = state.definitions[R]
+                    state = replace(state, definitions={k: v for k, v in state.definitions.items() if k != R},
+                                    merit={k: v for k, v in state.merit.items() if k[0] != R},
+                                    embed={k: v for k, v in state.embed.items() if k[0] != R},
+                                    exceptions={k: v for k, v in state.exceptions.items() if k[0] != R},
+                                    slot_history={k: v for k, v in state.slot_history.items() if k[0] != R},
+                                    v39_seats={k: v for k, v in state.v39_seats.items() if k[0] != R})
+                    CTX["act"].pop((R, d.registered_at), None)
+                    conv_events = list(conv_events) + [{"kind": "definition_removed", "R": R, "trial": trial, "v39": "forget_actr",
+                                                        "registered_at": d.registered_at, "B": acts[R]}]
+                    forgot.append([R, d.registered_at, acts[R]])
+                    STATS["forget_actr"] += 1
+                if forgot:
+                    after = total_bits(state, code_lengths(state.p_hat))
+            if "dump_act" in CFG:
+                from array import array
+                array("d", [b for R, b in acts.items() if R in state.definitions]).tofile(CFG["dump_act"])
+                CFG["dump_act"].flush()
         events.extend(conv_events)
         if CFG.get("dump_cands"):
             from array import array
@@ -1120,6 +1169,7 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
                "conv": [[e["v39"], e["R"], e["slot_index"], e["V"], e["dC"], e["why"], e["tie_n"]]
                         for e in conv_events if e.get("v39") in ("FH", "HU")],
                "retire": [e["R"] for e in conv_events if e.get("v39") == "retire"],
+               **({"forget": forgot} if forgot else {}),
                "boundary": boundary, "scored": tr.get("scored"), "m1": CTX.get("m1_rec")}
         ans = tr.get("answers")
         if ans is not None:

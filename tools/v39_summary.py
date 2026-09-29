@@ -84,6 +84,7 @@ def one_ledger(p, side, inc, seedf):
     n_rec = 0
     bnd_hi, bnd_lo = [], []
     relearned = set()
+    forgets = []   # ★ D：活性で手放した定義 (R, 生まれた試行, 手放した試行)
     zero_by_stage = collections.Counter()
     for line in open(side, encoding="utf-8"):
         if '"v39' not in line:
@@ -119,6 +120,8 @@ def one_ledger(p, side, inc, seedf):
             if kind == "HU" and (R, slot) in relearned:
                 C["覚え直しのあと H→U"] += 1
         C["退役"] += len(d.get("retire") or [])
+        for R, reg, B in d.get("forget") or []:
+            forgets.append((R, reg, t))
         b = d.get("boundary")
         if b:
             C["境目のある試行"] += 1
@@ -148,6 +151,20 @@ def one_ledger(p, side, inc, seedf):
             ch = child.get(t, set())
             C["U_親の穴埋めに使われた"] += len(u_fill_ids & ch)
             _ = R
+    # ★ D：覚え直し ＝ 活性で手放した定義の生まれた型（場面の型）で、手放したあとに新しい定義が生まれた回数。
+    #   誕生は定義の表（def_origin の born_motif）から。一つの誕生は一度だけ数える（同じ型を二度以上手放していても）。
+    births = sorted((born, motif, R) for R, xs in inc.items() for born, died, motif in xs)
+    motif_of = {(R, born): motif for R, xs in inc.items() for born, died, motif in xs}
+    C["活性で手放した"] = len(forgets)
+    first_release = {}
+    for R, reg, t in forgets:
+        m = motif_of.get((R, reg))
+        if m is None:
+            C["活性で手放した_型が分からない"] += 1
+            continue
+        first_release[m] = min(first_release.get(m, t), t)
+        C["手放したあと同じ型が生まれた"] += any(b > t and bm == m for b, bm, _ in births)
+    C["覚え直し_同じ型の誕生"] = sum(1 for b, bm, _ in births if bm in first_release and b > first_release[bm])
     C = collections.Counter({k: v for k, v in C.items() if not k.startswith("_")})
     C["走行末_F"] = last["F"] if last else 0
     C["走行末_H"] = last["H"] if last else 0
@@ -197,7 +214,7 @@ def main():
     out_spk = tot["発話_生まれた型以外"]
     FHU_end = (tot["走行末_F"], tot["走行末_H"], tot["走行末_U"])
     summary = {
-        "腕": arm, "走行": len(runs), "旗": {k: fl.get(k) for k in ("v39", "v39_budget", "v39_init", "v39_a", "v39_u", "v39_decay", "v39_price", "nsim", "config")},
+        "腕": arm, "走行": len(runs), "旗": {k: fl.get(k) for k in ("v39", "v39_budget", "v39_init", "v39_a", "v39_u", "v39_decay", "v39_price", "v39_forget_actr", "nsim", "config")},
         "課題": n, "正解": tot["正解"], "誤答": tot["誤答"], "棄権": tot["棄権"],
         "正解率（全課題）": tot["正解"] / n if n else None, "誤答率（全課題）": tot["誤答"] / n if n else None,
         "棄権率（全課題）": tot["棄権"] / n if n else None, "発話時正解率": tot["正解"] / spk if spk else None,
@@ -219,6 +236,9 @@ def main():
                                               "H→U": tot["変換_HU_neg"] + tot["変換_HU_price"],
                                               "うち V＜0 の F→H": tot["変換_FH_neg"], "うち V＜0 の H→U": tot["変換_HU_neg"]},
         "λで空いたビット": tot["λで空いたビット"],
+        "活性で手放した定義": tot["活性で手放した"],
+        "覚え直し（手放した定義の生まれた型で、手放したあとに生まれた新しい定義の数。各誕生を一度）": tot["覚え直し_同じ型の誕生"],
+        "手放したうち、あとで同じ型の新しい定義が生まれたもの": tot["手放したあと同じ型が生まれた"],
         "点0の変換_段別（走行の和）": dict(sum((collections.Counter(r.get("点0の変換_段別") or {}) for r in runs), collections.Counter())),
         "退役": tot["退役"], "覚え直し": tot["覚え直し"], "覚え直しのあと H→U": tot["覚え直しのあと H→U"],
         "最大使用量（走行ごとの最大の中央値）": statistics.median([r["最大使用量"] for r in runs]) if runs else None,
@@ -226,7 +246,10 @@ def main():
         "走行ごと": runs,
     }
     extra = ""
-    if fl.get("v39_price") is not None:
+    if fl.get("v39_forget_actr") is not None:
+        extra = (f"／活性で手放した定義 {tot['活性で手放した']:,}（その後に同じ型の場面で新しい定義が生まれた回数 {tot['覚え直し_同じ型の誕生']:,}、"
+                 f"手放したうち同じ型の新しい定義があとで生まれたもの {tot['手放したあと同じ型が生まれた']:,}）")
+    elif fl.get("v39_price") is not None:
         lam = summary["λを下回って変換した件数（段別、V＜0 を含む）"]
         extra = (f"／λ を下回って変換した件数（段別）F→H {lam['F→H']:,}・H→U {lam['H→U']:,}"
                  f"（うち V＜0 は F→H {lam['うち V＜0 の F→H']:,}・H→U {lam['うち V＜0 の H→U']:,}）")
@@ -235,7 +258,8 @@ def main():
         extra = f"／容量で変換した件数のうち点数 0 の同点 {tot['容量_点0の同点']:,}（{100 * r0:.1f}%）"
     head = (f"予算 {fl.get('v39_budget')}" + (f"、λ＝{fl.get('v39_price')}" if fl.get("v39_price") is not None else "")
             + f"、初期 {fl.get('v39_init')}、a＝{fl.get('v39_a')}" + (f"、U {fl.get('v39_u')}" if fl.get("v39_u") not in (None, "global") else "")
-            + (f"、重み {fl.get('v39_decay')}" if fl.get("v39_decay") not in (None, "uniform") else ""))
+            + (f"、重み {fl.get('v39_decay')}" if fl.get("v39_decay") not in (None, "uniform") else "")
+            + (f"、τ＝{fl.get('v39_forget_actr')}" if fl.get("v39_forget_actr") is not None else ""))
     line = (f"- {arm}（{head}、走行 {len(runs)}"
             f"{'、容量不適合 ' + str(len(unfit)) if unfit else ''}）："
             f"全課題 {n:,} のうち 正解 {tot['正解']:,}・誤答 {tot['誤答']:,}・棄権 {tot['棄権']:,}／"

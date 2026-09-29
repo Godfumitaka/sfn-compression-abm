@@ -23,6 +23,7 @@
                   --v39-u global|abstain（U の答え、既定 global）
                   v3.10（2026-09-29 朝）：--v39-decay uniform|actr（点数の記録の 16 本の平均の重み。actr は τₖ^(−0.5) ∝、既定 uniform）・
                   --v39-price λ（1 ビットの値段。予算無限で、V＜λ の変換を候補がなくなるまで行う）・--v39-dump-cands（較正用：各試行の終わりの候補の正の点数を書き出す）
+                  D（2026-09-29）：--v39-forget-actr τ（ACT-R の基礎の活性が τ を下回った定義を手放す）・--v39-dump-act（較正用：各試行の終わりの全部の定義の活性を書き出す）
    --checks       v3.7：決まりごとの検査（罰を受けた行の写し先が伏せ辺そのものでない・当たりの試行に罰が付かない）。記録だけ（tools/checks_v37.py）
    --fill-unseen  v3.4 の穴埋めの直し（2026-09-27）：席を写した位置に見えている関係が一本でもあれば、述語によらずその席を埋めない。
                   伏せ辺の位置（見えていない位置）は今までどおり埋める。tools/fillunseen.py
@@ -425,7 +426,9 @@ def worker(task: dict) -> dict:
         v39.install(fo, seed=int(task["seed"]), horizon=int(task["cfg"]["trial_count"]),
                     seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
                     a=task["v39_a"], u=task["v39_u"], decay_mode=task.get("v39_decay", "uniform"), price=task.get("v39_price"),
-                    dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None))
+                    dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None),
+                    forget_tau=task.get("v39_forget_actr"),
+                    dump_act=(str(side_dir / f"seed{task['seed']:03d}.v39act.f64") if task.get("v39_dump_act") else None))
         _REAL["theta_impl"] = v39.CTX["apply"]
     try:
         rec = sweep.run_one(task)
@@ -559,6 +562,8 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
+    ap.add_argument("--v39-forget-actr", type=float, default=None, help="D：ACT-R の基礎の活性が τ を下回った定義を手放す")
+    ap.add_argument("--v39-dump-act", action="store_true", help="D の較正用：各試行の終わりの全部の定義の活性を side に書き出す")
     ap.add_argument("--death-terms", action="store_true",
                     help="v3.7：死んだ行の V の項を side に書く（記録だけ。tools/deathterms.py）")
     ap.add_argument("--checks", action="store_true",
@@ -635,6 +640,7 @@ def main() -> None:
               "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
+              "v39_forget_actr": args.v39_forget_actr, "v39_dump_act": args.v39_dump_act,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -651,6 +657,7 @@ def main() -> None:
                                                     "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
+                                                    "v39_forget_actr": args.v39_forget_actr,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
