@@ -120,6 +120,47 @@ def candidates(state, d, t, L, n_defs):
     return out
 
 
+# ---------------------------------------------------------------- 取消の符号 D₁（仕様 3 節、案 1）
+def gamma(n: int) -> str:
+    """I(n) の符号語（n＋1 の Elias γ）：長さ 2 floor(log₂(n＋1))＋1。"""
+    b = bin(n + 1)[2:]
+    return "0" * (len(b) - 1) + b
+
+
+def ungamma(bits: str, i: int = 0):
+    z = 0
+    while bits[i + z] == "0":
+        z += 1
+    return int(bits[i + z:i + 2 * z + 1], 2) - 1, i + 2 * z + 1
+
+
+def d1_bits(k: int, m: int) -> int:
+    """D₁(k,m)＝I(m)＋m ceil(log₂ max(k,1))。k＝0 では m＝0 だけ。"""
+    import v39
+    if k == 0 and m != 0:
+        raise ValueError("k＝0 では m＝0 だけ")
+    if not 0 <= m <= max(k, 0):
+        raise ValueError((k, m))
+    return v39.I(m) + m * v39.clog2(max(k, 1))
+
+
+def d1_encode(k: int, seats) -> str:
+    """取り消す席（固定順の 0〜k−1）を、個数と昇順の席番号で書く。"""
+    import v39
+    seats = sorted(seats)
+    b = v39.clog2(max(k, 1))
+    if k == 0 and seats:
+        raise ValueError("k＝0 では m＝0 だけ")
+    return gamma(len(seats)) + "".join(format(x, f"0{b}b") if b else "" for x in seats)
+
+
+def d1_decode(k: int, bits: str):
+    import v39
+    m, i = ungamma(bits)
+    b = v39.clog2(max(k, 1))
+    return [int(bits[i + j * b:i + (j + 1) * b], 2) if b else 0 for j in range(m)]
+
+
 # ---------------------------------------------------------------- E：候補を仮に適用する
 def _restrict(alignment, keep):
     return replace(alignment, relation_mapping={k: v for k, v in alignment.relation_mapping.items() if k in keep})
@@ -215,7 +256,8 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
     x_rel_ids = set(x_by_id)
     b_ren = v39.I(len(ren)) + len(ren) * v39.clog2(max(n_map, 1)) + sum(_ell(p, L) for p in ren)
     b_add = v39.I(len(adds)) + sum(_ell(r.predicate, L) + _arg_bits(r, x_rel_ids, e, m) for r in adds)
-    b_can = v39.I(0)                      # ★ D₁(k, 0)：不在が確かめられないので取消は 0 本（案 1）
+    n_FH = sum(1 for row in d.constituents if v39.seat_state(d, row, hist) != "U")
+    b_can = d1_bits(n_FH, 0)              # ★ D₁(k, 0)：不在が確かめられないので取消は 0 本（案 1）。k＝固定順の F・H の席数
     parts = {"書換": b_ren, "追加": b_add, "取消": b_can, "書換数": len(ren), "追加数": len(adds),
              "写った席": n_map, "一致": n_map - len(ren), "取消の未確認": unmapped_seats}
     return b_ren + b_add + b_can, parts
@@ -354,6 +396,11 @@ def install(fo, *, seed: int, nohash: bool) -> None:
             L = v39.code_lengths(state.p_hat)
             pre = [c[0] for d in state.definitions.values() for c in candidates(state, d, trial, L, len(state.definitions))]
         res = inner_rc(state, trial)
+        for e in res[1]:
+            # ★ 新方式の値は別の名で残す（仕様 ⑫）：v39 の「S（正解の数）」の欄に入っているのは、ここでは書換ビット R
+            if e.get("v39") in ("FH", "HU") and "S" in e:
+                e["R_bits"] = e.pop("S")
+                e["R_bits_init_post"] = e.pop("S_init_post", None)
         if pre is not None:
             v39.CTX["last_cands"] = pre
         side = CTX.pop("side", None) or {"kind": "v310be", "trial": trial, "x": "no_m1"}
