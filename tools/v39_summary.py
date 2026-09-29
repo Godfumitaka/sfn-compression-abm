@@ -106,10 +106,14 @@ def one_ledger(p, side, inc, seedf):
             C[f"変換_{kind}_{why}"] += 1
             if why == "cap":
                 C["容量で空いたビット"] += dC
+            elif why == "price":
+                C["λで空いたビット"] += dC        # ★ v3.10（B）：V が λ を下回った変換（0 ≦ V ＜ λ）
             else:
                 C["V負で空いたビット"] += dC
             if tie_n > 1:
                 C["同点で選んだ"] += 1
+            if why == "cap" and V == 0 and tie_n > 1:
+                C["容量_点0の同点"] += 1          # ★ v3.10（A）：容量で変換した件数のうち、点数 0 の同点から選んだもの
             if V == 0:
                 zero_by_stage[kind] += 1
             if kind == "HU" and (R, slot) in relearned:
@@ -193,7 +197,7 @@ def main():
     out_spk = tot["発話_生まれた型以外"]
     FHU_end = (tot["走行末_F"], tot["走行末_H"], tot["走行末_U"])
     summary = {
-        "腕": arm, "走行": len(runs), "旗": {k: fl.get(k) for k in ("v39", "v39_budget", "v39_init", "v39_a", "v39_u", "nsim", "config")},
+        "腕": arm, "走行": len(runs), "旗": {k: fl.get(k) for k in ("v39", "v39_budget", "v39_init", "v39_a", "v39_u", "v39_decay", "v39_price", "nsim", "config")},
         "課題": n, "正解": tot["正解"], "誤答": tot["誤答"], "棄権": tot["棄権"],
         "正解率（全課題）": tot["正解"] / n if n else None, "誤答率（全課題）": tot["誤答"] / n if n else None,
         "棄権率（全課題）": tot["棄権"] / n if n else None, "発話時正解率": tot["正解"] / spk if spk else None,
@@ -208,20 +212,38 @@ def main():
         "容量で手放した件数": tot["変換_FH_cap"] + tot["変換_HU_cap"], "容量で空いたビット": tot["容量で空いたビット"],
         "V負で手放した件数": tot["変換_FH_neg"] + tot["変換_HU_neg"], "V負で空いたビット": tot["V負で空いたビット"],
         "同点で選んだ": tot["同点で選んだ"], "境目のある試行": tot["境目のある試行"],
+        "容量で変換した件数のうち点数0の同点": tot["容量_点0の同点"],
+        "容量で変換した件数のうち点数0の同点の割合": (tot["容量_点0の同点"] / (tot["変換_FH_cap"] + tot["変換_HU_cap"])
+                                          if (tot["変換_FH_cap"] + tot["変換_HU_cap"]) else None),
+        "λを下回って変換した件数（段別、V＜0 を含む）": {"F→H": tot["変換_FH_neg"] + tot["変換_FH_price"],
+                                              "H→U": tot["変換_HU_neg"] + tot["変換_HU_price"],
+                                              "うち V＜0 の F→H": tot["変換_FH_neg"], "うち V＜0 の H→U": tot["変換_HU_neg"]},
+        "λで空いたビット": tot["λで空いたビット"],
         "点0の変換_段別（走行の和）": dict(sum((collections.Counter(r.get("点0の変換_段別") or {}) for r in runs), collections.Counter())),
         "退役": tot["退役"], "覚え直し": tot["覚え直し"], "覚え直しのあと H→U": tot["覚え直しのあと H→U"],
         "最大使用量（走行ごとの最大の中央値）": statistics.median([r["最大使用量"] for r in runs]) if runs else None,
         "容量不適合": unfit,
         "走行ごと": runs,
     }
-    line = (f"- {arm}（予算 {fl.get('v39_budget')}、初期 {fl.get('v39_init')}、a＝{fl.get('v39_a')}、走行 {len(runs)}"
+    extra = ""
+    if fl.get("v39_price") is not None:
+        lam = summary["λを下回って変換した件数（段別、V＜0 を含む）"]
+        extra = (f"／λ を下回って変換した件数（段別）F→H {lam['F→H']:,}・H→U {lam['H→U']:,}"
+                 f"（うち V＜0 は F→H {lam['うち V＜0 の F→H']:,}・H→U {lam['うち V＜0 の H→U']:,}）")
+    elif summary["容量で手放した件数"]:
+        r0 = summary["容量で変換した件数のうち点数0の同点の割合"]
+        extra = f"／容量で変換した件数のうち点数 0 の同点 {tot['容量_点0の同点']:,}（{100 * r0:.1f}%）"
+    head = (f"予算 {fl.get('v39_budget')}" + (f"、λ＝{fl.get('v39_price')}" if fl.get("v39_price") is not None else "")
+            + f"、初期 {fl.get('v39_init')}、a＝{fl.get('v39_a')}" + (f"、U {fl.get('v39_u')}" if fl.get("v39_u") not in (None, "global") else "")
+            + (f"、重み {fl.get('v39_decay')}" if fl.get("v39_decay") not in (None, "uniform") else ""))
+    line = (f"- {arm}（{head}、走行 {len(runs)}"
             f"{'、容量不適合 ' + str(len(unfit)) if unfit else ''}）："
             f"全課題 {n:,} のうち 正解 {tot['正解']:,}・誤答 {tot['誤答']:,}・棄権 {tot['棄権']:,}／"
             f"生まれた型以外への実際の発話 {out_spk:,}（発話の {100 * out_spk / spk if spk else 0:.1f}%）、そこでの誤答 {tot['誤答_生まれた型以外']:,}／"
             f"走行末の席 F {FHU_end[0]:,}・H {FHU_end[1]:,}・U {FHU_end[2]:,}／"
             f"変数の席：選ばれた定義に含まれた {tot['U_選ばれた定義に含まれた']:,}、実際に答えた {tot['U_実際の発話']:,}／"
             f"容量で手放した {summary['容量で手放した件数']:,} 件・空いた {tot['容量で空いたビット']:,} ビット"
-            f"（V＜0 で手放した {summary['V負で手放した件数']:,} 件）／定義の退役 {tot['退役']:,}")
+            f"（V＜0 で手放した {summary['V負で手放した件数']:,} 件）／定義の退役 {tot['退役']:,}{extra}")
     dest = results / host / arm
     dest.mkdir(parents=True, exist_ok=True)
     (dest / f"v39要約_{arm}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

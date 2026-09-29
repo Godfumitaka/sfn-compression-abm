@@ -195,13 +195,34 @@ def rec_values(rec: SeatRec, t: int):
             tuple(tuple(x * k for x, k in zip(col, w)) for col in rec.post))
 
 
+def mean16(col) -> float:
+    """16 本の記録を一つの量にする。既定は均等の平均（v3.9 のまま）。--v39-decay actr（v3.10）では、
+    時定数 τₖ^(−0.5) に比例し合計 1 の重みで平均する（ACT-R の形：一回の採点の Δ 試行後の重みが、およそ Δ^(−0.5) に比例する）。"""
+    wt = CFG.get("mean_weights")
+    if wt is None:
+        return sum(col) / 16.0
+    return sum(x * k for x, k in zip(col, wt))
+
+
 def rec_means(rec: SeatRec, t: int) -> tuple:
-    """(S_F, S_H, S_U, E)：初期分と誕生後の分を足した 16 本の平均。"""
+    """(S_F, S_H, S_U, E)：初期分と誕生後の分を足した 16 本の平均（重みは mean16）。"""
     w = _pow(max(t - rec.t0, 0))
     out = []
+    wt = CFG.get("mean_weights")
     for a, b in zip(rec.init, rec.post):
-        out.append(sum((x + y) * k for x, y, k in zip(a, b, w)) / 16.0)
+        if wt is None:
+            out.append(sum((x + y) * k for x, y, k in zip(a, b, w)) / 16.0)   # ★ v3.9 と一字一句同じ計算
+        else:
+            out.append(sum((x + y) * k * q for x, y, k, q in zip(a, b, w, wt)))
     return tuple(out)
+
+
+def actr_weights(horizon: int) -> tuple:
+    """--v39-decay actr の平均の重み：abm/accounting.py の decay_ladder と同じ時定数 τₖ（0.3〜3T の等比 16 本）に対し τₖ^(−0.5) ∝、合計 1。"""
+    taus = [0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (k / 15)) for k in range(16)]
+    raw = [tau ** -0.5 for tau in taus]
+    z = sum(raw)
+    return tuple(r / z for r in raw)
 
 
 def rec_add(rec: SeatRec, t: int, inc: tuple) -> SeatRec:
@@ -857,10 +878,12 @@ def run_conversions(state, trial):
     phase = "neg"
     boundary = {"最高削除点": None, "最低保持点": None, "同点で選んだ": 0}
     B = CFG["budget"]
+    LAM = CFG.get("price") or 0
     while True:
         cands = [c for cs in by_def.values() for c in cs]
         if phase == "neg":
-            neg = [c for c in cands if c[0] < 0]
+            # ★ v3.10 --v39-price λ：V＜λ の変換を、候補がなくなるまで低い点から一段ずつ（λ＝0 なら v3.9 の V＜0 の段と同じ）
+            neg = [c for c in cands if c[0] < LAM] if LAM else [c for c in cands if c[0] < 0]
             if not neg:
                 phase = "cap"
                 continue
@@ -881,14 +904,15 @@ def run_conversions(state, trial):
         rec0 = state.v39_seats[(R, slot)]
         d0 = state.definitions[R]
         w0 = _pow(max(trial - rec0.t0, 0))
-        split = [[round(sum(x * k for x, k in zip(col, w0)) / 16.0, 6) for col in rec0.init],
-                 [round(sum(x * k for x, k in zip(col, w0)) / 16.0, 6) for col in rec0.post]]
+        split = [[round(mean16([x * k for x, k in zip(col, w0)]), 6) for col in rec0.init],
+                 [round(mean16([x * k for x, k in zip(col, w0)]), 6) for col in rec0.post]]
         state, ev = _convert(state, kind, R, slot, trial)
         rec = state.v39_seats.get((R, slot))
         reg_at = next((r.registered_at for r in (state.definitions.get(R) or d0).constituents if r.slot_index == slot), None)
         # ★ F→H は、今の解析の道具が読む行の死（kind＝"deletion"）として書く。H→U は新しい種類
         e = {"kind": "deletion" if kind == "FH" else "v39_HU", "v39": kind, "R": R, "slot_index": slot,
-             "registered_at": reg_at, "trial": trial, "V": V, "dC": dc, "why": phase,
+             "registered_at": reg_at, "trial": trial, "V": V, "dC": dc,
+             "why": ("price" if phase == "neg" and V >= 0 else phase),
              "tie_n": nt, "S": list(sc), "S_init_post": split, "gen": rec.gen if rec is not None else None}
         events.append(e)
         conv.append(e)
@@ -912,11 +936,14 @@ def run_conversions(state, trial):
         boundary["最低保持点"] = min(rest) if rest else None
     else:
         boundary = None
+    if CFG.get("dump_cands"):
+        CTX["last_cands"] = [c[0] for cs in by_def.values() for c in cs]
     return state, events, before, after, ties, boundary
 
 
 # ---------------------------------------------------------------- 入れる所
-def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a: float, u: str) -> None:
+def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a: float, u: str,
+            decay_mode: str = "uniform", price=None, dump_cands=None) -> None:
     import abm.abstraction as ab
     import abm.agent_runtime as ar
     import abm.loop as loop
@@ -934,9 +961,21 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
     CFG.update(seed=seed, T=horizon, budget=budget, init=init, a=float(a), u_abstain=(u == "abstain"),
                decay=decay_ladder(horizon), D=len(dictionary), dict_index={p: i for i, p in enumerate(dictionary)},
                rho=v32.STATS.get("rho"), argmax=bool(v32.STATS.get("argmax")), commons=bool(v32.STATS.get("commons")))
+    # ★ v3.10：平均の重み（--v39-decay actr）・1 ビットの値段 λ（--v39-price）・較正用の候補の点数の書き出し
+    if decay_mode not in ("uniform", "actr"):
+        raise ValueError(decay_mode)
+    if price is not None and budget is not None:
+        raise ValueError("--v39-price は予算無限（--v39-budget inf）で使う")
+    if decay_mode == "actr":
+        CFG["mean_weights"] = actr_weights(horizon)
+    if price is not None:
+        CFG["price"] = float(price)
+    if dump_cands:
+        CFG["dump_cands"] = open(dump_cands, "wb")
     STATS.update(trials=0, scored_trials=0, scored_seats=0, births=0, birth_noop=0, birth_childless_dropped=0,
                  conv_FH=0, conv_HU=0, retire=0, neg_conv=0, cap_conv=0, ties=0, max_usage=0, relearn=0,
-                 cfg={k: CFG[k] for k in ("budget", "init", "a", "u_abstain", "D", "T", "rho", "argmax", "commons")})
+                 price_conv=0, cfg={**{k: CFG[k] for k in ("budget", "init", "a", "u_abstain", "D", "T", "rho", "argmax", "commons")},
+                                    "decay_mode": decay_mode, "price": price})
     CTX.update(struct_cache={}, births_rec=[], relearn=[], drift=[], cost_mismatch=[], answers=None, output=None)
     _install_candidates()
 
@@ -1053,6 +1092,10 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
         CTX["cost_mismatch"] = []
         state, conv_events, before, after, ties, boundary = run_conversions(state, trial)
         events.extend(conv_events)
+        if CFG.get("dump_cands"):
+            from array import array
+            array("d", [v for v in CTX.get("last_cands", ()) if v > 0]).tofile(CFG["dump_cands"])
+            CFG["dump_cands"].flush()
         STATS["trials"] += 1
         STATS["max_usage"] = max(STATS["max_usage"], after)
         for e in conv_events:
@@ -1064,7 +1107,7 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
             elif k == "retire":
                 STATS["retire"] += 1
             if k in ("FH", "HU"):
-                STATS["neg_conv" if e["why"] == "neg" else "cap_conv"] += 1
+                STATS["neg_conv" if e["why"] == "neg" else "price_conv" if e["why"] == "price" else "cap_conv"] += 1
         STATS["ties"] += ties
         nF = nH = nU = 0
         for d in state.definitions.values():

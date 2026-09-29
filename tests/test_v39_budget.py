@@ -25,11 +25,18 @@ v39._install_candidates()
 S39 = v39._state_class()
 
 
-def setup(budget=None, init="two", a=0.5, u="global", T=100):
+MODE = {"decay": "uniform"}   # ★ v3.10：同じ検査を --v39-decay actr でも通す（下の __main__ で両方回す）
+
+
+def setup(budget=None, init="two", a=0.5, u="global", T=100, price=None):
     for d in (v39.STATS, v39.CFG, v39.CTX, v39.REG, v39._POW):
         d.clear()
     v39.CFG.update(seed=1, T=T, budget=budget, init=init, a=a, u_abstain=(u == "abstain"), decay=decay_ladder(T),
                    D=len(DICT), dict_index={p: i for i, p in enumerate(DICT)}, rho=None, argmax=False, commons=False)
+    if MODE["decay"] == "actr":
+        v39.CFG["mean_weights"] = v39.actr_weights(T)
+    if price is not None:
+        v39.CFG["price"] = price
     v39.CTX.update(struct_cache={}, births_rec=[], relearn=[], drift=[], cost_mismatch=[])
 
 
@@ -304,8 +311,32 @@ def test_16_local_scoring_touches_only_used_definition():
     assert out[("R_y", 0)] is seats[("R_y", 0)]
 
 
+# v3.10 λ＞0：V＜λ の変換を、候補がなくなるまで低い点から一段ずつ（負の点数を含む）。λ＝0 は V＜0 だけ
+def test_17_price_converts_below_lambda_until_none():
+    d = definition(row(0, "fold", ("x", "y")), row(1, "lock", ("y", "z")), row(2, "push", ("x", "z")))
+    hist = {("R_x", 0): {"fold": 1, "wrap": 2}, ("R_x", 1): {"lock": 1}, ("R_x", 2): {"push": 2}}
+    seats = {("R_x", 0): rec("F", sf=0.0, sh=1.0, e=1.0),            # V_FH＜0
+             ("R_x", 1): rec("F", sf=1.0, sh=1.0, su=1.0, e=1.0),    # V_FH＝0、H→U も 0
+             ("R_x", 2): rec("F", sf=3.0, sh=0.0, e=3.0)}            # V_FH＞0（大きい）
+    st = state([d], hist, seats)
+    setup(price=0.0)
+    v39.CFG.pop("price")
+    out0, ev0, *_ = v39.run_conversions(st, 10)
+    assert [(e["v39"], e["slot_index"]) for e in ev0 if e.get("v39") in ("FH", "HU")] == [("FH", 0)]   # λ＝0：V＜0 だけ
+    setup(price=1e-9)
+    out, ev, *_ = v39.run_conversions(st, 10)
+    conv = [(e["v39"], e["slot_index"], e["why"]) for e in ev if e.get("v39") in ("FH", "HU")]
+    assert conv[0] == ("FH", 0, "neg")                                # 低い点から
+    assert ("FH", 1, "price") in conv and ("HU", 1, "price") in conv  # V＝0＜λ：一つ変換するごとに次の段も計算し直す
+    assert all(s != 2 for _, s, _ in conv)                           # V＞λ は残す
+    cands = [c for c in v39._candidates(out, out.definitions["R_x"], 10, v39.code_lengths(out.p_hat), 1)]
+    assert all(c[0] >= 1e-9 for c in cands)                           # 候補がなくなるまで
+
+
 if __name__ == "__main__":
-    for name, fn in list(globals().items()):
-        if name.startswith("test_"):
-            fn()
-            print("ok", name)
+    for mode in ("uniform", "actr"):
+        MODE["decay"] = mode
+        for name, fn in list(globals().items()):
+            if name.startswith("test_"):
+                fn()
+                print("ok", mode, name)
