@@ -69,6 +69,85 @@ def score_answers(seats, ans, received, t):
     return seats, scored
 
 
+# ---------------------------------------------------------------- 採点の対応先（旗 --score-role、2026-09-30 の追加・置換の指示 3）
+# score_answers は「写した位置（物の組）が開示の引数と同じ席」をすべて採点する。一つの物の組に一階の関係が何本も乗る世界では、
+# 一本の開示で同じ物の組の別の席まで採点してしまう（採点先の混線）。旗を立てると、次のようにする。
+#   開示前の定義と場面の対応（予測に使った definition_alignment）で、席を引数に持つ親の行が対応した場面の関係の「同じ位置の子」
+#   （関係の ID）を、その席の対応先として控える（three_answers の控えに cid を足す）。
+#   開示された関係の ID が対応先と一致する席だけを採点する。答えは開示前に控えた三答え（F・H・U）。正解の名前で対応を選び直さない。
+#   親が無い・親が場面の関係に対応しない・対応先が一意でない席には、採点の証拠を足さない（理由ごとの件数を STATS に）。物の組だけの判定には戻さない。
+def role_target(d, row, alignment, scene):
+    """席の対応先：(関係 ID, None) 又は (None, 理由)。親の行ごとに、対応した場面の関係の同じ位置の子を集める。"""
+    sid = row.relation.relation_id
+    parents = [(p, k) for p in d.constituents for k, a in enumerate(p.relation.arguments) if a == sid]
+    if not parents:
+        return None, "親が無い"
+    s_by_id = {r.relation_id: r for r in scene.relations}
+    got = []
+    for p, k in parents:
+        Q = s_by_id.get(alignment.relation_mapping.get(p.relation.relation_id))
+        if Q is None or k >= len(Q.arguments):
+            continue
+        if Q.arguments[k] not in got:
+            got.append(Q.arguments[k])
+    if not got:
+        return None, "親が対応しない"
+    if len(got) > 1:
+        return None, "対応先が一意でない"
+    return got[0], None
+
+
+def three_answers_role(inner):
+    def three_answers(d, alignment, state, config, scene):
+        from abm.filling import _is_higher
+        items = inner(d, alignment, state, config, scene)
+        rows = {row.slot_index: row for row in d.constituents}
+        rel_ids = {row.relation.relation_id for row in d.constituents}
+        for it in items:
+            row = rows[it["slot"]]
+            cid, why = role_target(d, row, alignment, scene)
+            it["cid"] = cid
+            it["cid_why"] = why
+            it["higher"] = _is_higher(row.relation, rel_ids)
+        return items
+    return three_answers
+
+
+def score_answers_role(seats, ans, received, t):
+    """score_answers と同じ採点（r＝0 又は 正解の名前の ℓ、世代・状態の確かめ）を、対応先の ID が開示の ID と一致する席だけに行う。"""
+    import v39
+    L = CTX["L_score"]
+    seats = dict(seats)
+    scored = []
+    for it in ans["items"]:
+        if "ans" not in it:
+            continue
+        key = (ans["R"], it["slot"])
+        rec = seats.get(key)
+        if rec is None or rec.gen != it["gen"] or rec.state != it["st"]:
+            v39.STATS["score_skipped_changed"] = v39.STATS.get("score_skipped_changed", 0) + 1
+            continue
+        old = tuple(it["pos"]) == tuple(received.arguments)    # 記録だけ：今の決め方（物の組）なら採点したか
+        order = "高階" if it.get("higher") else "一階"
+        if it.get("cid") is None:
+            STATS[f"score_role_no_target_{order}_{it.get('cid_why')}"] = STATS.get(f"score_role_no_target_{order}_{it.get('cid_why')}", 0) + 1
+            STATS["score_role_old_would_score_no_target"] += old
+            continue
+        if it["cid"] != received.relation_id:
+            STATS["score_role_other_target"] += 1
+            STATS["score_role_old_would_score_other"] += old
+            continue
+        STATS["score_role_scored"] += 1
+        STATS["score_role_scored_pos_differs"] += not old
+        lp = _ell(received.predicate, L)
+        r = {x: (0.0 if it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
+        inc = (r["F"] if it["st"] == "F" else 0.0, r["H"], r["U"], 1.0)
+        seats[key] = v39.rec_add(rec, t, inc)
+        scored.append([it["slot"], it["st"], r["F"] if it["st"] == "F" else None, r["H"], r["U"]])
+        CTX["R_B_trial"] += r[it["st"]]
+    return seats, scored
+
+
 def init_rec(d, row, state, base, target, trial, base_age, config):
     """誕生の初期値：二材料の再現採点をビットに（F の答えは固定名なので 0。H・U は外れなら ℓ）。旧い場面は φ^年齢。"""
     import v39
@@ -337,7 +416,7 @@ def choose_and_register(state, base, target, alignment, trial, kw, inner_m1):
 
 
 # ---------------------------------------------------------------- 入れる所
-def install(fo, *, seed: int, nohash: bool) -> None:
+def install(fo, *, seed: int, nohash: bool, score_role: bool = False) -> None:
     import abm.loop as loop
     import v39
     if v39.CFG.get("mean_weights") is None:
@@ -355,6 +434,13 @@ def install(fo, *, seed: int, nohash: bool) -> None:
 
     # B：採点・初期値・V を書換ビットの形に（tools/v39.py の同じ名前の関数を置き換える。呼ぶ側はモジュールの名前で引く）
     v39.score_answers = score_answers
+    if score_role:
+        # ★ 旗 --score-role：採点の対応先を、親の行の対応の同じ位置の子にする（上の role_target）
+        STATS.update(score_role_scored=0, score_role_scored_pos_differs=0, score_role_other_target=0,
+                     score_role_old_would_score_other=0, score_role_old_would_score_no_target=0)
+        STATS["cfg"]["score_role"] = True
+        v39.three_answers = three_answers_role(v39.three_answers)
+        v39.score_answers = score_answers_role
     v39._init_rec = init_rec
     v39._candidates = candidates
 

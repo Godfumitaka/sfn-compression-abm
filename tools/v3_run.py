@@ -435,7 +435,7 @@ def worker(task: dict) -> dict:
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
-            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]))
+            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")))
         _REAL["theta_impl"] = v39.CTX["apply"]
     try:
         rec = sweep.run_one(task)
@@ -573,6 +573,8 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--score-role", action="store_true",
+                    help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
@@ -625,6 +627,8 @@ def main() -> None:
                                                    r["fill_selection"]) in keep_c]
     # ★ 種の順に並べる（締め切りで打ち切っても、終わった種は 4 セルがそろいやすいように）。
     runs.sort(key=lambda r: (r["seed"], r["cell"]))
+    if args.score_role and not args.v310_be:
+        raise SystemExit("--score-role は --v310-be と一緒に使う")
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
     seed = sweep.load_seed(cfg["seed_file"])
@@ -654,7 +658,7 @@ def main() -> None:
               "v39": args.v39, "v39_budget": (None if args.v39_budget == "inf" else int(args.v39_budget)),
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
-              "v310_be": args.v310_be, "hist_role": args.hist_role,
+              "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -671,7 +675,7 @@ def main() -> None:
                                                     "v39": args.v39, "v39_budget": args.v39_budget, "v39_init": args.v39_init,
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
-                                                    "v310_be": args.v310_be, "hist_role": args.hist_role,
+                                                    "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
