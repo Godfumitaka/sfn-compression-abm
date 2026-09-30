@@ -56,6 +56,9 @@ if "u_struct" in SW_FLAGS:
 if "relearn_init" in SW_FLAGS:
     import relearninit  # noqa: E402
     relearninit.install(_FO)
+if "tie_struct" in SW_FLAGS:              # tools/v3_run.py（v3.10urta）:450-453
+    import tiestruct  # noqa: E402
+    tiestruct.install()
 
 
 def reconcile_with_scene(state, trial, why, scene):
@@ -76,6 +79,8 @@ def setup(T=T_PLAN, lam=LAM, u_abstain=False):
                    mean_weights=v39.actr_weights(T), price=lam)
     v39.CTX.update(struct_cache={}, births_rec=[], relearn=[], drift=[], cost_mismatch=[], answers=None, output=None,
                    config=CONFIG)
+    if "amb_local" in SW_FLAGS:           # tools/v3_run.py（v3.10urta）:447-449：v39.CFG["amb_local"]＝True（v39.CFG は件ごとに作り直すので、ここで毎回入れる）
+        v39.CFG["amb_local"] = True
     for d in (B.STATS, B.CFG, B.CTX):
         d.clear()
     B.CFG.update(seed=1, alpha=1.0, lam=lam, nohash=True)

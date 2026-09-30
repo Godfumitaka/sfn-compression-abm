@@ -1,0 +1,1593 @@
+[
+ {
+  "id": "C01",
+  "status": "PASS",
+  "expected": {
+   "selected": "D_A",
+   "support": 5,
+   "denominator": 6,
+   "required": 5,
+   "gate": true,
+   "answer": "push(a,b)",
+   "answer_source": "F_projection",
+   "role_target": "s1 only",
+   "loss_increment": {
+    "s1": {
+     "F": 0,
+     "H": 0,
+     "U": 4
+    }
+   },
+   "other_slot_score_increment": 0
+  },
+  "actual": {
+   "R_used": "D_A",
+   "support": 6,
+   "denominator": 6,
+   "required": 5,
+   "passed": [
+    "D_A"
+   ],
+   "answer": "push(a,b)",
+   "abstain_reason": null,
+   "path": "projection",
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null,
+    "3": "q_cut",
+    "4": "q_turn",
+    "5": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い",
+    "3": null,
+    "4": null,
+    "5": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    },
+    "3": {
+     "F": "cut",
+     "H": "cut",
+     "U": null
+    },
+    "4": {
+     "F": "turn",
+     "H": "turn",
+     "U": null
+    },
+    "5": {
+     "F": "bind_a",
+     "H": "bind_a",
+     "U": null
+    }
+   },
+   "loss_increment": {
+    "s1": {
+     "F": 0.0,
+     "H": 0.0,
+     "U": 4.0
+    }
+   }
+  },
+  "checks": [
+   [
+    "selected",
+    true
+   ],
+   [
+    "support 6（訂正）",
+    true
+   ],
+   [
+    "denominator 6",
+    true
+   ],
+   [
+    "required 5",
+    true
+   ],
+   [
+    "gate",
+    true
+   ],
+   [
+    "answer push(a,b)",
+    true
+   ],
+   [
+    "source F_projection",
+    true
+   ],
+   [
+    "role_target s1 only",
+    true
+   ],
+   [
+    "loss s1 (0,0,4)",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C02",
+  "status": "PASS",
+  "expected": {
+   "score_increment_all_slots": 0
+  },
+  "actual": {
+   "score_called": false,
+   "loss_increment": {}
+  },
+  "checks": [
+   [
+    "score increment all 0",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "採点の関数は開示のときだけ呼ばれる（tools/v39.py:1003-1007 の条件をそのまま当てた）。"
+ },
+ {
+  "id": "C03",
+  "status": "PASS",
+  "expected": {
+   "selected": "D_B",
+   "support": 5,
+   "denominator": 6,
+   "required": 5,
+   "gate": true,
+   "answer": "wrap(a,b)",
+   "loss_increment": {
+    "s4": {
+     "F": 0,
+     "H": 0,
+     "U": 4
+    }
+   },
+   "other_slot_score_increment": 0
+  },
+  "actual": {
+   "R_used": "D_B",
+   "support": 6,
+   "denominator": 6,
+   "required": 5,
+   "passed": [
+    "D_B"
+   ],
+   "answer": "wrap(a,b)",
+   "abstain_reason": null,
+   "path": "projection",
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null,
+    "3": "q_wrap",
+    "4": "q_stack",
+    "5": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い",
+    "3": null,
+    "4": null,
+    "5": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    },
+    "3": {
+     "F": "wrap",
+     "H": "wrap",
+     "U": null
+    },
+    "4": {
+     "F": "stack",
+     "H": "stack",
+     "U": null
+    },
+    "5": {
+     "F": "bind_b",
+     "H": "bind_b",
+     "U": null
+    }
+   },
+   "loss_increment": {
+    "s4": {
+     "F": 0.0,
+     "H": 0.0,
+     "U": 4.0
+    }
+   }
+  },
+  "checks": [
+   [
+    "selected",
+    true
+   ],
+   [
+    "support 6（訂正）",
+    true
+   ],
+   [
+    "denominator 6",
+    true
+   ],
+   [
+    "required 5",
+    true
+   ],
+   [
+    "answer wrap(a,b)",
+    true
+   ],
+   [
+    "loss s4 (0,0,4)",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C04",
+  "status": "PASS",
+  "expected": {
+   "support_ratios": {
+    "D_A": "3/6",
+    "D_B": "5/6"
+   },
+   "selected": "D_B",
+   "gate": true,
+   "answer": "wrap(a,b)",
+   "score_recipient_definition": "D_B only"
+  },
+  "actual": {
+   "support_ratios": {
+    "D_A": "3/6",
+    "D_B": "6/6"
+   },
+   "R_used": "D_B",
+   "support": 6,
+   "denominator": 6,
+   "required": 5,
+   "passed": [
+    "D_B"
+   ],
+   "answer": "wrap(a,b)",
+   "abstain_reason": null,
+   "path": "projection",
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null,
+    "3": "q_wrap",
+    "4": "q_stack",
+    "5": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い",
+    "3": null,
+    "4": null,
+    "5": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    },
+    "3": {
+     "F": "wrap",
+     "H": "wrap",
+     "U": null
+    },
+    "4": {
+     "F": "stack",
+     "H": "stack",
+     "U": null
+    },
+    "5": {
+     "F": "bind_b",
+     "H": "bind_b",
+     "U": null
+    }
+   },
+   "loss_increment": {
+    "s4": {
+     "F": 0.0,
+     "H": 0.0,
+     "U": 4.0
+    }
+   },
+   "score_recipients": [
+    "D_B"
+   ]
+  },
+  "checks": [
+   [
+    "ratio D_A 3/6",
+    true
+   ],
+   [
+    "ratio D_B 6/6（訂正）",
+    true
+   ],
+   [
+    "selected D_B",
+    true
+   ],
+   [
+    "answer wrap(a,b)",
+    true
+   ],
+   [
+    "score only D_B",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C05",
+  "status": "PASS",
+  "expected": {
+   "selected": "D_S",
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "gate": true,
+   "answer": "abstain",
+   "reason": "all three represented relations already visible; no restatement",
+   "role_score_increment_for_cut": 0
+  },
+  "actual": {
+   "R_used": "D_S",
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "passed": [
+    "D_S"
+   ],
+   "answer": "abstain",
+   "abstain_reason": "no_projectable_relation",
+   "path": null,
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    }
+   },
+   "loss_increment": {}
+  },
+  "checks": [
+   [
+    "selected D_S",
+    true
+   ],
+   [
+    "support 3",
+    true
+   ],
+   [
+    "denominator 3",
+    true
+   ],
+   [
+    "required 3",
+    true
+   ],
+   [
+    "answer abstain",
+    true
+   ],
+   [
+    "score for cut 0",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C06",
+  "status": "PASS",
+  "expected": {
+   "selected_candidate": "D_S",
+   "support": 2,
+   "denominator": 3,
+   "required": 3,
+   "gate": false,
+   "used_definition": null,
+   "answer": "abstain",
+   "score_increment_all_slots": 0
+  },
+  "actual": {
+   "R_used": "D_S",
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "passed": [
+    "D_S"
+   ],
+   "answer": "push(a,b)",
+   "abstain_reason": null,
+   "path": "projection",
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    }
+   },
+   "candidate_support": 3,
+   "loss_increment": {
+    "s1": {
+     "F": 0.0,
+     "H": 0.0,
+     "U": 4.0
+    }
+   }
+  },
+  "checks": [
+   [
+    "support 3（訂正）",
+    true
+   ],
+   [
+    "required 3",
+    true
+   ],
+   [
+    "gate true（訂正）",
+    true
+   ],
+   [
+    "answer push(a,b)（訂正）",
+    true
+   ],
+   [
+    "loss s1 (0,0,4)（訂正）",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C07",
+  "status": "PASS",
+  "expected": {
+   "selected_candidate": "D_A",
+   "support": 3,
+   "denominator": 6,
+   "required": 5,
+   "gate": false,
+   "used_definition": null,
+   "answer": "abstain",
+   "score_increment_all_slots": 0
+  },
+  "actual": {
+   "R_used": null,
+   "support": 3,
+   "denominator": 6,
+   "required": 5,
+   "passed": [],
+   "answer": "abstain",
+   "abstain_reason": "below_tau",
+   "path": null,
+   "role_targets": null,
+   "role_why": null,
+   "answers": null,
+   "candidate_support": 3
+  },
+  "checks": [
+   [
+    "support 3",
+    true
+   ],
+   [
+    "required 5",
+    true
+   ],
+   [
+    "gate false",
+    true
+   ],
+   [
+    "answer abstain",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C08",
+  "status": "PASS",
+  "expected": {
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "gate": true,
+   "answer": "abstain",
+   "reason": "F relations already visible; U first-order and second-order choices tied"
+  },
+  "actual": {
+   "R_used": "D_A",
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "passed": [
+    "D_A"
+   ],
+   "answer": "abstain",
+   "abstain_reason": "ambiguous_projection",
+   "path": null,
+   "role_targets": {
+    "0": "q_push",
+    "1": "q_fold",
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い",
+    "3": "親が対応しない",
+    "4": "親が対応しない",
+    "5": "親が無い"
+   },
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": "bind_s"
+    },
+    "3": null,
+    "4": null,
+    "5": null
+   }
+  },
+  "checks": [
+   [
+    "support 3",
+    true
+   ],
+   [
+    "denominator 3",
+    true
+   ],
+   [
+    "required 3",
+    true
+   ],
+   [
+    "gate",
+    true
+   ],
+   [
+    "answer abstain",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C09",
+  "status": "PASS",
+  "expected": {
+   "history_after": {
+    "s1": {
+     "push": 2
+    },
+    "s2": {
+     "fold": 3
+    },
+    "s3": {
+     "bind_s": 3
+    },
+    "s4": {
+     "cut": 3
+    },
+    "s5": {
+     "turn": 3
+    },
+    "s6": {
+     "bind_a": 3
+    }
+   },
+   "memory_before": 279,
+   "memory_after": 289,
+   "memory_delta": 10
+  },
+  "actual": {
+   "history_after": {
+    "s1": {
+     "push": 2
+    },
+    "s2": {
+     "fold": 3
+    },
+    "s3": {
+     "bind_s": 3
+    },
+    "s4": {
+     "cut": 3
+    },
+    "s5": {
+     "turn": 3
+    },
+    "s6": {
+     "bind_a": 3
+    }
+   },
+   "memory_before": 279,
+   "memory_after": 289,
+   "memory_delta": 10,
+   "definition_alignment_used": "m1 の中の map_graphs（abm/abstraction.py:125-129）。親の対応は外から与えられない"
+  },
+  "checks": [
+   [
+    "history",
+    true
+   ],
+   [
+    "memory_before 279",
+    true
+   ],
+   [
+    "memory_after 289",
+    true
+   ],
+   [
+    "delta 10",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C10",
+  "status": "PASS",
+  "expected": {
+   "history_increment_for_push": 0,
+   "role_target": null,
+   "score_increment_for_push": 0
+  },
+  "actual": {
+   "history_increment_for_push": 0,
+   "role_target": null,
+   "role_why": "親が無い",
+   "score_increment": {}
+  },
+  "checks": [
+   [
+    "history +0",
+    true
+   ],
+   [
+    "role_target None",
+    true
+   ],
+   [
+    "score push 0",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C11",
+  "status": "PASS",
+  "expected": {
+   "local_answers": {
+    "F": "wrap",
+    "H": "push",
+    "U": "abstain"
+   },
+   "loss_increment": {
+    "F": 4,
+    "H": 0,
+    "U": 4
+   },
+   "history_bits": 17,
+   "fixed_pointer_bits": 3,
+   "V_FH": -1.3333333333333333,
+   "V_HU": 0.23529411764705882,
+   "lambda": 0.0625,
+   "slot_conversion": "F -> H; H remains",
+   "fixed_name_rebinding": false
+  },
+  "actual": {
+   "local_answers": {
+    "F": "wrap",
+    "H": "push",
+    "U": null
+   },
+   "loss_increment": {
+    "F": 4.0,
+    "H": 0.0,
+    "U": 4.0
+   },
+   "history_bits": 17,
+   "fixed_pointer_bits": 3,
+   "V_FH": -1.3333333333333333,
+   "V_HU_after_FH": 0.23529411764705882,
+   "conversions_s1": [
+    "FH"
+   ],
+   "R_used": "D_A",
+   "answer": "wrap(a,b)",
+   "参考_定義全体の変換の段": [
+    [
+     "FH",
+     0,
+     -1.3333333333333333
+    ],
+    [
+     "FH",
+     3,
+     0.0
+    ],
+    [
+     "FH",
+     2,
+     0.0
+    ],
+    [
+     "FH",
+     1,
+     0.0
+    ],
+    [
+     "HU",
+     1,
+     0.0
+    ],
+    [
+     "HU",
+     3,
+     0.0
+    ],
+    [
+     "HU",
+     2,
+     0.0
+    ],
+    [
+     "FH",
+     5,
+     0.0
+    ],
+    [
+     "FH",
+     4,
+     0.0
+    ],
+    [
+     "HU",
+     4,
+     0.0
+    ],
+    [
+     "HU",
+     5,
+     0.0
+    ],
+    [
+     "HU",
+     0,
+     0.043010752688172046
+    ],
+    [
+     "retire",
+     null,
+     null
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "answers F wrap/H push/U None",
+    true
+   ],
+   [
+    "loss (4,0,4)",
+    true
+   ],
+   [
+    "history_bits 17",
+    true
+   ],
+   [
+    "pointer 3",
+    true
+   ],
+   [
+    "V_FH -4/3",
+    true
+   ],
+   [
+    "V_HU 4/17",
+    true
+   ],
+   [
+    "F->H, H remains",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C12",
+  "status": "PASS",
+  "expected": {
+   "L_push": 3,
+   "L_wrap": 4,
+   "H_weights": {
+    "push": 0.05,
+    "wrap": 0.07500000000000001
+   },
+   "local_answers": {
+    "H": "wrap",
+    "U": "push"
+   },
+   "loss_increment": {
+    "H": 3,
+    "U": 0
+   },
+   "history_bits": 18,
+   "V_HU": -0.16666666666666666,
+   "lambda": 0.0625,
+   "slot_conversion": "H -> U",
+   "bits_freed": 18
+  },
+  "actual": {
+   "L_push": 3,
+   "L_wrap": 4,
+   "local_answers": {
+    "H": "wrap",
+    "U": "push"
+   },
+   "loss_increment": {
+    "F": 0.0,
+    "H": 3.0,
+    "U": 0.0
+   },
+   "history_bits": 18,
+   "V_HU": -0.16666666666666666,
+   "conversions_s1": [
+    [
+     "HU",
+     18
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "L_push 3",
+    true
+   ],
+   [
+    "L_wrap 4",
+    true
+   ],
+   [
+    "H wrap",
+    true
+   ],
+   [
+    "U push",
+    true
+   ],
+   [
+    "loss H3 U0",
+    true
+   ],
+   [
+    "history_bits 18",
+    true
+   ],
+   [
+    "V_HU -1/6",
+    true
+   ],
+   [
+    "H->U frees 18",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C13",
+  "status": "PASS",
+  "expected": {
+   "R_F": 0,
+   "R_H": 0,
+   "R_U": 5.641816426994021,
+   "V_FH": 0,
+   "V_HU": 0.5641816426994021,
+   "lambda": 0.0625,
+   "slot_conversion": "F -> H; H remains",
+   "after_one_no_evidence_tick": {
+    "R_H": 0,
+    "R_U": 2.798144619741777,
+    "V_HU": 0.2798144619741777
+   }
+  },
+  "actual": {
+   "T=16": {
+    "R_F": 0.0,
+    "R_H": 0.0,
+    "R_U": 5.620777114088077,
+    "V_FH": 0.0,
+    "fixed_pointer_bits": 3,
+    "after_one_tick": {
+     "R_H": 0.0,
+     "R_U": 2.691317711067378
+    },
+    "births_rec": [
+     {
+      "slot": 0,
+      "rF": 0.0,
+      "rH": 0.0,
+      "rU旧": 4.0,
+      "rU今": 4.0,
+      "H答え": "push",
+      "U答え": [
+       null,
+       null
+      ],
+      "理由": [
+       null,
+       "同点",
+       "同点"
+      ],
+      "履歴": {
+       "push": 2
+      }
+     }
+    ],
+    "V_HU_after_FH": 0.5620777114088077
+   },
+   "T=1740": {
+    "R_F": 0.0,
+    "R_H": 0.0,
+    "R_U": 5.64181642699402,
+    "V_FH": 0.0,
+    "fixed_pointer_bits": 3,
+    "after_one_tick": {
+     "R_H": 0.0,
+     "R_U": 2.7981446197417776
+    },
+    "births_rec": [
+     {
+      "slot": 0,
+      "rF": 0.0,
+      "rH": 0.0,
+      "rU旧": 4.0,
+      "rU今": 4.0,
+      "H答え": "push",
+      "U答え": [
+       null,
+       null
+      ],
+      "理由": [
+       null,
+       "同点",
+       "同点"
+      ],
+      "履歴": {
+       "push": 2
+      }
+     }
+    ],
+    "V_HU_after_FH": 0.564181642699402
+   }
+  },
+  "checks": [
+   [
+    "R_F 0",
+    true
+   ],
+   [
+    "R_H 0",
+    true
+   ],
+   [
+    "R_U 5.620777114088078 (T=16、訂正)",
+    true
+   ],
+   [
+    "V_FH 0",
+    true
+   ],
+   [
+    "after tick R_U 2.691317711067378 (T=16、訂正)",
+    true
+   ],
+   [
+    "V_HU 0.5620777114088078 (T=16、訂正)",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "V_HU（F→H の後の H→U の点）は、同じ席を F→H したあとに candidates で見る（下の actual に足す）。"
+ },
+ {
+  "id": "C14",
+  "status": "PASS",
+  "expected": {
+   "global_table": 124,
+   "definition_count": 3,
+   "structure": 62,
+   "state_markers": 12,
+   "history_contents": 60,
+   "fixed_pointers": 18,
+   "total": 279,
+   "one_F_to_H_total": 276,
+   "then_same_H_to_U_total": 266,
+   "all_six_H_total": 261
+  },
+  "actual": {
+   "global_table": 124,
+   "definition_count": 3,
+   "structure": 62,
+   "total": 279,
+   "one_F_to_H_total": 276,
+   "then_same_H_to_U_total": 266,
+   "all_six_H_total": 261
+  },
+  "checks": [
+   [
+    "global 124",
+    true
+   ],
+   [
+    "count 3",
+    true
+   ],
+   [
+    "structure 62",
+    true
+   ],
+   [
+    "total 279",
+    true
+   ],
+   [
+    "FH 276",
+    true
+   ],
+   [
+    "HU 266",
+    true
+   ],
+   [
+    "all H 261",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C15",
+  "status": "PASS",
+  "expected": {
+   "memory_before": 211,
+   "memory_after": 125,
+   "bits_freed": 86,
+   "V_HU": 0.046511627906976744,
+   "lambda": 0.0625,
+   "action": "delete last history and retire whole definition",
+   "global_counts_preserved": true
+  },
+  "actual": {
+   "memory_before": 211,
+   "memory_after": 125,
+   "bits_freed": 86,
+   "V_HU": 0.046511627906976744,
+   "retired": true,
+   "events": [
+    "HU",
+    "retire"
+   ],
+   "global_counts_preserved": true
+  },
+  "checks": [
+   [
+    "before 211",
+    true
+   ],
+   [
+    "after 125",
+    true
+   ],
+   [
+    "freed 86",
+    true
+   ],
+   [
+    "V 4/86",
+    true
+   ],
+   [
+    "retired",
+    true
+   ],
+   [
+    "global preserved",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C16",
+  "status": "PASS",
+  "expected": {
+   "A_existing": 0.5849625007211562,
+   "A_new": 1.584962500721156,
+   "deltaC_existing": 12,
+   "deltaC_new": 152,
+   "residual_body_existing": 0,
+   "residual_body_new": 0,
+   "K_minus_common_overhead_existing": 1.334962500721156,
+   "K_minus_common_overhead_new": 11.084962500721156,
+   "choice": "assimilate existing"
+  },
+  "actual": {
+   "A_existing": 0.584963,
+   "A_new": 1.584963,
+   "deltaC_existing": 12,
+   "deltaC_new": 152,
+   "r_existing": 3,
+   "r_new": 3,
+   "parts_existing": {
+    "書換": 1,
+    "追加": 1,
+    "取消": 1,
+    "書換数": 0,
+    "追加数": 0,
+    "写った席": 6,
+    "一致": 6,
+    "取消の未確認": 0
+   },
+   "parts_new": {
+    "書換": 1,
+    "追加": 1,
+    "取消": 1,
+    "書換数": 0,
+    "追加数": 0,
+    "写った席": 6,
+    "一致": 6,
+    "取消の未確認": 0
+   },
+   "K_existing": 4.334963,
+   "K_new": 14.084963,
+   "K_minus_common_overhead_existing": 1.3349630000000001,
+   "K_minus_common_overhead_new": 11.084963,
+   "choice": "D_A"
+  },
+  "checks": [
+   [
+    "A_existing",
+    true
+   ],
+   [
+    "A_new",
+    true
+   ],
+   [
+    "dC existing 12",
+    true
+   ],
+   [
+    "dC new 152",
+    true
+   ],
+   [
+    "residual body 0/0",
+    true
+   ],
+   [
+    "K-common existing",
+    true
+   ],
+   [
+    "K-common new",
+    true
+   ],
+   [
+    "choice existing",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "side の cands の A・K は 6 桁に丸めてある（tools/v310be.py:411-412）。共通の無編集の頭は I(0)×3＝3 ビットとして引いた。"
+ },
+ {
+  "id": "C17",
+  "status": "PASS",
+  "expected": {
+   "A_existing": 0.5849625007211562,
+   "A_new": 1.584962500721156,
+   "deltaC_existing": 6,
+   "deltaC_new": 152,
+   "cancellation_count": 0,
+   "K_existing_minus_common_overhead_lower_bound": 12.959962500721156,
+   "K_new_minus_common_overhead": 11.084962500721156,
+   "choice": "new D_B",
+   "addition_name_bits_lower_bound": 12
+  },
+  "actual": {
+   "A_existing": 0.584963,
+   "A_new": 1.584963,
+   "deltaC_existing": 6,
+   "deltaC_new": 152,
+   "r_existing": 44.0,
+   "r_new": 3,
+   "parts_existing": {
+    "書換": 1,
+    "追加": 42.0,
+    "取消": 1,
+    "書換数": 0,
+    "追加数": 3,
+    "写った席": 3,
+    "一致": 3,
+    "取消の未確認": 0
+   },
+   "parts_new": {
+    "書換": 1,
+    "追加": 1,
+    "取消": 1,
+    "書換数": 0,
+    "追加数": 0,
+    "写った席": 6,
+    "一致": 6,
+    "取消の未確認": 0
+   },
+   "K_existing": 44.959963,
+   "K_new": 14.084963,
+   "K_existing_minus_common_overhead": 41.959963,
+   "K_new_minus_common_overhead": 11.084963,
+   "choice": null
+  },
+  "checks": [
+   [
+    "A_existing",
+    true
+   ],
+   [
+    "A_new",
+    true
+   ],
+   [
+    "dC existing 6",
+    true
+   ],
+   [
+    "dC new 152",
+    true
+   ],
+   [
+    "cancellations 0",
+    true
+   ],
+   [
+    "existing >= lower bound",
+    true
+   ],
+   [
+    "K-common new",
+    true
+   ],
+   [
+    "addition names >= 12",
+    true
+   ],
+   [
+    "choice new D_B",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C18",
+  "status": "PASS",
+  "expected": {
+   "state_after": "H",
+   "history_after": {
+    "push": 1
+   },
+   "history_bits_added": 10,
+   "new_generation_scores": {
+    "H": 0,
+    "U": 0
+   },
+   "not_restored": [
+    "old fixed predicate",
+    "old candidate counts",
+    "old scores"
+   ]
+  },
+  "actual": {
+   "通常の照合_state_after": "H",
+   "通常の照合_history_after": {
+    "push": 1
+   },
+   "bind_s_mapped_in_m1_alignment": true,
+   "通常の照合_新しい世代": 1,
+   "通常の照合_点": [
+    0.0,
+    4.0
+   ],
+   "直接_state": "H",
+   "直接_H内容": 10,
+   "直接_世代": 1,
+   "直接_初期点": [
+    0.0,
+    4.0
+   ]
+  },
+  "checks": [
+   [
+    "照合の直しの版：H",
+    true
+   ],
+   [
+    "照合の直しの版：履歴 push 1",
+    true
+   ],
+   [
+    "照合の直しの版：内容 10",
+    true
+   ],
+   [
+    "直接：H",
+    true
+   ],
+   [
+    "直接：H 内容 10",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "今の版は訂正（ERRATA）に従い「U のまま」。照合の直しの版（v3.10u）は元の期待値（H{push:1}・内容 10・新しい世代の点 0）。初期の評価を入れた版（v3.10ur）では、新しい世代の点は初期の評価で決まる（提案 (a)。C26〜C28 で見る）ので、点の比べは入れていない。"
+ },
+ {
+  "id": "C19",
+  "status": "PASS",
+  "expected": {
+   "V": 0.0625,
+   "convert": false
+  },
+  "actual": {
+   "dC": 16,
+   "V": 0.0625,
+   "converted_s1": [],
+   "参考_定義全体の変換の段": [
+    [
+     "FH",
+     1,
+     0.0
+    ],
+    [
+     "FH",
+     3,
+     0.0
+    ],
+    [
+     "FH",
+     2,
+     0.0
+    ],
+    [
+     "HU",
+     1,
+     0.0
+    ],
+    [
+     "HU",
+     3,
+     0.0
+    ],
+    [
+     "FH",
+     4,
+     0.0
+    ],
+    [
+     "HU",
+     2,
+     0.0
+    ],
+    [
+     "FH",
+     5,
+     0.0
+    ],
+    [
+     "HU",
+     4,
+     0.0
+    ],
+    [
+     "HU",
+     5,
+     0.0
+    ],
+    [
+     "HU",
+     0,
+     0.010869565217391304
+    ],
+    [
+     "retire",
+     null,
+     null
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "dC 16",
+    true
+   ],
+   [
+    "V 0.0625",
+    true
+   ],
+   [
+    "not converted",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C20",
+  "status": "PASS",
+  "expected": {
+   "new_cancellation_count": 0,
+   "agent_state_between_variants": "identical under the same tie choices"
+  },
+  "actual": {
+   "prediction_same_for_two_hidden_answers": true,
+   "rewrite_parts": {
+    "書換": 1,
+    "追加": 30.0,
+    "取消": 1,
+    "書換数": 0,
+    "追加数": 2,
+    "写った席": 3,
+    "一致": 3,
+    "取消の未確認": 3
+   },
+   "new_cancellation_count": 0
+  },
+  "checks": [
+   [
+    "cancellations 0",
+    true
+   ],
+   [
+    "prediction independent of hidden answer",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "予測と E の入力は提示の図だけで、伏せた正解の値は関数の引数に無い。本人の状態の一致は、本番の旗で T02（tools/v38_checks/t02.py）が 839/839 一致（v3.10hs の確かめ）。ここでは同じ入力で二回予測して一致を見た。"
+ }
+]

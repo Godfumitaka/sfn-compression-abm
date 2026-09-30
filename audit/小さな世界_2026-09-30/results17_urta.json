@@ -1,0 +1,2029 @@
+[
+ {
+  "id": "C21",
+  "status": "PASS",
+  "expected": {
+   "今の版": "支持 1/2・必要 2・通らない",
+   "直した版": "支持 2/2・通る（U の s1 は構造の対応に入るが支持に入らない）"
+  },
+  "actual": {
+   "visible": 2,
+   "hidden_position": 0,
+   "unmatched": 0,
+   "support": 2,
+   "denominator": 2,
+   "required": 2,
+   "mapping": {
+    "s1": "a1",
+    "s2": "a2",
+    "s3": "a3"
+   },
+   "U_mapped": [
+    "s1→a1"
+   ],
+   "gate": true
+  },
+  "checks": [
+   [
+    "直した版：支持 2",
+    true
+   ],
+   [
+    "分母 2",
+    true
+   ],
+   [
+    "必要 2",
+    true
+   ],
+   [
+    "門を通る",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C22",
+  "status": "PASS",
+  "expected": {
+   "支持": "2/2・必要 2",
+   "s1 の観察": 0,
+   "s1": "U のまま・履歴なし"
+  },
+  "actual": {
+   "visible": 2,
+   "hidden_position": 0,
+   "unmatched": 0,
+   "support": 2,
+   "denominator": 2,
+   "required": 2,
+   "mapping": {
+    "s1": "a1",
+    "s2": "a2",
+    "s3": "a3"
+   },
+   "U_mapped": [
+    "s1→a1"
+   ],
+   "s1_state_after_m1": "U",
+   "s1_history_after_m1": {},
+   "s1_rec_gen": 0
+  },
+  "checks": [
+   [
+    "支持 2",
+    true
+   ],
+   [
+    "分母 2",
+    true
+   ],
+   [
+    "必要 2",
+    true
+   ],
+   [
+    "s1 観察 0",
+    true
+   ],
+   [
+    "s1 は U",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C23",
+  "status": "PASS",
+  "expected": {
+   "直した版": "s1 に {wrap:1} だけ、内容 10"
+  },
+  "actual": {
+   "s1_history_after": {
+    "wrap": 1
+   },
+   "s1_state_after": "H"
+  },
+  "checks": [
+   [
+    "新しい履歴 {wrap:1}",
+    true
+   ],
+   [
+    "種類 1・合計 1",
+    true
+   ],
+   [
+    "内容 10",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "今の版では照合の直しが無いので NOT_APPLICABLE（観察した値だけ残す）。"
+ },
+ {
+  "id": "C24",
+  "status": "PASS",
+  "expected": {
+   "支持": "1/2・通らない",
+   "s1 の観察": 0
+  },
+  "actual": {
+   "visible": 1,
+   "hidden_position": 0,
+   "unmatched": 1,
+   "support": 1,
+   "denominator": 2,
+   "required": 2,
+   "mapping": {
+    "s2": "a2"
+   },
+   "U_mapped": [],
+   "s1_history_after_m1": {},
+   "m1_registered": true
+  },
+  "checks": [
+   [
+    "支持 1",
+    true
+   ],
+   [
+    "分母 2",
+    true
+   ],
+   [
+    "通らない",
+    true
+   ],
+   [
+    "s1 観察 0",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C25",
+  "status": "NOT_APPLICABLE",
+  "expected": {
+   "直した版": "194→208、H{push:1}、λ＝1/16 で 198・λ＝0 で 208"
+  },
+  "actual": {
+   "λ=0": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 208,
+    "conversions": []
+   },
+   "λ=1/16": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 208,
+    "conversions": []
+   }
+  },
+  "checks": [
+   [
+    "before 194",
+    true
+   ],
+   [
+    "after m1 208",
+    true
+   ],
+   [
+    "s1 H{push:1}",
+    true
+   ],
+   [
+    "λ=1/16 → 198",
+    false
+   ],
+   [
+    "λ=0 → 208",
+    true
+   ]
+  ],
+  "pass": false,
+  "note": "照合の直しとゼロの初期値が前提（v3.10u だけ）。今の版と、初期の評価を入れた版（v3.10ur）では NOT_APPLICABLE（観察した値だけ残す）。"
+ },
+ {
+  "id": "C26",
+  "status": "PASS",
+  "expected": {
+   "loss_H": "0",
+   "loss_U": "4",
+   "freed_bits": "10",
+   "V_HU": "0.4",
+   "bits_retained": "208",
+   "bits_discarded": "198"
+  },
+  "actual": {
+   "λ=0.2": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 208,
+    "conversions": []
+   },
+   "λ=0.5": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 198,
+    "conversions": [
+     [
+      "HU",
+      0,
+      0.4
+     ]
+    ]
+   }
+  },
+  "checks": [
+   [
+    "損失 H0",
+    true
+   ],
+   [
+    "損失 U4",
+    true
+   ],
+   [
+    "空く量 10",
+    true
+   ],
+   [
+    "V 0.4",
+    true
+   ],
+   [
+    "λ.2 で H を残す 208",
+    true
+   ],
+   [
+    "λ.5 で H→U 198",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C27",
+  "status": "PASS",
+  "expected": {
+   "predicate_bits": "3",
+   "content_bits": "9",
+   "loss_H": "0",
+   "loss_U": "0",
+   "V_HU": "0"
+  },
+  "actual": {
+   "bits_before": 196,
+   "bits_after_m1": 209,
+   "s1_history": {
+    "push": 1
+   },
+   "s1_gen": 1,
+   "s1_R_H": 0.0,
+   "s1_R_U": 0.0,
+   "s1_candidate": [
+    [
+     "HU",
+     0.0,
+     9
+    ]
+   ],
+   "content_bits": 9,
+   "s1_state": "H",
+   "registration": 3,
+   "bits_after_B": 200,
+   "conversions": [
+    [
+     "HU",
+     0,
+     0.0
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "内容 9",
+    true
+   ],
+   [
+    "損失 H0・U0",
+    true
+   ],
+   [
+    "V 0",
+    true
+   ],
+   [
+    "λ＝1/16 で同じ試行に U へ戻る",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C28",
+  "status": "PASS",
+  "expected": {
+   "w1": "0.4051942785220194",
+   "loss_difference_next": "1.6207771140880776",
+   "V_next": "0.16207771140880775",
+   "bits_after_B": "198"
+  },
+  "actual": {
+   "bits_before": 194,
+   "bits_after_m1": 208,
+   "s1_history": {
+    "push": 1
+   },
+   "s1_gen": 1,
+   "s1_R_H": 0.0,
+   "s1_R_U": 1.6207771140880776,
+   "s1_candidate": [
+    [
+     "HU",
+     0.16207771140880775,
+     10
+    ]
+   ],
+   "content_bits": 10,
+   "s1_state": "H",
+   "registration": 3,
+   "bits_after_B": 198,
+   "conversions": [
+    [
+     "HU",
+     0,
+     0.16207771140880775
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "損失差 4w(1)",
+    true
+   ],
+   [
+    "V 0.16208",
+    true
+   ],
+   [
+    "H→U で 198",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "c25 と同じ初期状態から m1 を行い、B を内部の時計を 1 進めた時点（t＋1）で行った。新しい観察・開示・登録は足していない。"
+ },
+ {
+  "id": "C29",
+  "status": "PASS",
+  "expected": {
+   "existing_rewrite": "44",
+   "new_rewrite": "3",
+   "existing_delta_memory": "6",
+   "new_delta_memory": "152",
+   "existing_lambda_025": "46.084962500721154",
+   "new_lambda_025": "42.584962500721154",
+   "existing_lambda_050": "47.584962500721154",
+   "new_lambda_050": "80.58496250072116"
+  },
+  "actual": {
+   "λ=0.25": {
+    "x_rows": 6,
+    "existing": {
+     "r": 44.0,
+     "dC": 6,
+     "parts": {
+      "書換": 1,
+      "追加": 42.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 3,
+      "写った席": 3,
+      "一致": 3,
+      "取消の未確認": 3
+     },
+     "K": 46.084962500721154
+    },
+    "new": {
+     "r": 3,
+     "dC": 152,
+     "parts": {
+      "書換": 1,
+      "追加": 1,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 0,
+      "写った席": 6,
+      "一致": 6,
+      "取消の未確認": 0
+     },
+     "K": 42.584962500721154
+    },
+    "chosen": null,
+    "calls": [
+     null
+    ],
+    "state_unchanged_by_E": true,
+    "bits_before": 279,
+    "bits_after": 431,
+    "registration_after": 2,
+    "definitions_after": 2,
+    "hist_after": {
+     "s1": {
+      "push": 2
+     },
+     "s2": {
+      "fold": 2
+     },
+     "s3": {
+      "bind_s": 2
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   },
+   "λ=0.5": {
+    "x_rows": 6,
+    "existing": {
+     "r": 44.0,
+     "dC": 6,
+     "parts": {
+      "書換": 1,
+      "追加": 42.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 3,
+      "写った席": 3,
+      "一致": 3,
+      "取消の未確認": 3
+     },
+     "K": 47.584962500721154
+    },
+    "new": {
+     "r": 3,
+     "dC": 152,
+     "parts": {
+      "書換": 1,
+      "追加": 1,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 0,
+      "写った席": 6,
+      "一致": 6,
+      "取消の未確認": 0
+     },
+     "K": 80.58496250072116
+    },
+    "chosen": "D_A",
+    "calls": [
+     "D_A"
+    ],
+    "state_unchanged_by_E": true,
+    "bits_before": 279,
+    "bits_after": 285,
+    "registration_after": 3,
+    "definitions_after": 1,
+    "hist_after": {
+     "s1": {
+      "push": 3
+     },
+     "s2": {
+      "fold": 3
+     },
+     "s3": {
+      "bind_s": 3
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   }
+  },
+  "checks": [
+   [
+    "既存 r 44",
+    true
+   ],
+   [
+    "新規 r 3",
+    true
+   ],
+   [
+    "既存 ΔC 6",
+    true
+   ],
+   [
+    "新規 ΔC 152",
+    true
+   ],
+   [
+    "λ.25 既存 K",
+    true
+   ],
+   [
+    "λ.25 新規 K",
+    true
+   ],
+   [
+    "λ.25 新規を選ぶ",
+    true
+   ],
+   [
+    "λ.5 既存 K",
+    true
+   ],
+   [
+    "λ.5 新規 K",
+    true
+   ],
+   [
+    "λ.5 既存を選ぶ",
+    true
+   ],
+   [
+    "取消の未確認 3",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "K は side の丸め（6 桁）を使わず、A を式から、r と ΔC を整数のまま足した。"
+ },
+ {
+  "id": "C30",
+  "status": "DIFFERENCE",
+  "expected": {
+   "x_rows": "5",
+   "new_rows": "4",
+   "existing_rewrite": "44",
+   "new_rewrite": "19",
+   "existing_delta_memory": "4",
+   "new_structure": "42",
+   "new_states": "8",
+   "orphan_F_content": "6",
+   "new_delta_memory": "95",
+   "existing_lambda_025": "45.584962500721154",
+   "new_lambda_025": "44.334962500721154",
+   "existing_lambda_050": "46.584962500721154",
+   "new_lambda_050": "68.08496250072116"
+  },
+  "actual": {
+   "λ=0.25": {
+    "x_rows": 5,
+    "existing": {
+     "r": 48.0,
+     "dC": 4,
+     "parts": {
+      "書換": 1,
+      "追加": 46.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 3,
+      "写った席": 2,
+      "一致": 2,
+      "取消の未確認": 4
+     },
+     "K": 49.584962500721154
+    },
+    "new": {
+     "r": 19.0,
+     "dC": 95,
+     "parts": {
+      "書換": 1,
+      "追加": 17.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 1,
+      "写った席": 4,
+      "一致": 4,
+      "取消の未確認": 0
+     },
+     "K": 44.33496250072116
+    },
+    "chosen": null,
+    "calls": [
+     null
+    ],
+    "state_unchanged_by_E": true,
+    "bits_before": 279,
+    "bits_after": 374,
+    "registration_after": 2,
+    "definitions_after": 2,
+    "hist_after": {
+     "s1": {
+      "push": 2
+     },
+     "s2": {
+      "fold": 2
+     },
+     "s3": {
+      "bind_s": 2
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   },
+   "λ=0.5": {
+    "x_rows": 5,
+    "existing": {
+     "r": 48.0,
+     "dC": 4,
+     "parts": {
+      "書換": 1,
+      "追加": 46.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 3,
+      "写った席": 2,
+      "一致": 2,
+      "取消の未確認": 4
+     },
+     "K": 50.584962500721154
+    },
+    "new": {
+     "r": 19.0,
+     "dC": 95,
+     "parts": {
+      "書換": 1,
+      "追加": 17.0,
+      "取消": 1,
+      "書換数": 0,
+      "追加数": 1,
+      "写った席": 4,
+      "一致": 4,
+      "取消の未確認": 0
+     },
+     "K": 68.08496250072116
+    },
+    "chosen": "D_A",
+    "calls": [
+     "D_A"
+    ],
+    "state_unchanged_by_E": true,
+    "bits_before": 279,
+    "bits_after": 283,
+    "registration_after": 3,
+    "definitions_after": 1,
+    "hist_after": {
+     "s1": {
+      "push": 2
+     },
+     "s2": {
+      "fold": 3
+     },
+     "s3": {
+      "bind_s": 3
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   },
+   "new_rows": [
+    "fold",
+    "wrap",
+    "stack",
+    "bind_b"
+   ],
+   "new_structure": 42,
+   "new_states": 8,
+   "orphan_fold_content": 6,
+   "new_histories": {
+    "fold": {},
+    "wrap": {
+     "wrap": 1
+    },
+    "stack": {
+     "stack": 1
+    },
+    "bind_b": {
+     "bind_b": 1
+    }
+   }
+  },
+  "checks": [
+   [
+    "x 5 本",
+    true
+   ],
+   [
+    "新規 4 席",
+    true
+   ],
+   [
+    "既存 r 44",
+    false
+   ],
+   [
+    "新規 r 19",
+    true
+   ],
+   [
+    "既存 ΔC 4",
+    true
+   ],
+   [
+    "構造 42",
+    true
+   ],
+   [
+    "状態 8",
+    true
+   ],
+   [
+    "親なし fold 内容 6",
+    true
+   ],
+   [
+    "新規 ΔC 95",
+    true
+   ],
+   [
+    "λ.25 既存 K",
+    false
+   ],
+   [
+    "λ.25 新規 K",
+    true
+   ],
+   [
+    "λ.25 新規",
+    true
+   ],
+   [
+    "λ.5 既存 K",
+    false
+   ],
+   [
+    "λ.5 新規 K",
+    true
+   ],
+   [
+    "λ.5 既存",
+    true
+   ]
+  ],
+  "pass": false,
+  "note": ""
+ },
+ {
+  "id": "C31",
+  "status": "PASS",
+  "expected": {
+   "full_bits_before": "279",
+   "full_bits_after": "285",
+   "partial_bits_after": "283",
+   "registration_after": "3",
+   "definitions_after": "1"
+  },
+  "actual": {
+   "C29_λ.5": {
+    "state_unchanged_by_E": true,
+    "calls": [
+     "D_A"
+    ],
+    "bits_before": 279,
+    "bits_after": 285,
+    "registration_after": 3,
+    "definitions_after": 1,
+    "hist_after": {
+     "s1": {
+      "push": 3
+     },
+     "s2": {
+      "fold": 3
+     },
+     "s3": {
+      "bind_s": 3
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   },
+   "C30_λ.5": {
+    "state_unchanged_by_E": true,
+    "calls": [
+     "D_A"
+    ],
+    "bits_before": 279,
+    "bits_after": 283,
+    "registration_after": 3,
+    "definitions_after": 1,
+    "hist_after": {
+     "s1": {
+      "push": 2
+     },
+     "s2": {
+      "fold": 3
+     },
+     "s3": {
+      "bind_s": 3
+     },
+     "s4": {
+      "cut": 2
+     },
+     "s5": {
+      "turn": 2
+     },
+     "s6": {
+      "bind_a": 2
+     }
+    }
+   }
+  },
+  "checks": [
+   [
+    "仮の適用で実記憶は変わらない",
+    true
+   ],
+   [
+    "実登録は一回",
+    true
+   ],
+   [
+    "C29 279→285",
+    true
+   ],
+   [
+    "C30 279→283",
+    true
+   ],
+   [
+    "登録 2→3",
+    true
+   ],
+   [
+    "定義数 1",
+    true
+   ],
+   [
+    "C29 共有 3 履歴だけ 3",
+    true
+   ],
+   [
+    "C30 fold・bind_s だけ 3",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "実登録は、E が採った候補を hypo_m1 と同じ経路（abm.abstraction.m1＋--hist-role の包み）で一回呼び、v39.reconcile を通した。"
+ },
+ {
+  "id": "C32",
+  "status": "PASS",
+  "expected": {
+   "tie_score": "0",
+   "each_freed_bits": "3",
+   "post_FH_HU_score": "10",
+   "bits_before": "279",
+   "bits_after": "273"
+  },
+  "actual": {
+   "bits_before": 279,
+   "bits_after": 273,
+   "order": [
+    [
+     "FH",
+     "s1"
+    ],
+    [
+     "FH",
+     "s2"
+    ]
+   ],
+   "freed": 6,
+   "log（各変換の直前の、λ 未満の候補＝_pick に渡るもの）": [
+    {
+     "k": 0,
+     "候補": [
+      [
+       "FH",
+       "s1",
+       0.0,
+       3
+      ],
+      [
+       "FH",
+       "s2",
+       0.0,
+       3
+      ]
+     ],
+     "選んだ": [
+      "FH",
+      "s1"
+     ],
+     "同点": 2
+    },
+    {
+     "k": 1,
+     "候補": [
+      [
+       "FH",
+       "s2",
+       0.0,
+       3
+      ]
+     ],
+     "選んだ": [
+      "FH",
+      "s2"
+     ],
+     "同点": 1
+    }
+   ],
+   "log": [
+    {
+     "k": 0,
+     "候補": [
+      [
+       "FH",
+       "s1",
+       0.0,
+       3
+      ],
+      [
+       "FH",
+       "s2",
+       0.0,
+       3
+      ]
+     ],
+     "選んだ": [
+      "FH",
+      "s1"
+     ],
+     "同点": 2
+    },
+    {
+     "k": 1,
+     "候補": [
+      [
+       "FH",
+       "s2",
+       0.0,
+       3
+      ]
+     ],
+     "選んだ": [
+      "FH",
+      "s2"
+     ],
+     "同点": 1
+    }
+   ],
+   "段の後の全候補": [
+    [
+     "HU",
+     "s1",
+     10.0,
+     10
+    ],
+    [
+     "HU",
+     "s2",
+     10.0,
+     10
+    ],
+    [
+     "FH",
+     "s3",
+     33.333333333333,
+     3
+    ],
+    [
+     "FH",
+     "s4",
+     33.333333333333,
+     3
+    ],
+    [
+     "FH",
+     "s5",
+     33.333333333333,
+     3
+    ],
+    [
+     "FH",
+     "s6",
+     33.333333333333,
+     3
+    ]
+   ]
+  },
+  "checks": [
+   [
+    "最初の同点 {s1 F→H, s2 F→H} 点 0",
+    true
+   ],
+   [
+    "空く量 3",
+    true
+   ],
+   [
+    "順序は二つのどちらか",
+    true
+   ],
+   [
+    "279→273",
+    true
+   ],
+   [
+    "s1・s2 を H にしたあとの H→U の点 10（変換しない）",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C33",
+  "status": "PASS",
+  "expected": {
+   "initial_tie_score": "0",
+   "new_HU_score": "-0.4",
+   "total_freed_bits": "23",
+   "bits_before": "276",
+   "bits_after": "253"
+  },
+  "actual": {
+   "本番の選び方": {
+    "bits_before": 276,
+    "bits_after": 253,
+    "order": [
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ],
+     [
+      "HU",
+      "s2"
+     ]
+    ],
+    "freed": 23,
+    "log（各変換の直前の、λ 未満の候補＝_pick に渡るもの）": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 1
+     }
+    ],
+    "log": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 1
+     }
+    ],
+    "段の後の全候補": [
+     [
+      "FH",
+      "s3",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s4",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s5",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s6",
+      33.333333333333,
+      3
+     ]
+    ]
+   },
+   "最初に s1 F→H を指定": {
+    "bits_before": 276,
+    "bits_after": 253,
+    "order": [
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ],
+     [
+      "HU",
+      "s2"
+     ]
+    ],
+    "freed": 23,
+    "log（各変換の直前の、λ 未満の候補＝_pick に渡るもの）": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 1
+     }
+    ],
+    "log": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 1
+     }
+    ],
+    "段の後の全候補": [
+     [
+      "FH",
+      "s3",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s4",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s5",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s6",
+      33.333333333333,
+      3
+     ]
+    ]
+   },
+   "最初に s2 H→U を指定": {
+    "bits_before": 276,
+    "bits_after": 253,
+    "order": [
+     [
+      "HU",
+      "s2"
+     ],
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ]
+    ],
+    "freed": 23,
+    "log（各変換の直前の、λ 未満の候補＝_pick に渡るもの）": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     }
+    ],
+    "log": [
+     {
+      "k": 0,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ],
+       [
+        "HU",
+        "s2",
+        0.0,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s2"
+      ],
+      "同点": 2
+     },
+     {
+      "k": 1,
+      "候補": [
+       [
+        "FH",
+        "s1",
+        0.0,
+        3
+       ]
+      ],
+      "選んだ": [
+       "FH",
+       "s1"
+      ],
+      "同点": 1
+     },
+     {
+      "k": 2,
+      "候補": [
+       [
+        "HU",
+        "s1",
+        -0.4,
+        10
+       ]
+      ],
+      "選んだ": [
+       "HU",
+       "s1"
+      ],
+      "同点": 1
+     }
+    ],
+    "段の後の全候補": [
+     [
+      "FH",
+      "s3",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s4",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s5",
+      33.333333333333,
+      3
+     ],
+     [
+      "FH",
+      "s6",
+      33.333333333333,
+      3
+     ]
+    ]
+   }
+  },
+  "checks": [
+   [
+    "最初の同点 {s1 F→H, s2 H→U} 点 0",
+    true
+   ],
+   [
+    "順序が許される二つのどちらか",
+    true
+   ],
+   [
+    "指定 (i)",
+    true
+   ],
+   [
+    "指定 (ii)",
+    true
+   ],
+   [
+    "s1 F→H の直後の s1 H→U の点 −0.4",
+    true
+   ],
+   [
+    "解放 23・276→253",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C34",
+  "status": "PASS",
+  "expected": {
+   "test_seed": "101",
+   "test_trial": "5",
+   "world_rng_changes": "0",
+   "feedback_rng_changes": "0"
+  },
+  "actual": {
+   "同じ鍵で繰り返して同じ順": true,
+   "種 101・試行 5 の順（3 回）": [
+    [
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ],
+     [
+      "HU",
+      "s2"
+     ]
+    ],
+    [
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ],
+     [
+      "HU",
+      "s2"
+     ]
+    ],
+    [
+     [
+      "FH",
+      "s1"
+     ],
+     [
+      "HU",
+      "s1"
+     ],
+     [
+      "HU",
+      "s2"
+     ]
+    ]
+   ],
+   "random（世界の乱数と同じ Python の random）の状態が B の前後で同じ": true
+  },
+  "checks": [
+   [
+    "繰り返して同じ",
+    true
+   ],
+   [
+    "世界・開示の乱数の状態を変えない",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "B の同点の乱数は tools/v39.py:859-866 _pick が sha256(種・試行・変換番号) から作る Random で、Python の random の状態も世界の乱数（abm/loop.py の Random(_rng_seed(...)) と world の u_coins）も使わない。ここでは random.getstate() の前後の一致を見た。"
+ },
+ {
+  "id": "C35",
+  "status": "PASS",
+  "expected": {
+   "support": "3",
+   "denominator": "3",
+   "required": "3",
+   "visible": "2",
+   "hidden_position": "1",
+   "unmatched": "0",
+   "new_loss_H": "0",
+   "new_loss_U": "4",
+   "H_history_count_before": "2",
+   "H_history_count_after_correct_fill_update": "3"
+  },
+  "actual": {
+   "visible": 2,
+   "hidden_position": 1,
+   "unmatched": 0,
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "mapping": {
+    "s1": "b1",
+    "s2": "b2",
+    "s3": "b3"
+   },
+   "U_mapped": [],
+   "R_used": "D_A",
+   "answer": "push(ba,bb)",
+   "path": "filling_tombstone",
+   "abstain_reason": null,
+   "fill_seat_state": "H",
+   "answers": {
+    "0": {
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": "bind_b"
+    },
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "role_targets": {
+    "0": "b1",
+    "1": "b2",
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "loss_increment": {
+    "s1": {
+     "F": 0.0,
+     "H": 0.0,
+     "U": 4.0
+    }
+   },
+   "D-10 の条件（穴埋めの当たり＋開示）": true
+  },
+  "checks": [
+   [
+    "支持 3/3・必要 3",
+    true
+   ],
+   [
+    "内訳 可視2・未観測1・なし0",
+    true
+   ],
+   [
+    "H から push(ba,bb) を答える",
+    true
+   ],
+   [
+    "s1 の届け先 b1",
+    true
+   ],
+   [
+    "損失 H0・U4、s1 だけ",
+    true
+   ],
+   [
+    "当たりの穴埋めで履歴 2→3（D-10 の条件）",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": "D-10（tools/v38.py:140-160）は会計の包みの中なので、ここでは条件（穴埋めの答えが当たりで開示あり）が成り立つかだけを見た。"
+ },
+ {
+  "id": "C36",
+  "status": "PASS",
+  "expected": {
+   "support": "3",
+   "denominator": "4",
+   "required": "3",
+   "visible": "3",
+   "hidden_position": "0",
+   "unmatched": "1",
+   "score_role_new_loss_H": "0",
+   "score_role_new_loss_U": "0"
+  },
+  "actual": {
+   "visible": 3,
+   "hidden_position": 0,
+   "unmatched": 1,
+   "support": 3,
+   "denominator": 4,
+   "required": 3,
+   "mapping": {
+    "s1": "b1",
+    "s2": "b2",
+    "s3": "b3"
+   },
+   "U_mapped": [],
+   "R_used": "D_A",
+   "answer": "cut(ba,bb)",
+   "path": "filling_tombstone",
+   "abstain_reason": null,
+   "fill_seat_state": "H",
+   "answers": {
+    "0": {
+     "F": "push",
+     "H": "push",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": "bind_s"
+    },
+    "3": {
+     "H": "cut",
+     "U": null
+    },
+    "4": null,
+    "5": null
+   },
+   "role_targets": {
+    "0": "b1",
+    "1": "b2",
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "role_why": {
+    "0": null,
+    "1": null,
+    "2": "親が無い",
+    "3": "親が対応しない",
+    "4": "親が対応しない",
+    "5": "親が無い"
+   },
+   "loss_increment": {}
+  },
+  "checks": [
+   [
+    "支持 3/4・必要 3",
+    true
+   ],
+   [
+    "内訳 可視3・未観測0・なし1",
+    true
+   ],
+   [
+    "H から cut(ba,bb) を答える（世界で外れ）",
+    true
+   ],
+   [
+    "s4 の届け先なし",
+    true
+   ],
+   [
+    "役割採点の加算 0",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "C37",
+  "status": "PASS",
+  "expected": {
+   "support": "3",
+   "denominator": "3",
+   "required": "3",
+   "visible": "2",
+   "hidden_position": "1",
+   "unmatched": "0",
+   "new_loss_H": "4",
+   "new_loss_U": "4"
+  },
+  "actual": {
+   "visible": 2,
+   "hidden_position": 1,
+   "unmatched": 0,
+   "support": 3,
+   "denominator": 3,
+   "required": 3,
+   "mapping": {
+    "s1": "b1",
+    "s2": "b2",
+    "s3": "b3"
+   },
+   "U_mapped": [],
+   "R_used": "D_S",
+   "answer": "cut(ba,bb)",
+   "path": "filling_tombstone",
+   "abstain_reason": null,
+   "fill_seat_state": "H",
+   "answers": {
+    "0": {
+     "H": "cut",
+     "U": null
+    },
+    "1": {
+     "F": "fold",
+     "H": "fold",
+     "U": null
+    },
+    "2": {
+     "F": "bind_s",
+     "H": "bind_s",
+     "U": null
+    }
+   },
+   "role_targets": {
+    "0": "b1",
+    "1": "b2",
+    "2": null
+   },
+   "loss_increment": {
+    "s1": {
+     "F": 0.0,
+     "H": 4.0,
+     "U": 4.0
+    }
+   }
+  },
+  "checks": [
+   [
+    "支持 3/3・必要 3",
+    true
+   ],
+   [
+    "内訳 可視2・未観測1・なし0",
+    true
+   ],
+   [
+    "H から cut(ba,bb) を答える（外れ）",
+    true
+   ],
+   [
+    "損失 H4・U4、s1 だけ",
+    true
+   ]
+  ],
+  "pass": true,
+  "note": ""
+ }
+]
