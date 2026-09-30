@@ -7,21 +7,25 @@
    "直した版": "支持 2/2・通る（U の s1 は構造の対応に入るが支持に入らない）"
   },
   "actual": {
-   "visible": 1,
+   "visible": 2,
    "hidden_position": 0,
-   "unmatched": 1,
-   "support": 1,
+   "unmatched": 0,
+   "support": 2,
    "denominator": 2,
    "required": 2,
    "mapping": {
-    "s2": "a2"
+    "s1": "a1",
+    "s2": "a2",
+    "s3": "a3"
    },
-   "U_mapped": [],
-   "gate": false
+   "U_mapped": [
+    "s1→a1"
+   ],
+   "gate": true
   },
   "checks": [
    [
-    "今の版：支持 1",
+    "直した版：支持 2",
     true
    ],
    [
@@ -33,7 +37,7 @@
     true
    ],
    [
-    "門を通らない",
+    "門を通る",
     true
    ]
   ],
@@ -94,29 +98,31 @@
  },
  {
   "id": "C23",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
    "直した版": "s1 に {wrap:1} だけ、内容 10"
   },
   "actual": {
-   "s1_history_after": {},
-   "s1_state_after": "U"
+   "s1_history_after": {
+    "wrap": 1
+   },
+   "s1_state_after": "H"
   },
   "checks": [
    [
     "新しい履歴 {wrap:1}",
-    false
+    true
    ],
    [
     "種類 1・合計 1",
-    false
+    true
    ],
    [
     "内容 10",
-    false
+    true
    ]
   ],
-  "pass": false,
+  "pass": true,
   "note": "今の版では照合の直しが無いので NOT_APPLICABLE（観察した値だけ残す）。"
  },
  {
@@ -163,38 +169,60 @@
  },
  {
   "id": "C25",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
    "直した版": "194→208、H{push:1}、λ＝1/16 で 198・λ＝0 で 208"
   },
   "actual": {
    "λ=0": {
     "bits_before": 194,
-    "bits_after_m1": 194,
-    "s1_history": {},
-    "s1_gen": 0,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
     "s1_R_H": 0.0,
     "s1_R_U": 0.0,
-    "s1_candidate": [],
-    "content_bits": null,
-    "s1_state": "U",
+    "s1_candidate": [
+     [
+      "HU",
+      0.0,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
     "registration": 3,
-    "bits_after_B": 194,
+    "bits_after_B": 208,
     "conversions": []
    },
    "λ=1/16": {
     "bits_before": 194,
-    "bits_after_m1": 194,
-    "s1_history": {},
-    "s1_gen": 0,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
     "s1_R_H": 0.0,
     "s1_R_U": 0.0,
-    "s1_candidate": [],
-    "content_bits": null,
-    "s1_state": "U",
+    "s1_candidate": [
+     [
+      "HU",
+      0.0,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
     "registration": 3,
-    "bits_after_B": 194,
-    "conversions": []
+    "bits_after_B": 198,
+    "conversions": [
+     [
+      "HU",
+      0,
+      0.0
+     ]
+    ]
    }
   },
   "checks": [
@@ -204,22 +232,22 @@
    ],
    [
     "after m1 208",
-    false
+    true
    ],
    [
     "s1 H{push:1}",
-    false
+    true
    ],
    [
     "λ=1/16 → 198",
-    false
+    true
    ],
    [
     "λ=0 → 208",
-    false
+    true
    ]
   ],
-  "pass": false,
+  "pass": true,
   "note": "照合の直しとゼロの初期値が前提（v3.10u だけ）。今の版と、初期の評価を入れた版（v3.10ur）では NOT_APPLICABLE（観察した値だけ残す）。"
  },
  {

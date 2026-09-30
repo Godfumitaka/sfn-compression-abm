@@ -7,21 +7,25 @@
    "直した版": "支持 2/2・通る（U の s1 は構造の対応に入るが支持に入らない）"
   },
   "actual": {
-   "visible": 1,
+   "visible": 2,
    "hidden_position": 0,
-   "unmatched": 1,
-   "support": 1,
+   "unmatched": 0,
+   "support": 2,
    "denominator": 2,
    "required": 2,
    "mapping": {
-    "s2": "a2"
+    "s1": "a1",
+    "s2": "a2",
+    "s3": "a3"
    },
-   "U_mapped": [],
-   "gate": false
+   "U_mapped": [
+    "s1→a1"
+   ],
+   "gate": true
   },
   "checks": [
    [
-    "今の版：支持 1",
+    "直した版：支持 2",
     true
    ],
    [
@@ -33,7 +37,7 @@
     true
    ],
    [
-    "門を通らない",
+    "門を通る",
     true
    ]
   ],
@@ -94,29 +98,31 @@
  },
  {
   "id": "C23",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
    "直した版": "s1 に {wrap:1} だけ、内容 10"
   },
   "actual": {
-   "s1_history_after": {},
-   "s1_state_after": "U"
+   "s1_history_after": {
+    "wrap": 1
+   },
+   "s1_state_after": "H"
   },
   "checks": [
    [
     "新しい履歴 {wrap:1}",
-    false
+    true
    ],
    [
     "種類 1・合計 1",
-    false
+    true
    ],
    [
     "内容 10",
-    false
+    true
    ]
   ],
-  "pass": false,
+  "pass": true,
   "note": "今の版では照合の直しが無いので NOT_APPLICABLE（観察した値だけ残す）。"
  },
  {
@@ -170,30 +176,46 @@
   "actual": {
    "λ=0": {
     "bits_before": 194,
-    "bits_after_m1": 194,
-    "s1_history": {},
-    "s1_gen": 0,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
     "s1_R_H": 0.0,
-    "s1_R_U": 0.0,
-    "s1_candidate": [],
-    "content_bits": null,
-    "s1_state": "U",
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
     "registration": 3,
-    "bits_after_B": 194,
+    "bits_after_B": 208,
     "conversions": []
    },
    "λ=1/16": {
     "bits_before": 194,
-    "bits_after_m1": 194,
-    "s1_history": {},
-    "s1_gen": 0,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
     "s1_R_H": 0.0,
-    "s1_R_U": 0.0,
-    "s1_candidate": [],
-    "content_bits": null,
-    "s1_state": "U",
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
     "registration": 3,
-    "bits_after_B": 194,
+    "bits_after_B": 208,
     "conversions": []
    }
   },
@@ -204,11 +226,11 @@
    ],
    [
     "after m1 208",
-    false
+    true
    ],
    [
     "s1 H{push:1}",
-    false
+    true
    ],
    [
     "λ=1/16 → 198",
@@ -216,7 +238,7 @@
    ],
    [
     "λ=0 → 208",
-    false
+    true
    ]
   ],
   "pass": false,
@@ -224,42 +246,208 @@
  },
  {
   "id": "C26",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
-   "提案 (a)": "承認・実装されたときだけ"
+   "loss_H": "0",
+   "loss_U": "4",
+   "freed_bits": "10",
+   "V_HU": "0.4",
+   "bits_retained": "208",
+   "bits_discarded": "198"
   },
   "actual": {
-   "note": "提案 (a)（覚え直しの一観察で初期の評価をする）は、この版に無い"
+   "λ=0.2": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 208,
+    "conversions": []
+   },
+   "λ=0.5": {
+    "bits_before": 194,
+    "bits_after_m1": 208,
+    "s1_history": {
+     "push": 1
+    },
+    "s1_gen": 1,
+    "s1_R_H": 0.0,
+    "s1_R_U": 4.0,
+    "s1_candidate": [
+     [
+      "HU",
+      0.4,
+      10
+     ]
+    ],
+    "content_bits": 10,
+    "s1_state": "H",
+    "registration": 3,
+    "bits_after_B": 198,
+    "conversions": [
+     [
+      "HU",
+      0,
+      0.4
+     ]
+    ]
+   }
   },
-  "checks": [],
+  "checks": [
+   [
+    "損失 H0",
+    true
+   ],
+   [
+    "損失 U4",
+    true
+   ],
+   [
+    "空く量 10",
+    true
+   ],
+   [
+    "V 0.4",
+    true
+   ],
+   [
+    "λ.2 で H を残す 208",
+    true
+   ],
+   [
+    "λ.5 で H→U 198",
+    true
+   ]
+  ],
   "pass": true,
-  "note": "提案 (a) は、この版に無い。"
+  "note": ""
  },
  {
   "id": "C27",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
-   "提案 (a)": "承認・実装されたときだけ"
+   "predicate_bits": "3",
+   "content_bits": "9",
+   "loss_H": "0",
+   "loss_U": "0",
+   "V_HU": "0"
   },
   "actual": {
-   "note": "提案 (a)（覚え直しの一観察で初期の評価をする）は、この版に無い"
+   "bits_before": 196,
+   "bits_after_m1": 209,
+   "s1_history": {
+    "push": 1
+   },
+   "s1_gen": 1,
+   "s1_R_H": 0.0,
+   "s1_R_U": 0.0,
+   "s1_candidate": [
+    [
+     "HU",
+     0.0,
+     9
+    ]
+   ],
+   "content_bits": 9,
+   "s1_state": "H",
+   "registration": 3,
+   "bits_after_B": 200,
+   "conversions": [
+    [
+     "HU",
+     0,
+     0.0
+    ]
+   ]
   },
-  "checks": [],
+  "checks": [
+   [
+    "内容 9",
+    true
+   ],
+   [
+    "損失 H0・U0",
+    true
+   ],
+   [
+    "V 0",
+    true
+   ],
+   [
+    "λ＝1/16 で同じ試行に U へ戻る",
+    true
+   ]
+  ],
   "pass": true,
-  "note": "提案 (a) は、この版に無い。"
+  "note": ""
  },
  {
   "id": "C28",
-  "status": "NOT_APPLICABLE",
+  "status": "PASS",
   "expected": {
-   "提案 (a)": "承認・実装されたときだけ"
+   "w1": "0.4051942785220194",
+   "loss_difference_next": "1.6207771140880776",
+   "V_next": "0.16207771140880775",
+   "bits_after_B": "198"
   },
   "actual": {
-   "note": "提案 (a)（覚え直しの一観察で初期の評価をする）は、この版に無い"
+   "bits_before": 194,
+   "bits_after_m1": 208,
+   "s1_history": {
+    "push": 1
+   },
+   "s1_gen": 1,
+   "s1_R_H": 0.0,
+   "s1_R_U": 1.6207771140880776,
+   "s1_candidate": [
+    [
+     "HU",
+     0.16207771140880775,
+     10
+    ]
+   ],
+   "content_bits": 10,
+   "s1_state": "H",
+   "registration": 3,
+   "bits_after_B": 198,
+   "conversions": [
+    [
+     "HU",
+     0,
+     0.16207771140880775
+    ]
+   ]
   },
-  "checks": [],
+  "checks": [
+   [
+    "損失差 4w(1)",
+    true
+   ],
+   [
+    "V 0.16208",
+    true
+   ],
+   [
+    "H→U で 198",
+    true
+   ]
+  ],
   "pass": true,
-  "note": "提案 (a) は、この版に無い。"
+  "note": "c25 と同じ初期状態から m1 を行い、B を内部の時計を 1 進めた時点（t＋1）で行った。新しい観察・開示・登録は足していない。"
  },
  {
   "id": "C29",

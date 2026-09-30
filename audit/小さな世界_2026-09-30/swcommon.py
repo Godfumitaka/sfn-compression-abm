@@ -46,6 +46,25 @@ v39._init_rec = B.init_rec
 v39._candidates = B.candidates
 _ORIG_M1 = ab.m1
 ab.m1 = histrole.make(_ORIG_M1, real=False)
+# 版ごとの旗（SW_FLAGS に u_struct・relearn_init）：tools/v3_run.py:440-446 と同じく、v39・v310be のあとに入れる
+import io as _io
+SW_FLAGS = set(filter(None, os.environ.get("SW_FLAGS", "").split(",")))
+_FO = _io.StringIO()
+if "u_struct" in SW_FLAGS:
+    import ustruct  # noqa: E402
+    ustruct.install(_FO)
+if "relearn_init" in SW_FLAGS:
+    import relearninit  # noqa: E402
+    relearninit.install(_FO)
+
+
+def reconcile_with_scene(state, trial, why, scene):
+    """本番では loop.m1／会計の包み（tools/relearninit.py:32-43）が場面を控えてから reconcile が呼ばれる。その控えを同じく置く。"""
+    if "relearn_init" in SW_FLAGS:
+        relearninit.CTX["scene"] = scene
+    return v39.reconcile(state, trial, why)
+
+
 S39 = v39._state_class()
 
 

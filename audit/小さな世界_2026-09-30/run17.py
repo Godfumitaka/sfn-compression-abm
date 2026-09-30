@@ -14,7 +14,7 @@ from types import SimpleNamespace
 
 sys.path.insert(0, "/Users/tatsu-admin/sw_audit")
 from swcommon import *  # noqa
-from swcommon import RES, case, _need, LAYOUT  # noqa
+from swcommon import RES, case, _need, LAYOUT, reconcile_with_scene, SW_FLAGS  # noqa
 
 VER = os.environ.get("SW_VERSION", "hs")
 C = json.load(open("/Users/tatsu-admin/sw_audit2/v310hs_small_world_supplement/cases.json", encoding="utf-8"))
@@ -116,7 +116,7 @@ A_full, _ = scene("A_full")
 bd = breakdown(D, st, A_full)
 gate = bd["support"] >= bd["required"]
 chk = [("今の版：支持 1", bd["support"] == num("C21", "current_support")), ("分母 2", bd["denominator"] == num("C21", "current_denominator")),
-       ("必要 2", bd["required"] == num("C21", "required")), ("門を通らない", not gate)] if VER == "hs" else \
+       ("必要 2", bd["required"] == num("C21", "required")), ("門を通らない", not gate)] if "u_struct" not in SW_FLAGS else \
       [("直した版：支持 2", bd["support"] == num("C21", "fixed_support")), ("分母 2", bd["denominator"] == num("C21", "fixed_denominator")),
        ("必要 2", bd["required"] == 2), ("門を通る", gate)]
 case("C21", {"今の版": "支持 1/2・必要 2・通らない", "直した版": "支持 2/2・通る（U の s1 は構造の対応に入るが支持に入らない）"},
@@ -128,7 +128,7 @@ A_hp, hidp = scene("A_hide_push")
 st = make_state([D], hist=hist_for("D_S", ["s1", "s2", "s3"], st_), seats=seats_for("D_S", ["s1", "s2", "s3"], st_))
 bd = breakdown(D, st, A_hp)
 res = B.hypo_m1(st, A_full, A_hp, sme.map_graphs(A_full, A_hp).alignment, t, "D_S", KW)
-sa = v39.reconcile(res[0], t, "m1") if res else None
+sa = reconcile_with_scene(res[0], t, "m1", A_hp) if res else None
 s1_state = v39.seat_state(sa.definitions["D_S"], sa.definitions["D_S"].constituents[0], sa.slot_history) if sa else None
 s1_hist = dict(v39.hist_counts(sa.slot_history.get(("D_S", 0)))) if sa else None
 case("C22", {"支持": "2/2・必要 2", "s1 の観察": 0, "s1": "U のまま・履歴なし"},
@@ -141,7 +141,7 @@ setup()
 A_rw, _ = scene("A_replace_push_wrap")
 st = make_state([D], hist=hist_for("D_S", ["s1", "s2", "s3"], st_), seats=seats_for("D_S", ["s1", "s2", "s3"], st_))
 res = B.hypo_m1(st, A_rw, A_rw, sme.map_graphs(A_rw, A_rw).alignment, t, "D_S", KW)
-sa = v39.reconcile(res[0], t, "m1") if res else None
+sa = reconcile_with_scene(res[0], t, "m1", A_rw) if res else None
 h1 = dict(v39.hist_counts(sa.slot_history.get(("D_S", 0)))) if sa else None
 L = v39.code_lengths(st.p_hat)
 act = {"s1_history_after": h1, "s1_state_after": v39.seat_state(sa.definitions["D_S"], sa.definitions["D_S"].constituents[0], sa.slot_history) if sa else None}
@@ -156,7 +156,7 @@ A_sp, _ = scene("A_replace_shared_parent")
 st = make_state([D], hist=hist_for("D_S", ["s1", "s2", "s3"], st_), seats=seats_for("D_S", ["s1", "s2", "s3"], st_))
 bd = breakdown(D, st, A_sp)
 res = B.hypo_m1(st, A_sp, A_sp, sme.map_graphs(A_sp, A_sp).alignment, t, "D_S", KW)
-sa = v39.reconcile(res[0], t, "m1") if res else None
+sa = reconcile_with_scene(res[0], t, "m1", A_sp) if res else None
 h1 = dict(v39.hist_counts(sa.slot_history.get(("D_S", 0)))) if sa else {}
 case("C24", {"支持": "1/2・通らない", "s1 の観察": 0}, {**bd, "s1_history_after_m1": h1, "m1_registered": res is not None},
      [("支持 1", bd["support"] == num("C24", "support")), ("分母 2", bd["denominator"] == num("C24", "denominator")),
@@ -164,7 +164,7 @@ case("C24", {"支持": "1/2・通らない", "s1 の観察": 0}, {**bd, "s1_hist
 
 
 # ---------------- C25〜C28（照合の直し・提案 (a) が前提）
-def c25(lam, ph=None):
+def c25(lam, ph=None, tick=0):
     setup(lam=lam)
     st_ = {"s1": "U"}
     D = defn("D_S", ["s1", "s2", "s3"], st_, reg_count=2)
@@ -173,11 +173,16 @@ def c25(lam, ph=None):
     L = v39.code_lengths(st.p_hat)
     b0 = v39.total_bits(st, L)
     res = B.hypo_m1(st, A_full, A_full, sme.map_graphs(A_full, A_full).alignment, t, "D_S", KW)
-    sa = v39.reconcile(res[0], t, "m1")
+    sa = reconcile_with_scene(res[0], t, "m1", A_full)
     b1 = v39.total_bits(sa, L)
-    out, ev, *_ = v39.run_conversions(sa, t)
+    r0 = sa.v39_seats.get(("D_S", 0))
+    RF, RH, RU, _n = v39.rec_means(r0, t + tick) if r0 else (None,) * 4
+    cs1 = [c for c in B.candidates(sa, sa.definitions["D_S"], t + tick, L, 1) if c[3] == 0]
+    out, ev, *_ = v39.run_conversions(sa, t + tick)
     b2 = v39.total_bits(out, L)
     return {"bits_before": b0, "bits_after_m1": b1, "s1_history": dict(v39.hist_counts(sa.slot_history.get(("D_S", 0)))),
+            "s1_gen": r0.gen if r0 else None, "s1_R_H": RH, "s1_R_U": RU,
+            "s1_candidate": [[c[1], c[0], c[4]] for c in cs1], "content_bits": v39.hcost(sa.slot_history.get(("D_S", 0)), L) if ("D_S", 0) in sa.slot_history else None,
             "s1_state": v39.seat_state(sa.definitions["D_S"], sa.definitions["D_S"].constituents[0], sa.slot_history),
             "registration": sa.definitions["D_S"].assimilation_count, "bits_after_B": b2,
             "conversions": [[e.get("v39"), e.get("slot_index"), e.get("V")] for e in ev if e.get("v39")]}
@@ -188,10 +193,31 @@ a1 = c25(LAM)
 case("C25", {"直した版": "194→208、H{push:1}、λ＝1/16 で 198・λ＝0 で 208"}, {"λ=0": a0, "λ=1/16": a1},
      [("before 194", a1["bits_before"] == 194), ("after m1 208", a1["bits_after_m1"] == 208), ("s1 H{push:1}", a1["s1_history"] == {"push": 1}),
       ("λ=1/16 → 198", a1["bits_after_B"] == 198), ("λ=0 → 208", a0["bits_after_B"] == 208)],
-     "今の版では照合の直しが無いので NOT_APPLICABLE（観察した値だけ残す）。", status=NA if VER == "hs" else None)
-for cid in ("C26", "C27", "C28"):
-    case(cid, {"提案 (a)": "承認・実装されたときだけ"}, {"note": "提案 (a)（覚え直しの一観察で初期の評価をする）は、この版に無い"}, [],
-         "提案 (a) は未承認・未実装。", status=NA if VER in ("hs", "u") else None)
+     "照合の直しとゼロの初期値が前提（v3.10u だけ）。今の版と、初期の評価を入れた版（v3.10ur）では NOT_APPLICABLE（観察した値だけ残す）。",
+     status=NA if ("u_struct" not in SW_FLAGS or "relearn_init" in SW_FLAGS) else None)
+if "relearn_init" in SW_FLAGS:
+    a2 = c25(0.2)
+    a5 = c25(0.5)
+    case("C26", {q: NE["C26"][q] for q in NE["C26"]}, {"λ=0.2": a2, "λ=0.5": a5},
+         [("損失 H0", abs(a2["s1_R_H"] - 0) < 1e-9), ("損失 U4", abs(a2["s1_R_U"] - 4) < 1e-9),
+          ("空く量 10", bool(a2["s1_candidate"]) and a2["s1_candidate"][0][2] == 10),
+          ("V 0.4", bool(a2["s1_candidate"]) and abs(a2["s1_candidate"][0][1] - 0.4) < 1e-9),
+          ("λ.2 で H を残す 208", a2["bits_after_B"] == 208), ("λ.5 で H→U 198", a5["bits_after_B"] == 198)])
+    a27 = c25(LAM, ph=ptable(push=32))
+    case("C27", {q: NE["C27"][q] for q in NE["C27"]}, a27,
+         [("内容 9", a27["content_bits"] == 9), ("損失 H0・U0", abs(a27["s1_R_H"]) < 1e-9 and abs(a27["s1_R_U"]) < 1e-9),
+          ("V 0", bool(a27["s1_candidate"]) and a27["s1_candidate"][0][1] == 0.0),
+          ("λ＝1/16 で同じ試行に U へ戻る", ["HU", 0] in [c[:2] for c in a27["conversions"]])])
+    a28 = c25(0.2, tick=1)
+    case("C28", {q: NE["C28"][q] for q in NE["C28"]}, a28,
+         [("損失差 4w(1)", abs((a28["s1_R_U"] - a28["s1_R_H"]) - num("C28", "loss_difference_next")) < 1e-9),
+          ("V 0.16208", bool(a28["s1_candidate"]) and abs(a28["s1_candidate"][0][1] - num("C28", "V_next")) < 1e-9),
+          ("H→U で 198", a28["bits_after_B"] == 198)],
+         "c25 と同じ初期状態から m1 を行い、B を内部の時計を 1 進めた時点（t＋1）で行った。新しい観察・開示・登録は足していない。")
+else:
+    for cid in ("C26", "C27", "C28"):
+        case(cid, {"提案 (a)": "承認・実装されたときだけ"}, {"note": "提案 (a)（覚え直しの一観察で初期の評価をする）は、この版に無い"}, [],
+             "提案 (a) は、この版に無い。", status=NA)
 
 
 # ---------------- C29・C30（E の比べ）
@@ -206,7 +232,7 @@ def run_E2(defs, hist, base, target, lam):
     def inner(state, b, t_, a_, tr, **kw):
         calls.append(kw.get("name"))
         h = B.hypo_m1(state, b, t_, a_, tr, kw.get("name"), {k: v for k, v in kw.items() if k != "name"})
-        return (v39.reconcile(h[0], tr, "m1"), {"R": h[1], "was_extension": kw.get("name") is not None}) if h else (state, None)
+        return (reconcile_with_scene(h[0], tr, "m1", t_), {"R": h[1], "was_extension": kw.get("name") is not None}) if h else (state, None)
 
     out, reg = B.choose_and_register(st, base, target, al, t, KW, inner)
     rec = B.CTX.get("side")

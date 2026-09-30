@@ -2,7 +2,7 @@
 import sys, os
 sys.path.insert(0, "/Users/tatsu-admin/sw_audit")
 from swcommon import *  # noqa
-from swcommon import RES, case, _need, _ORIG_M1
+from swcommon import RES, case, _need, _ORIG_M1, reconcile_with_scene, SW_FLAGS
 
 
 def exp(cid):
@@ -345,24 +345,30 @@ st = make_state([D18], hist=hist18, seats=seats18)
 L = v39.code_lengths(st.p_hat)
 C0 = v39.total_bits(st, L)
 res = B.hypo_m1(st, fullA, sceneF, sme.map_graphs(fullA, sceneF).alignment, 5, "D_A", KW)
-sa = v39.reconcile(res[0], 5, "m1")
+sa = reconcile_with_scene(res[0], 5, "m1", sceneF)
 h0 = dict(v39.hist_counts(sa.slot_history.get(("D_A", 0))))
 st0 = v39.seat_state(sa.definitions["D_A"], sa.definitions["D_A"].constituents[0], sa.slot_history)
 rec0 = sa.v39_seats.get(("D_A", 0))
 g, al18 = v39.map_v39(D18, hist18, sceneF)
 # 訂正：今の版の通常の照合では U のまま。別の行：観察を直接与えた（observe_slot で push を 1 回）あとの算術
 sd = replace(st, slot_history={**st.slot_history, ("D_A", 0): {"push": 1}})
-sd = v39.reconcile(sd, 5, "直接")
+sd = reconcile_with_scene(sd, 5, "直接", sceneF)
 rd = sd.v39_seats.get(("D_A", 0))
+U_FIX = "u_struct" in SW_FLAGS
+chk18 = [("通常の照合では U のまま（訂正・今の版）", st0 == "U" and h0 == {})] if not U_FIX else \
+        [("照合の直しの版：H", st0 == "H"), ("照合の直しの版：履歴 push 1", h0 == {"push": 1}),
+         ("照合の直しの版：内容 10", ("D_A", 0) in sa.slot_history and v39.hcost(sa.slot_history[("D_A", 0)], L) == 10)] + \
+        ([("照合の直しの版：新しい世代・点 0", bool(rec0) and rec0.gen == 1 and v39.rec_means(rec0, 5)[1:3] == (0.0, 0.0))]
+         if "relearn_init" not in SW_FLAGS else [])
 case("C18", exp("C18"), {"通常の照合_state_after": st0, "通常の照合_history_after": h0, "bind_s_mapped_in_m1_alignment": "D_A_s3" in al18.relation_mapping,
+                         "通常の照合_新しい世代": rec0.gen if rec0 else None, "通常の照合_点": list(v39.rec_means(rec0, 5)[1:3]) if rec0 else None,
                          "直接_state": v39.seat_state(sd.definitions["D_A"], sd.definitions["D_A"].constituents[0], sd.slot_history),
                          "直接_H内容": v39.hcost(sd.slot_history[("D_A", 0)], L), "直接_世代": rd.gen if rd else None,
                          "直接_初期点": list(v39.rec_means(rd, 5)[1:3]) if rd else None},
-     [("通常の照合では U のまま（訂正）", st0 == "U" and h0 == {}),
-      ("直接：H", v39.seat_state(sd.definitions["D_A"], sd.definitions["D_A"].constituents[0], sd.slot_history) == "H"),
-      ("直接：H 内容 10", v39.hcost(sd.slot_history[("D_A", 0)], L) == 10),
-      ("直接：新しい世代・点 0", bool(rd) and rd.gen == 1 and v39.rec_means(rd, 5)[1:3] == (0.0, 0.0))],
-     "訂正（ERRATA）に従い二つに分けた。直接の行は、観察を slot_history に置いてから v39.reconcile（tools/v39.py:764-790）を通した。")
+     chk18 + [("直接：H", v39.seat_state(sd.definitions["D_A"], sd.definitions["D_A"].constituents[0], sd.slot_history) == "H"),
+              ("直接：H 内容 10", v39.hcost(sd.slot_history[("D_A", 0)], L) == 10)],
+     "今の版は訂正（ERRATA）に従い「U のまま」。照合の直しの版（v3.10u）は元の期待値（H{push:1}・内容 10・新しい世代の点 0）。"
+     "初期の評価を入れた版（v3.10ur）では、新しい世代の点は初期の評価で決まる（提案 (a)。C26〜C28 で見る）ので、点の比べは入れていない。")
 
 # ---------------- C19（ΔR＝1・ΔC＝16：H 席の履歴 {push:15}＝I(1)＋4＋I(15)＝16）
 setup()
