@@ -103,6 +103,9 @@ open(os.path.join(dest, "README.md"), "w", encoding="utf-8").write(
     f"台帳と side はマックの ~/v310hprod/{arm} に全部残している。\n")
 print("sha", arm, len(rows))
 P
+  if [[ "${ANSWERS:-0}" == "1" ]]; then   # ★ 2026-09-30 朝：答えごとの記録（tools/answerlog_gather.py。まとめるだけ・数えない）を同じ置き場所に
+    (cd $W && python3.12 tools/answerlog_gather.py $OUT/$ARM $ARM $RES mac --no-push) >> "$LOG" 2>&1 && say "腕 $ARM の答えごとの記録をまとめた" || say "★ 腕 $ARM の答えごとの記録をまとめられなかった"
+  fi
   (cd $W && python3.12 tools/results_push.py $RES mac $ARM "結果：mac の $ARM（s21）の flag.json・sha256 の一覧（要約なし）") >> "$LOG" 2>&1 \
     && say "腕 $ARM の flag.json・sha256 を上げた" || say "★ 腕 $ARM を上げられなかった"
   ctl_line "- $(date '+%H:%M') 腕 $ARM（λ＝$LAM${U:+、U 棄権}）：20 本のうち $n_done 本が走り終わった（rc＝$rc）。台帳は ~/v310hprod/$ARM。"
