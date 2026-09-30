@@ -15,8 +15,8 @@ TAG=${TAG:?新しいタグを TAG に渡す}
 EXTRA=${EXTRA:?両方の直しの旗を EXTRA に渡す}
 export TAG EXTRA
 W=/Users/tatsu-admin/sfn/sfn-compression-abm-${TAG}
-OUT=$HOME/v310hprod; RES=$HOME/v33prod/results; LOG=$OUT/mac_h21.log; mkdir -p $OUT
-CTRL=control/2026-09-30_BE直し_s21_走行_マック.md
+OUT=${OUT_OVERRIDE:-$HOME/v310hprod}; RES=$HOME/v33prod/results; LOG=$OUT/mac_h21.log; mkdir -p $OUT; mkdir -p $OUT
+CTRL=${CTRL_OVERRIDE:-control/2026-09-30_BE直し_s21_走行_マック.md}
 say() { echo "$(date '+%F %T') [h21] $*" >> "$LOG"; }
 freegb() { df -Pk "$HOME" | awk 'NR==2 {printf "%d", $4/1048576}'; }
 pushctl() {
@@ -54,6 +54,7 @@ L50=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['50']
 L75=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['75']))")
 L90=$(python3.12 -c "import json;print(repr(json.load(open('$LAMJ'))['λ']['90']))")
 ARMS="v310BEhs_L0_s21:0 v310BEhs_L25_s21:$L25 v310BEhs_L50_s21:$L50 v310BEhs_L75_s21:$L75 v310BEhs_L90_s21:$L90 v310BEhs_L1_s21:1 v310BEhs_L50_Uabs_s21:$L50:abstain v310BEhs_L0p2_s21:0.2 v310BEhs_L0p3_s21:0.3 v310BEhs_L0p5_s21:0.5 v310BEhs_L0p7_s21:0.7"
+ARMS=${ARMS_OVERRIDE:-$ARMS}   # ★ 2026-09-30 朝：答えごとの記録の 5 腕などは、ARMS_OVERRIDE（腕:λ[:abstain] の並び）で渡す
 # ★ 追記（2026-09-30 深夜）：7 腕のあとに、同じ直した版で λ＝0.2・0.3・0.5・0.7 の 4 腕（種 21〜40）。要約は書かない
 say "腕：$ARMS"
 for A in $ARMS; do
