@@ -1,5 +1,5 @@
 """v3.11c（集団化・事例伝達、2026-09-29 夕の委任書）：旗 --v311c。仕様 control/sfn_collective_spec_2026-09-29_v2.md（版 2）の 3〜7 節。
-基準は個体版 B＋E（v3.10be-main、d42a1e1）。★ abm/ は変えない。旗を切れば何もしない（v3.10be-main と一字一句同じ）。
+基準は席の履歴・採点を直した個体版 B＋E（v3.10hsa-main、f714394）。★ abm/ は変えない。旗を切れば何もしない（v3.10hsa-main と一字一句同じ）。
 
 仕組み（個体の走り方は変えない）
   ・一個体を一つのプロセスで、今の個体の走行（sweep.run_one → abm.loop.run_longitudinal）のまま走らせる。乱数と作業領域は個体ごとに分かれる（仕様 8 節 ②）。
@@ -28,7 +28,7 @@
     今回の束は比べる相手にしない。記憶が空なら、個体版の初めの扱い（何も登録しない）。
   ・土台を選んだあと、今回の束を逐語の記憶に一度入れる（場面を書くのと同じく、全体の回数表 p_hat にも書く）。そのあと個体版の道（E）で取り込み／誕生。
   ・予測と開示による採点はしない。束に無い関係は反証にしない（B＋E の取消は常に 0 本）。誕生したときだけ、個体版どおり材料二場面で初期採点。
-使い方：tools/v3_run.py … --v311c --v311c-n 2 --v311c-f 0.5,0.5 --v311c-q 0.2 --v311c-recv B --v311c-runs 1,2,3（くわしくは v3_run.py の説明）
+使い方：tools/v3_run.py … --v311c --v311c-f 0.5,0.5 --v311c-q 0.2 --v311c-recv B --v311c-runs 1,2,3（くわしくは v3_run.py の説明）
 """
 from __future__ import annotations
 
@@ -623,6 +623,10 @@ def install(fo, task, REAL) -> None:
                     conn.send({"type": "probe", "answers": probe(state, cmd["items"], CTX.get("config") or config)})
                 else:
                     break
+        if CFG["tags"] and trial + 1 == CFG["T"]:
+            # ★ 研究者用の最終名札回数表。記憶と費用は変えず、受け手には渡さない。
+            STATS["name_tables_end"] = {R: {"born": d.registered_at, "tags": dict(state.c_tags.get(R, {}))}
+                                        for R, d in sorted(state.definitions.items())}
         CTX["t"] = trial + 1
         return state, events
 
