@@ -13,6 +13,10 @@
   B_RF・B_RH・B_RU・B_n その席の B の点数（tools/v39.py rec_means：B＋E では書換ビットの重み付き平均。B_n は採点の重みの和）
   pred_freq 答えた述語の全体の頻度（p_hat の回数 ÷ 合計）
   cand_n 候補の定義の数（F・H の席があって照合したもの）・cand_other_max_ratio 選ばれなかった候補の支持の割合の最大・cand_other_ratios 同じく上位 5 つ
+  支持の三分類（2026-09-30 の委任書「U の照合の直し…」の 3。記録だけ。門の決まりは変えない）：名前を持つ F・H の席を、写しで
+    sel_vis 見えている関係に対応した・sel_hid 親から伏せられた位置（見えていない ID）に対応した・sel_none 対応先が無い（選ばれた定義）、
+    sel_vis_match 見えている関係に対応した席のうち、その関係の名が F の固定名・H の履歴の名（回数 1 以上）に一致した数、
+    cand_tri 選ばれなかった候補の上位 5 つ（支持の割合の大きい順）の「割合:見えている/伏せられた/無い/一致」
 列（研究者の側）
   born_motif 定義が生まれた試行の場面の型・base_motif 生まれたときの土台の場面の型・scene_motif 場面の型・same_motif 生まれた型の場面か（1／0）
   assim_motifs 定義が取り込んだ（同化した）場面の型と回数（例 M1:30;M2:2）・assim_total 同化の回数・assim_cross 型またぎの同化の回数（場面の型 ≠ born_motif）
@@ -34,7 +38,8 @@ COLS = ["trial", "seed", "R", "R_born", "def_id", "source", "slot", "pred", "hit
         "support", "m_live", "support_ratio", "B_RF", "B_RH", "B_RU", "B_n", "pred_freq",
         "cand_n", "cand_other_max_ratio", "cand_other_ratios",
         "born_motif", "base_motif", "scene_motif", "same_motif", "assim_motifs", "assim_total", "assim_cross",
-        "seat_pred_born", "role", "role_in_scene_motif", "role_same_pred"]
+        "seat_pred_born", "role", "role_in_scene_motif", "role_same_pred",
+        "sel_vis", "sel_hid", "sel_none", "sel_vis_match", "cand_tri"]
 WCOLS = ["scene_variant", "held_out_switch", "born_variant", "base_variant", "def_switch_seats", "other_switch_visible"]
 ST: dict = {}
 
@@ -98,13 +103,33 @@ def install(path, *, seed: int, seed_file: str) -> None:
         finally:
             v39.map_v39 = real_map
         cands = []
+        vis = {r.relation_id: r for r in scene.relations}
         for name, (d, al) in got.items():
             if al is None:
                 continue
             n = v39.n_FH(d, state.slot_history)
             sup = sum(1 for row in d.constituents if v39.seat_state(d, row, state.slot_history) != "U"
                       and row.relation.relation_id in al.relation_mapping)
-            cands.append((name, sup / n if n else 0.0))
+            # 支持の三分類（2026-09-30 の委任書の 3、記録だけ）：名前を持つ F・H の席を、見えている関係に対応／親から伏せられた位置に対応／対応先が無い に分ける。
+            # 見えている関係に対応した席のうち、その関係の名が F の固定名・H の履歴の名（回数 1 以上）に一致した数も数える
+            tri = [0, 0, 0, 0]
+            for row in d.constituents:
+                st = v39.seat_state(d, row, state.slot_history)
+                if st == "U":
+                    continue
+                m = al.relation_mapping.get(row.relation.relation_id)
+                if m in vis:
+                    tri[0] += 1
+                    p = vis[m].predicate
+                    if st == "F":
+                        tri[3] += p == row.relation.predicate
+                    else:
+                        tri[3] += v39.hist_counts(state.slot_history.get((d.name, row.slot_index))).get(p, 0) >= 1
+                elif m is not None:
+                    tri[1] += 1
+                else:
+                    tri[2] += 1
+            cands.append((name, sup / n if n else 0.0, tuple(tri)))
         ST["cands"] = cands
         return res
 
@@ -211,8 +236,13 @@ def _write(p, coin, held):
     ph = state.p_hat
     r["pred_freq"] = (ph.counts.get(edge.predicate, 0) / ph.total) if ph.total else ""
     if cands is not None:
-        others = sorted((x for name, x in cands if name != R), reverse=True)
+        others = sorted((x for name, x, _t in cands if name != R), reverse=True)
         r.update(cand_n=len(cands), cand_other_max_ratio=(others[0] if others else ""), cand_other_ratios=";".join(f"{x:.4f}" for x in others[:5]))
+        sel = next((t_ for name, _x, t_ in cands if name == R), None)
+        if sel is not None:
+            r.update(sel_vis=sel[0], sel_hid=sel[1], sel_none=sel[2], sel_vis_match=sel[3])
+        oth = sorted(((x, t_) for name, x, t_ in cands if name != R), key=lambda z: -z[0])[:5]
+        r["cand_tri"] = ";".join(f"{x:.4f}:{t_[0]}/{t_[1]}/{t_[2]}/{t_[3]}" for x, t_ in oth)
     b = ST["birth"].get((R, d.registered_at))
     sm = ST["motif"].get(t)
     r["scene_motif"] = sm

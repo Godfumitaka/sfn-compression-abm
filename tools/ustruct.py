@@ -1,4 +1,4 @@
-"""U の照合（旗 --u-struct）と、覚え直しの初期の評価（旗 --relearn-init）。2026-09-30 の委任書「U の照合の直し・覚え直しの初期の評価・支持の三分類」の 1・2。
+"""U の照合（旗 --u-struct）。2026-09-30 の委任書「U の照合の直し・覚え直しの初期の評価・支持の三分類」の 1。
 ★ abm/ は変えない。旗を切れば何もしない（v3.10hsa-main と一字一句同じ）。
 
 1 --u-struct（--v39 と --hist-role と一緒に使う）
@@ -15,21 +15,13 @@
     親自身の名前の条件は今のまま（F は名前の一致、H は履歴の名）。忘れた名前（U の席の名）は照合に使わない（U の席の行の述語は見ない）。
   U の席の観察（m1 の席の履歴）：親が照合で写れば、その親の同じ引数の位置の子を U の席の対応先にし、子が見えていればその述語を観察として足す
     （tools/histrole.py の親の子の規則を、U の席については階を問わず使う。親が無い・写らない・子が見えないときは足さない）。
-2 --relearn-init（--u-struct と --v310-be と一緒に使う）
-  U の席が観察を受けて覚え直す（U→H、tools/v39.py reconcile）とき、その観察一回だけの新しい H（名前 1 回）の記録の初期値に、
-  同じ観察を H で答えた場合（h_answer）と U で答えた場合（u_answer）の書換ビット（一致なら 0、違えば観察した名の ℓ）を入れる（誕生の初期の成績と同じ形）。
-  ℓ・H・U の答えは、同じ時点の p̂ と同じ場面で出す。古い履歴や点数は復活させない（世代は reconcile のとおり新しい）。
-  未来の予測の成功とは数えない：B の採点の累計（R_B）には足さず、side の kind＝"relearn_init" に別に書く。
-  観察が一つでない（鍵の回数の和が 1 でない）覚え直しには初期値を入れず、数だけ記録する。
+（2 の覚え直しの初期の評価は tools/relearninit.py、旗 --relearn-init）
 """
 from __future__ import annotations
-
-import json
 
 CFG: dict = {}
 STATS: dict = {}
 UREG: dict = {}      # id(g) → {U の席の関係 ID: Relation}
-CTX: dict = {}
 
 
 def u_candidates(prev):
@@ -129,19 +121,11 @@ def _consistent(entity_pairs, relation_pairs, left_id, right_id) -> bool:
     return True
 
 
-def install(fo, *, relearn_init: bool = False) -> None:
-    """tools/v3_run.py の worker で、v39・v310be のあとに入れる。"""
-    import abm.loop as loop
+def install_matching():
+    """照合の差し替えだけを入れる（v39_graph に U の席の行を控えさせ、候補の規則を包む）。元に戻す関数を返す。"""
     import abm.sme as sme
-    import histrole
     import v39
-    CFG.clear()
-    STATS.clear()
-    UREG.clear()
-    CTX.clear()
-    CFG.update(relearn_init=bool(relearn_init))
-    STATS.update(relearn_init=0, relearn_init_multi_obs=0, relearn_init_rU_gt_rH=0)
-    real_graph = v39.v39_graph
+    real_graph, real_unreg, real_cands = v39.v39_graph, v39.unregister, sme._alignment_candidates
 
     def v39_graph(d, slot_history):
         g = real_graph(d, slot_history)
@@ -149,77 +133,24 @@ def install(fo, *, relearn_init: bool = False) -> None:
         UREG[id(g)] = {row.relation.relation_id: row.relation for row in d.constituents if row.relation.relation_id in ushield}
         return g
 
-    v39.v39_graph = v39_graph
-    real_unreg = v39.unregister
-
     def unregister(g):
         UREG.pop(id(g), None)
         real_unreg(g)
 
+    v39.v39_graph = v39_graph
     v39.unregister = unregister
-    sme._alignment_candidates = u_candidates(sme._alignment_candidates)
+    sme._alignment_candidates = u_candidates(real_cands)
+
+    def undo():
+        v39.v39_graph, v39.unregister, sme._alignment_candidates = real_graph, real_unreg, real_cands
+    return undo
+
+
+def install(fo) -> None:
+    """tools/v3_run.py の worker で、v39・v310be のあとに入れる。"""
+    import histrole
+    CFG.clear()
+    STATS.clear()
+    UREG.clear()
+    install_matching()
     histrole.CFG["u_all_orders"] = True
-    if not relearn_init:
-        return
-
-    # 2 覚え直しの初期の評価：場面を控え、reconcile の覚え直しに初期値を入れる
-    real_m1 = loop.m1
-
-    def m1(state, base, target, alignment, trial, **kw):
-        CTX["scene"] = target
-        return real_m1(state, base, target, alignment, trial, **kw)
-
-    loop.m1 = m1
-    real_acc = loop._update_accounting
-
-    def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):
-        CTX["scene"] = scene
-        return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)
-
-    loop._update_accounting = update_accounting
-    real_rec = v39.reconcile
-
-    def reconcile(state, trial, why):
-        n0 = len(v39.CTX.get("relearn") or [])
-        out = real_rec(state, trial, why)
-        new = (v39.CTX.get("relearn") or [])[n0:]
-        if new:
-            out = _apply_init(out, trial, why, new, fo)
-        return out
-
-    v39.reconcile = reconcile
-
-
-def _apply_init(state, t, why, events, fo):
-    from dataclasses import replace
-    import v39
-    import v310be
-    config = v39.CTX["config"]
-    L = v39.code_lengths(state.p_hat)
-    seats = dict(state.v39_seats)
-    scene = CTX.get("scene")
-    for ev in events:
-        d = state.definitions[ev["R"]]
-        row = next(r for r in d.constituents if r.slot_index == ev["slot"])
-        h = {k: v for k, v in v39.hist_counts(state.slot_history.get((d.name, row.slot_index))).items() if v > 0}
-        rec = {"kind": "relearn_init", "trial": t, "R": d.name, "slot": row.slot_index, "gen": ev["gen"], "by": why,
-               "obs": sorted(h.items())}
-        if sum(h.values()) != 1:
-            STATS["relearn_init_multi_obs"] += 1
-            rec["skipped"] = "観察が一つでない"
-            fo.write(json.dumps(rec, ensure_ascii=False) + "\n")
-            continue
-        o = next(iter(h))
-        ha = v39.h_answer(d, row, state.slot_history, state.p_hat, config.local_lambda, config.higher_order_predicates)[0]
-        ua = v39.u_answer(d, row, scene, state.p_hat, config.higher_order_predicates)[0] if scene is not None else None
-        lo = v310be._ell(o, L)
-        rH = 0.0 if ha == o else lo
-        rU = 0.0 if ua == o else lo
-        col = lambda v: (float(v),) * 16  # noqa: E731
-        key = (d.name, row.slot_index)
-        seats[key] = replace(seats[key], init=(col(0.0), col(rH), col(rU), col(1.0)))
-        STATS["relearn_init"] += 1
-        STATS["relearn_init_rU_gt_rH"] += rU > rH
-        rec.update(H=ha, U=ua, r_H=rH, r_U=rU)
-        fo.write(json.dumps(rec, ensure_ascii=False) + "\n")
-    return replace(state, v39_seats=seats)
