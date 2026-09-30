@@ -438,9 +438,12 @@ def worker(task: dict) -> dict:
             v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")))
         _REAL["theta_impl"] = v39.CTX["apply"]
         if task.get("u_struct"):
-            # ★ U の照合（--u-struct）：tools/ustruct.py。v39・v310be のあとに入れる
+            # ★ U の照合（--u-struct）と覚え直しの初期の評価（--relearn-init）：tools/ustruct.py・tools/relearninit.py。v39・v310be のあとに入れる
             import ustruct
             ustruct.install(fo)
+            if task.get("relearn_init"):
+                import relearninit
+                relearninit.install(fo)
     if task.get("world_cue"):
         # ★ 世界 v4（型の変種、2026-09-30 深夜の追記 B-2）：tools/worldvariant.py。世界を作る前に入れる。v39 の固定辞書に新しい述語を足す
         sys.path.insert(0, str(ROOT / "tools"))
@@ -473,6 +476,8 @@ def worker(task: dict) -> dict:
         rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if task.get("u_struct"):
         rec["ustruct"] = dict(sys.modules["ustruct"].STATS)
+    if task.get("relearn_init"):
+        rec["relearninit"] = dict(sys.modules["relearninit"].STATS)
     if task.get("world_cue"):
         rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
     if task.get("dump_answers"):
@@ -605,6 +610,8 @@ def main() -> None:
     ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
     ap.add_argument("--u-struct", action="store_true",
                     help="U の照合：U の席を名前の条件を持たない関係の位置として照合に参加させる（--v39 --hist-role と一緒に。tools/ustruct.py）")
+    ap.add_argument("--relearn-init", action="store_true",
+                    help="覚え直しの初期の評価：U→H の覚え直しの観察一回を H と U で採点して初期値に入れる（--u-struct --v310-be と一緒に。tools/relearninit.py）")
     ap.add_argument("--score-role", action="store_true",
                     help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
     ap.add_argument("--hist-role", action="store_true",
@@ -663,6 +670,8 @@ def main() -> None:
         raise SystemExit("--score-role は --v310-be と一緒に使う")
     if args.u_struct and (not args.v39 or not args.hist_role):
         raise SystemExit("--u-struct は --v39 と --hist-role と一緒に使う")
+    if args.relearn_init and (not args.u_struct or not args.v310_be):
+        raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
     seed = sweep.load_seed(cfg["seed_file"])
@@ -694,7 +703,7 @@ def main() -> None:
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers,
-              "u_struct": args.u_struct,
+              "u_struct": args.u_struct, "relearn_init": args.relearn_init,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -713,7 +722,7 @@ def main() -> None:
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
                                                     "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers,
-                                                    "u_struct": args.u_struct,
+                                                    "u_struct": args.u_struct, "relearn_init": args.relearn_init,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")

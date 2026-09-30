@@ -1,9 +1,11 @@
-"""U の照合（--u-struct）の小例（tools/ustruct.py。2026-09-30 の委任書「U の照合の直し…」の 1・4）。
+"""U の照合（--u-struct）と覚え直しの初期の評価（--relearn-init）の小例（tools/ustruct.py。2026-09-30 の委任書「U の照合の直し…」の 1・2・4）。
 例：定義は cause(r1, r2)（F）・r1＝hold(x,y)（U：墓石で履歴の鍵が無い）・r2＝brk(x,y)（F）。場面は hold(a,b)・brk(a,b)・cause(hold, brk)。
 今の照合では、cause の子 r1 が U なので、hold が見えていると cause は写らない。--u-struct では写り、U の席 r1 の対応先が hold になる。
 """
 from __future__ import annotations
 
+import io
+import json
 import sys
 from pathlib import Path
 
@@ -14,8 +16,10 @@ import test_v310_be as E  # noqa: E402
 import test_v39_budget as T  # noqa: E402
 import abm.abstraction as ab  # noqa: E402
 import histrole  # noqa: E402
+import relearninit  # noqa: E402
 import ustruct  # noqa: E402
 import v39  # noqa: E402
+import v310be as B  # noqa: E402
 from abm.domains import Entity, Relation, RelationGraph  # noqa: E402
 
 
@@ -111,6 +115,39 @@ def test_7_m1_observes_u_seat_from_parent_position():
     assert reg is not None and reg["was_extension"]
     assert out.slot_history.get(("R_u", 1)) == {"hold": 1}                        # U の席に観察一回（覚え直しのきっかけ）
     assert ("R_u", 1) not in out_off.slot_history                                 # 旗なし：親が写らないので観察なし
+
+
+def test_8_relearn_init_scores_h_and_u_once():
+    E.setup()
+    d = defn()
+    hist = {("R_u", 0): {"cause": 1}, ("R_u", 1): {"hold": 1}, ("R_u", 2): {"brk": 1}}
+    seats = {("R_u", 0): E.seat("F"), ("R_u", 1): v39.SeatRec(2, "H", 9, 9, v39.ZERO4, v39.ZERO4), ("R_u", 2): E.seat("F")}
+    st = E.st([d], hist, seats)
+    relearninit.CTX["scene"] = scene()
+    relearninit.STATS.update(relearn_init=0, relearn_init_multi_obs=0, relearn_init_rU_gt_rH=0)
+    fo = io.StringIO()
+    out = relearninit._apply_init(st, 9, "m1", [{"R": "R_u", "slot": 1, "gen": 2}], fo)
+    rec = out.v39_seats[("R_u", 1)]
+    L = v39.code_lengths(st.p_hat)
+    u = v39.u_answer(d, d.constituents[1], scene(), st.p_hat, E.CONFIG.higher_order_predicates)[0]
+    assert rec.init[1] == (0.0,) * 16                                              # H の答え＝観察した名（履歴は名前 1 回）
+    assert rec.init[2] == ((0.0 if u == "hold" else float(B._ell("hold", L))),) * 16
+    assert rec.init[3] == (1.0,) * 16 and rec.post == v39.ZERO4 and rec.gen == 2   # 古い点数は復活させない
+    side = json.loads(fo.getvalue())
+    assert side["kind"] == "relearn_init" and side["obs"] == [["hold", 1]]
+    assert B.CTX["R_B_trial"] == 0.0                                                # B の採点の累計には足さない
+
+
+def test_9_relearn_init_skips_multi_observation():
+    E.setup()
+    d = defn()
+    hist = {("R_u", 1): {"hold": 1, "wrap": 1}}
+    seats = {("R_u", 1): v39.SeatRec(2, "H", 9, 9, v39.ZERO4, v39.ZERO4)}
+    st = E.st([d], hist, seats)
+    relearninit.CTX["scene"] = scene()
+    relearninit.STATS.update(relearn_init=0, relearn_init_multi_obs=0, relearn_init_rU_gt_rH=0)
+    out = relearninit._apply_init(st, 9, "m1", [{"R": "R_u", "slot": 1, "gen": 2}], io.StringIO())
+    assert out.v39_seats[("R_u", 1)].init == v39.ZERO4 and relearninit.STATS["relearn_init_multi_obs"] == 1
 
 
 if __name__ == "__main__":
