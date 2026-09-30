@@ -458,6 +458,15 @@ def worker(task: dict) -> dict:
         worldvariant.install(float(task.get("world_cue_p", 0.8)))
         if "v39" in sys.modules:
             worldvariant.extend_dictionary()
+    if task.get("probe_world"):
+        # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
+        if not task.get("v39"):
+            raise ValueError("--probe-world は --v39 と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import probeworld
+        probeworld.install(side_dir / f"seed{task['seed']:03d}.probe.jsonl", run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
+                           seed_file=str(ROOT / task["cfg"]["seed_file"]), horizon=int(task["cfg"]["trial_count"]),
+                           holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
     if task.get("dump_answers"):
         # ★ 答えごとの記録（2026-09-30 朝の委任書の 2・3）：tools/answerlog.py。記録だけ（台帳は変わらない）。ほかの差し替えのあと、世界を作る前に入れる
         if not task.get("v39"):
@@ -491,6 +500,8 @@ def worker(task: dict) -> dict:
         rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
     if task.get("dump_answers"):
         rec["answerlog"] = sys.modules["answerlog"].close()
+    if task.get("probe_world"):
+        rec["probeworld"] = sys.modules["probeworld"].close()
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -612,6 +623,8 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--probe-world", action="store_true",
+                    help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
     ap.add_argument("--dump-answers", action="store_true",
                     help="答えごとの記録（記録だけ）：実際に答えた試行ごとに side/<セル>/seed<種>.answers.csv へ一行（tools/answerlog.py）")
     ap.add_argument("--world-cue", action="store_true",
@@ -698,7 +711,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.probe_world
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -720,7 +733,7 @@ def main() -> None:
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers,
-              "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
+              "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local, "probe_world": args.probe_world,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -739,7 +752,7 @@ def main() -> None:
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
                                                     "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers,
-                                                    "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
+                                                    "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local, "probe_world": args.probe_world,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
