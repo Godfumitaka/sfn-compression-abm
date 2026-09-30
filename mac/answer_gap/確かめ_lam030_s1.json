@@ -1,0 +1,103 @@
+{
+ "数": {
+  "試行": 1740,
+  "D＝伏せた関係の ID 一つ": 1409,
+  "答えた": 77,
+  "話した答えの対応先が D に入る": 77,
+  "D がそれ以外": 331,
+  "D がそれ以外：空": 331
+ },
+ "例": {
+  "D が伏せた関係一つでない": [
+   {
+    "trial": 6,
+    "D": [],
+    "held": "fbbc57ea1c6a6df1",
+    "区分": "空"
+   },
+   {
+    "trial": 10,
+    "D": [],
+    "held": "7ee899e280f360de",
+    "区分": "空"
+   },
+   {
+    "trial": 23,
+    "D": [],
+    "held": "01d295374ccdd22a",
+    "区分": "空"
+   },
+   {
+    "trial": 24,
+    "D": [],
+    "held": "b5f7272b11c43236",
+    "区分": "空"
+   },
+   {
+    "trial": 26,
+    "D": [],
+    "held": "b69ce84369c3f172",
+    "区分": "空"
+   }
+  ],
+  "話した答えの対応先が D に無い": []
+ },
+ "旗なしとの比べ": {
+  "最初に答えが変わる試行": 11,
+  "それより前の台帳の行が一字一句同じ": true,
+  "t0 の旗あり": {
+   "predicted_edge": {
+    "arguments": [
+     "e6d1e1b597a1b000",
+     "a05336767c1d8fe8"
+    ],
+    "attributes": {},
+    "predicate": "cause",
+    "relation_id": "filling__R_6ea98e5f4fb35140__9__10"
+   },
+   "abstain_reason": null,
+   "R_used": "R_6ea98e5f4fb35140"
+  },
+  "t0 の旗なし": {
+   "predicted_edge": {
+    "arguments": [
+     "1746327bd734f6d9",
+     "043e31741a483672"
+    ],
+    "attributes": {},
+    "predicate": "lock",
+    "relation_id": "filling__R_6ea98e5f4fb35140__2__10"
+   },
+   "abstain_reason": null,
+   "R_used": "R_6ea98e5f4fb35140"
+  },
+  "旗なしの後づけの計算の (i) の最初の候補": {
+   "k": 3,
+   "slot": 9,
+   "pred": "cause",
+   "cid": "3db252c6049fd41b",
+   "cls": "(i) 伏せた関係",
+   "correct": 1
+  },
+  "t0 の旗ありの答えが (i) の最初の候補と同じ": true,
+  "t0 の台帳の行で違う欄": [
+   "accuracy",
+   "hit",
+   "oracle_verdict",
+   "outcome_category",
+   "predicted_edge"
+  ],
+  "状態の指紋が最初に分かれる試行": 93,
+  "答えが違う試行の数": 376,
+  "状態の指紋が違う試行の数": 68
+ },
+ "棄権の理由（旗あり）": {
+  "no_prototype": 1,
+  "below_threshold": 1,
+  "no_definition": 22,
+  "below_tau": 801,
+  "no_projectable_relation": 210,
+  "ambiguous_projection": 280,
+  "no_gap_candidate": 348
+ }
+}
