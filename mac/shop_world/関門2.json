@@ -1,0 +1,654 @@
+{
+ "1 四状況の専用の定義で正しく答える": {
+  "must": true,
+  "pass": false,
+  "detail": {
+   "甲・n": {
+    "期待": "hold",
+    "answer": "hold_b",
+    "args": [
+     "af11ee19c90b2bed",
+     "d01c8103cec31a54"
+    ],
+    "abstain": null,
+    "R_used": "D_甲e",
+    "path": "projection",
+    "support": 17,
+    "m_live": 17,
+    "正しい": false,
+    "支持": {
+     "D_甲n": [
+      17,
+      17
+     ],
+     "D_甲e": [
+      17,
+      17
+     ],
+     "D_乙n": [
+      11,
+      17
+     ],
+     "D_乙e": [
+      11,
+      17
+     ]
+    }
+   },
+   "甲・e": {
+    "期待": "hold_b",
+    "answer": "hold_b",
+    "args": [
+     "af11ee19c90b2bed",
+     "d01c8103cec31a54"
+    ],
+    "abstain": null,
+    "R_used": "D_甲e",
+    "path": "projection",
+    "support": 17,
+    "m_live": 17,
+    "正しい": true,
+    "支持": {
+     "D_甲n": [
+      17,
+      17
+     ],
+     "D_甲e": [
+      17,
+      17
+     ],
+     "D_乙n": [
+      11,
+      17
+     ],
+     "D_乙e": [
+      11,
+      17
+     ]
+    }
+   },
+   "乙・n": {
+    "期待": "hold_b",
+    "answer": "hold",
+    "args": [
+     "1db60bd13e5c914e",
+     "2635b95d1235a3c4"
+    ],
+    "abstain": null,
+    "R_used": "D_乙e",
+    "path": "projection",
+    "support": 17,
+    "m_live": 17,
+    "正しい": false,
+    "支持": {
+     "D_甲n": [
+      11,
+      17
+     ],
+     "D_甲e": [
+      11,
+      17
+     ],
+     "D_乙n": [
+      17,
+      17
+     ],
+     "D_乙e": [
+      17,
+      17
+     ]
+    }
+   },
+   "乙・e": {
+    "期待": "hold",
+    "answer": "hold",
+    "args": [
+     "1db60bd13e5c914e",
+     "2635b95d1235a3c4"
+    ],
+    "abstain": null,
+    "R_used": "D_乙e",
+    "path": "projection",
+    "support": 17,
+    "m_live": 17,
+    "正しい": true,
+    "支持": {
+     "D_甲n": [
+      11,
+      17
+     ],
+     "D_甲e": [
+      11,
+      17
+     ],
+     "D_乙n": [
+      17,
+      17
+     ],
+     "D_乙e": [
+      17,
+      17
+     ]
+    }
+   }
+  }
+ },
+ "2 F の席は固定の名だけに合う": {
+  "must": true,
+  "pass": false,
+  "detail": {
+   "ドアの席の状態": "F",
+   "履歴": {
+    "hold": 2,
+    "hold_b": 3
+   },
+   "場面のドアが hold のときの写し先": "a4878240d0d13ff3",
+   "場面のドアが hold_b のときの写し先": "a4878240d0d13ff3",
+   "場面のドアの ID": "a4878240d0d13ff3"
+  }
+ },
+ "3 H の席は履歴にある名に合う": {
+  "must": true,
+  "pass": true,
+  "detail": {
+   "ドアの席の状態": "H",
+   "履歴": {
+    "hold": 2,
+    "hold_b": 1
+   },
+   "場面のドアが hold のときの写し先": "a4878240d0d13ff3",
+   "場面のドアが hold_b のときの写し先": "a4878240d0d13ff3",
+   "場面のドアの ID": "a4878240d0d13ff3",
+   "話す答え（記録だけ）": {
+    "甲・n（ドアを伏せた）": {
+     "answer": "hold",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲n",
+     "path": "filling_tombstone",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold"
+    },
+    "甲・e（ドアを伏せた）": {
+     "answer": "hold",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲n",
+     "path": "filling_tombstone",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold_b"
+    }
+   }
+  }
+ },
+ "4 通常と例外を混ぜた材料からの誕生（記録だけ）": {
+  "must": false,
+  "detail": {
+   "甲：材料 n → 場面 e": {
+    "生まれた": true,
+    "定義": "R_cb95dcf57e1d0abe",
+    "席の数": 10,
+    "構造の関係のうち落ちたもの": [
+     "attach",
+     "cause",
+     "couple",
+     "govern",
+     "hold",
+     "require",
+     "sig_n"
+    ],
+    "ドアの席": {
+     "ある": false
+    },
+    "シールの席": {
+     "ある": false
+    },
+    "link の席": {
+     "ある": false
+    },
+    "伏せた関係（場面）": "require"
+   },
+   "甲：材料 e → 場面 n": {
+    "生まれた": true,
+    "定義": "R_cb95dcf57e1d0abe",
+    "席の数": 10,
+    "構造の関係のうち落ちたもの": [
+     "attach",
+     "cause",
+     "couple",
+     "govern",
+     "hold_b",
+     "require",
+     "sig_e"
+    ],
+    "ドアの席": {
+     "ある": false
+    },
+    "シールの席": {
+     "ある": false
+    },
+    "link の席": {
+     "ある": false
+    },
+    "伏せた関係（場面）": "require"
+   },
+   "乙：材料 n → 場面 e": {
+    "生まれた": true,
+    "定義": "R_da8fc027fd1bd79c",
+    "席の数": 8,
+    "構造の関係のうち落ちたもの": [
+     "attach",
+     "cause",
+     "couple",
+     "govern",
+     "hinder",
+     "hold_b",
+     "lock",
+     "sig_n",
+     "steer"
+    ],
+    "ドアの席": {
+     "ある": false
+    },
+    "シールの席": {
+     "ある": false
+    },
+    "link の席": {
+     "ある": false
+    },
+    "伏せた関係（場面）": "lock"
+   }
+  }
+ },
+ "5 シールの席を手放した前後（記録だけ）": {
+  "must": false,
+  "detail": {
+   "F（そのまま）": {
+    "甲・n": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       17,
+       17
+      ],
+      "D_甲e": [
+       17,
+       17
+      ],
+      "D_乙n": [
+       11,
+       17
+      ],
+      "D_乙e": [
+       11,
+       17
+      ]
+     }
+    },
+    "甲・e": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       17,
+       17
+      ],
+      "D_甲e": [
+       17,
+       17
+      ],
+      "D_乙n": [
+       11,
+       17
+      ],
+      "D_乙e": [
+       11,
+       17
+      ]
+     }
+    },
+    "乙・n": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       11,
+       17
+      ],
+      "D_甲e": [
+       11,
+       17
+      ],
+      "D_乙n": [
+       17,
+       17
+      ],
+      "D_乙e": [
+       17,
+       17
+      ]
+     }
+    },
+    "乙・e": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       11,
+       17
+      ],
+      "D_甲e": [
+       11,
+       17
+      ],
+      "D_乙n": [
+       17,
+       17
+      ],
+      "D_乙e": [
+       17,
+       17
+      ]
+     }
+    }
+   },
+   "H（シールの席を手放した：墓石・履歴あり）": {
+    "甲・n": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       17,
+       17
+      ],
+      "D_甲e": [
+       17,
+       17
+      ],
+      "D_乙n": [
+       11,
+       17
+      ],
+      "D_乙e": [
+       11,
+       17
+      ]
+     }
+    },
+    "甲・e": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       17,
+       17
+      ],
+      "D_甲e": [
+       17,
+       17
+      ],
+      "D_乙n": [
+       11,
+       17
+      ],
+      "D_乙e": [
+       11,
+       17
+      ]
+     }
+    },
+    "乙・n": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       11,
+       17
+      ],
+      "D_甲e": [
+       11,
+       17
+      ],
+      "D_乙n": [
+       17,
+       17
+      ],
+      "D_乙e": [
+       17,
+       17
+      ]
+     }
+    },
+    "乙・e": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 17,
+     "m_live": 17,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       11,
+       17
+      ],
+      "D_甲e": [
+       11,
+       17
+      ],
+      "D_乙n": [
+       17,
+       17
+      ],
+      "D_乙e": [
+       17,
+       17
+      ]
+     }
+    }
+   },
+   "U（中身も忘れた：墓石・履歴なし）": {
+    "甲・n": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 16,
+     "m_live": 16,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       16,
+       16
+      ],
+      "D_甲e": [
+       16,
+       16
+      ],
+      "D_乙n": [
+       10,
+       16
+      ],
+      "D_乙e": [
+       10,
+       16
+      ]
+     }
+    },
+    "甲・e": {
+     "answer": "hold_b",
+     "args": [
+      "af11ee19c90b2bed",
+      "d01c8103cec31a54"
+     ],
+     "abstain": null,
+     "R_used": "D_甲e",
+     "path": "projection",
+     "support": 16,
+     "m_live": 16,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       16,
+       16
+      ],
+      "D_甲e": [
+       16,
+       16
+      ],
+      "D_乙n": [
+       10,
+       16
+      ],
+      "D_乙e": [
+       10,
+       16
+      ]
+     }
+    },
+    "乙・n": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 16,
+     "m_live": 16,
+     "表の答え": "hold_b",
+     "支持": {
+      "D_甲n": [
+       10,
+       16
+      ],
+      "D_甲e": [
+       10,
+       16
+      ],
+      "D_乙n": [
+       16,
+       16
+      ],
+      "D_乙e": [
+       16,
+       16
+      ]
+     }
+    },
+    "乙・e": {
+     "answer": "hold",
+     "args": [
+      "1db60bd13e5c914e",
+      "2635b95d1235a3c4"
+     ],
+     "abstain": null,
+     "R_used": "D_乙e",
+     "path": "projection",
+     "support": 16,
+     "m_live": 16,
+     "表の答え": "hold",
+     "支持": {
+      "D_甲n": [
+       10,
+       16
+      ],
+      "D_甲e": [
+       10,
+       16
+      ],
+      "D_乙n": [
+       16,
+       16
+      ],
+      "D_乙e": [
+       16,
+       16
+      ]
+     }
+    }
+   }
+  }
+ }
+}
