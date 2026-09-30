@@ -275,17 +275,20 @@ nd = h[0].definitions[h[1]]
 new_struct = v39.structure_bits(nd)
 fold_row = [r for r in nd.constituents if r.relation.predicate == "fold"]
 fold_content = v39.seat_content_bits(nd, fold_row[0], "F", h[0].slot_history, L) if fold_row else None
-case("C30", {q: NE["C30"][q] for q in NE["C30"]},
+C30X = {"existing_rewrite": 48, "existing_lambda_025": math.log2(3 / 2) + 48 + 0.25 * 4, "new_lambda_025": math.log2(3) + 19 + 0.25 * 95,
+        "existing_lambda_050": math.log2(3 / 2) + 48 + 0.5 * 4, "new_lambda_050": math.log2(3) + 19 + 0.5 * 95}
+# ★ ChatGPT の訂正（2026-09-30 夕方、アストラさん経由）：既存の書き直し 48 ビット。λ＝0.25 で既存 49.58・新規 44.33 → 新規、0.5 で既存 50.58・新規 68.08 → 既存
+case("C30", {**{q: NE["C30"][q] for q in NE["C30"]}, "訂正": {k: round(v, 12) if isinstance(v, float) else v for k, v in C30X.items()}},
      {**{f"λ={k}": v for k, v in r30.items()}, "new_rows": [r.relation.predicate for r in nd.constituents], "new_structure": new_struct,
       "new_states": 2 * len(nd.constituents), "orphan_fold_content": fold_content,
       "new_histories": {r.relation.predicate: dict(v39.hist_counts(h[0].slot_history.get((h[1], r.slot_index)))) for r in nd.constituents}},
-     [("x 5 本", r30[0.25]["x_rows"] == 5), ("新規 4 席", len(nd.constituents) == 4), ("既存 r 44", r30[0.25]["existing"]["r"] == 44),
+     [("x 5 本", r30[0.25]["x_rows"] == 5), ("新規 4 席", len(nd.constituents) == 4), ("既存 r 48（訂正）", r30[0.25]["existing"]["r"] == 48),
       ("新規 r 19", r30[0.25]["new"]["r"] == 19), ("既存 ΔC 4", r30[0.25]["existing"]["dC"] == 4), ("構造 42", new_struct == 42),
       ("状態 8", 2 * len(nd.constituents) == 8), ("親なし fold 内容 6", fold_content == 6), ("新規 ΔC 95", r30[0.25]["new"]["dC"] == 95),
-      ("λ.25 既存 K", abs(r30[0.25]["existing"]["K"] - num("C30", "existing_lambda_025")) < 1e-9),
-      ("λ.25 新規 K", abs(r30[0.25]["new"]["K"] - num("C30", "new_lambda_025")) < 1e-9), ("λ.25 新規", r30[0.25]["chosen"] is None),
-      ("λ.5 既存 K", abs(r30[0.5]["existing"]["K"] - num("C30", "existing_lambda_050")) < 1e-9),
-      ("λ.5 新規 K", abs(r30[0.5]["new"]["K"] - num("C30", "new_lambda_050")) < 1e-9), ("λ.5 既存", r30[0.5]["chosen"] == "D_A")])
+      ("λ.25 既存 K 49.58（訂正）", abs(r30[0.25]["existing"]["K"] - C30X["existing_lambda_025"]) < 1e-9),
+      ("λ.25 新規 K 44.33", abs(r30[0.25]["new"]["K"] - C30X["new_lambda_025"]) < 1e-9), ("λ.25 新規", r30[0.25]["chosen"] is None),
+      ("λ.5 既存 K 50.58（訂正）", abs(r30[0.5]["existing"]["K"] - C30X["existing_lambda_050"]) < 1e-9),
+      ("λ.5 新規 K 68.08", abs(r30[0.5]["new"]["K"] - C30X["new_lambda_050"]) < 1e-9), ("λ.5 既存", r30[0.5]["chosen"] == "D_A")])
 
 # ---------------- C31（仮の適用に副作用が無い・実際の登録は一回）
 a29 = r29[0.5]
