@@ -96,9 +96,9 @@ def arm_tables(name, rows):
     for s in srcs:
         rs = [r for r in ans if (r.get("source") or "—") == s]
         ms = [r for r in rs if r["task"] == "外れ"]
+        can = (f"{sum(r.get('答えを作れる') == '1' for r in ms):,}" if any(r.get('答えを作れる') != '' for r in ms) else "記録なし")
         L.append(f"| {s} | {len(rs):,} | {sum(r['task'] == '当たり' for r in rs):,} | {len(ms):,} | {sum(r['world'] == '偽' for r in rs):,} | "
-                 f"{sum(r['細_印'] == '確かめる機会がまだなかった' for r in ms):,} | {sum(r.get('細_証拠が届いた') == '0' for r in ms):,} | "
-                 (f"{sum(r.get('答えを作れる') == '1' for r in ms):,}" if any(r.get('答えを作れる') != '' for r in ms) else "記録なし") + " |")
+                 f"{sum(r['細_印'] == '確かめる機会がまだなかった' for r in ms):,} | {sum(r.get('細_証拠が届いた') == '0' for r in ms):,} | {can} |")
     L.append("")
     diff = Counter((r["粗_印"], r["細_印"]) for r in rows if r["粗_印"] != r["細_印"])
     L += ["### 表 5：粗い・細かいで印が食い違う課題", "", f"- 食い違い {sum(diff.values()):,}（全課題 {len(rows):,}）", ""]
