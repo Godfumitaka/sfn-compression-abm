@@ -444,6 +444,14 @@ def worker(task: dict) -> dict:
         worldvariant.install(float(task.get("world_cue_p", 0.8)))
         if "v39" in sys.modules:
             worldvariant.extend_dictionary()
+    if task.get("dump_answers"):
+        # 記録だけ。ほかの差し替えのあと、世界を作る前に入れる。
+        if not task.get("v39"):
+            raise ValueError("--dump-answers は --v39 と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import answerlog
+        answerlog.install(side_dir / f"seed{task['seed']:03d}.answers.csv", seed=int(task["seed"]),
+                          seed_file=str(ROOT / task["cfg"]["seed_file"]))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -461,6 +469,8 @@ def worker(task: dict) -> dict:
         rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if task.get("world_cue"):
         rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
+    if task.get("dump_answers"):
+        rec["answerlog"] = sys.modules["answerlog"].close()
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -582,6 +592,7 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--dump-answers", action="store_true", help="答えごとの記録だけ（tools/answerlog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
     ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
@@ -671,7 +682,7 @@ def main() -> None:
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
-              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p,
+              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -689,7 +700,7 @@ def main() -> None:
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
-                                                    "world_cue": (args.world_cue_p if args.world_cue else None),
+                                                    "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
