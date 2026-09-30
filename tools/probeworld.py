@@ -30,7 +30,7 @@ from random import Random
 ST: dict = {}
 SNAP_MODULES = ("v39", "v310be", "fixorder2", "fix2", "v32", "projfirst", "fillnorestate", "fillunseen", "nocharge2", "v38", "v31",
                 "histrole", "ustruct", "relearninit", "tiestruct", "answerlog", "worldvariant", "worldcue", "deathterms", "checks_v37",
-                "routelog")
+                "routelog", "answergap", "shopworld")
 SNAP_ATTRS = ("STATS", "CTX", "ST", "INFO", "TCTX")
 
 
@@ -201,6 +201,7 @@ def _probe(state, config, t):
             v39.select_definition = real_select
         pred = out.prediction
         rec = {"t": t, "motif": q["motif"], "path": q["path"], "level": q["level"], "truth": q["truth"], "role": q["role"]}
+        rec.update(q.get("extra", {}))   # ★ お店の世界の試験の印（tools/shopworld.py add_probes）。ほかの試験には無い
         if isinstance(pred, EdgePrediction):
             e = pred.edge
             rid = e.relation_id
