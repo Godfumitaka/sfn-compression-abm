@@ -90,15 +90,16 @@ def checks():
     print("台帳本体9組・通信1組の一致を確認", flush=True)
 
 
-def main_runs():
+def main_runs(price, arm):
     jobs = []
     for name, recv, q in (("recvA", "A", "0.2"), ("recvB", "B", "0.2"), ("no_comm", "B", "0")):
-        extra = ["--v311c", "--v311c-f", "0.5,0.5", "--v311c-runs", "1,2,3", "--workers", "1",
+        extra = ["--v39-price", str(price), "--v311c", "--v311c-f", "0.5,0.5", "--v311c-runs", "1,2,3", "--workers", "1",
                  "--v311c-q", q, "--v311c-recv", recv]
-        jobs.append((name, SOURCE, 1740, extra))
+        jobs.append((arm + "_" + name, SOURCE, 1740, extra))
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
         list(ex.map(run_job, jobs))
 
 
 if __name__ == "__main__":
-    {"checks": checks, "main": main_runs}[sys.argv[1]]()
+    {"checks": checks, "main_L50": lambda: main_runs(0.01873710622997919, "L50"),
+     "main_020": lambda: main_runs(0.2, "lam020")}[sys.argv[1]]()
