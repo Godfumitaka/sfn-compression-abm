@@ -624,17 +624,7 @@ def predict(agent_input, state, config, rng):
                              entity_map_covered=all(a in definition_alignment.entity_mapping
                                                     or a in definition_alignment.relation_mapping
                                                     for row in definition.constituents for a in row.relation.arguments))
-                ambiguous = filling.ambiguous and not isinstance(prediction, EdgePrediction)   # ★ 投影優先（--proj-first）
-                if ambiguous:
-                    prediction = Abstain(reason="ambiguous_projection")
-                elif isinstance(prediction, Abstain) and filling.relations:
-                    prediction = EdgePrediction(filling.relations[0])
-                    alive = filling.alive_by_slot[0] if filling.alive_by_slot else None
-                    prediction_path = "filling_live" if alive else "filling_tombstone"
-                elif isinstance(prediction, Abstain):
-                    prediction = Abstain(reason="no_projectable_relation")
-                elif isinstance(prediction, EdgePrediction):
-                    prediction_path = "projection"
+                prediction, prediction_path = fill_decision(prediction, filling, prediction_path)
                 # ★ 局所の三答え（開示前の同じ対応・同じ記憶）
                 CTX["answers"] = {"R": name, "items": three_answers(definition, definition_alignment, state, config, scene),
                                   "fill_states": CTX.get("fill_states", ()), "fill_ids": CTX.get("fill_ids", ())}
@@ -693,6 +683,35 @@ def identify(state, scene, threshold, self_score_cache=None, *, identification_g
 
 
 # ---------------------------------------------------------------- 反実仮想の予測（記録だけ。loop._counterfactual_predictions の写し。F/H/U の表し方で）
+def fill_decision(prediction, filling, prediction_path):
+    """投影（F の行だけ）と穴埋めから、話す答えを決める（予測の最後の段。旗なしでは今までの書き方と同じ）。返り値：(予測, 答えの道)。"""
+    from abm.domains import Abstain, EdgePrediction
+    ambiguous = filling.ambiguous and not isinstance(prediction, EdgePrediction)   # ★ 投影優先（--proj-first）
+    if ambiguous and not amb_blocks(filling):
+        ambiguous = False
+        STATS["amb_local_spoke"] = STATS.get("amb_local_spoke", 0) + 1
+    if ambiguous:
+        prediction = Abstain(reason="ambiguous_projection")
+    elif isinstance(prediction, Abstain) and filling.relations:
+        prediction = EdgePrediction(filling.relations[0])
+        alive = filling.alive_by_slot[0] if filling.alive_by_slot else None
+        prediction_path = "filling_live" if alive else "filling_tombstone"
+    elif isinstance(prediction, Abstain):
+        prediction = Abstain(reason="no_projectable_relation")
+    elif isinstance(prediction, EdgePrediction):
+        prediction_path = "projection"
+    return prediction, prediction_path
+
+
+def amb_blocks(filling) -> bool:
+    """穴埋めの「あいまい」の印で、答え全体を止めるか。
+    旗なし：止める（今のまま）。
+    --amb-local（2026-09-30 夕の指示の 2、CFG["amb_local"]）：候補（名前と必要な引数が決まって埋まった関係）が一つでもあれば止めない。
+      決まらない席（同点の席・U の常時棄権の席）は穴埋めで関係を作らず、その子に頼る親も引数が決まらないので作られない（fill_v39 のとおり）。
+      候補どうしの選び方（最初に埋まった関係）と、固定の答えの投影の優先は今のまま。研究者の伏せ辺は見ない。"""
+    return not (CFG.get("amb_local") and filling.relations)
+
+
 def counterfactuals(state, target, output, held_out, higher_order_predicates, local_lambda=0.0):
     from abm.domains import Abstain, EdgePrediction
     from abm.sme import project
@@ -707,7 +726,7 @@ def counterfactuals(state, target, output, held_out, higher_order_predicates, lo
         prediction = project(alignment, graph, target, prototype_prior_weight=0.0)
         filling = fill_v39(d, target, alignment.entity_mapping, alignment.relation_mapping, state.slot_history, state.p_hat,
                            higher_order_predicates=higher_order_predicates, local_lambda=local_lambda)
-        if filling.ambiguous:
+        if filling.ambiguous and amb_blocks(filling):
             prediction = Abstain(reason="ambiguous_projection")
         elif isinstance(prediction, Abstain) and filling.relations:
             prediction = EdgePrediction(filling.relations[0])
