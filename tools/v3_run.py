@@ -451,6 +451,10 @@ def worker(task: dict) -> dict:
             # ★ 同点の並べ方（--tie-struct）：tools/tiestruct.py。変換の同点を構造だけの鍵で並べる
             import tiestruct
             tiestruct.install()
+        if task.get("answer_gap"):
+            # ★ 欠けた位置にだけ答える（--answer-gap、2026-09-30 夜の委任書）：tools/answergap.py。話す答えを選ぶ所（fill_decision）だけを包む
+            import answergap
+            answergap.install()
     if task.get("world_cue"):
         # ★ 世界 v4（型の変種、2026-09-30 深夜の追記 B-2）：tools/worldvariant.py。世界を作る前に入れる。v39 の固定辞書に新しい述語を足す
         sys.path.insert(0, str(ROOT / "tools"))
@@ -495,6 +499,8 @@ def worker(task: dict) -> dict:
         rec["relearninit"] = dict(sys.modules["relearninit"].STATS)
     if task.get("tie_struct"):
         rec["tiestruct"] = dict(sys.modules["tiestruct"].STATS)
+    if task.get("answer_gap"):
+        rec["answergap"] = dict(sys.modules["answergap"].STATS)
     if task.get("world_cue"):
         rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
     if task.get("dump_answers"):
@@ -636,6 +642,8 @@ def main() -> None:
                     help="覚え直しの初期の評価：U→H の覚え直しの観察一回を H と U で採点して初期値に入れる（--u-struct --v310-be と一緒に。tools/relearninit.py）")
     ap.add_argument("--amb-local", action="store_true",
                     help="候補ごとの棄権：穴埋めで決まった候補があれば、ほかの席の同点（あいまい）で答え全体を止めない（--v39 と一緒に。tools/v39.py amb_blocks）")
+    ap.add_argument("--answer-gap", action="store_true",
+                    help="欠けた位置にだけ答える：投影・穴埋めの候補を、対応先が提示の場面の欠けた位置（ぶら下がった参照）に入るものに絞ってから今の決まりで選ぶ（--v39 --v310-be と一緒に。tools/answergap.py）")
     ap.add_argument("--tie-struct", action="store_true",
                     help="同点の並べ方：変換の同点を、名前や番号ではなく構造だけの鍵（生まれた試行・階・親の述語と位置）で並べる（--v39 と一緒に。tools/tiestruct.py）")
     ap.add_argument("--score-role", action="store_true",
@@ -700,6 +708,8 @@ def main() -> None:
         raise SystemExit("--amb-local は --v39 と一緒に使う")
     if args.tie_struct and not args.v39:
         raise SystemExit("--tie-struct は --v39 と一緒に使う")
+    if args.answer_gap and not (args.v39 and args.v310_be):
+        raise SystemExit("--answer-gap は --v39 --v310-be と一緒に使う")
     if args.relearn_init and (not args.u_struct or not args.v310_be):
         raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
@@ -711,7 +721,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -734,7 +744,7 @@ def main() -> None:
               "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
-              "compare": do_compare} for r in runs]
+              "answer_gap": args.answer_gap, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -753,6 +763,7 @@ def main() -> None:
                                                     "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
                                                     "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
                                                     "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
+                                                    "answer_gap": args.answer_gap,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
