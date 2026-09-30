@@ -13,6 +13,10 @@
   B_RF・B_RH・B_RU・B_n その席の B の点数（tools/v39.py rec_means：B＋E では書換ビットの重み付き平均。B_n は採点の重みの和）
   pred_freq 答えた述語の全体の頻度（p_hat の回数 ÷ 合計）
   cand_n 候補の定義の数（F・H の席があって照合したもの）・cand_other_max_ratio 選ばれなかった候補の支持の割合の最大・cand_other_ratios 同じく上位 5 つ
+  cand_answers 候補ごとの JSON。R・R_born・def_id・selected・support・m_live・support_ratio・gate_pass・pred・arguments・source・seat_state・slot・abstain_reason・hit。
+    門の下も含め、実際の選択時の対応と開示前の記憶で、門だけを適用せずに既存の投影・穴埋めを計算する。hit は計算後の会計で足す。
+  cand_other_correct 選ばれた定義以外に正しい答えを出せた候補があったか（門の下を含む）。cand_other_correct_passed 同じく門を通った候補にあったか。
+  cand_tie_disagree_pairs 選ばれた定義と支持の割合が同じで、どちらも答えを出し、述語または引数が違う候補対の数。cand_tie_disagree その対が一つ以上あったか。
 列（研究者の側）
   born_motif 定義が生まれた試行の場面の型・base_motif 生まれたときの土台の場面の型・scene_motif 場面の型・same_motif 生まれた型の場面か（1／0）
   assim_motifs 定義が取り込んだ（同化した）場面の型と回数（例 M1:30;M2:2）・assim_total 同化の回数・assim_cross 型またぎの同化の回数（場面の型 ≠ born_motif）
@@ -25,18 +29,87 @@
 from __future__ import annotations
 
 import csv
+import copy
+import json
 import math
 import sys
 from collections import Counter
+from dataclasses import replace
+from itertools import combinations
 
 COLS = ["trial", "seed", "R", "R_born", "def_id", "source", "slot", "pred", "hit", "disclosed", "seat_state",
         "h_total", "h_top", "h_top_ratio", "h_kinds", "h_entropy_bits", "def_F", "def_H", "def_U", "def_registrations", "age",
         "support", "m_live", "support_ratio", "B_RF", "B_RH", "B_RU", "B_n", "pred_freq",
-        "cand_n", "cand_other_max_ratio", "cand_other_ratios",
+        "cand_n", "cand_other_max_ratio", "cand_other_ratios", "cand_answers", "cand_other_correct", "cand_other_correct_passed",
+        "cand_tie_disagree", "cand_tie_disagree_pairs",
         "born_motif", "base_motif", "scene_motif", "same_motif", "assim_motifs", "assim_total", "assim_cross",
         "seat_pred_born", "role", "role_in_scene_motif", "role_same_pred"]
 WCOLS = ["scene_variant", "held_out_switch", "born_variant", "base_variant", "def_switch_seats", "other_switch_visible"]
 ST: dict = {}
+
+
+def _describe_prediction(d, prediction, slot_history):
+    """答えと出どころだけを返す。正解には触れない。"""
+    import v39
+    from abm.domains import EdgePrediction
+    if not isinstance(prediction, EdgePrediction):
+        return {"pred": None, "arguments": None, "source": None, "seat_state": None,
+                "slot": None, "abstain_reason": prediction.reason}
+    edge = prediction.edge
+    rid = edge.relation_id
+    slot = None
+    if rid.startswith("sme_projection__"):
+        base_id = rid[len("sme_projection__"):]
+        slot = next((r.slot_index for r in d.constituents if r.relation.relation_id == base_id), None)
+    elif rid.startswith("filling__"):
+        slot = int(rid.rsplit("__", 2)[1])
+    row = next((r for r in d.constituents if r.slot_index == slot), None)
+    st = v39.seat_state(d, row, slot_history) if row is not None else None
+    source = "F_proj" if rid.startswith("sme_projection__") else (f"{st}_fill" if rid.startswith("filling__") else "other")
+    return {"pred": edge.predicate, "arguments": list(edge.arguments), "source": source,
+            "seat_state": st, "slot": slot, "abstain_reason": None}
+
+
+def _candidate_answer(d, graph, alignment, state, config, scene, rng):
+    """v39.predict と同じ投影優先の答え。門だけ外す。照合し直さず、正解・更新・採点を呼ばない。"""
+    import v39
+    from abm.domains import Abstain, EdgePrediction
+    from abm.sme import project
+    # fill_v39 の記録用変数も元に戻す。乱数は各候補に独立の写しを渡す。
+    saved_stats, saved_ctx = dict(v39.STATS), dict(v39.CTX)
+    try:
+        f_ids = {r.relation.relation_id for r in d.constituents if r.alive}
+        alignment = replace(alignment, candidate_projections=tuple(x for x in alignment.candidate_projections if x in f_ids))
+        prediction = project(alignment, graph, scene, prototype_prior_weight=0.0)
+        filling = v39.fill_v39(d, scene, alignment.entity_mapping, alignment.relation_mapping,
+                               state.slot_history, state.p_hat, config.fill_selection, copy.deepcopy(rng),
+                               higher_order_predicates=config.higher_order_predicates, local_lambda=config.local_lambda)
+        if filling.ambiguous and not isinstance(prediction, EdgePrediction):
+            prediction = Abstain(reason="ambiguous_projection")
+        elif isinstance(prediction, Abstain) and filling.relations:
+            prediction = EdgePrediction(filling.relations[0])
+        elif isinstance(prediction, Abstain):
+            prediction = Abstain(reason="no_projectable_relation")
+        return _describe_prediction(d, prediction, state.slot_history)
+    finally:
+        v39.STATS.clear()
+        v39.STATS.update(saved_stats)
+        v39.CTX.clear()
+        v39.CTX.update(saved_ctx)
+
+
+def _score_candidates(cands, held):
+    """控えた答えの採点だけ。候補の答えを作り直さない。"""
+    scored = [{**c, "hit": int(c["pred"] is not None and c["pred"] == held.predicate
+                              and tuple(c["arguments"]) == tuple(held.arguments))} for c in cands]
+    others = [c for c in scored if not c["selected"]]
+    selected = next(c for c in scored if c["selected"])
+    tied = [c for c in scored if c["support_ratio"] == selected["support_ratio"] and c["pred"] is not None]
+    pairs = sum((a["pred"], a["arguments"]) != (b["pred"], b["arguments"]) for a, b in combinations(tied, 2))
+    return {"cand_answers": json.dumps(scored, ensure_ascii=False, separators=(",", ":")),
+            "cand_other_correct": int(any(c["hit"] for c in others)),
+            "cand_other_correct_passed": int(any(c["hit"] and c["gate_pass"] for c in others)),
+            "cand_tie_disagree": int(pairs > 0), "cand_tie_disagree_pairs": pairs}
 
 
 def _role_triples(seed):
@@ -89,7 +162,7 @@ def install(path, *, seed: int, seed_file: str) -> None:
 
         def map_v39(d, slot_history, sc):
             g, al = real_map(d, slot_history, sc)
-            got[d.name] = (d, al)
+            got[d.name] = (d, g, al)
             return g, al
 
         v39.map_v39 = map_v39
@@ -98,13 +171,13 @@ def install(path, *, seed: int, seed_file: str) -> None:
         finally:
             v39.map_v39 = real_map
         cands = []
-        for name, (d, al) in got.items():
+        for name, (d, g, al) in got.items():
             if al is None:
                 continue
             n = v39.n_FH(d, state.slot_history)
             sup = sum(1 for row in d.constituents if v39.seat_state(d, row, state.slot_history) != "U"
                       and row.relation.relation_id in al.relation_mapping)
-            cands.append((name, sup / n if n else 0.0))
+            cands.append((d, g, al, sup, n))
         ST["cands"] = cands
         return res
 
@@ -139,10 +212,23 @@ def install(path, *, seed: int, seed_file: str) -> None:
 
     def predict(agent_input, state, config, rng):
         ST["cands"] = None
+        rng_before = copy.deepcopy(rng)
         output, pending = real_predict(agent_input, state, config, rng)
         ST["pending"] = None
         if isinstance(output.prediction, EdgePrediction) and output.trace.get("R_used"):
-            ST["pending"] = (state, output, getattr(pending, "prediction_path", None), agent_input.target_graph_partial, ST["cands"])
+            import abm.agent_runtime as ar
+            scene = agent_input.target_graph_partial
+            cands = []
+            for d, g, al, sup, n in ST["cands"] or []:
+                answer = _candidate_answer(d, g, al, state, config, scene, rng_before)
+                selected = d.name == output.trace["R_used"]
+                if selected and answer != _describe_prediction(d, output.prediction, state.slot_history):
+                    raise RuntimeError("記録用の候補の答えが実際の答えと一致しない。停止")
+                cands.append({"R": d.name, "R_born": d.registered_at, "def_id": f"{d.name}@{d.registered_at}",
+                              "selected": int(selected), "support": sup, "m_live": n,
+                              "support_ratio": sup / n if n else 0.0, "gate_pass": int(sup >= ar._need(config.tau_acc, n)),
+                              **answer})
+            ST["pending"] = (state, output, getattr(pending, "prediction_path", None), scene, cands)
         return output, pending
 
     loop.predict = predict
@@ -211,8 +297,9 @@ def _write(p, coin, held):
     ph = state.p_hat
     r["pred_freq"] = (ph.counts.get(edge.predicate, 0) / ph.total) if ph.total else ""
     if cands is not None:
-        others = sorted((x for name, x in cands if name != R), reverse=True)
+        others = sorted((c["support_ratio"] for c in cands if not c["selected"]), reverse=True)
         r.update(cand_n=len(cands), cand_other_max_ratio=(others[0] if others else ""), cand_other_ratios=";".join(f"{x:.4f}" for x in others[:5]))
+        r.update(_score_candidates(cands, held))
     b = ST["birth"].get((R, d.registered_at))
     sm = ST["motif"].get(t)
     r["scene_motif"] = sm
