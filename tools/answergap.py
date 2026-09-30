@@ -12,10 +12,10 @@
   ・投影が適格でなければ投影を捨て、適格な穴埋めの候補に進む。
   ・適格な候補が一つも無ければ棄権し、理由を no_gap_candidate にする（下の「未決」を参照）。
   ・U 常時棄権は、今の U の扱い（fill_v39 の中で U の席を埋めない）が先に効き、そのあとに絞る。
-未決（control/ に書いた、アストラさんの決定待ち）：絞る前から候補が一本も無かった試行（例：投影なし・穴埋めの候補 0 本）の棄権の理由。
-  この版では、絞って候補が減り、かつ適格な候補が一つも残らなかったときだけ no_gap_candidate にし、それ以外は今の決まりの理由のまま
-  （GAP_REASON_RULE＝"removed"）。棄権の課金は設定で切られており（config の abstain_charge＝false、abm/loop.py:312-317）、
-  理由の名前は状態に効かない。
+棄権の理由の名前（決定、2026-09-30 深夜のアストラさんの返事）：絞ったことで候補が無くなった試行（絞る前に投影か穴埋めの候補があり、
+  適格なものが一つも残らなかった試行）だけを no_gap_candidate にする。絞る前から候補が無い試行は、今の決まりの名前
+  （no_projectable_relation・ambiguous_projection）のまま（GAP_REASON_RULE＝"removed"）。棄権の課金は設定で切られており
+  （config の abstain_charge＝false、abm/loop.py:312-317）、理由の名前は状態に効かない。
 """
 from __future__ import annotations
 
