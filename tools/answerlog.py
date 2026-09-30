@@ -13,6 +13,9 @@
   B_RF・B_RH・B_RU・B_n その席の B の点数（tools/v39.py rec_means：B＋E では書換ビットの重み付き平均。B_n は採点の重みの和）
   pred_freq 答えた述語の全体の頻度（p_hat の回数 ÷ 合計）
   cand_n 候補の定義の数（F・H の席があって照合したもの）・cand_other_max_ratio 選ばれなかった候補の支持の割合の最大・cand_other_ratios 同じく上位 5 つ
+  あいまいで黙った試行（予測が ambiguous_projection で棄権。記録だけ）は side/<セル>/seed<種>.ambig.csv に一行ずつ：伏せられた関係に当たる席
+    （held_found_by＝cid：--score-role の対応先が伏せ辺の ID と一致／pos：写した位置が伏せ辺の引数と同じ）、その席の状態と H・F の答え・当たり
+    （held_hit）・その席自身が同点か（held_tied）、ほかの席で同点だった席の数を状態ごと（tied_U_other・tied_H_other・tied_F_other）。
   支持の三分類（2026-09-30 の委任書「U の照合の直し…」の 3。記録だけ。門の決まりは変えない）：名前を持つ F・H の席を、写しで
     sel_vis 見えている関係に対応した・sel_hid 親から伏せられた位置（見えていない ID）に対応した・sel_none 対応先が無い（選ばれた定義）、
     sel_vis_match 見えている関係に対応した席のうち、その関係の名が F の固定名・H の履歴の名（回数 1 以上）に一致した数、
@@ -68,7 +71,7 @@ def install(path, *, seed: int, seed_file: str) -> None:
     from abm.seed import load_seed
     sd = load_seed(seed_file)
     ST.clear()
-    ST.update(f=open(path, "w", encoding="utf-8", newline=""), seed=seed, motif={}, run_seed=None, birth={}, assim={},
+    ST.update(f=open(path, "w", encoding="utf-8", newline=""), af=None, ambig_path=str(path).replace(".answers.csv", ".ambig.csv"), seed=seed, motif={}, run_seed=None, birth={}, assim={},
               pending=None, cands=None, tri=_role_triples(sd), sd=sd, rows=0)
     wv = sys.modules.get("worldvariant")
     ST["cols"] = COLS + (WCOLS if wv is not None else [])
@@ -166,8 +169,13 @@ def install(path, *, seed: int, seed_file: str) -> None:
         ST["cands"] = None
         output, pending = real_predict(agent_input, state, config, rng)
         ST["pending"] = None
+        ST["ambig"] = None
         if isinstance(output.prediction, EdgePrediction) and output.trace.get("R_used"):
             ST["pending"] = (state, output, getattr(pending, "prediction_path", None), agent_input.target_graph_partial, ST["cands"])
+        elif getattr(output.prediction, "reason", None) == "ambiguous_projection" and output.trace.get("R_used"):
+            # ★ あいまいで黙った試行（2026-09-30 の「U 同点で黙る」の数え、記録だけ）：控えた三答えと穴埋めの候補の分布
+            ST["ambig"] = (output, (v39.CTX.get("answers") or {}).get("items") or [],
+                           getattr(pending, "filling_candidate_distribution", ()) or ())
         return output, pending
 
     loop.predict = predict
@@ -179,6 +187,10 @@ def install(path, *, seed: int, seed_file: str) -> None:
         ST["pending"] = None
         if p is not None and p[1] is output:
             _write(p, coin, revealed_edge)
+        a = ST.pop("ambig", None)
+        ST["ambig"] = None
+        if a is not None and a[0] is output:
+            _write_ambig(a, coin, revealed_edge)
         return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)
 
     loop._update_accounting = update_accounting
@@ -276,8 +288,43 @@ def _write(p, coin, held):
     ST["rows"] += 1
 
 
+AMBIG_COLS = ["trial", "seed", "R", "held_found_by", "held_slot", "held_state", "held_answer", "held_hit", "held_tied",
+              "tied_U_other", "tied_H_other", "tied_F_other", "fill_entries", "disclosed"]
+
+
+def _write_ambig(a, coin, held):
+    """あいまい（ambiguous_projection）で黙った試行を一行。伏せられた関係に当たる席（--score-role の対応先が伏せ辺の ID と一致する席。
+    対応先が無ければ、写した位置が伏せ辺の引数と同じ席）と、その席が H・F で出せた答え、穴埋めの候補の分布で同点だった席の状態を数える。"""
+    output, items, dists = a
+    if ST.get("af") is None:
+        ST["af"] = open(ST["ambig_path"], "w", encoding="utf-8", newline="")
+        ST["aw"] = csv.writer(ST["af"])
+        ST["aw"].writerow(AMBIG_COLS)
+    it = next((x for x in items if x.get("cid") is not None and x.get("cid") == held.relation_id), None)
+    how = "cid" if it is not None else ""
+    if it is None and not any("cid" in x for x in items):
+        it = next((x for x in items if x.get("pos") is not None and tuple(x["pos"]) == tuple(held.arguments)), None)
+        how = "pos" if it is not None else ""
+    tied = {}
+    for e in dists:
+        cands = e.get("candidates") or []
+        mx = max((w for _, w in cands), default=0.0)
+        if mx > 0 and sum(1 for _, w in cands if w == mx) > 1:
+            tied[e.get("slot_index")] = e.get("席")
+    hs = it["slot"] if it is not None else None
+    st_ = it["st"] if it is not None else ""
+    ans = (it.get("ans") or {}).get(st_) if it is not None and st_ in ("F", "H") else None
+    hit = int(ans is not None and ans == held.predicate and it.get("pos") is not None and tuple(it["pos"]) == tuple(held.arguments))
+    ST["aw"].writerow([coin.t, ST["seed"], output.trace.get("R_used"), how, hs if hs is not None else "", st_, ans or "", hit if ans is not None else "",
+                       int(hs in tied) if hs is not None else "",
+                       sum(1 for k, v in tied.items() if v == "U" and k != hs), sum(1 for k, v in tied.items() if v == "H" and k != hs),
+                       sum(1 for k, v in tied.items() if v == "F" and k != hs), len(dists), int(bool(coin.f_fired))])
+
+
 def close() -> dict:
     f = ST.get("f")
     if f is not None:
         f.close()
+    if ST.get("af") is not None:
+        ST["af"].close()
     return {"rows": ST.get("rows", 0), "births": len(ST.get("birth", {}))}
