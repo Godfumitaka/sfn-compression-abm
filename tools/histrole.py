@@ -21,6 +21,7 @@ m1（abm/abstraction.py:121-140）の席の履歴の集め方のうち、一階�
 from __future__ import annotations
 
 STATS: dict = {}
+CFG: dict = {}       # u_all_orders：tools/ustruct.py（--u-struct）が立てる。U の席は階を問わず親の子の規則で観察する
 
 
 def _stats_zero():
@@ -80,11 +81,14 @@ def make(orig, *, real: bool):
                 S["births"] += 1
                 S["birth_rows"] += len(d.constituents)
         for row in d.constituents:
-            if _is_higher(row.relation, rel_ids):
-                if S is not None:
-                    S["seats_higher"] += 1
-                continue
             key = (R, row.slot_index)
+            if _is_higher(row.relation, rel_ids):
+                if not (CFG.get("u_all_orders") and not row.alive and key not in pre):
+                    if S is not None:
+                        S["seats_higher"] += 1
+                    continue
+                if S is not None:
+                    S["u_higher"] = S.get("u_higher", 0) + 1
             sid = row.relation.relation_id
             old_obs = _count(hist.get(key)) - _count(pre.get(key))
             # 今の集め方で足した分を取り消す（呼ぶ前の値に戻す。呼ぶ前に鍵が無ければ消す）
