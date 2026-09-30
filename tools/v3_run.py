@@ -452,6 +452,14 @@ def worker(task: dict) -> dict:
         import answerlog
         answerlog.install(side_dir / f"seed{task['seed']:03d}.answers.csv", seed=int(task["seed"]),
                           seed_file=str(ROOT / task["cfg"]["seed_file"]))
+    if task.get("dump_routing"):
+        # ★ 証拠の届け先の記録（2026-09-30 夕方、委任書「外挿の印」の案 (1)）：tools/routelog.py。記録だけ（台帳・side は変わらない）。
+        #   ほかの差し替えのすべてのあとに入れる（m1 と採点を一番外で包む）。書くのは side/<セル>/seed<種>.routing.jsonl だけ
+        if not (task.get("v39") and task.get("v310_be") and task.get("hist_role")):
+            raise ValueError("--dump-routing は --v39 --v310-be --hist-role と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import routelog
+        routelog.install(str(side_dir / f"seed{task['seed']:03d}.routing.jsonl"))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -471,6 +479,9 @@ def worker(task: dict) -> dict:
         rec["worldvariant"] = dict(sys.modules["worldvariant"].STATS)
     if task.get("dump_answers"):
         rec["answerlog"] = sys.modules["answerlog"].close()
+    if task.get("dump_routing"):
+        rec["routelog"] = dict(sys.modules["routelog"].STATS)
+        sys.modules["routelog"].close()
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -594,6 +605,8 @@ def main() -> None:
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--dump-answers", action="store_true",
                     help="答えごとの記録（記録だけ）：実際に答えた試行ごとに side/<セル>/seed<種>.answers.csv へ一行（tools/answerlog.py）")
+    ap.add_argument("--dump-routing", action="store_true",
+                    help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
     ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
@@ -683,7 +696,7 @@ def main() -> None:
               "v39_init": args.v39_init, "v39_a": float(args.v39_a), "v39_u": args.v39_u,
               "v39_decay": args.v39_decay, "v39_price": args.v39_price, "v39_dump_cands": args.v39_dump_cands,
               "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
-              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers,
+              "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
@@ -701,7 +714,7 @@ def main() -> None:
                                                     "v39_a": args.v39_a, "v39_u": args.v39_u,
                                                     "v39_decay": args.v39_decay, "v39_price": args.v39_price,
                                                     "v310_be": args.v310_be, "hist_role": args.hist_role, "score_role": args.score_role,
-                                                    "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers,
+                                                    "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
