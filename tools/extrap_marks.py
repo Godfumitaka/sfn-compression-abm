@@ -21,6 +21,7 @@
   ・定義の役割：記憶の定義の席のうち、役割（親の行の生まれたときの述語と、その親の中の位置）が伏せた位置の親（述語と位置）と同じ席の
       固定の名（F）か候補の履歴の名に、その状況で経験した答えがある。
   ・答えを作れる：答えの記録の候補の答え（cand_answers）に、正解（hit＝1）を出す候補がある（答えた試行だけ。黙った試行は記録なし）。
+      答えの記録に cand_answers の列が無い版では空（記録なし）。
   ・実際に使える：実際の答えが正解。
 ■ 定義の経験（選ばれた定義と、答えの出どころの席。定義の同一性は名前＠生まれた試行）
   ・取り込んだ：s＜t に誕生・同化でその定義に登録した場面に、同じ状況の位置があった。
@@ -235,8 +236,11 @@ def main(arm_root, cell, seed, out_csv):
             rec[f"{g}_定義の役割"] = dr
         # 答えを作れる・実際に使える
         if ans is not None:
-            ca = json.loads(ans.get("cand_answers") or "[]")
-            rec["答えを作れる"] = int(any(c.get("hit") == 1 for c in ca))
+            if "cand_answers" in ans:
+                ca = json.loads(ans.get("cand_answers") or "[]")
+                rec["答えを作れる"] = int(any(c.get("hit") == 1 for c in ca))
+            else:
+                rec["答えを作れる"] = ""        # ★ 答えの記録に候補の答え（cand_answers）の列が無い版（v3.10urta-main の tools/answerlog.py）では記録なし
             rec["実際に使える"] = int(row.get("hit") == 1)
             rec["source"] = ans.get("source")
             R = ans.get("R")
