@@ -535,6 +535,13 @@ def worker(task: dict) -> dict:
         import useforget
         useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"), tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]),
                           dump_s_path=(str(side_dir / f"seed{task['seed']:03d}.useforget_S.f64") if task.get("use_forget_dump_s") else None))
+    if task.get("dump_door"):
+        # ★ 定義の選びと門の記録（2026-10-01 夕方の委任書「D-最小の外れの中身」の段 2）：tools/doorlog.py。記録だけ。一番外に入れる
+        if not task.get("v39"):
+            raise ValueError("--dump-door は --v39 と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import doorlog
+        doorlog.install(str(side_dir / f"seed{task['seed']:03d}.door.jsonl"))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -550,6 +557,8 @@ def worker(task: dict) -> dict:
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
+    if task.get("dump_door"):
+        rec["doorlog"] = sys.modules["doorlog"].close()
     if task.get("hist_role"):
         rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if task.get("u_struct"):
@@ -708,6 +717,7 @@ def main() -> None:
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
     ap.add_argument("--use-forget", type=float, default=None,
                     help="使用で強める腕 D：名前の使用の強さ S＜τ の席を薄くする（τ。-inf なら薄くしない＝較正用）。今の B の λ の判断の代わり（tools/useforget.py）")
+    ap.add_argument("--dump-door", action="store_true", help="記録だけ：予測ごとに選ばれた定義の支持・三分類・シールの席の照合・門・次点・生きている定義を書く（tools/doorlog.py）")
     ap.add_argument("--use-forget-dump-s", action="store_true", help="較正用：試行 100 以降の各試行の終わりに、生きている席の S を書き出す")
     ap.add_argument("--cf-learn", action="store_true",
                     help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
@@ -831,7 +841,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "dump_door": args.dump_door, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -854,6 +864,7 @@ def main() -> None:
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s,
+                                                    "dump_door": args.dump_door,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
