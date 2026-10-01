@@ -229,3 +229,38 @@ def save_set(st, out_dir):
     json.dump(llm, open(os.path.join(out_dir, base + "_llm.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     json.dump(res, open(os.path.join(out_dir, base + "_研究者.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     return base
+
+
+# ---------------------------------------------------------------- 見せ方 v2（委任書「理解検査」の段 C）：意味は変えず、つながりを追いやすい決まった順にする
+def render_v2(rels, hidden, rng, voc):
+    """行の順：親を持たない関係から始め（親の関係の引数を持つものが先、その中は関係の並びの順）、親の行のすぐ下に子の行を
+    引数の順に、深さごとに二つの空白で字下げして置く（深さ優先）。番号は場面ごとにでたらめ（関係 10〜99、物 1〜9）。
+    伏せた関係の行は消し、親の引数のその番号を「?」にする（伏せた関係の子の行は、伏せた関係の位置の深さのまま残す）。"""
+    names = [n for n, _p, _a in rels]
+    nums = rng.sample(range(10, 100), len(names))
+    rid = {n: f"r{k}" for n, k in zip(names, nums)}
+    oid = {o: f"o{k}" for o, k in zip(("a", "b"), rng.sample(range(1, 10), 2))}
+    by = {n: (p, args) for n, p, args in rels}
+    par = parents_of(rels)
+    tops = [n for n in names if n not in par]
+    tops.sort(key=lambda n: (0 if any(a in by for a in by[n][1]) else 1, names.index(n)))
+    lines = []
+
+    def emit(n, depth):
+        p, args = by[n]
+        if n != hidden:
+            shown = ["?" if a == hidden else (rid[a] if a in rid else oid[a]) for a in args]
+            lines.append("  " * depth + f"{rid[n]}: {voc[p]}({', '.join(shown)})")
+        for a in args:
+            if a in by:
+                emit(a, depth + 1)
+
+    for t in tops:
+        emit(t, 0)
+    truth = by[hidden][0]
+    return "\n".join(lines), {"rid": rid, "oid": oid, "hidden": hidden, "hidden_rid": rid[hidden], "truth_pred": truth,
+                              "truth_symbol": voc[truth]}
+
+
+def parse_v2(text):
+    return parse("\n".join(ln.strip() for ln in text.split("\n")))

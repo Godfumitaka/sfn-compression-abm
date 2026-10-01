@@ -1,0 +1,139 @@
+"""理解検査（委任書「LLM の小さな試し・理解検査」の段 C・D）。全履歴の条件。★ 研究者用の説明語は渡さない。
+見せ方（段 C、llm_trial/world.py render_v2）：親の行の下に子の行を字下げして置く決まった順。番号は場面ごとにでたらめ。r／o で区別。
+  指示（INTRO）：記号の読み方を、本番に出ない記号の小さな例で説明し、「?」は一つだけと明示し、
+  「同じに見える場面には一貫した答えがある。過去の場面と答えから予測する課題」と明示する。
+段 D：四つの場合を二例ずつ、計 8 例を、正解つきの過去の場面として与えて固定する（例はどれもドアを伏せた場面。順はでたらめ。仮の決定）。
+  四つの場合それぞれ 4 問、計 16 問を、新しい番号で、一問ずつ別々の問い合わせで出す（ドアを伏せた場面）。試験の間に正解は足さない。
+  通過の目安（事前の基準）：最もありそうな答えが 16 問中 15 問以上正しく、どの場合も 4 問中 3 問以上正しい。黙ったかは別に記録。
+答えの形：提供元の形の指定（Haiku：output_config.format の json_schema、Together：response_format の json_schema）。言葉での指示は補助。
+推論：どの模型も推論の設定は切る（Qwen は reasoning: {enabled: false}。全条件で共通にする前提）。推論に使った量と、上限で切れたかを記録する。
+形が崩れたとき：今まで（stage4.py）と同じく 2 回まで問い直し、それでも読めなければ「形の崩れ」。上限で切れたもの（finish_reason／stop_reason が長さ）は別に数える。
+使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/stage_d.py <出力の場所> <模型> <世界> <組の種>'"""
+import json
+import os
+import random
+import sys
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import api  # noqa: E402
+import stage4 as s4  # noqa: E402
+import world as w  # noqa: E402
+
+INTRO = """How to read a scene. A scene is a list of lines. Each line has the form `rN: word(arg, arg)` or `rN: word(arg)`.
+`rN` is a relation and `word` is its predicate. Each argument is either an object (`oN`, starting with the letter o) or another relation (`rN`, starting with the letter r).
+Indentation shows structure: the lines indented below a line are the relations that appear as its arguments.
+Relation numbers and object numbers are arbitrary labels; they change from scene to scene and carry no meaning.
+
+Example (the words in this example are not used in the task):
+r12: wug(r7, r3)
+  r7: dax(o1, o2)
+  r3: fep(o1, o2)
+r30: zib(o2)
+Here r12 has two arguments, the relations r7 and r3; r7 and r3 each relate the objects o1 and o2; r30 has one argument, the object o2.
+
+In every scene exactly one relation has been removed. Its line is missing, and where it appeared as an argument it is written as `?`. There is exactly one `?` in each scene.
+Your task: predict the predicate (the word) of the removed relation.
+Scenes that look the same have a consistent answer. This is a prediction task: use the past scenes and their answers to predict the answer for the current scene."""
+ASK = ('Respond with only a JSON object of the form {"answer": "<word>", "confidence": <probability from 0 to 1 that your answer is correct>, '
+       '"respond": <true to give this answer, false to abstain>}. Even if you abstain, give your best answer and its confidence. '
+       'Do not explain your reasoning. Output nothing except the JSON object.')
+SCHEMA = {"type": "object", "properties": {"answer": {"type": "string"}, "confidence": {"type": "number"}, "respond": {"type": "boolean"}},
+          "required": ["answer", "confidence", "respond"], "additionalProperties": False}
+MAXTOK = 100
+
+
+def prompt(history, scene):
+    parts = [INTRO, "", "Past scenes, each followed by the correct predicate of its removed relation:"]
+    for k, s in enumerate(history, 1):
+        parts += ["", f"Scene {k}:", s["text"], f"Answer: {s['answer']}"]
+    parts += ["", "Current scene:", scene["text"], "", ASK]
+    return "\n".join(parts)
+
+
+def call(model, content, what):
+    t0 = time.time()
+    if model == api.HAIKU:
+        r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=MAXTOK, what=what,
+                                    output_format={"type": "json_schema", "schema": SCHEMA})
+        text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
+        cut = r.get("stop_reason") == "max_tokens"
+        reasoning = None
+    else:
+        rf = {"type": "json_schema", "json_schema": {"name": "answer", "schema": SCHEMA}}
+        r, u, cost = api.together_chat(model, [{"role": "user", "content": content}], max_tokens=MAXTOK, what=what, response_format=rf)
+        ch = r["choices"][0]
+        text = ch["message"].get("content")
+        cut = ch.get("finish_reason") == "length"
+        reasoning = ch["message"].get("reasoning")
+    rt = (u.get("completion_tokens_details") or {}).get("reasoning_tokens", u.get("reasoning_tokens"))
+    return text, u, cost, time.time() - t0, cut, reasoning, rt
+
+
+def build(set_seed, world):
+    voc = w.vocab(set_seed)
+    hist = []
+    for k, (typ, cue) in enumerate(w.CASES):
+        for j in range(2):
+            text, rec = w.render_v2(w.relations(typ, cue, world), w.DOOR_PATH, random.Random(f"D-hist|{set_seed}|{world}|{k}|{j}"), voc)
+            hist.append({"text": text, "answer": rec["truth_symbol"], "case": f"{typ}・{cue}"})
+    random.Random(f"D-order|{set_seed}").shuffle(hist)
+    tests = []
+    for k, (typ, cue) in enumerate(w.CASES):
+        for j in range(4):
+            text, rec = w.render_v2(w.relations(typ, cue, world), w.DOOR_PATH, random.Random(f"D-test|{set_seed}|{world}|{k}|{j}"), voc)
+            tests.append({"text": text, "answer": rec["truth_symbol"], "case": f"{typ}・{cue}"})
+    return hist, tests
+
+
+def main():
+    out, model, world, set_seed = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
+    os.makedirs(out, exist_ok=True)
+    api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
+    hist, tests = build(set_seed, world)
+    tag = f"{model.split('/')[-1]}_w{world}_set{set_seed}"
+    log = os.path.join(out, f"{tag}.jsonl")
+    done = {}
+    if os.path.exists(log):
+        for l in open(log, encoding="utf-8"):
+            d = json.loads(l)
+            done[d["問"]] = d
+    for q, t in enumerate(tests):
+        if q in done:
+            continue
+        content = prompt(hist, t)
+        tries, got = [], None
+        for k in range(3):
+            text, u, cost, sec, cut, reasoning, rt = call(model, content if k == 0 else content + "\n" + s4.STRICT, f"段D {tag} 問 {q} 試み {k + 1}")
+            got = s4.parse(text)
+            tries.append({"出力": text, "使用量": u, "費用": cost, "秒": round(sec, 2), "上限で切れた": cut, "推論の量": rt,
+                          "推論の欄あり": reasoning is not None})
+            if got or cut:
+                break
+        row = {"問": q, "場合": t["case"], "正解": t["answer"], "試み": tries}
+        if got:
+            row.update(got)
+            row["判定"] = "黙り" if not got["respond"] else ("正解" if got["answer"] == t["answer"] else "誤答")
+            row["最もありそうな答えが正しい"] = got["answer"] == t["answer"]
+        else:
+            row["判定"] = "上限で切れた" if tries[-1]["上限で切れた"] else "形の崩れ"
+        with open(log, "a", encoding="utf-8") as f:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        done[q] = row
+    rows = [done[q] for q in range(len(tests))]
+    by = {}
+    for c in [f"{a}・{b}" for a, b in w.CASES]:
+        rs = [r for r in rows if r["場合"] == c]
+        by[c] = {"最もありそうな答えが正しい": sum(1 for r in rs if r.get("最もありそうな答えが正しい")), "黙り": sum(1 for r in rs if r["判定"] == "黙り"),
+                 "形の崩れ・上限": sum(1 for r in rs if r["判定"] in ("形の崩れ", "上限で切れた"))}
+    best = sum(v["最もありそうな答えが正しい"] for v in by.values())
+    passed = best >= 15 and all(v["最もありそうな答えが正しい"] >= 3 for v in by.values())
+    summ = {"模型": model, "世界": world, "組の種": set_seed, "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
+            "黙り": sum(1 for r in rows if r["判定"] == "黙り"), "費用（これまでの合計）": round(api.spent(), 4),
+            "履歴の場合の並び": [h["case"] for h in hist]}
+    json.dump(summ, open(os.path.join(out, f"{tag}_要約.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(json.dumps(summ, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

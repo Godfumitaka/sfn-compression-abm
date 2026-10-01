@@ -71,9 +71,11 @@ def together_prices():
 NO_REASONING = {"reasoning": {"enabled": False}}   # Qwen：推論の過程を出さない指定（仮の決定。二つの候補とも効くことを確かめた）
 
 
-def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperature=0.0):
+def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperature=0.0, response_format=None):
     _guard(0.01)
     body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
+    if response_format:
+        body["response_format"] = response_format
     if "qwen" in model.lower():
         body.update(NO_REASONING)
     if logprobs:
@@ -85,9 +87,11 @@ def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperatu
     return r, u, cost
 
 
-def haiku_chat(messages, *, max_tokens, what, system=None, temperature=0.0):
+def haiku_chat(messages, *, max_tokens, what, system=None, temperature=0.0, output_format=None):
     _guard(0.01)
     body = {"model": HAIKU, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
+    if output_format:
+        body["output_config"] = {"format": output_format}
     if system:
         body["system"] = system
     r = _post("https://api.anthropic.com/v1/messages", body, {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
