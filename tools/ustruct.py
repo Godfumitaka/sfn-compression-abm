@@ -66,7 +66,7 @@ def u_candidates(prev):
                             upair = True
                             relation_pairs.append((left_arg, right_arg))
                             for ua, ca in zip(u.arguments, C.arguments):
-                                if ua in def_rel_ids:
+                                if ua in def_rel_ids or (v39.LEFT_REL[0](base_graph, ua, ca in partial_relation_ids) if v39.LEFT_REL else False):
                                     if ca in partial_entity_ids:
                                         compatible = False
                                         break
@@ -81,7 +81,8 @@ def u_candidates(prev):
                             continue
                         relation_pairs.append((left_arg, right_arg))
                         continue
-                    left_is_relation = left_arg in base_relation_ids
+                    left_is_relation = left_arg in base_relation_ids or (v39.LEFT_REL[0](base_graph, left_arg, right_arg in partial_relation_ids)
+                                                                         if v39.LEFT_REL else False)
                     right_is_relation = right_arg in partial_relation_ids
                     right_is_unobserved = (not right_is_relation) and (right_arg not in partial_entity_ids)
                     if left_is_relation and right_is_unobserved:

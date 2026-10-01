@@ -30,6 +30,8 @@ from collections import Counter, defaultdict
 
 STATS: dict = {}
 MAX_COMPONENT = 16
+# ★ 物の伝播で物として扱わない ID を返す関数の並び（既定は空＝今と同じ）。--strict-pc（tools/strictpc.py）が U の席の関係 ID を返す関数を入れる
+PROP_EXCLUDE: list = []
 
 
 def _heights(graph) -> dict[str, int]:
@@ -189,6 +191,7 @@ def install() -> None:
         # ★ 2 伝播：一通りにしか決まらない対応だけ
         _bid = {r.relation_id: r for r in base_graph.relations}
         _tid = {r.relation_id: r for r in target_graph_partial.relations}
+        skip = frozenset().union(*(f(base_graph) for f in PROP_EXCLUDE)) if PROP_EXCLUDE else frozenset()
         changed = True
         while changed:
             changed = False
@@ -199,7 +202,7 @@ def install() -> None:
                 if lb is None or rb is None or len(lb.arguments) != len(rb.arguments):
                     continue
                 for la, ra in zip(lb.arguments, rb.arguments):
-                    if la in base_relation_ids or ra in partial_relation_ids:
+                    if la in base_relation_ids or ra in partial_relation_ids or la in skip:
                         continue
                     if la in entity_mapping or ra in used_entities:
                         continue
