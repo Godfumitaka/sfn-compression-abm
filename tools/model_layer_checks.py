@@ -81,10 +81,10 @@ def run():
     _d, _h, c1 = amap({0: "U"}, G(SC_HID, ()))
     _d, _h, c2 = amap({0: "U"}, G(SC_PUSH))
     out["L3 U の席と --u-struct"] = {"s0 の位置が伏せられた場面": dict(c1.relation_mapping), "s0 の位置に tilt が見えている場面": dict(c2.relation_mapping),
-                                   "期待（旗あり）": "伏せた場面で s2→Q・s0→dH（見えていない位置）。見えている場面では、U の席は自分の対の候補を持たないので、"
-                                                     "並行連結の (b) を満たせず s2 は写らない（記録。--u-struct の『U の子が見えている関係に当たる』は旗ありでは起きない）",
+                                   "期待（旗あり）": "伏せた場面で s2→Q・s0→dH（見えていない位置）。見えている場面でも、U の子は (c) で許され、"
+                                                     "s2→Q・s0→d0（2026-10-01 午前の返事の段 1 の (c)）",
                                    "通った": c1.relation_mapping.get("s2") == "Q" and c1.relation_mapping.get("s0") == "dH"
-                                   and "s2" not in c2.relation_mapping}
+                                   and c2.relation_mapping.get("s2") == "Q" and c2.relation_mapping.get("s0") == "d0"}
     # L4 支持の三分類（全部 F、s0 の位置が伏せられた場面。s3 push は場面に無い）
     d, h, al = amap({}, G(SC_HID))
     t = tri(d, h, al, G(SC_HID))

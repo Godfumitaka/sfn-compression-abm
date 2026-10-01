@@ -47,13 +47,49 @@ def _use() -> str:
 
 
 def filter_candidates(cands, base_graph, partial_graph):
-    """採れる候補だけを、元の並びのまま返す。あわせて (落とした数, 理由の Counter) を返す。"""
+    """採れる候補だけを、元の並びのまま返す。あわせて (落とした数, 理由の Counter, (c) で許した U の子の数) を返す。"""
     partial_ids = frozenset(r.relation_id for r in partial_graph.relations)
+    partial_by_id = {r.relation_id: r for r in partial_graph.relations}
+    partial_ents = frozenset(e.entity_id for e in partial_graph.entities)
+    base_ids = frozenset(r.relation_id for r in base_graph.relations)
+    urows = {}
+    if "ustruct" in sys.modules:
+        urows = sys.modules["ustruct"].UREG.get(id(base_graph), {}) or {}
+    def_ids = base_ids | frozenset(urows)
     direct = {(c.base_relation_id, c.partial_relation_id): c for c in cands}
     bpred = {r.relation_id: r.predicate for r in base_graph.relations}
     tpred = {r.relation_id: r.predicate for r in partial_graph.relations}
     memo: dict = {}
     why: dict = {}
+    allowed_u = Counter()
+
+    def child_ok(lc, rc):
+        """子の対 (lc, rc) が (a)(b)(c) のどれかを満たすか。満たさなければ理由を返す（満たせば None）。"""
+        if rc not in partial_ids:
+            return None                                          # (a)
+        if lc in base_ids:                                       # (b)
+            c = direct.get((lc, rc))
+            if c is None:
+                return f"子の対が無い：{bpred.get(lc, '?')}≠{tpred.get(rc, '?')}" if bpred.get(lc) != tpred.get(rc) else "子の対が無い（名は同じ）"
+            return None if ok(c) else "子の対が採れない（その下で落ちた）"
+        u = urows.get(lc)                                        # (c) U の席
+        if u is None:
+            return "基の子が照合のグラフに無く、U の席でもない"
+        C = partial_by_id[rc]
+        if len(u.arguments) != len(C.arguments):
+            return "U の子：引数の数が合わない"
+        for ua, ca in zip(u.arguments, C.arguments):
+            ua_rel = ua in def_ids
+            ca_rel = ca in partial_ids
+            ca_unobs = (not ca_rel) and (ca not in partial_ents)
+            if ua_rel and (ca_rel or ca_unobs):
+                r = child_ok(ua, ca)
+                if r is not None:
+                    return f"U の子の下で：{r}"
+            elif ua_rel or ca_rel or ca_unobs:
+                return "U の子：引数の種類が合わない"
+        allowed_u["(c) で許した U の子"] += 1
+        return None
 
     def ok(c) -> bool:
         key = (c.base_relation_id, c.partial_relation_id)
@@ -62,36 +98,105 @@ def filter_candidates(cands, base_graph, partial_graph):
         memo[key] = True   # 循環は無い（子は親の引数）が、念のため
         res = True
         for lc, rc in c.relation_pairs:
-            if rc not in partial_ids:
-                continue
-            child = direct.get((lc, rc))
-            if child is None:
+            r = child_ok(lc, rc)
+            if r is not None:
                 res = False
-                why[key] = f"子の対が無い：{bpred.get(lc, '?')}≠{tpred.get(rc, '?')}" if bpred.get(lc) != tpred.get(rc) \
-                    else "子の対が無い（名は同じ）"
-                break
-            if not ok(child):
-                res = False
-                why[key] = "子の対が採れない（その下で落ちた）"
+                why[key] = r
                 break
         memo[key] = res
         return res
 
     out = [c for c in cands if ok(c)]
+    if SAMPLE:
+        for c in cands:
+            key = (c.base_relation_id, c.partial_relation_id)
+            if not memo[key] and why.get(key) == "子の対が無い（名は同じ）":
+                _sample(c, base_graph, partial_graph, base_ids, partial_ids, partial_ents, urows, direct)
     reasons = Counter(why[(c.base_relation_id, c.partial_relation_id)] for c in cands if not memo[(c.base_relation_id, c.partial_relation_id)])
-    return tuple(out), len(cands) - len(out), reasons
+    return tuple(out), len(cands) - len(out), reasons, allowed_u
+
+
+SAMPLE: list = []    # 環境変数 STRICTPC_SAMPLE（記録だけ）：開いたファイル
+PAIRDUMP: list = []  # 環境変数 STRICTPC_PAIRDUMP（記録だけ）：開いたファイルと残りの数
+
+
+def _kind(x, rel_ids, ent_ids, uids=frozenset()):
+    return "U の席" if x in uids else "関係" if x in rel_ids else "物" if x in ent_ids else "見えていない ID"
+
+
+def _sample(c, base_graph, partial_graph, base_ids, partial_ids, partial_ents, urows, direct):
+    """段 2：名は同じだが子の対の候補が無いために落ちた親の候補の、最初に引っかかった子の中身（記録だけ）。"""
+    import json
+    bby = {r.relation_id: r for r in base_graph.relations}
+    tby = {r.relation_id: r for r in partial_graph.relations}
+    bents = frozenset(e.entity_id for e in base_graph.entities)
+    for lc, rc in c.relation_pairs:
+        if rc in partial_ids and lc in base_ids and (lc, rc) not in direct and bby[lc].predicate == tby[rc].predicate:
+            L, R = bby[lc], tby[rc]
+            rec = {"大きさ": len(base_graph.relations) + len(partial_graph.relations), "使い道": _use(),
+                   "基は定義のグラフか": any(n.startswith("definition:") for n in (base_graph.graph_id,)), "親": [c.base_relation_id, c.partial_relation_id, c.predicate],
+                   "基の子": [L.relation_id, L.predicate, list(L.arguments), [_kind(a, base_ids, bents, frozenset(urows)) for a in L.arguments]],
+                   "相手の子": [R.relation_id, R.predicate, list(R.arguments), [_kind(a, partial_ids, partial_ents) for a in R.arguments]],
+                   "基の子の引数の関係": {a: [bby[a].predicate, list(bby[a].arguments)] for a in L.arguments if a in bby},
+                   "相手の子の引数の関係": {a: [tby[a].predicate, list(tby[a].arguments)] for a in R.arguments if a in tby},
+                   "基の子の引数の U の席": {a: [urows[a].predicate, list(urows[a].arguments)] for a in L.arguments if a in urows}}
+            SAMPLE[0].write(json.dumps(rec, ensure_ascii=False) + "\n")
+            return
+
+
+def _pairdump(real_select):
+    """段 3：予測で選ばれた定義と提示の場面の組を、照合の前の候補の一覧（直しの前）と照合器の写像と一緒に書く（記録だけ）。"""
+    import json
+    import v39
+
+    def select_definition(state, scene, config):
+        res = real_select(state, scene, config)
+        if res is not None and PAIRDUMP and PAIRDUMP[1] > 0:
+            _r, _s, d, _g, al, _n, _tie, _passed = res
+            g = v39.v39_graph(d, state.slot_history)
+            try:
+                raw = PREV[0](g, scene)
+                ur = dict(sys.modules["ustruct"].UREG.get(id(g), {})) if "ustruct" in sys.modules else {}
+            finally:
+                v39.unregister(g)
+            rec = {"基": [[r.relation_id, r.predicate, list(r.arguments)] for r in g.relations],
+                   "基の物": sorted({a for r in g.relations for a in r.arguments if a not in {x.relation_id for x in g.relations} and a not in ur}),
+                   "U の席": [[r.relation_id, r.predicate, list(r.arguments)] for r in ur.values()],
+                   "相手": [[r.relation_id, r.predicate, list(r.arguments)] for r in scene.relations],
+                   "相手の物": [e.entity_id for e in scene.entities],
+                   "候補（直しの前）": [[c.base_relation_id, c.partial_relation_id, [list(x) for x in c.entity_pairs], [list(x) for x in c.relation_pairs]] for c in raw],
+                   "照合器の関係": dict(al.relation_mapping), "照合器の物": dict(al.entity_mapping), "照合器の点": al.total_score}
+            PAIRDUMP[0].write(json.dumps(rec, ensure_ascii=False) + "\n")
+            PAIRDUMP[1] -= 1
+        return res
+    return select_definition
+
+
+PREV: list = []
 
 
 def install() -> None:
     """ほかの候補の差し替え（fix2・v39・ustruct）のあと、照合を使う前に入れる。"""
     import abm.sme as sme
     STATS.clear()
-    STATS.update(calls=0, dropped=0, reasons=Counter(), use_calls=Counter(), use_dropped=Counter())
+    STATS.update(calls=0, dropped=0, u_allowed=0, reasons=Counter(), use_calls=Counter(), use_dropped=Counter())
     prev = sme._alignment_candidates
+    PREV.clear()
+    PREV.append(prev)
+    import os
+    SAMPLE.clear()
+    PAIRDUMP.clear()
+    if os.environ.get("STRICTPC_SAMPLE"):
+        SAMPLE.append(open(os.environ["STRICTPC_SAMPLE"], "w", encoding="utf-8"))
+    if os.environ.get("STRICTPC_PAIRDUMP"):
+        import v39
+        PAIRDUMP.extend([open(os.environ["STRICTPC_PAIRDUMP"], "w", encoding="utf-8"), int(os.environ.get("STRICTPC_PAIRDUMP_N", "3000"))])
+        v39.select_definition = _pairdump(v39.select_definition)
 
     def _alignment_candidates(base_graph, partial_graph):
         cands = prev(base_graph, partial_graph)
-        out, n, reasons = filter_candidates(cands, base_graph, partial_graph)
+        out, n, reasons, allowed_u = filter_candidates(cands, base_graph, partial_graph)
+        STATS["u_allowed"] += allowed_u["(c) で許した U の子"]
         u = _use()
         STATS["calls"] += 1
         STATS["dropped"] += n
@@ -104,5 +209,7 @@ def install() -> None:
 
 
 def stats() -> dict:
-    return {"calls": STATS.get("calls", 0), "dropped": STATS.get("dropped", 0), "reasons": dict(STATS.get("reasons", {})),
+    for f in (SAMPLE[:1] + PAIRDUMP[:1]):
+        f.flush()
+    return {"calls": STATS.get("calls", 0), "dropped": STATS.get("dropped", 0), "u_allowed": STATS.get("u_allowed", 0), "reasons": dict(STATS.get("reasons", {})),
             "use_calls": dict(STATS.get("use_calls", {})), "use_dropped": dict(STATS.get("use_dropped", {}))}
