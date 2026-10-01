@@ -23,6 +23,7 @@ from multiprocessing import Pool
 
 W = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(W, "tools"), W]
+_HISTORY_KEYS = {}  # 不変のキー文字列の読みだけを再利用。名前の回数は毎回その試行から読む。
 
 
 def _install(*, strict_pc=False):
@@ -68,7 +69,9 @@ def _restore_def(dd, argmap):
 def _restore_hist(sh, R):
     out = {}
     for k, v in sh.items():
-        key = ast.literal_eval(k)
+        if k not in _HISTORY_KEYS:
+            _HISTORY_KEYS[k] = ast.literal_eval(k)
+        key = _HISTORY_KEYS[k]
         if key[0] != R:
             continue
         out[key] = dict(v) if isinstance(v, dict) else frozenset(v)
