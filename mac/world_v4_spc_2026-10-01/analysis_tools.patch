@@ -1,0 +1,244 @@
+diff --git a/tests/test_roletarget_history_replay.py b/tests/test_roletarget_history_replay.py
+new file mode 100644
+index 0000000..c4dbb59
+--- /dev/null
++++ b/tests/test_roletarget_history_replay.py
+@@ -0,0 +1,29 @@
++"""履歴キーの読みを再利用しても、試行ごとの名前と回数を取り違えないこと。"""
++import ast
++from pathlib import Path
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path[:0] = [str(ROOT / "tools"), str(ROOT)]
++from roletarget_recompute import _restore_hist, _HISTORY_KEYS
++
++
++def reference(hist, name):
++    return {ast.literal_eval(k): dict(v) if isinstance(v, dict) else frozenset(v)
++            for k, v in hist.items() if ast.literal_eval(k)[0] == name}
++
++
++def test_keys_reused_contents_refreshed_and_copied():
++    _HISTORY_KEYS.clear()
++    name = "R_'quoted\\name"
++    hist = {str((name, 2)): {"hold": 1}, str(("R_other", 2)): {"pull": 5},
++            str((name, 7)): ["wrap", "hold"]}
++    assert _restore_hist(hist, name) == reference(hist, name)
++    size = len(_HISTORY_KEYS)
++    hist[str((name, 2))]["hold"] = 9
++    hist[str((name, 7))] = ["break"]
++    replay = _restore_hist(hist, name)
++    assert replay == reference(hist, name)
++    assert len(_HISTORY_KEYS) == size
++    replay[(name, 2)]["hold"] = 100
++    assert hist[str((name, 2))]["hold"] == 9
+diff --git a/tests/test_worldvariant_replay.py b/tests/test_worldvariant_replay.py
+new file mode 100644
+index 0000000..adb910e
+--- /dev/null
++++ b/tests/test_worldvariant_replay.py
+@@ -0,0 +1,66 @@
++"""世界の旗の後づけ復元を検査する。予測の正解方向は検査しない。"""
++from pathlib import Path
++import sys
++
++import pytest
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path[:0] = [str(ROOT / "tools"), str(ROOT)]
++
++from abm.seed import load_seed
++from extrap_reader import reconstruct_world, world_cue_probability
++
++
++@pytest.mark.parametrize("header,flags,expected", [
++    ({}, {}, None), ({}, {"world_cue": None}, None),
++    ({}, {"world_cue": 0.8}, 0.8), ({}, {"world_cue": 0}, 0.0),
++    ({"world_cue": True, "world_cue_p": 0.3}, {}, 0.3),
++    ({"world_cue": 0.3}, {"world_cue": 0.3}, 0.3),
++])
++def test_recorded_probability(header, flags, expected):
++    assert world_cue_probability(header, flags) == expected
++
++
++def test_conflicting_probability_stops():
++    with pytest.raises(ValueError, match="確率が違う"):
++        world_cue_probability({"world_cue": 0.3}, {"world_cue": 0.8})
++
++
++def test_plain_and_variant_replay_restore_hooks():
++    import abm.world as w
++    import abm.loop as loop
++    import abm.ledger as ledger
++    import worldvariant as variant
++    seed = load_seed(ROOT / "seeds/U-011_seed_v3a2.json")
++    header = dict(run_seed=1, trial_count=30, agent_ids=["agent"], arm_holdout_second_order=True)
++    plain = w.generate_world(1, 30, ["agent"], seed=seed, holdout_include_second_order=True)
++    hooks = w.generate_trial, loop._ledger_record, ledger.Ledger.append
++    saved = [dict(d) for d in (variant.INFO, variant.CFG, variant.STATS)]
++    for probability in (0.8, 0.3, 0.8):
++        replay = reconstruct_world(header, {"world_cue": probability}, seed)
++        assert [dict(d) for d in (variant.INFO, variant.CFG, variant.STATS)] == saved
++        expected = [variant.variant_trial(hooks[0], 1, t, ["agent"], seed=seed,
++                    holdout_include_second_order=True, p_a=probability) for t in range(30)]
++        # 手で同じ包みを適用した完全な場面、提示、伏せ辺との一致を検査する。
++        assert list(replay.trials) == expected
++        for d, old in zip((variant.INFO, variant.CFG, variant.STATS), saved):
++            d.clear()
++            d.update(old)
++        assert (w.generate_trial, loop._ledger_record, ledger.Ledger.append) == hooks
++        assert reconstruct_world(header, {}, seed) == plain
++
++
++def test_restoration_when_generation_fails(monkeypatch):
++    import abm.world as w
++    import abm.loop as loop
++    import abm.ledger as ledger
++    import worldvariant as variant
++    hooks = w.generate_trial, loop._ledger_record, ledger.Ledger.append
++    saved = [dict(d) for d in (variant.INFO, variant.CFG, variant.STATS)]
++    def fail(*args, **kwargs):
++        raise RuntimeError("検査用の失敗")
++    monkeypatch.setattr(w, "generate_world", fail)
++    with pytest.raises(RuntimeError, match="検査用の失敗"):
++        reconstruct_world(dict(run_seed=1, trial_count=30), {"world_cue": 0.8}, None)
++    assert (w.generate_trial, loop._ledger_record, ledger.Ledger.append) == hooks
++    assert [dict(d) for d in (variant.INFO, variant.CFG, variant.STATS)] == saved
+diff --git a/tools/extrap_reader.py b/tools/extrap_reader.py
+index 4d2d87e..3f1a2ca 100644
+--- a/tools/extrap_reader.py
++++ b/tools/extrap_reader.py
+@@ -19,6 +19,47 @@ import os
+ from collections import defaultdict
+ 
+ 
++def world_cue_probability(header, flags):
++    """台帳又は flag.json に記録された世界 v4 の確率を読む。0 も有効な確率。"""
++    probabilities = []
++    for metadata in (header, flags):
++        value = metadata.get("world_cue")
++        if value is None or value is False:
++            continue
++        if isinstance(value, bool):
++            value = metadata.get("world_cue_p", 0.8)
++        probability = float(value)
++        if not 0.0 <= probability <= 1.0:
++            raise ValueError(f"世界 v4 の確率が範囲外: {probability}")
++        probabilities.append(probability)
++    if len(set(probabilities)) > 1:
++        raise ValueError(f"台帳と flag.json の世界 v4 の確率が違う: {probabilities}")
++    return probabilities[0] if probabilities else None
++
++
++def reconstruct_world(header, flags, seed):
++    """記録された旗で世界を復元し、包みと控えを復元前に戻す。模型は走らせない。"""
++    import abm.world as world_module
++    kwargs = dict(seed=seed, holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
++    agents = header.get("agent_ids", ["agent"])
++    probability = world_cue_probability(header, flags)
++    if probability is None:
++        return world_module.generate_world(header["run_seed"], header["trial_count"], agents, **kwargs)
++    import abm.ledger as ledger
++    import abm.loop as loop
++    import worldvariant
++    hooks = world_module.generate_trial, loop._ledger_record, ledger.Ledger.append
++    saved = [(values, dict(values)) for values in (worldvariant.INFO, worldvariant.CFG, worldvariant.STATS)]
++    try:
++        worldvariant.install(probability)
++        return world_module.generate_world(header["run_seed"], header["trial_count"], agents, **kwargs)
++    finally:
++        world_module.generate_trial, loop._ledger_record, ledger.Ledger.append = hooks
++        for values, previous in saved:
++            values.clear()
++            values.update(previous)
++
++
+ def _side_by_trial(path):
+     out = defaultdict(lambda: defaultdict(list))
+     if path and os.path.exists(path):
+@@ -42,7 +83,6 @@ def _answers_by_trial(path):
+ def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
+     from abm.loop import _apply, _json_bytes
+     from abm.seed import load_seed
+-    from abm.world import generate_world
+     root = arm_root
+     fl = json.load(open(os.path.join(root, "flag.json"), encoding="utf-8"))
+     repo = os.path.dirname(os.path.dirname(os.path.abspath(__import__("abm").__file__)))
+@@ -55,8 +95,7 @@ def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
+     answers = _answers_by_trial(os.path.join(root, "side", cell, f"{sd}.answers.csv"))
+     with gzip.open(led, "rt", encoding="utf-8") as f:
+         header = json.loads(next(f))
+-        world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
+-                               holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
++        world = reconstruct_world(header, fl, load_seed(seedf))
+         if check_world and world.world_hash != header["world_hash"]:
+             raise RuntimeError(f"世界の指紋が合わない {led}")
+         state = None
+diff --git a/tools/roletarget_recompute.py b/tools/roletarget_recompute.py
+index 1ec259a..601a32d 100644
+--- a/tools/roletarget_recompute.py
++++ b/tools/roletarget_recompute.py
+@@ -23,9 +23,10 @@ from multiprocessing import Pool
+ 
+ W = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ sys.path[:0] = [os.path.join(W, "tools"), W]
++_HISTORY_KEYS = {}  # 不変のキー文字列の読みだけを再利用。名前の回数は毎回その試行から読む。
+ 
+ 
+-def _install():
++def _install(*, strict_pc=False):
+     """tools/v3_run.py worker と同じ順で、照合にかかわる差し替えだけを入れる（書き出しはしない）。"""
+     import io
+     import fixorder2
+@@ -37,6 +38,9 @@ def _install():
+     fix2.install(full=True)                # :392
+     v39._install_candidates()              # v39.install の中（:431）
+     ustruct.install_matching()             # ustruct.install（:443）の照合の部分
++    if strict_pc:
++        import strictpc
++        strictpc.install()
+     return v39, v310be
+ 
+ 
+@@ -65,7 +69,9 @@ def _restore_def(dd, argmap):
+ def _restore_hist(sh, R):
+     out = {}
+     for k, v in sh.items():
+-        key = ast.literal_eval(k)
++        if k not in _HISTORY_KEYS:
++            _HISTORY_KEYS[k] = ast.literal_eval(k)
++        key = _HISTORY_KEYS[k]
+         if key[0] != R:
+             continue
+         out[key] = dict(v) if isinstance(v, dict) else frozenset(v)
+@@ -90,7 +96,8 @@ def one(args):
+     root, cell, seed, out_dir = args
+     from abm.loop import _json_bytes
+     from extrap_reader import iter_run
+-    v39, v310be = _install()
++    flags = json.load(open(os.path.join(root, "flag.json"), encoding="utf-8"))
++    v39, v310be = _install(strict_pc=bool(flags.get("strict_pc")))
+     rows = []
+     st = dict(trials=0, R_used=0, check1_seats=0, check1_mismatch=0, check2_mismatch=0, hash_mismatch=0, args_unrestored=0,
+               score_R_differs=0, answer_R_differs=0, spoken_first_differs=0)
+@@ -160,6 +167,10 @@ def one(args):
+             rec.update(n_cands=len(cands), hid_cand=int(bool(hid)), hid_first_k=(hid[0]["k"] if hid else ""),
+                        hid_correct=(hid[0]["correct"] if hid else ""), cands=json.dumps(cinfo, ensure_ascii=False))
+             rows.append(rec)
++        if flags.get("strict_pc"):
++            # 予測の後の会計で、本人がこの試行に見たものだけを控える。次の試行の照合から使う。
++            import strictpc
++            strictpc.record_kinds(wt.target_graph_partial, (wt.held_out_edge,) if tr["disclosed"] else ())
+         prev_hash = row["agent_state_snapshot_hash"]
+     out = os.path.join(out_dir, f"{cell}_seed{seed:03d}.roletarget.csv")
+     keys = ["seed", "trial", "R_used", "answered", "disclosed", "source", "slot", "seat_state", "hit", "cid", "cid_why", "cls",
+@@ -180,7 +191,7 @@ def main():
+         s = int(os.path.basename(p)[4:7])
+         if s in seeds:
+             jobs.append((root, os.path.basename(os.path.dirname(p)), s, out_dir))
+-    with Pool(min(8, len(jobs))) as pool:
++    with Pool(min(8, len(jobs)), maxtasksperchild=1) as pool:
+         res = pool.map(one, jobs)
+     json.dump(res, open(os.path.join(out_dir, "checks.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+     tot = {k: sum(r[k] for r in res) for k in res[0] if k not in ("seed", "cell", "examples")}
