@@ -24,15 +24,21 @@ class Budget(Exception):
 
 def _post(url, body, headers, timeout=120):
     req = urllib.request.Request(url, data=json.dumps(body).encode(), headers={**headers, "User-Agent": UA, "Content-Type": "application/json"})
-    for k in range(4):
+    # 混み合い（429・5xx・529）と通信の途切れは、待って 8 回まで問い直す（格子の走行で並行を増やすため。2026-10-01 深夜）
+    for k in range(8):
         try:
             return json.load(urllib.request.urlopen(req, timeout=timeout))
         except urllib.error.HTTPError as e:
             msg = e.read()[:300].decode("utf-8", "replace")
-            if e.code in (429, 500, 502, 503, 529) and k < 3:
-                time.sleep(5 * (k + 1))
+            if e.code in (429, 500, 502, 503, 529) and k < 7:
+                time.sleep(min(60, 10 * (k + 1)))
                 continue
             raise RuntimeError(f"HTTP {e.code}：{msg}") from None
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if k < 7:
+                time.sleep(min(60, 10 * (k + 1)))
+                continue
+            raise RuntimeError(f"通信の失敗：{type(e).__name__}") from None
 
 
 def set_ledger(path):
