@@ -8,7 +8,11 @@
 答えの形：提供元の形の指定（Haiku：output_config.format の json_schema、Together：response_format の json_schema）。言葉での指示は補助。
 推論：どの模型も推論の設定は切る（Qwen は reasoning: {enabled: false}。全条件で共通にする前提）。推論に使った量と、上限で切れたかを記録する。
 形が崩れたとき：今まで（stage4.py）と同じく 2 回まで問い直し、それでも読めなければ「形の崩れ」。上限で切れたもの（finish_reason／stop_reason が長さ）は別に数える。
-使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/stage_d.py <出力の場所> <模型> <世界> <組の種>'"""
+使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/stage_d.py <出力の場所> <模型> <世界> <組の種> [各場合の例の数（既定 2）] [推論の予算（Haiku の拡張思考、既定なし）]'
+追記（2026-10-01 夕方の返事の 3）：例の数（各場合 2 又は 4）と推論の有無を変えられる。例は各場合の 1・2 番目が 2 例のときと同じ場面（4 例は
+  その 2 つに 3・4 番目を足したもの）、順は組の種と例の数からでたらめ。推論ありのとき出力の上限は 推論の予算 ＋ 100。
+  推論の中身は記録に残すだけで、ほかの問い合わせには渡さない。推論に使った量（推論の文字数と、出力のトークン数 − 答えの部分のトークン数の見積もり）と、
+  上限で切れたか（stop_reason が max_tokens）を記録する。"""
 import json
 import os
 import random
@@ -51,14 +55,18 @@ def prompt(history, scene):
     return "\n".join(parts)
 
 
+THINK = [None]
+
+
 def call(model, content, what):
     t0 = time.time()
     if model == api.HAIKU:
-        r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=MAXTOK, what=what,
-                                    output_format={"type": "json_schema", "schema": SCHEMA})
+        r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=MAXTOK + (THINK[0] or 0), what=what,
+                                    output_format={"type": "json_schema", "schema": SCHEMA}, thinking_budget=THINK[0])
         text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
         cut = r.get("stop_reason") == "max_tokens"
-        reasoning = None
+        th = "".join(b.get("thinking", "") for b in r.get("content", []) if b.get("type") == "thinking")
+        reasoning = th if THINK[0] else None
     else:
         rf = {"type": "json_schema", "json_schema": {"name": "answer", "schema": SCHEMA}}
         r, u, cost = api.together_chat(model, [{"role": "user", "content": content}], max_tokens=MAXTOK, what=what, response_format=rf)
@@ -70,14 +78,14 @@ def call(model, content, what):
     return text, u, cost, time.time() - t0, cut, reasoning, rt
 
 
-def build(set_seed, world):
+def build(set_seed, world, per_case=2):
     voc = w.vocab(set_seed)
     hist = []
     for k, (typ, cue) in enumerate(w.CASES):
-        for j in range(2):
+        for j in range(per_case):
             text, rec = w.render_v2(w.relations(typ, cue, world), w.DOOR_PATH, random.Random(f"D-hist|{set_seed}|{world}|{k}|{j}"), voc)
             hist.append({"text": text, "answer": rec["truth_symbol"], "case": f"{typ}・{cue}"})
-    random.Random(f"D-order|{set_seed}").shuffle(hist)
+    random.Random(f"D-order|{set_seed}" if per_case == 2 else f"D-order|{set_seed}|{per_case}").shuffle(hist)
     tests = []
     for k, (typ, cue) in enumerate(w.CASES):
         for j in range(4):
@@ -88,10 +96,12 @@ def build(set_seed, world):
 
 def main():
     out, model, world, set_seed = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
+    per_case = int(sys.argv[5]) if len(sys.argv) > 5 else 2
+    THINK[0] = int(sys.argv[6]) if len(sys.argv) > 6 and sys.argv[6] not in ("0", "none") else None
     os.makedirs(out, exist_ok=True)
     api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
-    hist, tests = build(set_seed, world)
-    tag = f"{model.split('/')[-1]}_w{world}_set{set_seed}"
+    hist, tests = build(set_seed, world, per_case)
+    tag = f"{model.split('/')[-1]}_w{world}_set{set_seed}" + ("" if per_case == 2 and not THINK[0] else f"_例{per_case * 4}_推論{THINK[0] or 'なし'}")
     log = os.path.join(out, f"{tag}.jsonl")
     done = {}
     if os.path.exists(log):
@@ -107,7 +117,8 @@ def main():
             text, u, cost, sec, cut, reasoning, rt = call(model, content if k == 0 else content + "\n" + s4.STRICT, f"段D {tag} 問 {q} 試み {k + 1}")
             got = s4.parse(text)
             tries.append({"出力": text, "使用量": u, "費用": cost, "秒": round(sec, 2), "上限で切れた": cut, "推論の量": rt,
-                          "推論の欄あり": reasoning is not None})
+                          "推論の欄あり": reasoning is not None, "推論の文字数": len(reasoning) if reasoning else 0,
+                          "推論の中身": reasoning if reasoning else None})
             if got or cut:
                 break
         row = {"問": q, "場合": t["case"], "正解": t["answer"], "試み": tries}
@@ -128,7 +139,10 @@ def main():
                  "形の崩れ・上限": sum(1 for r in rs if r["判定"] in ("形の崩れ", "上限で切れた"))}
     best = sum(v["最もありそうな答えが正しい"] for v in by.values())
     passed = best >= 15 and all(v["最もありそうな答えが正しい"] >= 3 for v in by.values())
-    summ = {"模型": model, "世界": world, "組の種": set_seed, "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
+    summ = {"模型": model, "世界": world, "組の種": set_seed, "各場合の例の数": per_case, "推論の予算": THINK[0],
+            "上限で切れた問い": sum(1 for r in rows if any(t["上限で切れた"] for t in r["試み"])),
+            "出力のトークン（中央値・最大）": (sorted(t["使用量"].get("output_tokens", t["使用量"].get("completion_tokens", 0)) for r in rows for t in r["試み"])[len(rows) // 2],
+                                    max(t["使用量"].get("output_tokens", t["使用量"].get("completion_tokens", 0)) for r in rows for t in r["試み"])), "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
             "黙り": sum(1 for r in rows if r["判定"] == "黙り"), "費用（これまでの合計）": round(api.spent(), 4),
             "履歴の場合の並び": [h["case"] for h in hist]}
     json.dump(summ, open(os.path.join(out, f"{tag}_要約.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

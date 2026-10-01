@@ -87,9 +87,14 @@ def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperatu
     return r, u, cost
 
 
-def haiku_chat(messages, *, max_tokens, what, system=None, temperature=0.0, output_format=None):
+def haiku_chat(messages, *, max_tokens, what, system=None, temperature=0.0, output_format=None, thinking_budget=None):
     _guard(0.01)
-    body = {"model": HAIKU, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
+    body = {"model": HAIKU, "messages": messages, "max_tokens": max_tokens}
+    if thinking_budget:
+        # 拡張思考（推論）：温度は指定しない（提供元の決まり）。推論の中身は記録に残すが、次の問い合わせには持ち越さない
+        body["thinking"] = {"type": "enabled", "budget_tokens": int(thinking_budget)}
+    elif temperature is not None:
+        body["temperature"] = temperature
     if output_format:
         body["output_config"] = {"format": output_format}
     if system:
