@@ -123,15 +123,19 @@ def render(rels, hidden, rng, voc):
                               "truth_symbol": voc[truth]}
 
 
-def make_set(set_seed, world, view="v1"):
+def make_set(set_seed, world, view="v1", mult=1, door_all=False):
     """一組：学習の系列 40 場面と試験の場面。世界 1・2 で順番・伏せ方・番号の引き方は同じ（述語だけ表に従って変わる）。
-    view＝"v2" のときは見せ方 v2（render_v2：字下げの決まった順）で書く。順番・伏せ方・番号は v1 と同じ（乱数の引き方が同じ）。"""
+    view＝"v2" のときは見せ方 v2（render_v2：字下げの決まった順）で書く。順番・伏せ方・番号は v1 と同じ（乱数の引き方が同じ）。
+    mult：各場合の場面の数を COUNTS の何倍にするか（2 なら 80 場面）。door_all：全部の場面でドアを伏せる。どちらも乱数の引き方の規則は同じ。"""
     voc = vocab(set_seed)
     render = globals()["render_v2"] if view == "v2" else globals()["render"]
     rng = random.Random(f"order|{set_seed}")
-    seq = [c for c in CASES for _ in range(COUNTS[c])]
+    seq = [c for c in CASES for _ in range(COUNTS[c] * mult)]
     rng.shuffle(seq)
     door_pos = set(rng.sample(range(len(seq)), len(seq) // 2))
+    if door_all:
+        # 全部の場面でドアを伏せる（委任書「全履歴の段階」2026-10-02 朝の段階 2・4）。乱数の流れを変えないよう、引いたうえで全部にする
+        door_pos = set(range(len(seq)))
     series = []
     seen = {c: 0 for c in CASES}
     for i, (typ, cue) in enumerate(seq):
