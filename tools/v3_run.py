@@ -526,6 +526,15 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import routelog
         routelog.install(str(side_dir / f"seed{task['seed']:03d}.routing.jsonl"))
+    if task.get("use_forget") is not None:
+        # ★ 使用で強める腕 D（2026-10-01 昼の予約の委任書、D-最小）：tools/useforget.py。今の B の λ の判断の代わりに、名前の使用の強さ S＜τ で薄くする。
+        #   ほかの差し替えのすべてのあと（一番外）に入れる（試験・腕 C・--cf-value の予測は数えない）
+        if not (task.get("v39") and task.get("v310_be")):
+            raise ValueError("--use-forget は --v39 --v310-be と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import useforget
+        useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"), tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]),
+                          dump_s_path=(str(side_dir / f"seed{task['seed']:03d}.useforget_S.f64") if task.get("use_forget_dump_s") else None))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -539,6 +548,8 @@ def worker(task: dict) -> dict:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("v310_be"):
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
+    if task.get("use_forget") is not None:
+        rec["useforget"] = sys.modules["useforget"].close()
     if task.get("hist_role"):
         rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if task.get("u_struct"):
@@ -695,6 +706,9 @@ def main() -> None:
                     help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--use-forget", type=float, default=None,
+                    help="使用で強める腕 D：名前の使用の強さ S＜τ の席を薄くする（τ。-inf なら薄くしない＝較正用）。今の B の λ の判断の代わり（tools/useforget.py）")
+    ap.add_argument("--use-forget-dump-s", action="store_true", help="較正用：試行 100 以降の各試行の終わりに、生きている席の S を書き出す")
     ap.add_argument("--cf-learn", action="store_true",
                     help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
     ap.add_argument("--e-price", type=float, default=None,
@@ -793,7 +807,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -817,7 +831,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -839,6 +853,7 @@ def main() -> None:
                                                     "answer_gap": args.answer_gap, "probe_world": args.probe_world,
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
+                                                    "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
