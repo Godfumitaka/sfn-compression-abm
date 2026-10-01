@@ -281,6 +281,11 @@ def unregister(g) -> None:
     REG.pop(id(g), None)
 
 
+# ★ 照合の候補の作り方の差し込み口（既定は空＝今と同じ）。--strict-pc（tools/strictpc.py）が、定義の行でない引数のうち
+#   控えた種類が関係のものを「関係」とみなす関数を入れる：LEFT_REL[0](照合のグラフ, 基の引数, 相手の引数が見えている関係か) → bool
+LEFT_REL: list = []
+
+
 def _install_candidates():
     import abm.sme as sme
     from abm.sme import AlignmentCandidate
@@ -313,7 +318,8 @@ def _install_candidates():
                             break
                         relation_pairs.append((left_arg, right_arg))
                         continue
-                    left_is_relation = left_arg in base_relation_ids
+                    left_is_relation = left_arg in base_relation_ids or (LEFT_REL[0](base_graph, left_arg, right_arg in partial_relation_ids)
+                                                                         if LEFT_REL else False)
                     right_is_relation = right_arg in partial_relation_ids
                     right_is_unobserved = (not right_is_relation) and (right_arg not in partial_entity_ids)
                     if left_is_relation and right_is_unobserved:

@@ -117,8 +117,10 @@ def filter_candidates(cands, base_graph, partial_graph):
     urows = {}
     if "ustruct" in sys.modules:
         urows = sys.modules["ustruct"].UREG.get(id(base_graph), {}) or {}
-    def_ids = base_ids | frozenset(urows)
-    base_ents = frozenset(e.entity_id for e in base_graph.entities)
+    def_ids = base_ids | frozenset(urows) | RELPOS.get(id(base_graph), frozenset())
+    base_ents = frozenset(e.entity_id for e in base_graph.entities) - RELPOS.get(id(base_graph), frozenset())
+    if MODE[0] == "ii":
+        base_ents = base_ents - NONROW.get(id(base_graph), frozenset())
     direct = {(c.base_relation_id, c.partial_relation_id): c for c in cands}
     bpred = {r.relation_id: r.predicate for r in base_graph.relations}
     tpred = {r.relation_id: r.predicate for r in partial_graph.relations}
@@ -244,12 +246,179 @@ def _pairdump(real_select):
 
 PREV: list = []
 
+# ---------------------------------------------------------------- 定義の行の引数の種類の控え（2026-10-01 11 時台の返事、段 3.5 の (iii)）
+# 控え方：本人が見た場面（本物の試行の会計の段の入口の提示。試験の場面は入れない）の関係ごとに、引数の種類を決めて控える。
+#   場面の関係の ID なら「関係」、場面の物の一覧にあれば「物」、どちらでもない（伏せられていた関係を指す ID）なら「関係」。研究者の側の情報は使わない。
+#   定義の行は、本人が前に見た場面（逐語の記憶の場面）の関係なので、行の関係 ID ごとの控え（KINDS）で、誕生・同化・仮の誕生のどれでも同じ種類になる。
+# 使い方：定義のグラフ（tools/v39.py v39_graph）を作るとき、行でない引数のうち控えた種類が関係のもの（RELPOS）を物の一覧から外す。
+#   照合の候補（v39・ustruct の LEFT_REL）では、それを「まだ分からない関係の位置」とし、相手の見えている関係・見えていない ID と関係の子の対にする。
+#   並行連結の確かめでは、見えていない子と同じく許す（基の側の見えていない子）。
+# 費用：tools/v39.py structure_bits の引数の符号を、控えた種類で数える（関係なら clog2(行の数)、物の数からは外す）。差を STATS に残す。
+KINDS: dict = {}       # 関係 ID → 引数ごとの種類（"関係"／"物"）の組
+RELPOS: dict = {}      # id(定義のグラフ) → 行でない引数のうち、控えた種類が関係のもの
+NONROW: dict = {}      # id(定義のグラフ) → 行でない引数（(ii) の記録用）
+MODE: list = ["iii"]   # "iii"（本番）／"ii"（記録だけ：種類を相手の側で決める）
+
+
+def record_kinds(scene, extra=()):
+    """extra：開示で本人に届いた関係（会計の段の入口で、開示があればその関係も同じ見分けで控える）。"""
+    rel = {r.relation_id for r in scene.relations} | {r.relation_id for r in extra}
+    ent = {e.entity_id for e in scene.entities}
+    for r in tuple(scene.relations) + tuple(extra):
+        if r.relation_id not in KINDS:
+            KINDS[r.relation_id] = tuple("関係" if a in rel else "物" if a in ent else "関係" for a in r.arguments)
+
+
+def _relpos_of(d):
+    rel_ids = {row.relation.relation_id for row in d.constituents}
+    out, nonrow, missing = set(), set(), 0
+    for row in d.constituents:
+        k = KINDS.get(row.relation.relation_id)
+        if k is None:
+            missing += 1
+        for i, a in enumerate(row.relation.arguments):
+            if a in rel_ids:
+                continue
+            nonrow.add(a)
+            if k is not None and i < len(k) and k[i] == "関係":
+                out.add(a)
+    return frozenset(out), frozenset(nonrow), missing
+
+
+def _left_rel(g, a, right_is_relation):
+    if MODE[0] == "off":
+        return False
+    if MODE[0] == "ii":
+        return a in NONROW.get(id(g), ()) and right_is_relation
+    return a in RELPOS.get(id(g), ())
+
+
+def _install_kinds():
+    import abm.loop as loop
+    import v39
+    from abm.domains import Entity, RelationGraph
+    real_acc = loop._update_accounting
+
+    def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):
+        record_kinds(scene, (revealed_edge,) if (coin.f_fired and revealed_edge is not None) else ())
+        return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)
+
+    loop._update_accounting = update_accounting
+    real_graph, real_unreg = v39.v39_graph, v39.unregister
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+        STATS["kinds_missing_rows"] += missing
+        if MODE[0] == "off":
+            SHADOW[id(g)] = relpos
+            return g
+        if MODE[0] == "ii" or not relpos:
+            NONROW[id(g)] = nonrow
+            return g
+        g2 = RelationGraph(graph_id=g.graph_id, entities=tuple(e for e in g.entities if e.entity_id not in relpos), relations=g.relations)
+        entry = v39.REG.pop(id(g))
+        v39.REG[id(g2)] = (g2, entry[1], entry[2])
+        us = sys.modules.get("ustruct")
+        if us is not None and id(g) in us.UREG:
+            us.UREG[id(g2)] = us.UREG.pop(id(g))
+        RELPOS[id(g2)] = relpos
+        NONROW[id(g2)] = nonrow
+        if KINDLOG:
+            import json
+            for row in d.constituents:
+                k = KINDS.get(row.relation.relation_id)
+                if k is not None:
+                    KINDLOG[0].write(json.dumps([row.relation.relation_id, list(row.relation.arguments), list(k)]) + "\n")
+        return g2
+
+    def unregister(g):
+        SHADOW.pop(id(g), None)
+        RELPOS.pop(id(g), None)
+        NONROW.pop(id(g), None)
+        real_unreg(g)
+
+    v39.v39_graph = v39_graph
+    v39.unregister = unregister
+    v39.LEFT_REL.clear()
+    v39.LEFT_REL.append(_left_rel)
+    real_sb = v39.structure_bits
+
+    def structure_bits(d):
+        old = real_sb(d)
+        relpos, _nonrow, _m = _relpos_of(d)
+        if not relpos or MODE[0] == "off":
+            return old
+        rel_ids = {row.relation.relation_id for row in d.constituents}
+        ents = {a for row in d.constituents for a in row.relation.arguments if a not in rel_ids and a not in relpos}
+        m = len({row.slot_index for row in d.constituents})
+        e = len(ents)
+        bits = v39.clog2(v39.CFG["T"]) + v39.I(m) + v39.I(e)
+        for row in d.constituents:
+            bits += v39.I(len(row.relation.arguments))
+            for a in row.relation.arguments:
+                bits += 1 + (v39.clog2(m) if (a in rel_ids or a in relpos) else v39.clog2(e))
+        STATS["struct_calls_changed"] += 1
+        STATS["struct_bits_diff"] += bits - old
+        return bits
+
+    v39.structure_bits = structure_bits
+    real_map = v39.map_v39
+
+    def map_v39(d, slot_history, scene):
+        g, al = real_map(d, slot_history, scene)
+        if ALT_II:
+            # 記録だけ：(ii)（種類を相手の側で決める）なら写像が変わったか。本番の写像には何も返さない
+            MODE[0] = "ii"
+            try:
+                _g2, al2 = real_map(d, slot_history, scene)
+            finally:
+                MODE[0] = "iii"
+            STATS["alt_ii_calls"] += 1
+            if dict(al.relation_mapping) != dict(al2.relation_mapping) or dict(al.entity_mapping) != dict(al2.entity_mapping):
+                STATS["alt_ii_changed"] += 1
+                for row in d.constituents:
+                    rid = row.relation.relation_id
+                    if al.relation_mapping.get(rid) != al2.relation_mapping.get(rid):
+                        STATS["alt_ii_seat_" + v39.seat_state(d, row, slot_history)] += 1
+        return g, al
+
+    v39.map_v39 = map_v39
+
+
+KINDLOG: list = []
+ALT_II: list = []
+SHADOW: dict = {}     # "off" のとき：id(定義のグラフ) → 控えから見た RELPOS（使わない。5 例の確かめ用）
+PROBE: list = []      # 環境変数 STRICTPC_PROBE（5 例の確かめ）：[{親の対, 基の子, 相手の子}] と結果のファイル
+
+
+def _probe5(prev, cands, out, g, T):
+    import json
+    keep = {(c.base_relation_id, c.partial_relation_id) for c in out}
+    have = {(c.base_relation_id, c.partial_relation_id) for c in cands}
+    for ex in PROBE[0]:
+        par = tuple(ex["親"][:2])
+        if par in have and par not in keep and ex["基の子"][0] in {r.relation_id for r in g.relations}:
+            MODE[0] = "iii"
+            RELPOS[id(g)] = SHADOW[id(g)]
+            try:
+                c2 = prev(g, T)
+                o2, n2, r2, _u = filter_candidates(c2, g, T)
+            finally:
+                RELPOS.pop(id(g), None)
+                MODE[0] = "off"
+            PROBE[1].write(json.dumps({"親": list(par), "控えを使わない：親が残る": False, "控えを使う：親が残る": par in {(c.base_relation_id, c.partial_relation_id) for c in o2},
+                                       "控えを使わない：落とした親の候補": len(cands) - len(out), "控えを使う：落とした親の候補": n2,
+                                       "控えから見た関係の位置": sorted(SHADOW[id(g)])}, ensure_ascii=False) + "\n")
+            PROBE[1].flush()
+
 
 def install() -> None:
     """ほかの候補の差し替え（fix2・v39・ustruct）のあと、照合を使う前に入れる。"""
     import abm.sme as sme
     STATS.clear()
-    STATS.update(calls=0, dropped=0, u_allowed=0, ext_cands=0, unobs_base_allowed=0, reasons=Counter(), use_calls=Counter(), use_dropped=Counter())
+    STATS.update(calls=0, dropped=0, u_allowed=0, ext_cands=0, unobs_base_allowed=0, kinds_missing_rows=0, struct_calls_changed=0,
+                 struct_bits_diff=0, alt_ii_calls=0, alt_ii_changed=0, alt_ii_seat_F=0, alt_ii_seat_H=0, alt_ii_seat_U=0, reasons=Counter(), use_calls=Counter(), use_dropped=Counter())
     prev = sme._alignment_candidates
     PREV.clear()
     PREV.append(prev)
@@ -258,6 +427,23 @@ def install() -> None:
     PAIRDUMP.clear()
     if os.environ.get("STRICTPC_SAMPLE"):
         SAMPLE.append(open(os.environ["STRICTPC_SAMPLE"], "w", encoding="utf-8"))
+    KINDS.clear()
+    RELPOS.clear()
+    NONROW.clear()
+    KINDLOG.clear()
+    ALT_II.clear()
+    MODE[0] = "off" if os.environ.get("STRICTPC_KINDS_OFF") else "iii"
+    SHADOW.clear()
+    PROBE.clear()
+    if os.environ.get("STRICTPC_PROBE"):
+        import json as _j
+        PROBE.extend([_j.load(open(os.environ["STRICTPC_PROBE"], encoding="utf-8")), open(os.environ["STRICTPC_PROBE"] + ".out", "w", encoding="utf-8")])
+    if os.environ.get("STRICTPC_KINDLOG"):
+        KINDLOG.append(open(os.environ["STRICTPC_KINDLOG"], "w", encoding="utf-8"))
+    if os.environ.get("STRICTPC_ALT_II"):
+        ALT_II.append(True)
+    if "v39" in sys.modules:
+        _install_kinds()
     if os.environ.get("STRICTPC_PAIRDUMP"):
         import v39
         PAIRDUMP.extend([open(os.environ["STRICTPC_PAIRDUMP"], "w", encoding="utf-8"), int(os.environ.get("STRICTPC_PAIRDUMP_N", "3000"))])
@@ -270,6 +456,8 @@ def install() -> None:
             cands, n_ext = cands_ext(base_graph, partial_graph)
             STATS["ext_cands"] += n_ext
         out, n, reasons, allowed_u = filter_candidates(cands, base_graph, partial_graph)
+        if PROBE and id(base_graph) in SHADOW:
+            _probe5(prev, cands, out, base_graph, partial_graph)
         STATS["u_allowed"] += allowed_u["(c) で許した U の子"]
         STATS["unobs_base_allowed"] += allowed_u["基の側の見えていない子"]
         u = _use()
@@ -289,8 +477,10 @@ def install() -> None:
 
 
 def stats() -> dict:
-    for f in (SAMPLE[:1] + PAIRDUMP[:1]):
+    for f in (SAMPLE[:1] + PAIRDUMP[:1] + KINDLOG[:1]):
         f.flush()
     return {"calls": STATS.get("calls", 0), "dropped": STATS.get("dropped", 0), "u_allowed": STATS.get("u_allowed", 0), "ext_cands": STATS.get("ext_cands", 0),
-            "unobs_base_allowed": STATS.get("unobs_base_allowed", 0), "reasons": dict(STATS.get("reasons", {})),
+            "unobs_base_allowed": STATS.get("unobs_base_allowed", 0),
+            **{k: STATS.get(k, 0) for k in ("kinds_missing_rows", "struct_calls_changed", "struct_bits_diff", "alt_ii_calls", "alt_ii_changed",
+                                            "alt_ii_seat_F", "alt_ii_seat_H", "alt_ii_seat_U")}, "reasons": dict(STATS.get("reasons", {})),
             "use_calls": dict(STATS.get("use_calls", {})), "use_dropped": dict(STATS.get("use_dropped", {}))}
