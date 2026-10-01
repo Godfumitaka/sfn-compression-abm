@@ -436,6 +436,11 @@ def worker(task: dict) -> dict:
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
             v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")))
+            if task.get("e_price") is not None:
+                # ★ まとめの値段（--e-price、2026-10-01 午前・改訂の段 2）：E（tools/v310be.py choose_and_register の K＝A＋r＋λ dC）の λ だけを
+                #   別の値にする。B（忘れる判断）は --v39-price のまま
+                v310be.CFG["lam"] = float(task["e_price"])
+                v310be.STATS["cfg"]["lam"] = v310be.CFG["lam"]
         _REAL["theta_impl"] = v39.CTX["apply"]
         if task.get("u_struct"):
             # ★ U の照合（--u-struct）と覚え直しの初期の評価（--relearn-init）：tools/ustruct.py・tools/relearninit.py。v39・v310be のあとに入れる
@@ -681,6 +686,8 @@ def main() -> None:
                     help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--e-price", type=float, default=None,
+                    help="まとめの値段：E（新しい場面を既存の定義にまとめるか新しく作るか）の λ を、--v39-price（B の忘れる値段）と別に与える（--v310-be と一緒に）")
     ap.add_argument("--cf-value", action="store_true",
                     help="反実仮想の保持価値の診断（記録だけ）：開示のあった試行で、選ばれた定義の席を一段薄くした写しで答え直し、書き直し費用の差を書く（tools/cfvalue.py）")
     ap.add_argument("--strict-pc", action="store_true",
@@ -775,7 +782,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -799,7 +806,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -820,7 +827,7 @@ def main() -> None:
                                                     "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
                                                     "answer_gap": args.answer_gap, "probe_world": args.probe_world,
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
-                                                    "strict_pc": args.strict_pc, "cf_value": args.cf_value,
+                                                    "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
