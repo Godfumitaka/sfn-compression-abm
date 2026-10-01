@@ -6,7 +6,7 @@
 定義：その状況の定義を作る場面の、構造の関係（abm.abstraction._structural_relation_ids：骨組み 15 本・シール・link）を全部 F の行にしたもの。
   履歴は F の名に 2 回（~/sw_audit の make_state と同じ）。p̂ はお店の辞書の全語に 16 回。
   1〜3 は通らなければ関門で止まる。4・5 は記録だけ。出力：<出力の .json>
-使い方  SW_TREE=<作業場所> SW_FLAGS=u_struct,relearn_init,tie_struct,amb_local python3.12 tools/shop/gate2.py <出力の .json>"""
+使い方  SW_TREE=<作業場所> SW_FLAGS=u_struct,relearn_init,tie_struct,amb_local [SW_STRICT=1] python3.12 tools/shop/gate2.py <出力の .json>"""
 import json
 import os
 import sys
@@ -38,6 +38,10 @@ KW = dict(base_written_at=0, horizon=1740, pricing_rule="spec", refill_rule="one
 WORLD = 2
 RS = "gate2"
 answergap.install()
+if os.environ.get("SW_STRICT"):
+    # ★ --strict-pc（親子の並行連結、段 1 の (c) つき）を、ほかの候補の差し替えのあとに入れる（tools/v3_run.py と同じ順）
+    import strictpc  # noqa: E402
+    strictpc.install()
 
 
 def setup(lam=0.3):
