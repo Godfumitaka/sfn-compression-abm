@@ -503,6 +503,13 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import cfvalue
         cfvalue.install(str(side_dir / f"seed{task['seed']:03d}.cfvalue.jsonl"), agent_id=tuple(task["cfg"]["agent_ids"])[0])
+    if task.get("cf_learn"):
+        # ★ 反実仮想で学ぶ腕 C（--cf-learn、2026-10-01 午前・改訂の段 3）：tools/cflearn.py。v310be のあと、--cf-value のあと、答えごとの記録より前
+        if not (task.get("v39") and task.get("v310_be")):
+            raise ValueError("--cf-learn は --v39 --v310-be と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import cflearn
+        cflearn.install(str(side_dir / f"seed{task['seed']:03d}.cflearn.jsonl"), agent_id=tuple(task["cfg"]["agent_ids"])[0])
     if task.get("dump_answers"):
         # ★ 答えごとの記録（2026-09-30 朝の委任書の 2・3）：tools/answerlog.py。記録だけ（台帳は変わらない）。ほかの差し替えのあと、世界を作る前に入れる
         if not task.get("v39"):
@@ -557,6 +564,8 @@ def worker(task: dict) -> dict:
         rec["strictpc"] = sys.modules["strictpc"].stats()
     if task.get("cf_value"):
         rec["cfvalue"] = sys.modules["cfvalue"].close()
+    if task.get("cf_learn"):
+        rec["cflearn"] = sys.modules["cflearn"].close()
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -686,6 +695,8 @@ def main() -> None:
                     help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--cf-learn", action="store_true",
+                    help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
     ap.add_argument("--e-price", type=float, default=None,
                     help="まとめの値段：E（新しい場面を既存の定義にまとめるか新しく作るか）の λ を、--v39-price（B の忘れる値段）と別に与える（--v310-be と一緒に）")
     ap.add_argument("--cf-value", action="store_true",
@@ -782,7 +793,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -806,7 +817,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -827,7 +838,7 @@ def main() -> None:
                                                     "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
                                                     "answer_gap": args.answer_gap, "probe_world": args.probe_world,
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
-                                                    "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price,
+                                                    "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
