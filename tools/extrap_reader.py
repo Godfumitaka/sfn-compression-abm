@@ -19,6 +19,47 @@ import os
 from collections import defaultdict
 
 
+def world_cue_probability(header, flags):
+    """台帳又は flag.json に記録された世界 v4 の確率を読む。0 も有効な確率。"""
+    probabilities = []
+    for metadata in (header, flags):
+        value = metadata.get("world_cue")
+        if value is None or value is False:
+            continue
+        if isinstance(value, bool):
+            value = metadata.get("world_cue_p", 0.8)
+        probability = float(value)
+        if not 0.0 <= probability <= 1.0:
+            raise ValueError(f"世界 v4 の確率が範囲外: {probability}")
+        probabilities.append(probability)
+    if len(set(probabilities)) > 1:
+        raise ValueError(f"台帳と flag.json の世界 v4 の確率が違う: {probabilities}")
+    return probabilities[0] if probabilities else None
+
+
+def reconstruct_world(header, flags, seed):
+    """記録された旗で世界を復元し、包みと控えを復元前に戻す。模型は走らせない。"""
+    import abm.world as world_module
+    kwargs = dict(seed=seed, holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+    agents = header.get("agent_ids", ["agent"])
+    probability = world_cue_probability(header, flags)
+    if probability is None:
+        return world_module.generate_world(header["run_seed"], header["trial_count"], agents, **kwargs)
+    import abm.ledger as ledger
+    import abm.loop as loop
+    import worldvariant
+    hooks = world_module.generate_trial, loop._ledger_record, ledger.Ledger.append
+    saved = [(values, dict(values)) for values in (worldvariant.INFO, worldvariant.CFG, worldvariant.STATS)]
+    try:
+        worldvariant.install(probability)
+        return world_module.generate_world(header["run_seed"], header["trial_count"], agents, **kwargs)
+    finally:
+        world_module.generate_trial, loop._ledger_record, ledger.Ledger.append = hooks
+        for values, previous in saved:
+            values.clear()
+            values.update(previous)
+
+
 def _side_by_trial(path):
     out = defaultdict(lambda: defaultdict(list))
     if path and os.path.exists(path):
@@ -42,7 +83,6 @@ def _answers_by_trial(path):
 def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
     from abm.loop import _apply, _json_bytes
     from abm.seed import load_seed
-    from abm.world import generate_world
     root = arm_root
     fl = json.load(open(os.path.join(root, "flag.json"), encoding="utf-8"))
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__import__("abm").__file__)))
@@ -55,8 +95,7 @@ def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
     answers = _answers_by_trial(os.path.join(root, "side", cell, f"{sd}.answers.csv"))
     with gzip.open(led, "rt", encoding="utf-8") as f:
         header = json.loads(next(f))
-        world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
-                               holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+        world = reconstruct_world(header, fl, load_seed(seedf))
         if check_world and world.world_hash != header["world_hash"]:
             raise RuntimeError(f"世界の指紋が合わない {led}")
         state = None
