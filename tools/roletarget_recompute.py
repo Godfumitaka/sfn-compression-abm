@@ -91,6 +91,11 @@ def one(args):
     from abm.loop import _json_bytes
     from extrap_reader import iter_run
     v39, v310be = _install()
+    fl = json.load(open(os.path.join(root, "flag.json"), encoding="utf-8"))
+    if fl.get("strict_pc"):
+        # ★ --strict-pc の走行は、同じ照合の直し（tools/strictpc.py）を入れて計算し直す
+        import strictpc
+        strictpc.install()
     rows = []
     st = dict(trials=0, R_used=0, check1_seats=0, check1_mismatch=0, check2_mismatch=0, hash_mismatch=0, args_unrestored=0,
               score_R_differs=0, answer_R_differs=0, spoken_first_differs=0)
