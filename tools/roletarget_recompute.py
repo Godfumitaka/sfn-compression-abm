@@ -25,7 +25,7 @@ W = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(W, "tools"), W]
 
 
-def _install():
+def _install(*, strict_pc=False):
     """tools/v3_run.py worker と同じ順で、照合にかかわる差し替えだけを入れる（書き出しはしない）。"""
     import io
     import fixorder2
@@ -37,6 +37,9 @@ def _install():
     fix2.install(full=True)                # :392
     v39._install_candidates()              # v39.install の中（:431）
     ustruct.install_matching()             # ustruct.install（:443）の照合の部分
+    if strict_pc:
+        import strictpc
+        strictpc.install()
     return v39, v310be
 
 
@@ -90,7 +93,8 @@ def one(args):
     root, cell, seed, out_dir = args
     from abm.loop import _json_bytes
     from extrap_reader import iter_run
-    v39, v310be = _install()
+    flags = json.load(open(os.path.join(root, "flag.json"), encoding="utf-8"))
+    v39, v310be = _install(strict_pc=bool(flags.get("strict_pc")))
     rows = []
     st = dict(trials=0, R_used=0, check1_seats=0, check1_mismatch=0, check2_mismatch=0, hash_mismatch=0, args_unrestored=0,
               score_R_differs=0, answer_R_differs=0, spoken_first_differs=0)
@@ -160,6 +164,10 @@ def one(args):
             rec.update(n_cands=len(cands), hid_cand=int(bool(hid)), hid_first_k=(hid[0]["k"] if hid else ""),
                        hid_correct=(hid[0]["correct"] if hid else ""), cands=json.dumps(cinfo, ensure_ascii=False))
             rows.append(rec)
+        if flags.get("strict_pc"):
+            # 予測の後の会計で、本人がこの試行に見たものだけを控える。次の試行の照合から使う。
+            import strictpc
+            strictpc.record_kinds(wt.target_graph_partial, (wt.held_out_edge,) if tr["disclosed"] else ())
         prev_hash = row["agent_state_snapshot_hash"]
     out = os.path.join(out_dir, f"{cell}_seed{seed:03d}.roletarget.csv")
     keys = ["seed", "trial", "R_used", "answered", "disclosed", "source", "slot", "seat_state", "hit", "cid", "cid_why", "cls",
@@ -180,7 +188,7 @@ def main():
         s = int(os.path.basename(p)[4:7])
         if s in seeds:
             jobs.append((root, os.path.basename(os.path.dirname(p)), s, out_dir))
-    with Pool(min(8, len(jobs))) as pool:
+    with Pool(min(8, len(jobs)), maxtasksperchild=1) as pool:
         res = pool.map(one, jobs)
     json.dump(res, open(os.path.join(out_dir, "checks.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     tot = {k: sum(r[k] for r in res) for k in res[0] if k not in ("seed", "cell", "examples")}
