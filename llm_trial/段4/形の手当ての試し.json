@@ -1,0 +1,52 @@
+[
+ {
+  "模型": "Qwen/Qwen3.8-2.4T-A95B",
+  "案": "案1 指示を強める",
+  "読めた": false,
+  "答え": null,
+  "出力の長さ": 80,
+  "出力の頭": "Looking at the pattern, I need to find what relation is missing where `?` appears in `r22: nape(?, r95)`.\n\nLet me analyze the structure by comparing with past s"
+ },
+ {
+  "模型": "Qwen/Qwen3.8-2.4T-A95B",
+  "案": "案2 上限 400",
+  "読めた": false,
+  "答え": null,
+  "出力の長さ": 400,
+  "出力の頭": "Looking at the scenes, I need to identify the pattern of what predicate fills the `?` position.\n\nLet me analyze the structure around the `?` in each scene:\n\n**S"
+ },
+ {
+  "模型": "claude-haiku-4-5-20251001",
+  "案": "案1 指示を強める",
+  "読めた": true,
+  "答え": {
+   "answer": "repi",
+   "confidence": 0.35,
+   "respond": true,
+   "前後に余計な文字": false
+  },
+  "出力の長さ": 23,
+  "出力の頭": "{\"answer\": \"repi\", \"confidence\": 0.35, \"respond\": true}"
+ },
+ {
+  "模型": "claude-haiku-4-5-20251001",
+  "案": "案2 上限 400",
+  "読めた": false,
+  "答え": null,
+  "出力の長さ": 400,
+  "出力の頭": "I need to find the missing predicate for the relation at r22, which has the form `r22: nape(?, r95)`.\n\nLet me analyze the pattern by looking at the past scenes:"
+ },
+ {
+  "模型": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "案": "案1 指示を強める",
+  "読めた": true,
+  "答え": {
+   "answer": "puga",
+   "confidence": 0.2,
+   "respond": false,
+   "前後に余計な文字": false
+  },
+  "出力の長さ": 21,
+  "出力の頭": "{\"answer\": \"puga\", \"confidence\": 0.2, \"respond\": false}"
+ }
+]
