@@ -72,7 +72,8 @@ def main():
     parser.add_argument('output')
     parser.add_argument('rest', nargs=argparse.REMAINDER)
     args = parser.parse_args()
-    assert args.rest[0] == '--'
+    native_args = args.rest[1:] if args.rest and args.rest[0] == '--' else args.rest
+    assert native_args and native_args[0].startswith('--')
     output = Path(args.output).resolve()
     assert output.is_relative_to(SOURCE.parent) and not output.exists()
     destination = output / 'relabel'
@@ -84,7 +85,7 @@ def main():
     ids = install_names(mapping, args.salt)
     import v3_run
     v3_run.ProcessPoolExecutor = Inline
-    sys.argv = ['tools/v3_run.py', str(destination / 'config_relabeled.json'), str(output), *args.rest[1:]]
+    sys.argv = ['tools/v3_run.py', str(destination / 'config_relabeled.json'), str(output), *native_args]
     try:
         v3_run.main()
     finally:
