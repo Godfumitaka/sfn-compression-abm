@@ -101,7 +101,7 @@ def main():
         n = len(L)
         c = outcome(L.values())
         summ[a] = {"全課題": n, **dict(c)}
-        if a.startswith("shop_"):
+        if a.startswith(("shop_", "cw")):
             S += [f"## {a}", ""]
             S += table("S1 全課題", ["", "数", "割合"], [[k, f"{c[k]:,}", f"{c[k] / n:.1%}"] for k in ["正解", "誤答", "棄権"] + [f"棄権：{r}" for r in reasons] if c[k] or k in ("正解", "誤答", "棄権")])
             dr = []
@@ -186,23 +186,42 @@ def main():
                        f"{v0p}／{len(v0)}（{v0p / len(v0):.0%}）" if v0 else "—", sum(1 for x in xs if x.get("V") is None)])
         V += [f"## {a}", ""] + table("V1 席の種類ごとの利益（開示のあった試行、選ばれた定義の席）",
                                       ["席の種類", "行", "利益 中央値〔四分位〕", "正", "0", "負", "V＝0 のうち利益が正", "候補にならない席（V なし）"], vr)
-        if a.startswith("shop_"):
+        if a.startswith(("shop_", "cw")):
             sig = byk.get("シール", [])
             v2[a] = [[t, len([x for x in sig if t - 100 < x["trial"] <= t]),
                       (sum(x["benefit"] for x in sig if t - 100 < x["trial"] <= t) / max(1, len([x for x in sig if t - 100 < x["trial"] <= t]))),
                       sum(1 for x in sig if t - 100 < x["trial"] <= t and x["benefit"] > 0)] for t in TS + [1800]]
     # V2：世界 1 と世界 2 を並べる
     V += ["## V2 シールの席の利益の時間変化（100 試行ごと：行・平均・正の数）", ""]
-    pairs = sorted({a.replace("shop_w1_", "").replace("shop_w2_", "") for a in v2})
-    for p in pairs:
-        a1, a2 = f"shop_w1_{p}", f"shop_w2_{p}"
+    def wkey(a):
+        for p1, p2 in (("shop_w1_", "shop_w2_"), ("cw1_", "cw2_")):
+            if a.startswith(p1) or a.startswith(p2):
+                return a[len(p1):], p1, p2
+        return a, "", ""
+    pairs = sorted({wkey(a) for a in v2})
+    for p, p1, p2 in pairs:
+        a1, a2 = f"{p1}{p}", f"{p2}{p}"
         rows = []
         for i, t in enumerate(TS + [1800]):
             x1 = v2.get(a1, [[t, 0, 0, 0]] * 18)[i]
             x2 = v2.get(a2, [[t, 0, 0, 0]] * 18)[i]
             rows.append([f"〜{min(t, 1739)}", x1[1], f"{x1[2]:.2f}", x1[3], x2[1], f"{x2[2]:.2f}", x2[3]])
         V += table(p, ["試行", "世界 1 行", "世界 1 平均", "世界 1 正", "世界 2 行", "世界 2 平均", "世界 2 正"], rows)
-    for fn, L in (("お店の世界.md", S), ("strict-pcの有無.md", C), ("cf-value.md", V)):
+    M = ["# まとめ：腕 A・C・F（世界 × 忘れる値段 λ）", "",
+         "記憶のビット＝side の v310be の記録の C_end（試行の終わりの記憶のビット）の、全試行・20 走行の平均。全課題とドアの課題は 20 走行の和。", "",
+         "| 腕 | 平均の記憶のビット | 全課題 正解・誤答・棄権 | ドア（通常）正解・誤答・棄権 | ドア（例外）正解・誤答・棄権 |", "|---|---:|---|---|---|"]
+    for a in arms:
+        if not a.startswith("cw"):
+            continue
+        cs = [r.get("C_end") for _s, r in side_rows(os.path.join(root, a), "jsonl") if r.get("kind") == "v310be" and r.get("C_end") is not None]
+        L = led[a]
+        c = outcome(L.values())
+        dn = outcome([v for v in L.values() if v["door"] and v["cue"] == "n"])
+        de = outcome([v for v in L.values() if v["door"] and v["cue"] == "e"])
+        f3 = lambda x: f"{x['正解']:,}・{x['誤答']:,}・{x['棄権']:,}"  # noqa: E731
+        M.append(f"| {a} | {sum(cs) / len(cs):.1f} | {f3(c)} | {f3(dn)} | {f3(de)} |" if cs else f"| {a} | — | {f3(c)} | {f3(dn)} | {f3(de)} |")
+        summ[a]["平均の記憶のビット"] = (sum(cs) / len(cs)) if cs else None
+    for fn, L in (("まとめ.md", M), ("お店の世界.md", S), ("strict-pcの有無.md", C), ("cf-value.md", V)):
         open(os.path.join(out, fn), "w", encoding="utf-8").write("\n".join(L) + "\n")
     json.dump(summ, open(os.path.join(out, "要約.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("ok", out)

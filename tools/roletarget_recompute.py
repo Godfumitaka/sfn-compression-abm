@@ -96,6 +96,7 @@ def one(args):
         # ★ --strict-pc の走行は、同じ照合の直し（tools/strictpc.py）を入れて計算し直す
         import strictpc
         strictpc.install()
+    strict = bool(fl.get("strict_pc"))
     rows = []
     st = dict(trials=0, R_used=0, check1_seats=0, check1_mismatch=0, check2_mismatch=0, hash_mismatch=0, args_unrestored=0,
               score_R_differs=0, answer_R_differs=0, spoken_first_differs=0)
@@ -166,6 +167,10 @@ def one(args):
                        hid_correct=(hid[0]["correct"] if hid else ""), cands=json.dumps(cinfo, ensure_ascii=False))
             rows.append(rec)
         prev_hash = row["agent_state_snapshot_hash"]
+        if strict:
+            # ★ --strict-pc の定義の行の引数の種類の控え：走行と同じく、この試行の計算のあとで、この試行の提示（と開示）を控えに足す
+            import strictpc
+            strictpc.record_kinds(wt.target_graph_partial, (wt.held_out_edge,) if tr["disclosed"] else ())
     out = os.path.join(out_dir, f"{cell}_seed{seed:03d}.roletarget.csv")
     keys = ["seed", "trial", "R_used", "answered", "disclosed", "source", "slot", "seat_state", "hit", "cid", "cid_why", "cls",
             "n_cands", "hid_cand", "hid_first_k", "hid_correct", "cands"]
