@@ -90,7 +90,7 @@ def main():
     for root in sys.argv[2:]:
         jobs = [(root, os.path.basename(os.path.dirname(p)), int(os.path.basename(p)[4:7]))
                 for p in sorted(glob.glob(os.path.join(root, "ledgers/cells/*/seed*.done"))) if 1 <= int(os.path.basename(p)[4:7]) <= 20]
-        with Pool(8) as pool:
+        with Pool(int(os.environ.get("EP_WORKERS", "8"))) as pool:
             runs = pool.map(one, jobs)
         c = Counter()
         for r in runs:

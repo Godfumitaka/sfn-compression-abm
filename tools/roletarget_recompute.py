@@ -190,7 +190,7 @@ def main():
         s = int(os.path.basename(p)[4:7])
         if s in seeds:
             jobs.append((root, os.path.basename(os.path.dirname(p)), s, out_dir))
-    with Pool(min(8, len(jobs))) as pool:
+    with Pool(min(int(os.environ.get("RT_WORKERS", "8")), len(jobs))) as pool:
         res = pool.map(one, jobs)
     json.dump(res, open(os.path.join(out_dir, "checks.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     tot = {k: sum(r[k] for r in res) for k in res[0] if k not in ("seed", "cell", "examples")}
