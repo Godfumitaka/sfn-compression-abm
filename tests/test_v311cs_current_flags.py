@@ -12,6 +12,7 @@ import strictpc
 import answergap
 import v39
 import v311c
+import probeworld
 from abm.domains import Abstain, Entity, Relation, RelationGraph, VerbatimTrace
 
 
@@ -130,3 +131,29 @@ def test_probe_restores_current_records_and_counter_types():
     assert strictpc.STATS['reasons'] == Counter({'original': 2})
     strictpc.STATS['reasons']['new_after_probe'] += 1
     assert strictpc.STATS['reasons']['new_after_probe'] == 1
+
+
+def test_diagnostics_restore_collective_pending_send(monkeypatch):
+    # 実際の答えを決めた後、診断が別の答えの束を作る場合を再現する。
+    # 保存した同じ控えを複数の診断の後で戻しても、送信は実回答のまま。
+    graph_marker = object()
+    conn_marker = object()
+    original = {'pred': ['answer', 'before', ['x', 'y']], 'graph': graph_marker,
+                'send': True, 'tag': 'n_before', 'to': 1}
+    monkeypatch.setattr(v311c, 'CTX', {'bundle': original, 'tag_counter': 3, 't': 17})
+    monkeypatch.setattr(v311c, 'STATS', {'speak': 1, 'bundles': 1, 'sent': 1})
+    monkeypatch.setattr(v311c, 'CFG', {'q': 0.2, 'conn': conn_marker})
+    identities = [id(v311c.CTX), id(v311c.STATS), id(v311c.CFG)]
+    snap = probeworld._snapshot_modules()
+    for answer in ('diagnostic_one', 'diagnostic_two'):
+        v311c.CTX['bundle'] = {'pred': ['answer', answer, ['x', 'y']], 'send': False,
+                              'tag': 'n_diagnostic', 'to': None}
+        v311c.CTX['tag_counter'] = 99
+        v311c.STATS['sent'] += 7
+        v311c.CFG['q'] = 0.0
+        probeworld._restore_modules(snap)
+        assert v311c.CTX == {'bundle': original, 'tag_counter': 3, 't': 17}
+        assert v311c.STATS == {'speak': 1, 'bundles': 1, 'sent': 1}
+        assert v311c.CFG == {'q': 0.2, 'conn': conn_marker}
+        assert v311c.CTX['bundle']['graph'] is graph_marker
+        assert [id(v311c.CTX), id(v311c.STATS), id(v311c.CFG)] == identities

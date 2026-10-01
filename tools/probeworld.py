@@ -30,7 +30,7 @@ from random import Random
 ST: dict = {}
 SNAP_MODULES = ("v39", "v310be", "fixorder2", "fix2", "v32", "projfirst", "fillnorestate", "fillunseen", "nocharge2", "v38", "v31",
                 "histrole", "ustruct", "relearninit", "tiestruct", "answerlog", "worldvariant", "worldcue", "deathterms", "checks_v37",
-                "routelog", "answergap", "shopworld")
+                "routelog", "answergap", "shopworld", "v311c")
 SNAP_ATTRS = ("STATS", "CTX", "ST", "INFO", "TCTX")
 
 
@@ -40,7 +40,10 @@ def _snapshot_modules():
         m = sys.modules.get(name)
         if m is None or m is sys.modules.get(__name__):
             continue
-        for a in SNAP_ATTRS:
+        # 集団化の答え直しは、通信待ちの束と送信の記録も一時的に作る。
+        # 送信設定も同じ控えへ入れ、診断の前へ戻す。
+        attrs = SNAP_ATTRS + ("CFG",) if name == "v311c" else SNAP_ATTRS
+        for a in attrs:
             d = getattr(m, a, None)
             if isinstance(d, dict):
                 snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))

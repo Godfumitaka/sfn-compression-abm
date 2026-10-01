@@ -17,7 +17,7 @@ SOURCE = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SOURCE/'tools'))
 ROOT = SOURCE.parent
 BASE = ROOT / 'baseline'
-OUTPUTS = ROOT / 'outputs'
+OUTPUTS = ROOT / 'outputs_recheck_2026-10-02'
 RESULTS = ROOT.parents[1] / 'codex_worldv4_2026-10-01/results'
 PY = '/opt/homebrew/opt/python@3.12/bin/python3.12'
 TEST_PY = str(ROOT.parents[1] / 'codex_v310ans_2026-09-30/verify-env/bin/python')
@@ -64,13 +64,14 @@ def body(name, seed):
 
 
 def run_job(name, count, extra, *, source=SOURCE, config='config/sweep_b2_hide_s1_2026-09-22.json',
-            forgetting=PRICE, learning=PRICE):
+            forgetting=PRICE, learning=PRICE, diagnostics=None):
     if shutil.disk_usage(ROOT).free-2_000_000_000 < 15_000_000_000:
         raise RuntimeError('新しい走行を始める空きが無い')
     dest = OUTPUTS/name
     log = OUTPUTS/(name+'.log')
     assert not dest.exists() and not log.exists(), name
-    cmd = [PY, 'tools/v3_run.py', config, str(dest), *FLAGS, '--trial-count', str(count),
+    flags = FLAGS if diagnostics is None else [f for f in FLAGS if f not in ('--cf-value', '--probe-world')] + list(diagnostics)
+    cmd = [PY, 'tools/v3_run.py', config, str(dest), *flags, '--trial-count', str(count),
            '--v39-price', forgetting, '--e-price', learning, *extra]
     save(OUTPUTS/(name+'.argv.json'), {'argv': cmd, 'cwd': str(source), 'start': now()})
     with log.open('x') as f:
@@ -97,7 +98,8 @@ def small_examples():
              ('test_v310_be.py', 11), ('test_v39_budget.py', 16)]
     items = [('test_v311cs_current_flags.py::'+name, 1) for name in (
              'test_received_bundle_strict_parent_child_mapping', 'test_received_argument_kinds_survive_definition_graph',
-             'test_received_definition_obeys_answer_gap_in_world', 'test_probe_restores_current_records_and_counter_types')]
+             'test_received_definition_obeys_answer_gap_in_world', 'test_probe_restores_current_records_and_counter_types',
+             'test_diagnostics_restore_collective_pending_send')]
     results = []
     for i, (name, expected) in enumerate(files+items):
         out = OUTPUTS/f'pytest_{i:02d}.xml'
@@ -113,7 +115,7 @@ def small_examples():
         print(json.dumps(result, ensure_ascii=False), flush=True)
         assert r.returncode == 0 and counts['tests'] == expected and not any(counts[k] for k in ('failures', 'errors', 'skipped')), result
     save(OUTPUTS/'small_examples.json', results)
-    assert sum(r['tests'] for r in results) == 68
+    assert sum(r['tests'] for r in results) == 69
 
 
 def checks():
@@ -158,9 +160,28 @@ def checks():
     assert priced and all(r['lam'] == 0.2 for r in priced)
     save(OUTPUTS/'eprice_receipts.json', {'forgetting': float(PRICE), 'learning': 0.2, 'receipts_with_costs': len(priced),
                                       'all_receipt_prices_equal': True, 'records': priced})
+    # 診断なし・各旗だけ・両旗の通信を、終了時のまとめ以外は一字一句比較する。
+    combinations = [('none', ()), ('cf', ('--cf-value',)), ('world', ('--probe-world',))]
+    diagnostic_checks = []
+    diagnostic_names = []
+    for mode, reference in [('B', 'repeat1'), ('A', 'recvA_check')]:
+        for suffix, diagnostics in combinations:
+            name = f'diagnostic_{mode}_{suffix}'
+            run_job(name, 300, COLLECTIVE+['--v311c-q', '0.5', '--v311c-recv', mode,
+                                         '--v311c-probe-every', '10'], diagnostics=diagnostics)
+            diagnostic_names.append(name)
+            pair = {'reference': reference, 'condition': name, 'flags': list(diagnostics),
+                    'communication_sha256_reference': comm_hash(reference),
+                    'communication_sha256_condition': comm_hash(name),
+                    'body_pairs': [{'seed': seed, 'reference': body(reference, seed), 'condition': body(name, seed)}
+                                   for seed in (1, 1001)]}
+            assert pair['communication_sha256_reference'] == pair['communication_sha256_condition'], pair
+            assert all(p['reference'] == p['condition'] for p in pair['body_pairs']), pair
+            diagnostic_checks.append(pair)
+    save(OUTPUTS/'diagnostic_noninterference.json', diagnostic_checks)
     import v311c_report
     rows = []
-    for name in ('notags', 'solo_notags', 'q0', 'solo_q0', 'repeat1', 'repeat2', 'noprobe', 'recvA_check', 'eprice_check'):
+    for name in ('notags', 'solo_notags', 'q0', 'solo_q0', 'repeat1', 'repeat2', 'noprobe', 'recvA_check', 'eprice_check', *diagnostic_names):
         for path in sorted((OUTPUTS/name/'comm').glob('run*.jsonl')):
             r = v311c_report.one_population(str(OUTPUTS/name), str(path))
             c, s = r['突き合わせ'], r['数']
@@ -170,11 +191,31 @@ def checks():
                                            '一個体一試行に束は一つまで', '受け取りで束を送らない'))
             assert all(s.get('STATS_'+k, 0) == 0 for k in ('recv_score_changed', 'recv_merit_changed', 'dC_mismatch'))
             assert s.get('誤答_?', 0) == 0
+            # ③沈黙の束なし、④束に残る予測が診断ではなく実回答、⑫件数の一致。
+            comm_rows = [json.loads(line) for line in path.read_text().splitlines()]
+            summary = next(item for item in comm_rows if item['kind'] == 'summary')
+            actual = {}
+            for agent, meta in enumerate(summary['agents']):
+                ledger = OUTPUTS/name/'ledgers/cells'/meta['cell']/f"seed{meta['seed']:03d}.jsonl.gz"
+                with gzip.open(ledger, 'rt') as stream:
+                    next(stream)
+                    for line in stream:
+                        trial = json.loads(line)
+                        actual[agent, trial['prediction_order']] = trial
+            bundles = [item for item in comm_rows if item['kind'] == 'bundle']
+            for bundle in bundles:
+                trial = actual[bundle['agent'], bundle['t']]
+                assert trial['coverage'] == 1, (name, bundle['agent'], bundle['t'], '棄権時の束')
+                if not bundle.get('empty'):
+                    edge = trial['predicted_edge']
+                    assert bundle['pred'] == [edge['relation_id'], edge['predicate'], edge['arguments']], (name, bundle['agent'], bundle['t'], '実回答と束の相違')
+            r['実回答と束の予測の相違'] = 0
             rows.append({'condition': name, **r})
     save(OUTPUTS/'checks_counts.json', rows)
     save(OUTPUTS/'gate_passed.json', {'time': now(), 'base': '88e0e38bbd4f8ebbdc3f087de36801ce64a673e2',
-                                   'small_examples': 68, 'body_pairs': 9, 'populations_audited': len(rows)})
-    progress('関門2：小例68件、台帳本文9組、通信の再現、件数と受信の採点・費用の一致を確認。', force=True)
+                                   'small_examples': 69, 'body_pairs': 9, 'populations_audited': len(rows),
+                                   'diagnostic_communication_pairs': len(diagnostic_checks)})
+    progress('関門2：小例69件、台帳本文9組、診断の有無の通信6組、16集団の件数と実回答・束の一致を確認。', force=True)
     print('関門2を確認', flush=True)
 
 
