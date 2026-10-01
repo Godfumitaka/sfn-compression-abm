@@ -263,9 +263,18 @@ def render_v2(rels, hidden, rng, voc):
 
     for t in tops:
         emit(t, 0)
+    if hidden is None:
+        # 何も伏せない完全な場面（委任書「全履歴の段階」追記の段階 2：過去の場面を完全な観察済みの場面として見せる）
+        return "\n".join(lines), {"rid": rid, "oid": oid, "hidden": None}
     truth = by[hidden][0]
     return "\n".join(lines), {"rid": rid, "oid": oid, "hidden": hidden, "hidden_rid": rid[hidden], "truth_pred": truth,
                               "truth_symbol": voc[truth]}
+
+
+def complete_text(set_seed, world, i, research, voc):
+    """学習の系列の場面 i を、伏せた関係に正解を戻した完全な場面として、同じ書式・同じ番号で書く（make_set と同じ乱数 num|<組>|<i>）。"""
+    text, _rec = render_v2(relations(research["type"], research["cue"], world), None, random.Random(f"num|{set_seed}|{i}"), voc)
+    return text
 
 
 def parse_v2(text):

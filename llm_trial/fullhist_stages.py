@@ -11,7 +11,9 @@
 通過の目安：理解検査と同じ（最もありそうな答えが 16 問中 15 問以上、どの場合も 4 問中 3 問以上）。
 予測の一回：memo.predict（形の崩れは 2 回まで問い直す、上限で切れたものは問い直さない）。出力の上限は 推論の予算＋100。
 推論に使った量：出力のトークン数から、本文（答えの JSON）のトークン数（数える API、正味）を引いた見積もり。推論の文字数も残す。
-使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階 1〜4>'   （一行目に PASS／FAIL）"""
+追記（2026-10-02 朝）：段階を組み直した（STAGES の 新2・新4・新5。新1＝"1"、新3＝"2"）。新2 は過去の場面を、伏せた関係に正解を戻した
+  完全な場面（world.complete_text）として、同じ書式で並べる（INTRO_OBS・prompt_obs）。組の種を引数で変えられる（確かめは調整に使っていない組で）。
+使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階> [組の種（既定 1）]'"""
 import json
 import os
 import sys
@@ -22,8 +24,32 @@ import memo as mm  # noqa: E402
 import stage_d as sd  # noqa: E402
 import world as w  # noqa: E402
 
-STAGES = {1: dict(mult=1, door_all=False, think=8000), 2: dict(mult=1, door_all=True, think=2048),
-          3: dict(mult=2, door_all=False, think=2048), 4: dict(mult=2, door_all=True, think=8000)}
+STAGES = {"1": dict(mult=1, door_all=False, think=8000), "2": dict(mult=1, door_all=True, think=2048),
+          "3": dict(mult=2, door_all=False, think=2048), "4": dict(mult=2, door_all=True, think=8000),
+          # 追記（2026-10-02 朝、ChatGPT の推薦）の組み直し：元の条件（40 場面・ドアは半分・予算 2,048・場面と正解）から一項目だけ変える。
+          # 新1＝上の "1"（予算 8,000）、新3＝上の "2"（全部の場面でドア）。新2・新4・新5 をここに足す。
+          "新2": dict(mult=1, door_all=False, think=2048, observed=True),
+          "新4": dict(mult=2, door_all=False, think=2048),
+          "新5": dict(mult=2, door_all=True, think=8000, observed=True)}
+
+# 新2（完全な観察済みの場面）の指示：記号の読み方は stage_d.INTRO と同じ。「?」の説明を今の場面だけにし、過去の場面は完全に見せると書く。
+# 過去の問いの文（Answer: の行）は省く。新しい規則は教えない（仮の決定。文面はこのとおり）
+OBS_FROM = ("In every scene exactly one relation has been removed. Its line is missing, and where it appeared as an argument it is written as `?`. "
+            "There is exactly one `?` in each scene.")
+OBS_TO = ("In the current scene exactly one relation has been removed. Its line is missing, and where it appeared as an argument it is written as `?`. "
+          "There is exactly one `?` in the current scene. The past scenes are shown complete, with nothing removed.")
+TASK_FROM = "use the past scenes and their answers to predict the answer for the current scene."
+TASK_TO = "use the past scenes to predict the answer for the current scene."
+assert OBS_FROM in sd.INTRO and TASK_FROM in sd.INTRO
+INTRO_OBS = sd.INTRO.replace(OBS_FROM, OBS_TO).replace(TASK_FROM, TASK_TO)
+
+
+def prompt_obs(past_full, scene):
+    parts = [INTRO_OBS, "", "Past scenes:"]
+    for k, t in enumerate(past_full, 1):
+        parts += ["", f"Scene {k}:", t]
+    parts += ["", "Current scene:", scene["text"], "", sd.ASK]
+    return "\n".join(parts)
 
 
 def text_tokens(t):
@@ -34,15 +60,21 @@ BASE = [None]
 
 
 def main():
-    out, world, stage = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+    out, world, stage = sys.argv[1], int(sys.argv[2]), sys.argv[3]
+    set_seed = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     os.makedirs(out, exist_ok=True)
     api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
     BASE[0] = api.haiku_count("a")
     cfg = STAGES[stage]
     mm.THINK = cfg["think"]
-    st = w.make_set(1, world, "v2", cfg["mult"], cfg["door_all"])
-    _h, tests = sd.build(1, world, 4)
-    tag = f"段階{stage}_w{world}"
+    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"])
+    _h, tests = sd.build(set_seed, world, 4)
+    full = [w.complete_text(set_seed, world, s["i"], s["research"], st["vocab"]) for s in st["series"]] if cfg.get("observed") else None
+
+    def make_prompt(past_n, scene):
+        return prompt_obs(full[:past_n], scene) if full is not None else sd.prompt(st["series"][:past_n], scene)
+
+    tag = f"段階{stage}_w{world}" + ("" if set_seed == 1 else f"_組{set_seed}")
     log = os.path.join(out, f"{tag}.jsonl")
     rows = [json.loads(l) for l in open(log, encoding="utf-8")] if os.path.exists(log) else []
     done = {(r["段"], r["i"]) for r in rows}
@@ -60,14 +92,14 @@ def main():
         if ("学習", i) in done:
             continue
         res = s["research"]
-        row = mm.predict(sd.prompt(st["series"][:i], s), s["answer"], f"全履歴 {tag} 学習 {i}")
+        row = mm.predict(make_prompt(i, s), s["answer"], f"全履歴 {tag} 学習 {i}")
         row.update({"段": "学習", "i": i, "場合": f"{res['type']}・{res['cue']}", "ドアを伏せた": res["door_hidden"]})
         put(row)
         print(tag, "学習", i, row["判定"], round(api.spent(), 4), flush=True)
     for q, t in enumerate(tests):
         if ("最後の試験", q) in done:
             continue
-        row = mm.predict(sd.prompt(st["series"], t), t["answer"], f"全履歴 {tag} 試験 {q}")
+        row = mm.predict(make_prompt(len(st["series"]), t), t["answer"], f"全履歴 {tag} 試験 {q}")
         row.update({"段": "最後の試験", "i": q, "場合": t["case"]})
         put(row)
         print(tag, "試験", q, t["case"], row["判定"], row.get("answer"), round(api.spent(), 4), flush=True)
@@ -75,7 +107,7 @@ def main():
     by = {c: sum(1 for r in fin if r["場合"] == c and r.get("最もありそうな答えが正しい")) for c in ("甲・n", "甲・e", "乙・n", "乙・e")}
     best = sum(by.values())
     passed = best >= 15 and all(v >= 3 for v in by.values())
-    summ = {"段階": stage, "世界": world, **cfg, "学習の場面の数": len(st["series"]), "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
+    summ = {"段階": stage, "世界": world, "組": set_seed, **cfg, "学習の場面の数": len(st["series"]), "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
             "判定": {k: sum(1 for r in fin if r["判定"] == k) for k in ("正解", "誤答", "黙り", "形の崩れ", "上限で切れた")}}
     json.dump(summ, open(os.path.join(out, f"{tag}_要約.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("PASS" if passed else "FAIL")
