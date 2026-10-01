@@ -6,7 +6,8 @@
   四つの場合それぞれ 4 問、計 16 問を、新しい番号で、一問ずつ別々の問い合わせで出す（ドアを伏せた場面）。試験の間に正解は足さない。
   通過の目安（事前の基準）：最もありそうな答えが 16 問中 15 問以上正しく、どの場合も 4 問中 3 問以上正しい。黙ったかは別に記録。
 答えの形：提供元の形の指定（Haiku：output_config.format の json_schema、Together：response_format の json_schema）。言葉での指示は補助。
-推論：どの模型も推論の設定は切る（Qwen は reasoning: {enabled: false}。全条件で共通にする前提）。推論に使った量と、上限で切れたかを記録する。
+推論：既定は切る（Qwen は reasoning: {enabled: false}）。推論ありの条件では、Haiku は拡張思考、Qwen は reasoning: {enabled: true}
+  （出力の上限は 推論の予算＋100 にそろえる）。Llama 3.3 70B には推論の機能が無いので、推論なしだけ。推論に使った量と、上限で切れたかを記録する。
 形が崩れたとき：今まで（stage4.py）と同じく 2 回まで問い直し、それでも読めなければ「形の崩れ」。上限で切れたもの（finish_reason／stop_reason が長さ）は別に数える。
 使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/stage_d.py <出力の場所> <模型> <世界> <組の種> [各場合の例の数（既定 2）] [推論の予算（Haiku の拡張思考、既定なし）]'
 追記（2026-10-01 夕方の返事の 3）：例の数（各場合 2 又は 4）と推論の有無を変えられる。例は各場合の 1・2 番目が 2 例のときと同じ場面（4 例は
@@ -69,11 +70,13 @@ def call(model, content, what):
         reasoning = th if THINK[0] else None
     else:
         rf = {"type": "json_schema", "json_schema": {"name": "answer", "schema": SCHEMA}}
-        r, u, cost = api.together_chat(model, [{"role": "user", "content": content}], max_tokens=MAXTOK, what=what, response_format=rf)
+        # 推論あり（Qwen だけ）：出力の上限は Haiku と同じ 推論の予算＋100。Together の推論には予算の指定が無いので、上限だけをそろえる
+        r, u, cost = api.together_chat(model, [{"role": "user", "content": content}], max_tokens=MAXTOK + (THINK[0] or 0), what=what,
+                                       response_format=rf, reasoning=bool(THINK[0]))
         ch = r["choices"][0]
         text = ch["message"].get("content")
         cut = ch.get("finish_reason") == "length"
-        reasoning = ch["message"].get("reasoning")
+        reasoning = ch["message"].get("reasoning") or None
     rt = (u.get("completion_tokens_details") or {}).get("reasoning_tokens", u.get("reasoning_tokens"))
     return text, u, cost, time.time() - t0, cut, reasoning, rt
 

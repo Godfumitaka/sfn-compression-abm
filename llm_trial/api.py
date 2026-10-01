@@ -71,13 +71,14 @@ def together_prices():
 NO_REASONING = {"reasoning": {"enabled": False}}   # Qwen：推論の過程を出さない指定（仮の決定。二つの候補とも効くことを確かめた）
 
 
-def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperature=0.0, response_format=None):
+def together_chat(model, messages, *, max_tokens, what, logprobs=None, temperature=0.0, response_format=None, reasoning=False):
     _guard(0.01)
     body = {"model": model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature}
     if response_format:
         body["response_format"] = response_format
     if "qwen" in model.lower():
-        body.update(NO_REASONING)
+        # 推論：既定は切る（NO_REASONING）。reasoning＝真のときだけ入れる（推論の文章は message.reasoning に別に返る）
+        body.update({"reasoning": {"enabled": True}} if reasoning else NO_REASONING)
     if logprobs:
         body["logprobs"] = logprobs
     r = _post("https://api.together.xyz/v1/chat/completions", body, {"Authorization": "Bearer " + os.environ["TOGETHER_API_KEY"]})
