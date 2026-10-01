@@ -455,6 +455,12 @@ def worker(task: dict) -> dict:
             # ★ 欠けた位置にだけ答える（--answer-gap、2026-09-30 夜の委任書）：tools/answergap.py。話す答えを選ぶ所（fill_decision）だけを包む
             import answergap
             answergap.install()
+    if task.get("strict_pc"):
+        # ★ 照合の直し：親子の並行連結（--strict-pc、2026-10-01 朝の委任書）：tools/strictpc.py。候補の差し替え（fix2・v39・ustruct）のすべてのあと、
+        #   照合を使う前に入れる（sme._alignment_candidates をいちばん外側で包む）
+        sys.path.insert(0, str(ROOT / "tools"))
+        import strictpc
+        strictpc.install()
     if task.get("world_cue"):
         # ★ 世界 v4（型の変種、2026-09-30 深夜の追記 B-2）：tools/worldvariant.py。世界を作る前に入れる。v39 の固定辞書に新しい述語を足す
         sys.path.insert(0, str(ROOT / "tools"))
@@ -535,6 +541,8 @@ def worker(task: dict) -> dict:
         rec["probeworld"] = sys.modules["probeworld"].close()
     if task.get("shop_world"):
         rec["shopworld"] = sys.modules["shopworld"].close()
+    if task.get("strict_pc"):
+        rec["strictpc"] = sys.modules["strictpc"].stats()
     if "nocharge2" in sys.modules:
         rec["nocharge2"] = dict(sys.modules["nocharge2"].STATS)
     if "v38" in sys.modules:
@@ -664,6 +672,8 @@ def main() -> None:
                     help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
     ap.add_argument("--world-cue", action="store_true",
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--strict-pc", action="store_true",
+                    help="照合の直し：親の候補の対は、その子の対がすべて（見えていない相手か、採れる直接の候補）のときだけ採る（tools/strictpc.py）")
     ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
                     help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
     ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
@@ -754,7 +764,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -778,7 +788,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -799,6 +809,7 @@ def main() -> None:
                                                     "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
                                                     "answer_gap": args.answer_gap, "probe_world": args.probe_world,
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
+                                                    "strict_pc": args.strict_pc,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
