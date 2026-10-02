@@ -24,6 +24,7 @@
   ・その定義を使った場合の答え：選びのあとの段（門・投影・穴埋め・答える所。tools/v39.py predict の 604 行目より後と同じ呼び方）を
     その定義でやり直す（乱数は本物の予測と同じ種から新しく作る）。答えの名前・引数、門を通るか、当たるか、ドアの位置に答えたか。
 確かめ：作り直した状態で本物と同じ予測になること。実際に選ばれた定義でやり直した答えが本物の答えと同じこと。
+追記（2026-10-02 夜）：環境変数 SC_CUE（既定 e）で、対象の日を選ぶ（n＝通常の日）。シールなどの席に「写り先の述語」「場面のシールに写る」の欄を足す。
 出力：<出力>/<腕>/seed<種>.cands.jsonl.gz（候補ごと）、seed<種>.cases.jsonl（試行ごと）、seed<種>.check.json。
 使い方  python3.12 tools/selcands.py <出力の場所> <腕の走行根> <sealmem の出力の場所> [種 …]（並列 SC_WORKERS、既定 2）"""
 from __future__ import annotations
@@ -159,7 +160,9 @@ def one_trial(st, wt, row_real, config, agent, t, info, pred_by_id, door_ids, ro
                 h = sh.get((d.name, r.slot_index))
                 seats.append({"席": r.slot_index, "種類": k, "状態": stt[rid], "述語": r.relation.predicate if r.alive else None,
                               "履歴": (dict(h) if hasattr(h, "items") else sorted(h)) if h is not None else None,
-                              "写り先": rm.get(rid), "写り先は見えている": rm.get(rid) in vis, "対応先": cid, "ドアに写る": to_door})
+                              "写り先": rm.get(rid), "写り先は見えている": rm.get(rid) in vis, "対応先": cid, "ドアに写る": to_door,
+                              "写り先の述語": vis[rm[rid]].predicate if rm.get(rid) in vis else None,
+                              "場面のシールに写る": rm.get(rid) == info["sig_id"]})
         unmatched = {}
         for r in fh:
             if r.relation.relation_id not in rm:
@@ -315,7 +318,7 @@ def main():
             continue
         cell = os.path.basename(os.path.dirname(p))
         tg = {int(r["trial"]): int(r["hit"]) for r in csv.DictReader(open(os.path.join(smdir, arm, f"seed{s:03d}.answers.csv"), encoding="utf-8"))
-              if r["door"] == "1" and r["shop_cue"] == "e"}
+              if r["door"] == "1" and r["shop_cue"] == os.environ.get("SC_CUE", "e")}
         jobs.append((root, cell, s, tg, out_dir))
     with get_context("spawn").Pool(min(int(os.environ.get("SC_WORKERS", "2")), len(jobs)), maxtasksperchild=1) as pool:
         res = pool.map(one, jobs, chunksize=1)
