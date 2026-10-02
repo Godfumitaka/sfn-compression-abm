@@ -1,0 +1,89 @@
+{
+ "arm": "C",
+ "status": "waiting_for_A",
+ "A_gate_required": "40 populations, 80 ledgers, 139200 tasks and all counts; first 3 seeds matched previous pilot",
+ "source": "34667a55a4e68d7cda64614ead95e84a361b0118",
+ "python": "3.12.13",
+ "world": 2,
+ "price": 0.0187,
+ "e_price": 0.0187,
+ "cf_learn": true,
+ "group_seeds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20
+ ],
+ "modes": [
+  "no_comm",
+  "recvA"
+ ],
+ "send_probability": {
+  "no_comm": 0,
+  "recvA": 0.2
+ },
+ "agent_f": [
+  0.5,
+  0.5
+ ],
+ "second_world_seed_offset": 1000,
+ "trials_per_agent": 1740,
+ "seed_barrier": "both conditions complete before next seed",
+ "first_population_parallel": 1,
+ "parallel_populations_max": 2,
+ "combined_heavy_jobs_max": 3,
+ "stop_new_runs_on": [
+  "thermal or performance warning",
+  "swap increase",
+  "projected free disk below 15 GiB"
+ ],
+ "argument_checks": [
+  {
+   "condition": "pilot_w2_no_comm_g001",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  },
+  {
+   "condition": "pilot_w2_recvA_g001",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  },
+  {
+   "condition": "pilot_w2_no_comm_g002",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  },
+  {
+   "condition": "pilot_w2_recvA_g002",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  },
+  {
+   "condition": "pilot_w2_no_comm_g003",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  },
+  {
+   "condition": "pilot_w2_recvA_g003",
+   "only_added_flag": "--cf-learn",
+   "only_changed_argument": "output_directory"
+  }
+ ],
+ "precondition_check": "A未完了のため開始条件は未成立"
+}
