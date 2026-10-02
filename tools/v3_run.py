@@ -460,6 +460,11 @@ def worker(task: dict) -> dict:
             # ★ 欠けた位置にだけ答える（--answer-gap、2026-09-30 夜の委任書）：tools/answergap.py。話す答えを選ぶ所（fill_decision）だけを包む
             import answergap
             answergap.install()
+        if task.get("select_n3"):
+            # ★ 選び方 N3（--select-n3、2026-10-02 夜の委任書）：tools/selectn3.py。定義の選び（tools/v39.py select_definition）の並べ方だけを替える。
+            #   select_definition を包む記録（answerlog・probeworld・useforget・--select-log）より前に入れる
+            import selectn3
+            selectn3.install_n3()
     if task.get("strict_pc"):
         # ★ 照合の直し：親子の並行連結（--strict-pc、2026-10-01 朝の委任書）：tools/strictpc.py。候補の差し替え（fix2・v39・ustruct）のすべてのあと、
         #   照合を使う前に入れる（sme._alignment_candidates をいちばん外側で包む）
@@ -537,6 +542,13 @@ def worker(task: dict) -> dict:
         import useforget
         useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"), tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]),
                           dump_s_path=(str(side_dir / f"seed{task['seed']:03d}.useforget_S.f64") if task.get("use_forget_dump_s") else None))
+    if task.get("select_log"):
+        # ★ 選びの記録（--select-log、記録だけ）：tools/selectn3.py install_log。一番外に入れる
+        if not task.get("v39"):
+            raise ValueError("--select-log は --v39 と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import selectn3
+        selectn3.install_log(str(side_dir / f"seed{task['seed']:03d}.select.jsonl.gz"))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -552,6 +564,8 @@ def worker(task: dict) -> dict:
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
+    if task.get("select_n3") or task.get("select_log"):
+        rec["selectn3"] = sys.modules["selectn3"].close()
     if task.get("hist_role"):
         rec["histrole"] = dict(sys.modules["histrole"].STATS)
     if task.get("u_struct"):
@@ -722,6 +736,8 @@ def main() -> None:
     ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
                     help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
     ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
+    ap.add_argument("--select-n3", action="store_true", help="選び方 N3：定義を N3＝2S(d,x)÷(S(d,d)＋S(x,x)) の大きい順で選ぶ（tools/selectn3.py）。門は今のまま")
+    ap.add_argument("--select-log", action="store_true", help="記録だけ：本物の予測ごとに候補の定義の支持・N3 の三項・順位・選ばれたか・門を書く")
     ap.add_argument("--shop-door-p", type=float, default=None,
                     help="お店の世界：各場面で確率 d でドアを伏せ、それ以外はドア以外の候補から一様に一本（別の乱数の流れ）。付けなければ今のまま")
     ap.add_argument("--shop-keep-cue", action="store_true", help="お店の世界の診断：B の変換の候補からシールと link の席を外す")
@@ -811,7 +827,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None and not args.select_n3 and not args.select_log
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -835,7 +851,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "select_n3": args.select_n3, "select_log": args.select_log, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -858,6 +874,7 @@ def main() -> None:
                                                     "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p,
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s,
+                                                    "select_n3": args.select_n3, "select_log": args.select_log,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
