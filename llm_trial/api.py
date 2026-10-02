@@ -22,7 +22,7 @@ class Budget(Exception):
     pass
 
 
-def _post(url, body, headers, timeout=120):
+def _post(url, body, headers, timeout=600):
     req = urllib.request.Request(url, data=json.dumps(body).encode(), headers={**headers, "User-Agent": UA, "Content-Type": "application/json"})
     # 混み合い（429・5xx・529）と通信の途切れは、待って 8 回まで問い直す（格子の走行で並行を増やすため。2026-10-01 深夜）
     for k in range(8):
@@ -115,5 +115,35 @@ def haiku_chat(messages, *, max_tokens, what, system=None, temperature=0.0, outp
 def haiku_count(text):
     """Anthropic のトークン数を数える API（count_tokens）。費用はかからない（控えにも 0 で書く）。"""
     r = _post("https://api.anthropic.com/v1/messages/count_tokens", {"model": HAIKU, "messages": [{"role": "user", "content": text}]},
+              {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
+    return r["input_tokens"]
+
+
+# ---------------------------------------------------------------- Sonnet 5.5・Opus 5.5（2026-10-02 昼の返事：理解検査を effort で）
+# 値段（100 万トークンあたりのドル、入力・出力）：platform.claude.com/docs/en/about-claude/pricing（2026-10-02 12:58 に確かめた）
+CLAUDE_PRICE = {"claude-sonnet-5-5": {"input": 2.0, "output": 10.0}, "claude-opus-5-5": {"input": 4.0, "output": 20.0}}
+
+
+def claude_chat(model, messages, *, max_tokens, what, output_format=None, effort=None):
+    """adaptive の推論（この模型では予算の指定 budget_tokens は 400 で断られる）。effort は output_config.effort。温度は指定しない
+    （Sonnet 5.5 は既定値以外が 400）。server-side の fallbacks は使わない（ほかの模型で答え直されると比べにならないため）。"""
+    _guard(0.05)
+    body = {"model": model, "messages": messages, "max_tokens": max_tokens, "thinking": {"type": "adaptive"}}
+    oc = {}
+    if output_format:
+        oc["format"] = output_format
+    if effort:
+        oc["effort"] = effort
+    if oc:
+        body["output_config"] = oc
+    r = _post("https://api.anthropic.com/v1/messages", body, {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
+    u = r.get("usage") or {}
+    cost = _book(model, u.get("input_tokens", 0), u.get("output_tokens", 0), CLAUDE_PRICE[model], what)
+    return r, u, cost
+
+
+def count_tokens(model, text):
+    """その模型のトークン数を数える API（費用はかからない）。正味＝値 − 一文字 a の値 ＋ 1 は呼ぶ側で。"""
+    r = _post("https://api.anthropic.com/v1/messages/count_tokens", {"model": model, "messages": [{"role": "user", "content": text}]},
               {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
     return r["input_tokens"]
