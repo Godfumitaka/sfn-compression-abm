@@ -16,6 +16,11 @@
   ・場面の側の割合：提示の関係のうち、(i) の写り先になった関係の割合。
   ・r：tools/v310be.py rewrite（E の書換・追加・取消のビットと内訳。x＝提示の場面、符号表＝予測の直前の p̂ の符号長）。
   ・今の規則での順位、選ばれたか。
+  ・N3（追記 2026-10-02 夕方）＝2S(d,x)÷(S(d,d)＋S(x,x))。S＝名前の一致＋引数の対応＋一段のつながり（減点なし）。
+      S(d,x)：名前は見えている関係に写った F・H の席だけ（U は 0 点）、引数とつながりは見えている関係に写った席すべて（U も構造として数える）。
+      S(d,d)：恒等の対応。名前＝F・H の席の数、引数＝全部の席の引数の位置の数、つながり＝引数が定義の行である位置の数。
+      S(x,x)：提示の関係だけで恒等の対応。名前＝関係の数、引数＝引数の位置の数、つながり＝引数が提示の関係である位置の数。
+      N3 での順位（同点は今の規則の順）、N3 で選ばれるか、その定義が今の門（支持が ceil(τ×n)）を通るか。
   ・その定義を使った場合の答え：選びのあとの段（門・投影・穴埋め・答える所。tools/v39.py predict の 604 行目より後と同じ呼び方）を
     その定義でやり直す（乱数は本物の予測と同じ種から新しく作る）。答えの名前・引数、門を通るか、当たるか、ドアの位置に答えたか。
 確かめ：作り直した状態で本物と同じ予測になること。実際に選ばれた定義でやり直した答えが本物の答えと同じこと。
@@ -115,6 +120,31 @@ def one_trial(st, wt, row_real, config, agent, t, info, pred_by_id, door_ids, ro
                 if a in ivis_ids and k < len(tgt.arguments) and rm.get(a) == tgt.arguments[k]:
                     links += 1
         imgs = {rm[r.relation.relation_id] for r in i_vis}
+        # ★ N3（追記 2026-10-02 夕方）：N3 ＝ 2S(d,x) ÷ (S(d,d) ＋ S(x,x))。S＝見えている名前の一致＋引数の対応＋一段のつながり（減点なし）。
+        #   U の席の名前は 0 点、構造（引数・位置）は数える。伏せた関係はどこにも使わない（場面は提示の関係だけ）。自己の点は恒等の対応。
+        mapped_vis = [r for r in d.constituents if rm.get(r.relation.relation_id) in vis]          # F・H・U のうち、見えている関係に写った行
+        n_name = sum(1 for r in mapped_vis if stt[r.relation.relation_id] != "U")
+        n_arg = 0
+        for r in mapped_vis:
+            tgt = vis[rm[r.relation.relation_id]]
+            for k, a in enumerate(r.relation.arguments):
+                if k < len(tgt.arguments) and (em.get(a) == tgt.arguments[k] or rm.get(a) == tgt.arguments[k]):
+                    n_arg += 1
+        mv_ids = {r.relation.relation_id for r in mapped_vis}
+        n_link = 0
+        for r in mapped_vis:
+            tgt = vis[rm[r.relation.relation_id]]
+            for k, a in enumerate(r.relation.arguments):
+                if a in mv_ids and k < len(tgt.arguments) and rm.get(a) == tgt.arguments[k]:
+                    n_link += 1
+        S_dx = n_name + n_arg + n_link
+        row_ids = {r.relation.relation_id for r in d.constituents}
+        S_dd = (sum(1 for r in d.constituents if stt[r.relation.relation_id] != "U")
+                + sum(len(r.relation.arguments) for r in d.constituents)
+                + sum(1 for r in d.constituents for a in r.relation.arguments if a in row_ids))
+        S_xx = (len(vis) + sum(len(r.arguments) for r in vis.values())
+                + sum(1 for r in vis.values() for a in r.arguments if a in vis))
+        N3 = 2 * S_dx / (S_dd + S_xx) if (S_dd + S_xx) else 0.0
         try:
             rbits, rparts = v310be.rewrite(st, d.name, scene, L, config, scene_ids)
         except Exception as e:  # noqa
@@ -144,6 +174,9 @@ def one_trial(st, wt, row_real, config, agent, t, info, pred_by_id, door_ids, ro
                       "SME の点数": al.total_score, "SME の内訳": dict(al.score_breakdown),
                       "選択用の点数": len(i_vis) + argp + links, "選択用の内訳": {"名前の一致": len(i_vis), "引数の対応": argp, "一段のつながり": links},
                       "場面の側の割合": len(imgs) / len(vis) if vis else None, "r": rbits, "r の内訳": rparts,
+                      "N3": N3, "N3 の分子 S(d,x)": S_dx, "N3 の分子の内訳": {"名前": n_name, "引数": n_arg, "つながり": n_link},
+                      "自己の点 S(d,d)": S_dd, "自己の点 S(x,x)": S_xx,
+                      "門を通る（今の門、支持の割合）": support >= ar._need(config.tau_acc, n),
                       "写らなかった F・H の席（種類別）": unmatched, "ドア・シール・link の席": seats,
                       "_cand": (support / n, support, d, graph, al2, n)})
         v39.unregister(graph)
@@ -151,6 +184,10 @@ def one_trial(st, wt, row_real, config, agent, t, info, pred_by_id, door_ids, ro
     for k, c in enumerate(cands):
         c["今の規則の順位"] = k + 1
         c["選ばれた"] = (k == 0)
+    # N3 の順位（同点は今の規則の順。仮の決定）
+    for k, c in enumerate(sorted(cands, key=lambda c: (-c["N3"], c["今の規則の順位"]))):
+        c["N3 での順位"] = k + 1
+        c["N3 で選ばれる"] = (k == 0)
         pred, gate = answer_with(c.pop("_cand"), ai, st, config, seed_rng, v39, ar, sme)
         e = pred.edge if isinstance(pred, EdgePrediction) else None
         c["その定義での答え"] = {"門を通る": gate, "黙り": e is None, "理由": getattr(pred, "reason", None) if e is None else None,
