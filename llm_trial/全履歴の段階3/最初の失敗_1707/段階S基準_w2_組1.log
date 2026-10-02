@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/fullhist_stages.py", line 136, in <module>
+    main()
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/fullhist_stages.py", line 113, in main
+    row = mm.predict(make_prompt(i, s), s["answer"], f"全履歴 {tag} 学習 {i}")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/memo.py", line 96, in predict
+    t = haiku(content if k == 0 else content + "\n" + s4.STRICT, sd.MAXTOK + THINK, sd.SCHEMA, f"{what} 試み {k + 1}")
+                                                                 ~~~~~~~~~~^~~~~~~
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
+落ちた（1 回目） 17:07:57
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/fullhist_stages.py", line 136, in <module>
+    main()
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/fullhist_stages.py", line 113, in main
+    row = mm.predict(make_prompt(i, s), s["answer"], f"全履歴 {tag} 学習 {i}")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/sfn/sfn-compression-abm-llm/llm_trial/memo.py", line 96, in predict
+    t = haiku(content if k == 0 else content + "\n" + s4.STRICT, sd.MAXTOK + THINK, sd.SCHEMA, f"{what} 試み {k + 1}")
+                                                                 ~~~~~~~~~~^~~~~~~
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
+落ちた（2 回目） 17:08:27
