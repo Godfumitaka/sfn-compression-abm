@@ -41,8 +41,9 @@ def main():
     res, md, ex = {}, ["# 全履歴の段階の集計", ""], ["# 最後の試験の推論の抜き書き（各問の推論の最後の 800 文字。記録として残す）", ""]
     for p in sorted(glob.glob(os.path.join(out, "段階*_w*.jsonl"))):
         tag = os.path.basename(p)[:-6]
-        world = int(tag.split("_w")[1])
-        voc = w.vocab(1)
+        world = int(tag.split("_w")[1].split("_")[0])
+        set_seed = int(tag.split("組")[1]) if "組" in tag else 1   # 組の付いた名前（確かめの組 3 など）。記号はその組の記号
+        voc = w.vocab(set_seed)
         truth = {f"{t}・{c}": voc[w.door_pred(world, t, c)] for t, c in w.CASES}
         rows = [json.loads(l) for l in open(p, encoding="utf-8")]
         fin = [r for r in rows if r["段"] == "最後の試験"]
