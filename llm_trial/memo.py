@@ -93,7 +93,7 @@ def haiku(content, max_tokens, schema, what):
 def predict(content, answer, what):
     tries, got = [], None
     for k in range(3):
-        t = haiku(content if k == 0 else content + "\n" + s4.STRICT, sd.MAXTOK + THINK, sd.SCHEMA, f"{what} 試み {k + 1}")
+        t = haiku(content if k == 0 else content + "\n" + s4.STRICT, sd.MAXTOK + (THINK or 0), sd.SCHEMA, f"{what} 試み {k + 1}")
         got = s4.parse(t["出力"])
         tries.append(t)
         if got or t["上限で切れた"]:
