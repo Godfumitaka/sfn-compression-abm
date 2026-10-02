@@ -80,12 +80,13 @@ def call(model, content, what):
         cut = r.get("stop_reason") == "max_tokens"
         th = "".join(b.get("thinking", "") for b in r.get("content", []) if b.get("type") == "thinking")
         reasoning = th or None
-        u = dict(u, stop_reason=r.get("stop_reason"), 本文のトークン数=_net_tokens(model, text))
+        u = dict(u, stop_reason=r.get("stop_reason"), 本文のトークン数=_net_tokens(model, text), 応答の控え=api.response_meta(r, u))
         rt = u.get("output_tokens", 0) - u["本文のトークン数"]
         return text, u, cost, time.time() - t0, cut, reasoning, rt
     if model == api.HAIKU:
         r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=MAXTOK + (THINK[0] or 0), what=what,
                                     output_format={"type": "json_schema", "schema": SCHEMA}, thinking_budget=THINK[0])
+        u = dict(u, 応答の控え=api.response_meta(r, u))
         text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
         cut = r.get("stop_reason") == "max_tokens"
         th = "".join(b.get("thinking", "") for b in r.get("content", []) if b.get("type") == "thinking")

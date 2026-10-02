@@ -147,3 +147,19 @@ def count_tokens(model, text):
     r = _post("https://api.anthropic.com/v1/messages/count_tokens", {"model": model, "messages": [{"role": "user", "content": text}]},
               {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01"})
     return r["input_tokens"]
+
+
+def response_meta(r, u):
+    """問いごとの記録に足す応答の控え（2026-10-02 夕方の委任書の 1）：応答の model の欄・応答の ID・使用量（入力・出力・推論のトークン）・
+    止まった理由・推論の中身の返り方。送る文字列は変えない（記録だけ）。"""
+    blocks = [b for b in (r.get("content") or []) if b.get("type") == "thinking"]
+    shown = "".join(b.get("thinking", "") for b in blocks)
+    if not blocks:
+        how = "推論の塊なし"
+    elif shown:
+        how = "中身が返った"
+    else:
+        how = "塊はあるが中身は空（返らない設定）"
+    return {"応答の model": r.get("model"), "応答の ID": r.get("id"), "止まった理由": r.get("stop_reason"),
+            "入力のトークン": (u or {}).get("input_tokens"), "出力のトークン": (u or {}).get("output_tokens"),
+            "推論のトークン": ((u or {}).get("output_tokens_details") or {}).get("thinking_tokens"), "推論の中身の返り方": how}

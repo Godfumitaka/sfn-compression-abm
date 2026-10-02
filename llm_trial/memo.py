@@ -77,7 +77,7 @@ def haiku(content, max_tokens, schema, what):
     text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
     th = "".join(b.get("thinking", "") for b in r.get("content", []) if b.get("type") == "thinking")
     return {"出力": text, "使用量": u, "費用": cost, "秒": round(time.time() - t0, 2), "上限で切れた": r.get("stop_reason") == "max_tokens",
-            "推論の文字数": len(th), "推論の中身": th}
+            "推論の文字数": len(th), "推論の中身": th, **api.response_meta(r, u)}
 
 
 def predict(content, answer, what):
