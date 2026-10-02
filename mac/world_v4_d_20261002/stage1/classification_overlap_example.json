@@ -1,0 +1,528 @@
+{
+ "motif": "M1",
+ "variant": "B",
+ "hidden_subtree": 0,
+ "truth": {
+  "relation_id": "scene:0.0.0",
+  "predicate": "hold_b",
+  "arguments": [
+   "scene:x",
+   "scene:y"
+  ],
+  "attributes": {}
+ },
+ "switch_rows": [
+  {
+   "slot": 0,
+   "rid": "base:0.0.0",
+   "state": "U"
+  },
+  {
+   "slot": 4,
+   "rid": "base:1.0.0",
+   "state": "U"
+  }
+ ],
+ "result": {
+  "selected": "R_B",
+  "prediction": {
+   "relation_id": "filling__R_B__0__3",
+   "predicate": "hold",
+   "arguments": [
+    "scene:x",
+    "scene:y"
+   ],
+   "attributes": {}
+  },
+  "support": 13,
+  "m_live": 13,
+  "state_unchanged": true
+ },
+ "support": {
+  "support": 13,
+  "m_live": 13,
+  "support_ratio": 1.0,
+  "mapping": {
+   "base:0": "scene:0",
+   "base:0.0": "scene:0.0",
+   "base:0.0.0": "scene:0.0.0",
+   "base:0.0.1": "scene:0.0.1",
+   "base:0.1": "scene:0.1",
+   "base:0.1.0": "scene:0.1.0",
+   "base:0.1.1": "scene:0.1.1",
+   "base:1": "scene:1",
+   "base:1.0": "scene:1.0",
+   "base:1.0.0": "scene:1.0.0",
+   "base:1.0.1": "scene:1.0.1",
+   "base:1.1": "scene:1.1",
+   "base:1.1.0": "scene:1.1.0",
+   "base:1.1.1": "scene:1.1.1",
+   "base:root": "scene:root"
+  }
+ },
+ "visible_switch": {
+  "relation_id": "scene:1.0.0",
+  "predicate": "break_b",
+  "arguments": [
+   "scene:x",
+   "scene:y"
+  ],
+  "attributes": {}
+ },
+ "scene": {
+  "graph_id": "scene",
+  "entities": [
+   {
+    "entity_id": "scene:x",
+    "label": null,
+    "attributes": {}
+   },
+   {
+    "entity_id": "scene:y",
+    "label": null,
+    "attributes": {}
+   }
+  ],
+  "relations": [
+   {
+    "relation_id": "scene:0.0.1",
+    "predicate": "push",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:0.1.0",
+    "predicate": "carry",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:0.1.1",
+    "predicate": "lift",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.0.1",
+    "predicate": "cut",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.1.0",
+    "predicate": "turn",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.1.1",
+    "predicate": "press",
+    "arguments": [
+     "scene:x",
+     "scene:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:0.0",
+    "predicate": "cause",
+    "arguments": [
+     "scene:0.0.0",
+     "scene:0.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:0.1",
+    "predicate": "require",
+    "arguments": [
+     "scene:0.1.0",
+     "scene:0.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.0",
+    "predicate": "enable",
+    "arguments": [
+     "scene:1.0.0",
+     "scene:1.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1.1",
+    "predicate": "avert",
+    "arguments": [
+     "scene:1.1.0",
+     "scene:1.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:0",
+    "predicate": "couple",
+    "arguments": [
+     "scene:0.0",
+     "scene:0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:1",
+    "predicate": "anchor",
+    "arguments": [
+     "scene:1.0",
+     "scene:1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "scene:root",
+    "predicate": "govern",
+    "arguments": [
+     "scene:0",
+     "scene:1"
+    ],
+    "attributes": {}
+   }
+  ]
+ },
+ "definition_before_erasure": {
+  "graph_id": "base",
+  "entities": [
+   {
+    "entity_id": "base:x",
+    "label": null,
+    "attributes": {}
+   },
+   {
+    "entity_id": "base:y",
+    "label": null,
+    "attributes": {}
+   }
+  ],
+  "relations": [
+   {
+    "relation_id": "base:0.0.0",
+    "predicate": "hold_b",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.0.1",
+    "predicate": "push",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1.0",
+    "predicate": "carry",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1.1",
+    "predicate": "lift",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0.1",
+    "predicate": "cut",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1.0",
+    "predicate": "turn",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1.1",
+    "predicate": "press",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.0",
+    "predicate": "cause",
+    "arguments": [
+     "base:0.0.0",
+     "base:0.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1",
+    "predicate": "require",
+    "arguments": [
+     "base:0.1.0",
+     "base:0.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0",
+    "predicate": "enable",
+    "arguments": [
+     "base:1.0.0",
+     "base:1.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1",
+    "predicate": "avert",
+    "arguments": [
+     "base:1.1.0",
+     "base:1.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0",
+    "predicate": "couple",
+    "arguments": [
+     "base:0.0",
+     "base:0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1",
+    "predicate": "anchor",
+    "arguments": [
+     "base:1.0",
+     "base:1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:root",
+    "predicate": "govern",
+    "arguments": [
+     "base:0",
+     "base:1"
+    ],
+    "attributes": {}
+   }
+  ]
+ },
+ "definition_after_erasure": {
+  "name": "R_B",
+  "rows": [
+   {
+    "relation_id": "base:0.0.0",
+    "predicate": "⟨消去⟩",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.0.1",
+    "predicate": "push",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1.0",
+    "predicate": "carry",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1.1",
+    "predicate": "lift",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0.0",
+    "predicate": "⟨消去⟩",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0.1",
+    "predicate": "cut",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1.0",
+    "predicate": "turn",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1.1",
+    "predicate": "press",
+    "arguments": [
+     "base:x",
+     "base:y"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.0",
+    "predicate": "cause",
+    "arguments": [
+     "base:0.0.0",
+     "base:0.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0.1",
+    "predicate": "require",
+    "arguments": [
+     "base:0.1.0",
+     "base:0.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.0",
+    "predicate": "enable",
+    "arguments": [
+     "base:1.0.0",
+     "base:1.0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1.1",
+    "predicate": "avert",
+    "arguments": [
+     "base:1.1.0",
+     "base:1.1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:0",
+    "predicate": "couple",
+    "arguments": [
+     "base:0.0",
+     "base:0.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:1",
+    "predicate": "anchor",
+    "arguments": [
+     "base:1.0",
+     "base:1.1"
+    ],
+    "attributes": {}
+   },
+   {
+    "relation_id": "base:root",
+    "predicate": "govern",
+    "arguments": [
+     "base:0",
+     "base:1"
+    ],
+    "attributes": {}
+   }
+  ]
+ },
+ "frequency_counts": {
+  "hold_b": 1,
+  "push": 1,
+  "carry": 1,
+  "lift": 1,
+  "break_b": 1,
+  "cut": 1,
+  "turn": 1,
+  "press": 1,
+  "cause": 1,
+  "require": 1,
+  "enable": 1,
+  "avert": 1,
+  "couple": 1,
+  "anchor": 1,
+  "govern": 1,
+  "hold": 100
+ },
+ "fill_states": [
+  "U"
+ ]
+}

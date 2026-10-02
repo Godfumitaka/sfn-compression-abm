@@ -1,0 +1,5728 @@
+{
+ "cases": [
+  {
+   "selected": "R_M1_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M1:A:0.0.0",
+    "predicate": "hold",
+    "arguments": [
+     "scene:M1:A:x",
+     "scene:M1:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M1",
+   "variant": "A",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M1:A:0.0.0",
+    "predicate": "hold",
+    "arguments": [
+     "scene:M1:A:x",
+     "scene:M1:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M1:A:0": "scene:M1:A:0",
+      "def:M1:A:0.0": "scene:M1:A:0.0",
+      "def:M1:A:0.0.0": "scene:M1:A:0.0.0",
+      "def:M1:A:0.0.1": "scene:M1:A:0.0.1",
+      "def:M1:A:0.1": "scene:M1:A:0.1",
+      "def:M1:A:0.1.0": "scene:M1:A:0.1.0",
+      "def:M1:A:0.1.1": "scene:M1:A:0.1.1",
+      "def:M1:A:1": "scene:M1:A:1",
+      "def:M1:A:1.0": "scene:M1:A:1.0",
+      "def:M1:A:1.0.0": "scene:M1:A:1.0.0",
+      "def:M1:A:1.0.1": "scene:M1:A:1.0.1",
+      "def:M1:A:1.1": "scene:M1:A:1.1",
+      "def:M1:A:1.1.0": "scene:M1:A:1.1.0",
+      "def:M1:A:1.1.1": "scene:M1:A:1.1.1",
+      "def:M1:A:root": "scene:M1:A:root"
+     }
+    },
+    "R_M1_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M1:B:0": "scene:M1:A:0",
+      "def:M1:B:0.0": "scene:M1:A:0.0",
+      "def:M1:B:0.0.0": "scene:M1:A:0.0.0",
+      "def:M1:B:0.0.1": "scene:M1:A:0.0.1",
+      "def:M1:B:0.1": "scene:M1:A:0.1",
+      "def:M1:B:0.1.0": "scene:M1:A:0.1.0",
+      "def:M1:B:0.1.1": "scene:M1:A:0.1.1",
+      "def:M1:B:1.0.1": "scene:M1:A:1.0.1",
+      "def:M1:B:1.1": "scene:M1:A:1.1",
+      "def:M1:B:1.1.0": "scene:M1:A:1.1.0",
+      "def:M1:B:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:0": "scene:M1:A:0",
+      "def:M2:A:0.0": "scene:M1:A:0.0",
+      "def:M2:A:0.0.0": "scene:M1:A:0.0.0",
+      "def:M2:A:0.0.1": "scene:M1:A:0.0.1",
+      "def:M2:A:0.1": "scene:M1:A:0.1",
+      "def:M2:A:0.1.0": "scene:M1:A:0.1.0",
+      "def:M2:A:0.1.1": "scene:M1:A:0.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:0": "scene:M1:A:0",
+      "def:M2:B:0.0": "scene:M1:A:0.0",
+      "def:M2:B:0.0.0": "scene:M1:A:0.0.0",
+      "def:M2:B:0.0.1": "scene:M1:A:0.0.1",
+      "def:M2:B:0.1": "scene:M1:A:0.1",
+      "def:M2:B:0.1.0": "scene:M1:A:0.1.0",
+      "def:M2:B:0.1.1": "scene:M1:A:0.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:1": "scene:M1:A:1",
+      "def:M3:A:1.0": "scene:M1:A:1.0",
+      "def:M3:A:1.0.0": "scene:M1:A:1.0.0",
+      "def:M3:A:1.0.1": "scene:M1:A:1.0.1",
+      "def:M3:A:1.1": "scene:M1:A:1.1",
+      "def:M3:A:1.1.0": "scene:M1:A:1.1.0",
+      "def:M3:A:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M3:B:1.0.1": "scene:M1:A:1.0.1",
+      "def:M3:B:1.1": "scene:M1:A:1.1",
+      "def:M3:B:1.1.0": "scene:M1:A:1.1.0",
+      "def:M3:B:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M1:A",
+    "entities": [
+     {
+      "entity_id": "scene:M1:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M1:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M1:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.0.0",
+      "predicate": "break",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M1:A:0.0.0",
+       "scene:M1:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M1:A:0.1.0",
+       "scene:M1:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M1:A:1.0.0",
+       "scene:M1:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M1:A:1.1.0",
+       "scene:M1:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M1:A:0.0",
+       "scene:M1:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M1:A:1.0",
+       "scene:M1:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M1:A:0",
+       "scene:M1:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M1_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M1:A:1.0.0",
+    "predicate": "break",
+    "arguments": [
+     "scene:M1:A:x",
+     "scene:M1:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M1",
+   "variant": "A",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M1:A:1.0.0",
+    "predicate": "break",
+    "arguments": [
+     "scene:M1:A:x",
+     "scene:M1:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M1:A:0": "scene:M1:A:0",
+      "def:M1:A:0.0": "scene:M1:A:0.0",
+      "def:M1:A:0.0.0": "scene:M1:A:0.0.0",
+      "def:M1:A:0.0.1": "scene:M1:A:0.0.1",
+      "def:M1:A:0.1": "scene:M1:A:0.1",
+      "def:M1:A:0.1.0": "scene:M1:A:0.1.0",
+      "def:M1:A:0.1.1": "scene:M1:A:0.1.1",
+      "def:M1:A:1": "scene:M1:A:1",
+      "def:M1:A:1.0": "scene:M1:A:1.0",
+      "def:M1:A:1.0.0": "scene:M1:A:1.0.0",
+      "def:M1:A:1.0.1": "scene:M1:A:1.0.1",
+      "def:M1:A:1.1": "scene:M1:A:1.1",
+      "def:M1:A:1.1.0": "scene:M1:A:1.1.0",
+      "def:M1:A:1.1.1": "scene:M1:A:1.1.1",
+      "def:M1:A:root": "scene:M1:A:root"
+     }
+    },
+    "R_M1_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M1:B:0.0.1": "scene:M1:A:0.0.1",
+      "def:M1:B:0.1": "scene:M1:A:0.1",
+      "def:M1:B:0.1.0": "scene:M1:A:0.1.0",
+      "def:M1:B:0.1.1": "scene:M1:A:0.1.1",
+      "def:M1:B:1": "scene:M1:A:1",
+      "def:M1:B:1.0": "scene:M1:A:1.0",
+      "def:M1:B:1.0.0": "scene:M1:A:1.0.0",
+      "def:M1:B:1.0.1": "scene:M1:A:1.0.1",
+      "def:M1:B:1.1": "scene:M1:A:1.1",
+      "def:M1:B:1.1.0": "scene:M1:A:1.1.0",
+      "def:M1:B:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:0": "scene:M1:A:0",
+      "def:M2:A:0.0": "scene:M1:A:0.0",
+      "def:M2:A:0.0.0": "scene:M1:A:0.0.0",
+      "def:M2:A:0.0.1": "scene:M1:A:0.0.1",
+      "def:M2:A:0.1": "scene:M1:A:0.1",
+      "def:M2:A:0.1.0": "scene:M1:A:0.1.0",
+      "def:M2:A:0.1.1": "scene:M1:A:0.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M2:B:0.0.1": "scene:M1:A:0.0.1",
+      "def:M2:B:0.1": "scene:M1:A:0.1",
+      "def:M2:B:0.1.0": "scene:M1:A:0.1.0",
+      "def:M2:B:0.1.1": "scene:M1:A:0.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:1": "scene:M1:A:1",
+      "def:M3:A:1.0": "scene:M1:A:1.0",
+      "def:M3:A:1.0.0": "scene:M1:A:1.0.0",
+      "def:M3:A:1.0.1": "scene:M1:A:1.0.1",
+      "def:M3:A:1.1": "scene:M1:A:1.1",
+      "def:M3:A:1.1.0": "scene:M1:A:1.1.0",
+      "def:M3:A:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:1": "scene:M1:A:1",
+      "def:M3:B:1.0": "scene:M1:A:1.0",
+      "def:M3:B:1.0.0": "scene:M1:A:1.0.0",
+      "def:M3:B:1.0.1": "scene:M1:A:1.0.1",
+      "def:M3:B:1.1": "scene:M1:A:1.1",
+      "def:M3:B:1.1.0": "scene:M1:A:1.1.0",
+      "def:M3:B:1.1.1": "scene:M1:A:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M1:A",
+    "entities": [
+     {
+      "entity_id": "scene:M1:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M1:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M1:A:0.0.0",
+      "predicate": "hold",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M1:A:x",
+       "scene:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M1:A:0.0.0",
+       "scene:M1:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M1:A:0.1.0",
+       "scene:M1:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M1:A:1.0.0",
+       "scene:M1:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M1:A:1.1.0",
+       "scene:M1:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M1:A:0.0",
+       "scene:M1:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M1:A:1.0",
+       "scene:M1:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M1:A:0",
+       "scene:M1:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M1_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M1:B:0.0.0",
+    "predicate": "hold_b",
+    "arguments": [
+     "scene:M1:B:x",
+     "scene:M1:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M1",
+   "variant": "B",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M1:B:0.0.0",
+    "predicate": "hold_b",
+    "arguments": [
+     "scene:M1:B:x",
+     "scene:M1:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M1:A:0": "scene:M1:B:0",
+      "def:M1:A:0.0": "scene:M1:B:0.0",
+      "def:M1:A:0.0.0": "scene:M1:B:0.0.0",
+      "def:M1:A:0.0.1": "scene:M1:B:0.0.1",
+      "def:M1:A:0.1": "scene:M1:B:0.1",
+      "def:M1:A:0.1.0": "scene:M1:B:0.1.0",
+      "def:M1:A:0.1.1": "scene:M1:B:0.1.1",
+      "def:M1:A:1.0.1": "scene:M1:B:1.0.1",
+      "def:M1:A:1.1": "scene:M1:B:1.1",
+      "def:M1:A:1.1.0": "scene:M1:B:1.1.0",
+      "def:M1:A:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M1:B:0": "scene:M1:B:0",
+      "def:M1:B:0.0": "scene:M1:B:0.0",
+      "def:M1:B:0.0.0": "scene:M1:B:0.0.0",
+      "def:M1:B:0.0.1": "scene:M1:B:0.0.1",
+      "def:M1:B:0.1": "scene:M1:B:0.1",
+      "def:M1:B:0.1.0": "scene:M1:B:0.1.0",
+      "def:M1:B:0.1.1": "scene:M1:B:0.1.1",
+      "def:M1:B:1": "scene:M1:B:1",
+      "def:M1:B:1.0": "scene:M1:B:1.0",
+      "def:M1:B:1.0.0": "scene:M1:B:1.0.0",
+      "def:M1:B:1.0.1": "scene:M1:B:1.0.1",
+      "def:M1:B:1.1": "scene:M1:B:1.1",
+      "def:M1:B:1.1.0": "scene:M1:B:1.1.0",
+      "def:M1:B:1.1.1": "scene:M1:B:1.1.1",
+      "def:M1:B:root": "scene:M1:B:root"
+     }
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:0": "scene:M1:B:0",
+      "def:M2:A:0.0": "scene:M1:B:0.0",
+      "def:M2:A:0.0.0": "scene:M1:B:0.0.0",
+      "def:M2:A:0.0.1": "scene:M1:B:0.0.1",
+      "def:M2:A:0.1": "scene:M1:B:0.1",
+      "def:M2:A:0.1.0": "scene:M1:B:0.1.0",
+      "def:M2:A:0.1.1": "scene:M1:B:0.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:0": "scene:M1:B:0",
+      "def:M2:B:0.0": "scene:M1:B:0.0",
+      "def:M2:B:0.0.0": "scene:M1:B:0.0.0",
+      "def:M2:B:0.0.1": "scene:M1:B:0.0.1",
+      "def:M2:B:0.1": "scene:M1:B:0.1",
+      "def:M2:B:0.1.0": "scene:M1:B:0.1.0",
+      "def:M2:B:0.1.1": "scene:M1:B:0.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M3:A:1.0.1": "scene:M1:B:1.0.1",
+      "def:M3:A:1.1": "scene:M1:B:1.1",
+      "def:M3:A:1.1.0": "scene:M1:B:1.1.0",
+      "def:M3:A:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:1": "scene:M1:B:1",
+      "def:M3:B:1.0": "scene:M1:B:1.0",
+      "def:M3:B:1.0.0": "scene:M1:B:1.0.0",
+      "def:M3:B:1.0.1": "scene:M1:B:1.0.1",
+      "def:M3:B:1.1": "scene:M1:B:1.1",
+      "def:M3:B:1.1.0": "scene:M1:B:1.1.0",
+      "def:M3:B:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M1:B",
+    "entities": [
+     {
+      "entity_id": "scene:M1:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M1:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M1:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.0.0",
+      "predicate": "break_b",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M1:B:0.0.0",
+       "scene:M1:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M1:B:0.1.0",
+       "scene:M1:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M1:B:1.0.0",
+       "scene:M1:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M1:B:1.1.0",
+       "scene:M1:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M1:B:0.0",
+       "scene:M1:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M1:B:1.0",
+       "scene:M1:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M1:B:0",
+       "scene:M1:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M1_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M1:B:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "scene:M1:B:x",
+     "scene:M1:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M1",
+   "variant": "B",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M1:B:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "scene:M1:B:x",
+     "scene:M1:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M1:A:0.0.1": "scene:M1:B:0.0.1",
+      "def:M1:A:0.1": "scene:M1:B:0.1",
+      "def:M1:A:0.1.0": "scene:M1:B:0.1.0",
+      "def:M1:A:0.1.1": "scene:M1:B:0.1.1",
+      "def:M1:A:1": "scene:M1:B:1",
+      "def:M1:A:1.0": "scene:M1:B:1.0",
+      "def:M1:A:1.0.0": "scene:M1:B:1.0.0",
+      "def:M1:A:1.0.1": "scene:M1:B:1.0.1",
+      "def:M1:A:1.1": "scene:M1:B:1.1",
+      "def:M1:A:1.1.0": "scene:M1:B:1.1.0",
+      "def:M1:A:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M1:B:0": "scene:M1:B:0",
+      "def:M1:B:0.0": "scene:M1:B:0.0",
+      "def:M1:B:0.0.0": "scene:M1:B:0.0.0",
+      "def:M1:B:0.0.1": "scene:M1:B:0.0.1",
+      "def:M1:B:0.1": "scene:M1:B:0.1",
+      "def:M1:B:0.1.0": "scene:M1:B:0.1.0",
+      "def:M1:B:0.1.1": "scene:M1:B:0.1.1",
+      "def:M1:B:1": "scene:M1:B:1",
+      "def:M1:B:1.0": "scene:M1:B:1.0",
+      "def:M1:B:1.0.0": "scene:M1:B:1.0.0",
+      "def:M1:B:1.0.1": "scene:M1:B:1.0.1",
+      "def:M1:B:1.1": "scene:M1:B:1.1",
+      "def:M1:B:1.1.0": "scene:M1:B:1.1.0",
+      "def:M1:B:1.1.1": "scene:M1:B:1.1.1",
+      "def:M1:B:root": "scene:M1:B:root"
+     }
+    },
+    "R_M2_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M2:A:0.0.1": "scene:M1:B:0.0.1",
+      "def:M2:A:0.1": "scene:M1:B:0.1",
+      "def:M2:A:0.1.0": "scene:M1:B:0.1.0",
+      "def:M2:A:0.1.1": "scene:M1:B:0.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:0": "scene:M1:B:0",
+      "def:M2:B:0.0": "scene:M1:B:0.0",
+      "def:M2:B:0.0.0": "scene:M1:B:0.0.0",
+      "def:M2:B:0.0.1": "scene:M1:B:0.0.1",
+      "def:M2:B:0.1": "scene:M1:B:0.1",
+      "def:M2:B:0.1.0": "scene:M1:B:0.1.0",
+      "def:M2:B:0.1.1": "scene:M1:B:0.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:1": "scene:M1:B:1",
+      "def:M3:A:1.0": "scene:M1:B:1.0",
+      "def:M3:A:1.0.0": "scene:M1:B:1.0.0",
+      "def:M3:A:1.0.1": "scene:M1:B:1.0.1",
+      "def:M3:A:1.1": "scene:M1:B:1.1",
+      "def:M3:A:1.1.0": "scene:M1:B:1.1.0",
+      "def:M3:A:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:1": "scene:M1:B:1",
+      "def:M3:B:1.0": "scene:M1:B:1.0",
+      "def:M3:B:1.0.0": "scene:M1:B:1.0.0",
+      "def:M3:B:1.0.1": "scene:M1:B:1.0.1",
+      "def:M3:B:1.1": "scene:M1:B:1.1",
+      "def:M3:B:1.1.0": "scene:M1:B:1.1.0",
+      "def:M3:B:1.1.1": "scene:M1:B:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M1:B",
+    "entities": [
+     {
+      "entity_id": "scene:M1:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M1:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M1:B:0.0.0",
+      "predicate": "hold_b",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M1:B:x",
+       "scene:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M1:B:0.0.0",
+       "scene:M1:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M1:B:0.1.0",
+       "scene:M1:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M1:B:1.0.0",
+       "scene:M1:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M1:B:1.1.0",
+       "scene:M1:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M1:B:0.0",
+       "scene:M1:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M1:B:1.0",
+       "scene:M1:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M1:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M1:B:0",
+       "scene:M1:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M2_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M2:A:0.0.0",
+    "predicate": "hold",
+    "arguments": [
+     "scene:M2:A:x",
+     "scene:M2:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M2",
+   "variant": "A",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M2:A:0.0.0",
+    "predicate": "hold",
+    "arguments": [
+     "scene:M2:A:x",
+     "scene:M2:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:0": "scene:M2:A:0",
+      "def:M1:A:0.0": "scene:M2:A:0.0",
+      "def:M1:A:0.0.0": "scene:M2:A:0.0.0",
+      "def:M1:A:0.0.1": "scene:M2:A:0.0.1",
+      "def:M1:A:0.1": "scene:M2:A:0.1",
+      "def:M1:A:0.1.0": "scene:M2:A:0.1.0",
+      "def:M1:A:0.1.1": "scene:M2:A:0.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:0": "scene:M2:A:0",
+      "def:M1:B:0.0": "scene:M2:A:0.0",
+      "def:M1:B:0.0.0": "scene:M2:A:0.0.0",
+      "def:M1:B:0.0.1": "scene:M2:A:0.0.1",
+      "def:M1:B:0.1": "scene:M2:A:0.1",
+      "def:M1:B:0.1.0": "scene:M2:A:0.1.0",
+      "def:M1:B:0.1.1": "scene:M2:A:0.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M2:A:0": "scene:M2:A:0",
+      "def:M2:A:0.0": "scene:M2:A:0.0",
+      "def:M2:A:0.0.0": "scene:M2:A:0.0.0",
+      "def:M2:A:0.0.1": "scene:M2:A:0.0.1",
+      "def:M2:A:0.1": "scene:M2:A:0.1",
+      "def:M2:A:0.1.0": "scene:M2:A:0.1.0",
+      "def:M2:A:0.1.1": "scene:M2:A:0.1.1",
+      "def:M2:A:1": "scene:M2:A:1",
+      "def:M2:A:1.0": "scene:M2:A:1.0",
+      "def:M2:A:1.0.0": "scene:M2:A:1.0.0",
+      "def:M2:A:1.0.1": "scene:M2:A:1.0.1",
+      "def:M2:A:1.1": "scene:M2:A:1.1",
+      "def:M2:A:1.1.0": "scene:M2:A:1.1.0",
+      "def:M2:A:1.1.1": "scene:M2:A:1.1.1",
+      "def:M2:A:root": "scene:M2:A:root"
+     }
+    },
+    "R_M2_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M2:B:0": "scene:M2:A:0",
+      "def:M2:B:0.0": "scene:M2:A:0.0",
+      "def:M2:B:0.0.0": "scene:M2:A:0.0.0",
+      "def:M2:B:0.0.1": "scene:M2:A:0.0.1",
+      "def:M2:B:0.1": "scene:M2:A:0.1",
+      "def:M2:B:0.1.0": "scene:M2:A:0.1.0",
+      "def:M2:B:0.1.1": "scene:M2:A:0.1.1",
+      "def:M2:B:1.0.1": "scene:M2:A:1.0.1",
+      "def:M2:B:1.1": "scene:M2:A:1.1",
+      "def:M2:B:1.1.0": "scene:M2:A:1.1.0",
+      "def:M2:B:1.1.1": "scene:M2:A:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:1": "scene:M2:A:1",
+      "def:M4:A:1.0": "scene:M2:A:1.0",
+      "def:M4:A:1.0.0": "scene:M2:A:1.0.0",
+      "def:M4:A:1.0.1": "scene:M2:A:1.0.1",
+      "def:M4:A:1.1": "scene:M2:A:1.1",
+      "def:M4:A:1.1.0": "scene:M2:A:1.1.0",
+      "def:M4:A:1.1.1": "scene:M2:A:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M4:B:1.0.1": "scene:M2:A:1.0.1",
+      "def:M4:B:1.1": "scene:M2:A:1.1",
+      "def:M4:B:1.1.0": "scene:M2:A:1.1.0",
+      "def:M4:B:1.1.1": "scene:M2:A:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M2:A",
+    "entities": [
+     {
+      "entity_id": "scene:M2:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M2:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M2:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.0.0",
+      "predicate": "pull",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M2:A:0.0.0",
+       "scene:M2:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M2:A:0.1.0",
+       "scene:M2:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M2:A:1.0.0",
+       "scene:M2:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M2:A:1.1.0",
+       "scene:M2:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M2:A:0.0",
+       "scene:M2:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M2:A:1.0",
+       "scene:M2:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M2:A:0",
+       "scene:M2:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M2_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M2:A:1.0.0",
+    "predicate": "pull",
+    "arguments": [
+     "scene:M2:A:x",
+     "scene:M2:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M2",
+   "variant": "A",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M2:A:1.0.0",
+    "predicate": "pull",
+    "arguments": [
+     "scene:M2:A:x",
+     "scene:M2:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:0": "scene:M2:A:0",
+      "def:M1:A:0.0": "scene:M2:A:0.0",
+      "def:M1:A:0.0.0": "scene:M2:A:0.0.0",
+      "def:M1:A:0.0.1": "scene:M2:A:0.0.1",
+      "def:M1:A:0.1": "scene:M2:A:0.1",
+      "def:M1:A:0.1.0": "scene:M2:A:0.1.0",
+      "def:M1:A:0.1.1": "scene:M2:A:0.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M1:B:0.0.1": "scene:M2:A:0.0.1",
+      "def:M1:B:0.1": "scene:M2:A:0.1",
+      "def:M1:B:0.1.0": "scene:M2:A:0.1.0",
+      "def:M1:B:0.1.1": "scene:M2:A:0.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M2:A:0": "scene:M2:A:0",
+      "def:M2:A:0.0": "scene:M2:A:0.0",
+      "def:M2:A:0.0.0": "scene:M2:A:0.0.0",
+      "def:M2:A:0.0.1": "scene:M2:A:0.0.1",
+      "def:M2:A:0.1": "scene:M2:A:0.1",
+      "def:M2:A:0.1.0": "scene:M2:A:0.1.0",
+      "def:M2:A:0.1.1": "scene:M2:A:0.1.1",
+      "def:M2:A:1": "scene:M2:A:1",
+      "def:M2:A:1.0": "scene:M2:A:1.0",
+      "def:M2:A:1.0.0": "scene:M2:A:1.0.0",
+      "def:M2:A:1.0.1": "scene:M2:A:1.0.1",
+      "def:M2:A:1.1": "scene:M2:A:1.1",
+      "def:M2:A:1.1.0": "scene:M2:A:1.1.0",
+      "def:M2:A:1.1.1": "scene:M2:A:1.1.1",
+      "def:M2:A:root": "scene:M2:A:root"
+     }
+    },
+    "R_M2_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M2:B:0.0.1": "scene:M2:A:0.0.1",
+      "def:M2:B:0.1": "scene:M2:A:0.1",
+      "def:M2:B:0.1.0": "scene:M2:A:0.1.0",
+      "def:M2:B:0.1.1": "scene:M2:A:0.1.1",
+      "def:M2:B:1": "scene:M2:A:1",
+      "def:M2:B:1.0": "scene:M2:A:1.0",
+      "def:M2:B:1.0.0": "scene:M2:A:1.0.0",
+      "def:M2:B:1.0.1": "scene:M2:A:1.0.1",
+      "def:M2:B:1.1": "scene:M2:A:1.1",
+      "def:M2:B:1.1.0": "scene:M2:A:1.1.0",
+      "def:M2:B:1.1.1": "scene:M2:A:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:1": "scene:M2:A:1",
+      "def:M4:A:1.0": "scene:M2:A:1.0",
+      "def:M4:A:1.0.0": "scene:M2:A:1.0.0",
+      "def:M4:A:1.0.1": "scene:M2:A:1.0.1",
+      "def:M4:A:1.1": "scene:M2:A:1.1",
+      "def:M4:A:1.1.0": "scene:M2:A:1.1.0",
+      "def:M4:A:1.1.1": "scene:M2:A:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:1": "scene:M2:A:1",
+      "def:M4:B:1.0": "scene:M2:A:1.0",
+      "def:M4:B:1.0.0": "scene:M2:A:1.0.0",
+      "def:M4:B:1.0.1": "scene:M2:A:1.0.1",
+      "def:M4:B:1.1": "scene:M2:A:1.1",
+      "def:M4:B:1.1.0": "scene:M2:A:1.1.0",
+      "def:M4:B:1.1.1": "scene:M2:A:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M2:A",
+    "entities": [
+     {
+      "entity_id": "scene:M2:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M2:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M2:A:0.0.0",
+      "predicate": "hold",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M2:A:x",
+       "scene:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M2:A:0.0.0",
+       "scene:M2:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M2:A:0.1.0",
+       "scene:M2:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M2:A:1.0.0",
+       "scene:M2:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M2:A:1.1.0",
+       "scene:M2:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M2:A:0.0",
+       "scene:M2:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M2:A:1.0",
+       "scene:M2:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M2:A:0",
+       "scene:M2:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M2_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M2:B:0.0.0",
+    "predicate": "hold_b",
+    "arguments": [
+     "scene:M2:B:x",
+     "scene:M2:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M2",
+   "variant": "B",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M2:B:0.0.0",
+    "predicate": "hold_b",
+    "arguments": [
+     "scene:M2:B:x",
+     "scene:M2:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:0": "scene:M2:B:0",
+      "def:M1:A:0.0": "scene:M2:B:0.0",
+      "def:M1:A:0.0.0": "scene:M2:B:0.0.0",
+      "def:M1:A:0.0.1": "scene:M2:B:0.0.1",
+      "def:M1:A:0.1": "scene:M2:B:0.1",
+      "def:M1:A:0.1.0": "scene:M2:B:0.1.0",
+      "def:M1:A:0.1.1": "scene:M2:B:0.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:0": "scene:M2:B:0",
+      "def:M1:B:0.0": "scene:M2:B:0.0",
+      "def:M1:B:0.0.0": "scene:M2:B:0.0.0",
+      "def:M1:B:0.0.1": "scene:M2:B:0.0.1",
+      "def:M1:B:0.1": "scene:M2:B:0.1",
+      "def:M1:B:0.1.0": "scene:M2:B:0.1.0",
+      "def:M1:B:0.1.1": "scene:M2:B:0.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M2:A:0": "scene:M2:B:0",
+      "def:M2:A:0.0": "scene:M2:B:0.0",
+      "def:M2:A:0.0.0": "scene:M2:B:0.0.0",
+      "def:M2:A:0.0.1": "scene:M2:B:0.0.1",
+      "def:M2:A:0.1": "scene:M2:B:0.1",
+      "def:M2:A:0.1.0": "scene:M2:B:0.1.0",
+      "def:M2:A:0.1.1": "scene:M2:B:0.1.1",
+      "def:M2:A:1.0.1": "scene:M2:B:1.0.1",
+      "def:M2:A:1.1": "scene:M2:B:1.1",
+      "def:M2:A:1.1.0": "scene:M2:B:1.1.0",
+      "def:M2:A:1.1.1": "scene:M2:B:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M2:B:0": "scene:M2:B:0",
+      "def:M2:B:0.0": "scene:M2:B:0.0",
+      "def:M2:B:0.0.0": "scene:M2:B:0.0.0",
+      "def:M2:B:0.0.1": "scene:M2:B:0.0.1",
+      "def:M2:B:0.1": "scene:M2:B:0.1",
+      "def:M2:B:0.1.0": "scene:M2:B:0.1.0",
+      "def:M2:B:0.1.1": "scene:M2:B:0.1.1",
+      "def:M2:B:1": "scene:M2:B:1",
+      "def:M2:B:1.0": "scene:M2:B:1.0",
+      "def:M2:B:1.0.0": "scene:M2:B:1.0.0",
+      "def:M2:B:1.0.1": "scene:M2:B:1.0.1",
+      "def:M2:B:1.1": "scene:M2:B:1.1",
+      "def:M2:B:1.1.0": "scene:M2:B:1.1.0",
+      "def:M2:B:1.1.1": "scene:M2:B:1.1.1",
+      "def:M2:B:root": "scene:M2:B:root"
+     }
+    },
+    "R_M3_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M4:A:1.0.1": "scene:M2:B:1.0.1",
+      "def:M4:A:1.1": "scene:M2:B:1.1",
+      "def:M4:A:1.1.0": "scene:M2:B:1.1.0",
+      "def:M4:A:1.1.1": "scene:M2:B:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:1": "scene:M2:B:1",
+      "def:M4:B:1.0": "scene:M2:B:1.0",
+      "def:M4:B:1.0.0": "scene:M2:B:1.0.0",
+      "def:M4:B:1.0.1": "scene:M2:B:1.0.1",
+      "def:M4:B:1.1": "scene:M2:B:1.1",
+      "def:M4:B:1.1.0": "scene:M2:B:1.1.0",
+      "def:M4:B:1.1.1": "scene:M2:B:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M2:B",
+    "entities": [
+     {
+      "entity_id": "scene:M2:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M2:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M2:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.0.0",
+      "predicate": "pull_b",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M2:B:0.0.0",
+       "scene:M2:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M2:B:0.1.0",
+       "scene:M2:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M2:B:1.0.0",
+       "scene:M2:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M2:B:1.1.0",
+       "scene:M2:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M2:B:0.0",
+       "scene:M2:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M2:B:1.0",
+       "scene:M2:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M2:B:0",
+       "scene:M2:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M2_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M2:B:1.0.0",
+    "predicate": "pull_b",
+    "arguments": [
+     "scene:M2:B:x",
+     "scene:M2:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M2",
+   "variant": "B",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M2:B:1.0.0",
+    "predicate": "pull_b",
+    "arguments": [
+     "scene:M2:B:x",
+     "scene:M2:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M1:A:0.0.1": "scene:M2:B:0.0.1",
+      "def:M1:A:0.1": "scene:M2:B:0.1",
+      "def:M1:A:0.1.0": "scene:M2:B:0.1.0",
+      "def:M1:A:0.1.1": "scene:M2:B:0.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:0": "scene:M2:B:0",
+      "def:M1:B:0.0": "scene:M2:B:0.0",
+      "def:M1:B:0.0.0": "scene:M2:B:0.0.0",
+      "def:M1:B:0.0.1": "scene:M2:B:0.0.1",
+      "def:M1:B:0.1": "scene:M2:B:0.1",
+      "def:M1:B:0.1.0": "scene:M2:B:0.1.0",
+      "def:M1:B:0.1.1": "scene:M2:B:0.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M2:A:0.0.1": "scene:M2:B:0.0.1",
+      "def:M2:A:0.1": "scene:M2:B:0.1",
+      "def:M2:A:0.1.0": "scene:M2:B:0.1.0",
+      "def:M2:A:0.1.1": "scene:M2:B:0.1.1",
+      "def:M2:A:1": "scene:M2:B:1",
+      "def:M2:A:1.0": "scene:M2:B:1.0",
+      "def:M2:A:1.0.0": "scene:M2:B:1.0.0",
+      "def:M2:A:1.0.1": "scene:M2:B:1.0.1",
+      "def:M2:A:1.1": "scene:M2:B:1.1",
+      "def:M2:A:1.1.0": "scene:M2:B:1.1.0",
+      "def:M2:A:1.1.1": "scene:M2:B:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M2:B:0": "scene:M2:B:0",
+      "def:M2:B:0.0": "scene:M2:B:0.0",
+      "def:M2:B:0.0.0": "scene:M2:B:0.0.0",
+      "def:M2:B:0.0.1": "scene:M2:B:0.0.1",
+      "def:M2:B:0.1": "scene:M2:B:0.1",
+      "def:M2:B:0.1.0": "scene:M2:B:0.1.0",
+      "def:M2:B:0.1.1": "scene:M2:B:0.1.1",
+      "def:M2:B:1": "scene:M2:B:1",
+      "def:M2:B:1.0": "scene:M2:B:1.0",
+      "def:M2:B:1.0.0": "scene:M2:B:1.0.0",
+      "def:M2:B:1.0.1": "scene:M2:B:1.0.1",
+      "def:M2:B:1.1": "scene:M2:B:1.1",
+      "def:M2:B:1.1.0": "scene:M2:B:1.1.0",
+      "def:M2:B:1.1.1": "scene:M2:B:1.1.1",
+      "def:M2:B:root": "scene:M2:B:root"
+     }
+    },
+    "R_M3_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:1": "scene:M2:B:1",
+      "def:M4:A:1.0": "scene:M2:B:1.0",
+      "def:M4:A:1.0.0": "scene:M2:B:1.0.0",
+      "def:M4:A:1.0.1": "scene:M2:B:1.0.1",
+      "def:M4:A:1.1": "scene:M2:B:1.1",
+      "def:M4:A:1.1.0": "scene:M2:B:1.1.0",
+      "def:M4:A:1.1.1": "scene:M2:B:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:1": "scene:M2:B:1",
+      "def:M4:B:1.0": "scene:M2:B:1.0",
+      "def:M4:B:1.0.0": "scene:M2:B:1.0.0",
+      "def:M4:B:1.0.1": "scene:M2:B:1.0.1",
+      "def:M4:B:1.1": "scene:M2:B:1.1",
+      "def:M4:B:1.1.0": "scene:M2:B:1.1.0",
+      "def:M4:B:1.1.1": "scene:M2:B:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M2:B",
+    "entities": [
+     {
+      "entity_id": "scene:M2:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M2:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M2:B:0.0.0",
+      "predicate": "hold_b",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M2:B:x",
+       "scene:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "scene:M2:B:0.0.0",
+       "scene:M2:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "scene:M2:B:0.1.0",
+       "scene:M2:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M2:B:1.0.0",
+       "scene:M2:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M2:B:1.1.0",
+       "scene:M2:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "scene:M2:B:0.0",
+       "scene:M2:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M2:B:1.0",
+       "scene:M2:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M2:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "scene:M2:B:0",
+       "scene:M2:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M3_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M3:A:0.0.0",
+    "predicate": "wrap",
+    "arguments": [
+     "scene:M3:A:x",
+     "scene:M3:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M3",
+   "variant": "A",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M3:A:0.0.0",
+    "predicate": "wrap",
+    "arguments": [
+     "scene:M3:A:x",
+     "scene:M3:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:1": "scene:M3:A:1",
+      "def:M1:A:1.0": "scene:M3:A:1.0",
+      "def:M1:A:1.0.0": "scene:M3:A:1.0.0",
+      "def:M1:A:1.0.1": "scene:M3:A:1.0.1",
+      "def:M1:A:1.1": "scene:M3:A:1.1",
+      "def:M1:A:1.1.0": "scene:M3:A:1.1.0",
+      "def:M1:A:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M1:B:1.0.1": "scene:M3:A:1.0.1",
+      "def:M1:B:1.1": "scene:M3:A:1.1",
+      "def:M1:B:1.1.0": "scene:M3:A:1.1.0",
+      "def:M1:B:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M3:A:0": "scene:M3:A:0",
+      "def:M3:A:0.0": "scene:M3:A:0.0",
+      "def:M3:A:0.0.0": "scene:M3:A:0.0.0",
+      "def:M3:A:0.0.1": "scene:M3:A:0.0.1",
+      "def:M3:A:0.1": "scene:M3:A:0.1",
+      "def:M3:A:0.1.0": "scene:M3:A:0.1.0",
+      "def:M3:A:0.1.1": "scene:M3:A:0.1.1",
+      "def:M3:A:1": "scene:M3:A:1",
+      "def:M3:A:1.0": "scene:M3:A:1.0",
+      "def:M3:A:1.0.0": "scene:M3:A:1.0.0",
+      "def:M3:A:1.0.1": "scene:M3:A:1.0.1",
+      "def:M3:A:1.1": "scene:M3:A:1.1",
+      "def:M3:A:1.1.0": "scene:M3:A:1.1.0",
+      "def:M3:A:1.1.1": "scene:M3:A:1.1.1",
+      "def:M3:A:root": "scene:M3:A:root"
+     }
+    },
+    "R_M3_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M3:B:0": "scene:M3:A:0",
+      "def:M3:B:0.0": "scene:M3:A:0.0",
+      "def:M3:B:0.0.0": "scene:M3:A:0.0.0",
+      "def:M3:B:0.0.1": "scene:M3:A:0.0.1",
+      "def:M3:B:0.1": "scene:M3:A:0.1",
+      "def:M3:B:0.1.0": "scene:M3:A:0.1.0",
+      "def:M3:B:0.1.1": "scene:M3:A:0.1.1",
+      "def:M3:B:1.0.1": "scene:M3:A:1.0.1",
+      "def:M3:B:1.1": "scene:M3:A:1.1",
+      "def:M3:B:1.1.0": "scene:M3:A:1.1.0",
+      "def:M3:B:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:0": "scene:M3:A:0",
+      "def:M4:A:0.0": "scene:M3:A:0.0",
+      "def:M4:A:0.0.0": "scene:M3:A:0.0.0",
+      "def:M4:A:0.0.1": "scene:M3:A:0.0.1",
+      "def:M4:A:0.1": "scene:M3:A:0.1",
+      "def:M4:A:0.1.0": "scene:M3:A:0.1.0",
+      "def:M4:A:0.1.1": "scene:M3:A:0.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:0": "scene:M3:A:0",
+      "def:M4:B:0.0": "scene:M3:A:0.0",
+      "def:M4:B:0.0.0": "scene:M3:A:0.0.0",
+      "def:M4:B:0.0.1": "scene:M3:A:0.0.1",
+      "def:M4:B:0.1": "scene:M3:A:0.1",
+      "def:M4:B:0.1.0": "scene:M3:A:0.1.0",
+      "def:M4:B:0.1.1": "scene:M3:A:0.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M3:A",
+    "entities": [
+     {
+      "entity_id": "scene:M3:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M3:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M3:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.0.0",
+      "predicate": "break",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M3:A:0.0.0",
+       "scene:M3:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M3:A:0.1.0",
+       "scene:M3:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M3:A:1.0.0",
+       "scene:M3:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M3:A:1.1.0",
+       "scene:M3:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M3:A:0.0",
+       "scene:M3:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M3:A:1.0",
+       "scene:M3:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M3:A:0",
+       "scene:M3:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M3_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M3:A:1.0.0",
+    "predicate": "break",
+    "arguments": [
+     "scene:M3:A:x",
+     "scene:M3:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M3",
+   "variant": "A",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M3:A:1.0.0",
+    "predicate": "break",
+    "arguments": [
+     "scene:M3:A:x",
+     "scene:M3:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:1": "scene:M3:A:1",
+      "def:M1:A:1.0": "scene:M3:A:1.0",
+      "def:M1:A:1.0.0": "scene:M3:A:1.0.0",
+      "def:M1:A:1.0.1": "scene:M3:A:1.0.1",
+      "def:M1:A:1.1": "scene:M3:A:1.1",
+      "def:M1:A:1.1.0": "scene:M3:A:1.1.0",
+      "def:M1:A:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:1": "scene:M3:A:1",
+      "def:M1:B:1.0": "scene:M3:A:1.0",
+      "def:M1:B:1.0.0": "scene:M3:A:1.0.0",
+      "def:M1:B:1.0.1": "scene:M3:A:1.0.1",
+      "def:M1:B:1.1": "scene:M3:A:1.1",
+      "def:M1:B:1.1.0": "scene:M3:A:1.1.0",
+      "def:M1:B:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M3:A:0": "scene:M3:A:0",
+      "def:M3:A:0.0": "scene:M3:A:0.0",
+      "def:M3:A:0.0.0": "scene:M3:A:0.0.0",
+      "def:M3:A:0.0.1": "scene:M3:A:0.0.1",
+      "def:M3:A:0.1": "scene:M3:A:0.1",
+      "def:M3:A:0.1.0": "scene:M3:A:0.1.0",
+      "def:M3:A:0.1.1": "scene:M3:A:0.1.1",
+      "def:M3:A:1": "scene:M3:A:1",
+      "def:M3:A:1.0": "scene:M3:A:1.0",
+      "def:M3:A:1.0.0": "scene:M3:A:1.0.0",
+      "def:M3:A:1.0.1": "scene:M3:A:1.0.1",
+      "def:M3:A:1.1": "scene:M3:A:1.1",
+      "def:M3:A:1.1.0": "scene:M3:A:1.1.0",
+      "def:M3:A:1.1.1": "scene:M3:A:1.1.1",
+      "def:M3:A:root": "scene:M3:A:root"
+     }
+    },
+    "R_M3_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M3:B:0.0.1": "scene:M3:A:0.0.1",
+      "def:M3:B:0.1": "scene:M3:A:0.1",
+      "def:M3:B:0.1.0": "scene:M3:A:0.1.0",
+      "def:M3:B:0.1.1": "scene:M3:A:0.1.1",
+      "def:M3:B:1": "scene:M3:A:1",
+      "def:M3:B:1.0": "scene:M3:A:1.0",
+      "def:M3:B:1.0.0": "scene:M3:A:1.0.0",
+      "def:M3:B:1.0.1": "scene:M3:A:1.0.1",
+      "def:M3:B:1.1": "scene:M3:A:1.1",
+      "def:M3:B:1.1.0": "scene:M3:A:1.1.0",
+      "def:M3:B:1.1.1": "scene:M3:A:1.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:0": "scene:M3:A:0",
+      "def:M4:A:0.0": "scene:M3:A:0.0",
+      "def:M4:A:0.0.0": "scene:M3:A:0.0.0",
+      "def:M4:A:0.0.1": "scene:M3:A:0.0.1",
+      "def:M4:A:0.1": "scene:M3:A:0.1",
+      "def:M4:A:0.1.0": "scene:M3:A:0.1.0",
+      "def:M4:A:0.1.1": "scene:M3:A:0.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M4:B:0.0.1": "scene:M3:A:0.0.1",
+      "def:M4:B:0.1": "scene:M3:A:0.1",
+      "def:M4:B:0.1.0": "scene:M3:A:0.1.0",
+      "def:M4:B:0.1.1": "scene:M3:A:0.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M3:A",
+    "entities": [
+     {
+      "entity_id": "scene:M3:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M3:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M3:A:0.0.0",
+      "predicate": "wrap",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M3:A:x",
+       "scene:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M3:A:0.0.0",
+       "scene:M3:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M3:A:0.1.0",
+       "scene:M3:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M3:A:1.0.0",
+       "scene:M3:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M3:A:1.1.0",
+       "scene:M3:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M3:A:0.0",
+       "scene:M3:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M3:A:1.0",
+       "scene:M3:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M3:A:0",
+       "scene:M3:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M3_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M3:B:0.0.0",
+    "predicate": "wrap_b",
+    "arguments": [
+     "scene:M3:B:x",
+     "scene:M3:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M3",
+   "variant": "B",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M3:B:0.0.0",
+    "predicate": "wrap_b",
+    "arguments": [
+     "scene:M3:B:x",
+     "scene:M3:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M1:A:1.0.1": "scene:M3:B:1.0.1",
+      "def:M1:A:1.1": "scene:M3:B:1.1",
+      "def:M1:A:1.1.0": "scene:M3:B:1.1.0",
+      "def:M1:A:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:1": "scene:M3:B:1",
+      "def:M1:B:1.0": "scene:M3:B:1.0",
+      "def:M1:B:1.0.0": "scene:M3:B:1.0.0",
+      "def:M1:B:1.0.1": "scene:M3:B:1.0.1",
+      "def:M1:B:1.1": "scene:M3:B:1.1",
+      "def:M1:B:1.1.0": "scene:M3:B:1.1.0",
+      "def:M1:B:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M3:A:0": "scene:M3:B:0",
+      "def:M3:A:0.0": "scene:M3:B:0.0",
+      "def:M3:A:0.0.0": "scene:M3:B:0.0.0",
+      "def:M3:A:0.0.1": "scene:M3:B:0.0.1",
+      "def:M3:A:0.1": "scene:M3:B:0.1",
+      "def:M3:A:0.1.0": "scene:M3:B:0.1.0",
+      "def:M3:A:0.1.1": "scene:M3:B:0.1.1",
+      "def:M3:A:1.0.1": "scene:M3:B:1.0.1",
+      "def:M3:A:1.1": "scene:M3:B:1.1",
+      "def:M3:A:1.1.0": "scene:M3:B:1.1.0",
+      "def:M3:A:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M3:B:0": "scene:M3:B:0",
+      "def:M3:B:0.0": "scene:M3:B:0.0",
+      "def:M3:B:0.0.0": "scene:M3:B:0.0.0",
+      "def:M3:B:0.0.1": "scene:M3:B:0.0.1",
+      "def:M3:B:0.1": "scene:M3:B:0.1",
+      "def:M3:B:0.1.0": "scene:M3:B:0.1.0",
+      "def:M3:B:0.1.1": "scene:M3:B:0.1.1",
+      "def:M3:B:1": "scene:M3:B:1",
+      "def:M3:B:1.0": "scene:M3:B:1.0",
+      "def:M3:B:1.0.0": "scene:M3:B:1.0.0",
+      "def:M3:B:1.0.1": "scene:M3:B:1.0.1",
+      "def:M3:B:1.1": "scene:M3:B:1.1",
+      "def:M3:B:1.1.0": "scene:M3:B:1.1.0",
+      "def:M3:B:1.1.1": "scene:M3:B:1.1.1",
+      "def:M3:B:root": "scene:M3:B:root"
+     }
+    },
+    "R_M4_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:A:0": "scene:M3:B:0",
+      "def:M4:A:0.0": "scene:M3:B:0.0",
+      "def:M4:A:0.0.0": "scene:M3:B:0.0.0",
+      "def:M4:A:0.0.1": "scene:M3:B:0.0.1",
+      "def:M4:A:0.1": "scene:M3:B:0.1",
+      "def:M4:A:0.1.0": "scene:M3:B:0.1.0",
+      "def:M4:A:0.1.1": "scene:M3:B:0.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:0": "scene:M3:B:0",
+      "def:M4:B:0.0": "scene:M3:B:0.0",
+      "def:M4:B:0.0.0": "scene:M3:B:0.0.0",
+      "def:M4:B:0.0.1": "scene:M3:B:0.0.1",
+      "def:M4:B:0.1": "scene:M3:B:0.1",
+      "def:M4:B:0.1.0": "scene:M3:B:0.1.0",
+      "def:M4:B:0.1.1": "scene:M3:B:0.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M3:B",
+    "entities": [
+     {
+      "entity_id": "scene:M3:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M3:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M3:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.0.0",
+      "predicate": "break_b",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M3:B:0.0.0",
+       "scene:M3:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M3:B:0.1.0",
+       "scene:M3:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M3:B:1.0.0",
+       "scene:M3:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M3:B:1.1.0",
+       "scene:M3:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M3:B:0.0",
+       "scene:M3:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M3:B:1.0",
+       "scene:M3:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M3:B:0",
+       "scene:M3:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M3_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M3:B:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "scene:M3:B:x",
+     "scene:M3:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M3",
+   "variant": "B",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M3:B:1.0.0",
+    "predicate": "break_b",
+    "arguments": [
+     "scene:M3:B:x",
+     "scene:M3:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:A:1": "scene:M3:B:1",
+      "def:M1:A:1.0": "scene:M3:B:1.0",
+      "def:M1:A:1.0.0": "scene:M3:B:1.0.0",
+      "def:M1:A:1.0.1": "scene:M3:B:1.0.1",
+      "def:M1:A:1.1": "scene:M3:B:1.1",
+      "def:M1:A:1.1.0": "scene:M3:B:1.1.0",
+      "def:M1:A:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M1_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M1:B:1": "scene:M3:B:1",
+      "def:M1:B:1.0": "scene:M3:B:1.0",
+      "def:M1:B:1.0.0": "scene:M3:B:1.0.0",
+      "def:M1:B:1.0.1": "scene:M3:B:1.0.1",
+      "def:M1:B:1.1": "scene:M3:B:1.1",
+      "def:M1:B:1.1.0": "scene:M3:B:1.1.0",
+      "def:M1:B:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M2_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M3_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M3:A:0.0.1": "scene:M3:B:0.0.1",
+      "def:M3:A:0.1": "scene:M3:B:0.1",
+      "def:M3:A:0.1.0": "scene:M3:B:0.1.0",
+      "def:M3:A:0.1.1": "scene:M3:B:0.1.1",
+      "def:M3:A:1": "scene:M3:B:1",
+      "def:M3:A:1.0": "scene:M3:B:1.0",
+      "def:M3:A:1.0.0": "scene:M3:B:1.0.0",
+      "def:M3:A:1.0.1": "scene:M3:B:1.0.1",
+      "def:M3:A:1.1": "scene:M3:B:1.1",
+      "def:M3:A:1.1.0": "scene:M3:B:1.1.0",
+      "def:M3:A:1.1.1": "scene:M3:B:1.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M3:B:0": "scene:M3:B:0",
+      "def:M3:B:0.0": "scene:M3:B:0.0",
+      "def:M3:B:0.0.0": "scene:M3:B:0.0.0",
+      "def:M3:B:0.0.1": "scene:M3:B:0.0.1",
+      "def:M3:B:0.1": "scene:M3:B:0.1",
+      "def:M3:B:0.1.0": "scene:M3:B:0.1.0",
+      "def:M3:B:0.1.1": "scene:M3:B:0.1.1",
+      "def:M3:B:1": "scene:M3:B:1",
+      "def:M3:B:1.0": "scene:M3:B:1.0",
+      "def:M3:B:1.0.0": "scene:M3:B:1.0.0",
+      "def:M3:B:1.0.1": "scene:M3:B:1.0.1",
+      "def:M3:B:1.1": "scene:M3:B:1.1",
+      "def:M3:B:1.1.0": "scene:M3:B:1.1.0",
+      "def:M3:B:1.1.1": "scene:M3:B:1.1.1",
+      "def:M3:B:root": "scene:M3:B:root"
+     }
+    },
+    "R_M4_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M4:A:0.0.1": "scene:M3:B:0.0.1",
+      "def:M4:A:0.1": "scene:M3:B:0.1",
+      "def:M4:A:0.1.0": "scene:M3:B:0.1.0",
+      "def:M4:A:0.1.1": "scene:M3:B:0.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M4:B:0": "scene:M3:B:0",
+      "def:M4:B:0.0": "scene:M3:B:0.0",
+      "def:M4:B:0.0.0": "scene:M3:B:0.0.0",
+      "def:M4:B:0.0.1": "scene:M3:B:0.0.1",
+      "def:M4:B:0.1": "scene:M3:B:0.1",
+      "def:M4:B:0.1.0": "scene:M3:B:0.1.0",
+      "def:M4:B:0.1.1": "scene:M3:B:0.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M3:B",
+    "entities": [
+     {
+      "entity_id": "scene:M3:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M3:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M3:B:0.0.0",
+      "predicate": "wrap_b",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "scene:M3:B:x",
+       "scene:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M3:B:0.0.0",
+       "scene:M3:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M3:B:0.1.0",
+       "scene:M3:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "scene:M3:B:1.0.0",
+       "scene:M3:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "scene:M3:B:1.1.0",
+       "scene:M3:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M3:B:0.0",
+       "scene:M3:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "scene:M3:B:1.0",
+       "scene:M3:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M3:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M3:B:0",
+       "scene:M3:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M4_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M4:A:0.0.0",
+    "predicate": "wrap",
+    "arguments": [
+     "scene:M4:A:x",
+     "scene:M4:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M4",
+   "variant": "A",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M4:A:0.0.0",
+    "predicate": "wrap",
+    "arguments": [
+     "scene:M4:A:x",
+     "scene:M4:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M1_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:1": "scene:M4:A:1",
+      "def:M2:A:1.0": "scene:M4:A:1.0",
+      "def:M2:A:1.0.0": "scene:M4:A:1.0.0",
+      "def:M2:A:1.0.1": "scene:M4:A:1.0.1",
+      "def:M2:A:1.1": "scene:M4:A:1.1",
+      "def:M2:A:1.1.0": "scene:M4:A:1.1.0",
+      "def:M2:A:1.1.1": "scene:M4:A:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M2:B:1.0.1": "scene:M4:A:1.0.1",
+      "def:M2:B:1.1": "scene:M4:A:1.1",
+      "def:M2:B:1.1.0": "scene:M4:A:1.1.0",
+      "def:M2:B:1.1.1": "scene:M4:A:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:0": "scene:M4:A:0",
+      "def:M3:A:0.0": "scene:M4:A:0.0",
+      "def:M3:A:0.0.0": "scene:M4:A:0.0.0",
+      "def:M3:A:0.0.1": "scene:M4:A:0.0.1",
+      "def:M3:A:0.1": "scene:M4:A:0.1",
+      "def:M3:A:0.1.0": "scene:M4:A:0.1.0",
+      "def:M3:A:0.1.1": "scene:M4:A:0.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:0": "scene:M4:A:0",
+      "def:M3:B:0.0": "scene:M4:A:0.0",
+      "def:M3:B:0.0.0": "scene:M4:A:0.0.0",
+      "def:M3:B:0.0.1": "scene:M4:A:0.0.1",
+      "def:M3:B:0.1": "scene:M4:A:0.1",
+      "def:M3:B:0.1.0": "scene:M4:A:0.1.0",
+      "def:M3:B:0.1.1": "scene:M4:A:0.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M4:A:0": "scene:M4:A:0",
+      "def:M4:A:0.0": "scene:M4:A:0.0",
+      "def:M4:A:0.0.0": "scene:M4:A:0.0.0",
+      "def:M4:A:0.0.1": "scene:M4:A:0.0.1",
+      "def:M4:A:0.1": "scene:M4:A:0.1",
+      "def:M4:A:0.1.0": "scene:M4:A:0.1.0",
+      "def:M4:A:0.1.1": "scene:M4:A:0.1.1",
+      "def:M4:A:1": "scene:M4:A:1",
+      "def:M4:A:1.0": "scene:M4:A:1.0",
+      "def:M4:A:1.0.0": "scene:M4:A:1.0.0",
+      "def:M4:A:1.0.1": "scene:M4:A:1.0.1",
+      "def:M4:A:1.1": "scene:M4:A:1.1",
+      "def:M4:A:1.1.0": "scene:M4:A:1.1.0",
+      "def:M4:A:1.1.1": "scene:M4:A:1.1.1",
+      "def:M4:A:root": "scene:M4:A:root"
+     }
+    },
+    "R_M4_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M4:B:0": "scene:M4:A:0",
+      "def:M4:B:0.0": "scene:M4:A:0.0",
+      "def:M4:B:0.0.0": "scene:M4:A:0.0.0",
+      "def:M4:B:0.0.1": "scene:M4:A:0.0.1",
+      "def:M4:B:0.1": "scene:M4:A:0.1",
+      "def:M4:B:0.1.0": "scene:M4:A:0.1.0",
+      "def:M4:B:0.1.1": "scene:M4:A:0.1.1",
+      "def:M4:B:1.0.1": "scene:M4:A:1.0.1",
+      "def:M4:B:1.1": "scene:M4:A:1.1",
+      "def:M4:B:1.1.0": "scene:M4:A:1.1.0",
+      "def:M4:B:1.1.1": "scene:M4:A:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M4:A",
+    "entities": [
+     {
+      "entity_id": "scene:M4:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M4:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M4:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.0.0",
+      "predicate": "pull",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M4:A:0.0.0",
+       "scene:M4:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M4:A:0.1.0",
+       "scene:M4:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M4:A:1.0.0",
+       "scene:M4:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M4:A:1.1.0",
+       "scene:M4:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M4:A:0.0",
+       "scene:M4:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M4:A:1.0",
+       "scene:M4:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M4:A:0",
+       "scene:M4:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M4_A",
+   "prediction": {
+    "relation_id": "sme_projection__def:M4:A:1.0.0",
+    "predicate": "pull",
+    "arguments": [
+     "scene:M4:A:x",
+     "scene:M4:A:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M4",
+   "variant": "A",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M4:A:1.0.0",
+    "predicate": "pull",
+    "arguments": [
+     "scene:M4:A:x",
+     "scene:M4:A:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M1_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:1": "scene:M4:A:1",
+      "def:M2:A:1.0": "scene:M4:A:1.0",
+      "def:M2:A:1.0.0": "scene:M4:A:1.0.0",
+      "def:M2:A:1.0.1": "scene:M4:A:1.0.1",
+      "def:M2:A:1.1": "scene:M4:A:1.1",
+      "def:M2:A:1.1.0": "scene:M4:A:1.1.0",
+      "def:M2:A:1.1.1": "scene:M4:A:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:1": "scene:M4:A:1",
+      "def:M2:B:1.0": "scene:M4:A:1.0",
+      "def:M2:B:1.0.0": "scene:M4:A:1.0.0",
+      "def:M2:B:1.0.1": "scene:M4:A:1.0.1",
+      "def:M2:B:1.1": "scene:M4:A:1.1",
+      "def:M2:B:1.1.0": "scene:M4:A:1.1.0",
+      "def:M2:B:1.1.1": "scene:M4:A:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:0": "scene:M4:A:0",
+      "def:M3:A:0.0": "scene:M4:A:0.0",
+      "def:M3:A:0.0.0": "scene:M4:A:0.0.0",
+      "def:M3:A:0.0.1": "scene:M4:A:0.0.1",
+      "def:M3:A:0.1": "scene:M4:A:0.1",
+      "def:M3:A:0.1.0": "scene:M4:A:0.1.0",
+      "def:M3:A:0.1.1": "scene:M4:A:0.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M3:B:0.0.1": "scene:M4:A:0.0.1",
+      "def:M3:B:0.1": "scene:M4:A:0.1",
+      "def:M3:B:0.1.0": "scene:M4:A:0.1.0",
+      "def:M3:B:0.1.1": "scene:M4:A:0.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M4:A:0": "scene:M4:A:0",
+      "def:M4:A:0.0": "scene:M4:A:0.0",
+      "def:M4:A:0.0.0": "scene:M4:A:0.0.0",
+      "def:M4:A:0.0.1": "scene:M4:A:0.0.1",
+      "def:M4:A:0.1": "scene:M4:A:0.1",
+      "def:M4:A:0.1.0": "scene:M4:A:0.1.0",
+      "def:M4:A:0.1.1": "scene:M4:A:0.1.1",
+      "def:M4:A:1": "scene:M4:A:1",
+      "def:M4:A:1.0": "scene:M4:A:1.0",
+      "def:M4:A:1.0.0": "scene:M4:A:1.0.0",
+      "def:M4:A:1.0.1": "scene:M4:A:1.0.1",
+      "def:M4:A:1.1": "scene:M4:A:1.1",
+      "def:M4:A:1.1.0": "scene:M4:A:1.1.0",
+      "def:M4:A:1.1.1": "scene:M4:A:1.1.1",
+      "def:M4:A:root": "scene:M4:A:root"
+     }
+    },
+    "R_M4_B": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M4:B:0.0.1": "scene:M4:A:0.0.1",
+      "def:M4:B:0.1": "scene:M4:A:0.1",
+      "def:M4:B:0.1.0": "scene:M4:A:0.1.0",
+      "def:M4:B:0.1.1": "scene:M4:A:0.1.1",
+      "def:M4:B:1": "scene:M4:A:1",
+      "def:M4:B:1.0": "scene:M4:A:1.0",
+      "def:M4:B:1.0.0": "scene:M4:A:1.0.0",
+      "def:M4:B:1.0.1": "scene:M4:A:1.0.1",
+      "def:M4:B:1.1": "scene:M4:A:1.1",
+      "def:M4:B:1.1.0": "scene:M4:A:1.1.0",
+      "def:M4:B:1.1.1": "scene:M4:A:1.1.1"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M4:A",
+    "entities": [
+     {
+      "entity_id": "scene:M4:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M4:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M4:A:0.0.0",
+      "predicate": "wrap",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M4:A:x",
+       "scene:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M4:A:0.0.0",
+       "scene:M4:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M4:A:0.1.0",
+       "scene:M4:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M4:A:1.0.0",
+       "scene:M4:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M4:A:1.1.0",
+       "scene:M4:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M4:A:0.0",
+       "scene:M4:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M4:A:1.0",
+       "scene:M4:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M4:A:0",
+       "scene:M4:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M4_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M4:B:0.0.0",
+    "predicate": "wrap_b",
+    "arguments": [
+     "scene:M4:B:x",
+     "scene:M4:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M4",
+   "variant": "B",
+   "hidden_subtree": 0,
+   "truth": {
+    "relation_id": "scene:M4:B:0.0.0",
+    "predicate": "wrap_b",
+    "arguments": [
+     "scene:M4:B:x",
+     "scene:M4:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M1_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M2:A:1.0.1": "scene:M4:B:1.0.1",
+      "def:M2:A:1.1": "scene:M4:B:1.1",
+      "def:M2:A:1.1.0": "scene:M4:B:1.1.0",
+      "def:M2:A:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:1": "scene:M4:B:1",
+      "def:M2:B:1.0": "scene:M4:B:1.0",
+      "def:M2:B:1.0.0": "scene:M4:B:1.0.0",
+      "def:M2:B:1.0.1": "scene:M4:B:1.0.1",
+      "def:M2:B:1.1": "scene:M4:B:1.1",
+      "def:M2:B:1.1.0": "scene:M4:B:1.1.0",
+      "def:M2:B:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:A:0": "scene:M4:B:0",
+      "def:M3:A:0.0": "scene:M4:B:0.0",
+      "def:M3:A:0.0.0": "scene:M4:B:0.0.0",
+      "def:M3:A:0.0.1": "scene:M4:B:0.0.1",
+      "def:M3:A:0.1": "scene:M4:B:0.1",
+      "def:M3:A:0.1.0": "scene:M4:B:0.1.0",
+      "def:M3:A:0.1.1": "scene:M4:B:0.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:0": "scene:M4:B:0",
+      "def:M3:B:0.0": "scene:M4:B:0.0",
+      "def:M3:B:0.0.0": "scene:M4:B:0.0.0",
+      "def:M3:B:0.0.1": "scene:M4:B:0.0.1",
+      "def:M3:B:0.1": "scene:M4:B:0.1",
+      "def:M3:B:0.1.0": "scene:M4:B:0.1.0",
+      "def:M3:B:0.1.1": "scene:M4:B:0.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M4:A:0": "scene:M4:B:0",
+      "def:M4:A:0.0": "scene:M4:B:0.0",
+      "def:M4:A:0.0.0": "scene:M4:B:0.0.0",
+      "def:M4:A:0.0.1": "scene:M4:B:0.0.1",
+      "def:M4:A:0.1": "scene:M4:B:0.1",
+      "def:M4:A:0.1.0": "scene:M4:B:0.1.0",
+      "def:M4:A:0.1.1": "scene:M4:B:0.1.1",
+      "def:M4:A:1.0.1": "scene:M4:B:1.0.1",
+      "def:M4:A:1.1": "scene:M4:B:1.1",
+      "def:M4:A:1.1.0": "scene:M4:B:1.1.0",
+      "def:M4:A:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M4:B:0": "scene:M4:B:0",
+      "def:M4:B:0.0": "scene:M4:B:0.0",
+      "def:M4:B:0.0.0": "scene:M4:B:0.0.0",
+      "def:M4:B:0.0.1": "scene:M4:B:0.0.1",
+      "def:M4:B:0.1": "scene:M4:B:0.1",
+      "def:M4:B:0.1.0": "scene:M4:B:0.1.0",
+      "def:M4:B:0.1.1": "scene:M4:B:0.1.1",
+      "def:M4:B:1": "scene:M4:B:1",
+      "def:M4:B:1.0": "scene:M4:B:1.0",
+      "def:M4:B:1.0.0": "scene:M4:B:1.0.0",
+      "def:M4:B:1.0.1": "scene:M4:B:1.0.1",
+      "def:M4:B:1.1": "scene:M4:B:1.1",
+      "def:M4:B:1.1.0": "scene:M4:B:1.1.0",
+      "def:M4:B:1.1.1": "scene:M4:B:1.1.1",
+      "def:M4:B:root": "scene:M4:B:root"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M4:B",
+    "entities": [
+     {
+      "entity_id": "scene:M4:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M4:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M4:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.0.0",
+      "predicate": "pull_b",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M4:B:0.0.0",
+       "scene:M4:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M4:B:0.1.0",
+       "scene:M4:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M4:B:1.0.0",
+       "scene:M4:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M4:B:1.1.0",
+       "scene:M4:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M4:B:0.0",
+       "scene:M4:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M4:B:1.0",
+       "scene:M4:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M4:B:0",
+       "scene:M4:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  },
+  {
+   "selected": "R_M4_B",
+   "prediction": {
+    "relation_id": "sme_projection__def:M4:B:1.0.0",
+    "predicate": "pull_b",
+    "arguments": [
+     "scene:M4:B:x",
+     "scene:M4:B:y"
+    ],
+    "attributes": {}
+   },
+   "support": 15,
+   "m_live": 15,
+   "state_unchanged": true,
+   "motif": "M4",
+   "variant": "B",
+   "hidden_subtree": 1,
+   "truth": {
+    "relation_id": "scene:M4:B:1.0.0",
+    "predicate": "pull_b",
+    "arguments": [
+     "scene:M4:B:x",
+     "scene:M4:B:y"
+    ],
+    "attributes": {}
+   },
+   "candidates": {
+    "R_M1_A": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M1_B": {
+     "support": 0,
+     "m_live": 15,
+     "support_ratio": 0.0,
+     "mapping": {}
+    },
+    "R_M2_A": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:A:1": "scene:M4:B:1",
+      "def:M2:A:1.0": "scene:M4:B:1.0",
+      "def:M2:A:1.0.0": "scene:M4:B:1.0.0",
+      "def:M2:A:1.0.1": "scene:M4:B:1.0.1",
+      "def:M2:A:1.1": "scene:M4:B:1.1",
+      "def:M2:A:1.1.0": "scene:M4:B:1.1.0",
+      "def:M2:A:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M2_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M2:B:1": "scene:M4:B:1",
+      "def:M2:B:1.0": "scene:M4:B:1.0",
+      "def:M2:B:1.0.0": "scene:M4:B:1.0.0",
+      "def:M2:B:1.0.1": "scene:M4:B:1.0.1",
+      "def:M2:B:1.1": "scene:M4:B:1.1",
+      "def:M2:B:1.1.0": "scene:M4:B:1.1.0",
+      "def:M2:B:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M3_A": {
+     "support": 4,
+     "m_live": 15,
+     "support_ratio": 0.26666666666666666,
+     "mapping": {
+      "def:M3:A:0.0.1": "scene:M4:B:0.0.1",
+      "def:M3:A:0.1": "scene:M4:B:0.1",
+      "def:M3:A:0.1.0": "scene:M4:B:0.1.0",
+      "def:M3:A:0.1.1": "scene:M4:B:0.1.1"
+     }
+    },
+    "R_M3_B": {
+     "support": 7,
+     "m_live": 15,
+     "support_ratio": 0.4666666666666667,
+     "mapping": {
+      "def:M3:B:0": "scene:M4:B:0",
+      "def:M3:B:0.0": "scene:M4:B:0.0",
+      "def:M3:B:0.0.0": "scene:M4:B:0.0.0",
+      "def:M3:B:0.0.1": "scene:M4:B:0.0.1",
+      "def:M3:B:0.1": "scene:M4:B:0.1",
+      "def:M3:B:0.1.0": "scene:M4:B:0.1.0",
+      "def:M3:B:0.1.1": "scene:M4:B:0.1.1"
+     }
+    },
+    "R_M4_A": {
+     "support": 11,
+     "m_live": 15,
+     "support_ratio": 0.7333333333333333,
+     "mapping": {
+      "def:M4:A:0.0.1": "scene:M4:B:0.0.1",
+      "def:M4:A:0.1": "scene:M4:B:0.1",
+      "def:M4:A:0.1.0": "scene:M4:B:0.1.0",
+      "def:M4:A:0.1.1": "scene:M4:B:0.1.1",
+      "def:M4:A:1": "scene:M4:B:1",
+      "def:M4:A:1.0": "scene:M4:B:1.0",
+      "def:M4:A:1.0.0": "scene:M4:B:1.0.0",
+      "def:M4:A:1.0.1": "scene:M4:B:1.0.1",
+      "def:M4:A:1.1": "scene:M4:B:1.1",
+      "def:M4:A:1.1.0": "scene:M4:B:1.1.0",
+      "def:M4:A:1.1.1": "scene:M4:B:1.1.1"
+     }
+    },
+    "R_M4_B": {
+     "support": 15,
+     "m_live": 15,
+     "support_ratio": 1.0,
+     "mapping": {
+      "def:M4:B:0": "scene:M4:B:0",
+      "def:M4:B:0.0": "scene:M4:B:0.0",
+      "def:M4:B:0.0.0": "scene:M4:B:0.0.0",
+      "def:M4:B:0.0.1": "scene:M4:B:0.0.1",
+      "def:M4:B:0.1": "scene:M4:B:0.1",
+      "def:M4:B:0.1.0": "scene:M4:B:0.1.0",
+      "def:M4:B:0.1.1": "scene:M4:B:0.1.1",
+      "def:M4:B:1": "scene:M4:B:1",
+      "def:M4:B:1.0": "scene:M4:B:1.0",
+      "def:M4:B:1.0.0": "scene:M4:B:1.0.0",
+      "def:M4:B:1.0.1": "scene:M4:B:1.0.1",
+      "def:M4:B:1.1": "scene:M4:B:1.1",
+      "def:M4:B:1.1.0": "scene:M4:B:1.1.0",
+      "def:M4:B:1.1.1": "scene:M4:B:1.1.1",
+      "def:M4:B:root": "scene:M4:B:root"
+     }
+    }
+   },
+   "scene": {
+    "graph_id": "scene:M4:B",
+    "entities": [
+     {
+      "entity_id": "scene:M4:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "scene:M4:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "scene:M4:B:0.0.0",
+      "predicate": "wrap_b",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "scene:M4:B:x",
+       "scene:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "scene:M4:B:0.0.0",
+       "scene:M4:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "scene:M4:B:0.1.0",
+       "scene:M4:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "scene:M4:B:1.0.0",
+       "scene:M4:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "scene:M4:B:1.1.0",
+       "scene:M4:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "scene:M4:B:0.0",
+       "scene:M4:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "scene:M4:B:1.0",
+       "scene:M4:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "scene:M4:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "scene:M4:B:0",
+       "scene:M4:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   },
+   "correct": true,
+   "dedicated_selected": true,
+   "cue_support_difference": true
+  }
+ ],
+ "definitions": [
+  {
+   "name": "R_M1_A",
+   "graph": {
+    "graph_id": "def:M1:A",
+    "entities": [
+     {
+      "entity_id": "def:M1:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M1:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M1:A:0.0.0",
+      "predicate": "hold",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.0.0",
+      "predicate": "break",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "def:M1:A:x",
+       "def:M1:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "def:M1:A:0.0.0",
+       "def:M1:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "def:M1:A:0.1.0",
+       "def:M1:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "def:M1:A:1.0.0",
+       "def:M1:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "def:M1:A:1.1.0",
+       "def:M1:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "def:M1:A:0.0",
+       "def:M1:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "def:M1:A:1.0",
+       "def:M1:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "def:M1:A:0",
+       "def:M1:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M1_B",
+   "graph": {
+    "graph_id": "def:M1:B",
+    "entities": [
+     {
+      "entity_id": "def:M1:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M1:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M1:B:0.0.0",
+      "predicate": "hold_b",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.0.0",
+      "predicate": "break_b",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "def:M1:B:x",
+       "def:M1:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "def:M1:B:0.0.0",
+       "def:M1:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "def:M1:B:0.1.0",
+       "def:M1:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "def:M1:B:1.0.0",
+       "def:M1:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "def:M1:B:1.1.0",
+       "def:M1:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "def:M1:B:0.0",
+       "def:M1:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "def:M1:B:1.0",
+       "def:M1:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M1:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "def:M1:B:0",
+       "def:M1:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M2_A",
+   "graph": {
+    "graph_id": "def:M2:A",
+    "entities": [
+     {
+      "entity_id": "def:M2:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M2:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M2:A:0.0.0",
+      "predicate": "hold",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.0.0",
+      "predicate": "pull",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "def:M2:A:x",
+       "def:M2:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "def:M2:A:0.0.0",
+       "def:M2:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0.1",
+      "predicate": "require",
+      "arguments": [
+       "def:M2:A:0.1.0",
+       "def:M2:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "def:M2:A:1.0.0",
+       "def:M2:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "def:M2:A:1.1.0",
+       "def:M2:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:0",
+      "predicate": "couple",
+      "arguments": [
+       "def:M2:A:0.0",
+       "def:M2:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "def:M2:A:1.0",
+       "def:M2:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:A:root",
+      "predicate": "govern",
+      "arguments": [
+       "def:M2:A:0",
+       "def:M2:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M2_B",
+   "graph": {
+    "graph_id": "def:M2:B",
+    "entities": [
+     {
+      "entity_id": "def:M2:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M2:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M2:B:0.0.0",
+      "predicate": "hold_b",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0.0.1",
+      "predicate": "push",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0.1.0",
+      "predicate": "carry",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0.1.1",
+      "predicate": "lift",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.0.0",
+      "predicate": "pull_b",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "def:M2:B:x",
+       "def:M2:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0.0",
+      "predicate": "cause",
+      "arguments": [
+       "def:M2:B:0.0.0",
+       "def:M2:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0.1",
+      "predicate": "require",
+      "arguments": [
+       "def:M2:B:0.1.0",
+       "def:M2:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "def:M2:B:1.0.0",
+       "def:M2:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "def:M2:B:1.1.0",
+       "def:M2:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:0",
+      "predicate": "couple",
+      "arguments": [
+       "def:M2:B:0.0",
+       "def:M2:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "def:M2:B:1.0",
+       "def:M2:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M2:B:root",
+      "predicate": "govern",
+      "arguments": [
+       "def:M2:B:0",
+       "def:M2:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M3_A",
+   "graph": {
+    "graph_id": "def:M3:A",
+    "entities": [
+     {
+      "entity_id": "def:M3:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M3:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M3:A:0.0.0",
+      "predicate": "wrap",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.0.0",
+      "predicate": "break",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "def:M3:A:x",
+       "def:M3:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "def:M3:A:0.0.0",
+       "def:M3:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "def:M3:A:0.1.0",
+       "def:M3:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "def:M3:A:1.0.0",
+       "def:M3:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "def:M3:A:1.1.0",
+       "def:M3:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "def:M3:A:0.0",
+       "def:M3:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:1",
+      "predicate": "anchor",
+      "arguments": [
+       "def:M3:A:1.0",
+       "def:M3:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "def:M3:A:0",
+       "def:M3:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M3_B",
+   "graph": {
+    "graph_id": "def:M3:B",
+    "entities": [
+     {
+      "entity_id": "def:M3:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M3:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M3:B:0.0.0",
+      "predicate": "wrap_b",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.0.0",
+      "predicate": "break_b",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.0.1",
+      "predicate": "cut",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.1.0",
+      "predicate": "turn",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.1.1",
+      "predicate": "press",
+      "arguments": [
+       "def:M3:B:x",
+       "def:M3:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "def:M3:B:0.0.0",
+       "def:M3:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "def:M3:B:0.1.0",
+       "def:M3:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.0",
+      "predicate": "enable",
+      "arguments": [
+       "def:M3:B:1.0.0",
+       "def:M3:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1.1",
+      "predicate": "avert",
+      "arguments": [
+       "def:M3:B:1.1.0",
+       "def:M3:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "def:M3:B:0.0",
+       "def:M3:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:1",
+      "predicate": "anchor",
+      "arguments": [
+       "def:M3:B:1.0",
+       "def:M3:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M3:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "def:M3:B:0",
+       "def:M3:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M4_A",
+   "graph": {
+    "graph_id": "def:M4:A",
+    "entities": [
+     {
+      "entity_id": "def:M4:A:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M4:A:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M4:A:0.0.0",
+      "predicate": "wrap",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.0.0",
+      "predicate": "pull",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "def:M4:A:x",
+       "def:M4:A:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "def:M4:A:0.0.0",
+       "def:M4:A:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "def:M4:A:0.1.0",
+       "def:M4:A:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "def:M4:A:1.0.0",
+       "def:M4:A:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "def:M4:A:1.1.0",
+       "def:M4:A:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:0",
+      "predicate": "shield",
+      "arguments": [
+       "def:M4:A:0.0",
+       "def:M4:A:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:1",
+      "predicate": "steer",
+      "arguments": [
+       "def:M4:A:1.0",
+       "def:M4:A:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:A:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "def:M4:A:0",
+       "def:M4:A:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  },
+  {
+   "name": "R_M4_B",
+   "graph": {
+    "graph_id": "def:M4:B",
+    "entities": [
+     {
+      "entity_id": "def:M4:B:x",
+      "label": null,
+      "attributes": {}
+     },
+     {
+      "entity_id": "def:M4:B:y",
+      "label": null,
+      "attributes": {}
+     }
+    ],
+    "relations": [
+     {
+      "relation_id": "def:M4:B:0.0.0",
+      "predicate": "wrap_b",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0.0.1",
+      "predicate": "fold",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0.1.0",
+      "predicate": "stack",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0.1.1",
+      "predicate": "tilt",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.0.0",
+      "predicate": "pull_b",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.0.1",
+      "predicate": "drag",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.1.0",
+      "predicate": "lock",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.1.1",
+      "predicate": "bend",
+      "arguments": [
+       "def:M4:B:x",
+       "def:M4:B:y"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0.0",
+      "predicate": "sustain",
+      "arguments": [
+       "def:M4:B:0.0.0",
+       "def:M4:B:0.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0.1",
+      "predicate": "trigger",
+      "arguments": [
+       "def:M4:B:0.1.0",
+       "def:M4:B:0.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.0",
+      "predicate": "permit",
+      "arguments": [
+       "def:M4:B:1.0.0",
+       "def:M4:B:1.0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1.1",
+      "predicate": "hinder",
+      "arguments": [
+       "def:M4:B:1.1.0",
+       "def:M4:B:1.1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:0",
+      "predicate": "shield",
+      "arguments": [
+       "def:M4:B:0.0",
+       "def:M4:B:0.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:1",
+      "predicate": "steer",
+      "arguments": [
+       "def:M4:B:1.0",
+       "def:M4:B:1.1"
+      ],
+      "attributes": {}
+     },
+     {
+      "relation_id": "def:M4:B:root",
+      "predicate": "sustainedby",
+      "arguments": [
+       "def:M4:B:0",
+       "def:M4:B:1"
+      ],
+      "attributes": {}
+     }
+    ]
+   }
+  }
+ ],
+ "point1_passed": true,
+ "point2_passed": true
+}
