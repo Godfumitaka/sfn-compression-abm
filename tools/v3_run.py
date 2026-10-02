@@ -481,7 +481,9 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import shopworld
         shopworld.install(fo, world=int(task["shop_world"]), exc=float(task["shop_exc"]), keep_cue=bool(task.get("shop_keep_cue")),
-                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"))
+                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"), door_p=task.get("shop_door_p"))
+        if task.get("shop_door_p") is not None and task["cfg"]["fixed"].get("holdout_include_second_order"):
+            raise ValueError("--shop-door-p は二階を伏せない設定（hide1）で使う")
         shopworld.extend_dictionary()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
@@ -706,6 +708,8 @@ def main() -> None:
     ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
                     help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
     ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
+    ap.add_argument("--shop-door-p", type=float, default=None,
+                    help="お店の世界：各場面で確率 d でドアを伏せ、それ以外はドア以外の候補から一様に一本（別の乱数の流れ）。付けなければ今のまま")
     ap.add_argument("--shop-keep-cue", action="store_true", help="お店の世界の診断：B の変換の候補からシールと link の席を外す")
     ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
     ap.add_argument("--u-struct", action="store_true",
@@ -817,7 +821,7 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -837,7 +841,7 @@ def main() -> None:
                                                     "world_cue": (args.world_cue_p if args.world_cue else None), "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
                                                     "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
                                                     "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-                                                    "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue,
+                                                    "shop_world": args.shop_world, "shop_exc": (args.shop_exc if args.shop_world else None), "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p,
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
