@@ -30,7 +30,10 @@ STAGES = {"1": dict(mult=1, door_all=False, think=8000), "2": dict(mult=1, door_
           # 新1＝上の "1"（予算 8,000）、新3＝上の "2"（全部の場面でドア）。新2・新4・新5 をここに足す。
           "新2": dict(mult=1, door_all=False, think=2048, observed=True),
           "新4": dict(mult=2, door_all=False, think=2048),
-          "新5": dict(mult=2, door_all=True, think=8000, observed=True)}
+          "新5": dict(mult=2, door_all=True, think=8000, observed=True),
+          # 委任書「例外を増やす・大きな模型」（2026-10-02 昼）の 1：新5 の条件で、例外の割合だけを 0.4・0.5 に
+          "例外04": dict(mult=2, door_all=True, think=8000, observed=True, exc=0.4),
+          "例外05": dict(mult=2, door_all=True, think=8000, observed=True, exc=0.5)}
 
 # 新2（完全な観察済みの場面）の指示：記号の読み方は stage_d.INTRO と同じ。「?」の説明を今の場面だけにし、過去の場面は完全に見せると書く。
 # 過去の問いの文（Answer: の行）は省く。新しい規則は教えない（仮の決定。文面はこのとおり）
@@ -67,7 +70,7 @@ def main():
     BASE[0] = api.haiku_count("a")
     cfg = STAGES[stage]
     mm.THINK = cfg["think"]
-    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"])
+    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"))
     _h, tests = sd.build(set_seed, world, 4)
     full = [w.complete_text(set_seed, world, s["i"], s["research"], st["vocab"]) for s in st["series"]] if cfg.get("observed") else None
 
