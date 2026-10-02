@@ -33,7 +33,17 @@ STAGES = {"1": dict(mult=1, door_all=False, think=8000), "2": dict(mult=1, door_
           "新5": dict(mult=2, door_all=True, think=8000, observed=True),
           # 委任書「例外を増やす・大きな模型」（2026-10-02 昼）の 1：新5 の条件で、例外の割合だけを 0.4・0.5 に
           "例外04": dict(mult=2, door_all=True, think=8000, observed=True, exc=0.4),
-          "例外05": dict(mult=2, door_all=True, think=8000, observed=True, exc=0.5)}
+          "例外05": dict(mult=2, door_all=True, think=8000, observed=True, exc=0.5),
+          # 委任書「LLM 大きな模型の本番（Sonnet 5.5・effort medium）」（2026-10-02 夕方）：Sonnet 5.5、adaptive の推論。
+          # 基準＝元の条件（40 場面・ドアは半分・場面と正解・effort medium）。各段階は基準から一項目だけ変える。
+          # 「推論を増やす」は、Sonnet では予算を指定できないので effort high に置き換えた。全部合わせるは 完全な場面＋全部ドア＋80 場面＋effort high
+          "S基準": dict(mult=1, door_all=False, think=None, model="claude-sonnet-5-5", effort="medium"),
+          "S完全": dict(mult=1, door_all=False, think=None, observed=True, model="claude-sonnet-5-5", effort="medium"),
+          "S全部ドア": dict(mult=1, door_all=True, think=None, model="claude-sonnet-5-5", effort="medium"),
+          "S80": dict(mult=2, door_all=False, think=None, model="claude-sonnet-5-5", effort="medium"),
+          "S全部": dict(mult=2, door_all=True, think=None, observed=True, model="claude-sonnet-5-5", effort="high"),
+          "S推論": dict(mult=1, door_all=False, think=None, model="claude-sonnet-5-5", effort="high")}
+DISPLAY = "summarized"   # Sonnet の推論の中身は要約で返させる（見え方だけ。使ったことを要約の記録に書く）
 
 # 新2（完全な観察済みの場面）の指示：記号の読み方は stage_d.INTRO と同じ。「?」の説明を今の場面だけにし、過去の場面は完全に見せると書く。
 # 過去の問いの文（Answer: の行）は省く。新しい規則は教えない（仮の決定。文面はこのとおり）
@@ -56,6 +66,9 @@ def prompt_obs(past_full, scene):
 
 
 def text_tokens(t):
+    # 本文のトークン数（正味）。Sonnet・Opus はその模型の数え方（2026-10-02 夕方）
+    if mm.MODEL[0] is not None:
+        return max(api.count_tokens(mm.MODEL[0], t) - BASE[0] + 1, 0) if t else 0
     return max(api.haiku_count(t) - BASE[0] + 1, 0) if t else 0
 
 
@@ -67,9 +80,11 @@ def main():
     set_seed = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     os.makedirs(out, exist_ok=True)
     api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
-    BASE[0] = api.haiku_count("a")
     cfg = STAGES[stage]
+    BASE[0] = api.count_tokens(cfg["model"], "a") if cfg.get("model") else api.haiku_count("a")
     mm.THINK = cfg["think"]
+    if cfg.get("model"):
+        mm.MODEL[0], mm.EFFORT[0], mm.DISPLAY[0] = cfg["model"], cfg.get("effort"), DISPLAY
     st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"))
     _h, tests = sd.build(set_seed, world, 4)
     full = [w.complete_text(set_seed, world, s["i"], s["research"], st["vocab"]) for s in st["series"]] if cfg.get("observed") else None
@@ -110,7 +125,7 @@ def main():
     by = {c: sum(1 for r in fin if r["場合"] == c and r.get("最もありそうな答えが正しい")) for c in ("甲・n", "甲・e", "乙・n", "乙・e")}
     best = sum(by.values())
     passed = best >= 15 and all(v >= 3 for v in by.values())
-    summ = {"段階": stage, "世界": world, "組": set_seed, **cfg, "学習の場面の数": len(st["series"]), "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
+    summ = {"段階": stage, "世界": world, "組": set_seed, **cfg, "推論の中身の見え方": (DISPLAY if cfg.get("model") else "拡張思考（中身が返る）"), "学習の場面の数": len(st["series"]), "最もありそうな答えが正しい（16 問）": best, "場合ごと": by, "通過": passed,
             "判定": {k: sum(1 for r in fin if r["判定"] == k) for k in ("正解", "誤答", "黙り", "形の崩れ", "上限で切れた")}}
     json.dump(summ, open(os.path.join(out, f"{tag}_要約.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("PASS" if passed else "FAIL")

@@ -70,10 +70,20 @@ def memo_tokens(memo):
     return api.haiku_count(memo if memo else EMPTY) - BASE[0] + 1
 
 
+MODEL = [None]          # None なら Haiku（拡張思考の予算 THINK）。"claude-sonnet-5-5" などなら adaptive の推論 ＋ effort（2026-10-02 夕方）
+EFFORT = [None]
+DISPLAY = [None]
+SONNET_MAXTOK = 32000   # Sonnet・Opus の出力の上限（理解検査の段 D4 と同じ仮の決定）
+
+
 def haiku(content, max_tokens, schema, what):
     t0 = time.time()
-    r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=max_tokens, what=what,
-                                output_format={"type": "json_schema", "schema": schema}, thinking_budget=THINK)
+    if MODEL[0] is not None:
+        r, u, cost = api.claude_chat(MODEL[0], [{"role": "user", "content": content}], max_tokens=SONNET_MAXTOK, what=what,
+                                     output_format={"type": "json_schema", "schema": schema}, effort=EFFORT[0], display=DISPLAY[0])
+    else:
+        r, u, cost = api.haiku_chat([{"role": "user", "content": content}], max_tokens=max_tokens, what=what,
+                                    output_format={"type": "json_schema", "schema": schema}, thinking_budget=THINK)
     text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
     th = "".join(b.get("thinking", "") for b in r.get("content", []) if b.get("type") == "thinking")
     return {"出力": text, "使用量": u, "費用": cost, "秒": round(time.time() - t0, 2), "上限で切れた": r.get("stop_reason") == "max_tokens",

@@ -124,11 +124,14 @@ def haiku_count(text):
 CLAUDE_PRICE = {"claude-sonnet-5-5": {"input": 2.0, "output": 10.0}, "claude-opus-5-5": {"input": 4.0, "output": 20.0}}
 
 
-def claude_chat(model, messages, *, max_tokens, what, output_format=None, effort=None):
+def claude_chat(model, messages, *, max_tokens, what, output_format=None, effort=None, display=None):
     """adaptive の推論（この模型では予算の指定 budget_tokens は 400 で断られる）。effort は output_config.effort。温度は指定しない
     （Sonnet 5.5 は既定値以外が 400）。server-side の fallbacks は使わない（ほかの模型で答え直されると比べにならないため）。"""
     _guard(0.05)
     body = {"model": model, "messages": messages, "max_tokens": max_tokens, "thinking": {"type": "adaptive"}}
+    if display:
+        # 推論の中身の見え方（"summarized"＝要約が返る。既定は omitted＝空）。公式の文書では、見え方だけで推論と課金は同じ
+        body["thinking"]["display"] = display
     oc = {}
     if output_format:
         oc["format"] = output_format
