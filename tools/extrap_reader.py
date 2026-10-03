@@ -55,8 +55,22 @@ def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
     answers = _answers_by_trial(os.path.join(root, "side", cell, f"{sd}.answers.csv"))
     with gzip.open(led, "rt", encoding="utf-8") as f:
         header = json.loads(next(f))
-        world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
-                               holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+        if fl.get("shop_world"):
+            # ★ お店の世界（tools/shopworld.py）：走行と同じ包みで世界を作り直す（2026-10-01 午前の返事の段 6 の表のため）
+            import abm.world as w
+            import shopworld as sw
+            sw.CFG.update(world=int(fl["shop_world"]), exc=float(fl.get("shop_exc") or 0.2), door_p=fl.get("shop_door_p"))
+            orig = w.generate_trial
+            w.generate_trial = lambda rs, i, a, *, seed, holdout_include_second_order=False: sw.shop_trial(
+                orig, rs, i, a, seed=seed, holdout_include_second_order=holdout_include_second_order)
+            try:
+                world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
+                                       holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+            finally:
+                w.generate_trial = orig
+        else:
+            world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
+                                   holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
         if check_world and world.world_hash != header["world_hash"]:
             raise RuntimeError(f"世界の指紋が合わない {led}")
         state = None
