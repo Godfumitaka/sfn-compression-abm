@@ -1,0 +1,108 @@
+{
+ "source_model_changes": false,
+ "example_not_a_collective_run": true,
+ "records": [
+  {
+   "python_hash_seed": "0",
+   "argv": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-c",
+    "import json\nfrom abm.seed import load_seed\nfrom abm.definition import Constituent, FrozenPrice, NamedDefinition\nfrom abm.domains import Relation\nimport shopworld, v39, v310be\nfrom v311c_fingerprint import fingerprint\nnames=list(load_seed('tools/shop/U-011_seed_shop.json').data['marginal'])\nv39.CFG.update(dict_index={p:i for i,p in enumerate(names)},D=len(names),T=1740,decay=(1.0,)*16)\nshopworld.extend_dictionary()\nhistory=frozenset(('abc','acb','bac'))\nrow=Constituent(0,0,Relation('r','abc',('e',)),FrozenPrice(4.0,0,0.0,1))\nd=NamedDefinition('R',(row,),1,0)\nrec=v39.SeatRec(0,'F',0,0,v39.ZERO4,(v39.ZERO16,(0.075,)*16,v39.ZERO16,v39.ZERO16))\nstate=v39._state_class()(definitions={'R':d},slot_history={('R',0):history},v39_seats={('R',0):rec})\nc=v310be.candidates(state,d,0,{'abc':4,'acb':4,'bac':4},1)[0]\nprint(json.dumps({'dictionary_size':len(v39.CFG['dict_index']),\n 'unknown_names':sorted(history-set(v39.CFG['dict_index'])),\n 'dict_order_keys':{p:v39.dict_order(p) for p in sorted(history)},\n 'set_iteration':list(history), 'fixed_spec_bits':v39.fixed_spec_bits('abc',history,{}),\n 'candidate_V':c[0], 'candidate_kind':c[1], 'candidate_dC':c[4],\n 'lambda':0.01873710622997919,'would_convert':c[0]<0.01873710622997919,\n 'state_fingerprint':fingerprint(state)}))"
+   ],
+   "data": {
+    "dictionary_size": 80,
+    "unknown_names": [
+     "abc",
+     "acb",
+     "bac"
+    ],
+    "dict_order_keys": {
+     "abc": 374,
+     "acb": 374,
+     "bac": 374
+    },
+    "set_iteration": [
+     "acb",
+     "abc",
+     "bac"
+    ],
+    "fixed_spec_bits": 3,
+    "candidate_V": 0.024999999999999998,
+    "candidate_kind": "FH",
+    "candidate_dC": 3,
+    "lambda": 0.01873710622997919,
+    "would_convert": false,
+    "state_fingerprint": "d3cadbaf2b6212c2cb8b2f9e0746fb71b8122c60e792a044354c9730cbb915de"
+   }
+  },
+  {
+   "python_hash_seed": "1",
+   "argv": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-c",
+    "import json\nfrom abm.seed import load_seed\nfrom abm.definition import Constituent, FrozenPrice, NamedDefinition\nfrom abm.domains import Relation\nimport shopworld, v39, v310be\nfrom v311c_fingerprint import fingerprint\nnames=list(load_seed('tools/shop/U-011_seed_shop.json').data['marginal'])\nv39.CFG.update(dict_index={p:i for i,p in enumerate(names)},D=len(names),T=1740,decay=(1.0,)*16)\nshopworld.extend_dictionary()\nhistory=frozenset(('abc','acb','bac'))\nrow=Constituent(0,0,Relation('r','abc',('e',)),FrozenPrice(4.0,0,0.0,1))\nd=NamedDefinition('R',(row,),1,0)\nrec=v39.SeatRec(0,'F',0,0,v39.ZERO4,(v39.ZERO16,(0.075,)*16,v39.ZERO16,v39.ZERO16))\nstate=v39._state_class()(definitions={'R':d},slot_history={('R',0):history},v39_seats={('R',0):rec})\nc=v310be.candidates(state,d,0,{'abc':4,'acb':4,'bac':4},1)[0]\nprint(json.dumps({'dictionary_size':len(v39.CFG['dict_index']),\n 'unknown_names':sorted(history-set(v39.CFG['dict_index'])),\n 'dict_order_keys':{p:v39.dict_order(p) for p in sorted(history)},\n 'set_iteration':list(history), 'fixed_spec_bits':v39.fixed_spec_bits('abc',history,{}),\n 'candidate_V':c[0], 'candidate_kind':c[1], 'candidate_dC':c[4],\n 'lambda':0.01873710622997919,'would_convert':c[0]<0.01873710622997919,\n 'state_fingerprint':fingerprint(state)}))"
+   ],
+   "data": {
+    "dictionary_size": 80,
+    "unknown_names": [
+     "abc",
+     "acb",
+     "bac"
+    ],
+    "dict_order_keys": {
+     "abc": 374,
+     "acb": 374,
+     "bac": 374
+    },
+    "set_iteration": [
+     "acb",
+     "bac",
+     "abc"
+    ],
+    "fixed_spec_bits": 5,
+    "candidate_V": 0.015,
+    "candidate_kind": "FH",
+    "candidate_dC": 5,
+    "lambda": 0.01873710622997919,
+    "would_convert": true,
+    "state_fingerprint": "d3cadbaf2b6212c2cb8b2f9e0746fb71b8122c60e792a044354c9730cbb915de"
+   }
+  },
+  {
+   "python_hash_seed": "2",
+   "argv": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-c",
+    "import json\nfrom abm.seed import load_seed\nfrom abm.definition import Constituent, FrozenPrice, NamedDefinition\nfrom abm.domains import Relation\nimport shopworld, v39, v310be\nfrom v311c_fingerprint import fingerprint\nnames=list(load_seed('tools/shop/U-011_seed_shop.json').data['marginal'])\nv39.CFG.update(dict_index={p:i for i,p in enumerate(names)},D=len(names),T=1740,decay=(1.0,)*16)\nshopworld.extend_dictionary()\nhistory=frozenset(('abc','acb','bac'))\nrow=Constituent(0,0,Relation('r','abc',('e',)),FrozenPrice(4.0,0,0.0,1))\nd=NamedDefinition('R',(row,),1,0)\nrec=v39.SeatRec(0,'F',0,0,v39.ZERO4,(v39.ZERO16,(0.075,)*16,v39.ZERO16,v39.ZERO16))\nstate=v39._state_class()(definitions={'R':d},slot_history={('R',0):history},v39_seats={('R',0):rec})\nc=v310be.candidates(state,d,0,{'abc':4,'acb':4,'bac':4},1)[0]\nprint(json.dumps({'dictionary_size':len(v39.CFG['dict_index']),\n 'unknown_names':sorted(history-set(v39.CFG['dict_index'])),\n 'dict_order_keys':{p:v39.dict_order(p) for p in sorted(history)},\n 'set_iteration':list(history), 'fixed_spec_bits':v39.fixed_spec_bits('abc',history,{}),\n 'candidate_V':c[0], 'candidate_kind':c[1], 'candidate_dC':c[4],\n 'lambda':0.01873710622997919,'would_convert':c[0]<0.01873710622997919,\n 'state_fingerprint':fingerprint(state)}))"
+   ],
+   "data": {
+    "dictionary_size": 80,
+    "unknown_names": [
+     "abc",
+     "acb",
+     "bac"
+    ],
+    "dict_order_keys": {
+     "abc": 374,
+     "acb": 374,
+     "bac": 374
+    },
+    "set_iteration": [
+     "acb",
+     "bac",
+     "abc"
+    ],
+    "fixed_spec_bits": 5,
+    "candidate_V": 0.015,
+    "candidate_kind": "FH",
+    "candidate_dC": 5,
+    "lambda": 0.01873710622997919,
+    "would_convert": true,
+    "state_fingerprint": "d3cadbaf2b6212c2cb8b2f9e0746fb71b8122c60e792a044354c9730cbb915de"
+   }
+  }
+ ],
+ "fingerprints_equal": true,
+ "costs_equal": false,
+ "conversion_decisions_equal": false
+}
