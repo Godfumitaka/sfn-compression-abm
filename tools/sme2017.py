@@ -266,9 +266,17 @@ class _Engine:
         return value
 
     def _ordered(self, values, scorer, phase):
-        groups = {}
+        by_score = {}
         for value in set(values):
-            groups.setdefault((-scorer(value), self._key(value)), []).append(value)
+            by_score.setdefault(-scorer(value), []).append(value)
+        groups = {}
+        for score, values_at_score in by_score.items():
+            # 点だけで順が決まるものには、構造の同点の鍵を作らない。
+            if len(values_at_score) == 1 and math.isfinite(score):
+                groups[score, ()] = values_at_score
+            else:
+                for value in values_at_score:
+                    groups.setdefault((score, self._key(value)), []).append(value)
         out = []
         for rank in sorted(groups):
             tied = groups[rank]
@@ -355,8 +363,20 @@ class _Engine:
             for child in self.mhs[i].children:
                 if child in members:
                     parents[child].append(i)
-        queue = sorted(members, key=lambda i: (-max(self.lh[self.mhs[i].left], self.rh[self.mhs[i].right]),
-                                               self._key(frozenset({i}))))
+        heights = {i: max(self.lh[self.mhs[i].left], self.rh[self.mhs[i].right]) for i in members}
+        if any(heights[parent] <= heights[child] for child, got in parents.items() for parent in got):
+            # 高さが親から子へ減らない入力には、元の順をそのまま使う。
+            queue = sorted(members, key=lambda i: (-heights[i], self._key(frozenset({i}))))
+        else:
+            queue = []
+            for height in sorted(set(heights.values()), reverse=True):
+                at_height = [i for i in members if heights[i] == height]
+                # 同じ高さは点を渡し合わない。親が複数あるものの相対順だけは
+                # 同点の乱数の順を保つため、従来の構造の鍵で並べる。
+                uses_order = lambda i: not global_ and self.s.block_most_out_of_mapping and len(parents[i]) > 1
+                queue.extend(i for i in at_height if not uses_order(i))
+                queue.extend(sorted((i for i in at_height if uses_order(i)),
+                                    key=lambda i: self._key(frozenset({i}))))
         for child in queue:
             got = parents[child]
             if not global_ and self.s.block_most_out_of_mapping:
@@ -501,8 +521,12 @@ class _Engine:
                                         tuple(sorted(breakdown)), self._inferences(c)))
         tied = ()
         if candidates:
-            best_key = self._key(globals_[0])
-            tied = tuple(i for i, c in enumerate(candidates) if c.score == candidates[0].score and self._key(c.members) == best_key)
+            at_best_score = tuple(i for i, c in enumerate(candidates) if c.score == candidates[0].score)
+            if len(at_best_score) <= 1:
+                tied = at_best_score
+            else:
+                best_key = self._key(globals_[0])
+                tied = tuple(i for i in at_best_score if self._key(candidates[i].members) == best_key)
         return Result(VERSION, self.s, self.left.fingerprint(), self.right.fingerprint(), tuple(candidates),
                       0 if candidates else None, tied, tuple(self.choices), tuple(self.mhs))
 
