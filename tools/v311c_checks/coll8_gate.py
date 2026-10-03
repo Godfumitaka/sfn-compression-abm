@@ -232,6 +232,9 @@ def main():
     compare('直列と同時（2体）',p,s,comm=True)
     first=run_job('no_comm_r1',1740,q=0,m=0)
     coins=inspect_population('no_comm_r1',first,FS,GROUPS,1740,0,0)
+    old=run_job('default2_baseline',200,fs=[0.1,0.9],groups=[0,1],serial=False,shop=False,audit=False,lineage=False,source=ROOT/'baseline')
+    new=run_job('default2_current',200,fs=[0.1,0.9],groups=[0,1],serial=False,shop=False,audit=False,lineage=False)
+    compare('追加旗が全てオフと土台（2体）',old,new,comm=True)
     for i,f in enumerate(FS):
         solo=run_job(f'solo_r1_a{i}',1740,solo_agent=i,q=0,m=0)
         check(f'通信なし8体と単独：個体{i}',body(ledger_paths(first)[i])==body(ledger_paths(solo)[0]),collective=body(ledger_paths(first)[i]),solo=body(ledger_paths(solo)[0]))
