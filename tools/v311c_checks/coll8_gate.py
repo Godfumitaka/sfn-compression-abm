@@ -250,11 +250,19 @@ def inspect_population(name,path,fs,groups,count,q,m):
     check(name+' 報告の初期採点のsource',all(r.get('E',{}).get('source')=='報告' for r in births),births=len(births))
     check(name+' 未記載は反証・取消にしない',all(c[5]['取消']==1 for r in recv for c in (r.get('E') or {}).get('cands',[])))
     side_sources=[]
+    no_learning_rows=0
+    bad_no_learning_rows=[]
     for p in (path/'side').glob('*/*.jsonl'):
         for line in p.open():
             r=json.loads(line)
-            if r.get('kind')=='v310be':side_sources.append(r.get('source'))
-    check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'},world_rows=len(side_sources))
+            if r.get('kind')=='v310be':
+                if r.get('x')=='no_m1' and r.get('source') is None:
+                    # 未学習の初期行はsourceの対象外。採点が0であることは別に確かめる。
+                    no_learning_rows+=1
+                    if r['R_B']!=0 or r['R_E']!=0:bad_no_learning_rows.append({'file':str(p),'trial':r['trial']})
+                else:side_sources.append(r.get('source'))
+    check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'} and not bad_no_learning_rows,
+          world_learning_rows=len(side_sources),no_learning_rows=no_learning_rows,bad_no_learning_rows=bad_no_learning_rows)
     stats={'name':name,'q':q,'m':m,'sent':len(sent),'within':sum(groups[r['agent']]==groups[r['to']] for r in sent),
            'cross':sum(groups[r['agent']]!=groups[r['to']] for r in sent),'receive_results':__import__('collections').Counter(r.get('result') for r in recv),
            'world':{'total':len(fs)*count,'correct':correct,'wrong':wrong,'silence':silence,'wrong_sources':sources}}
