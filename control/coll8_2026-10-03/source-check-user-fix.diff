@@ -1,0 +1,85 @@
+diff --git a/tools/v311c_checks/coll8_gate.py b/tools/v311c_checks/coll8_gate.py
+index 098c06d..c120312 100644
+--- a/tools/v311c_checks/coll8_gate.py
++++ b/tools/v311c_checks/coll8_gate.py
+@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
+ import gzip, hashlib, json, os, re, signal, subprocess, sys, time, traceback
+ from concurrent.futures import ThreadPoolExecutor, as_completed
+ from threading import RLock, Event
++from coll8_source_check import validate_source
+ 
+ SOURCE = Path(__file__).resolve().parents[2]
+ ROOT = SOURCE.parent
+@@ -249,20 +250,23 @@ def inspect_population(name,path,fs,groups,count,q,m):
+     births=[r for r in recv if r.get('result')=='誕生']
+     check(name+' 報告の初期採点のsource',all(r.get('E',{}).get('source')=='報告' for r in births),births=len(births))
+     check(name+' 未記載は反証・取消にしない',all(c[5]['取消']==1 for r in recv for c in (r.get('E') or {}).get('cands',[])))
+-    side_sources=[]
+-    no_learning_rows=0
+-    bad_no_learning_rows=[]
++    source_counts=__import__('collections').Counter()
++    source_errors=[]
+     for p in (path/'side').glob('*/*.jsonl'):
+         for line in p.open():
+             r=json.loads(line)
+             if r.get('kind')=='v310be':
+-                if r.get('x')=='no_m1' and r.get('source') is None:
+-                    # 未学習の初期行はsourceの対象外。採点が0であることは別に確かめる。
+-                    no_learning_rows+=1
+-                    if r['R_B']!=0 or r['R_E']!=0:bad_no_learning_rows.append({'file':str(p),'trial':r['trial']})
+-                else:side_sources.append(r.get('source'))
+-    check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'} and not bad_no_learning_rows,
+-          world_learning_rows=len(side_sources),no_learning_rows=no_learning_rows,bad_no_learning_rows=bad_no_learning_rows)
++                try:source_counts[validate_source(r,'世界')]+=1
++                except ValueError as e:source_errors.append({'file':str(p),'trial':r.get('trial'),'error':str(e)})
++    check(name+' 世界の学習のsource',sum(source_counts.values())==len(fs)*count and not source_errors,
++          counts=source_counts,errors=source_errors)
++    report_counts=__import__('collections').Counter()
++    report_errors=[]
++    for r in recv:
++        if r.get('E'):
++            try:report_counts[validate_source(r['E'],'報告')]+=1
++            except ValueError as e:report_errors.append({'bundle':r['bundle'],'trial':r['t'],'error':str(e)})
++    check(name+' 報告の採点欄とsource',not report_errors,counts=report_counts,errors=report_errors)
+     stats={'name':name,'q':q,'m':m,'sent':len(sent),'within':sum(groups[r['agent']]==groups[r['to']] for r in sent),
+            'cross':sum(groups[r['agent']]!=groups[r['to']] for r in sent),'receive_results':__import__('collections').Counter(r.get('result') for r in recv),
+            'world':{'total':len(fs)*count,'correct':correct,'wrong':wrong,'silence':silence,'wrong_sources':sources}}
+diff --git a/tools/v311c_checks/coll8_source_check.py b/tools/v311c_checks/coll8_source_check.py
+new file mode 100644
+index 0000000..1c07858
+--- /dev/null
++++ b/tools/v311c_checks/coll8_source_check.py
+@@ -0,0 +1,33 @@
++"""保存記録だけを読む採点欄の検査。模型からは呼ばない。"""
++
++# no_m1の記録はこの7欄だけ。採点欄・source・未知の欄を許さない。
++INITIAL_KEYS = frozenset(('kind', 'trial', 'x', 'R_B', 'R_E', 'C_end', 'zero_release'))
++SCORE_KEYS = frozenset(('K', 'r', 'cands', 'lam', 'chosen', 'reg', 'x_rows', 'N',
++                        'dC_pred', 'dC_real', 'dT', 'C_after_E', 'ties',
++                        'was_extension', 'hist_inc'))
++
++
++def validate_source(row, expected):
++    """採点がある記録は出どころ必須。未採点の記録も明示的に検査する。"""
++    if row.get('kind') != 'v310be':
++        raise ValueError('v310be以外を渡した')
++    if row.get('x') == 'no_m1':
++        if (expected != '世界' or set(row) != INITIAL_KEYS or row['trial'] != 0
++                or row['R_B'] != 0 or row['R_E'] != 0 or row['zero_release'] != []):
++            raise ValueError('未採点の初期行に採点欄・非零の採点・未知の欄がある')
++        return 'initial_unscored'
++    if row.get('source') != expected:
++        raise ValueError('採点又はm1の記録に正しいsourceが無い')
++    score_keys = SCORE_KEYS.intersection(row)
++    if score_keys:
++        if not {'K', 'r', 'cands'} <= set(row) or not row['cands']:
++            raise ValueError('採点欄が一部だけある')
++        return 'scored'
++    # 既存のm1の不成立二経路。採点欄が無いことを欄集合でも確認する。
++    empty_keys = {'kind', 'trial', 'disclosed', 'source', 'x', 'new_excluded',
++                  'R_B', 'R_E', 'C_end', 'zero_release'}
++    if (not set(row) <= empty_keys or not
++            (('x' in row and row['x'] is None) or 'new_excluded' in row)
++            or row.get('R_E', 0) != 0):
++        raise ValueError('未採点のm1不成立行に採点欄があるか、経路が不明')
++    return 'm1_unscored'

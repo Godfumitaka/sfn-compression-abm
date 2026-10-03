@@ -1,0 +1,36 @@
+.......................                                                  [100%]
+==================================== PASSES ====================================
+___ test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric ____
+----------------------------- Captured stdout call -----------------------------
+{"H_tie_corrected_expected": 0.045454545454545456, "measured": [{"epsilon": 0.0001, "central_Q_fold_minus_wrap": 0.04545454545423766}, {"epsilon": 1e-05, "central_Q_fold_minus_wrap": 0.045454545455347876}, {"epsilon": 1e-06, "central_Q_fold_minus_wrap": 0.04545454551641015}]}
+______ test_05_analytic_gradient_matches_measured_loss_and_projected_step ______
+----------------------------- Captured stdout call -----------------------------
+{"smooth_max_central_L_error": 1.8135156137216724e-10, "eta": 1e-06, "L_change_measured": -1.5845396883484852e-08, "L_change_gradient_prediction": -1.584539661379482e-08}
+_____ test_05c_H_tie_measured_loss_and_actual_normalized_update_direction ______
+----------------------------- Captured stdout call -----------------------------
+{"H_tie_L_before": 0.7171476186690149, "L_change_directional_prediction": -1.870444138075731e-08, "L_change_measured": -1.8704441773209624e-08, "central_checks": [{"epsilon": 0.0001, "max_central_L_error": 3.8421788073339513e-07}, {"epsilon": 1e-05, "max_central_L_error": 3.839395568139281e-08}, {"epsilon": 1e-06, "max_central_L_error": 4.021450838997964e-09}], "equal_split_gradient_dot_step": -2.3220167316145332e-08, "eta": 1e-06, "half_eta_L_change_directional_prediction": -9.352220746847598e-09, "half_eta_L_change_measured": -9.352221219671719e-09, "weights_after": {"attach": 0.9999999838374597, "cause": 0.9999999838374597, "fold": 0.9999999838374597, "hold": 1.00000004961449, "hold_b": 0.9999999281370869, "sig_e": 1.0000001138180508, "sig_n": 0.9999999569179935}, "weights_before": {"attach": 1.0, "cause": 1.0, "fold": 1.0, "hold": 1.0, "hold_b": 1.0, "sig_e": 1.0, "sig_n": 1.0}}
+=========================== short test summary info ============================
+PASSED tests/test_selectn3.py::test_1_same_representation_is_one
+PASSED tests/test_selectn3.py::test_2_U_name_gets_no_point
+PASSED tests/test_selectn3.py::test_3_hidden_relation_name_not_used
+PASSED tests/test_selectn3.py::test_4_mismatch_not_in_numerator
+PASSED tests/test_selectn3.py::test_5_bounded_0_1
+PASSED tests/test_selectn3.py::test_6_selects_max_N3_not_ratio_and_gate_unchanged
+PASSED tests/test_attnsel.py::test_01_unit_weights_match_N3_selection_and_answer
+PASSED tests/test_attnsel.py::test_02_flag_off_ledger_and_all_generated_side_bytes_identical
+PASSED tests/test_attnsel.py::test_03_same_weights_in_three_scores_and_recomputed_self_scores
+PASSED tests/test_attnsel.py::test_04_H_once_max_self_and_U_never_reads_erased_name
+PASSED tests/test_attnsel.py::test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric
+PASSED tests/test_attnsel.py::test_05_analytic_gradient_matches_measured_loss_and_projected_step
+PASSED tests/test_attnsel.py::test_05b_H_smooth_gradient_and_multiple_correct_candidates
+PASSED tests/test_attnsel.py::test_05c_H_tie_measured_loss_and_actual_normalized_update_direction
+PASSED tests/test_attnsel.py::test_06_two_candidate_hand_values
+PASSED tests/test_attnsel.py::test_07_no_correct_candidate_all_same_and_no_candidates_skip
+PASSED tests/test_attnsel.py::test_08_no_disclosure_never_reads_truth_and_dynamic_f_is_exact
+PASSED tests/test_attnsel.py::test_09_current_answer_precedes_update_next_scores_follow_update
+PASSED tests/test_attnsel.py::test_10_name_id_seat_number_relabeling_preserves_answer_and_update
+PASSED tests/test_attnsel.py::test_11_record_only_memory_attention_and_rng_match_baseline
+PASSED tests/test_attnsel.py::test_12_gate_and_silence_are_precomputed_without_fallback
+PASSED tests/test_attnsel.py::test_13_mean_scope_includes_only_seen_and_feedback_after_disclosure
+PASSED tests/test_attnsel.py::test_14_nonnegative_projection_ties_and_agent_isolation
+23 passed in 0.14s
