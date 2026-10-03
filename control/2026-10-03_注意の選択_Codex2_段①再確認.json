@@ -1,0 +1,624 @@
+{
+  "scope": "段①全関門合格で停止。段②移送・作り直し・再生と段③は未開始。",
+  "code_branch": "attn-2026-10-03",
+  "base_commit": "d2068a96cb3ce3ab75d016a4c962127ea9bd9d14",
+  "code_commit": "b6cd68561a7ff14323f11073995777f4d21367cd",
+  "previous_code_commit": "a6fe166562eda47316160540a53cc16464221036",
+  "changed_this_resume": [
+    "tests/test_attnsel.py"
+  ],
+  "computational_implementation_changed": false,
+  "gate_status": "all_stage1_hand_example_checks_passed",
+  "pytest_suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "23",
+    "time": "0.136",
+    "timestamp": "2026-10-03T20:06:19.475719+09:00",
+    "hostname": "tatsu-adminnoMacBook-Air.local"
+  },
+  "pytest_execution": {
+    "command": [
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_v310ans_2026-09-30/verify-env/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-x",
+      "-rA",
+      "tests/test_selectn3.py",
+      "tests/test_attnsel.py",
+      "--junitxml=../stage1_resume_tests.xml"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.288656042,
+    "child_cpu_user_seconds": 0.221876,
+    "child_cpu_system_seconds": 0.034061,
+    "child_max_rss_bytes": 46006272
+  },
+  "pytest_cases": [
+    {
+      "name": "tests.test_selectn3::test_1_same_representation_is_one",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_2_U_name_gets_no_point",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_3_hidden_relation_name_not_used",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_4_mismatch_not_in_numerator",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_5_bounded_0_1",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_6_selects_max_N3_not_ratio_and_gate_unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_01_unit_weights_match_N3_selection_and_answer",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_02_flag_off_ledger_and_all_generated_side_bytes_identical",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_03_same_weights_in_three_scores_and_recomputed_self_scores",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_04_H_once_max_self_and_U_never_reads_erased_name",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_05_analytic_gradient_matches_measured_loss_and_projected_step",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_05b_H_smooth_gradient_and_multiple_correct_candidates",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_05c_H_tie_measured_loss_and_actual_normalized_update_direction",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_06_two_candidate_hand_values",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_07_no_correct_candidate_all_same_and_no_candidates_skip",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_08_no_disclosure_never_reads_truth_and_dynamic_f_is_exact",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_09_current_answer_precedes_update_next_scores_follow_update",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_10_name_id_seat_number_relabeling_preserves_answer_and_update",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_11_record_only_memory_attention_and_rng_match_baseline",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_12_gate_and_silence_are_precomputed_without_fallback",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_13_mean_scope_includes_only_seen_and_feedback_after_disclosure",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_14_nonnegative_projection_ties_and_agent_isolation",
+      "status": "passed"
+    }
+  ],
+  "independent_numerical_checks": [
+    {
+      "H_tie_corrected_expected": 0.045454545454545456,
+      "measured": [
+        {
+          "epsilon": 0.0001,
+          "central_Q_fold_minus_wrap": 0.04545454545423766
+        },
+        {
+          "epsilon": 1e-05,
+          "central_Q_fold_minus_wrap": 0.045454545455347876
+        },
+        {
+          "epsilon": 1e-06,
+          "central_Q_fold_minus_wrap": 0.04545454551641015
+        }
+      ]
+    },
+    {
+      "smooth_max_central_L_error": 1.8135156137216724e-10,
+      "eta": 1e-06,
+      "L_change_measured": -1.5845396883484852e-08,
+      "L_change_gradient_prediction": -1.584539661379482e-08
+    },
+    {
+      "H_tie_L_before": 0.7171476186690149,
+      "L_change_directional_prediction": -1.870444138075731e-08,
+      "L_change_measured": -1.8704441773209624e-08,
+      "central_checks": [
+        {
+          "epsilon": 0.0001,
+          "max_central_L_error": 3.8421788073339513e-07
+        },
+        {
+          "epsilon": 1e-05,
+          "max_central_L_error": 3.839395568139281e-08
+        },
+        {
+          "epsilon": 1e-06,
+          "max_central_L_error": 4.021450838997964e-09
+        }
+      ],
+      "equal_split_gradient_dot_step": -2.3220167316145332e-08,
+      "eta": 1e-06,
+      "half_eta_L_change_directional_prediction": -9.352220746847598e-09,
+      "half_eta_L_change_measured": -9.352221219671719e-09,
+      "weights_after": {
+        "attach": 0.9999999838374597,
+        "cause": 0.9999999838374597,
+        "fold": 0.9999999838374597,
+        "hold": 1.00000004961449,
+        "hold_b": 0.9999999281370869,
+        "sig_e": 1.0000001138180508,
+        "sig_n": 0.9999999569179935
+      },
+      "weights_before": {
+        "attach": 1.0,
+        "cause": 1.0,
+        "fold": 1.0,
+        "hold": 1.0,
+        "hold_b": 1.0,
+        "sig_e": 1.0,
+        "sig_n": 1.0
+      }
+    }
+  ],
+  "H_tie_note": "中央差分は等分の劣勾配を確認。実際の一歩のLの変化は同点maxの方向微分を使って照合し、等分勾配の内積とは同一視しない。",
+  "grid_execution": {
+    "command": [
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_v310ans_2026-09-30/verify-env/bin/python",
+      "-c",
+      "import sys,json; sys.path.insert(0,\"tools\"); import attnsel_checks as C; print(json.dumps(C.tiny_grid(),ensure_ascii=False,indent=2))"
+    ],
+    "scope": "手例だけ、固定記憶、各格子80試行、毎回f=1開示、世界走行ではない",
+    "returncode": 0,
+    "wall_seconds": 1.383215833,
+    "child_cpu_user_seconds": 1.359646,
+    "child_cpu_system_seconds": 0.014986999999999999,
+    "child_max_rss_bytes": 24068096
+  },
+  "grid": [
+    {
+      "beta": 1.0,
+      "eta": 0.01,
+      "steps": 80,
+      "correct_before_update": 0,
+      "updated": 80,
+      "first_L": 0.6979022655106681,
+      "last_L_before_update": 0.6974208239222063,
+      "weights_after": {
+        "attach": 0.9974610799051102,
+        "cause": 0.9974610799051102,
+        "fold": 0.9974610799051102,
+        "hold": 1.0077827161917272,
+        "hold_b": 0.9887357432965634,
+        "sig_e": 1.013333800672581,
+        "sig_n": 0.9977645001237978
+      }
+    },
+    {
+      "beta": 1.0,
+      "eta": 0.05,
+      "steps": 80,
+      "correct_before_update": 0,
+      "updated": 80,
+      "first_L": 0.6979022655106681,
+      "last_L_before_update": 0.6955123835256843,
+      "weights_after": {
+        "attach": 0.9872878988360875,
+        "cause": 0.9872878988360875,
+        "fold": 0.9872878988360875,
+        "hold": 1.0387483562932276,
+        "hold_b": 0.9440847942903933,
+        "sig_e": 1.0662782660862056,
+        "sig_n": 0.9890248868219113
+      }
+    },
+    {
+      "beta": 1.0,
+      "eta": 0.1,
+      "steps": 80,
+      "correct_before_update": 0,
+      "updated": 80,
+      "first_L": 0.6979022655106681,
+      "last_L_before_update": 0.6931640161977579,
+      "weights_after": {
+        "attach": 0.9745285566344277,
+        "cause": 0.9745285566344277,
+        "fold": 0.9745285566344277,
+        "hold": 1.077104032786466,
+        "hold_b": 0.8891472780071555,
+        "sig_e": 1.1316205923799523,
+        "sig_n": 0.9785424269231422
+      }
+    },
+    {
+      "beta": 5.0,
+      "eta": 0.01,
+      "steps": 80,
+      "correct_before_update": 0,
+      "updated": 80,
+      "first_L": 0.7171476186690144,
+      "last_L_before_update": 0.7048600850868865,
+      "weights_after": {
+        "attach": 0.9871086910648851,
+        "cause": 0.9871086910648851,
+        "fold": 0.9871086910648851,
+        "hold": 1.0392907415054855,
+        "hold_b": 0.9433050775937271,
+        "sig_e": 1.06720409610421,
+        "sig_n": 0.9888740116019226
+      }
+    },
+    {
+      "beta": 5.0,
+      "eta": 0.05,
+      "steps": 80,
+      "correct_before_update": 48,
+      "updated": 80,
+      "first_L": 0.7171476186690144,
+      "last_L_before_update": 0.6598097994733578,
+      "weights_after": {
+        "attach": 0.9362052863952164,
+        "cause": 0.9362052863952164,
+        "fold": 0.9362052863952164,
+        "hold": 1.189285702565192,
+        "hold_b": 0.7308041042684406,
+        "sig_e": 1.3212428787294876,
+        "sig_n": 0.9500514552512304
+      }
+    },
+    {
+      "beta": 5.0,
+      "eta": 0.1,
+      "steps": 80,
+      "correct_before_update": 64,
+      "updated": 80,
+      "first_L": 0.7171476186690144,
+      "last_L_before_update": 0.6109029307201381,
+      "weights_after": {
+        "attach": 0.873631276030015,
+        "cause": 0.873631276030015,
+        "fold": 0.873631276030015,
+        "hold": 1.3637907101995164,
+        "hold_b": 0.49132248996467287,
+        "sig_e": 1.6119264306605292,
+        "sig_n": 0.9120665410852358
+      }
+    },
+    {
+      "beta": 10.0,
+      "eta": 0.01,
+      "steps": 80,
+      "correct_before_update": 2,
+      "updated": 80,
+      "first_L": 0.7417102865453042,
+      "last_L_before_update": 0.6923418726613679,
+      "weights_after": {
+        "attach": 0.9740005023809892,
+        "cause": 0.9740005023809892,
+        "fold": 0.9740005023809892,
+        "hold": 1.0786801454243455,
+        "hold_b": 0.886898516495625,
+        "sig_e": 1.134300046722975,
+        "sig_n": 0.9781197842140861
+      }
+    },
+    {
+      "beta": 10.0,
+      "eta": 0.05,
+      "steps": 80,
+      "correct_before_update": 64,
+      "updated": 80,
+      "first_L": 0.7417102865453042,
+      "last_L_before_update": 0.5415244986635042,
+      "weights_after": {
+        "attach": 0.877863908008614,
+        "cause": 0.877863908008614,
+        "fold": 0.877863908008614,
+        "hold": 1.3522941831043933,
+        "hold_b": 0.5068470980368507,
+        "sig_e": 1.5929321845894713,
+        "sig_n": 0.9143348102434424
+      }
+    },
+    {
+      "beta": 10.0,
+      "eta": 0.1,
+      "steps": 80,
+      "correct_before_update": 72,
+      "updated": 80,
+      "first_L": 0.7417102865453042,
+      "last_L_before_update": 0.4180237516584775,
+      "weights_after": {
+        "attach": 0.7711332802877263,
+        "cause": 0.7711332802877263,
+        "fold": 0.7711332802877263,
+        "hold": 1.6306838203125302,
+        "hold_b": 0.14052723963641361,
+        "sig_e": 2.0470771236813636,
+        "sig_n": 0.868311975506513
+      }
+    }
+  ],
+  "machine": {
+    "start": {
+      "time": "2026-10-03T20:00:29.644127+09:00",
+      "purpose": "段①再々開前",
+      "checks": {
+        "disk": {
+          "command": [
+            "df",
+            "-h",
+            "/"
+          ],
+          "returncode": 0,
+          "output": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    56Gi    19%    484k  584M    0%   /\n"
+        },
+        "ram": {
+          "command": [
+            "sysctl",
+            "hw.memsize"
+          ],
+          "returncode": 0,
+          "output": "hw.memsize: 34359738368\n"
+        },
+        "vm": {
+          "command": [
+            "vm_stat"
+          ],
+          "returncode": 0,
+          "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   278722.\nPages active:                                 577040.\nPages inactive:                               884995.\nPages speculative:                              4468.\nPages throttled:                                   0.\nPages wired down:                             162925.\nPages purgeable:                                8566.\n\"Translation faults\":                      299489534.\nPages copy-on-write:                        14749982.\nPages zero filled:                         164822582.\nPages reactivated:                          25730515.\nPages purged:                                1793767.\nFile-backed pages:                            881024.\nAnonymous pages:                              585479.\nPages stored in compressor:                   287544.\nPages occupied by compressor:                 136633.\nDecompressions:                             50742878.\nCompressions:                               56618229.\nPageins:                                    27793226.\nPageouts:                                      31271.\nSwapins:                                    10019359.\nSwapouts:                                   11946411.\nPages tagged:                                 116538.\nPages tagged resident:                         93885.\nPages tagged compressed:                       22653.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5608.\nPages tag-storage free:                         2126.\nPages tag-storage non-tag pageable:            57660.\nPages tag-storage non-tag wired:                  23.\nBytes of compressed tags:                    3300544.\nTagged compressions:                          322454.\nTagged decompressions:                        293788.\n"
+        },
+        "swap": {
+          "command": [
+            "sysctl",
+            "vm.swapusage"
+          ],
+          "returncode": 0,
+          "output": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\n"
+        },
+        "thermal": {
+          "command": [
+            "pmset",
+            "-g",
+            "therm"
+          ],
+          "returncode": 0,
+          "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+        },
+        "processes": {
+          "command": [
+            "ps",
+            "-axo",
+            "pid,ppid,%cpu,rss,etime,comm"
+          ],
+          "returncode": 0,
+          "output": "  PID  PPID  %CPU    RSS     ELAPSED COMM\n 1498     1   3.4 345296 01-07:26:26 /Applications/Claude.app/Contents/MacOS/Claude\n 1503     1   0.0   6192 01-07:26:23 /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler\n 1504  1498   0.0  76704 01-07:26:23 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1506  1498   0.0  50480 01-07:26:23 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1514  1498   0.0  60272 01-07:26:23 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1518  1498   0.0 922064 01-07:26:23 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1520  1498   0.0  72000 01-07:26:22 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1530  1498   0.0  20032 01-07:26:21 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1531  1498   0.0  27744 01-07:26:21 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1730  1498   0.0  43024 01-07:25:31 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1731  1498   0.0  46288 01-07:25:31 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1809  1498   0.0    736 01-07:25:27 /Applications/Claude.app/Contents/Helpers/disclaimer\n 1810  1809   0.1 260528 01-07:25:27 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n 1835  1498   0.0  37296 01-07:25:27 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 5552 67250   0.0  13328    01:14:19 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  16032    01:12:59 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n18489 67250   0.0  17760       27:31 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20577  5654   0.0  27744       06:49 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20579 20577   0.0  15840       06:49 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20580 20577 100.0 438992       06:49 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20800  5552   0.0  31056       04:37 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20803 20800   0.0  15808       04:37 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20804 20800  98.5 335184       04:37 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n21203 67250   3.3  11056       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n"
+        }
+      }
+    },
+    "before_tests": {
+      "time": "2026-10-03T20:05:58.176321+09:00",
+      "purpose": "段①の H 同点を含む関門検査前",
+      "checks": {
+        "disk": {
+          "command": [
+            "df",
+            "-h",
+            "/"
+          ],
+          "returncode": 0,
+          "output": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    55Gi    19%    484k  580M    0%   /\n"
+        },
+        "ram": {
+          "command": [
+            "sysctl",
+            "hw.memsize"
+          ],
+          "returncode": 0,
+          "output": "hw.memsize: 34359738368\n"
+        },
+        "vm": {
+          "command": [
+            "vm_stat"
+          ],
+          "returncode": 0,
+          "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   185925.\nPages active:                                 641362.\nPages inactive:                               916149.\nPages speculative:                              5736.\nPages throttled:                                   0.\nPages wired down:                             159793.\nPages purgeable:                               15314.\n\"Translation faults\":                      300016019.\nPages copy-on-write:                        14800700.\nPages zero filled:                         165129858.\nPages reactivated:                          25730947.\nPages purged:                                1796379.\nFile-backed pages:                            928048.\nAnonymous pages:                              635199.\nPages stored in compressor:                   285136.\nPages occupied by compressor:                 135818.\nDecompressions:                             50745952.\nCompressions:                               56618229.\nPageins:                                    27814679.\nPageouts:                                      31271.\nSwapins:                                    10019359.\nSwapouts:                                   11946411.\nPages tagged:                                 117959.\nPages tagged resident:                         95480.\nPages tagged compressed:                       22479.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5617.\nPages tag-storage free:                         2225.\nPages tag-storage non-tag pageable:            57550.\nPages tag-storage non-tag wired:                  24.\nBytes of compressed tags:                    3271680.\nTagged compressions:                          322454.\nTagged decompressions:                        293955.\n"
+        },
+        "swap": {
+          "command": [
+            "sysctl",
+            "vm.swapusage"
+          ],
+          "returncode": 0,
+          "output": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\n"
+        },
+        "thermal": {
+          "command": [
+            "pmset",
+            "-g",
+            "therm"
+          ],
+          "returncode": 0,
+          "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+        },
+        "processes": {
+          "command": [
+            "ps",
+            "-arxo",
+            "pid,ppid,%cpu,rss,etime,comm"
+          ],
+          "returncode": 0,
+          "output": "  PID  PPID  %CPU    RSS     ELAPSED COMM\n20804 20800 100.0 646992       10:06 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20580 20577  99.3 696224       12:18 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n  434     1   6.7 103856 01-07:32:51 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n67249 67172   1.1 892160    07:07:49 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n67229 67172   0.9 147936    07:07:51 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Service).app/Contents/MacOS/Codex (Service)\n  427     1   0.8  20096 01-07:32:51 /usr/sbin/bluetoothd\n  656     1   0.8  38480 01-07:32:47 /System/Library/DriverExtensions/AppleCentauriAlpha.dext/AppleCentauriAlpha\n 1810  1809   0.6 261616 01-07:30:56 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n62915 62902   0.3 426832    09:47:52 /Applications/Discord.app/Contents/Frameworks/Discord Helper (Renderer).app/Contents/MacOS/Discord Helper (Renderer)\n 1504  1498   0.3  81824 01-07:31:52 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n67250 67172   0.3 302928    07:07:49 /Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n  745     1   0.2  47568 01-07:32:46 /usr/libexec/sharingd\n  828     1   0.2  11648 01-07:32:45 /usr/libexec/milod\n  565     1   0.2  24064 01-07:32:49 /usr/sbin/coreaudiod\n  763     1   0.1   8448 01-07:32:46 /usr/libexec/nearbyd\n 5552 67250   0.0  13328    01:19:48 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n21442 67250   0.0  11088       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n20803 20800   0.0  15808       10:06 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20800  5552   0.0  31056       10:06 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20579 20577   0.0  15840       12:18 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20577  5654   0.0  27744       12:18 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n18489 67250   0.0  17776       33:00 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  16032    01:18:28 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n"
+        }
+      }
+    },
+    "before_grid": {
+      "time": "2026-10-03T20:07:31.680609+09:00",
+      "purpose": "段①の手例だけの小格子の前",
+      "checks": {
+        "disk": {
+          "command": [
+            "df",
+            "-h",
+            "/"
+          ],
+          "returncode": 0,
+          "output": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    55Gi    19%    484k  580M    0%   /\n"
+        },
+        "ram": {
+          "command": [
+            "sysctl",
+            "hw.memsize"
+          ],
+          "returncode": 0,
+          "output": "hw.memsize: 34359738368\n"
+        },
+        "vm": {
+          "command": [
+            "vm_stat"
+          ],
+          "returncode": 0,
+          "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   151282.\nPages active:                                 664398.\nPages inactive:                               919160.\nPages speculative:                              8426.\nPages throttled:                                   0.\nPages wired down:                             165730.\nPages purgeable:                               16049.\n\"Translation faults\":                      300223742.\nPages copy-on-write:                        14812980.\nPages zero filled:                         165250461.\nPages reactivated:                          25731086.\nPages purged:                                1797070.\nFile-backed pages:                            933557.\nAnonymous pages:                              658427.\nPages stored in compressor:                   285014.\nPages occupied by compressor:                 135787.\nDecompressions:                             50746088.\nCompressions:                               56618229.\nPageins:                                    27817779.\nPageouts:                                      31271.\nSwapins:                                    10019359.\nSwapouts:                                   11946411.\nPages tagged:                                 118372.\nPages tagged resident:                         95902.\nPages tagged compressed:                       22470.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5615.\nPages tag-storage free:                         2210.\nPages tag-storage non-tag pageable:            57565.\nPages tag-storage non-tag wired:                  24.\nBytes of compressed tags:                    3270080.\nTagged compressions:                          322454.\nTagged decompressions:                        293964.\n"
+        },
+        "swap": {
+          "command": [
+            "sysctl",
+            "vm.swapusage"
+          ],
+          "returncode": 0,
+          "output": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\n"
+        },
+        "thermal": {
+          "command": [
+            "pmset",
+            "-g",
+            "therm"
+          ],
+          "returncode": 0,
+          "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+        },
+        "processes": {
+          "command": [
+            "ps",
+            "-arxo",
+            "pid,ppid,%cpu,rss,etime,comm"
+          ],
+          "returncode": 0,
+          "output": "  PID  PPID  %CPU    RSS     ELAPSED COMM\n20804 20800  98.8 715344       11:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20580 20577  97.9 784736       13:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n  434     1  22.7 103920 01-07:34:24 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 1518  1498  12.2 922416 01-07:33:25 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n21493 67250  10.0  10960       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n 1498     1   8.6 347520 01-07:33:28 /Applications/Claude.app/Contents/MacOS/Claude\n 1504  1498   7.1  87056 01-07:33:25 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n67249 67172   5.2 901792    07:09:22 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n  669     1   2.9  20400 01-07:34:20 /System/Library/CoreServices/WindowManager.app/Contents/MacOS/WindowManager\n67250 67172   2.3 303120    07:09:22 /Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n  427     1   1.8  20080 01-07:34:24 /usr/sbin/bluetoothd\n  437     1   1.8   5888 01-07:34:23 /usr/sbin/cfprefsd\n  411     1   1.7  23856 01-07:34:24 /usr/libexec/locationd\n  442     1   1.3 138224 01-07:34:23 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow\n  656     1   1.1  38496 01-07:34:20 /System/Library/DriverExtensions/AppleCentauriAlpha.dext/AppleCentauriAlpha\n 1810  1809   0.0 261632 01-07:32:29 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n20803 20800   0.0  15808       11:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20800  5552   0.0  31056       11:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20579 20577   0.0  15840       13:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20577  5654   0.0  27744       13:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n18489 67250   0.0  17776       34:33 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  16032    01:20:01 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5552 67250   0.0  13328    01:21:21 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n"
+        }
+      }
+    },
+    "after_stop": {
+      "time": "2026-10-03T20:09:59.315507+09:00",
+      "purpose": "段①全関門と手例格子の完了後・計算は停止",
+      "checks": {
+        "disk": {
+          "command": [
+            "df",
+            "-h",
+            "/"
+          ],
+          "returncode": 0,
+          "output": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    54Gi    20%    484k  566M    0%   /\n"
+        },
+        "ram": {
+          "command": [
+            "sysctl",
+            "hw.memsize"
+          ],
+          "returncode": 0,
+          "output": "hw.memsize: 34359738368\n"
+        },
+        "vm": {
+          "command": [
+            "vm_stat"
+          ],
+          "returncode": 0,
+          "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    33954.\nPages active:                                 686402.\nPages inactive:                              1025266.\nPages speculative:                              8743.\nPages throttled:                                   0.\nPages wired down:                             158032.\nPages purgeable:                               13658.\n\"Translation faults\":                      300861488.\nPages copy-on-write:                        14860606.\nPages zero filled:                         165568612.\nPages reactivated:                          25731353.\nPages purged:                                1798206.\nFile-backed pages:                           1035128.\nAnonymous pages:                              685283.\nPages stored in compressor:                   280062.\nPages occupied by compressor:                 132386.\nDecompressions:                             50751334.\nCompressions:                               56618229.\nPageins:                                    27838181.\nPageouts:                                      31271.\nSwapins:                                    10019659.\nSwapouts:                                   11946411.\nPages tagged:                                 118291.\nPages tagged resident:                         95826.\nPages tagged compressed:                       22465.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5624.\nPages tag-storage free:                         1556.\nPages tag-storage non-tag pageable:            58199.\nPages tag-storage non-tag wired:                  23.\nBytes of compressed tags:                    3269440.\nTagged compressions:                          322454.\nTagged decompressions:                        293969.\n"
+        },
+        "swap": {
+          "command": [
+            "sysctl",
+            "vm.swapusage"
+          ],
+          "returncode": 0,
+          "output": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\n"
+        },
+        "thermal": {
+          "command": [
+            "pmset",
+            "-g",
+            "therm"
+          ],
+          "returncode": 0,
+          "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+        },
+        "processes": {
+          "command": [
+            "ps",
+            "-arxo",
+            "pid,ppid,%cpu,rss,etime,comm"
+          ],
+          "returncode": 0,
+          "output": "  PID  PPID  %CPU    RSS     ELAPSED COMM\n20580 20577  99.6 821152       16:19 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20804 20800  99.2 839680       14:07 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n  434     1  16.8 103808 01-07:36:52 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n67249 67172   1.9 919952    07:11:50 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n67229 67172   1.8 148256    07:11:52 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Service).app/Contents/MacOS/Codex (Service)\n  656     1   1.7  38560 01-07:36:48 /System/Library/DriverExtensions/AppleCentauriAlpha.dext/AppleCentauriAlpha\n67250 67172   0.6 305328    07:11:50 /Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n39806     1   0.5  22736    18:53:14 /usr/libexec/PerfPowerServices\n  362     1   0.4  49936 01-07:36:52 /usr/libexec/logd\n62915 62902   0.4 426640    09:51:53 /Applications/Discord.app/Contents/Frameworks/Discord Helper (Renderer).app/Contents/MacOS/Discord Helper (Renderer)\n  365     1   0.4  11168 01-07:36:52 /usr/libexec/UserEventAgent\n  707     1   0.4  15488 01-07:36:48 /usr/libexec/trustd\n67172     1   0.3 529024    07:11:54 /Applications/ChatGPT.app/Contents/MacOS/ChatGPT\n  428     1   0.3   4512 01-07:36:52 /usr/sbin/notifyd\n  565     1   0.3  24064 01-07:36:50 /usr/sbin/coreaudiod\n 1810  1809   0.1 295936 01-07:34:57 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n21878 67250   0.0  11184       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n21560 21559   0.0 272304       02:26 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n20803 20800   0.0  15808       14:07 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20800  5552   0.0  31056       14:07 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20579 20577   0.0  15840       16:19 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n20577  5654   0.0  27744       16:19 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n18489 67250   0.0  17792       37:01 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  16032    01:22:29 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5552 67250   0.0  13328    01:23:49 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n"
+        }
+      }
+    }
+  },
+  "stage2": {
+    "world2_arm": "n3l_w2_A_lam0.0187",
+    "world2_equivalence": "ユーザーが指定腕との表のハッシュ・旗の一致と全種台帳を確認。今回実物は読まず。",
+    "seeds": "1〜20のみ",
+    "world2_transfer_started": false,
+    "world1_rebuild_started": false,
+    "replay_started": false
+  },
+  "stage3_started": false,
+  "flag_off_scope": [
+    "手例の台帳行 seed001.jsonl",
+    "手例用side seed001.side.jsonl",
+    "既存selectロガー seed001.select.jsonl.gz"
+  ],
+  "unverified": [
+    "両世界の全side一式の実測比較",
+    "両世界の注意効果と誤りの分類",
+    "世界の各名前の初出試行",
+    "段②と段③"
+  ]
+}
