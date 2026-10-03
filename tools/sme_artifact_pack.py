@@ -77,6 +77,8 @@ def main():
     ap.add_argument('target', type=Path)
     args = ap.parse_args()
     source, target = args.source.resolve(), args.target.resolve()
+    if not source.is_dir() or target.is_relative_to(source):
+        raise SystemExit('元は既存の場所、公開用の場所は元の外にする')
     if target.exists():
         raise SystemExit('公開用の場所は新しい場所にする')
     target.mkdir(parents=True)
