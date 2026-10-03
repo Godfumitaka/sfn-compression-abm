@@ -1,0 +1,1546 @@
+{
+ "status": "stopped",
+ "checks": [
+  {
+   "name": "模型のコードは承認前から不変",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "serial2_simultaneous 個体数",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous fの毎試行値",
+   "passed": true,
+   "checked_rows": 200
+  },
+  {
+   "name": "serial2_simultaneous 世界課題の分母",
+   "passed": true,
+   "correct": 124,
+   "wrong": 1,
+   "silence": 75,
+   "total": 200
+  },
+  {
+   "name": "serial2_simultaneous 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 125,
+   "wrong_sources": {
+    "H": 1
+   }
+  },
+  {
+   "name": "serial2_simultaneous 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 30,
+   "recv": 30
+  },
+  {
+   "name": "serial2_simultaneous 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 125
+  },
+  {
+   "name": "serial2_simultaneous 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 0,
+     "同じ誤答": 0,
+     "双方棄権": 0,
+     "その他": 0
+    },
+    "cross": {
+     "双方正解": 10,
+     "同じ誤答": 3,
+     "双方棄権": 2,
+     "その他": 5
+    }
+   }
+  },
+  {
+   "name": "serial2_simultaneous 報告の初期採点のsource",
+   "passed": true,
+   "births": 12
+  },
+  {
+   "name": "serial2_simultaneous 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 2,
+    "scored": 198
+   },
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 報告の採点欄とsource",
+   "passed": true,
+   "counts": {
+    "scored": 30
+   },
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 個体数",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial fの毎試行値",
+   "passed": true,
+   "checked_rows": 200
+  },
+  {
+   "name": "serial2_serial 世界課題の分母",
+   "passed": true,
+   "correct": 124,
+   "wrong": 1,
+   "silence": 75,
+   "total": 200
+  },
+  {
+   "name": "serial2_serial 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 125,
+   "wrong_sources": {
+    "H": 1
+   }
+  },
+  {
+   "name": "serial2_serial 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 30,
+   "recv": 30
+  },
+  {
+   "name": "serial2_serial 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 125
+  },
+  {
+   "name": "serial2_serial 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 0,
+     "同じ誤答": 0,
+     "双方棄権": 0,
+     "その他": 0
+    },
+    "cross": {
+     "双方正解": 10,
+     "同じ誤答": 3,
+     "双方棄権": 2,
+     "その他": 5
+    }
+   }
+  },
+  {
+   "name": "serial2_serial 報告の初期採点のsource",
+   "passed": true,
+   "births": 12
+  },
+  {
+   "name": "serial2_serial 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 2,
+    "scored": 198
+   },
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 報告の採点欄とsource",
+   "passed": true,
+   "counts": {
+    "scored": 30
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 8,
+    "scored": 13912
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 報告の採点欄とsource",
+   "passed": true,
+   "counts": {},
+   "errors": []
+  },
+  {
+   "name": "以前の合格記録を全て再検査",
+   "passed": true,
+   "previous_unique_checks": 19,
+   "missing": []
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 8,
+    "scored": 13912
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 報告の採点欄とsource",
+   "passed": true,
+   "counts": {},
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "default2_current 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_current 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   },
+   "right": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体0",
+   "passed": true,
+   "collective": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体1",
+   "passed": true,
+   "collective": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 8,
+    "scored": 13912
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 報告の採点欄とsource",
+   "passed": true,
+   "counts": {},
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "default2_current 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_current 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   },
+   "right": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体0",
+   "passed": true,
+   "collective": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体1",
+   "passed": true,
+   "collective": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体2",
+   "passed": true,
+   "collective": {
+    "sha256": "b26624f1681e88bfd4576956f3fa763149e56391baff8d9a27306ede4c9bab0c",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "b26624f1681e88bfd4576956f3fa763149e56391baff8d9a27306ede4c9bab0c",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体3",
+   "passed": true,
+   "collective": {
+    "sha256": "1bc9866667d5941e98b65f306cb871c3e1c8bbf546505b83e79382db33cebec3",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "1bc9866667d5941e98b65f306cb871c3e1c8bbf546505b83e79382db33cebec3",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体4",
+   "passed": true,
+   "collective": {
+    "sha256": "ed83a5b5567bfc880eccde47b4ed30132b8ebab0f23a8e45c697d95124c699b1",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "ed83a5b5567bfc880eccde47b4ed30132b8ebab0f23a8e45c697d95124c699b1",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体5",
+   "passed": true,
+   "collective": {
+    "sha256": "a99ad8dd1bfe5f896f72e9b4593cb35b01d1f3f771116a0947731cde230bd56a",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "a99ad8dd1bfe5f896f72e9b4593cb35b01d1f3f771116a0947731cde230bd56a",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体6",
+   "passed": true,
+   "collective": {
+    "sha256": "42499d524edb43711184aa55da778a621690f9ffa35387bfd86805049353c1ab",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "42499d524edb43711184aa55da778a621690f9ffa35387bfd86805049353c1ab",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体7",
+   "passed": true,
+   "collective": {
+    "sha256": "de2640120f4501e2cdf1c9458e1a16e015f644866eab609ed0a2f093ee1527e9",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "de2640120f4501e2cdf1c9458e1a16e015f644866eab609ed0a2f093ee1527e9",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "off8 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "off8 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体0",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 8,
+    "scored": 13912
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 報告の採点欄とsource",
+   "passed": true,
+   "counts": {},
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "default2_current 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_current 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   },
+   "right": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体0",
+   "passed": true,
+   "collective": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体1",
+   "passed": true,
+   "collective": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体2",
+   "passed": true,
+   "collective": {
+    "sha256": "b26624f1681e88bfd4576956f3fa763149e56391baff8d9a27306ede4c9bab0c",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "b26624f1681e88bfd4576956f3fa763149e56391baff8d9a27306ede4c9bab0c",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体3",
+   "passed": true,
+   "collective": {
+    "sha256": "1bc9866667d5941e98b65f306cb871c3e1c8bbf546505b83e79382db33cebec3",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "1bc9866667d5941e98b65f306cb871c3e1c8bbf546505b83e79382db33cebec3",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体4",
+   "passed": true,
+   "collective": {
+    "sha256": "ed83a5b5567bfc880eccde47b4ed30132b8ebab0f23a8e45c697d95124c699b1",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "ed83a5b5567bfc880eccde47b4ed30132b8ebab0f23a8e45c697d95124c699b1",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体5",
+   "passed": true,
+   "collective": {
+    "sha256": "a99ad8dd1bfe5f896f72e9b4593cb35b01d1f3f771116a0947731cde230bd56a",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "a99ad8dd1bfe5f896f72e9b4593cb35b01d1f3f771116a0947731cde230bd56a",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体6",
+   "passed": true,
+   "collective": {
+    "sha256": "42499d524edb43711184aa55da778a621690f9ffa35387bfd86805049353c1ab",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "42499d524edb43711184aa55da778a621690f9ffa35387bfd86805049353c1ab",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "通信なし8体と単独：個体7",
+   "passed": true,
+   "collective": {
+    "sha256": "de2640120f4501e2cdf1c9458e1a16e015f644866eab609ed0a2f093ee1527e9",
+    "rows": 1740
+   },
+   "solo": {
+    "sha256": "de2640120f4501e2cdf1c9458e1a16e015f644866eab609ed0a2f093ee1527e9",
+    "rows": 1740
+   }
+  },
+  {
+   "name": "off8 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "off8 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体0",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体1",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体2",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体3",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体4",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体5",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体6",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体7",
+   "passed": true
+  },
+  {
+   "name": "record8_plain 完走・終了通知",
+   "passed": false,
+   "last_comm_probe_trial": 199,
+   "evidence": [
+    "record8_plain-agent6.sample.txt",
+    "record8_plain-agent1.sample.txt",
+    "record8_plain-coordinator.sample.txt"
+   ],
+   "manual_stop": "record8_plain-stop-action.json"
+  }
+ ],
+ "runs": [
+  {
+   "name": "serial2_simultaneous",
+   "elapsed_seconds": 10.696558000010555,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:07:58+09:00",
+   "rss_sum_peak_bytes": 207749120,
+   "rss_sample_interval_seconds": 1,
+   "samples": 10,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    71.1,
+    62.9
+   ]
+  },
+  {
+   "name": "serial2_serial",
+   "elapsed_seconds": 14.841840375011088,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:08:13+09:00",
+   "rss_sum_peak_bytes": 191332352,
+   "rss_sample_interval_seconds": 1,
+   "samples": 14,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    61.7,
+    55.3
+   ]
+  },
+  {
+   "name": "no_comm_r1",
+   "elapsed_seconds": 1688.667464291997,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:36:22+09:00",
+   "rss_sum_peak_bytes": 1037680640,
+   "rss_sample_interval_seconds": 1,
+   "samples": 1593,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    100.1,
+    113.6,
+    108.2,
+    107.7,
+    135.6,
+    140.4,
+    143.7,
+    137.9
+   ]
+  },
+  {
+   "name": "default2_baseline",
+   "elapsed_seconds": 26.882597125004395,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:18:32+09:00",
+   "rss_sum_peak_bytes": 245432320,
+   "rss_sample_interval_seconds": 1,
+   "samples": 25,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    96.3,
+    90.0
+   ]
+  },
+  {
+   "name": "default2_current",
+   "elapsed_seconds": 28.10076783299155,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:19:00+09:00",
+   "rss_sum_peak_bytes": 237780992,
+   "rss_sample_interval_seconds": 1,
+   "samples": 26,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    94.9,
+    89.4
+   ]
+  },
+  {
+   "name": "solo_r1_a0",
+   "elapsed_seconds": 116.3289456670027,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:20:56+09:00",
+   "rss_sum_peak_bytes": 110968832,
+   "rss_sample_interval_seconds": 1,
+   "samples": 106,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a1",
+   "elapsed_seconds": 132.63492316700285,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:21:13+09:00",
+   "rss_sum_peak_bytes": 123895808,
+   "rss_sample_interval_seconds": 1,
+   "samples": 121,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a2",
+   "elapsed_seconds": 93.48293149999517,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:29:56+09:00",
+   "rss_sum_peak_bytes": 124633088,
+   "rss_sample_interval_seconds": 1,
+   "samples": 88,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a3",
+   "elapsed_seconds": 93.72752062500513,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:31:31+09:00",
+   "rss_sum_peak_bytes": 118865920,
+   "rss_sample_interval_seconds": 1,
+   "samples": 88,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a4",
+   "elapsed_seconds": 291.9488182920031,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:36:24+09:00",
+   "rss_sum_peak_bytes": 148242432,
+   "rss_sample_interval_seconds": 1,
+   "samples": 274,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a5",
+   "elapsed_seconds": 287.7724100839987,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:41:14+09:00",
+   "rss_sum_peak_bytes": 144015360,
+   "rss_sample_interval_seconds": 1,
+   "samples": 269,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a6",
+   "elapsed_seconds": 306.36079329199856,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:46:22+09:00",
+   "rss_sum_peak_bytes": 170393600,
+   "rss_sample_interval_seconds": 1,
+   "samples": 287,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "solo_r1_a7",
+   "elapsed_seconds": 318.2507483329973,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:51:43+09:00",
+   "rss_sum_peak_bytes": 147259392,
+   "rss_sample_interval_seconds": 1,
+   "samples": 296,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "off8",
+   "elapsed_seconds": 47.46559316600906,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:52:32+09:00",
+   "rss_sum_peak_bytes": 426196992,
+   "rss_sample_interval_seconds": 1,
+   "samples": 44,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    47.4,
+    53.4,
+    47.4,
+    48.3,
+    46.6,
+    46.4,
+    43.6,
+    50.2
+   ]
+  },
+  {
+   "name": "baseline_a0",
+   "elapsed_seconds": 5.384012000009534,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:52:38+09:00",
+   "rss_sum_peak_bytes": 101711872,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a1",
+   "elapsed_seconds": 5.387462124999729,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:02+09:00",
+   "rss_sum_peak_bytes": 108937216,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a2",
+   "elapsed_seconds": 5.392779707995942,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:07+09:00",
+   "rss_sum_peak_bytes": 100532224,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a3",
+   "elapsed_seconds": 6.4717029580060625,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:14+09:00",
+   "rss_sum_peak_bytes": 104513536,
+   "rss_sample_interval_seconds": 1,
+   "samples": 6,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a4",
+   "elapsed_seconds": 5.382651459003682,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:19+09:00",
+   "rss_sum_peak_bytes": 104120320,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a5",
+   "elapsed_seconds": 5.3908382919908036,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:25+09:00",
+   "rss_sum_peak_bytes": 104333312,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a6",
+   "elapsed_seconds": 4.313415917000384,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:29+09:00",
+   "rss_sum_peak_bytes": 99205120,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  },
+  {
+   "name": "baseline_a7",
+   "elapsed_seconds": 5.391224500010139,
+   "exitcode": 0,
+   "finished": "2026-10-03T20:57:35+09:00",
+   "rss_sum_peak_bytes": 105906176,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19
+  }
+ ],
+ "authorization": "2026-10-03 ユーザー：検査台本だけ修正、全合格を再検査、保存結果を再利用して続行",
+ "previous_stop": "gates-stopped-original.json",
+ "machine_interruption": {
+  "record": "gates-machine-limit-stop.json",
+  "remaining_independent_parallelism": 1,
+  "preserved": "interrupted-machine-limit-preserved.json"
+ },
+ "machine_stop_history": [
+  {
+   "record": "gates-machine-stop-20261003T205240.json",
+   "archive": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/interrupted-machine-20261003T205240"
+  }
+ ],
+ "finished": "2026-10-03T21:12:49+09:00",
+ "reason": "関門不成立：record8_plainの終了通知の相互待ち（直列旗）",
+ "traceback": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/run_with_machine_priority.py\", line 52, in <module>\n    gate.main()\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 300, in main\n    plain=run_job('record8_plain',200,shop=False,audit=True,lineage=False)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 155, in run_job\n    if p.returncode: raise RuntimeError('走行失敗：'+name)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: 走行失敗：record8_plain\n"
+}
