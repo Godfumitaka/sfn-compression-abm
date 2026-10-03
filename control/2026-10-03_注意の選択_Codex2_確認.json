@@ -1,0 +1,124 @@
+{
+  "status": "stopped_missing_stage2_materials",
+  "attention_results_computed": 0,
+  "experimental_runs_executed": 0,
+  "base_commit": "d2068a96cb3ce3ab75d016a4c962127ea9bd9d14",
+  "code_branch": "attn-2026-10-03",
+  "report_base_commit": "35eade1c5ee750dabf62979d7971c78ae787b7ee",
+  "initial_machine_observations": {
+    "disk_available_GiB_rounded": 59,
+    "ram_bytes": 34359738368,
+    "swap_used_reported_MB": 380.19,
+    "vm_page_bytes": 16384,
+    "free_pages": 8565,
+    "inactive_pages": 891152,
+    "compressor_occupied_pages": 90039,
+    "thermal_warning": "no_recorded_warning",
+    "performance_warning": "no_recorded_warning",
+    "ps_observation": "短い負荷一覧では Python の重い処理は見えなかった。後の記録では他セッションの Python が 1 本 CPU 100%。",
+    "initial_sandbox_limitations": "ps・sysctl は許可範囲の外での読み取りに切り替えた。pmset はその切り替え後に警告記録なしを確認。"
+  },
+  "final_machine_check": {
+    "timestamp_jst": "2026-10-03T18:05:21.996505+09:00",
+    "purpose": "材料不足で停止した後の機械状態の記録。重い処理は開始していない。",
+    "disk": {
+      "command": [
+        "df",
+        "-h",
+        "/"
+      ],
+      "returncode": 0,
+      "stdout": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    56Gi    19%    484k  583M    0%   /",
+      "stderr": ""
+    },
+    "memory": {
+      "command": [
+        "vm_stat"
+      ],
+      "returncode": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    18429.\nPages active:                                 881331.\nPages inactive:                               878884.\nPages speculative:                              1722.\nPages throttled:                                   0.\nPages wired down:                             151305.\nPages purgeable:                               47520.\n\"Translation faults\":                      277878074.\nPages copy-on-write:                        12412982.\nPages zero filled:                         153963247.\nPages reactivated:                          25048212.\nPages purged:                                1648032.\nFile-backed pages:                            986773.\nAnonymous pages:                              775164.\nPages stored in compressor:                   231833.\nPages occupied by compressor:                 113112.\nDecompressions:                             50604977.\nCompressions:                               56394376.\nPageins:                                    26771327.\nPageouts:                                      31247.\nSwapins:                                    10019341.\nSwapouts:                                   11946411.\nPages tagged:                                 129047.\nPages tagged resident:                        111702.\nPages tagged compressed:                       17345.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5815.\nPages tag-storage free:                          272.\nPages tag-storage non-tag pageable:            59316.\nPages tag-storage non-tag wired:                  33.\nBytes of compressed tags:                    2490176.\nTagged compressions:                          315005.\nTagged decompressions:                        291717.",
+      "stderr": ""
+    },
+    "swap_and_ram": {
+      "command": [
+        "sysctl",
+        "vm.swapusage",
+        "hw.memsize"
+      ],
+      "returncode": 0,
+      "stdout": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\nhw.memsize: 34359738368",
+      "stderr": ""
+    },
+    "thermal": {
+      "command": [
+        "pmset",
+        "-g",
+        "therm"
+      ],
+      "returncode": 0,
+      "stdout": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "stderr": ""
+    },
+    "processes": {
+      "command": [
+        "ps",
+        "-axo",
+        "pid,ppid,%cpu,%mem,rss,etime,comm",
+        "-r"
+      ],
+      "returncode": 0,
+      "stdout": "  PID  PPID  %CPU %MEM    RSS     ELAPSED COMM\n 4020  4017 100.0  1.3 430448       05:13 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n  434     1   9.9  0.4 131344 01-05:32:15 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 1835  1498   0.0  0.1  38000 01-05:30:20 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1810  1809   0.0  1.2 395088 01-05:30:20 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n 1809  1498   0.0  0.0    736 01-05:30:20 /Applications/Claude.app/Contents/Helpers/disclaimer\n 1731  1498   0.0  0.2  52336 01-05:30:24 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1730  1498   0.0  0.1  43440 01-05:30:24 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1531  1498   0.0  0.1  28000 01-05:31:14 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1530  1498   0.0  0.1  20240 01-05:31:14 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1520  1498   0.0  0.2  74816 01-05:31:15 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1518  1498   0.0  2.8 932496 01-05:31:16 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1514  1498   0.0  0.2  64256 01-05:31:16 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1506  1498   0.0  0.2  53360 01-05:31:16 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1504  1498   0.0  0.3  89856 01-05:31:16 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1503     1   0.0  0.0   6256 01-05:31:16 /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler\n 1498     1   0.0  1.1 382960 01-05:31:19 /Applications/Claude.app/Contents/MacOS/Claude\n 4520 67250   0.0  0.1  17888       00:01 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n 4019  4017   0.0  0.0  15840       05:13 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4017  4014   0.0  0.1  30832       05:13 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4014 67250   0.0  0.0  16128       05:13 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python",
+      "stderr": ""
+    }
+  },
+  "rerun_estimate_reference": [
+    {
+      "arm": "cw1_A_lam0187",
+      "source": "注意なし・N3なしの同条件の既存走行。時間・容量の参考であり指定材料の代用ではない",
+      "seeds_measured": 20,
+      "total_process_seconds": 7693.42,
+      "min_seconds": 327.7,
+      "max_seconds": 428.27,
+      "file_bytes": {
+        "ledgers/cells": 385665718,
+        "side": 645821736
+      },
+      "file_counts": {
+        "ledgers/cells": 40,
+        "side": 140
+      },
+      "peak_reported_MB": 136.0
+    },
+    {
+      "arm": "cw2_A_lam0187",
+      "source": "注意なし・N3なしの同条件の既存走行。時間・容量の参考であり指定材料の代用ではない",
+      "seeds_measured": 20,
+      "total_process_seconds": 5606.58,
+      "min_seconds": 205.62,
+      "max_seconds": 324.31,
+      "file_bytes": {
+        "ledgers/cells": 541115702,
+        "side": 642460516
+      },
+      "file_counts": {
+        "ledgers/cells": 40,
+        "side": 140
+      },
+      "peak_reported_MB": 159.9
+    }
+  ],
+  "rerun_estimate": {
+    "scope": "基準 N3 の二腕・種1〜20の材料を作り直す走行だけ。段①・②の時間を含まない",
+    "workers": 1,
+    "hours_range": [
+      4,
+      6
+    ],
+    "reserve_GiB_range": [
+      3,
+      5
+    ],
+    "measured_attention_or_N3_run": false,
+    "rationale": "同じ世界・A・λ・f の N3 なしの既存 Mac 走行で、40 本の処理時間合計 13300 秒、保存量 2215063672 B。選択変更・記録増・他処理との競合は未測定。"
+  }
+}
