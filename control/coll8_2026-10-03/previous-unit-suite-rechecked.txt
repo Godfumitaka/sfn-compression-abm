@@ -1,0 +1,876 @@
+...................................FF.F..F.FFFFFFFFF..FFFF....F....F.... [ 82%]
+F.F...F........                                                          [100%]
+=================================== FAILURES ===================================
+__________________________ test_02_no_double_counting __________________________
+
+    def test_02_no_double_counting():
+        setup()
+        s = st([the_def()], HIST)
+        L = v39.code_lengths(s.p_hat)
+>       bits, parts = B.rewrite(s, "R_x", X, L, CONFIG, {r.relation_id for r in X.relations})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310_be.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v310be.py:305: in rewrite
+    g = v39.v39_graph(d, hist)
+        ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_x', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='r0...ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=False)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {('R_x', 0): {'fold': 2, 'wrap': 1}, ('R_x', 1): {'lock': 1}, ('R_x', 2): {'push': 1}}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+________________________ test_03_absence_never_assumed _________________________
+
+    def test_03_absence_never_assumed():
+        setup()
+        s = st([the_def()], HIST)
+        L = v39.code_lengths(s.p_hat)
+>       _, parts = B.rewrite(s, "R_x", X, L, CONFIG, {r.relation_id for r in X.relations})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310_be.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v310be.py:305: in rewrite
+    g = v39.v39_graph(d, hist)
+        ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_x', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='r0...ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=False)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {('R_x', 0): {'fold': 2, 'wrap': 1}, ('R_x', 1): {'lock': 1}, ('R_x', 2): {'push': 1}}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+_______________ test_05_increment_matches_and_no_double_storage ________________
+
+    def test_05_increment_matches_and_no_double_storage():
+        setup()
+>       base, target, al = _graphs()
+                           ^^^^^^^^^
+
+tests/test_v310_be.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310_be.py:129: in _graphs
+    return base, target, sme.map_graphs(base, target).alignment
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='p', label=None, attributes=mappingproxy({})), Entity(entity...{})), Relation(relation_id='b_cause', predicate='cause', arguments=('b_fold', 'b_lock'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...appingproxy({})), Relation(relation_id='s_pull', predicate='pull', arguments=('a', 'c'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_________________________ test_08_hypo_no_side_effects _________________________
+
+    def test_08_hypo_no_side_effects():
+        setup()
+>       base, target, al = _graphs()
+                           ^^^^^^^^^
+
+tests/test_v310_be.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310_be.py:129: in _graphs
+    return base, target, sme.map_graphs(base, target).alignment
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='p', label=None, attributes=mappingproxy({})), Entity(entity...{})), Relation(relation_id='b_cause', predicate='cause', arguments=('b_fold', 'b_lock'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...appingproxy({})), Relation(relation_id='s_pull', predicate='pull', arguments=('a', 'c'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_________________________ test_10_breakdown_and_choice _________________________
+
+    def test_10_breakdown_and_choice():
+        setup(lam=0.5)
+>       base, target, al = _graphs()
+                           ^^^^^^^^^
+
+tests/test_v310_be.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310_be.py:129: in _graphs
+    return base, target, sme.map_graphs(base, target).alignment
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='p', label=None, attributes=mappingproxy({})), Entity(entity...{})), Relation(relation_id='b_cause', predicate='cause', arguments=('b_fold', 'b_lock'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...appingproxy({})), Relation(relation_id='s_pull', predicate='pull', arguments=('a', 'c'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_________ test_11_answers_before_truth_and_no_double_birth_observation _________
+
+    def test_11_answers_before_truth_and_no_double_birth_observation():
+        setup()
+        d = the_def()
+        s = st([d], HIST)
+>       base, target, _ = _graphs()
+                          ^^^^^^^^^
+
+tests/test_v310_be.py:251: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310_be.py:129: in _graphs
+    return base, target, sme.map_graphs(base, target).alignment
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='p', label=None, attributes=mappingproxy({})), Entity(entity...{})), Relation(relation_id='b_cause', predicate='cause', arguments=('b_fold', 'b_lock'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...appingproxy({})), Relation(relation_id='s_pull', predicate='pull', arguments=('a', 'c'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_______________ test_1_parent_maps_and_u_seat_gets_its_position ________________
+
+    def test_1_parent_maps_and_u_seat_gets_its_position():
+        T.setup()
+        d = defn()
+>       off = mapping(d, scene(), u=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+___________________________ test_2_arity_must_match ____________________________
+
+    def test_2_arity_must_match():
+        T.setup()
+>       assert "c1" not in mapping(defn(r1_args=("x",)), scene()).relation_mapping     # U の席の行が一項、場面の子は二項
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+_________________ test_3_no_contradiction_with_entity_mapping __________________
+
+    def test_3_no_contradiction_with_entity_mapping():
+        T.setup()
+>       al = mapping(defn(r1_args=("y", "x")), scene())                                # U の行の引数が逆：x→b・y→a を要する
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+___________________ test_4_relation_is_not_matched_to_entity ___________________
+
+    def test_4_relation_is_not_matched_to_entity():
+        T.setup()
+>       assert "c1" not in mapping(defn(), scene(first_arg="a")).relation_mapping       # 親の子の位置が物
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+______ test_5_parent_name_condition_unchanged_and_hidden_child_as_before _______
+
+    def test_5_parent_name_condition_unchanged_and_hidden_child_as_before():
+        T.setup()
+>       assert "c1" not in mapping(defn(), scene(parent="enable")).relation_mapping     # 名前の違う親には当てはまらない
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+_________________________ test_6_u_seat_not_in_support _________________________
+
+    def test_6_u_seat_not_in_support():
+        T.setup()
+        d = defn()
+>       al = mapping(d, scene())
+             ^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310u.py:40: in mapping
+    return v39.map_v39(d, {}, sc)[1]
+           ^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_u', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='c1...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+________________ test_7_m1_observes_u_seat_from_parent_position ________________
+
+    def test_7_m1_observes_u_seat_from_parent_position():
+        T.setup()
+        d = defn()
+        st = T.state([d], {("R_u", 0): {"cause": 1}, ("R_u", 2): {"brk": 1}}, {})
+        base = scene()
+        sc = scene()
+        new = histrole.make(ab.m1.__wrapped__ if hasattr(ab.m1, "__wrapped__") else ab.m1, real=False)
+        from abm.sme import map_graphs
+        orig_dg, orig_ext = ab._definition_graph, ab._extend_definition
+        ab._definition_graph = lambda definition, mode="all": v39.v39_graph(definition, st.slot_history)
+        ab._extend_definition = lambda old, pairs, state, trial, **k: old          # 本番の --extend-rule none と同じ（行を足さない）
+        histrole.CFG["u_all_orders"] = True
+        histrole.STATS.clear()
+        histrole.STATS.update(histrole._stats_zero())
+>       al = map_graphs(base, sc).alignment                                         # 土台と今の場面の写し（m1 の材料）
+             ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310u.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...mappingproxy({})), Relation(relation_id='t1', predicate='cause', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entit...mappingproxy({})), Relation(relation_id='t1', predicate='cause', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+___________ test_birth_first_order_seat_takes_child_of_mapped_parent ___________
+
+    def test_birth_first_order_seat_takes_child_of_mapped_parent():
+>       _, (o, ro), (n, rn) = born()
+                              ^^^^^^
+
+tests/test_v310h_hist_role.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310h_hist_role.py:48: in born
+    return st0, run(ORIG, st0, scene()), run(NEW, st0, scene())
+                ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_v310h_hist_role.py:36: in run
+    al = map_graphs(BASE, target).alignment
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entity...mappingproxy({})), Relation(relation_id='c1', predicate='cause', arguments=('r1', 'r2'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='A', label=None, attributes=mappingproxy({})), Entity(entit...mappingproxy({})), Relation(relation_id='t1', predicate='cause', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_____________________ test_parent_not_mapped_adds_nothing ______________________
+
+    def test_parent_not_mapped_adds_nothing():
+>       _, _, (n, rn) = born()
+                        ^^^^^^
+
+tests/test_v310h_hist_role.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310h_hist_role.py:48: in born
+    return st0, run(ORIG, st0, scene()), run(NEW, st0, scene())
+                ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_v310h_hist_role.py:36: in run
+    al = map_graphs(BASE, target).alignment
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entity...mappingproxy({})), Relation(relation_id='c1', predicate='cause', arguments=('r1', 'r2'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='A', label=None, attributes=mappingproxy({})), Entity(entit...mappingproxy({})), Relation(relation_id='t1', predicate='cause', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+_____________ test_parentless_first_order_rows_get_no_observation ______________
+
+    def test_parentless_first_order_rows_get_no_observation():
+        T.setup()
+        st0 = T.state([], {}, {})
+>       (o, ro), (n, rn) = run(ORIG, st0, scene(parent="enable")), run(NEW, st0, scene(parent="enable"))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v310h_hist_role.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310h_hist_role.py:36: in run
+    al = map_graphs(BASE, target).alignment
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entity...mappingproxy({})), Relation(relation_id='c1', predicate='cause', arguments=('r1', 'r2'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='A', label=None, attributes=mappingproxy({})), Entity(entit...appingproxy({})), Relation(relation_id='t1', predicate='enable', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+________________________ test_hidden_child_adds_nothing ________________________
+
+    def test_hidden_child_adds_nothing():
+>       _, _, (n, rn) = born()
+                        ^^^^^^
+
+tests/test_v310h_hist_role.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v310h_hist_role.py:48: in born
+    return st0, run(ORIG, st0, scene()), run(NEW, st0, scene())
+                ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_v310h_hist_role.py:36: in run
+    al = map_graphs(BASE, target).alignment
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='base', entities=(Entity(entity_id='a', label=None, attributes=mappingproxy({})), Entity(entity...mappingproxy({})), Relation(relation_id='c1', predicate='cause', arguments=('r1', 'r2'), attributes=mappingproxy({}))))
+partial_graph = RelationGraph(graph_id='scene', entities=(Entity(entity_id='A', label=None, attributes=mappingproxy({})), Entity(entit...mappingproxy({})), Relation(relation_id='t1', predicate='cause', arguments=('s1', 's2'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+__________ test_04_negative_difference_released_with_infinite_budget ___________
+
+    def test_04_negative_difference_released_with_infinite_budget():
+        setup(budget=None)
+        d = definition(row(0, "fold", ("x", "y")), row(1, "lock", ("y", "z")))
+        hist = {("R_x", 0): {"fold": 1, "wrap": 2}, ("R_x", 1): {"lock": 1}}
+        st = state([d], hist, {("R_x", 0): rec("F", sf=0.0, sh=1.0, e=1.0), ("R_x", 1): rec("F", sf=1.0, sh=1.0, e=1.0)})
+        out, events, before, after, ties, boundary = v39.run_conversions(st, 10)
+        kinds = [(e["v39"], e["slot_index"]) for e in events]
+>       assert ("FH", 0) in kinds and ("FH", 1) not in kinds  # V＝0 は残す
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert (('FH', 0) in [])
+
+tests/test_v39_budget.py:124: AssertionError
+________________________ test_08_erased_name_unreadable ________________________
+
+    def test_08_erased_name_unreadable():
+        setup()
+        d = definition(row(0, "lock", ("x", "y")), row(1, "fold", ("y", "z")))
+        hist = {("R_x", 0): {"wrap": 2}, ("R_x", 1): {"fold": 1}}      # 固定名 lock は履歴に無い
+        st = state([d], hist, {("R_x", 0): rec("F"), ("R_x", 1): rec("F")})
+        st1, _ = v39._convert(st, "FH", "R_x", 0, 10)
+        assert "lock" not in repr(st1.definitions)                     # 行の述語は消えている
+>       g = v39.v39_graph(st1.definitions["R_x"], st1.slot_history)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v39_budget.py:198: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_x', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='r0...(ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=True)), m_alloc=2, registered_at=3, assimilation_count=1)
+slot_history = {('R_x', 0): {'wrap': 2}, ('R_x', 1): {'fold': 1}}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+_____________ test_13_gate_two_conditions_and_zero_name_condition ______________
+
+    def test_13_gate_two_conditions_and_zero_name_condition():
+        setup()
+        cfg = SimpleNamespace(tau_acc=0.67)
+        # F 2 席（fold(x,y)・lock(y,z)）と H 1 席（履歴 wrap）。場面で H が当てはまらなければ 2/3 ＜ ceil(0.67×3)＝3
+        d = definition(row(0, "fold", ("x", "y")), row(1, "lock", ("y", "z")), row(2, "push", ("x", "z"), alive=False))
+        hist = {("R_x", 2): {"wrap": 1}}
+>       sel = v39.select_definition(state([d], hist, {}), SCENE, cfg)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v39_budget.py:292: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v39.py:556: in select_definition
+    graph, alignment = map_v39(d, state.slot_history, scene)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:369: in map_v39
+    g, al = real_map(d, slot_history, scene)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:347: in map_v39
+    g = v39_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/strictpc.py:310: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/ustruct.py:132: in v39_graph
+    g = real_graph(d, slot_history)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R_x', constituents=(Constituent(slot_index=0, registered_at=3, relation=Relation(relation_id='r0...ell_frozen=1.0, c=0, hold_cost=0.0, m_alloc_at_reg=3), alive=False)), m_alloc=3, registered_at=3, assimilation_count=1)
+slot_history = {('R_x', 2): {'wrap': 1}}
+
+    def v39_graph(d, slot_history):
+        g = real_graph(d, slot_history)
+        relpos, nonrow, missing = _relpos_of(d)
+>       STATS["kinds_missing_rows"] += missing
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'kinds_missing_rows'
+
+tools/strictpc.py:312: KeyError
+________________ test_17_price_converts_below_lambda_until_none ________________
+
+    def test_17_price_converts_below_lambda_until_none():
+        d = definition(row(0, "fold", ("x", "y")), row(1, "lock", ("y", "z")), row(2, "push", ("x", "z")))
+        hist = {("R_x", 0): {"fold": 1, "wrap": 2}, ("R_x", 1): {"lock": 1}, ("R_x", 2): {"push": 2}}
+        seats = {("R_x", 0): rec("F", sf=0.0, sh=1.0, e=1.0),            # V_FH＜0
+                 ("R_x", 1): rec("F", sf=1.0, sh=1.0, su=1.0, e=1.0),    # V_FH＝0、H→U も 0
+                 ("R_x", 2): rec("F", sf=3.0, sh=0.0, e=3.0)}            # V_FH＞0（大きい）
+        st = state([d], hist, seats)
+        setup(price=0.0)
+        v39.CFG.pop("price")
+        out0, ev0, *_ = v39.run_conversions(st, 10)
+>       assert [(e["v39"], e["slot_index"]) for e in ev0 if e.get("v39") in ("FH", "HU")] == [("FH", 0)]   # λ＝0：V＜0 だけ
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert [('FH', 2)] == [('FH', 0)]
+E         
+E         At index 0 diff: ('FH', 2) != ('FH', 0)
+E         Use -v to get more diff
+
+tests/test_v39_budget.py:325: AssertionError
+___________ test_eight_agent_structure[test_06_receive_B_candidates] ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1089a2cf0>
+name = 'test_06_receive_B_candidates'
+
+    @pytest.mark.parametrize('name', [
+        'test_03_silent_no_bundle_and_single_prediction',
+        'test_04_bundle_fixed_and_no_truth_to_receiver',
+        'test_05_reference_resolution',
+        'test_06_receive_B_candidates',
+        'test_07_tags_counts_sampling_init',
+        'test_08_tag_cost_changes'])
+    def test_eight_agent_structure(monkeypatch,name):
+        original=C.setup
+        def setup8():
+            original()
+            v311c.CFG.update(n=8,groups=[0,0,0,0,1,1,1,1],b=14)
+        monkeypatch.setattr(C,'setup',setup8)
+>       getattr(C,name)()
+
+tests/test_v311c_eight_structure.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v311c.py:126: in test_06_receive_B_candidates
+    base, _, n_same, used_B = v311c.choose_partner(st, G, "nT", "B")
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v311c.py:164: in choose_partner
+    ranked = [(map_graphs(tr.scene, G), tr) for tr in cand]
+               ^^^^^^^^^^^^^^^^^^^^^^^
+tools/fixorder2.py:109: in map_graphs
+    pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_graph = RelationGraph(graph_id='bold', entities=(Entity(entity_id='x', label=None, attributes=mappingproxy({})), Entity(entity...xy({}))), relations=(Relation(relation_id='o1', predicate='fold', arguments=('x', 'y'), attributes=mappingproxy({})),))
+partial_graph = RelationGraph(graph_id='bnew', entities=(Entity(entity_id='u', label=None, attributes=mappingproxy({})), Entity(entity...es=mappingproxy({})), Relation(relation_id='q2', predicate='wrap', arguments=('u', 'v'), attributes=mappingproxy({}))))
+
+    def _alignment_candidates(base_graph, partial_graph):
+        if _registered(base_graph):
+            cands = prev(base_graph, partial_graph)
+        else:
+            cands, n_ext = cands_ext(base_graph, partial_graph)
+>           STATS["ext_cands"] += n_ext
+            ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'ext_cands'
+
+tools/strictpc.py:457: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_v310_be.py::test_02_no_double_counting - KeyError: 'kinds_m...
+FAILED tests/test_v310_be.py::test_03_absence_never_assumed - KeyError: 'kind...
+FAILED tests/test_v310_be.py::test_05_increment_matches_and_no_double_storage
+FAILED tests/test_v310_be.py::test_08_hypo_no_side_effects - KeyError: 'ext_c...
+FAILED tests/test_v310_be.py::test_10_breakdown_and_choice - KeyError: 'ext_c...
+FAILED tests/test_v310_be.py::test_11_answers_before_truth_and_no_double_birth_observation
+FAILED tests/test_v310u.py::test_1_parent_maps_and_u_seat_gets_its_position
+FAILED tests/test_v310u.py::test_2_arity_must_match - KeyError: 'kinds_missin...
+FAILED tests/test_v310u.py::test_3_no_contradiction_with_entity_mapping - Key...
+FAILED tests/test_v310u.py::test_4_relation_is_not_matched_to_entity - KeyErr...
+FAILED tests/test_v310u.py::test_5_parent_name_condition_unchanged_and_hidden_child_as_before
+FAILED tests/test_v310u.py::test_6_u_seat_not_in_support - KeyError: 'kinds_m...
+FAILED tests/test_v310u.py::test_7_m1_observes_u_seat_from_parent_position - ...
+FAILED tests/test_v310h_hist_role.py::test_birth_first_order_seat_takes_child_of_mapped_parent
+FAILED tests/test_v310h_hist_role.py::test_parent_not_mapped_adds_nothing - K...
+FAILED tests/test_v310h_hist_role.py::test_parentless_first_order_rows_get_no_observation
+FAILED tests/test_v310h_hist_role.py::test_hidden_child_adds_nothing - KeyErr...
+FAILED tests/test_v39_budget.py::test_04_negative_difference_released_with_infinite_budget
+FAILED tests/test_v39_budget.py::test_08_erased_name_unreadable - KeyError: '...
+FAILED tests/test_v39_budget.py::test_13_gate_two_conditions_and_zero_name_condition
+FAILED tests/test_v39_budget.py::test_17_price_converts_below_lambda_until_none
+FAILED tests/test_v311c_eight_structure.py::test_eight_agent_structure[test_06_receive_B_candidates]
+22 failed, 65 passed in 2.94s
