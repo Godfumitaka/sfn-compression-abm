@@ -1,0 +1,695 @@
+[
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-01",
+    "rule": "墓石も予算に含める",
+    "location": "tools/v39.py:119; tools/v39.py:154",
+    "status": "一致",
+    "evidence": "H/Uの行を構造費用から外さない。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-02",
+    "rule": "曖昧化後も経験の偏りを保持し、定義群全体で節約を数える",
+    "location": "tools/v39.py:98; tools/v39.py:163",
+    "status": "一致",
+    "evidence": "Hの名前と回数、全定義と全体表の費用。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-03",
+    "rule": "場面の記憶は定義群の予算と別枠",
+    "location": "tools/v39.py:163; abm/agent_runtime.py:263",
+    "status": "一致",
+    "evidence": "total_bitsにprototypeを加えない。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-04",
+    "rule": "予算の価格を現在の経験から更新",
+    "location": "tools/v39.py:71; tools/v39.py:894",
+    "status": "一致",
+    "evidence": "変換の試行でp̂からLを作る。Eは候補のループ前に凍結。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-05",
+    "rule": "複数の候補名は観察に基づく",
+    "location": "abm/filling.py:266; tools/histrole.py:49",
+    "status": "一致",
+    "evidence": "履歴はvisible/revealedの観察。Uの全体既定値は履歴へ仮に足さない。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-06",
+    "rule": "現実的な更新から設計する",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "設計の手順。特定の実行時規則としてのコード対応はない。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-07",
+    "rule": "経験を既存へ取り込めない場合を許す",
+    "location": "tools/v310be.py:381; tools/v39.py:1042",
+    "status": "一致",
+    "evidence": "Eに新規案。共通部2行未満では新規が作られない。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-08",
+    "rule": "開示で確認された関係を確認実績に入れる",
+    "location": "tools/v38.py:75; tools/v310be.py:116",
+    "status": "一致（旧経路）",
+    "evidence": "v38は述語と引数を照合。現在のB＋Eは別の席成績へ置換。引数の差はS13。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-09",
+    "rule": "未確認は加点・減点しない",
+    "location": "tools/v38.py:99; tools/v310be.py:116",
+    "status": "一致",
+    "evidence": "v38の評価分母は充足・反証だけ。B＋Eの誕生後分は開示が対応する席だけ。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-10",
+    "rule": "開示された正しい穴埋めの席の観察を足す",
+    "location": "tools/v38.py:151; tools/histrole.py:49",
+    "status": "一致",
+    "evidence": "v38はID由来の席を更新。hist-roleで他の席の観察も役割の対応を使う。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "9-28の予算判断（セッション内の番号）",
+    "id": "D-11",
+    "rule": "使用定義内の確認できた不成立も評価",
+    "location": "tools/v38.py:88; tools/v39.py:1027",
+    "status": "不一致（後続方式で置換）",
+    "evidence": "旧v38は反証を評価。B＋E・Aは開示IDの席だけに成績を加える（S14）、Cは最終回答で全非U席を評価（S21）。",
+    "document": "control/sfn_claude_handoff_2026-09-28.md:63; :356; :514"
+  },
+  {
+    "namespace": "後続の番号参照",
+    "id": "D-31",
+    "rule": "extend-rule noneは同化で行を足さない",
+    "location": "tools/v31.py:123",
+    "status": "一致",
+    "evidence": "本番の指定はnone。profitの規則はtools/v31.py:162、今回は実行対象外。",
+    "document": "docs/意図した変更_v3_v31.md／control/判断_0927_1630.md"
+  },
+  {
+    "namespace": "後続の番号参照",
+    "id": "D-32",
+    "rule": "投影と穴埋めの誤答で罰の届け先を分ける",
+    "location": "tools/v31.py:78",
+    "status": "一致（旧経路）",
+    "evidence": "D32処理は存在。本番B＋EのVはこの罰Qを足さない（S16）。",
+    "document": "docs/意図した変更_v3_v31.md／control/判断_0927_1630.md"
+  },
+  {
+    "namespace": "後続の番号参照",
+    "id": "D-38",
+    "rule": "Hの子の位置に可視名が履歴にあれば対にできる",
+    "location": "tools/v39.py:289; tools/strictpc.py:111",
+    "status": "一致",
+    "evidence": "Hの候補と、strict-pcの親子の検査。模型層の本番旗つき7小例。",
+    "document": "docs/意図した変更_v3_v31.md／control/判断_0927_1630.md"
+  },
+  {
+    "namespace": "後続の番号参照",
+    "id": "D-59",
+    "rule": "二階も伏せ候補に入れる（仮決定の参照）",
+    "location": "abm/world.py:236; abm/domains.py:182",
+    "status": "一致（実装の条文）",
+    "evidence": "設定holdout_include_second_order=true。決裁の台帳本文は未取得。",
+    "document": "docs/意図した変更_v3_v31.md／control/判断_0927_1630.md"
+  },
+  {
+    "namespace": "台帳本文未取得",
+    "id": "D-25",
+    "rule": "委任書に番号の参照がある",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "確定事項の本文を取得していない。D-27は9-19委任書に「落とす」と記録、実行規則の原文は未取得。",
+    "document": "委任書_2026-09-19_第4版.md:95; :187; :205; :223"
+  },
+  {
+    "namespace": "台帳本文未取得",
+    "id": "D-27",
+    "rule": "委任書に番号の参照がある",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "確定事項の本文を取得していない。D-27は9-19委任書に「落とす」と記録、実行規則の原文は未取得。",
+    "document": "委任書_2026-09-19_第4版.md:95; :187; :205; :223"
+  },
+  {
+    "namespace": "台帳本文未取得",
+    "id": "D-28",
+    "rule": "委任書に番号の参照がある",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "確定事項の本文を取得していない。D-27は9-19委任書に「落とす」と記録、実行規則の原文は未取得。",
+    "document": "委任書_2026-09-19_第4版.md:95; :187; :205; :223"
+  },
+  {
+    "namespace": "台帳本文未取得",
+    "id": "D-41",
+    "rule": "委任書に番号の参照がある",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "確定事項の本文を取得していない。D-27は9-19委任書に「落とす」と記録、実行規則の原文は未取得。",
+    "document": "委任書_2026-09-19_第4版.md:95; :187; :205; :223"
+  },
+  {
+    "namespace": "台帳本文未取得",
+    "id": "D-48",
+    "rule": "委任書に番号の参照がある",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "確定事項の本文を取得していない。D-27は9-19委任書に「落とす」と記録、実行規則の原文は未取得。",
+    "document": "委任書_2026-09-19_第4版.md:95; :187; :205; :223"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-008",
+    "rule": "照合参加を通じてVが下がるという参照",
+    "location": "abm/accounting.py:201",
+    "status": "見つからない",
+    "evidence": "全文なし。現在のB＋EはP・aを使わない。旧式は残る。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-011",
+    "rule": "比率Pは0から1",
+    "location": "abm/accounting.py:138; tools/v38.py:68",
+    "status": "一致（旧量）",
+    "evidence": "同じ分子・分母の16列。B＋EのVはPを使わない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-016",
+    "rule": "模型内部の意味論の一貫性",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "B1:709の理由の参照だけで決定本文なし。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-030",
+    "rule": "課金時点のm_liveを凍結する",
+    "location": "abm/loop.py:358; abm/definition.py:74",
+    "status": "一致（旧量）",
+    "evidence": "既存の課金額を後から再価格化しない。B＋EのVはQを使わない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-040",
+    "rule": "m1の入力はprototypeと現在場面の整列",
+    "location": "tools/v310be.py:467",
+    "status": "一致",
+    "evidence": "同定先とは別の元の材料から共通部を作る。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-041",
+    "rule": "同定閾値に届く定義なしなら新規",
+    "location": "abm/abstraction.py:14; tools/v310be.py:345",
+    "status": "不一致（後続Eで置換）",
+    "evidence": "旧同定は存在。本番は閾値による同定をNoneにし、費用最小の案を選ぶ。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-042",
+    "rule": "高階優先・S2最大の核を上書きしたという参照",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "B1:1093に変遷だけ。上書きした決定全文なし。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-051",
+    "rule": "①②の課金を同じ累積器へ",
+    "location": "abm/loop.py:358; abm/definition.py:74",
+    "status": "一致（旧量）",
+    "evidence": "共通のExceptionAccumulator。本番のB＋EはQをVに使わない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-058",
+    "rule": "旧種の6構成素の仮定でcを定める",
+    "location": "abm/accounting.py:42; abm/abstraction.py:177",
+    "status": "一致（旧量）",
+    "evidence": "旧価格は残る。本番の定義費用は構造・履歴等の実際のビット。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-060",
+    "rule": "実際の可視先に写った行を充填しない",
+    "location": "abm/filling.py:118; tools/v39.py:437",
+    "status": "一致",
+    "evidence": "可視の対応先を先に除く。欠けた位置はanswer-gapで追加制限。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-062",
+    "rule": "誕生のP初期値は上端1で≥.5",
+    "location": "abm/accounting.py:80",
+    "status": "一致（旧量）",
+    "evidence": "二材料の同じ重みを分子と分母に初期化。B＋Eは別のRF/RH/RUを用いる。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-067",
+    "rule": "同定の走査は取り込み回数→新しさ",
+    "location": "abm/abstraction.py:30; tools/v39.py:650",
+    "status": "不一致（後続Eで置換）",
+    "evidence": "旧経路の順は残る。Eはmin Kで同定し、同点に回数と新しさと名前を使う。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-068",
+    "rule": "予測のR_identifiedをm1の名前へ流用しない",
+    "location": "tools/v310be.py:459; tools/v310be.py:467",
+    "status": "一致",
+    "evidence": "予測で使ったRからではなくEの候補で同化先を選ぶ。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-069",
+    "rule": "採択したR_used一本だけ功績を加算",
+    "location": "abm/loop.py:240; tools/v39.py:1027",
+    "status": "一致",
+    "evidence": "他候補の席は誕生後の採点をしない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-070",
+    "rule": "位置不明は分子0、分母+1、課金なし",
+    "location": "tools/v38.py:99",
+    "status": "不一致（D-09で置換）",
+    "evidence": "D-09以降は未確認・不明の評価分母を増やさない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-071",
+    "rule": "同じ位置に複数関係なら課金符号長の平均",
+    "location": "abm/loop.py:311",
+    "status": "一致（旧量）",
+    "evidence": "ell_rの衝突の平均。本番B＋Eは開示した述語一つのℓで採点。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-018",
+    "rule": "R外使用を同じ古さの梯子で貯める",
+    "location": "abm/accounting.py:119; abm/loop.py:198",
+    "status": "一致（旧量）",
+    "evidence": "ext_basisを同じ16列で減衰・加算。本番beta=0。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "B1またはコードの決定参照",
+    "id": "M-020",
+    "rule": "外使用の分母は全試行−R適用",
+    "location": "abm/accounting.py:184",
+    "status": "一致（旧量）",
+    "evidence": "total_opportunityからopportunity_basisを引く。B＋EのVでは使わない。",
+    "document": "SPEC_B1_impl_2026-08-28.md／abm/accounting.py"
+  },
+  {
+    "namespace": "仮確定の参照",
+    "id": "C-55",
+    "rule": "腕は設定パスと種ファイルの指紋で同定",
+    "location": "abm/seed.py:39; sweep.py:161; sweep.py:350",
+    "status": "一致（記録の対象）",
+    "evidence": "種の指紋・設定・旗を保存。腕名だけで判定しない。",
+    "document": "config/readings_2026-09-15.md:34"
+  },
+  {
+    "namespace": "仮確定の参照",
+    "id": "C-82",
+    "rule": "旧fan_in_rawが0でκが効かない",
+    "location": "abm/accounting.py:196; abm/abstraction.py:120",
+    "status": "一致（旧量の初期化）",
+    "evidence": "初期fan_in_raw=0。今回のB＋EのVにはembed項自体がない。旧走行の全件は再計数しない。",
+    "document": "config/readings_2026-09-15.md:61"
+  },
+  {
+    "namespace": "コードの確定参照",
+    "id": "C-33",
+    "rule": "高階述語の集合は種から計算し必須で渡す",
+    "location": "abm/seed.py:58; abm/filling.py:135",
+    "status": "一致",
+    "evidence": "Noneを受け付けずコード定数で凍結しない。",
+    "document": "abm/seed.py:64"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-1",
+    "rule": "per_def の `m_alloc` は厚さではない",
+    "location": "abm/abstraction.py:58",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:45"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-2",
+    "rule": "T-111 は支持される",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:55"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-3",
+    "rule": "中心的な過程は観測されない（本研究で初の直接観測）",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:59"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-4",
+    "rule": "m_live の天井は「写像に現れる異なり述語の数」（`abstraction.py:163`）",
+    "location": "abm/abstraction.py:192",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:67"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-5",
+    "rule": "T-105 が環境をまたいで確認された",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:71"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-6",
+    "rule": "`repair_scope` は配線されている。縮退の原因は塔の深さ",
+    "location": "abm/loop.py:377",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:75"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-7",
+    "rule": "`one_minus_h` は検算専用（`world.py:59-64`）",
+    "location": "abm/world.py:44",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:82"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-8",
+    "rule": "高階は投影候補に入らない（`sme.py:364-365` / `243-244`）",
+    "location": "abm/sme.py:364",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:84"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-9",
+    "rule": "V の式（`accounting.py:221-223`）",
+    "location": "abm/accounting.py:201",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:86"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-10",
+    "rule": "θ′ 格子の設計意図（SPEC_B1 1357-1361）",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:93"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-11",
+    "rule": "共通の三階は誤対応を生む（写像器で実測）",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:101"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-12",
+    "rule": "高階の引数は述語一致なしに引きずられる（実測）",
+    "location": "tools/strictpc.py:111",
+    "status": "不一致（strict-pcで制限）",
+    "evidence": "旧写像器の小例。今は可視の子の名前を親子の検査で調べる。strict-pc小例5件通過。",
+    "document": "台帳追記7 2026-09-03 rev4.md:108"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-13",
+    "rule": "`c` は保持価値に届いている",
+    "location": "abm/definition.py:23",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:114"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-14",
+    "rule": "`new_slots` は種で設計できない",
+    "location": "abm/abstraction.py:251",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:118"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-15",
+    "rule": "`--calibrate` は費用の較正（`sweep.py:304-334`）",
+    "location": "sweep.py:316; sweep.py:379",
+    "status": "一致（旧経路の記述）",
+    "evidence": "指定箇所に対応する旧処理が残る。本番のB＋E・strict-pcの差し替えはS表に別記。",
+    "document": "台帳追記7 2026-09-03 rev4.md:130"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの確定候補",
+    "id": "C-16",
+    "rule": "主図は量−正確性トレードオフを正しく測っている",
+    "location": "abm/accounting.py:262",
+    "status": "見つからない",
+    "evidence": "旧走行の実測・設計の記録。今回のコードだけからその過去の数は確定しない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:138"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-1",
+    "rule": "判断2（種を大きくする）は実施する。",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-2",
+    "rule": "ρ は掃引軸とする。ρ ∈ {0,1}、主は 0。",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-3",
+    "rule": "段階分割する。**段階1＝塔2（射程軸）／段階2＝＋核一階（降下）／段階3＝塔の伏せ候補化",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-4",
+    "rule": "三階はモチーフごとに別述語とする**（C-11）",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-5",
+    "rule": "判断1（一次指標）は段階2 まで保留する。",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-6",
+    "rule": "θ′ 格子は種から導かず、短い走行で境目を測って置く**（C-14）",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "追記7 rev4：承認待ちの旧実験判断",
+    "id": "D-7",
+    "rule": "ポスターの重心を主図（f 軸）に置く。**神話率は段階2 の結果次第で加える",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "段階の選び方・実験の配置・過去の設計判断。今の実行規則の単一のコード箇所に対応させない。",
+    "document": "台帳追記7 2026-09-03 rev4.md:177"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D1",
+    "rule": "台帳write-only、研究者の真の世界をエージェントが読まない",
+    "location": "abm/loop.py:48; abm/loop.py:500",
+    "status": "一致",
+    "evidence": "predictには部分場面を渡し、loopが台帳へappend。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D2",
+    "rule": "照合のbaseは箱・入出力を変えない",
+    "location": "abm/sme.py:1; tools/v39.py:345",
+    "status": "一致（部品の接続）",
+    "evidence": "map_graphsのbase/targetとAlignmentを使用。全文未取得。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D3",
+    "rule": "ID・名前の辞書順を同点割りに使わないという抜粋",
+    "location": "tools/v39.py:565; tools/v310be.py:391",
+    "status": "不一致（後続仕様の同点順）",
+    "evidence": "本番は名前を最後の鍵に明記する。tiestructは忘却の同点だけを構造化。前後の仕様を混同しない。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D5",
+    "rule": "行は(slot_index,registered_at)、逐語の仮答えは研究者だけ",
+    "location": "abm/definition.py:34; abm/loop.py:415",
+    "status": "一致（旧欄）",
+    "evidence": "B＋EのSeatRecはさらに世代番号で覚え直しを分離。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D7",
+    "rule": "ID・名前の辞書順を同点割りに使わないという抜粋",
+    "location": "tools/v39.py:565",
+    "status": "不一致（後続仕様の同点順）",
+    "evidence": "D3と同じ抜粋。現在の選択順はS30。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D8",
+    "rule": "可視の不一致はfに無関係に②を発火",
+    "location": "abm/loop.py:286",
+    "status": "一致（旧経路）",
+    "evidence": "本番no-charge2とB＋Eでは②をVへ加えない。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D9",
+    "rule": "predictはAgentStateを変えない",
+    "location": "abm/loop.py:81; tools/cflearn.py:90",
+    "status": "一致",
+    "evidence": "小例の本物の状態の指紋は不変。Cは照合後にも検査。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D10",
+    "rule": "旧削除はV<θ′だけ",
+    "location": "abm/accounting.py:256; tools/v39.py:894",
+    "status": "不一致（後続Bで置換）",
+    "evidence": "現B＋Eは変換V<λ、Dは使用S<τ。旧θ′による刈り込みを本番に使わない。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D11",
+    "rule": "記憶の変異は登録・削除・統計の三種",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "現在は履歴の役割観察・Uの覚え直し等を後続仕様で実行。元の全文の範囲未取得。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D12",
+    "rule": "意味論の一貫性という理由の参照",
+    "location": "—",
+    "status": "見つからない",
+    "evidence": "B1:709の理由だけで本文未取得。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D13",
+    "rule": "p̂はエージェントごとに一つ",
+    "location": "abm/domains.py:254; tools/v39.py:71",
+    "status": "一致",
+    "evidence": "同じstate.p_hatを回答と価格に使用。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D14",
+    "rule": "設定値を名で渡し、走行長Tを明示する",
+    "location": "sweep.py:46; abm/accounting.py:71",
+    "status": "一致（取得した抜粋）",
+    "evidence": "取得したD14の抜粋はT等を明示する規則。時定数の上端3Tの根拠は、新着の9-30午後D-30jに確認した。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  },
+  {
+    "namespace": "B1のハイフンなし番号の抜粋",
+    "id": "D23",
+    "rule": "台帳に再計算のための欄を必須とする",
+    "location": "abm/ledger.py:1; abm/loop.py:500",
+    "status": "一致（対象の記録）",
+    "evidence": "実現f、種・世界の指紋と状態・旗を記録。6本の独立再計算の対象欄を照合。完全なD23本文未取得。",
+    "document": "SPEC_B1_impl_2026-08-28.md:181; :1044; :1268"
+  }
+]

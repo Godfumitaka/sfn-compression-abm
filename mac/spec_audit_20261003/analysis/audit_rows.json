@@ -1,0 +1,425 @@
+[
+  {
+    "key": "S01",
+    "rule": "F＝固定名と履歴、H＝履歴欄あり、U＝履歴欄なし",
+    "location": "tools/v39.py:133",
+    "status": "一致",
+    "evidence": "空の履歴欄もH。aliveと履歴の鍵の有無で三状態を分ける。",
+    "spec": "予算仕様§1・§6",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S02",
+    "rule": "F→Hで固定名だけを捨てる",
+    "location": "tools/v39.py:843",
+    "status": "一致",
+    "evidence": "行はalive=False、述語は消去名に置換。履歴と引数は残す。32件の既存V39小例のうち復元費用・消去検査でも確認。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S03",
+    "rule": "H→Uで候補名と回数を捨てる",
+    "location": "tools/v39.py:863",
+    "status": "一致",
+    "evidence": "履歴の鍵を外し、init/postを0にする。定義の構造を残す。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S04",
+    "rule": "全席Uで定義が退役し、FゼロでもHありなら残る",
+    "location": "tools/v39.py:870",
+    "status": "一致",
+    "evidence": "全席の状態を調べて退役。関連する履歴・成績・例外等を外す。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S05",
+    "rule": "U→Hは新世代。古い名前・成績を戻さない",
+    "location": "tools/v39.py:789",
+    "status": "一致",
+    "evidence": "世代+1、H、初期分と誕生後分0。後続のrelearn-initが新観察の初期分だけを足す。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S06",
+    "rule": "H→Fへ自動的に戻さない",
+    "location": "tools/v31.py:123",
+    "status": "一致",
+    "evidence": "本番はextend-rule none。取り込みで固定の行を足さない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S07",
+    "rule": "誕生は共通構造。必要な子を残し、最小2行",
+    "location": "tools/v39.py:1042",
+    "status": "一致",
+    "evidence": "m1の前処理で共通の行と子を扱い、2行未満なら登録しない。θ′の刈り込みは使わない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S08",
+    "rule": "二材料の誕生初期値と誕生後の採点を分離",
+    "location": "tools/v310be.py:151",
+    "status": "一致",
+    "evidence": "F初期費用0、H/Uは材料の名前との差をビット化。旧い材料をφ^年齢、現在を1で重み付け。SeatRecのinitとpostを分離。",
+    "spec": "B＋E仕様§6",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S09",
+    "rule": "覚え直しの初期値は新観察一回だけ",
+    "location": "tools/relearninit.py:57",
+    "status": "一致",
+    "evidence": "新しい履歴の正の回数の和が1ならH/Uを同じp̂と場面で評価。複数観察はskipとして記録。R_Bに足さない。",
+    "spec": "9-30のrelearn-initの委任書",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S10",
+    "rule": "Hは局所回数の割合^local_lambda×全体頻度の最大",
+    "location": "tools/v39.py:363; abm/filling.py:40",
+    "status": "一致",
+    "evidence": "階数をそろえ、同点は答えを出さない。本番local_lambda=1。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S11",
+    "rule": "Uは引数の型・階数に適合する全体最頻",
+    "location": "tools/v39.py:376",
+    "status": "一致",
+    "evidence": "署名と階数で候補を絞る。決まらなければ棄権。v39-u abstainなら常に棄権。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S12",
+    "rule": "予測前に同じ記憶・対応でF/H/Uの三答えを保存",
+    "location": "tools/v39.py:392; tools/v310be.py:100",
+    "status": "一致",
+    "evidence": "three_answersで控え、score-roleが同じ照合の親から対応先IDを付ける。開示の後で対応を取り直さない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S13",
+    "rule": "Aの書換費用は、開示と名前・引数が一致なら0、違えばℓ",
+    "location": "tools/v310be.py:142",
+    "status": "不一致",
+    "evidence": "score-roleは対応先IDが一致すると名前だけを比べる。fold(a,b)対fold(b,a)の小例で、世界の採点は外れだがFの書換費用0。仕様では4ビット。",
+    "spec": "B＋E仕様§2・§6",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S14",
+    "rule": "Aは使った定義の問われた席だけに証拠を届ける",
+    "location": "tools/v310be.py:116",
+    "status": "一致",
+    "evidence": "開示ID＝保存したcidの席だけを採点する。cid不明や別のcidは更新しない。引数の照合の差はS13。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S15",
+    "rule": "開示なしなら誕生後の席を採点しない",
+    "location": "tools/v39.py:1027",
+    "status": "一致",
+    "evidence": "receivedはcoin.f_firedならrevealed_edge、そうでなければNone。f0の3480試行で採点0・開示0。初期値は別列。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S16",
+    "rule": "AのV=(R_after−R_before)/(C_before−C_after)",
+    "location": "tools/v310be.py:172",
+    "status": "一致",
+    "evidence": "FHは(RH−RF)/固定名の解放量、HUは(RU−RH)/履歴の解放量。使用回数の除算、a補正、Qは足さない。保存された変換の全件で独立計算一致。",
+    "spec": "B＋E仕様§6",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S17",
+    "rule": "最後のHUでは構造を含む総解放量。解放量≤0は比を作らない",
+    "location": "tools/v310be.py:191",
+    "status": "一致",
+    "evidence": "定義全体の費用とI(定義数)の差を足す。dc≤0はzero_releaseに記録。最後の分子は席の局所値。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S18",
+    "rule": "V<λを低い順に一段ずつ。V=λは保持",
+    "location": "tools/v39.py:894",
+    "status": "一致",
+    "evidence": "比較は厳密な<。λ=0も負値は変換可能。変換後に対象定義の候補と費用を更新。λ0の2本で変換0・U0。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S19",
+    "rule": "同点の変換は世界・開示と別の乱数",
+    "location": "tools/tiestruct.py:73",
+    "status": "一致",
+    "evidence": "v39-tie＋種＋試行＋変換番号から乱数を作り、構造の鍵で並べる。世界の乱数を使わない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S20",
+    "rule": "Cは薄くした写しで定義選択から最終回答まで答え直す",
+    "location": "tools/cflearn.py:36",
+    "status": "一致",
+    "evidence": "FはH/U、HはUの写しを作る。本物と同じ予測用の種でpredictを呼ぶ。正解はpredictに渡さず、戻った出力を名前と引数で採点する。 引数が逆の小例でCは4ビット、写しでの再予測6回と本物の記憶不変を確認。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S21",
+    "rule": "Cの証拠は開示時のR_usedのUでない全席",
+    "location": "tools/cflearn.py:87; tools/cflearn.py:104",
+    "status": "一致",
+    "evidence": "R_usedの席を列挙。世代と状態が一致する場合だけrec_add。元のA採点は記録に残すが成績には足さない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S22",
+    "rule": "Cの写しが本物の状態を変えない",
+    "location": "tools/cflearn.py:90; tools/probeworld.py:37",
+    "status": "一致",
+    "evidence": "stateの指紋を比べ、部品のCTX/STATS等を保存して戻す。相違ならRuntimeError。集団化はこの対象版には含まれない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S23",
+    "rule": "記憶費用＝全体表＋I(定義数)＋構造＋各席の状態・内容",
+    "location": "tools/v39.py:79; tools/v39.py:154",
+    "status": "一致",
+    "evidence": "全体表は一回。U内容0、Hはhcost、Fはhcost＋固定名指定。状態は各席2ビット。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S24",
+    "rule": "消した関係の位置も関係として構造費用を数える",
+    "location": "tools/strictpc.py:347",
+    "status": "一致",
+    "evidence": "KINDSで関係と記録した行外参照を関係として数え、物の一覧から外す。関係参照はclog2(m)。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S25",
+    "rule": "Eの届け先費用A_k=-log2(n_k/(N+1)), A_new=-log2(1/(N+1))",
+    "location": "tools/v310be.py:373; tools/v310be.py:384",
+    "status": "一致",
+    "evidence": "生きた定義のassimilation_countの和N、alpha=1を使用。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S26",
+    "rule": "Eの書換・追加・取消を固定した照合で一回数える",
+    "location": "tools/v310be.py:299",
+    "status": "一致",
+    "evidence": "写った別名は書換、場面の写らない行は追加。不在は確認できないため取消0本、I(0)=1を費用に残す。",
+    "spec": "B＋E仕様§2・§3・§7",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S27",
+    "rule": "EのλΔCは候補の適用前後の記憶差。符号表は選択前で固定",
+    "location": "tools/v310be.py:357; tools/v310be.py:373",
+    "status": "一致",
+    "evidence": "Lを候補のループの前に作る。同化は当該定義の差、新規は定義と定義数の符号差。共通の全体表は差から相殺。実採用の総差と比較する。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S28",
+    "rule": "EはK=A+r+λΔCの最小を採用",
+    "location": "tools/v310be.py:391",
+    "status": "一致",
+    "evidence": "同点は登録数・新しさ・名前のkey。候補の費用と実際の費用の差を記録。6本の候補の式と採用したΔCを数え直して一致。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S29",
+    "rule": "Eの値段とBの値段は別に指定できる",
+    "location": "tools/v3_run.py:439",
+    "status": "一致",
+    "evidence": "e-priceをv310be.CFG[lam]に設定する。極端な値のλ0でもEはL50、Bだけ0。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S30",
+    "rule": "本番の定義選択は支持比→F+H席数→新しさ→名前",
+    "location": "tools/v39.py:548",
+    "status": "一致",
+    "evidence": "選択の元の関数はこの順。N3の旗のときだけN3の比が先になる。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S31",
+    "rule": "Uを支持の分子にも分母にも入れない",
+    "location": "tools/v39.py:140; tools/v39.py:559",
+    "status": "一致",
+    "evidence": "n_FHでUを除く。支持もUでない席のrelation_mappingへの出現で数える。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S32",
+    "rule": "門は支持≥ceil(.67×(F+H))。名前条件0なら選ばない",
+    "location": "tools/v39.py:617; abm/agent_runtime.py:189",
+    "status": "一致",
+    "evidence": "最上位の定義が門を通らなければ黙る。門のために次点へ選び直さない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S33",
+    "rule": "投影優先、曖昧さは候補ごと、欠けた位置に結び付く回答だけ",
+    "location": "tools/v39.py:692; tools/v39.py:712; tools/answergap.py:30",
+    "status": "一致",
+    "evidence": "amb-localは未決の席だけを外す。answer-gapは親の対応先が欠けたIDに入る候補を残す。全域の不明から場面の答えを埋めない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S34",
+    "rule": "strict-pcは子が合わない親を対にしない",
+    "location": "tools/strictpc.py:111",
+    "status": "一致",
+    "evidence": "可視の子は直接の候補と、その下の条件を再帰で検査する。基で見えない子・相手で見えない子・Uの子の(c)を別に扱う。小例5＋模型の層7を本番の旗で確認。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S35",
+    "rule": "開示確率はf(agent,t)、実値を毎試行記録",
+    "location": "abm/feedback.py:39; sweep.py:46; abm/loop.py:500",
+    "status": "一致",
+    "evidence": "frequency(agent_id,t)の戻り値をf_realized、coin_t<f_realizedをf_firedに記録。6本10440試行で実値と判定の相違0。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S36",
+    "rule": "古さの16時定数は0.3から3Tまで等比",
+    "location": "abm/accounting.py:71; tools/v39.py:220",
+    "status": "一致",
+    "evidence": "τ_i=.3(3T/.3)^(i/15)。最大のみTに正比例。T=1740→5220、3480→10440。中間はT^(i/15)、最小.3は一定。 新着のD-30jは予定Tの3倍を正と明記。",
+    "spec": "D-30j（9-30午後の台帳）・B1:489・891",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S37",
+    "rule": "B＋E仕様の古さの式の5220は固定値として書かれている",
+    "location": "abm/accounting.py:71; tools/v39.py:220",
+    "status": "不一致（古い文書の記載）",
+    "evidence": "B＋E仕様§6は固定5220、コードは3T。今回T=1740では同じ。9-30午後のD-30jが3Tを正と決定しており、実装は後続決定と一致。模型の不通とは数えない。",
+    "spec": "B＋E仕様§6（旧記載）→D-30j（後続決定）",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S38",
+    "rule": "予測を確定してから正解・開示を扱う",
+    "location": "abm/loop.py:81",
+    "status": "一致",
+    "evidence": "predictの後にscoreとcoinを作り、updateへFeedbackを渡す。研究者の型・店・例外ラベルは台帳へ加え、AgentInputへ加えない。",
+    "spec": "委任書／各部品の冒頭の仕様",
+    "version": "88e0e38"
+  },
+  {
+    "key": "S39",
+    "rule": "shopdoorは独立乱数で伏せる位置だけを選び直す",
+    "location": "tools/shopworld.py:39",
+    "status": "一致",
+    "evidence": "random()<pならドア。それ以外は元の一階の候補からドアを除きchoice。シールとlinkを加える前。hide1を検査する。",
+    "spec": "10-02 C格子の委任書",
+    "version": "da80915"
+  },
+  {
+    "key": "S40",
+    "rule": "shopdoorの旗なしは元の伏せ位置を使う",
+    "location": "tools/shopworld.py:125",
+    "status": "一致",
+    "evidence": "door_p is not Noneのときだけrehide。旗がなければ元のgenerate_trialをそのままbuildへ渡す。",
+    "spec": "shopdoorの部品冒頭",
+    "version": "da80915"
+  },
+  {
+    "key": "S41",
+    "rule": "Dは採用された照合で名前を使った席、回答元F/Hを一試行一回数える",
+    "location": "tools/useforget.py:244; tools/useforget.py:270",
+    "status": "一致",
+    "evidence": "可視の名前の一致と、回答元を数える。U、伏せ位置への対応だけ、他候補は数えない。門で黙っても照合の使用は数える。小例9。",
+    "spec": "D-最小の委任書",
+    "version": "fe8d567"
+  },
+  {
+    "key": "S42",
+    "rule": "Dは誕生・覚え直しに使用一回、次の試行から判断",
+    "location": "tools/useforget.py:124; tools/useforget.py:135; tools/useforget.py:236",
+    "status": "一致",
+    "evidence": "新しい世代のSを作り、born==tの候補を除く。",
+    "spec": "D-最小の委任書",
+    "version": "fe8d567"
+  },
+  {
+    "key": "S43",
+    "rule": "DのS=Σw(使用年齢)、S<τで名前を失う",
+    "location": "tools/useforget.py:47; tools/useforget.py:150",
+    "status": "一致",
+    "evidence": "16列を減衰して使用1を足す。候補の点を-1e9に置き換え、同じ変換の段でF→H→U。S=τは候補にしない。",
+    "spec": "D-最小の委任書",
+    "version": "fe8d567"
+  },
+  {
+    "key": "S44",
+    "rule": "DでもEと記憶費用は元の方式",
+    "location": "tools/useforget.py:150",
+    "status": "一致",
+    "evidence": "B候補の作り方を包む。解放量0以下の候補が無い席は変換しない件数を記録。Eのchoose_and_registerは変更しない。",
+    "spec": "D-最小の委任書",
+    "version": "fe8d567"
+  },
+  {
+    "key": "S45",
+    "rule": "N3=2S(d,x)/(S(d,d)+S(x,x))。名前・引数・親子の三項",
+    "location": "tools/selectn3.py:34",
+    "status": "一致",
+    "evidence": "係数はいずれも1。Uは名前0、構造の引数とつながりには入る。伏せた名前を使わない。小例6。",
+    "spec": "N3の委任書と部品冒頭",
+    "version": "3380344"
+  },
+  {
+    "key": "S46",
+    "rule": "N3最大を分数で比べ、残りの同点順と門は元の規則",
+    "location": "tools/selectn3.py:64; tools/selectn3.py:70",
+    "status": "一致",
+    "evidence": "Fractionで正確に比較。N3→F+H数→新しさ→名前。返す支持・分母は元の値なので予測の門は元のまま。",
+    "spec": "N3の委任書と部品冒頭",
+    "version": "3380344"
+  },
+  {
+    "key": "S47",
+    "rule": "select-logは本物の予測だけを記録",
+    "location": "tools/selectn3.py:113",
+    "status": "一致",
+    "evidence": "LOG[real]の間だけ元の照合を控える。候補の量と二種類の順位を記録。",
+    "spec": "N3の委任書と部品冒頭",
+    "version": "3380344"
+  }
+]

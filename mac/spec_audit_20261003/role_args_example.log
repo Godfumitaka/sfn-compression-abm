@@ -1,0 +1,131 @@
+{
+  "definition": [
+    [
+      "r0",
+      "fold",
+      [
+        "x",
+        "y"
+      ]
+    ],
+    [
+      "r1",
+      "lock",
+      [
+        "x",
+        "y"
+      ]
+    ],
+    [
+      "r2",
+      "cause",
+      [
+        "r0",
+        "r1"
+      ]
+    ]
+  ],
+  "visible": [
+    [
+      "s1",
+      "lock",
+      [
+        "a",
+        "b"
+      ]
+    ],
+    [
+      "s2",
+      "cause",
+      [
+        "hid",
+        "s1"
+      ]
+    ]
+  ],
+  "held": {
+    "relation_id": "hid",
+    "predicate": "fold",
+    "arguments": [
+      "b",
+      "a"
+    ],
+    "attributes": {}
+  },
+  "prediction": {
+    "relation_id": "sme_projection__r0",
+    "predicate": "fold",
+    "arguments": [
+      "a",
+      "b"
+    ],
+    "attributes": {}
+  },
+  "actual_hit": false,
+  "support": 3,
+  "FH": 3,
+  "items": [
+    {
+      "slot": 0,
+      "st": "F",
+      "pos": [
+        "a",
+        "b"
+      ],
+      "gen": 0,
+      "ans": {
+        "F": "fold",
+        "H": "fold",
+        "U": null
+      },
+      "cid": "hid",
+      "cid_why": null,
+      "higher": false
+    },
+    {
+      "slot": 1,
+      "st": "F",
+      "pos": [
+        "a",
+        "b"
+      ],
+      "gen": 0,
+      "ans": {
+        "F": "lock",
+        "H": "lock",
+        "U": null
+      },
+      "cid": "s1",
+      "cid_why": null,
+      "higher": false
+    },
+    {
+      "slot": 2,
+      "st": "F",
+      "pos": [
+        "hid",
+        "s1"
+      ],
+      "gen": 0,
+      "ans": {
+        "F": "cause",
+        "H": "cause",
+        "U": null
+      },
+      "cid": null,
+      "cid_why": "親が無い",
+      "higher": true
+    }
+  ],
+  "expected_F_rewrite_bits": 4.0,
+  "recorded_score": [
+    [
+      0,
+      "F",
+      0.0,
+      0.0,
+      4.0
+    ]
+  ],
+  "pre_state_unchanged": true
+}
