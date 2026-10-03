@@ -169,6 +169,14 @@ def inspect_population(name,path,fs,groups,count,q,m):
     ls=ledger_paths(path);check(name+' 個体数',len(ls)==len(fs))
     rr=[minimal_rows(p) for p in ls]
     check(name+' fの毎試行値',all(len(r)==count and all(x['f_realized']==f for x in r) for r,f in zip(rr,fs)),checked_rows=sum(map(len,rr)))
+    correct=sum(bool(r['hit']) for rows in rr for r in rows)
+    silence=sum(r['predicted_edge'] is None for rows in rr for r in rows)
+    wrong=sum(r['predicted_edge'] is not None and not r['hit'] for rows in rr for r in rows)
+    check(name+' 世界課題の分母',correct+silence+wrong==len(fs)*count,correct=correct,wrong=wrong,silence=silence,total=len(fs)*count)
+    import csv
+    answer_rows=[r for p in (path/'side').glob('*/*.answers.csv') for r in csv.DictReader(p.open())]
+    sources=__import__('collections').Counter(r['source'].split('_')[0] for r in answer_rows if r['hit']=='0')
+    check(name+' 答えの出どころの台帳照合',len(answer_rows)==correct+wrong and sum(sources.values())==wrong and set(sources)<=set('FHU'),answer_rows=len(answer_rows),wrong_sources=sources)
     comm=list(next((path/'comm').glob('run???.jsonl')).open())
     events=[json.loads(x) for x in comm]
     sent=[r for r in events if r['kind']=='bundle' and r.get('send')]
@@ -217,7 +225,8 @@ def inspect_population(name,path,fs,groups,count,q,m):
             if r.get('kind')=='v310be':side_sources.append(r.get('source'))
     check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'},world_rows=len(side_sources))
     stats={'name':name,'q':q,'m':m,'sent':len(sent),'within':sum(groups[r['agent']]==groups[r['to']] for r in sent),
-           'cross':sum(groups[r['agent']]!=groups[r['to']] for r in sent),'receive_results':__import__('collections').Counter(r.get('result') for r in recv)}
+           'cross':sum(groups[r['agent']]!=groups[r['to']] for r in sent),'receive_results':__import__('collections').Counter(r.get('result') for r in recv),
+           'world':{'total':len(fs)*count,'correct':correct,'wrong':wrong,'silence':silence,'wrong_sources':sources}}
     save(EV/(name+'.counts.json'),stats)
     return [[(r['coin_t'],r['f_fired'],r['f_realized']) for r in rows] for rows in rr]
 
