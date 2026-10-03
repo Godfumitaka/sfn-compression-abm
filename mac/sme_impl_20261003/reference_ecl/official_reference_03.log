@@ -1,0 +1,597 @@
+;;; Loading #P"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_impl_2026-10-03/reference_ecl_01/distribution/qrgsetup.lsp"
+;;; Loading #P"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_impl_2026-10-03/reference_ecl_01/distribution/v4/defsys.lsp"
+;;; Loading #P"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_impl_2026-10-03/reference_ecl_01/distribution/v4/regression.lsp"
+
+
+
+   Running test <SME Test: Simple heat/water analogy>... (0.00105 s);;; Warning: Expected ENTITY-MHS value to be , but is ((PIPE BAR) (WATER HEAT)
+                                                       (VIAL ICE-CUBE)
+                                                       (BEAKER COFFEE)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((GREATER
+                                                       (PRESSURE BEAKER)
+                                                       (PRESSURE VIAL))
+                                                      (GREATER
+                                                       (TEMPERATURE COFFEE)
+                                                       (TEMPERATURE ICE-CUBE)))
+                                                     ((FLOW BEAKER VIAL WATER
+                                                       PIPE)
+                                                      (FLOW COFFEE ICE-CUBE
+                                                       HEAT BAR))) instead.
+;;; Warning: Expected CIS value to be , but is ((GREATER (DIAMETER COFFEE)
+                                                 (DIAMETER ICE-CUBE))
+                                                (CLEAR COFFEE) (FLAT-TOP HEAT)
+                                                (LIQUID HEAT)
+                                                (CAUSE
+                                                 (GREATER (TEMPERATURE COFFEE)
+                                                  (TEMPERATURE ICE-CUBE))
+                                                 (FLOW COFFEE ICE-CUBE HEAT
+                                                  BAR))) instead.
+;;; Warning: Expected ENTITY-MHS value to be , but is ((PIPE BAR) (WATER HEAT)
+                                                       (VIAL ICE-CUBE)
+                                                       (BEAKER COFFEE)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((GREATER
+                                                       (DIAMETER BEAKER)
+                                                       (DIAMETER VIAL))
+                                                      (GREATER
+                                                       (TEMPERATURE COFFEE)
+                                                       (TEMPERATURE ICE-CUBE)))
+                                                     ((FLOW BEAKER VIAL WATER
+                                                       PIPE)
+                                                      (FLOW COFFEE ICE-CUBE
+                                                       HEAT BAR))) instead.
+;;; Warning: Expected CIS value to be , but is ((CLEAR COFFEE) (FLAT-TOP HEAT)
+                                                (LIQUID HEAT)
+                                                (CAUSE
+                                                 (GREATER (PRESSURE COFFEE)
+                                                  (PRESSURE ICE-CUBE))
+                                                 (FLOW COFFEE ICE-CUBE HEAT
+                                                  BAR))) instead.
+
+   Running test <SME Test: Complex heat/water analogy>... (0.001937 s);;; Warning: Expected ENTITY-MHS value to be , but is ((PIPE BAR)
+                                                       (CS-BEAK COFFEE)
+                                                       (CS-V ICE-CUBE)
+                                                       (FLUID-FLOW HEAT-FLOW)
+                                                       (PI PI)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((IMPLIES
+                                                       (AND (ALIGNED PIPE)
+                                                            (GREATER
+                                                             (PRESSURE CS-BEAK)
+                                                             (PRESSURE CS-V)))
+                                                       (ACTIVE PI))
+                                                      (IMPLIES
+                                                       (AND (ALIGNED BAR)
+                                                            (GREATER
+                                                             (TEMPERATURE
+                                                              COFFEE)
+                                                             (TEMPERATURE
+                                                              ICE-CUBE)))
+                                                       (ACTIVE PI)))
+                                                     ((SUB (PRESSURE CS-BEAK)
+                                                       (PRESSURE CS-V)
+                                                       (DIFF PI))
+                                                      (SUB (TEMPERATURE COFFEE)
+                                                       (TEMPERATURE ICE-CUBE)
+                                                       (DIFF PI)))
+                                                     ((I- (AMOUNT-OF CS-BEAK)
+                                                       (FLOW-RATE PI))
+                                                      (I- (HEAT COFFEE)
+                                                       (FLOW-RATE PI)))
+                                                     ((I+ (AMOUNT-OF CS-V)
+                                                       (FLOW-RATE PI))
+                                                      (I+ (HEAT ICE-CUBE)
+                                                       (FLOW-RATE PI)))
+                                                     ((AND
+                                                       (PROCESS-INSTANCE PI)
+                                                       (EQUAL FLUID-FLOW
+                                                              (PROCESS PI)))
+                                                      (AND
+                                                       (PROCESS-INSTANCE PI)
+                                                       (EQUAL HEAT-FLOW
+                                                              (PROCESS PI))))
+                                                     ((PROP (FLOW-RATE PI)
+                                                       (DIFF PI))
+                                                      (PROP (FLOW-RATE PI)
+                                                       (DIFF PI)))
+                                                     ((AND (ACTIVE PI)
+                                                           (PROCESS-INSTANCE
+                                                            PI))
+                                                      (AND (ACTIVE PI)
+                                                           (PROCESS-INSTANCE
+                                                            PI)))) instead.
+;;; Warning: Expected CIS value to be , but is ((FLUID-PATH BAR)
+                                                (IMPLIES
+                                                 (AND (PROCESS-INSTANCE PI)
+                                                      (EQUAL HEAT-FLOW
+                                                             (PROCESS PI)))
+                                                 (AND
+                                                  (IMPLIES
+                                                   (AND (ALIGNED BAR)
+                                                        (GREATER
+                                                         (TEMPERATURE COFFEE)
+                                                         (TEMPERATURE
+                                                          ICE-CUBE)))
+                                                   (ACTIVE PI))
+                                                  (IMPLIES
+                                                   (AND (ACTIVE PI)
+                                                        (PROCESS-INSTANCE PI))
+                                                   (AND
+                                                    (SUB (TEMPERATURE COFFEE)
+                                                     (TEMPERATURE ICE-CUBE)
+                                                     (DIFF PI))
+                                                    (PROP (FLOW-RATE PI)
+                                                     (DIFF PI))
+                                                    (I- (HEAT COFFEE)
+                                                     (FLOW-RATE PI))
+                                                    (I+ (HEAT ICE-CUBE)
+                                                     (FLOW-RATE PI))))))) instead.
+
+   Running test <SME Test: Rutherford analogy>... (0.001163 s);;; Warning: Expected ENTITY-MHS value to be , but is ((SUN NUCLEUS)
+                                                       (PLANET ELECTRON)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((GREATER (MASS SUN)
+                                                       (MASS PLANET))
+                                                      (GREATER (MASS NUCLEUS)
+                                                       (MASS ELECTRON)))
+                                                     ((ATTRACTS SUN PLANET)
+                                                      (ATTRACTS NUCLEUS
+                                                       ELECTRON))
+                                                     ((REVOLVE-AROUND PLANET
+                                                       SUN)
+                                                      (REVOLVE-AROUND ELECTRON
+                                                       NUCLEUS))) instead.
+;;; Warning: Expected CIS value to be , but is ((CAUSE
+                                                 (AND
+                                                  (GREATER (MASS NUCLEUS)
+                                                   (MASS ELECTRON))
+                                                  (ATTRACTS NUCLEUS ELECTRON))
+                                                 (REVOLVE-AROUND ELECTRON
+                                                  NUCLEUS))
+                                                (GREATER (TEMPERATURE NUCLEUS)
+                                                 (TEMPERATURE ELECTRON))
+                                                (CAUSE
+                                                 (GRAVITY (MASS NUCLEUS)
+                                                  (MASS ELECTRON))
+                                                 (ATTRACTS NUCLEUS ELECTRON))) instead.
+;;; Warning: Expected ENTITY-MHS value to be , but is ((SUN NUCLEUS)
+                                                       (PLANET ELECTRON)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((GREATER
+                                                       (TEMPERATURE SUN)
+                                                       (TEMPERATURE PLANET))
+                                                      (GREATER (MASS NUCLEUS)
+                                                       (MASS ELECTRON)))
+                                                     ((ATTRACTS SUN PLANET)
+                                                      (ATTRACTS NUCLEUS
+                                                       ELECTRON))
+                                                     ((REVOLVE-AROUND PLANET
+                                                       SUN)
+                                                      (REVOLVE-AROUND ELECTRON
+                                                       NUCLEUS))) instead.
+;;; Warning: Expected CIS value to be , but is ((CAUSE
+                                                 (AND
+                                                  (GREATER (MASS NUCLEUS)
+                                                   (MASS ELECTRON))
+                                                  (ATTRACTS NUCLEUS ELECTRON))
+                                                 (REVOLVE-AROUND ELECTRON
+                                                  NUCLEUS))
+                                                (CAUSE
+                                                 (GRAVITY (MASS NUCLEUS)
+                                                  (MASS ELECTRON))
+                                                 (ATTRACTS NUCLEUS ELECTRON))) instead.
+
+   Running test <SME Test: Syslit analogy 5>... (0.006027 s);;; Warning: Expected ENTITY-MHS value to be , but is ((F F) (HIGH HIGH)
+                                                       (MAN1 GAGRACH)
+                                                       (KARLA ZERDIA)
+                                                       (FEATHERS SUPERCOMPUTER)
+                                                       (CROSS-BOW MISSILES)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((CAUSE
+                                                       (NOT
+                                                        (USED-FOR FEATHERS
+                                                         CROSS-BOW))
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK MAN1 KARLA))
+                                                        F))
+                                                      (CAUSE
+                                                       (NOT
+                                                        (USED-FOR SUPERCOMPUTER
+                                                         MISSILES))
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK GAGRACH
+                                                          ZERDIA))
+                                                        F)))
+                                                     ((FOLLOW
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK MAN1 KARLA))
+                                                        F)
+                                                       (REALIZE KARLA
+                                                        (DESIRE MAN1
+                                                         FEATHERS)))
+                                                      (FOLLOW
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK GAGRACH
+                                                          ZERDIA))
+                                                        F)
+                                                       (REALIZE ZERDIA
+                                                        (DESIRE GAGRACH
+                                                         SUPERCOMPUTER))))
+                                                     ((FOLLOW
+                                                       (ATTACK MAN1 KARLA)
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK MAN1 KARLA))
+                                                        F))
+                                                      (FOLLOW
+                                                       (ATTACK GAGRACH ZERDIA)
+                                                       (EQUALS
+                                                        (SUCCESS
+                                                         (ATTACK GAGRACH
+                                                          ZERDIA))
+                                                        F)))
+                                                     ((CAUSE
+                                                       (EQUALS (HAPPINESS MAN1)
+                                                        HIGH)
+                                                       (PROMISE MAN1 KARLA
+                                                        (NOT
+                                                         (ATTACK MAN1 KARLA))))
+                                                      (CAUSE
+                                                       (EQUALS
+                                                        (HAPPINESS GAGRACH)
+                                                        HIGH)
+                                                       (PROMISE GAGRACH ZERDIA
+                                                        (NOT
+                                                         (ATTACK GAGRACH
+                                                          ZERDIA)))))
+                                                     ((CAUSE
+                                                       (REALIZE KARLA
+                                                        (DESIRE MAN1 FEATHERS))
+                                                       (OFFER KARLA FEATHERS
+                                                        MAN1))
+                                                      (CAUSE
+                                                       (REALIZE ZERDIA
+                                                        (DESIRE GAGRACH
+                                                         SUPERCOMPUTER))
+                                                       (OFFER ZERDIA
+                                                        SUPERCOMPUTER
+                                                        GAGRACH)))
+                                                     ((FOLLOW
+                                                       (OFFER KARLA FEATHERS
+                                                        MAN1)
+                                                       (OBTAIN MAN1 FEATHERS))
+                                                      (FOLLOW
+                                                       (OFFER ZERDIA
+                                                        SUPERCOMPUTER GAGRACH)
+                                                       (OBTAIN GAGRACH
+                                                        SUPERCOMPUTER)))
+                                                     ((CAUSE
+                                                       (OBTAIN MAN1 FEATHERS)
+                                                       (EQUALS (HAPPINESS MAN1)
+                                                        HIGH))
+                                                      (CAUSE
+                                                       (OBTAIN GAGRACH
+                                                        SUPERCOMPUTER)
+                                                       (EQUALS
+                                                        (HAPPINESS GAGRACH)
+                                                        HIGH)))
+                                                     ((POSSESS MAN1 CROSS-BOW)
+                                                      (POSSESS GAGRACH
+                                                       MISSILES))
+                                                     ((WARLIKE MAN1)
+                                                      (WARLIKE GAGRACH))
+                                                     ((POSSESS KARLA FEATHERS)
+                                                      (POSSESS ZERDIA
+                                                       SUPERCOMPUTER))
+                                                     ((ASSET FEATHERS)
+                                                      (ASSET SUPERCOMPUTER))
+                                                     ((LARGE CROSS-BOW)
+                                                      (LARGE MISSILES))
+                                                     ((WEAPON CROSS-BOW)
+                                                      (WEAPON MISSILES))) instead.
+;;; Warning: Expected CIS value to be , but is ((BIRD ZERDIA) (HAWK ZERDIA)
+                                                (LARGE ZERDIA)
+                                                (POWERFUL ZERDIA)
+                                                (BLACK ZERDIA)
+                                                (PREDATORY ZERDIA)
+                                                (MALE GAGRACH) (HUMAN GAGRACH)
+                                                (HUNTER GAGRACH)
+                                                (BIPED GAGRACH) (VOCAL GAGRACH)
+                                                (SOFT SUPERCOMPUTER)
+                                                (LONG SUPERCOMPUTER)
+                                                (COVERING SUPERCOMPUTER)
+                                                (BLACK SUPERCOMPUTER)
+                                                (WOODEN MISSILES)
+                                                (MEDIEVAL MISSILES)
+                                                (THIN MISSILES)
+                                                (LIVES ZERDIA (SKOLEM LOC1))
+                                                (HAPPEN (SEE ZERDIA GAGRACH))
+                                                (FOLLOW (SEE ZERDIA GAGRACH)
+                                                 (ATTACK GAGRACH ZERDIA))
+                                                (FOLLOW
+                                                 (PROMISE GAGRACH ZERDIA
+                                                  (NOT
+                                                   (ATTACK GAGRACH ZERDIA)))
+                                                 (ATTACK GAGRACH
+                                                  (SKOLEM DEER)))) instead.
+
+   Running test <SME Test: Syslit analogy 17>... (0.010404 s);;; Warning: Expected ENTITY-MHS value to be , but is ((VALLEY1
+                                                        TWENTY-DOLLARS1)
+                                                       (JOHNSON NORMA)
+                                                       (SMITH BETTY)
+                                                       (JONES MRS-LEE)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((FOLLOW
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON)
+                                                       (AND
+                                                        (REALIZE SMITH
+                                                         (SAME-TIME
+                                                          (DIVIDE-BETWEEN SMITH
+                                                           VALLEY1 SMITH
+                                                           JOHNSON)
+                                                          (DIVIDE-BETWEEN
+                                                           JOHNSON VALLEY1
+                                                           SMITH JOHNSON)))
+                                                        (REALIZE JOHNSON
+                                                         (SAME-TIME
+                                                          (DIVIDE-BETWEEN SMITH
+                                                           VALLEY1 SMITH
+                                                           JOHNSON)
+                                                          (DIVIDE-BETWEEN
+                                                           JOHNSON VALLEY1
+                                                           SMITH JOHNSON)))))
+                                                      (FOLLOW
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)
+                                                       (AND
+                                                        (REALIZE BETTY
+                                                         (SAME-TIME
+                                                          (DIVIDE-BETWEEN BETTY
+                                                           TWENTY-DOLLARS1
+                                                           BETTY NORMA)
+                                                          (DIVIDE-BETWEEN NORMA
+                                                           TWENTY-DOLLARS1
+                                                           BETTY NORMA)))
+                                                        (REALIZE NORMA
+                                                         (SAME-TIME
+                                                          (DIVIDE-BETWEEN BETTY
+                                                           TWENTY-DOLLARS1
+                                                           BETTY NORMA)
+                                                          (DIVIDE-BETWEEN NORMA
+                                                           TWENTY-DOLLARS1
+                                                           BETTY NORMA))))))
+                                                     ((CAUSE
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON)
+                                                       (REALIZE JOHNSON
+                                                        (SAME-TIME
+                                                         (DIVIDE-BETWEEN SMITH
+                                                          VALLEY1 SMITH
+                                                          JOHNSON)
+                                                         (DIVIDE-BETWEEN
+                                                          JOHNSON VALLEY1 SMITH
+                                                          JOHNSON))))
+                                                      (CAUSE
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)
+                                                       (REALIZE NORMA
+                                                        (SAME-TIME
+                                                         (DIVIDE-BETWEEN BETTY
+                                                          TWENTY-DOLLARS1 BETTY
+                                                          NORMA)
+                                                         (DIVIDE-BETWEEN NORMA
+                                                          TWENTY-DOLLARS1 BETTY
+                                                          NORMA)))))
+                                                     ((CAUSE
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON)
+                                                       (REALIZE SMITH
+                                                        (SAME-TIME
+                                                         (DIVIDE-BETWEEN SMITH
+                                                          VALLEY1 SMITH
+                                                          JOHNSON)
+                                                         (DIVIDE-BETWEEN
+                                                          JOHNSON VALLEY1 SMITH
+                                                          JOHNSON))))
+                                                      (CAUSE
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)
+                                                       (REALIZE BETTY
+                                                        (SAME-TIME
+                                                         (DIVIDE-BETWEEN BETTY
+                                                          TWENTY-DOLLARS1 BETTY
+                                                          NORMA)
+                                                         (DIVIDE-BETWEEN NORMA
+                                                          TWENTY-DOLLARS1 BETTY
+                                                          NORMA)))))
+                                                     ((CAUSE
+                                                       (AND
+                                                        (SAME-TIME
+                                                         (DISCOVER SMITH
+                                                          VALLEY1)
+                                                         (DISCOVER JOHNSON
+                                                          VALLEY1))
+                                                        (SAME-TIME
+                                                         (DESIRE SMITH VALLEY1)
+                                                         (DESIRE JOHNSON
+                                                          VALLEY1)))
+                                                       (FIGHT SMITH JOHNSON))
+                                                      (CAUSE
+                                                       (AND
+                                                        (SAME-TIME
+                                                         (DISCOVER BETTY
+                                                          TWENTY-DOLLARS1)
+                                                         (DISCOVER NORMA
+                                                          TWENTY-DOLLARS1))
+                                                        (SAME-TIME
+                                                         (DESIRE BETTY
+                                                          TWENTY-DOLLARS1)
+                                                         (DESIRE NORMA
+                                                          TWENTY-DOLLARS1)))
+                                                       (FIGHT BETTY NORMA)))
+                                                     ((CAUSE
+                                                       (FIGHT SMITH JOHNSON)
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON))
+                                                      (CAUSE
+                                                       (FIGHT BETTY NORMA)
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)))
+                                                     ((FOLLOW (ARRIVE JONES)
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON))
+                                                      (FOLLOW (ARRIVE MRS-LEE)
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)))
+                                                     ((CAUSE
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON)
+                                                       (BELONGS-TO JOHNSON
+                                                        VALLEY1))
+                                                      (CAUSE
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)
+                                                       (BELONGS-TO NORMA
+                                                        TWENTY-DOLLARS1)))
+                                                     ((CAUSE
+                                                       (DIVIDE-BETWEEN JONES
+                                                        VALLEY1 SMITH JOHNSON)
+                                                       (BELONGS-TO SMITH
+                                                        VALLEY1))
+                                                      (CAUSE
+                                                       (DIVIDE-BETWEEN MRS-LEE
+                                                        TWENTY-DOLLARS1 BETTY
+                                                        NORMA)
+                                                       (BELONGS-TO BETTY
+                                                        TWENTY-DOLLARS1)))
+                                                     ((FOLLOW
+                                                       (DISCOVER JOHNSON
+                                                        VALLEY1)
+                                                       (DESIRE JOHNSON
+                                                        VALLEY1))
+                                                      (FOLLOW
+                                                       (DISCOVER NORMA
+                                                        TWENTY-DOLLARS1)
+                                                       (DESIRE NORMA
+                                                        TWENTY-DOLLARS1)))
+                                                     ((FOLLOW
+                                                       (DISCOVER SMITH VALLEY1)
+                                                       (DESIRE SMITH VALLEY1))
+                                                      (FOLLOW
+                                                       (DISCOVER BETTY
+                                                        TWENTY-DOLLARS1)
+                                                       (DESIRE BETTY
+                                                        TWENTY-DOLLARS1)))
+                                                     ((SAME-TIME
+                                                       (FIGHT SMITH JOHNSON)
+                                                       (ARRIVE JONES))
+                                                      (SAME-TIME
+                                                       (FIGHT BETTY NORMA)
+                                                       (ARRIVE MRS-LEE)))
+                                                     ((DESIRABLE VALLEY1)
+                                                      (DESIRABLE
+                                                       TWENTY-DOLLARS1))
+                                                     ((HUMAN JOHNSON)
+                                                      (HUMAN NORMA))
+                                                     ((HUMAN SMITH)
+                                                      (HUMAN BETTY))
+                                                     ((BIPED JOHNSON)
+                                                      (BIPED NORMA))
+                                                     ((BIPED SMITH)
+                                                      (BIPED BETTY))
+                                                     ((HUMAN JONES)
+                                                      (HUMAN MRS-LEE))
+                                                     ((BIPED JONES)
+                                                      (BIPED MRS-LEE))
+                                                     ((AUTHORITY JONES)
+                                                      (AUTHORITY MRS-LEE))) instead.
+;;; Warning: Expected CIS value to be , but is ((MALE BETTY) (ADULT BETTY)
+                                                (ADVENTUROUS BETTY)
+                                                (PIONEER BETTY) (MALE NORMA)
+                                                (ADULT NORMA)
+                                                (ADVENTUROUS NORMA)
+                                                (PIONEER NORMA) (MALE MRS-LEE)
+                                                (SHERIFF MRS-LEE)
+                                                (OFFICIAL MRS-LEE)
+                                                (LAND TWENTY-DOLLARS1)
+                                                (LOCATION TWENTY-DOLLARS1)
+                                                (NATURAL TWENTY-DOLLARS1)
+                                                (GORGEOUS TWENTY-DOLLARS1)
+                                                (POSSESS BETTY (SKOLEM HOUSE1))
+                                                (POSSESS NORMA (SKOLEM HOUSE2))
+                                                (EQUAL (LOC BETTY)
+                                                       TWENTY-DOLLARS1)
+                                                (EQUAL (LOC NORMA)
+                                                       TWENTY-DOLLARS1)
+                                                (FOLLOW
+                                                 (AND
+                                                  (REALIZE BETTY
+                                                   (SAME-TIME
+                                                    (DIVIDE-BETWEEN BETTY
+                                                     TWENTY-DOLLARS1 BETTY
+                                                     NORMA)
+                                                    (DIVIDE-BETWEEN NORMA
+                                                     TWENTY-DOLLARS1 BETTY
+                                                     NORMA)))
+                                                  (REALIZE NORMA
+                                                   (SAME-TIME
+                                                    (DIVIDE-BETWEEN BETTY
+                                                     TWENTY-DOLLARS1 BETTY
+                                                     NORMA)
+                                                    (DIVIDE-BETWEEN NORMA
+                                                     TWENTY-DOLLARS1 BETTY
+                                                     NORMA))))
+                                                 (AND
+                                                  (BUILD BETTY
+                                                   (AND (SKOLEM HOUSE1)
+                                                        (SKOLEM HOUSE2)))
+                                                  (BUILD NORMA
+                                                   (AND (SKOLEM HOUSE1)
+                                                        (SKOLEM HOUSE2)))))) instead.
+
+   Running test <SME Test: Commutatives test 1>... (4.27e-4 s);;; Warning: Expected ENTITY-MHS value to be , but is ((SALLY SETH) (BILL BOB)
+                                                       (HENRY HENRIETTA)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((ACTIVE BILL)
+                                                      (ACTIVE BOB))
+                                                     ((AUTHORITY HENRY)
+                                                      (AUTHORITY HENRIETTA))
+                                                     ((AND HENRY BILL SALLY)
+                                                      (AND SETH BOB HENRIETTA))) instead.
+
+   Running test <SME Test: Commutatives test 2>... (7.57e-4 s);;; Warning: Expected ENTITY-MHS value to be , but is ((BOB BARBARA)
+                                                       (BILL BIFF)
+                                                       (SALLY SIMON)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((AND BILL SALLY BOB)
+                                                      (AND BARBARA SIMON BIFF))
+                                                     ((AND SALLY BILL)
+                                                      (AND BIFF SIMON))
+                                                     ((AND BILL BOB)
+                                                      (AND BIFF BARBARA))) instead.
+;;; Warning: Expected ENTITY-MHS value to be , but is ((BOB SIMON) (BILL BIFF)
+                                                       (SALLY BARBARA)) instead.
+;;; Warning: Expected ROOT-MHS value to be , but is (((AND SALLY BILL)
+                                                      (AND BIFF BARBARA))
+                                                     ((AND BILL BOB)
+                                                      (AND BIFF SIMON))
+                                                     ((AND BILL SALLY BOB)
+                                                      (AND BARBARA SIMON BIFF))) instead.
+
+ Passed 0 of 7 tests.
+ Failed tests: (<SME Test: Simple heat/water analogy>
+                <SME Test: Complex heat/water analogy>
+                <SME Test: Rutherford analogy> <SME Test: Syslit analogy 5>
+                <SME Test: Syslit analogy 17> <SME Test: Commutatives test 1>
+                <SME Test: Commutatives test 2>)
+ Total match time: 0.021765 s
+SME-CODEX-ROW	Simple heat/water analogy	0	20	20	2	2
+SME-CODEX-ROW	Complex heat/water analogy	0	52	52	1	1
+SME-CODEX-ROW	Rutherford analogy	0	22	22	2	2
+SME-CODEX-ROW	Syslit analogy 5	0	104	104	1	1
+SME-CODEX-ROW	Syslit analogy 17	0	152	152	1	1
+SME-CODEX-ROW	Commutatives test 1	0	15	15	1	1
+SME-CODEX-ROW	Commutatives test 2	0	15	15	2	2

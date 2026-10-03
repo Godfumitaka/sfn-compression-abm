@@ -1,0 +1,641 @@
+{
+  "paper_water": {
+    "paper": "Falkenhainer, Forbus, Gentner 1989",
+    "input_pages": [
+      53
+    ],
+    "expectation_source": "太陽系は本文印刷p27、水流はFig7印刷p20の第一位の対応",
+    "relation_mapping": [
+      [
+        ">pressure",
+        ">temperature"
+      ],
+      [
+        "pressure-beaker",
+        "temp-coffee"
+      ],
+      [
+        "pressure-vial",
+        "temp-ice-cube"
+      ],
+      [
+        "wflow",
+        "hflow"
+      ]
+    ],
+    "entity_mapping": [
+      [
+        "beaker",
+        "coffee"
+      ],
+      [
+        "pipe",
+        "bar"
+      ],
+      [
+        "vial",
+        "ice-cube"
+      ],
+      [
+        "water",
+        "heat"
+      ]
+    ],
+    "score_default": 0.09259999999999999,
+    "score_005_002_16": 3.1180000000000003,
+    "candidate_count_reference_only": 2,
+    "name_space": "式のキーはAppendix Bの名前。暗黙の式に付けたキーは対応の順位に使わない"
+  },
+  "paper_solar": {
+    "paper": "Falkenhainer, Forbus, Gentner 1989",
+    "input_pages": [
+      53,
+      54
+    ],
+    "expectation_source": "太陽系は本文印刷p27、水流はFig7印刷p20の第一位の対応",
+    "relation_mapping": [
+      [
+        ">mass",
+        ">mass"
+      ],
+      [
+        "attracts",
+        "attracts"
+      ],
+      [
+        "mass-planet",
+        "mass-e"
+      ],
+      [
+        "mass-sun",
+        "mass-n"
+      ],
+      [
+        "revolve",
+        "revolve"
+      ]
+    ],
+    "entity_mapping": [
+      [
+        "planet",
+        "electron"
+      ],
+      [
+        "sun",
+        "nucleus"
+      ]
+    ],
+    "score_default": 0.0985,
+    "score_005_002_16": 3.225,
+    "candidate_count_reference_only": 2,
+    "name_space": "式のキーはAppendix Bの名前。暗黙の式に付けたキーは対応の順位に使わない"
+  },
+  "five_entities_A": {
+    "exact_mapping_count": 1,
+    "opposite_variant_exact_mapping_count": 0,
+    "relation_mapping": [
+      [
+        "danchor",
+        "sanchor"
+      ],
+      [
+        "dcueA",
+        "scueA"
+      ],
+      [
+        "dcueB",
+        "scueB"
+      ],
+      [
+        "dother1",
+        "sother1"
+      ],
+      [
+        "dother2",
+        "sother2"
+      ],
+      [
+        "dp",
+        "sp"
+      ],
+      [
+        "dr",
+        "sr"
+      ]
+    ],
+    "entity_mapping": [
+      [
+        "da",
+        "sa"
+      ],
+      [
+        "db",
+        "sb"
+      ],
+      [
+        "do",
+        "so"
+      ],
+      [
+        "du",
+        "su"
+      ],
+      [
+        "dv",
+        "sv"
+      ]
+    ],
+    "source": [
+      {
+        "id": "du",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "da",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "db",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "dv",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "do",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "dp",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "du",
+          "da"
+        ]
+      },
+      {
+        "id": "dr",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "du",
+          "db"
+        ]
+      },
+      {
+        "id": "dcueA",
+        "kind": "relation",
+        "names": [
+          "break"
+        ],
+        "args": [
+          "da",
+          "dv"
+        ]
+      },
+      {
+        "id": "dcueB",
+        "kind": "relation",
+        "names": [
+          "break_b"
+        ],
+        "args": [
+          "db",
+          "dv"
+        ]
+      },
+      {
+        "id": "danchor",
+        "kind": "relation",
+        "names": [
+          "carry"
+        ],
+        "args": [
+          "do",
+          "da"
+        ]
+      },
+      {
+        "id": "dother1",
+        "kind": "relation",
+        "names": [
+          "lift"
+        ],
+        "args": [
+          "dv",
+          "do"
+        ]
+      },
+      {
+        "id": "dother2",
+        "kind": "relation",
+        "names": [
+          "press"
+        ],
+        "args": [
+          "do",
+          "du"
+        ]
+      }
+    ],
+    "target": [
+      {
+        "id": "su",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sa",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sb",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sv",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "so",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sp",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "su",
+          "sa"
+        ]
+      },
+      {
+        "id": "sr",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "su",
+          "sb"
+        ]
+      },
+      {
+        "id": "scueA",
+        "kind": "relation",
+        "names": [
+          "break"
+        ],
+        "args": [
+          "sa",
+          "sv"
+        ]
+      },
+      {
+        "id": "scueB",
+        "kind": "relation",
+        "names": [
+          "break_b"
+        ],
+        "args": [
+          "sb",
+          "sv"
+        ]
+      },
+      {
+        "id": "sanchor",
+        "kind": "relation",
+        "names": [
+          "carry"
+        ],
+        "args": [
+          "so",
+          "sa"
+        ]
+      },
+      {
+        "id": "sother1",
+        "kind": "relation",
+        "names": [
+          "lift"
+        ],
+        "args": [
+          "sv",
+          "so"
+        ]
+      },
+      {
+        "id": "sother2",
+        "kind": "relation",
+        "names": [
+          "press"
+        ],
+        "args": [
+          "so",
+          "su"
+        ]
+      }
+    ]
+  },
+  "five_entities_B": {
+    "exact_mapping_count": 1,
+    "opposite_variant_exact_mapping_count": 0,
+    "relation_mapping": [
+      [
+        "danchor",
+        "sanchor"
+      ],
+      [
+        "dcueA",
+        "scueA"
+      ],
+      [
+        "dcueB",
+        "scueB"
+      ],
+      [
+        "dother1",
+        "sother1"
+      ],
+      [
+        "dother2",
+        "sother2"
+      ],
+      [
+        "dp",
+        "sp"
+      ],
+      [
+        "dr",
+        "sr"
+      ]
+    ],
+    "entity_mapping": [
+      [
+        "da",
+        "sa"
+      ],
+      [
+        "db",
+        "sb"
+      ],
+      [
+        "do",
+        "so"
+      ],
+      [
+        "du",
+        "su"
+      ],
+      [
+        "dv",
+        "sv"
+      ]
+    ],
+    "source": [
+      {
+        "id": "du",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "da",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "db",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "dv",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "do",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "dp",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "du",
+          "da"
+        ]
+      },
+      {
+        "id": "dr",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "du",
+          "db"
+        ]
+      },
+      {
+        "id": "dcueA",
+        "kind": "relation",
+        "names": [
+          "break"
+        ],
+        "args": [
+          "db",
+          "dv"
+        ]
+      },
+      {
+        "id": "dcueB",
+        "kind": "relation",
+        "names": [
+          "break_b"
+        ],
+        "args": [
+          "da",
+          "dv"
+        ]
+      },
+      {
+        "id": "danchor",
+        "kind": "relation",
+        "names": [
+          "carry"
+        ],
+        "args": [
+          "do",
+          "da"
+        ]
+      },
+      {
+        "id": "dother1",
+        "kind": "relation",
+        "names": [
+          "lift"
+        ],
+        "args": [
+          "dv",
+          "do"
+        ]
+      },
+      {
+        "id": "dother2",
+        "kind": "relation",
+        "names": [
+          "press"
+        ],
+        "args": [
+          "do",
+          "du"
+        ]
+      }
+    ],
+    "target": [
+      {
+        "id": "su",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sa",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sb",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sv",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "so",
+        "kind": "entity",
+        "names": [],
+        "args": []
+      },
+      {
+        "id": "sp",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "su",
+          "sa"
+        ]
+      },
+      {
+        "id": "sr",
+        "kind": "relation",
+        "names": [
+          "fold"
+        ],
+        "args": [
+          "su",
+          "sb"
+        ]
+      },
+      {
+        "id": "scueA",
+        "kind": "relation",
+        "names": [
+          "break"
+        ],
+        "args": [
+          "sb",
+          "sv"
+        ]
+      },
+      {
+        "id": "scueB",
+        "kind": "relation",
+        "names": [
+          "break_b"
+        ],
+        "args": [
+          "sa",
+          "sv"
+        ]
+      },
+      {
+        "id": "sanchor",
+        "kind": "relation",
+        "names": [
+          "carry"
+        ],
+        "args": [
+          "so",
+          "sa"
+        ]
+      },
+      {
+        "id": "sother1",
+        "kind": "relation",
+        "names": [
+          "lift"
+        ],
+        "args": [
+          "sv",
+          "so"
+        ]
+      },
+      {
+        "id": "sother2",
+        "kind": "relation",
+        "names": [
+          "press"
+        ],
+        "args": [
+          "so",
+          "su"
+        ]
+      }
+    ]
+  }
+}

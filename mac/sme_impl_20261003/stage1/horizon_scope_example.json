@@ -1,0 +1,35 @@
+{
+  "20": {
+    "structure_bits": 25,
+    "header_time_bits": 5
+  },
+  "1740": {
+    "structure_bits": 31,
+    "header_time_bits": 11
+  },
+  "definition": [
+    {
+      "relation_id": "r1",
+      "predicate": "fold",
+      "arguments": [
+        "a",
+        "b"
+      ],
+      "attributes": {}
+    },
+    {
+      "relation_id": "r2",
+      "predicate": "carry",
+      "arguments": [
+        "b",
+        "a"
+      ],
+      "attributes": {}
+    }
+  ],
+  "horizon_source_commit": "b1664fc7ae34cf0b5ae0cebee9b25aef3cd824a9",
+  "horizon_not_applied_to_CFG_T": true,
+  "e_price": 0.01873710622997919,
+  "e_cost_difference": 0.11242263737987512,
+  "status": "仕様確認が必要。時間幅の共有実装は構造費用のTを残す。段4のT20とT1740の先頭一致との両立をまだ指定されていない。"
+}
