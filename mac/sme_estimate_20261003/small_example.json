@@ -1,0 +1,157 @@
+{
+  "base": {
+    "graph_id": "base",
+    "entities": [
+      {
+        "entity_id": "a",
+        "label": null,
+        "attributes": {}
+      },
+      {
+        "entity_id": "b",
+        "label": null,
+        "attributes": {}
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "bp",
+        "predicate": "p",
+        "arguments": [
+          "a",
+          "b"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "bq",
+        "predicate": "q",
+        "arguments": [
+          "bp"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "br",
+        "predicate": "r",
+        "arguments": [
+          "bq"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "bm",
+        "predicate": "mark",
+        "arguments": [
+          "a",
+          "b"
+        ],
+        "attributes": {}
+      }
+    ]
+  },
+  "target": {
+    "graph_id": "target",
+    "entities": [
+      {
+        "entity_id": "u",
+        "label": null,
+        "attributes": {}
+      },
+      {
+        "entity_id": "v",
+        "label": null,
+        "attributes": {}
+      },
+      {
+        "entity_id": "w",
+        "label": null,
+        "attributes": {}
+      },
+      {
+        "entity_id": "z",
+        "label": null,
+        "attributes": {}
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "tp0",
+        "predicate": "p",
+        "arguments": [
+          "u",
+          "v"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "tq0",
+        "predicate": "q",
+        "arguments": [
+          "tp0"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "tp1",
+        "predicate": "p",
+        "arguments": [
+          "w",
+          "z"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "tq1",
+        "predicate": "q",
+        "arguments": [
+          "tp1"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "tr",
+        "predicate": "r",
+        "arguments": [
+          "tq1"
+        ],
+        "attributes": {}
+      },
+      {
+        "relation_id": "tm",
+        "predicate": "mark",
+        "arguments": [
+          "u",
+          "v"
+        ],
+        "attributes": {}
+      }
+    ]
+  },
+  "current": {
+    "relations": {
+      "bm": "tm",
+      "bp": "tp1",
+      "bq": "tq1",
+      "br": "tr"
+    },
+    "entities": {
+      "a": "u",
+      "b": "v"
+    }
+  },
+  "prototype": {
+    "relation_mapping": {
+      "bp": "tp1",
+      "bq": "tq1",
+      "br": "tr"
+    },
+    "entity_mapping": {
+      "a": "w",
+      "b": "z"
+    },
+    "mh": 10,
+    "kernels": 3,
+    "local_pairs": 6
+  }
+}

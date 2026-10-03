@@ -1,0 +1,54 @@
+abm/smoke.py:32:from abm.sme import SMEParams, apply_threshold, map_graphs, project
+abm/smoke.py:40:    sme_params: SMEParams | None = None
+abm/smoke.py:70:    sme_params: SMEParams | None = None
+abm/smoke.py:221:    sme_params: SMEParams | None = None,
+abm/smoke.py:262:    sme_params: SMEParams | None = None,
+abm/smoke.py:315:    sme_params: SMEParams | None,
+tools/fixorder2.py:22:★ 採った対の並び（MappingResult.candidates）は、組の順・組の中は候補の元の並び。点の合計には並びは効かない。
+tools/fixorder2.py:106:        weights = params or sme.SMEParams()
+tools/fixorder2.py:231:        candidate_projections = sme._projectable_base_relation_ids(
+tools/fixorder2.py:237:            candidate_projections=candidate_projections,
+tools/fixorder2.py:248:            score_breakdown={
+tools/fixorder2.py:259:            systematicity_contribution=systematicity,
+tools/fixorder2.py:262:            candidate_projections=candidate_projections,
+abm/logging_schema.py:51:    "total_score_breakdown",
+abm/logging_schema.py:94:    total_score_breakdown: dict[str, Any] = field(default_factory=dict)
+abm/logging_schema.py:101:        object.__setattr__(self, "total_score_breakdown", dict(self.total_score_breakdown))
+abm/logging_schema.py:141:            "total_score_breakdown": dict(self.total_score_breakdown),
+tools/fixorder.py:38:        weights = params or sme.SMEParams()
+tools/fixorder.py:102:        candidate_projections = sme._projectable_base_relation_ids(
+tools/fixorder.py:108:            candidate_projections=candidate_projections,
+tools/fixorder.py:119:            score_breakdown={
+tools/fixorder.py:130:            systematicity_contribution=systematicity,
+tools/fixorder.py:133:            candidate_projections=candidate_projections,
+abm/sme.py:19:class SMEParams:
+abm/sme.py:35:    score_breakdown: Mapping[str, float]
+abm/sme.py:36:    systematicity_contribution: float
+abm/sme.py:39:    candidate_projections: tuple[str, ...] = ()
+abm/sme.py:45:        object.__setattr__(self, "score_breakdown", dict(sorted(self.score_breakdown.items())))
+abm/sme.py:48:        object.__setattr__(self, "candidate_projections", tuple(sorted(self.candidate_projections)))
+abm/sme.py:108:    params: SMEParams | None = None,
+abm/sme.py:115:    weights = params or SMEParams()
+abm/sme.py:167:    candidate_projections = _projectable_base_relation_ids(
+abm/sme.py:177:        candidate_projections=candidate_projections,
+abm/sme.py:188:        score_breakdown={
+abm/sme.py:199:        systematicity_contribution=systematicity,
+abm/sme.py:202:        candidate_projections=candidate_projections,
+abm/sme.py:228:    for relation_id in alignment.candidate_projections:
+abm/sme.py:254:    params: SMEParams | None = None,
+abm/sme.py:438:    candidate_projections: tuple[str, ...],
+abm/sme.py:448:        return PrototypePriorResult(0.0, {relation_id: 0.0 for relation_id in sorted(candidate_projections)})
+abm/sme.py:462:    for relation_id in sorted(candidate_projections):
+tools/v32.py:10:        （sme.py:157-166 の項。重みは SMEParams sme.py:19-25）。定義の側の罰が「写像の鍵に無い行」を数える（sme.py:415-416）のと向きをそろえた。
+tools/v32.py:46:    accepted = {c.base_relation_id: c for c in res.candidates}
+tools/v32.py:96:    from abm.sme import SMEParams
+tools/v32.py:101:    params = SMEParams()
+abm/mdl.py:106:    structural_relations = tuple(sorted((*mapped_base_ids, *alignment.candidate_projections)))
+tools/v39.py:573:    alignment = replace(alignment, candidate_projections=tuple(x for x in alignment.candidate_projections if x in f_ids))
+tools/v39.py:676:                row_points, _ = v32.self_row_points(target, sme.SMEParams())
+tools/v39.py:731:        alignment = replace(alignment, candidate_projections=tuple(x for x in alignment.candidate_projections if x in f_ids))
+tools/selectn3.py:100:    alignment = replace(alignment, candidate_projections=tuple(x for x in alignment.candidate_projections if x in f_ids))
+tools/matcher_audit.py:9:  ・点：abm/sme.py:157-166 の式をそのまま写す（重みは SMEParams の既定）。
+tools/matcher_audit.py:30:W = sme.SMEParams()
+tools/matcher_audit.py:147:    pairs = [(c.base_relation_id, c.partial_relation_id, c.entity_pairs, c.relation_pairs) for c in res.candidates]
+tools/cfvalue.py:123:    cands = {c[3]: c for c in v310be.candidates(state, d, t, L, len(state.definitions))}

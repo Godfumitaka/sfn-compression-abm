@@ -1,0 +1,433 @@
+{
+  "scope": "高階の役割情報を入力に入れない、一階だけの照合単体検査案。本番世界の生成ではない。",
+  "definitions": {
+    "A": {
+      "graph_id": "defA",
+      "entities": [
+        {
+          "entity_id": "defAu",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defAa",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defAb",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defAv",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defAo",
+          "label": null,
+          "attributes": {}
+        }
+      ],
+      "relations": [
+        {
+          "relation_id": "defAp",
+          "predicate": "fold",
+          "arguments": [
+            "defAu",
+            "defAa"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAr",
+          "predicate": "fold",
+          "arguments": [
+            "defAu",
+            "defAb"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAcueA",
+          "predicate": "break",
+          "arguments": [
+            "defAa",
+            "defAv"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAcueB",
+          "predicate": "break_b",
+          "arguments": [
+            "defAb",
+            "defAv"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAanchor",
+          "predicate": "carry",
+          "arguments": [
+            "defAo",
+            "defAa"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAother1",
+          "predicate": "lift",
+          "arguments": [
+            "defAv",
+            "defAo"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defAother2",
+          "predicate": "press",
+          "arguments": [
+            "defAo",
+            "defAu"
+          ],
+          "attributes": {}
+        }
+      ]
+    },
+    "B": {
+      "graph_id": "defB",
+      "entities": [
+        {
+          "entity_id": "defBu",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defBa",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defBb",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defBv",
+          "label": null,
+          "attributes": {}
+        },
+        {
+          "entity_id": "defBo",
+          "label": null,
+          "attributes": {}
+        }
+      ],
+      "relations": [
+        {
+          "relation_id": "defBp",
+          "predicate": "fold",
+          "arguments": [
+            "defBu",
+            "defBa"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBr",
+          "predicate": "fold",
+          "arguments": [
+            "defBu",
+            "defBb"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBcueA",
+          "predicate": "break",
+          "arguments": [
+            "defBb",
+            "defBv"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBcueB",
+          "predicate": "break_b",
+          "arguments": [
+            "defBa",
+            "defBv"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBanchor",
+          "predicate": "carry",
+          "arguments": [
+            "defBo",
+            "defBa"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBother1",
+          "predicate": "lift",
+          "arguments": [
+            "defBv",
+            "defBo"
+          ],
+          "attributes": {}
+        },
+        {
+          "relation_id": "defBother2",
+          "predicate": "press",
+          "arguments": [
+            "defBo",
+            "defBu"
+          ],
+          "attributes": {}
+        }
+      ]
+    }
+  },
+  "scenes": {
+    "A": {
+      "visible": {
+        "graph_id": "sceneA",
+        "entities": [
+          {
+            "entity_id": "sceneAu",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneAa",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneAb",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneAv",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneAo",
+            "label": null,
+            "attributes": {}
+          }
+        ],
+        "relations": [
+          {
+            "relation_id": "sceneAp",
+            "predicate": "fold",
+            "arguments": [
+              "sceneAu",
+              "sceneAa"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAr",
+            "predicate": "fold",
+            "arguments": [
+              "sceneAu",
+              "sceneAb"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAcueA",
+            "predicate": "break",
+            "arguments": [
+              "sceneAa",
+              "sceneAv"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAcueB",
+            "predicate": "break_b",
+            "arguments": [
+              "sceneAb",
+              "sceneAv"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAanchor",
+            "predicate": "carry",
+            "arguments": [
+              "sceneAo",
+              "sceneAa"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAother1",
+            "predicate": "lift",
+            "arguments": [
+              "sceneAv",
+              "sceneAo"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneAother2",
+            "predicate": "press",
+            "arguments": [
+              "sceneAo",
+              "sceneAu"
+            ],
+            "attributes": {}
+          }
+        ]
+      },
+      "expected_held": {
+        "relation_id": "sceneAhole",
+        "predicate": "hold",
+        "arguments": [
+          "sceneAa",
+          "sceneAv"
+        ],
+        "attributes": {}
+      }
+    },
+    "B": {
+      "visible": {
+        "graph_id": "sceneB",
+        "entities": [
+          {
+            "entity_id": "sceneBu",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneBa",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneBb",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneBv",
+            "label": null,
+            "attributes": {}
+          },
+          {
+            "entity_id": "sceneBo",
+            "label": null,
+            "attributes": {}
+          }
+        ],
+        "relations": [
+          {
+            "relation_id": "sceneBp",
+            "predicate": "fold",
+            "arguments": [
+              "sceneBu",
+              "sceneBa"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBr",
+            "predicate": "fold",
+            "arguments": [
+              "sceneBu",
+              "sceneBb"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBcueA",
+            "predicate": "break",
+            "arguments": [
+              "sceneBb",
+              "sceneBv"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBcueB",
+            "predicate": "break_b",
+            "arguments": [
+              "sceneBa",
+              "sceneBv"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBanchor",
+            "predicate": "carry",
+            "arguments": [
+              "sceneBo",
+              "sceneBa"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBother1",
+            "predicate": "lift",
+            "arguments": [
+              "sceneBv",
+              "sceneBo"
+            ],
+            "attributes": {}
+          },
+          {
+            "relation_id": "sceneBother2",
+            "predicate": "press",
+            "arguments": [
+              "sceneBo",
+              "sceneBu"
+            ],
+            "attributes": {}
+          }
+        ]
+      },
+      "expected_held": {
+        "relation_id": "sceneBhole",
+        "predicate": "hold_b",
+        "arguments": [
+          "sceneBa",
+          "sceneBv"
+        ],
+        "attributes": {}
+      }
+    }
+  },
+  "exact_mapping_matrix": {
+    "A->A": [
+      {
+        "defAu": "sceneAu",
+        "defAa": "sceneAa",
+        "defAb": "sceneAb",
+        "defAv": "sceneAv",
+        "defAo": "sceneAo"
+      }
+    ],
+    "A->B": [],
+    "B->A": [],
+    "B->B": [
+      {
+        "defBu": "sceneBu",
+        "defBa": "sceneBa",
+        "defBb": "sceneBb",
+        "defBv": "sceneBv",
+        "defBo": "sceneBo"
+      }
+    ]
+  },
+  "same_visible_predicate_counts": true,
+  "role_anchor": "carry(o,a) と共有する内部物 a の経路で、break/break_b のどちらが手がかりかを識別する。"
+}

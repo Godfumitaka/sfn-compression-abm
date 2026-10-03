@@ -1,0 +1,210 @@
+tools/probeworld.py:186:    real_select = v39.select_definition
+tools/probeworld.py:190:        def select_definition(st, scene, cfg):
+tools/probeworld.py:195:        v39.select_definition = select_definition
+tools/probeworld.py:201:            v39.select_definition = real_select
+abm/agent_runtime.py:31:from abm.sme import apply_threshold, map_graphs, project
+abm/agent_runtime.py:80:        result = map_graphs(trace.scene, agent_input.target_graph_partial)
+abm/agent_runtime.py:108:            selected = _select_definition(state, agent_input.target_graph_partial, config)
+abm/agent_runtime.py:204:def _select_definition(
+abm/agent_runtime.py:216:        graph = _definition_graph(definition)
+abm/agent_runtime.py:217:        alignment = map_graphs(graph, scene).alignment
+abm/agent_runtime.py:246:def _definition_graph(definition: Any) -> RelationGraph:
+abm/smoke.py:32:from abm.sme import SMEParams, apply_threshold, map_graphs, project
+abm/smoke.py:160:    現在の予測配線は map_graphs→apply_threshold→project であり prototype を読まないため、
+abm/smoke.py:328:    mapping_result = map_graphs(
+abm/abstraction.py:11:from abm.sme import Alignment, map_graphs
+abm/abstraction.py:35:        graph = _definition_graph(definition, mode=identification_graph)
+abm/abstraction.py:37:            # ★ 渡された辞書は読まず書かず、毎回 map_graphs で計算する。
+abm/abstraction.py:38:            self_score = map_graphs(graph, graph).alignment.total_score
+abm/abstraction.py:48:                self_score = map_graphs(graph, graph).alignment.total_score
+abm/abstraction.py:52:        score = map_graphs(graph, scene).alignment.total_score
+abm/abstraction.py:125:    definition_alignment = map_graphs(
+abm/abstraction.py:126:        _definition_graph(definition, mode="all"), target
+abm/abstraction.py:306:def _definition_graph(definition: NamedDefinition, *, mode: str = "all") -> RelationGraph:
+abm/abstraction.py:311:                 墓石を含む全構成素から作る。agent_runtime._definition_graph と同じ規則。
+abm/sme.py:105:def map_graphs(
+abm/sme.py:118:    pairs = _alignment_candidates(base_graph, target_graph_partial)
+abm/sme.py:262:    mapping = map_graphs(
+abm/sme.py:280:def _alignment_candidates(
+tools/selectn3.py:2:★ abm/ は変えない。旗を切れば何もしない（今の規則 tools/v39.py select_definition のまま）。方式の定義は ChatGPT（N3）、
+tools/selectn3.py:6:  S(d,x)（定義 d を場面 x に写した照合 al＝tools/v39.py map_v39 の結果で）：
+tools/selectn3.py:16:  返り値は tools/v39.py select_definition と同じ形（割合・支持・定義・グラフ・照合（F の行の投影候補だけに絞る）・F＋H・同点か・門を通る定義の一覧）。
+tools/selectn3.py:70:def select_definition_n3(state, scene, config):
+tools/selectn3.py:71:    """tools/v39.py select_definition の写し。★ の所（並べ方）だけ違う。"""
+tools/selectn3.py:80:        graph, alignment = v39.map_v39(d, state.slot_history, scene)
+tools/selectn3.py:106:    """tools/v3_run.py の worker で、v39・v310be のあと、select_definition を包む記録（answerlog・probeworld・useforget・--select-log）より前に入れる。"""
+tools/selectn3.py:110:    v39.select_definition = select_definition_n3
+tools/selectn3.py:127:    real_select = v39.select_definition
+tools/selectn3.py:129:    def select_definition(state, scene, config):
+tools/selectn3.py:133:        real_map = v39.map_v39
+tools/selectn3.py:135:        def map_v39(d, slot_history, sc):
+tools/selectn3.py:140:        v39.map_v39 = map_v39
+tools/selectn3.py:144:            v39.map_v39 = real_map
+tools/selectn3.py:171:    v39.select_definition = select_definition
+abm/loop.py:14:from abm.agent_runtime import _definition_graph, predict, update
+abm/loop.py:27:from abm.sme import map_graphs, project
+abm/loop.py:409:        graph = _definition_graph(definition)
+abm/loop.py:410:        alignment = map_graphs(graph, target).alignment
+tools/fixorder2.py:23:入れる所：fixorder.py と同じ（読み込み済みのモジュールで map_graphs が元の関数を指していれば、すべて張り替える）。
+tools/fixorder2.py:24:  候補は呼ぶときに sme._alignment_candidates を読むので、直し②（tools/fix2.py）の差し替えもそのまま効く。
+tools/fixorder2.py:98:    original = sme.map_graphs
+tools/fixorder2.py:103:    def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None, prototype_prior_weight=0.0):
+tools/fixorder2.py:109:        pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+tools/fixorder2.py:269:        if mod is not None and getattr(mod, "map_graphs", None) is original:
+tools/fixorder2.py:270:            setattr(mod, "map_graphs", map_graphs)
+tools/v310be.py:273:    orig_dg = ab._definition_graph
+tools/v310be.py:282:    ab._definition_graph = dg
+tools/v310be.py:286:        ab._definition_graph = orig_dg
+tools/v310be.py:307:        rm = sme.map_graphs(g, x).alignment.relation_mapping
+tools/histrole.py:11:      同じ照合（m1 の中の map_graphs の写し）で場面の関係に対応づけられていれば、その場面の関係の同じ位置の子を、その席の観察とする。
+tools/histrole.py:14:やり方：abm.abstraction.m1 そのものを包む（一番内側）。元の m1 をそのまま呼び、中の map_graphs の写し（履歴の照合）を控える。
+tools/histrole.py:50:        mg = ab.map_graphs
+tools/histrole.py:58:        ab.map_graphs = capture
+tools/histrole.py:62:            ab.map_graphs = mg
+tools/v32_readcounts.py:20:from abm.abstraction import _definition_graph
+tools/v32_readcounts.py:38:        cache[key] = sme.map_graphs(g, g).alignment.total_score
+tools/v32_readcounts.py:71:                snew = sme.map_graphs(gnew, gnew).alignment.total_score
+tools/v32_readcounts.py:80:                    gold = _definition_graph(D, mode="live")
+tools/v32_readcounts.py:82:                    s = sme.map_graphs(gnew, gold).alignment.total_score
+tools/v31.py:163:    from abm.abstraction import _definition_graph
+tools/v31.py:167:    from abm.sme import map_graphs
+tools/v31.py:230:        al = map_graphs(_definition_graph(old, mode="all"), target).alignment
+tools/fixorder.py:14:入れる所：map_graphs を差し替え、読み込み済みのモジュールで map_graphs の名前が元の関数を指していれば、すべて張り替える
+tools/fixorder.py:16:  tools/v31.py・fix2.py・v32.py は呼ぶときに abm.sme.map_graphs を読むので、この差し替えがそのまま効く。
+tools/fixorder.py:31:    original = sme.map_graphs
+tools/fixorder.py:35:    def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None, prototype_prior_weight=0.0):
+tools/fixorder.py:41:        pairs = sme._alignment_candidates(base_graph, target_graph_partial)
+tools/fixorder.py:140:        if mod is not None and getattr(mod, "map_graphs", None) is original:
+tools/fixorder.py:141:            setattr(mod, "map_graphs", map_graphs)
+tools/model_layer_checks.py:49:    _g, al = v39.map_v39(d, hist, sc)
+tools/model_layer_checks.py:95:    g, al = v39.map_v39(d, h, G(SC_HID))
+tools/model_layer_checks.py:106:    _g, al6 = v39.map_v39(d6, h6, G(SC_HID))
+tools/shop/gate2.py:118:    """定義ごとの支持（写った F・H の席の数）と F＋H の席の数。tools/v39.py select_definition と同じ数え方。"""
+tools/shop/gate2.py:125:        _g, al = v39.map_v39(d, state.slot_history, sc)
+tools/shop/gate2.py:168:_g, alX = v39.map_v39(d, hist, GX)
+tools/shop/gate2.py:169:_g, alY = v39.map_v39(d, hist, GY)
+tools/shop/gate2.py:181:_g, alX = v39.map_v39(dH, histH, GX)
+tools/shop/gate2.py:182:_g, alY = v39.map_v39(dH, histH, GY)
+tools/shop/gate2.py:201:    al = sme.map_graphs(base, tgt).alignment
+tools/roletarget_recompute.py:4:  v39.map_v39(定義, slot_history, 提示の場面) で照合し（本番と同じ差し替え：fixorder2・fix2・v39 の候補・ustruct の照合）、
+tools/roletarget_recompute.py:79:    _g, al = v39.map_v39(d, sh, scene)
+tools/prod_readcounts.py:21:from abm.abstraction import _definition_graph
+tools/prod_readcounts.py:50:        cache[key] = sme.map_graphs(g, g).alignment.total_score
+tools/prod_readcounts.py:83:                snew = sme.map_graphs(gnew, gnew).alignment.total_score
+tools/prod_readcounts.py:92:                    gold = _definition_graph(D, mode="live")
+tools/prod_readcounts.py:94:                    s = sme.map_graphs(gnew, gold).alignment.total_score
+tools/ustruct.py:12:        対は親の候補に入るので、既存の物・関係の対応と食い違えば、その親の候補は採られない（map_graphs の _candidate_fits）。
+tools/ustruct.py:28:    def _alignment_candidates(base_graph, partial_graph):
+tools/ustruct.py:112:    return _alignment_candidates
+tools/ustruct.py:129:    real_graph, real_unreg, real_cands = v39.v39_graph, v39.unregister, sme._alignment_candidates
+tools/ustruct.py:143:    sme._alignment_candidates = u_candidates(real_cands)
+tools/ustruct.py:146:        v39.v39_graph, v39.unregister, sme._alignment_candidates = real_graph, real_unreg, real_cands
+tools/matcher_audit.py:13:突き合わせ：照合器（この作業場所の abm.sme.map_graphs。tools/fixorder2.py・fix2・v39 の候補・ustruct・--strict-pc を入れた本番の差し替えの状態）の
+tools/matcher_audit.py:142:    al = sme.map_graphs(B, T).alignment
+tools/matcher_audit.py:146:    res = sme.map_graphs(B, T)
+tools/v3_run.py:31:                  自分の番で対にしたのと同じ点を数える。map_graphs を差し替え、使っている所すべてに効く。tools/fixorder.py
+tools/v3_run.py:376:        # ★ 名前の順番の直し（2026-09-26 夜）：map_graphs を差し替える（tools/fixorder.py）。ほかの差し替えより先に入れる。
+tools/v3_run.py:381:        # ★ 名前・番号に依らない写し（2026-09-26 夜、案 1）：map_graphs を差し替える（tools/fixorder2.py）。--fix-order の代わり。
+tools/v3_run.py:464:            # ★ 選び方 N3（--select-n3、2026-10-02 夜の委任書）：tools/selectn3.py。定義の選び（tools/v39.py select_definition）の並べ方だけを替える。
+tools/v3_run.py:465:            #   select_definition を包む記録（answerlog・probeworld・useforget・--select-log）より前に入れる
+tools/v3_run.py:470:        #   照合を使う前に入れる（sme._alignment_candidates をいちばん外側で包む）
+tools/v32.py:27:map_graphs は呼ぶときに abm.sme.map_graphs を読む（名前の順番の直し tools/fixorder.py が入っていれば、それを使う）。
+tools/v32.py:43:    res = sme.map_graphs(scene, scene)   # ★ 名前の順番の直し（tools/fixorder.py）が入っていれば、それを使う
+tools/v32.py:95:    from abm.abstraction import _definition_graph, _identify_definition as original
+tools/v32.py:98:    def map_graphs(*a, **k):   # ★ 呼ぶときに abm.sme.map_graphs を読む（名前の順番の直しの差し替えを使うため）
+tools/v32.py:99:        return sme.map_graphs(*a, **k)
+tools/v32.py:141:                al2 = map_graphs(base2, scene2).alignment
+tools/v32.py:155:                g = ren(_definition_graph(d, mode=identification_graph))
+tools/v32.py:158:                    allowed = fix2mod.tomb_allowed(_definition_graph(d, mode=identification_graph), d, state.slot_history)
+tools/v32.py:162:                    ss = map_graphs(g, g).alignment.total_score
+tools/v32.py:165:                    res = map_graphs(g, tgt)
+tools/v32.py:235:            graph = _definition_graph(definition, mode=identification_graph)
+tools/v32.py:240:                    self_score = map_graphs(graph, graph).alignment.total_score
+tools/v32.py:247:                        self_score = map_graphs(graph, graph).alignment.total_score
+tools/v32.py:251:                result = map_graphs(graph, target)
+tools/fix2.py:4:  同定（identification_graph="live"）と話すときの支持（agent_runtime._definition_graph）の定義のグラフは、関係に生きている行だけを置く。
+tools/fix2.py:6:  そのため写し（sme._alignment_candidates、sme.py:280-323）では、墓石の子の引数は「関係でない」側として扱われ、
+tools/fix2.py:18:    2 話すときの支持：agent_runtime._select_definition を差し替え、支持（と支持比による定義の選び方・τ の門）だけを直し②の写しで数える。
+tools/fix2.py:25:仕組み：墓石の子の情報は、グラフの物そのもの（id と参照の一致）に結びつけて REG に控え、差し替えた _alignment_candidates が読む。
+tools/fix2.py:26:  控えは使い終わったらすぐ消す。REG に無いグラフの写しは、元の _alignment_candidates をそのまま呼ぶ。
+tools/fix2.py:78:    original = sme._alignment_candidates
+tools/fix2.py:80:    def _alignment_candidates(base_graph, partial_graph):
+tools/fix2.py:140:    sme._alignment_candidates = _alignment_candidates
+tools/fix2.py:142:    def _select_definition(state, scene, config):
+tools/fix2.py:149:            graph = ar._definition_graph(definition)
+tools/fix2.py:150:            alignment = sme.map_graphs(graph, scene).alignment
+tools/fix2.py:156:                    support_alignment = sme.map_graphs(graph, scene).alignment
+tools/fix2.py:189:    ar._select_definition = _select_definition
+tools/l2scan_spoke.py:31:from abm.sme import map_graphs,project
+tools/l2scan_spoke.py:33:from abm.agent_runtime import _definition_graph,_need
+tools/l2scan_spoke.py:51:    g=_definition_graph(d);al=map_graphs(g,scene).alignment
+tools/l2scan_spoke_v6.py:37:from abm.sme import map_graphs,project
+tools/l2scan_spoke_v6.py:39:from abm.agent_runtime import _definition_graph,_need
+tools/l2scan_spoke_v6.py:57:    g=_definition_graph(d);al=map_graphs(g,scene).alignment
+tools/l2scan_spoke_v7.py:49:from abm.sme import map_graphs,project
+tools/l2scan_spoke_v7.py:51:from abm.agent_runtime import _definition_graph,_need
+tools/l2scan_spoke_v7.py:78:#   --fix-order（tools/fixorder.py）：map_graphs を差し替える。--fix2（tools/fix2.py）：支持（τ の門）だけを直し②の写しで数える。
+tools/l2scan_spoke_v7.py:86:    import abm.sme as _sme; map_graphs=_sme.map_graphs     # ★ このファイルの名前も差し替えた写しにする
+tools/l2scan_spoke_v7.py:89:    import abm.sme as _sme; map_graphs=_sme.map_graphs
+tools/l2scan_spoke_v7.py:91:    import fix2 as _fix2; _fix2.install()   # ★ 控え（REG）を読む _alignment_candidates の差し替えを入れる（支持の数え方）
+tools/l2scan_spoke_v7.py:100:    g=_definition_graph(d);al=map_graphs(g,scene).alignment
+tools/l2scan_spoke_v7.py:104:        try: sal=map_graphs(g,scene).alignment
+tools/useforget.py:6:  (a) 選ばれた定義（tools/v39.py select_definition の一位。発話の門を判定する前）の採用された照合で、その席の名前が照合の成立に実際に使われた。
+tools/useforget.py:75:    real_select = v39.select_definition
+tools/useforget.py:77:    def select_definition(state, scene, config):
+tools/useforget.py:81:        real_map = v39.map_v39
+tools/useforget.py:83:        def map_v39(d, slot_history, sc):
+tools/useforget.py:88:        v39.map_v39 = map_v39
+tools/useforget.py:92:            v39.map_v39 = real_map
+tools/useforget.py:100:    v39.select_definition = select_definition
+tools/answerlog.py:92:    real_select = v39.select_definition
+tools/answerlog.py:94:    def select_definition(state, scene, config):
+tools/answerlog.py:96:        real_map = v39.map_v39
+tools/answerlog.py:98:        def map_v39(d, slot_history, sc):
+tools/answerlog.py:103:        v39.map_v39 = map_v39
+tools/answerlog.py:107:            v39.map_v39 = real_map
+tools/answerlog.py:139:    v39.select_definition = select_definition
+tools/strictpc.py:2:★ abm/ は変えない。sme._alignment_candidates（照合の候補の一覧。fix2・v39・ustruct の差し替えを含む）をいちばん外側で包む。旗を切れば何もしない。
+tools/strictpc.py:9:  採れる候補だけを、元の並びのまま照合の手順（tools/fixorder2.py の map_graphs）に渡す。採る段で子の対が今の写像と食い違えば親を採らない
+tools/strictpc.py:33:    ("select_definition", "予測の定義の照合"),
+tools/strictpc.py:34:    ("map_v39", "予測の定義の照合"),
+tools/strictpc.py:224:    def select_definition(state, scene, config):
+tools/strictpc.py:244:    return select_definition
+tools/strictpc.py:366:    real_map = v39.map_v39
+tools/strictpc.py:368:    def map_v39(d, slot_history, scene):
+tools/strictpc.py:386:    v39.map_v39 = map_v39
+tools/strictpc.py:422:    prev = sme._alignment_candidates
+tools/strictpc.py:450:        v39.select_definition = _pairdump(v39.select_definition)
+tools/strictpc.py:452:    def _alignment_candidates(base_graph, partial_graph):
+tools/strictpc.py:471:    sme._alignment_candidates = _alignment_candidates
+tools/routelog.py:45:        al = sme.map_graphs(g, target).alignment
+tools/strictpc_tests.py:38:    return {k: dict(sme.map_graphs(b, t).alignment.relation_mapping) for k, (b, t, _e) in CASES.items()}
+tools/strictpc_tests.py:49:    _g, al = v39.map_v39(d, hist, sc)
+tools/v39.py:13:  定義のグラフに席ごとの仮の名（HPRED＋席番号）の関係として置き、照合の候補づくり（sme._alignment_candidates）で「履歴の名」との一致を許す。
+tools/v39.py:292:    prev = sme._alignment_candidates
+tools/v39.py:294:    def _alignment_candidates(base_graph, partial_graph):
+tools/v39.py:342:    sme._alignment_candidates = _alignment_candidates
+tools/v39.py:345:def map_v39(d, slot_history, scene):
+tools/v39.py:349:        al = sme.map_graphs(g, scene).alignment
+tools/v39.py:548:def select_definition(state, scene, config):
+tools/v39.py:556:        graph, alignment = map_v39(d, state.slot_history, scene)
+tools/v39.py:581:    from abm.sme import apply_threshold, map_graphs, project
+tools/v39.py:587:    ranked = [(map_graphs(trace.scene, agent_input.target_graph_partial), trace) for trace in state.prototype.traces]
+tools/v39.py:604:        selected = select_definition(state, scene, config)          # ★ F と H の席で選ぶ
+tools/v39.py:667:            self_score = sme.map_graphs(g, g).alignment.total_score
+tools/v39.py:670:            res = sme.map_graphs(g, target)
+tools/v39.py:729:        graph, alignment = map_v39(d, state.slot_history, target)
+tools/v39.py:1061:        orig_dg = ab._definition_graph
+tools/v39.py:1069:        ab._definition_graph = dg
+tools/v39.py:1073:            ab._definition_graph = orig_dg
+tools/childless_breakdown.py:2:★ 模型は走らせない。世界を作り直し、土台（直前の試行の見えている場面＋開示された辺）と今の場面を map_graphs で写す。
+tools/childless_breakdown.py:17:from abm.sme import map_graphs
+tools/childless_breakdown.py:41:    al = map_graphs(base, tgt).alignment
+tools/l2scan_spoke_v8.py:65:from abm.sme import map_graphs,project
+tools/l2scan_spoke_v8.py:67:from abm.agent_runtime import _definition_graph,_need
+tools/l2scan_spoke_v8.py:94:#   --fix-order（tools/fixorder.py）：map_graphs を差し替える。--fix2（tools/fix2.py）：支持（τ の門）だけを直し②の写しで数える。
+tools/l2scan_spoke_v8.py:104:    import abm.sme as _sme; map_graphs=_sme.map_graphs     # ★ このファイルの名前も差し替えた写しにする
+tools/l2scan_spoke_v8.py:107:    import abm.sme as _sme; map_graphs=_sme.map_graphs
+tools/l2scan_spoke_v8.py:113:    import fix2 as _fix2; _fix2.install()   # ★ 控え（REG）を読む _alignment_candidates の差し替えを入れる（支持の数え方）
+tools/l2scan_spoke_v8.py:122:    g=_definition_graph(d);al=map_graphs(g,scene).alignment
+tools/l2scan_spoke_v8.py:126:        try: sal=map_graphs(g,scene).alignment
