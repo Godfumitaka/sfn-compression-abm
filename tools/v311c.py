@@ -487,6 +487,9 @@ def _restore_modules(snap):
 
 def probe(state, items, config):
     from abm.domains import AgentInput, EdgePrediction
+    import random
+    audit = CFG.get("audit", False)
+    before = (repr(state), random.getstate()) if audit else None
     snap = _snapshot_modules()
     out = []
     try:
@@ -498,6 +501,8 @@ def probe(state, items, config):
             out.append([p.edge.predicate, list(p.edge.arguments)] if isinstance(p, EdgePrediction) else None)
     finally:
         _restore_modules(snap)
+    if audit and before != (repr(state), random.getstate()):
+        raise RuntimeError("一致の試験で学習状態又は本走行の乱数状態が変わった")
     return out
 
 
@@ -516,6 +521,9 @@ def install(fo, task, REAL) -> None:
                b=max(1, math.ceil(math.log2(max(2, int(c.get("b_n") or c["n"]) * int(task["cfg"]["trial_count"]))))),
                tag_limit=int(task["cfg"]["trial_count"]), conn=c.get("conn"),
                relearn_init=bool(task.get("relearn_init")), strict_pc=bool(task.get("strict_pc")))
+    if c.get("audit"):
+        CFG["audit"] = True
+    serial = c.get("serial_lock")
     STATS.update(speak=0, bundles=0, bundle_empty=0, sent=0, new_tags=0, birth_world=0, birth_report=0, assim_report=0,
                  recv=0, recv_assim=0, recv_birth=0, recv_none=0, recv_memory_empty=0, dC_mismatch=0, probes=0,
                  recv_score_changed=0, recv_merit_changed=0,
@@ -614,11 +622,15 @@ def install(fo, task, REAL) -> None:
             present = (sorted({tg for tags in state.c_tags.values() for tg in tags} | set(state.c_trace_tags.values()))
                        if CFG["tags"] else [])
             _dbg("agent", CFG["agent"], "t", trial, "send trial msg", "bundle" if b else None)
+            if serial is not None:
+                serial.release()
             conn.send({"type": "trial", "t": trial, "bundle": _pub(b), "research": _res(b), "tags": present,
                        "defs": len(state.definitions)})
             msg = conn.recv()
             _dbg("agent", CFG["agent"], "t", trial, "got deliver", len(msg.get("deliver", [])))
             deliver = msg.get("deliver", [])
+            if serial is not None:
+                serial.acquire()
             order = list(range(len(deliver)))
             rng_for("order", CFG["wseed"], trial).shuffle(order)
             for k in order:
@@ -630,14 +642,27 @@ def install(fo, task, REAL) -> None:
                 recs.append(rec)
             present = (sorted({tg for tags in state.c_tags.values() for tg in tags} | set(state.c_trace_tags.values()))
                        if CFG["tags"] else [])
-            conn.send({"type": "received", "t": trial, "records": recs, "tags": present, "defs": len(state.definitions)})
+            reply = {"type": "received", "t": trial, "records": recs, "tags": present, "defs": len(state.definitions)}
+            if CFG.get("audit"):
+                reply["audit"] = {"state": sha256(repr(state).encode()).hexdigest(),
+                                  "rng": sha256(repr(state.rng_state).encode()).hexdigest()}
+            if serial is not None:
+                serial.release()
+            conn.send(reply)
             while True:
                 cmd = conn.recv()
                 if cmd["type"] == "probe":
                     STATS["probes"] += 1
-                    conn.send({"type": "probe", "answers": probe(state, cmd["items"], CTX.get("config") or config)})
+                    if serial is not None:
+                        serial.acquire()
+                    answers = probe(state, cmd["items"], CTX.get("config") or config)
+                    if serial is not None:
+                        serial.release()
+                    conn.send({"type": "probe", "answers": answers})
                 else:
                     break
+            if serial is not None:
+                serial.acquire()
         if CFG["tags"] and trial + 1 == CFG["T"]:
             # ★ 研究者用の最終名札回数表。記憶と費用は変えず、受け手には渡さない。
             STATS["name_tables_end"] = {R: {"born": d.registered_at, "tags": dict(state.c_tags.get(R, {}))}
@@ -685,6 +710,9 @@ def _agent_main(conn, task):
     import v3_run
     task = dict(task)
     task["v311c"] = dict(task["v311c"], conn=conn)
+    lock = task["v311c"].get("serial_lock")
+    if lock is not None:
+        lock.acquire()
     try:
         rec = v3_run.worker(task)
         conn.send({"type": "done", "rec": _jsonable({k: v for k, v in rec.items() if k != "v311c"} | {"v311c": rec.get("v311c")})})
@@ -696,6 +724,13 @@ def _agent_main(conn, task):
             conn.send({"type": "error", "error": repr(e), "tb": tb})
         except BaseException:
             pass
+    finally:
+        if lock is not None:
+            # 例外で停止する場合は coordinate が残る個体を停止する。
+            try:
+                lock.release()
+            except ValueError:
+                pass
 
 
 def _jsonable(x):
@@ -724,6 +759,37 @@ def probe_items(seed_file, run, higher_order_second, per_motif=5):
     return items
 
 
+def probe_shop_items(seed_file, run, higher_order_second, *, world, exc=0.2):
+    """研究者用の固定1740場面。店×日ごとにドア3・その他2。不足なら停止し、抽選をやり直さない。"""
+    import shopworld
+    from abm.seed import load_seed
+    from abm.world import generate_world
+    seed = 900000 + int(run)
+    ws = generate_world(seed, 1740, ["agent"], seed=load_seed(seed_file),
+                        holdout_include_second_order=higher_order_second)
+    buckets = {(typ, cue, door): [] for typ in ("甲", "乙") for cue in ("n", "e") for door in (True, False)}
+    ids_before = dict(shopworld.IDS)
+    try:
+        for tr in ws.trials:
+            cue = "e" if shopworld.cue_rng(seed, tr.trial).random() < exc else "n"
+            built, info = shopworld.build(tr, seed, tr.trial, cue=cue, world=world)
+            key = (info["shop_type"], cue, info["held_out_is_door"])
+            need = 3 if key[2] else 2
+            if len(buckets[key]) < need:
+                buckets[key].append({"scene": graph_to_plain(built.target_graph_partial),
+                                     "held": [built.held_out_edge.predicate, list(built.held_out_edge.arguments)],
+                                     "motif": built.motif, "trial": built.trial,
+                                     "shop_type": key[0], "shop_cue": cue, "held_out_is_door": key[2]})
+    finally:
+        shopworld.IDS.clear()
+        shopworld.IDS.update(ids_before)
+    missing = {str(k): len(v) for k, v in buckets.items() if len(v) != (3 if k[2] else 2)}
+    if missing:
+        raise ValueError(f"固定のお店の試験の世界で場面が不足（種 {seed}、1740場面）: {missing}")
+    return [it for typ in ("甲", "乙") for cue in ("n", "e")
+            for it in sorted(buckets[(typ, cue, True)] + buckets[(typ, cue, False)], key=lambda it: it["trial"])]
+
+
 def coordinate(tasks, out_path, probe_every=100):
     """一つの集団の走行（tasks＝個体ごとの v3_run の仕事）。通信の記録を out_path（jsonl）に書き、要約を返す。
     まとめ役で失敗したら、個体のプロセスを止め、失敗を要約に書いて返す（待ち続けないように）。"""
@@ -744,6 +810,17 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
     n = len(tasks)
     T = int(tasks[0]["cfg"]["trial_count"])
     ctx = mp.get_context("fork")
+    if tasks[0]["v311c"].get("serial"):
+        lock = ctx.BoundedSemaphore(1)
+        tasks = [dict(t, v311c=dict(t["v311c"], serial_lock=lock)) for t in tasks]
+    seed_file = str(Path(__file__).resolve().parent.parent / tasks[0]["cfg"]["seed_file"])
+    shop = tasks[0]["v311c"].get("probe_shop")
+    if shop:
+        items = probe_shop_items(seed_file, tasks[0]["v311c"]["run"],
+                                 bool(tasks[0]["cfg"]["fixed"].get("holdout_include_second_order")),
+                                 world=tasks[0]["shop_world"], exc=tasks[0].get("shop_exc", 0.2))
+    else:
+        items = probe_items(seed_file, tasks[0]["v311c"]["run"], bool(tasks[0]["cfg"]["fixed"].get("holdout_include_second_order")))
     pipes = [ctx.Pipe() for _ in range(n)]
     procs = [ctx.Process(target=_agent_main, args=(pipes[i][1], tasks[i])) for i in range(n)]
     procs_out.extend(procs)
@@ -751,8 +828,11 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
         p.start()
     conns = [pp[0] for pp in pipes]
     fo = open(out_path, "w", encoding="utf-8")
-    seed_file = str(Path(__file__).resolve().parent.parent / tasks[0]["cfg"]["seed_file"])
-    items = probe_items(seed_file, tasks[0]["v311c"]["run"], bool(tasks[0]["cfg"]["fixed"].get("holdout_include_second_order")))
+    if shop:
+        fo.write(json.dumps({"kind": "probe_items", "seed": 900000 + tasks[0]["v311c"]["run"],
+                             "corpus_trials": 1740, "items": items}, ensure_ascii=False) + "\n")
+    audit_file = (open(str(out_path) + ".state.jsonl", "w", encoding="utf-8")
+                  if tasks[0]["v311c"].get("audit") else None)
     summ = {"trials": 0, "bundles": 0, "sent": 0, "delivered": 0, "recv": {}, "probe": [], "tag_lost": 0, "errors": []}
     tags_prev: set = set()
     done = [None] * n
@@ -788,6 +868,8 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
         tags_now = set()
         for i, c in enumerate(conns):
             m = c.recv()
+            if audit_file is not None:
+                audit_file.write(json.dumps({"t": t, "agent": i, **m["audit"]}) + "\n")
             for r in m["records"]:
                 summ["recv"][r.get("result", "?")] = summ["recv"].get(r.get("result", "?"), 0) + 1
                 fo.write(json.dumps({"kind": "recv", "t": t, "agent": i, **r}, ensure_ascii=False, default=str) + "\n")
@@ -840,4 +922,6 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
     summ["agents"] = [d.get("rec") if d and d.get("type") == "done" else d for d in done]
     fo.write(json.dumps({"kind": "summary", **summ}, ensure_ascii=False, default=str) + "\n")
     fo.close()
+    if audit_file is not None:
+        audit_file.close()
     return summ

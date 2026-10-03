@@ -671,10 +671,17 @@ def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
         ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
                    v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
                           "groups": groups, "tags": not args.v311c_no_tags, "b_n": args.v311c_b_n}) for i in range(n)]
+        for key in ("probe_shop", "audit", "serial"):
+            if getattr(args, "v311c_" + key):
+                for task in ts:
+                    task["v311c"][key] = True
         pops.append((r, ts))
 
     def one(r, ts):
         s = v311c.coordinate(ts, comm / f"run{r:03d}.jsonl", probe_every=args.v311c_probe_every)
+        if args.v311c_lineage and not s["errors"]:
+            from v311c_lineage import write_lineage
+            write_lineage(comm / f"run{r:03d}.jsonl", comm / f"run{r:03d}.lineage.jsonl", groups)
         (comm / f"run{r:03d}.summary.json").write_text(json.dumps(s, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
 
     ctx = mp.get_context("fork")
@@ -751,6 +758,10 @@ def main() -> None:
     ap.add_argument("--v311c-b-n", type=int, default=None, help="v3.11c：名札の固定長 b を決める個体の数（既定は集団の個体数。単独の比べの走行で集団と同じ b にするとき）")
     ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
     ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
+    ap.add_argument("--v311c-probe-shop", action="store_true", help="一致の試験を店×日ごとの固定20問にする（学習には戻さない）")
+    ap.add_argument("--v311c-audit", action="store_true", help="研究者用：各試行の状態・乱数の指紋と試験の非干渉を検査する")
+    ap.add_argument("--v311c-lineage", action="store_true", help="研究者用：走行後に通信記録から定義ごとの出どころ候補の系譜を書く")
+    ap.add_argument("--v311c-serial", action="store_true", help="個体の重い計算を全体で一つずつ実行する（試行の歩調は同じ）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--probe-world", action="store_true",
                     help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
@@ -812,6 +823,8 @@ def main() -> None:
     ap.add_argument("--dump-slot-history", action="store_true",
                     help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
     args = ap.parse_args()
+    if args.v311c_probe_shop and args.shop_world is None:
+        ap.error("--v311c-probe-shop は --shop-world と一緒に使う")
     import sweep
     cfg = json.load(open(args.config, encoding="utf-8"))
     orig_dir = cfg["output"]["dir"]
@@ -908,7 +921,9 @@ def main() -> None:
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "v311c": ({"f": args.v311c_f, "groups": args.v311c_groups, "q": args.v311c_q, "m": args.v311c_m,
                                                                "recv": args.v311c_recv, "runs": args.v311c_runs, "no_tags": args.v311c_no_tags,
-                                                               "probe_every": args.v311c_probe_every} if args.v311c else None),
+                                                               "probe_every": args.v311c_probe_every,
+                                                               **{k: True for k in ("probe_shop", "audit", "serial", "lineage")
+                                                                  if getattr(args, "v311c_" + k)}} if args.v311c else None),
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
