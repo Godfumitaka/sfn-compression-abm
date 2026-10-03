@@ -1,0 +1,655 @@
+{
+ "time": "2026-10-03T10:05:05+09:00",
+ "complete": true,
+ "stages": [
+  {
+   "fraction": 0.25,
+   "provenance": "今回",
+   "source_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_llm_door_2026-10-03/outputs/f025/段階S基準_w2.jsonl",
+   "source_sha256": "98f35dce7bd4897374bcd130cf74d2e1c721c2e7cac7bfa75f7156f870b6bd18",
+   "learning_door_questions": {
+    "甲・n": 7,
+    "甲・e": 0,
+    "乙・n": 3,
+    "乙・e": 0
+   },
+   "pattern": "店だけで答える",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "puga",
+    "乙・n": "repi",
+    "乙・e": "repi"
+   },
+   "best_correct": 8,
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 0,
+    "乙・n": 4,
+    "乙・e": 0
+   },
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 0
+   },
+   "actual": {
+    "正解": 8,
+    "誤答": 8
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "誤答": 8
+    }
+   },
+   "errors": {
+    "例外で通常の答え": 8
+   },
+   "confidence": {
+    "正解": [
+     0.97,
+     0.8,
+     0.8,
+     0.93,
+     0.8,
+     0.6,
+     0.8,
+     0.8
+    ],
+    "誤答": [
+     0.6,
+     0.8,
+     0.88,
+     0.9,
+     0.6,
+     0.9,
+     0.8,
+     0.6
+    ],
+    "黙り": []
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.97,
+     0.8,
+     0.8,
+     0.93
+    ],
+    "甲・e": [
+     0.6,
+     0.8,
+     0.88,
+     0.9
+    ],
+    "乙・n": [
+     0.8,
+     0.6,
+     0.8,
+     0.8
+    ],
+    "乙・e": [
+     0.6,
+     0.9,
+     0.8,
+     0.6
+    ]
+   },
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ]
+   },
+   "learning": {
+    "calls": 40,
+    "input": 237795,
+    "output": 1145,
+    "thinking": 128,
+    "thinking_missing": 0,
+    "thinking_zero": 39,
+    "thinking_max": 128,
+    "thinking_mean": 3.2,
+    "dollars": "0.487040",
+    "models": {
+     "claude-sonnet-5-5": 40
+    }
+   },
+   "final_test": {
+    "calls": 16,
+    "input": 177464,
+    "output": 400,
+    "thinking": 0,
+    "thinking_missing": 0,
+    "thinking_zero": 16,
+    "thinking_max": 0,
+    "thinking_mean": 0.0,
+    "dollars": "0.358928",
+    "models": {
+     "claude-sonnet-5-5": 16
+    }
+   },
+   "all": {
+    "calls": 56,
+    "input": 415259,
+    "output": 1545,
+    "thinking": 128,
+    "thinking_missing": 0,
+    "thinking_zero": 55,
+    "thinking_max": 128,
+    "thinking_mean": 2.2857142857142856,
+    "dollars": "0.845968",
+    "models": {
+     "claude-sonnet-5-5": 56
+    }
+   }
+  },
+  {
+   "fraction": 0.5,
+   "provenance": "既存",
+   "source_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_llm_door_2026-10-03/baselines/段階S基準_w2.jsonl",
+   "source_sha256": "1f0b810897edd8df4c250d90d866fe2b0d37e804c964a397f2c5a971a12539a5",
+   "learning_door_questions": {
+    "甲・n": 9,
+    "甲・e": 2,
+    "乙・n": 7,
+    "乙・e": 2
+   },
+   "pattern": "店だけで答える",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "puga",
+    "乙・n": "repi",
+    "乙・e": "repi"
+   },
+   "best_correct": 9,
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 1,
+    "乙・n": 4,
+    "乙・e": 0
+   },
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 1
+   },
+   "actual": {
+    "正解": 9,
+    "誤答": 7
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "誤答": 7,
+     "正解": 1
+    }
+   },
+   "errors": {
+    "例外で通常の答え": 7
+   },
+   "confidence": {
+    "正解": [
+     0.6,
+     0.6,
+     0.7,
+     0.8,
+     0.85,
+     0.97,
+     0.97,
+     0.97,
+     0.97
+    ],
+    "誤答": [
+     0.6,
+     0.6,
+     0.6,
+     0.9,
+     0.93,
+     0.95,
+     0.97
+    ],
+    "黙り": []
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.6,
+     0.6,
+     0.7,
+     0.8
+    ],
+    "甲・e": [
+     0.6,
+     0.6,
+     0.85,
+     0.6
+    ],
+    "乙・n": [
+     0.97,
+     0.97,
+     0.97,
+     0.97
+    ],
+    "乙・e": [
+     0.9,
+     0.93,
+     0.95,
+     0.97
+    ]
+   },
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "puga",
+     "puga",
+     "repi",
+     "puga"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ]
+   },
+   "learning": {
+    "calls": 40,
+    "input": 237473,
+    "output": 1444,
+    "thinking": 433,
+    "thinking_missing": 0,
+    "thinking_zero": 38,
+    "thinking_max": 285,
+    "thinking_mean": 10.825,
+    "dollars": "0.489386",
+    "models": {
+     "claude-sonnet-5-5": 40
+    }
+   },
+   "final_test": {
+    "calls": 16,
+    "input": 177240,
+    "output": 665,
+    "thinking": 265,
+    "thinking_missing": 0,
+    "thinking_zero": 15,
+    "thinking_max": 265,
+    "thinking_mean": 16.5625,
+    "dollars": "0.361130",
+    "models": {
+     "claude-sonnet-5-5": 16
+    }
+   },
+   "all": {
+    "calls": 56,
+    "input": 414713,
+    "output": 2109,
+    "thinking": 698,
+    "thinking_missing": 0,
+    "thinking_zero": 53,
+    "thinking_max": 285,
+    "thinking_mean": 12.464285714285714,
+    "dollars": "0.850516",
+    "models": {
+     "claude-sonnet-5-5": 56
+    }
+   }
+  },
+  {
+   "fraction": 0.75,
+   "provenance": "今回",
+   "source_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_llm_door_2026-10-03/outputs/f075/段階S基準_w2.jsonl",
+   "source_sha256": "1535e9c89bee0a3780dade67b59ab26aa17addcc1a8752f52641a63934b22483",
+   "learning_door_questions": {
+    "甲・n": 13,
+    "甲・e": 2,
+    "乙・n": 12,
+    "乙・e": 3
+   },
+   "pattern": "店だけで答える",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "puga",
+    "乙・n": "repi",
+    "乙・e": "repi"
+   },
+   "best_correct": 10,
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 2,
+    "乙・n": 4,
+    "乙・e": 0
+   },
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 2
+   },
+   "actual": {
+    "正解": 10,
+    "誤答": 6
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "誤答": 6,
+     "正解": 2
+    }
+   },
+   "errors": {
+    "例外で通常の答え": 6
+   },
+   "confidence": {
+    "正解": [
+     0.93,
+     0.6,
+     0.9,
+     0.97,
+     0.55,
+     0.85,
+     0.97,
+     0.97,
+     0.97,
+     0.97
+    ],
+    "誤答": [
+     0.6,
+     0.6,
+     0.97,
+     0.9,
+     0.97,
+     0.97
+    ],
+    "黙り": []
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.93,
+     0.6,
+     0.9,
+     0.97
+    ],
+    "甲・e": [
+     0.6,
+     0.55,
+     0.85,
+     0.6
+    ],
+    "乙・n": [
+     0.97,
+     0.97,
+     0.97,
+     0.97
+    ],
+    "乙・e": [
+     0.97,
+     0.9,
+     0.97,
+     0.97
+    ]
+   },
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "puga",
+     "repi",
+     "repi",
+     "puga"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ]
+   },
+   "learning": {
+    "calls": 40,
+    "input": 237305,
+    "output": 1623,
+    "thinking": 615,
+    "thinking_missing": 0,
+    "thinking_zero": 37,
+    "thinking_max": 230,
+    "thinking_mean": 15.375,
+    "dollars": "0.490840",
+    "models": {
+     "claude-sonnet-5-5": 40
+    }
+   },
+   "final_test": {
+    "calls": 16,
+    "input": 177128,
+    "output": 667,
+    "thinking": 267,
+    "thinking_missing": 0,
+    "thinking_zero": 15,
+    "thinking_max": 267,
+    "thinking_mean": 16.6875,
+    "dollars": "0.360926",
+    "models": {
+     "claude-sonnet-5-5": 16
+    }
+   },
+   "all": {
+    "calls": 56,
+    "input": 414433,
+    "output": 2290,
+    "thinking": 882,
+    "thinking_missing": 0,
+    "thinking_zero": 52,
+    "thinking_max": 267,
+    "thinking_mean": 15.75,
+    "dollars": "0.851766",
+    "models": {
+     "claude-sonnet-5-5": 56
+    }
+   }
+  },
+  {
+   "fraction": 1.0,
+   "provenance": "既存",
+   "source_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_llm_door_2026-10-03/baselines/段階S全部ドア_w2.jsonl",
+   "source_sha256": "3c4c306f459fff17940bca027c6120f72386e703dd67b9456e20646d94bdf652",
+   "learning_door_questions": {
+    "甲・n": 16,
+    "甲・e": 4,
+    "乙・n": 16,
+    "乙・e": 4
+   },
+   "pattern": "正しい表",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "repi",
+    "乙・n": "repi",
+    "乙・e": "puga"
+   },
+   "best_correct": 16,
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 4,
+    "乙・n": 4,
+    "乙・e": 4
+   },
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 8
+   },
+   "actual": {
+    "正解": 16
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "正解": 8
+    }
+   },
+   "errors": {},
+   "confidence": {
+    "正解": [
+     0.8,
+     0.97,
+     0.95,
+     0.97,
+     0.8,
+     0.9,
+     0.9,
+     0.97,
+     0.97,
+     0.97,
+     0.8,
+     0.9,
+     0.85,
+     0.9,
+     0.6,
+     0.6
+    ],
+    "誤答": [],
+    "黙り": []
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.8,
+     0.97,
+     0.95,
+     0.97
+    ],
+    "甲・e": [
+     0.8,
+     0.9,
+     0.9,
+     0.97
+    ],
+    "乙・n": [
+     0.97,
+     0.97,
+     0.8,
+     0.9
+    ],
+    "乙・e": [
+     0.85,
+     0.9,
+     0.6,
+     0.6
+    ]
+   },
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ]
+   },
+   "learning": {
+    "calls": 40,
+    "input": 237152,
+    "output": 2297,
+    "thinking": 1296,
+    "thinking_missing": 0,
+    "thinking_zero": 34,
+    "thinking_max": 349,
+    "thinking_mean": 32.4,
+    "dollars": "0.497274",
+    "models": {
+     "claude-sonnet-5-5": 40
+    }
+   },
+   "final_test": {
+    "calls": 16,
+    "input": 177032,
+    "output": 1624,
+    "thinking": 1224,
+    "thinking_missing": 0,
+    "thinking_zero": 11,
+    "thinking_max": 316,
+    "thinking_mean": 76.5,
+    "dollars": "0.370304",
+    "models": {
+     "claude-sonnet-5-5": 16
+    }
+   },
+   "all": {
+    "calls": 56,
+    "input": 414184,
+    "output": 3921,
+    "thinking": 2520,
+    "thinking_missing": 0,
+    "thinking_zero": 45,
+    "thinking_max": 349,
+    "thinking_mean": 45.0,
+    "dollars": "0.867578",
+    "models": {
+     "claude-sonnet-5-5": 56
+    }
+   }
+  }
+ ],
+ "known_task_dollars": "1.697804",
+ "preflight_dollars": 7e-05,
+ "ledger_prefix_unchanged": true
+}

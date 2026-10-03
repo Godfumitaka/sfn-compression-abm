@@ -1,0 +1,79 @@
+diff --git a/llm_trial/fullhist_stages.py b/llm_trial/fullhist_stages.py
+index a0c627e..9544c9b 100644
+--- a/llm_trial/fullhist_stages.py
++++ b/llm_trial/fullhist_stages.py
+@@ -13,7 +13,8 @@
+ 推論に使った量：出力のトークン数から、本文（答えの JSON）のトークン数（数える API、正味）を引いた見積もり。推論の文字数も残す。
+ 追記（2026-10-02 朝）：段階を組み直した（STAGES の 新2・新4・新5。新1＝"1"、新3＝"2"）。新2 は過去の場面を、伏せた関係に正解を戻した
+   完全な場面（world.complete_text）として、同じ書式で並べる（INTRO_OBS・prompt_obs）。組の種を引数で変えられる（確かめは調整に使っていない組で）。
+-使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階> [組の種（既定 1）]'"""
++使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階> [組の種（既定 1）] [--door-fraction <ドアの割合>]'"""
++import argparse
+ import json
+ import os
+ import sys
+@@ -76,16 +77,24 @@ BASE = [None]
+ 
+ 
+ def main():
+-    out, world, stage = sys.argv[1], int(sys.argv[2]), sys.argv[3]
+-    set_seed = int(sys.argv[4]) if len(sys.argv) > 4 else 1
++    parser = argparse.ArgumentParser()
++    parser.add_argument("out")
++    parser.add_argument("world", type=int)
++    parser.add_argument("stage")
++    parser.add_argument("set_seed", nargs="?", type=int, default=1)
++    parser.add_argument("--door-fraction", type=float)
++    args = parser.parse_args()
++    out, world, stage, set_seed = args.out, args.world, args.stage, args.set_seed
+     os.makedirs(out, exist_ok=True)
+     api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
+-    cfg = STAGES[stage]
++    cfg = STAGES[stage].copy()
++    if args.door_fraction is not None:
++        cfg["door_fraction"] = args.door_fraction
+     BASE[0] = api.count_tokens(cfg["model"], "a") if cfg.get("model") else api.haiku_count("a")
+     mm.THINK = cfg["think"]
+     if cfg.get("model"):
+         mm.MODEL[0], mm.EFFORT[0], mm.DISPLAY[0] = cfg["model"], cfg.get("effort"), DISPLAY
+-    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"))
++    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"), door_fraction=cfg.get("door_fraction"))
+     _h, tests = sd.build(set_seed, world, 4)
+     full = [w.complete_text(set_seed, world, s["i"], s["research"], st["vocab"]) for s in st["series"]] if cfg.get("observed") else None
+ 
+diff --git a/llm_trial/world.py b/llm_trial/world.py
+index 3c3fde9..1ab5bca 100644
+--- a/llm_trial/world.py
++++ b/llm_trial/world.py
+@@ -123,11 +123,12 @@ def render(rels, hidden, rng, voc):
+                               "truth_symbol": voc[truth]}
+ 
+ 
+-def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None):
++def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None, *, door_fraction=None):
+     """一組：学習の系列 40 場面と試験の場面。世界 1・2 で順番・伏せ方・番号の引き方は同じ（述語だけ表に従って変わる）。
+     view＝"v2" のときは見せ方 v2（render_v2：字下げの決まった順）で書く。順番・伏せ方・番号は v1 と同じ（乱数の引き方が同じ）。
+     mult：各場合の場面の数を COUNTS の何倍にするか（2 なら 80 場面）。door_all：全部の場面でドアを伏せる。どちらも乱数の引き方の規則は同じ。
+-    exc：例外の割合（店ごとに round(20×mult×exc) 場面を例外に。None なら COUNTS のまま＝0.2）。"""
++    exc：例外の割合（店ごとに round(20×mult×exc) 場面を例外に。None なら COUNTS のまま＝0.2）。
++    door_fraction：ドアを伏せる割合。None は従来の半分。場面数×割合が整数の値を指定する。"""
+     voc = vocab(set_seed)
+     render = globals()["render_v2"] if view == "v2" else globals()["render"]
+     rng = random.Random(f"order|{set_seed}")
+@@ -140,7 +141,15 @@ def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None):
+             counts[(typ, "n")] = per_shop - counts[(typ, "e")]
+     seq = [c for c in CASES for _ in range(counts[c])]
+     rng.shuffle(seq)
+-    door_pos = set(rng.sample(range(len(seq)), len(seq) // 2))
++    door_count = len(seq) // 2
++    if door_fraction is not None:
++        if not 0 <= door_fraction <= 1:
++            raise ValueError("ドアの割合は0以上1以下")
++        exact_count = len(seq) * door_fraction
++        if exact_count != int(exact_count):
++            raise ValueError("場面数×ドアの割合が整数になる値を指定する")
++        door_count = int(exact_count)
++    door_pos = set(rng.sample(range(len(seq)), door_count))
+     if door_all:
+         # 全部の場面でドアを伏せる（委任書「全履歴の段階」2026-10-02 朝の段階 2・4）。乱数の流れを変えないよう、引いたうえで全部にする
+         door_pos = set(range(len(seq)))
