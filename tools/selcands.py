@@ -319,7 +319,8 @@ def main():
             continue
         cell = os.path.basename(os.path.dirname(p))
         tg = {int(r["trial"]): int(r["hit"]) for r in csv.DictReader(open(os.path.join(smdir, arm, f"seed{s:03d}.answers.csv"), encoding="utf-8"))
-              if r["door"] == "1" and r["shop_cue"] == "e"}
+              if r["door"] == "1" and r["shop_cue"] == os.environ.get("SC_CUE", "e")
+              and (os.environ.get("SC_ONLY_MISS") != "1" or r["hit"] == "0")}   # ★ 2026-10-03（走行の係）：日（SC_CUE）と外れだけ（SC_ONLY_MISS）
         jobs.append((root, cell, s, tg, out_dir))
     with get_context("spawn").Pool(min(int(os.environ.get("SC_WORKERS", "2")), len(jobs)), maxtasksperchild=1) as pool:
         res = pool.map(one, jobs, chunksize=1)
