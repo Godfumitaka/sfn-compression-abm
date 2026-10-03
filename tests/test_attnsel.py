@@ -467,3 +467,36 @@ def test_14_nonnegative_projection_ties_and_agent_isolation():
     assert A.rank((newer, tied[1]), learner.weights)[0].definition.name == "B"
     bigger = replace(tied[0], n=tied[0].n + 1)
     assert A.rank((bigger, newer), learner.weights)[0].n == bigger.n
+
+
+def test_15_diagnostic_fixed_answer_names_in_scores_and_gradient():
+    st, ai, cfg, truth = C.example(extra_unknown=True)
+    fixed = C.answer_slot_names(st)
+    assert fixed == ("hold", "hold_b")
+    weights = {p: 1. for p in C.SEEN}
+    moved = {**weights, "hold": 4., "hold_b": .2}
+    for c in A.candidates(st, ai.target_graph_partial):
+        tt = replace(c.terms, fixed_names=fixed)
+        assert tt.scores(moved) == tt.scores(weights)
+        assert tt.gradient(moved)["hold"] == tt.gradient(moved)["hold_b"] == 0
+        for p in fixed:
+            lo, hi = dict(moved), dict(moved); lo[p] -= 1e-6; hi[p] += 1e-6
+            assert tt.value(lo) == tt.value(hi)
+
+
+def test_16_diagnostic_update_keeps_fixed_names_one_and_total_mean_one():
+    st, ai, cfg, truth = C.example(extra_unknown=True)
+    learner = A.Attention(enabled=True, seen=C.SEEN, fixed_names=C.answer_slot_names(st))
+    pre = learner.prepare("agent", 1, ai, st, cfg, Random(1))
+    correct = tuple(c.answer == (truth.predicate, truth.arguments) for c in pre.candidates)
+    loss, gradient, _ = A.loss_gradient(pre.candidates, learner.weights, correct, learner.beta)
+    for p in C.SEEN:
+        lo, hi = dict(learner.weights), dict(learner.weights); lo[p] -= 1e-6; hi[p] += 1e-6
+        measured = (A.loss_gradient(pre.candidates, hi, correct, learner.beta)[0]
+                    - A.loss_gradient(pre.candidates, lo, correct, learner.beta)[0]) / 2e-6
+        assert measured == pytest.approx(gradient[p], abs=2e-9)
+    rec = learner.finish(pre, C.feedback(1, truth))
+    assert rec["updated"] and rec["fixed_answer_names"] == ["hold", "hold_b"]
+    assert learner.weights["hold"] == learner.weights["hold_b"] == 1.
+    assert math.fsum(learner.weights.values()) == pytest.approx(len(C.SEEN))
+    assert A.loss_gradient(pre.candidates, learner.weights, correct, learner.beta)[0] < loss

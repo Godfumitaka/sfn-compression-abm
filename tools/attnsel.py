@@ -35,8 +35,11 @@ class Terms:
     scene_names: tuple
     scene_structure: int
     empty_histories: int = 0
+    fixed_names: tuple = ()  # 診断だけ。全三点でこの名前の重みを 1 に固定する。
 
     def scores(self, weights):
+        if self.fixed_names:
+            weights = {**weights, **dict.fromkeys(self.fixed_names, 1.0)}
         name = sum((n * _weight(weights, p) for p, n in self.cross), Fraction())
         dd_name = sum((n * _weight(weights, p) for p, n in self.fixed), Fraction())
         dd_name += sum((max(_weight(weights, p) for p in h) for h in self.histories), Fraction())
@@ -52,6 +55,8 @@ class Terms:
 
     def gradient(self, weights):
         """Q の解析勾配。H の最大値が同点なら全最大名に等分する劣勾配。"""
+        if self.fixed_names:
+            weights = {**weights, **dict.fromkeys(self.fixed_names, 1.0)}
         s, dd, xx = self.scores(weights)
         den = dd + xx
         if den == 0:
@@ -63,7 +68,7 @@ class Terms:
             tied = [p for p in hist if _weight(weights, p) == top]
             for p in tied:
                 dden[p] += Fraction(1, len(tied))
-        return {p: float(2 * (ds[p] * den - s * dden[p]) / den**2)
+        return {p: (0.0 if p in self.fixed_names else float(2 * (ds[p] * den - s * dden[p]) / den**2))
                 for p in weights}
 
 
@@ -220,9 +225,14 @@ def loss_gradient(cands, weights, correct, beta):
     return all_z - good_z, gradient, pi
 
 
-def normalized_step(weights, gradient, eta):
+def normalized_step(weights, gradient, eta, *, fixed_names=()):
     if not math.isfinite(eta) or eta < 0:
         raise ValueError("eta は有限・非負でなければならない")
+    if fixed_names:
+        # 固定名は 1、残りの平均も 1 にするので、全体の平均は 1 のまま。
+        free = {p: w for p, w in weights.items() if p not in fixed_names}
+        after = normalized_step(free, gradient, eta)
+        return {p: 1.0 if p in fixed_names else after[p] for p in weights}
     clipped = {p: max(0.0, w - eta * gradient[p]) for p, w in weights.items()}
     if not clipped:
         return {}
@@ -247,11 +257,14 @@ class Prepared:
 
 class Attention:
     """一個体で全定義に共有。個体ごとに別インスタンスを使う。"""
-    def __init__(self, *, enabled=False, beta=5.0, eta=0.05, seen=()):
+    def __init__(self, *, enabled=False, beta=5.0, eta=0.05, seen=(), fixed_names=()):
         if not math.isfinite(beta) or beta <= 0 or not math.isfinite(eta) or eta < 0:
             raise ValueError("beta は正、eta は非負、両方とも有限")
         self.enabled, self.beta, self.eta = enabled, beta, eta
         self.weights = {p: 1.0 for p in sorted(set(seen))}
+        self.fixed_names = tuple(sorted(set(fixed_names)))
+        if not set(self.fixed_names) <= self.weights.keys():
+            raise ValueError("診断で固定する名前は開示前に見た名前でなければならない")
         self.version = 0
         self._finished = set()
 
@@ -271,6 +284,8 @@ class Attention:
         before = dict(self.weights)
         with isolated():
             cs = candidates(state, agent_input.target_graph_partial)
+            if self.fixed_names:
+                cs = tuple(replace(c, terms=replace(c.terms, fixed_names=self.fixed_names)) for c in cs)
             ranked = rank(cs, before)
             frozen = []
             for c in ranked:
@@ -326,7 +341,7 @@ class Attention:
                 elif self.eta == 0:
                     reason = "eta_zero"
                 else:
-                    after = normalized_step(self.weights, gradient, self.eta)
+                    after = normalized_step(self.weights, gradient, self.eta, fixed_names=self.fixed_names)
                     reason = "updated" if after != self.weights else "zero_step"
                     self.weights = after
         record = {"kind": "attn_select", "trial": prepared.trial, "agent_id": prepared.agent_id,
@@ -335,6 +350,8 @@ class Attention:
                   "beta": self.beta, "eta": self.eta, "selected_before_update": prepared.selected,
                   "candidates": [{"R": c.definition.name, "answer_before_disclosure": c.answer,
                                   "Q_before": float(c.terms.value(dict(prepared.before)))} for c in prepared.candidates]}
+        if self.fixed_names:
+            record["fixed_answer_names"] = list(self.fixed_names)
         if not prepared.record_only:
             self._finished.add(prepared.trial)
             self.version += 1

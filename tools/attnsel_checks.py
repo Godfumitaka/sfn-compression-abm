@@ -99,19 +99,41 @@ def hand_values():
     return rows
 
 
-def tiny_grid(*, steps=80):
+def answer_slot_names(state):
+    """この手例の答える席は slot 0。正解は読まず、予測前記憶の F/H 名を取る。
+
+    世界走行に一般化した伏せ席の検出器ではない。U の忘れた名前は読まない。
+    """
+    names = set()
+    for d in state.definitions.values():
+        for row in d.constituents:
+            if row.slot_index != 0:
+                continue
+            status = v39.seat_state(d, row, state.slot_history)
+            if status == "F":
+                names.add(row.relation.predicate)
+            elif status == "H":
+                names.update(p for p, n in v39.hist_counts(state.slot_history[(d.name, 0)]).items() if n >= 1)
+    return tuple(sorted(names))
+
+
+def tiny_grid(*, steps=80, fix_answer_names=False, records=None):
     """同じ手例の固定記憶で 80 回だけ更新を検査する。世界走行の成績ではない。"""
     out = []
     with matching():
         for beta in (1.0, 5.0, 10.0):
             for eta in (0.01, 0.05, 0.1):
                 state, ai, cfg, truth = example(extra_unknown=True)
-                learner = A.Attention(enabled=True, beta=beta, eta=eta, seen=SEEN)
+                fixed = answer_slot_names(state) if fix_answer_names else ()
+                learner = A.Attention(enabled=True, beta=beta, eta=eta, seen=SEEN, fixed_names=fixed)
                 first_loss, last_loss, hits, changes = None, None, 0, 0
                 for t in range(1, steps + 1):
                     prepared = learner.prepare("agent", t, ai, state, cfg, Random(1))
                     hits += A.answer_key(prepared.output.prediction) == (truth.predicate, truth.arguments)
                     rec = learner.finish(prepared, feedback(t, truth, f=1.0))
+                    if records is not None:
+                        records.append({**rec, "answer_before_update": A.answer_key(prepared.output.prediction),
+                                        "correct_before_update": A.answer_key(prepared.output.prediction) == (truth.predicate, truth.arguments)})
                     changes += rec["updated"]
                     if first_loss is None:
                         first_loss = rec["L"]
@@ -128,10 +150,24 @@ def main():
     ap.add_argument("--attn-log", action="store_true", help="記録だけ。選択・重みを変えない")
     ap.add_argument("--attn-beta", type=float, default=5.0)
     ap.add_argument("--attn-eta", type=float, default=0.05)
+    ap.add_argument("--attn-fix-answer-names", action="store_true", help="診断だけ：手例の答える席の F/H 名を点・更新とも 1 に固定")
+    ap.add_argument("--attn-grid", action="store_true", help="手例の九点の格子だけを回す")
     ap.add_argument("--output", type=Path)
     args = ap.parse_args()
+    if args.attn_grid:
+        records = []
+        result = tiny_grid(fix_answer_names=args.attn_fix_answer_names, records=records)
+        if args.output:
+            args.output.mkdir(parents=True, exist_ok=True)
+            (args.output / "grid.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+            with (args.output / "grid.attn.jsonl").open("w", encoding="utf-8") as f:
+                for rec in records:
+                    A.write_record(f, rec)
+        print(json.dumps(result, ensure_ascii=False))
+        return
     state, ai, cfg, truth = example(extra_unknown=True)
-    learner = A.Attention(enabled=args.attn_select, beta=args.attn_beta, eta=args.attn_eta, seen=SEEN)
+    learner = A.Attention(enabled=args.attn_select, beta=args.attn_beta, eta=args.attn_eta, seen=SEEN,
+                          fixed_names=answer_slot_names(state) if args.attn_fix_answer_names else ())
     with matching():
         prepared = learner.prepare("agent", 1, ai, state, cfg, Random(1), record_only=args.attn_log)
         rec = learner.finish(prepared, feedback(1, truth))
