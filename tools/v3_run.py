@@ -432,6 +432,10 @@ def worker(task: dict) -> dict:
                     seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
                     a=task["v39_a"], u=task["v39_u"], decay_mode=task.get("v39_decay", "uniform"), price=task.get("v39_price"),
                     dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None))
+        if task.get("horizon") is not None:
+            # ★ 時間の幅の旗（--horizon H、2026-10-03）：古さの重み・平均の重み・誕生の初期の成績の時間の幅を、走行の長さ T でなく H に（tools/horizon.py）
+            import horizon
+            horizon.install(int(task["horizon"]))
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
@@ -700,6 +704,8 @@ def main() -> None:
                     help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
     ap.add_argument("--cf-learn", action="store_true",
                     help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
+    ap.add_argument("--horizon", type=int, default=None,
+                    help="時間の幅：古さの重みのはしご・平均の重み・誕生の初期の成績で、走行の長さ T の代わりに H を使う（tools/horizon.py。--v39 と一緒に）")
     ap.add_argument("--e-price", type=float, default=None,
                     help="まとめの値段：E（新しい場面を既存の定義にまとめるか新しく作るか）の λ を、--v39-price（B の忘れる値段）と別に与える（--v310-be と一緒に）")
     ap.add_argument("--cf-value", action="store_true",
@@ -792,6 +798,8 @@ def main() -> None:
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
     seed = sweep.load_seed(cfg["seed_file"])
+    if args.horizon is not None and not args.v39:
+        raise SystemExit("--horizon は --v39 と一緒に使う（時間の幅を差し替える先が v39 の時間の設定のため）")
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
                and args.extend_rule == "v2" and args.charge1 == "v2"
@@ -799,7 +807,7 @@ def main() -> None:
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
                and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
-               and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
+               and args.horizon is None and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
@@ -822,7 +830,8 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare,
+              **({"horizon": args.horizon} if args.horizon is not None else {})} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     if args.score_arg_order:
         if not (args.v310_be and args.hist_role and args.score_role):
@@ -851,7 +860,8 @@ def main() -> None:
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
-                                                    "workers": args.workers}) + "\n")
+                                                    "workers": args.workers,
+                                                    **({"horizon": args.horizon} if args.horizon is not None else {})}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
