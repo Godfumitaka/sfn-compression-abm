@@ -56,6 +56,11 @@ def argv(name, count, *, fs=FS, groups=GROUPS, run=1, q=0.2, m=0.1, serial=True,
         a += [flag for flag,enabled in [('--v311c-serial',serial),('--v311c-probe-shop',shop),('--v311c-audit',audit),('--v311c-lineage',lineage),('--v311c-no-tags',no_tags)] if enabled]
     else:
         a[a.index('--seeds')+1]=str(standalone_seed)
+        cfg=json.loads((source/'config/sweep_shop_hide1_s1_2026-10-01.json').read_text())
+        cfg['seeds']={'start':standalone_seed,'count':1}
+        config_path=EV/(name+'.config.json')
+        save(config_path,cfg)
+        a[2]=str(config_path)
     return a
 
 
@@ -157,11 +162,13 @@ def inspect_population(name,path,fs,groups,count,q,m):
             # 事前固定99.9%中央二項範囲（両側の尾はそれぞれ0.0005）。
             import math
             n=len(sent)
-            prob=math.exp(n*math.log1p(-m));cdf=prob;lo=None;hi=None
+            cdf=0.0;lo=None;hi=None
             for k in range(n+1):
+                prob=math.exp(math.lgamma(n+1)-math.lgamma(k+1)-math.lgamma(n-k+1)
+                              + k*math.log(m)+(n-k)*math.log1p(-m))
+                cdf+=prob
                 if cdf>=0.0005 and lo is None:lo=k
                 if cdf>=0.9995 and hi is None:hi=k;break
-                prob=prob*(n-k)/(k+1)*m/(1-m);cdf+=prob
             check(name+' mの二項範囲',lo is not None and hi is not None and lo<=cross<=hi,cross=cross,total=n,ratio=cross/n,expected=m,central_999_range=[lo,hi])
     cats=['双方正解','同じ誤答','双方棄権','その他']
     items=next((e['items'] for e in events if e['kind']=='probe_items'),None)
