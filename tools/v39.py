@@ -585,8 +585,12 @@ def predict(agent_input, state, config, rng):
         CTX["output"] = output
         return output, ar.PendingState(state, output, agent_input, ar._snapshot_rng_state(rng, state.rng_state))
     ranked = [(map_graphs(trace.scene, agent_input.target_graph_partial), trace) for trace in state.prototype.traces]
-    mapping, selected_trace = sorted(
-        ranked, key=lambda item: (-item[0].alignment.total_score, -item[1].written_at, item[1].scene.graph_id))[0]
+    if CFG.get("sme2017"):
+        import smeshared
+        mapping, selected_trace = smeshared.choose_trace(ranked, agent_input.target_graph_partial)
+    else:
+        mapping, selected_trace = sorted(
+            ranked, key=lambda item: (-item[0].alignment.total_score, -item[1].written_at, item[1].scene.graph_id))[0]
     base = selected_trace.scene
     threshold = apply_threshold(mapping, config.threshold)
     trace = {"alignment": mapping.alignment, "support_at_adoption": 0, "R_used": None, "m_live": 0, "filled_slots": (),

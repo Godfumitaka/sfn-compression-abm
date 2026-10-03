@@ -10,6 +10,7 @@ from fractions import Fraction
 from hashlib import sha256
 import gzip
 import inspect
+import io
 import json
 import sys
 
@@ -122,7 +123,29 @@ def _old_on_new(left, right, best, params):
 
 def _log(record):
     if LOG.get("f") is not None:
-        LOG["f"].write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+        if LOG.get("diagnostic") or _diagnosing():
+            if LOG.get("diagnostic_f") is None:
+                LOG["diagnostic_f"] = _text_gzip(str(LOG["path"]).replace(".jsonl.gz", ".diagnostics.jsonl.gz"))
+            target = LOG["diagnostic_f"]
+        else:
+            target = LOG["f"]
+        target.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def _diagnosing():
+    # cf-valueは一つの保存を各席の後で復元する。二席目以降も記録は診断へ。
+    f = inspect.currentframe().f_back
+    paths = {("cfvalue", "_measure"), ("cflearn", "variants_correct"), ("probeworld", "_probe")}
+    while f is not None:
+        if (f.f_globals.get("__name__"), f.f_code.co_name) in paths:
+            return True
+        f = f.f_back
+    return False
+
+
+def _text_gzip(path):
+    # gzipの時刻も固定し、記録の内容が同じなら圧縮後も同じにする。
+    return io.TextIOWrapper(gzip.GzipFile(filename=str(path), mode="wb", mtime=0), encoding="utf-8")
 
 
 def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None, prototype_prior_weight=0.0):
@@ -205,6 +228,25 @@ def _definition_choice(candidates, scene):
     return chosen, len(tied) > 1
 
 
+def choose_trace(ranked, scene):
+    """逐語の場面選びにもID順を残さず、同じ状態の同点は同じ選択を戻す。"""
+    first = max((m.alignment.total_score, tr.written_at) for m, tr in ranked)
+    tied = [(m, tr) for m, tr in ranked if (m.alignment.total_score, tr.written_at) == first]
+    keys = {id(tr): structural_key(GRAPHS[m.alignment.sme_audit["left"]]) for m, tr in tied}
+    least = min(keys.values())
+    tied = [(m, tr) for m, tr in tied if keys[id(tr)] == least]
+    token = ("trace", VERSION, ENGINE.settings, typed_graph(scene).fingerprint(),
+             tuple(sorted((m.alignment.sme_audit["left"], tr.written_at, tr.scene.graph_id) for m, tr in tied)))
+    if token not in CHOICES:
+        options = sorted(tied, key=lambda it: (it[0].alignment.sme_audit["left"], it[1].scene.graph_id))
+        pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
+        CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
+    selected = CHOICES[token]
+    _log({"kind": "sme_trace_tie", "version": VERSION, "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
+          "selected": selected})
+    return next(it for it in tied if (it[0].alignment.sme_audit["left"], it[1].scene.graph_id) == selected)
+
+
 def select_definition(state, scene, config):
     import abm.agent_runtime as ar
     import v39
@@ -273,7 +315,7 @@ def install(path, *, tie_seed):
     OLD_MAP = sme.map_graphs
     for d in (RESULTS, GRAPHS, CHOICES, STATS, LOG):
         d.clear()
-    LOG["f"] = gzip.open(path, "wt", encoding="utf-8") if path is not None else None
+    LOG.update(f=_text_gzip(path) if path is not None else None, path=path, diagnostic=False, diagnostic_f=None)
     # 既に読み込まれた全入口と、これから読み込む入口を同じ窓口にする。
     for module in tuple(sys.modules.values()):
         if module is None or module is sys.modules[__name__]:
@@ -283,15 +325,19 @@ def install(path, *, tie_seed):
                 setattr(module, key, map_graphs)
     sme.map_graphs = map_graphs
     v39.select_definition = select_definition
+    v39.CFG["sme2017"] = True
     real_snapshot, real_restore = probeworld._snapshot_modules, probeworld._restore_modules
 
     def snapshot_modules():
-        return real_snapshot(), snapshot()
+        snap = real_snapshot(), snapshot(), LOG.get("diagnostic", False)
+        LOG["diagnostic"] = True
+        return snap
 
     def restore_modules(snap):
-        ordinary, own = snap
+        ordinary, own, phase = snap
         real_restore(ordinary)
         restore(own)
+        LOG["diagnostic"] = phase
 
     probeworld._snapshot_modules = snapshot_modules
     probeworld._restore_modules = restore_modules
@@ -300,4 +346,6 @@ def install(path, *, tie_seed):
 def close():
     if LOG.get("f") is not None:
         LOG["f"].close()
+    if LOG.get("diagnostic_f") is not None:
+        LOG["diagnostic_f"].close()
     return {"version": VERSION, "settings": asdict(ENGINE.settings), **STATS}

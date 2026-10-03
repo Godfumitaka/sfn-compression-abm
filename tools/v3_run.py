@@ -543,6 +543,9 @@ def worker(task: dict) -> dict:
         import useforget
         useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"),
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
+    if task.get("sme2017"):
+        import smereplay
+        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -556,6 +559,7 @@ def worker(task: dict) -> dict:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("sme2017"):
         rec["sme2017"] = sys.modules["smeshared"].close()
+        rec["smereplay"] = sys.modules["smereplay"].close()
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
     if task.get("v310_be"):
@@ -746,6 +750,7 @@ def main() -> None:
     ap.add_argument("--score-arg-order", action="store_true",
                     help="A の採点と初期採点、E の書換費用で対応後の引数の順も比べる（--v310-be --hist-role --score-role と一緒に）")
     ap.add_argument("--sme2017", action="store_true", help="SME2017の順つき照合と、同じ採点の関数によるN3を使う（--v39と一緒に）")
+    ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
     ap.add_argument("--hist-role", action="store_true",
@@ -859,6 +864,8 @@ def main() -> None:
         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
     if args.shop_scatter and (args.shop_world is None or args.world_cue):
         raise SystemExit("--shop-scatterはお店の世界だけで使う")
+    if args.sme_replay is not None and (not args.sme2017 or len(tasks) != 1):
+        raise SystemExit("--sme-replayはSMEの走行一本にだけ使う")
     for task in tasks:
         if args.use_forget is not None:
             if not (args.v39 and args.v310_be):
@@ -866,6 +873,8 @@ def main() -> None:
             task["use_forget"] = args.use_forget
         if args.sme2017:
             task["sme2017"] = True
+            if args.sme_replay is not None:
+                task["sme_replay"] = args.sme_replay
         if args.shop_scatter:
             task["shop_scatter"] = True
     (out_root / "flag.json").write_text(json.dumps({**({"sme2017": True} if args.sme2017 else {}),

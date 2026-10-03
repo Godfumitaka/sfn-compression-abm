@@ -13,7 +13,9 @@ import probeworld
 import shopscatter
 import shopworld
 import smeshared
+import smereplay
 import ustruct
+import useforget
 import v39
 from abm.definition import Constituent, FrozenPrice, FrequencyTable, NamedDefinition
 from abm.domains import AgentConfig, AgentInput, CorrectionMode, EdgePrediction, Entity, Prototype, Relation, RelationGraph, VerbatimTrace
@@ -28,8 +30,8 @@ def separate(monkeypatch):
     for module in tuple(sys.modules.values()):
         if module is not None and hasattr(module, "map_graphs"):
             monkeypatch.setattr(module, "map_graphs", module.map_graphs)
-    for module in (v39, ustruct, answergap, shopworld, smeshared):
-        for key in ("STATS", "CFG", "CTX", "REG", "UREG", "RESULTS", "GRAPHS", "CHOICES", "LOG", "ENGINE", "OLD_MAP"):
+    for module in (v39, ustruct, answergap, shopworld, smeshared, useforget):
+        for key in ("ST", "STATS", "CFG", "CTX", "REG", "UREG", "RESULTS", "GRAPHS", "CHOICES", "LOG", "ENGINE", "OLD_MAP"):
             if hasattr(module, key):
                 current = getattr(module, key)
                 monkeypatch.setattr(module, key, {} if isinstance(current, dict) else current)
@@ -175,3 +177,65 @@ def test_scatter_preserves_tree_cue_coins_and_answer_rule():
                 assert len(changed) == 8
                 assert new[info["sig_id"]].arguments == (opaque_id(1, t, "entity:a"),)
                 assert new[info["door_id"]].predicate == shopworld.door_pred(world, shopworld.TYPE[original.motif], cue)
+
+
+def test_d_name_use_once_and_unknown_not_used():
+    g, scene = competition("d", "A"), competition("s", "A", False)
+    state = memory(g)
+    config = AgentConfig(0, CorrectionMode.NONE, tau_acc=0.67, local_lambda=1, higher_order_predicates=frozenset({"cause"}))
+    useforget.ST.update(t=1, rec={"uses": [], "struct": [], "answer": None}, S={}, used_t=set(), n_use={}, stats={"uses": 0})
+    selected = v39.select_definition(state, scene, config)
+    useforget._record_matching(state, scene, selected)
+    assert useforget.ST["stats"]["uses"] == 8
+    assert useforget.ST["rec"]["struct"] == [[8, "F"]]
+    output, _ = v39.predict(AgentInput(g, scene), state, config, Random(1))
+    useforget._record_answer(state, output)
+    assert useforget.ST["stats"]["uses"] == 9
+    # 候補の再検査を増やしても、同じ試行の名前の使用は増えない。
+    for _ in range(3):
+        useforget._record_matching(state, scene, v39.select_definition(state, scene, config))
+        useforget._record_answer(state, output)
+    assert useforget.ST["stats"]["uses"] == 9
+    assert all(n == 1 for n in useforget.ST["n_use"].values())
+
+
+def test_candidate_order_same_choice_and_delivered_alignment():
+    good = competition("d", "A")
+    other = competition("o", "B")
+    target = competition("s", "A", False)
+    state = memory(good)
+    second = memory(other, "Other")
+    state = replace(state, definitions={**state.definitions, **second.definitions}, slot_history={**state.slot_history, **second.slot_history})
+    config = AgentConfig(0, CorrectionMode.NONE)
+    initial = smeshared.snapshot()
+    result = v39.select_definition(state, target, config)
+    smeshared.restore(initial)
+    reverse = replace(state, definitions=dict(reversed(list(state.definitions.items()))))
+    result2 = v39.select_definition(reverse, target, config)
+    assert result[2].name == result2[2].name == "R"
+    assert result[4] == result2[4]
+
+
+def test_diagnosis_twice_restores_broker_frequency_memory_and_world_rng():
+    g, scene = competition("d", "A"), competition("s", "A", False)
+    state = memory(g)
+    rng = Random(1)
+    before = repr(state), rng.getstate(), smeshared.snapshot()
+    for _ in range(2):
+        snap = probeworld._snapshot_modules()
+        predict(g, scene)
+        probeworld._restore_modules(snap)
+    assert repr(state) == before[0] and rng.getstate() == before[1]
+    assert smeshared.snapshot() == before[2]
+
+
+def test_saved_state_retains_argument_order_and_four_score_columns():
+    g = competition("d", "A")
+    state = memory(g)
+    rec = v39.SeatRec(0, "F", 1, 2, tuple((float(i),) * 16 for i in (7, 3, 9, 1)), v39.ZERO4)
+    state = replace(state, v39_seats={("R", 0): rec})
+    saved = json.loads(json.dumps(smereplay.encode(state)))
+    restored = smereplay.decode(saved)
+    assert smereplay.encode(restored) == saved
+    assert restored.definitions["R"].constituents[0].relation.arguments == ("du", "da")
+    assert tuple(x[0] for x in restored.v39_seats["R", 0].init) == (7, 3, 9, 1)
