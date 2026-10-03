@@ -1,0 +1,936 @@
+{
+  "first": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/world1_rebuild/n3_w1_A_L50/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+  "second": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/world1_mac_repro/n3_w1_A_L50_repeat/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+  "comparison_excluded_fields": [],
+  "header_raw_bytes_match": true,
+  "header_changed_fields": [],
+  "body_sha256_first": "0b0fe3eea24c7849d99869b10d72be3a5a9d99d528ffeea00891fc2b8a187eb4",
+  "body_sha256_second": "0b0fe3eea24c7849d99869b10d72be3a5a9d99d528ffeea00891fc2b8a187eb4",
+  "body_row_counts": [
+    1740,
+    1740
+  ],
+  "raw_differing_body_rows": 0,
+  "value_differing_body_rows": 0,
+  "row_identity_mismatch_count": 0,
+  "field_difference_row_counts": {},
+  "first_difference_examples": {},
+  "inventory": {
+    "header": {
+      "agent_ids": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "list": 2
+        }
+      },
+      "arm_abstain_charge": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "bool": 2
+        }
+      },
+      "arm_adaptation_table": {
+        "present": 2,
+        "null": 2,
+        "types": {
+          "NoneType": 2
+        }
+      },
+      "arm_alpha": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_beta": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_d_shared": {
+        "present": 2,
+        "null": 2,
+        "types": {
+          "NoneType": 2
+        }
+      },
+      "arm_f_profile": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_fill_selection": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_holdout_repr": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_identification_graph": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_kappa": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_lambda_mix": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_local_lambda": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_pricing_rule": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_refill_rule": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_repair_scope": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_self_score_cache": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "arm_temperature": {
+        "present": 2,
+        "null": 2,
+        "types": {
+          "NoneType": 2
+        }
+      },
+      "arm_verbatim_theta": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "arm_w": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "code_commit": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "f_setting": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "record_type": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "run_seed": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "int": 2
+        }
+      },
+      "seed_file_sha256": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      },
+      "tau_acc": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "theta_prime": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "float": 2
+        }
+      },
+      "trial_count": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "int": 2
+        }
+      },
+      "world_hash": {
+        "present": 2,
+        "null": 0,
+        "types": {
+          "str": 2
+        }
+      }
+    },
+    "body": {
+      "L_DgH": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "L_H": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "M051_balance": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 2,
+          "float": 3478
+        }
+      },
+      "OA": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "R_used": {
+        "present": 3480,
+        "null": 4,
+        "types": {
+          "NoneType": 4,
+          "str": 3476
+        }
+      },
+      "Sel": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "V_vocab": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "abstain_reason": {
+        "present": 3480,
+        "null": 2220,
+        "types": {
+          "str": 1260,
+          "NoneType": 2220
+        }
+      },
+      "accuracy": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "activated_prototype": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "agent_id": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "agent_state_snapshot_hash": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "alignment_candidates": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "candidate_distribution": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "charge_source": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "coin_t": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "constituent_reason_123": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "dict": 3480
+        }
+      },
+      "constituent_states": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "constitution": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "coordination_gain": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "correction_mode": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "counterfactual_predictions": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "coverage": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "dangling_ref_duration": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "dangling_ref_onset": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "def_R_diff": {
+        "present": 3480,
+        "null": 2,
+        "types": {
+          "NoneType": 2,
+          "dict": 3478
+        }
+      },
+      "deletion_ell": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "deletion_event": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "description_length": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "door_pred": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "entity_map_covered": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      },
+      "enumeration_version": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "error_agreement": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "error_correlation": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "error_direction_prototype_consistent": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "exception_bits_charged": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "expansion_and_filling_all": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "f_fired": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      },
+      "f_realized": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "feedback_content": {
+        "present": 3480,
+        "null": 1678,
+        "types": {
+          "NoneType": 1678,
+          "dict": 1802
+        }
+      },
+      "filled_predicate": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "filling_empty_pool_slots": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "flat_matcher_baseline_hit": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "flat_matcher_baseline_prediction": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "frequency_baseline_hit": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "frequency_baseline_prediction": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "held_out_content": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "dict": 3480
+        }
+      },
+      "held_out_is_door": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      },
+      "hit": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "instance_id": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "lambda": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "m_alloc": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "m_live": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "matcher": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "merit_event_times": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "n_tie_candidates": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "observable_mask_edges": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "oracle_verdict": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "outcome_category": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "p0": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "p1": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "partner_id": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "pending_claims_confirmed": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "pending_claims_new": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "pending_claims_open": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "pending_merit_awarded": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "predicted_edge": {
+        "present": 3480,
+        "null": 1260,
+        "types": {
+          "NoneType": 1260,
+          "dict": 2220
+        }
+      },
+      "prediction_kind": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "prediction_order": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "prediction_path": {
+        "present": 3480,
+        "null": 1260,
+        "types": {
+          "NoneType": 1260,
+          "str": 2220
+        }
+      },
+      "predictions_all_slots": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "prototype_present_at_presentation": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "prototype_version": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "pruning_events": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "record_type": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "reg_del_events": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "registration_event": {
+        "present": 3480,
+        "null": 2,
+        "types": {
+          "NoneType": 2,
+          "dict": 3478
+        }
+      },
+      "run_id": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "scene_G_star_ref": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "seed_id": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "sending_policy": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "shop_cue": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "shop_type": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "str": 3480
+        }
+      },
+      "slot_history_size": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "slot_signature": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "state_snapshot": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "dict": 3480
+        }
+      },
+      "support_at_adoption": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "target_type": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "tau": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "tau_passed_defs": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "list": 3480
+        }
+      },
+      "theta_prime": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "float": 3480
+        }
+      },
+      "threshold": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "tie_event": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      },
+      "timestamp": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "total_score_breakdown": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "transmission_event": {
+        "present": 3480,
+        "null": 3480,
+        "types": {
+          "NoneType": 3480
+        }
+      },
+      "type2_fired": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      },
+      "verbatim_baseline_hit": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "int": 3480
+        }
+      },
+      "verbatim_baseline_prediction": {
+        "present": 3480,
+        "null": 630,
+        "types": {
+          "NoneType": 630,
+          "dict": 2850
+        }
+      },
+      "verbatim_written": {
+        "present": 3480,
+        "null": 0,
+        "types": {
+          "bool": 3480
+        }
+      }
+    }
+  }
+}
