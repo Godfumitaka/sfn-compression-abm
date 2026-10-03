@@ -473,6 +473,9 @@ def worker(task: dict) -> dict:
         worldvariant.install(float(task.get("world_cue_p", 0.8)))
         if "v39" in sys.modules:
             worldvariant.extend_dictionary()
+    if task.get("score_arg_order"):
+        import argorder
+        argorder.install()
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -720,6 +723,8 @@ def main() -> None:
                     help="同点の並べ方：変換の同点を、名前や番号ではなく構造だけの鍵（生まれた試行・階・親の述語と位置）で並べる（--v39 と一緒に。tools/tiestruct.py）")
     ap.add_argument("--score-role", action="store_true",
                     help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
+    ap.add_argument("--score-arg-order", action="store_true",
+                    help="A の採点と初期採点、E の書換費用で対応後の引数の順も比べる（--v310-be --hist-role --score-role と一緒に）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
@@ -819,7 +824,12 @@ def main() -> None:
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
               "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
-    (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
+    if args.score_arg_order:
+        if not (args.v310_be and args.hist_role and args.score_role):
+            raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
+        for task in tasks:
+            task["score_arg_order"] = True
+    (out_root / "flag.json").write_text(json.dumps({**({"score_arg_order": True} if args.score_arg_order else {}), "nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
                                                     "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,

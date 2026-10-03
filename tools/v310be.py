@@ -61,7 +61,8 @@ def score_answers(seats, ans, received, t):
             STATS["score_other_position"] += 1
             continue
         lp = _ell(received.predicate, L)
-        r = {x: (0.0 if it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
+        pos_ok = not CFG.get("score_arg_order") or tuple(it["pos"]) == tuple(received.arguments)
+        r = {x: (0.0 if pos_ok and it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
         inc = (r["F"] if it["st"] == "F" else 0.0, r["H"], r["U"], 1.0)
         seats[key] = v39.rec_add(rec, t, inc)
         scored.append([it["slot"], it["st"], r["F"] if it["st"] == "F" else None, r["H"], r["U"]])
@@ -140,7 +141,8 @@ def score_answers_role(seats, ans, received, t):
         STATS["score_role_scored"] += 1
         STATS["score_role_scored_pos_differs"] += not old
         lp = _ell(received.predicate, L)
-        r = {x: (0.0 if it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
+        pos_ok = not CFG.get("score_arg_order") or old
+        r = {x: (0.0 if pos_ok and it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
         inc = (r["F"] if it["st"] == "F" else 0.0, r["H"], r["U"], 1.0)
         seats[key] = v39.rec_add(rec, t, inc)
         scored.append([it["slot"], it["st"], r["F"] if it["st"] == "F" else None, r["H"], r["U"]])
@@ -161,11 +163,28 @@ def init_rec(d, row, state, base, target, trial, base_age, config):
     u_old, u_why_old = v39.u_answer(d, row, base, state.p_hat, config.higher_order_predicates)
     r_old = (0.0, 0.0 if h == p else lp, 0.0 if u_old == p else lp, 1.0)
     r_cur = (0.0, 0.0 if h == p else lp, 0.0 if u_cur == p else lp, 1.0)
+    ordered = None
+    if CFG.get("score_arg_order"):
+        import argorder
+        (obs_old, pos_old), (obs_cur, pos_cur) = argorder.birth_observations(row, base, target)
+
+        def costs(observed, position, ua):
+            length = _ell(observed.predicate, L)
+            return tuple(0.0 if argorder.correct(a, position, observed) else length for a in (p, h, ua)) + (1.0,)
+
+        r_old = costs(obs_old, pos_old, u_old)
+        r_cur = costs(obs_cur, pos_cur, u_cur)
+        ordered = {"position_old": list(pos_old) if pos_old is not None else None,
+                   "position_current": list(pos_cur) if pos_cur is not None else None,
+                   "observed_old": obs_old.to_dict(), "observed_current": obs_cur.to_dict(),
+                   "r_old": list(r_old), "r_current": list(r_cur)}
     w = tuple(f ** max(base_age, 0) for f in v39.CFG["decay"])
     init = tuple(tuple(k * so + sc for k in w) for so, sc in zip(r_old, r_cur))
     v39.CTX["births_rec"].append({"slot": row.slot_index, "rF": 0.0, "rH": r_cur[1], "rU旧": r_old[2], "rU今": r_cur[2],
                                   "H答え": h, "U答え": [u_old, u_cur], "理由": [h_why, u_why_old, u_why],
                                   "履歴": v39.hist_counts(state.slot_history.get((d.name, row.slot_index)))})
+    if ordered is not None:
+        v39.CTX["births_rec"][-1].update(rF=r_cur[0], ordered_arguments=ordered)
     return v39.SeatRec(0, "F", trial, trial, init, v39.ZERO4)
 
 
@@ -304,7 +323,8 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
     hist = state_a.slot_history
     g = v39.v39_graph(d, hist)
     try:
-        rm = sme.map_graphs(g, x).alignment.relation_mapping
+        alignment = sme.map_graphs(g, x).alignment
+        rm = alignment.relation_mapping
     finally:
         v39.unregister(g)
     x_by_id = {r.relation_id: r for r in x.relations}
@@ -325,7 +345,12 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
                 got = row.relation.predicate
             else:
                 got, _ = v39.h_answer(d, row, hist, state_a.p_hat, config.local_lambda, config.higher_order_predicates)
-            if got != want:
+            pos_ok = True
+            if CFG.get("score_arg_order"):
+                from abm.filling import _mapped_arguments
+                pos = _mapped_arguments(row.relation, alignment.entity_mapping, rm)
+                pos_ok = pos is not None and tuple(pos) == tuple(x_by_id[cid].arguments)
+            if got != want or not pos_ok:
                 ren.append(want)
         else:
             unmapped_seats += 1

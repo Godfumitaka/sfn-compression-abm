@@ -79,6 +79,14 @@ def _apply_init(state, t, why, events, fo):
         lo = v310be._ell(o, L)
         rH = 0.0 if ha == o else lo
         rU = 0.0 if ua == o else lo
+        if v310be.CFG.get("score_arg_order"):
+            import argorder
+            observed, position = argorder.relearn_observation(d.name, row.slot_index, why)
+            if observed is None or observed.predicate != o:
+                raise RuntimeError("順つきの覚え直し採点：履歴と観察した関係が一致しない")
+            rH = 0.0 if argorder.correct(ha, position, observed) else lo
+            rU = 0.0 if argorder.correct(ua, position, observed) else lo
+            rec.update(position=list(position) if position is not None else None, observed=observed.to_dict())
         col = lambda v: (float(v),) * 16  # noqa: E731
         key = (d.name, row.slot_index)
         seats[key] = replace(seats[key], init=(col(0.0), col(rH), col(rU), col(1.0)))

@@ -22,6 +22,7 @@ from __future__ import annotations
 
 STATS: dict = {}
 CFG: dict = {}       # u_all_orders：tools/ustruct.py（--u-struct）が立てる。U の席は階を問わず親の子の規則で観察する
+CTX: dict = {}       # 順つきの初期採点のため、実際に観察を届けた対応だけを控える
 
 
 def _stats_zero():
@@ -80,10 +81,15 @@ def make(orig, *, real: bool):
             if not reg["was_extension"]:
                 S["births"] += 1
                 S["birth_rows"] += len(d.constituents)
+        ordered_observations = {} if real and CFG.get("ordered_observations") else None
         for row in d.constituents:
             key = (R, row.slot_index)
             if _is_higher(row.relation, rel_ids):
                 if not (CFG.get("u_all_orders") and not row.alive and key not in pre):
+                    if ordered_observations is not None:
+                        from abm.filling import _mapped_arguments
+                        pos = _mapped_arguments(row.relation, al.entity_mapping, al.relation_mapping)
+                        ordered_observations[key] = tuple((c, pos) for c in target.relations if pos is not None and c.arguments == pos)
                     if S is not None:
                         S["seats_higher"] += 1
                     continue
@@ -109,6 +115,10 @@ def make(orig, *, real: bool):
                     kids.append(c)
             for c in kids:
                 hist = observe_slot(hist, R, row.slot_index, c.predicate, lam)
+            if ordered_observations is not None:
+                from abm.filling import _mapped_arguments
+                pos = _mapped_arguments(row.relation, al.entity_mapping, al.relation_mapping)
+                ordered_observations[key] = tuple((c, pos) for c in kids)
             if S is not None:
                 S["seats_first"] += 1
                 S["obs_old_first"] += old_obs
@@ -132,6 +142,8 @@ def make(orig, *, real: bool):
                     S["birth_first_rows"] += 1
                     S["birth_first_parentless"] += not parents
         from dataclasses import replace
+        if ordered_observations is not None:
+            CTX["observations"] = ordered_observations
         return replace(out, slot_history=hist), reg
 
     return m1
