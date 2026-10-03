@@ -1,0 +1,64 @@
+{"name": "serial2_simultaneous 完走", "passed": true, "trials": 100, "errors": []}
+{"name": "serial2_simultaneous 受信の採点・名札費用", "passed": true}
+{"name": "serial2_serial 完走", "passed": true, "trials": 100, "errors": []}
+{"name": "serial2_serial 受信の採点・名札費用", "passed": true}
+{"name": "直列と同時（2体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209", "rows": 100}, "seed1001.jsonl.gz": {"sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be", "rows": 100}}, "right": {"seed001.jsonl.gz": {"sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209", "rows": 100}, "seed1001.jsonl.gz": {"sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be", "rows": 100}}}
+{"name": "直列と同時（2体） 通信事象", "passed": true, "left": {"sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f", "rows": 157}, "right": {"sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f", "rows": 157}}
+{"name": "no_comm_r1 完走", "passed": true, "trials": 1740, "errors": []}
+{"name": "no_comm_r1 受信の採点・名札費用", "passed": true}
+{"name": "no_comm_r1 個体数", "passed": true}
+{"name": "no_comm_r1 fの毎試行値", "passed": true, "checked_rows": 13920}
+{"name": "no_comm_r1 世界課題の分母", "passed": true, "correct": 9629, "wrong": 63, "silence": 4228, "total": 13920}
+{"name": "no_comm_r1 答えの出どころの台帳照合", "passed": true, "answer_rows": 9692, "wrong_sources": {"H": 63}}
+{"name": "no_comm_r1 送信配送受信・同試行・自己配送なし", "passed": true, "sent": 0, "recv": 0}
+{"name": "no_comm_r1 黙りから送らない・答えは増やさない", "passed": true, "bundles": 9692}
+{"name": "no_comm_r1 束の参照本数", "passed": true}
+{"name": "no_comm_r1 m=0の組間配送", "passed": true, "cross": 0, "total": 0}
+{"name": "no_comm_r1 問い・対の再集計", "passed": true, "split": {"within": {"双方正解": 2876, "同じ誤答": 78, "双方棄権": 428, "その他": 698}, "cross": {"双方正解": 3795, "同じ誤答": 63, "双方棄権": 574, "その他": 1008}}}
+{"name": "no_comm_r1 報告の初期採点のsource", "passed": true, "births": 0}
+{"name": "no_comm_r1 未記載は反証・取消にしない", "passed": true}
+{"name": "no_comm_r1 世界の学習のsource", "passed": true, "counts": {"initial_unscored": 8, "scored": 13912}, "errors": []}
+{"name": "no_comm_r1 報告の採点欄とsource", "passed": true, "counts": {}, "errors": []}
+開始 default2_baseline
+{"name": "default2_baseline 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "default2_baseline 受信の採点・名札費用", "passed": true}
+終了 default2_baseline
+開始 default2_current
+{"name": "default2_current 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "default2_current 受信の採点・名札費用", "passed": true}
+終了 default2_current
+{"name": "追加旗が全てオフと土台（2体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339", "rows": 200}}, "right": {"seed001.jsonl.gz": {"sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339", "rows": 200}}}
+{"name": "追加旗が全てオフと土台（2体） 通信事象", "passed": true, "left": {"sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b", "rows": 332}, "right": {"sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b", "rows": 332}}
+開始 solo_r1_a0
+開始 solo_r1_a1
+終了 solo_r1_a0
+{"name": "通信なし8体と単独：個体0", "passed": true, "collective": {"sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377", "rows": 1740}, "solo": {"sha256": "41f4c0f6cfcc5ed4725fc91a570151efaf5ba51c38a6e07e49915252570b5377", "rows": 1740}}
+開始 solo_r1_a2
+終了 solo_r1_a1
+{"name": "通信なし8体と単独：個体1", "passed": true, "collective": {"sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838", "rows": 1740}, "solo": {"sha256": "f6027e0b3daef53c5b1da9bab7ea2ec14a0436d8340a6287516a18498c914838", "rows": 1740}}
+開始 solo_r1_a3
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 327, in <module>
+    try:main()
+        ^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 293, in main
+    parallel(solo1,range(8))
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 48, in parallel
+    try:future.result()
+        ^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 291, in solo1
+    solo=run_job(f'solo_r1_a{i}',1740,solo_agent=i,q=0,m=0)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 135, in run_job
+    if len(hh['foreign_heavy'])+active_cap>4: raise RuntimeError('機械の並列上限：SME等を優先して今回の処理を停止')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 機械の並列上限：SME等を優先して今回の処理を停止
+
