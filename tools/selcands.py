@@ -43,6 +43,8 @@ W = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(W, "tools"), W]
 
 T_PREDS = {"couple", "anchor", "steer", "shield"}
+# ★ 追記（2026-10-03）：候補に欄を足す差し込み口。f(d, al, st, scene, config, stt, kinds) → dict。空なら何もしない（これまでと同じ出力）
+EXTRA: list = []
 ROOT_PREDS = {"govern", "sustainedby"}
 
 
@@ -181,7 +183,10 @@ def one_trial(st, wt, row_real, config, agent, t, info, pred_by_id, door_ids, ro
                       "自己の点 S(d,d)": S_dd, "自己の点 S(x,x)": S_xx,
                       "門を通る（今の門、支持の割合）": support >= ar._need(config.tau_acc, n),
                       "写らなかった F・H の席（種類別）": unmatched, "ドア・シール・link の席": seats,
-                      "_cand": (support / n, support, d, graph, al2, n)})
+                      "_cand": (support / n, support, d, graph, al2, n),
+                      **{k: v for f in EXTRA for k, v in f(d, al, st, scene, config, stt,
+                                                           {r.relation.relation_id: kind_of(r.relation.relation_id, pred_by_id, sw.IDS, door_ids, role_ids)
+                                                            for r in d.constituents}).items()}})
         v39.unregister(graph)
     cands.sort(key=lambda c: (-c["割合"], -c["分母"], -c["生まれた試行"], c["R"]))
     for k, c in enumerate(cands):
