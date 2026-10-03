@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 import gzip, hashlib, json, os, re, signal, subprocess, sys, time, traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import RLock, Event
+from coll8_source_check import validate_source
 
 SOURCE = Path(__file__).resolve().parents[2]
 ROOT = SOURCE.parent
@@ -249,20 +250,23 @@ def inspect_population(name,path,fs,groups,count,q,m):
     births=[r for r in recv if r.get('result')=='誕生']
     check(name+' 報告の初期採点のsource',all(r.get('E',{}).get('source')=='報告' for r in births),births=len(births))
     check(name+' 未記載は反証・取消にしない',all(c[5]['取消']==1 for r in recv for c in (r.get('E') or {}).get('cands',[])))
-    side_sources=[]
-    no_learning_rows=0
-    bad_no_learning_rows=[]
+    source_counts=__import__('collections').Counter()
+    source_errors=[]
     for p in (path/'side').glob('*/*.jsonl'):
         for line in p.open():
             r=json.loads(line)
             if r.get('kind')=='v310be':
-                if r.get('x')=='no_m1' and r.get('source') is None:
-                    # 未学習の初期行はsourceの対象外。採点が0であることは別に確かめる。
-                    no_learning_rows+=1
-                    if r['R_B']!=0 or r['R_E']!=0:bad_no_learning_rows.append({'file':str(p),'trial':r['trial']})
-                else:side_sources.append(r.get('source'))
-    check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'} and not bad_no_learning_rows,
-          world_learning_rows=len(side_sources),no_learning_rows=no_learning_rows,bad_no_learning_rows=bad_no_learning_rows)
+                try:source_counts[validate_source(r,'世界')]+=1
+                except ValueError as e:source_errors.append({'file':str(p),'trial':r.get('trial'),'error':str(e)})
+    check(name+' 世界の学習のsource',sum(source_counts.values())==len(fs)*count and not source_errors,
+          counts=source_counts,errors=source_errors)
+    report_counts=__import__('collections').Counter()
+    report_errors=[]
+    for r in recv:
+        if r.get('E'):
+            try:report_counts[validate_source(r['E'],'報告')]+=1
+            except ValueError as e:report_errors.append({'bundle':r['bundle'],'trial':r['t'],'error':str(e)})
+    check(name+' 報告の採点欄とsource',not report_errors,counts=report_counts,errors=report_errors)
     stats={'name':name,'q':q,'m':m,'sent':len(sent),'within':sum(groups[r['agent']]==groups[r['to']] for r in sent),
            'cross':sum(groups[r['agent']]!=groups[r['to']] for r in sent),'receive_results':__import__('collections').Counter(r.get('result') for r in recv),
            'world':{'total':len(fs)*count,'correct':correct,'wrong':wrong,'silence':silence,'wrong_sources':sources}}
