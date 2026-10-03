@@ -104,3 +104,31 @@ def test_reverse_order_has_rewrite_cost(monkeypatch):
     _, off = v310be.rewrite(state, "R", x, {"fold": 7}, SimpleNamespace(), {"t"})
     assert on["書換数"] == 1 and off["書換数"] == 0
     assert on["書換"] - off["書換"] == 9.0
+
+
+@pytest.mark.parametrize("initial,delta,expected_value", [("F", 3, 0.01), ("H", 7, 0.03 / 7)])
+def test_be_forgetting_matches_hand_calculation(monkeypatch, initial, delta, expected_value):
+    # 二席のうち片方だけを変換する。もう一席を残し、退役の費用を混ぜない。
+    rows = tuple(Constituent(i, 0, Relation(str(i), p if i or initial == "F" else v39.ERASED,
+                                           ("a", "b")), FrozenPrice(1, 0, 0, 0), bool(i or initial == "F"))
+                 for i, p in enumerate(("p", "q")))
+    d = NamedDefinition("R", rows, 2, 0)
+    col = lambda x: (x,) * 16
+    init = (col(0.0), col(0.03 if initial == "F" else 0.0), col(10.0 if initial == "F" else 0.03), col(1.0))
+    seats = {("R", 0): v39.SeatRec(0, initial, 0, 0, init, v39.ZERO4),
+             ("R", 1): v39.SeatRec(0, "F", 0, 0, (col(0.0), col(10.0), col(10.0), col(1.0)), v39.ZERO4)}
+    state = v39._state_class()(definitions={"R": d}, slot_history={("R", 0): {"p": 1}, ("R", 1): {"q": 1}},
+                             p_hat=FrequencyTable({"p": 1, "q": 1}, 2, 0.1, frozenset({"p", "q"})), v39_seats=seats)
+    monkeypatch.setattr(v39, "_candidates", v310be.candidates)
+    monkeypatch.setattr(v39, "_POW", {})
+    v39.CFG.update(D=2, T=1740, dict_index={"p": 0, "q": 1}, mean_weights=None,
+                   price=0.01873710622997919, budget=None, seed=1)
+    v39.CTX["cost_mismatch"] = []
+    v39.CTX["struct_cache"] = {}
+    candidates = v310be.candidates(state, d, 0, {"p": 1, "q": 1}, 1)
+    assert candidates[0][0] == pytest.approx(expected_value)
+    assert candidates[0][4] == delta
+    after, events, before_bits, after_bits, _, _ = v39.run_conversions(state, 0)
+    assert len(events) == 1 and events[0]["v39"] == ("FH" if initial == "F" else "HU")
+    assert before_bits - after_bits == delta
+    assert after.v39_seats["R", 0].state == ("H" if initial == "F" else "U")
