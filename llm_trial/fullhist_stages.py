@@ -13,7 +13,8 @@
 推論に使った量：出力のトークン数から、本文（答えの JSON）のトークン数（数える API、正味）を引いた見積もり。推論の文字数も残す。
 追記（2026-10-02 朝）：段階を組み直した（STAGES の 新2・新4・新5。新1＝"1"、新3＝"2"）。新2 は過去の場面を、伏せた関係に正解を戻した
   完全な場面（world.complete_text）として、同じ書式で並べる（INTRO_OBS・prompt_obs）。組の種を引数で変えられる（確かめは調整に使っていない組で）。
-使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階> [組の種（既定 1）]'"""
+使い方（鍵のある環境で）  zsh -ic 'python3.12 llm_trial/fullhist_stages.py <出力の場所> <世界> <段階> [組の種（既定 1）] [--door-fraction <ドアの割合>]'"""
+import argparse
 import json
 import os
 import sys
@@ -76,16 +77,24 @@ BASE = [None]
 
 
 def main():
-    out, world, stage = sys.argv[1], int(sys.argv[2]), sys.argv[3]
-    set_seed = int(sys.argv[4]) if len(sys.argv) > 4 else 1
+    parser = argparse.ArgumentParser()
+    parser.add_argument("out")
+    parser.add_argument("world", type=int)
+    parser.add_argument("stage")
+    parser.add_argument("set_seed", nargs="?", type=int, default=1)
+    parser.add_argument("--door-fraction", type=float)
+    args = parser.parse_args()
+    out, world, stage, set_seed = args.out, args.world, args.stage, args.set_seed
     os.makedirs(out, exist_ok=True)
     api.set_ledger(os.path.join(os.path.dirname(out.rstrip("/")), "費用.jsonl"))
-    cfg = STAGES[stage]
+    cfg = STAGES[stage].copy()
+    if args.door_fraction is not None:
+        cfg["door_fraction"] = args.door_fraction
     BASE[0] = api.count_tokens(cfg["model"], "a") if cfg.get("model") else api.haiku_count("a")
     mm.THINK = cfg["think"]
     if cfg.get("model"):
         mm.MODEL[0], mm.EFFORT[0], mm.DISPLAY[0] = cfg["model"], cfg.get("effort"), DISPLAY
-    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"))
+    st = w.make_set(set_seed, world, "v2", cfg["mult"], cfg["door_all"], cfg.get("exc"), door_fraction=cfg.get("door_fraction"))
     _h, tests = sd.build(set_seed, world, 4)
     full = [w.complete_text(set_seed, world, s["i"], s["research"], st["vocab"]) for s in st["series"]] if cfg.get("observed") else None
 

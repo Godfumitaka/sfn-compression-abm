@@ -123,11 +123,12 @@ def render(rels, hidden, rng, voc):
                               "truth_symbol": voc[truth]}
 
 
-def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None):
+def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None, *, door_fraction=None):
     """一組：学習の系列 40 場面と試験の場面。世界 1・2 で順番・伏せ方・番号の引き方は同じ（述語だけ表に従って変わる）。
     view＝"v2" のときは見せ方 v2（render_v2：字下げの決まった順）で書く。順番・伏せ方・番号は v1 と同じ（乱数の引き方が同じ）。
     mult：各場合の場面の数を COUNTS の何倍にするか（2 なら 80 場面）。door_all：全部の場面でドアを伏せる。どちらも乱数の引き方の規則は同じ。
-    exc：例外の割合（店ごとに round(20×mult×exc) 場面を例外に。None なら COUNTS のまま＝0.2）。"""
+    exc：例外の割合（店ごとに round(20×mult×exc) 場面を例外に。None なら COUNTS のまま＝0.2）。
+    door_fraction：ドアを伏せる割合。None は従来の半分。場面数×割合が整数の値を指定する。"""
     voc = vocab(set_seed)
     render = globals()["render_v2"] if view == "v2" else globals()["render"]
     rng = random.Random(f"order|{set_seed}")
@@ -140,7 +141,15 @@ def make_set(set_seed, world, view="v1", mult=1, door_all=False, exc=None):
             counts[(typ, "n")] = per_shop - counts[(typ, "e")]
     seq = [c for c in CASES for _ in range(counts[c])]
     rng.shuffle(seq)
-    door_pos = set(rng.sample(range(len(seq)), len(seq) // 2))
+    door_count = len(seq) // 2
+    if door_fraction is not None:
+        if not 0 <= door_fraction <= 1:
+            raise ValueError("ドアの割合は0以上1以下")
+        exact_count = len(seq) * door_fraction
+        if exact_count != int(exact_count):
+            raise ValueError("場面数×ドアの割合が整数になる値を指定する")
+        door_count = int(exact_count)
+    door_pos = set(rng.sample(range(len(seq)), door_count))
     if door_all:
         # 全部の場面でドアを伏せる（委任書「全履歴の段階」2026-10-02 朝の段階 2・4）。乱数の流れを変えないよう、引いたうえで全部にする
         door_pos = set(range(len(seq)))
