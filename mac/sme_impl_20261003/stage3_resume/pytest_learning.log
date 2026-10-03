@@ -1,0 +1,110 @@
+........................FF...................                            [100%]
+=================================== FAILURES ===================================
+____________ test_be_forgetting_matches_hand_calculation[F-3-0.01] _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106357e60>
+initial = 'F', delta = 3, expected_value = 0.01
+
+    @pytest.mark.parametrize("initial,delta,expected_value", [("F", 3, 0.01), ("H", 7, 0.03 / 7)])
+    def test_be_forgetting_matches_hand_calculation(monkeypatch, initial, delta, expected_value):
+        # 二席のうち片方だけを変換する。もう一席を残し、退役の費用を混ぜない。
+        rows = tuple(Constituent(i, 0, Relation(str(i), p if i or initial == "F" else v39.ERASED,
+                                               ("a", "b")), FrozenPrice(1, 0, 0, 0), bool(i or initial == "F"))
+                     for i, p in enumerate(("p", "q")))
+        d = NamedDefinition("R", rows, 0, 1)
+        col = lambda x: (x,) * 16
+        init = (col(0.0), col(0.03 if initial == "F" else 0.0), col(10.0 if initial == "F" else 0.03), col(1.0))
+        seats = {("R", 0): v39.SeatRec(0, initial, 0, 0, init, v39.ZERO4),
+                 ("R", 1): v39.SeatRec(0, "F", 0, 0, (col(0.0), col(10.0), col(10.0), col(1.0)), v39.ZERO4)}
+        state = v39._state_class()(definitions={"R": d}, slot_history={("R", 0): {"p": 1}, ("R", 1): {"q": 1}},
+                                 p_hat=FrequencyTable({"p": 1, "q": 1}, 2, 0.1, frozenset({"p", "q"})), v39_seats=seats)
+        monkeypatch.setattr(v39, "_candidates", v310be.candidates)
+        monkeypatch.setattr(v39, "_POW", {})
+        v39.CFG.update(D=2, T=1740, dict_index={"p": 0, "q": 1}, mean_weights=None,
+                       price=0.01873710622997919, budget=None, seed=1)
+        v39.CTX["cost_mismatch"] = []
+        candidates = v310be.candidates(state, d, 0, {"p": 1, "q": 1}, 1)
+        assert candidates[0][0] == pytest.approx(expected_value)
+        assert candidates[0][4] == delta
+>       after, events, before_bits, after_bits, _, _ = v39.run_conversions(state, 0)
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tools/test_argorder_component.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v39.py:902: in run_conversions
+    before = total_bits(state, L)
+             ^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:165: in total_bits
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:165: in <genexpr>
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relation_id='0', ...rice(ell_frozen=1, c=0, hold_cost=0, m_alloc_at_reg=0), alive=True)), m_alloc=0, registered_at=1, assimilation_count=1)
+slot_history = {('R', 0): {'p': 1}, ('R', 1): {'q': 1}}, L = {'p': 1, 'q': 1}
+
+    def definition_bits(d, slot_history, L) -> int:
+        key = (d.name, d.registered_at, tuple((r.slot_index, r.registered_at) for r in d.constituents))
+>       sb = CTX["struct_cache"].get(key)
+             ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'struct_cache'
+
+tools/v39.py:156: KeyError
+____ test_be_forgetting_matches_hand_calculation[H-7-0.004285714285714286] _____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106116570>
+initial = 'H', delta = 7, expected_value = 0.004285714285714286
+
+    @pytest.mark.parametrize("initial,delta,expected_value", [("F", 3, 0.01), ("H", 7, 0.03 / 7)])
+    def test_be_forgetting_matches_hand_calculation(monkeypatch, initial, delta, expected_value):
+        # 二席のうち片方だけを変換する。もう一席を残し、退役の費用を混ぜない。
+        rows = tuple(Constituent(i, 0, Relation(str(i), p if i or initial == "F" else v39.ERASED,
+                                               ("a", "b")), FrozenPrice(1, 0, 0, 0), bool(i or initial == "F"))
+                     for i, p in enumerate(("p", "q")))
+        d = NamedDefinition("R", rows, 0, 1)
+        col = lambda x: (x,) * 16
+        init = (col(0.0), col(0.03 if initial == "F" else 0.0), col(10.0 if initial == "F" else 0.03), col(1.0))
+        seats = {("R", 0): v39.SeatRec(0, initial, 0, 0, init, v39.ZERO4),
+                 ("R", 1): v39.SeatRec(0, "F", 0, 0, (col(0.0), col(10.0), col(10.0), col(1.0)), v39.ZERO4)}
+        state = v39._state_class()(definitions={"R": d}, slot_history={("R", 0): {"p": 1}, ("R", 1): {"q": 1}},
+                                 p_hat=FrequencyTable({"p": 1, "q": 1}, 2, 0.1, frozenset({"p", "q"})), v39_seats=seats)
+        monkeypatch.setattr(v39, "_candidates", v310be.candidates)
+        monkeypatch.setattr(v39, "_POW", {})
+        v39.CFG.update(D=2, T=1740, dict_index={"p": 0, "q": 1}, mean_weights=None,
+                       price=0.01873710622997919, budget=None, seed=1)
+        v39.CTX["cost_mismatch"] = []
+        candidates = v310be.candidates(state, d, 0, {"p": 1, "q": 1}, 1)
+        assert candidates[0][0] == pytest.approx(expected_value)
+        assert candidates[0][4] == delta
+>       after, events, before_bits, after_bits, _, _ = v39.run_conversions(state, 0)
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tools/test_argorder_component.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v39.py:902: in run_conversions
+    before = total_bits(state, L)
+             ^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:165: in total_bits
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:165: in <genexpr>
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relation_id='0', ...rice(ell_frozen=1, c=0, hold_cost=0, m_alloc_at_reg=0), alive=True)), m_alloc=0, registered_at=1, assimilation_count=1)
+slot_history = {('R', 0): {'p': 1}, ('R', 1): {'q': 1}}, L = {'p': 1, 'q': 1}
+
+    def definition_bits(d, slot_history, L) -> int:
+        key = (d.name, d.registered_at, tuple((r.slot_index, r.registered_at) for r in d.constituents))
+>       sb = CTX["struct_cache"].get(key)
+             ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'struct_cache'
+
+tools/v39.py:156: KeyError
+=========================== short test summary info ============================
+FAILED tools/test_argorder_component.py::test_be_forgetting_matches_hand_calculation[F-3-0.01]
+FAILED tools/test_argorder_component.py::test_be_forgetting_matches_hand_calculation[H-7-0.004285714285714286]
+2 failed, 43 passed in 1.68s
