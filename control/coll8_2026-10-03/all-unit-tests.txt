@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+_________________ ERROR collecting tests/test_v311c_lineage.py _________________
+ImportError while importing test module '/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tests/test_v311c_lineage.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_v311c_lineage.py:4: in <module>
+    from v311c_lineage import write_lineage
+E   ModuleNotFoundError: No module named 'v311c_lineage'
+=========================== short test summary info ============================
+ERROR tests/test_v311c_lineage.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.15s

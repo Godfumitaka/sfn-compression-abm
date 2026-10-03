@@ -1,0 +1,275 @@
+{
+ "status": "stopped",
+ "checks": [
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": false,
+   "world_rows": 13920
+  }
+ ],
+ "runs": [
+  {
+   "name": "serial2_simultaneous",
+   "elapsed_seconds": 10.696558000010555,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:07:58+09:00",
+   "rss_sum_peak_bytes": 207749120,
+   "rss_sample_interval_seconds": 1,
+   "samples": 10,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    71.1,
+    62.9
+   ]
+  },
+  {
+   "name": "serial2_serial",
+   "elapsed_seconds": 14.841840375011088,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:08:13+09:00",
+   "rss_sum_peak_bytes": 191332352,
+   "rss_sample_interval_seconds": 1,
+   "samples": 14,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    61.7,
+    55.3
+   ]
+  },
+  {
+   "name": "no_comm_r1",
+   "elapsed_seconds": 1688.667464291997,
+   "exitcode": 0,
+   "finished": "2026-10-03T19:36:22+09:00",
+   "rss_sum_peak_bytes": 1037680640,
+   "rss_sample_interval_seconds": 1,
+   "samples": 1593,
+   "swap_start_mib": 380.19,
+   "swap_end_mib": 380.19,
+   "agent_peak_rss_mb_decimal": [
+    100.1,
+    113.6,
+    108.2,
+    107.7,
+    135.6,
+    140.4,
+    143.7,
+    137.9
+   ]
+  }
+ ],
+ "finished": "2026-10-03T19:38:02+09:00",
+ "reason": "関門不成立：no_comm_r1 世界の学習のsource",
+ "traceback": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 315, in <module>\n    try:main()\n        ^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 274, in main\n    coins=inspect_population('no_comm_r1',first,FS,GROUPS,1740,0,0)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 257, in inspect_population\n    check(name+' 世界の学習のsource',side_sources and set(side_sources)=={'世界'},world_rows=len(side_sources))\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 39, in check\n    raise RuntimeError('関門不成立：'+name)\nRuntimeError: 関門不成立：no_comm_r1 世界の学習のsource\n"
+}
