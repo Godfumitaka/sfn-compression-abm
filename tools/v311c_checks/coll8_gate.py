@@ -17,7 +17,8 @@ for flag in ('--v311c-f','--v311c-runs','--workers','--v311c-q','--v311c-recv','
     index = BASE.index(flag)
     del BASE[index:index+2]
 BASE.remove('--v311c')
-RESULT = {'status':'running','checks':[], 'runs':[]}
+RESULT = (json.loads((EV/'gates.json').read_text()) if (EV/'gates.json').exists()
+          else {'status':'running','checks':[], 'runs':[]})
 
 
 def now(): return datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(timespec='seconds')
@@ -47,7 +48,7 @@ def health():
     return h,rows
 
 
-def argv(name, count, *, fs=FS, groups=GROUPS, run=1, q=0.2, m=0.1, serial=True, shop=True, audit=True, lineage=True, no_tags=False, standalone_seed=None, source=SOURCE):
+def argv(name, count, *, fs=FS, groups=GROUPS, run=1, q=0.2, m=0.1, serial=True, shop=True, audit=True, lineage=True, no_tags=False, standalone_seed=None, solo_agent=None, source=SOURCE):
     a=[PYTHON,'tools/v3_run.py','config/sweep_shop_hide1_s1_2026-10-01.json',str(OUT/name),*BASE,
        '--trial-count',str(count),'--v39-price',PRICE,'--e-price',PRICE,'--workers','1','--seeds','1']
     if standalone_seed is None:
@@ -61,10 +62,27 @@ def argv(name, count, *, fs=FS, groups=GROUPS, run=1, q=0.2, m=0.1, serial=True,
         config_path=EV/(name+'.config.json')
         save(config_path,cfg)
         a[2]=str(config_path)
+    if solo_agent is not None:
+        a[1]='tools/v311c_checks/coll8_solo.py'
     return a
 
 
 def run_job(name, count, **kw):
+    resource=EV/(name+'.resource.json')
+    if resource.exists():
+        measurement=json.loads(resource.read_text())
+        if measurement['exitcode']!=0:raise RuntimeError('前の走行が不成立：'+name)
+        path=OUT/name
+        summaries=list((path/'comm').glob('*.summary.json'))
+        if summaries:
+            s=json.loads(summaries[0].read_text())
+            check(name+' 完走',s['trials']==count and not s['errors'],trials=s['trials'],errors=s['errors'])
+            check(name+' 受信の採点・名札費用',all(not a['v311c'][key] for a in s['agents'] for key in ('recv_score_changed','recv_merit_changed','dC_mismatch')))
+            measurement['agent_peak_rss_mb_decimal']=[a['peak_rss_mb'] for a in s['agents']]
+            save(resource,measurement)
+        if not any(r['name']==name for r in RESULT['runs']):RESULT['runs'].append(measurement)
+        checkpoint()
+        return path
     if (OUT/name).exists(): raise RuntimeError('既存出力を上書きしない：'+name)
     own_cap=1 if kw.get('serial',True) else len(kw.get('fs',FS))
     while True:
@@ -72,13 +90,16 @@ def run_job(name, count, **kw):
         if len(h['foreign_heavy'])+own_cap<=4: break
         print('他の重い処理の終了を待つ：'+name,flush=True);time.sleep(30)
     a=argv(name,count,**kw)
-    job={'name':name,'argv':a,'cwd':str(kw.get('source',SOURCE)),'started':now(),'initial':h}
+    environment=dict(os.environ)
+    if kw.get('solo_agent') is not None:environment['COLL8_SOLO_AGENT']=str(kw['solo_agent'])
+    job={'name':name,'argv':a,'cwd':str(kw.get('source',SOURCE)),'started':now(),'initial':h,
+         'extra_env':({'COLL8_SOLO_AGENT':str(kw['solo_agent'])} if kw.get('solo_agent') is not None else {})}
     save(EV/(name+'.argv.json'),job)
     with (EV/'jobs.jsonl').open('a') as f:f.write(json.dumps({k:v for k,v in job.items() if k!='initial'},ensure_ascii=False)+'\n')
     print('開始 '+name,flush=True)
     start=time.monotonic();max_rss=0;observations=0
     with (OUT/(name+'.stdout.log')).open('w') as stdout,(OUT/(name+'.time.log')).open('w') as stderr:
-        p=subprocess.Popen(['/usr/bin/time','-l',*a],cwd=job['cwd'],stdout=stdout,stderr=stderr,start_new_session=True)
+        p=subprocess.Popen(['/usr/bin/time','-l',*a],cwd=job['cwd'],stdout=stdout,stderr=stderr,start_new_session=True,env=environment)
         job['pid']=p.pid
         try:
             while p.poll() is None:
@@ -153,7 +174,8 @@ def inspect_population(name,path,fs,groups,count,q,m):
     sent=[r for r in events if r['kind']=='bundle' and r.get('send')]
     recv=[r for r in events if r['kind']=='recv']
     check(name+' 送信配送受信・同試行・自己配送なし',len(sent)==len(recv) and sorted((r['bundle'],r['agent'],r['to'],r['t']) for r in sent)==sorted((r['bundle'],r['from'],r['agent'],r['t']) for r in recv) and all(r['agent']!=r['to'] for r in sent),sent=len(sent),recv=len(recv))
-    check(name+' 黙りから送らない・答えは増やさない',all(rr[r['agent']][r['t']]['predicted_edge'] is not None and r['pred'][1:]==[rr[r['agent']][r['t']]['predicted_edge']['predicate'],rr[r['agent']][r['t']]['predicted_edge']['arguments']] for r in sent))
+    spoken=[r for r in events if r['kind']=='bundle' and not r.get('empty')]
+    check(name+' 黙りから送らない・答えは増やさない',all(rr[r['agent']][r['t']]['predicted_edge'] is not None and r['pred'][1:]==[rr[r['agent']][r['t']]['predicted_edge']['predicate'],rr[r['agent']][r['t']]['predicted_edge']['arguments']] for r in spoken),bundles=len(spoken))
     check(name+' 束の参照本数',all(r['final']==r['initial']-r['excluded']+r['added'] and len(r['relations'])==r['final'] for r in events if r['kind']=='bundle' and not r.get('empty')))
     if len(fs)>2:
         cross=sum(groups[r['agent']]!=groups[r['to']] for r in sent)
@@ -187,6 +209,7 @@ def inspect_population(name,path,fs,groups,count,q,m):
         check(name+' 問い・対の再集計',len(items)==20 and sum(split['within'].values())+sum(split['cross'].values())==(count//100)*20*(len(fs)*(len(fs)-1)//2),split=split)
     births=[r for r in recv if r.get('result')=='誕生']
     check(name+' 報告の初期採点のsource',all(r.get('E',{}).get('source')=='報告' for r in births),births=len(births))
+    check(name+' 未記載は反証・取消にしない',all(c[5]['取消']==1 for r in recv for c in (r.get('E') or {}).get('cands',[])))
     side_sources=[]
     for p in (path/'side').glob('*/*.jsonl'):
         for line in p.open():
@@ -200,6 +223,8 @@ def inspect_population(name,path,fs,groups,count,q,m):
 
 
 def main():
+    if RESULT['status']=='stopped':raise RuntimeError('関門不成立後は自動で再開しない')
+    if RESULT['status']=='passed':return
     OUT.mkdir(exist_ok=True);EV.mkdir(exist_ok=True);checkpoint()
     # 同時実行は二体のみ。八体の最初の走行より前に直列の配管を検査する。
     p=run_job('serial2_simultaneous',100,fs=[0.1,0.9],groups=[0,1],serial=False)
@@ -208,7 +233,7 @@ def main():
     first=run_job('no_comm_r1',1740,q=0,m=0)
     coins=inspect_population('no_comm_r1',first,FS,GROUPS,1740,0,0)
     for i,f in enumerate(FS):
-        solo=run_job(f'solo_r1_a{i}',1740,fs=[f],groups=[GROUPS[i]],run=1+1000*i,q=0,m=0)
+        solo=run_job(f'solo_r1_a{i}',1740,solo_agent=i,q=0,m=0)
         check(f'通信なし8体と単独：個体{i}',body(ledger_paths(first)[i])==body(ledger_paths(solo)[0]),collective=body(ledger_paths(first)[i]),solo=body(ledger_paths(solo)[0]))
     # 機能を全部切った8体と固定した個体版（短い配管の試行、全個体を比較）。
     off=run_job('off8',100,fs=[0.5]*8,groups=GROUPS,q=0,m=0,no_tags=True,shop=False,audit=False,lineage=False)
@@ -216,19 +241,23 @@ def main():
         baseline=run_job(f'baseline_a{i}',100,standalone_seed=1+1000*i,source=ROOT/'baseline')
         check(f'集団化全部オフと固定個体版：個体{i}',body(ledger_paths(off)[i])==body(ledger_paths(baseline)[0]))
     # 記録の旗・新しい試験の旗が模型へ戻らないこと。受信・誕生もある腕で測る。
-    plain=run_job('record8_plain',100,shop=False,audit=True,lineage=False)
-    logged=run_job('record8_logged',100)
+    plain=run_job('record8_plain',200,shop=False,audit=True,lineage=False)
+    logged=run_job('record8_logged',200)
     compare('お店試験・系譜の非干渉（8体）',plain,logged)
     state_plain=next((plain/'comm').glob('*.state.jsonl')).read_bytes()
     state_logged=next((logged/'comm').glob('*.state.jsonl')).read_bytes()
     check('お店試験・系譜の本走行乱数',state_plain==state_logged)
-    no_audit=run_job('record8_no_audit',100,audit=False)
+    no_audit=run_job('record8_no_audit',200,audit=False)
     compare('状態指紋の非干渉（8体）',logged,no_audit,comm=True)
     for run in (1,2,3):
         if run==1:nocomm=first;ref=coins
         else:
             nocomm=run_job(f'no_comm_r{run}',1740,run=run,q=0,m=0)
             ref=inspect_population(f'no_comm_r{run}',nocomm,FS,GROUPS,1740,0,0)
+            for i in range(8):
+                solo=run_job(f'solo_r{run}_a{i}',1740,run=run,solo_agent=i,q=0,m=0)
+                check(f'通信なし8体と単独：種{run}個体{i}',body(ledger_paths(nocomm)[i])==body(ledger_paths(solo)[0]),
+                      collective=body(ledger_paths(nocomm)[i]),solo=body(ledger_paths(solo)[0]))
         for m in (0,0.1,0.3):
             name=f'comm_m{m}_r{run}'
             pop=run_job(name,1740,run=run,m=m)
