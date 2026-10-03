@@ -239,3 +239,28 @@ def test_saved_state_retains_argument_order_and_four_score_columns():
     assert smereplay.encode(restored) == saved
     assert restored.definitions["R"].constituents[0].relation.arguments == ("du", "da")
     assert tuple(x[0] for x in restored.v39_seats["R", 0].init) == (7, 3, 9, 1)
+
+
+def test_saved_state_with_existing_v38_merit_and_closed_type_list(monkeypatch):
+    import inspect
+    import io
+    import abm.accounting as accounting
+    import abm.loop as loop
+    import v38
+    for mod, names in ((loop, ("classify_row", "update_merit", "_update_accounting")),
+                       (accounting, ("participation",))):
+        for name in names:
+            monkeypatch.setattr(mod, name, getattr(mod, name))
+    for name in ("STATS", "CTX", "_REAL"):
+        monkeypatch.setattr(v38, name, {})
+    v38.install(io.StringIO())
+    cls = inspect.getclosurevars(loop.update_merit).nonlocals["MeritAccumulatorV38"]
+    acc = cls(2, 3, (1.0,) * 16, (2.0,) * 16, 4.0, 0, (), (3.0,) * 16)
+    state = replace(memory(competition("d", "A")), merit={("R", 2, 3): acc})
+    saved = json.loads(json.dumps(smereplay.encode(state)))
+    restored = smereplay.decode(saved)
+    assert type(restored.merit["R", 2, 3]) is cls
+    assert smereplay.encode(restored) == saved
+    # abmの接頭辞だけでも許可せず、読込前に拒否する。
+    with pytest.raises(ValueError, match="認めていない型"):
+        smereplay.decode({"tag": "dataclass", "module": "abm.unlisted", "name": "Other", "fields": {}})

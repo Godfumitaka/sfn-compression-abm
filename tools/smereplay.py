@@ -11,6 +11,35 @@ from collections.abc import Mapping
 
 ST: dict = {}
 
+# 保存済みのA・C・D・λ=0の全状態で確認した模型の型だけを読む。
+# モジュールの接頭辞では許可せず、型名との組を完全一致で確認する。
+ALLOWED_TYPES = frozenset({
+    ("abm.agent_runtime", "PendingState"),
+    ("abm.definition", "Constituent"),
+    ("abm.definition", "EmbedState"),
+    ("abm.definition", "ExceptionAccumulator"),
+    ("abm.definition", "FrequencyTable"),
+    ("abm.definition", "FrozenPrice"),
+    ("abm.definition", "MeritAccumulator"),
+    ("abm.definition", "NamedDefinition"),
+    ("abm.domains", "Abstain"),
+    ("abm.domains", "AgentConfig"),
+    ("abm.domains", "AgentInput"),
+    ("abm.domains", "AgentOutput"),
+    ("abm.domains", "CorrectionMode"),
+    ("abm.domains", "EdgePrediction"),
+    ("abm.domains", "Entity"),
+    ("abm.domains", "Prototype"),
+    ("abm.domains", "Relation"),
+    ("abm.domains", "RelationGraph"),
+    ("abm.domains", "RepairScope"),
+    ("abm.domains", "VerbatimTrace"),
+    ("smeshared", "SharedAlignment"),
+    ("v38", "MeritAccumulatorV38"),
+    ("v39", "AgentStateV39"),
+    ("v39", "SeatRec"),
+})
+
 
 def encode(value):
     if isinstance(value, Enum):
@@ -38,10 +67,17 @@ def decode(value):
     if tag in ("tuple", "list", "set", "frozenset"):
         return {"tuple": tuple, "list": list, "set": set, "frozenset": frozenset}[tag](decode(x) for x in value["items"])
     module, name = value["module"], value["name"]
-    if not (module.startswith("abm.") or module in ("v39", "smeshared")):
-        raise ValueError("再生で認めていない型のモジュール")
+    if (module, name) not in ALLOWED_TYPES:
+        raise ValueError("再生で認めていない型のモジュールと名前")
     if module == "v39" and name == "AgentStateV39":
         cls = importlib.import_module("v39")._state_class()
+    elif module == "v38" and name == "MeritAccumulatorV38":
+        # v38.install内で作られる既存の型を使う。模型の包みを再登録しない。
+        import inspect
+        import abm.loop as loop
+        cls = inspect.getclosurevars(loop.update_merit).nonlocals.get(name)
+        if not isinstance(cls, type) or (cls.__module__, cls.__name__) != (module, name):
+            raise ValueError("再生に必要な既存v38の型が登録されていない")
     else:
         cls = getattr(importlib.import_module(module), name)
     if tag == "enum":
