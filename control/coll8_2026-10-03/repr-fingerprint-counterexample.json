@@ -1,0 +1,54 @@
+[
+ {
+  "python_hash_seed": "0",
+  "argv": [
+   "/opt/homebrew/opt/python@3.12/bin/python3.12",
+   "-c",
+   "from abm.domains import AgentState\nfrom abm.definition import FrequencyTable\nfrom hashlib import sha256\nimport json\ns=AgentState(p_hat=FrequencyTable({'fold':1,'wrap':1,'lock':1,'push':1},4,0.5,frozenset(('fold','wrap','lock','push'))))\nprint(json.dumps({'state_repr':repr(s),'state_sha256':sha256(repr(s).encode()).hexdigest(),'rng_sha256':sha256(repr(s.rng_state).encode()).hexdigest()}))"
+  ],
+  "data": {
+   "state_repr": "AgentState(prototype=Prototype(traces=()), public_history=(), rng_state=None, definitions={}, merit={}, embed={}, exceptions={}, p_hat=FrequencyTable(counts={'fold': 1, 'wrap': 1, 'lock': 1, 'push': 1}, total=4, lambda_mix=0.5, alive_vocab=frozenset({'push', 'fold', 'lock', 'wrap'})), slot_history={}, pending_claims=())",
+   "state_sha256": "53c72bffb53b285cc845a4c98bc80af9ad4622bbfb3a83e015d0ee96447939e4",
+   "rng_sha256": "dc937b59892604f5a86ac96936cd7ff09e25f18ae6b758e8014a24c7fa039e91"
+  }
+ },
+ {
+  "python_hash_seed": "1",
+  "argv": [
+   "/opt/homebrew/opt/python@3.12/bin/python3.12",
+   "-c",
+   "from abm.domains import AgentState\nfrom abm.definition import FrequencyTable\nfrom hashlib import sha256\nimport json\ns=AgentState(p_hat=FrequencyTable({'fold':1,'wrap':1,'lock':1,'push':1},4,0.5,frozenset(('fold','wrap','lock','push'))))\nprint(json.dumps({'state_repr':repr(s),'state_sha256':sha256(repr(s).encode()).hexdigest(),'rng_sha256':sha256(repr(s.rng_state).encode()).hexdigest()}))"
+  ],
+  "data": {
+   "state_repr": "AgentState(prototype=Prototype(traces=()), public_history=(), rng_state=None, definitions={}, merit={}, embed={}, exceptions={}, p_hat=FrequencyTable(counts={'fold': 1, 'wrap': 1, 'lock': 1, 'push': 1}, total=4, lambda_mix=0.5, alive_vocab=frozenset({'push', 'wrap', 'fold', 'lock'})), slot_history={}, pending_claims=())",
+   "state_sha256": "8c8edf2b06219e3b4ff70069648e953ba5cdd9d09e6be85c326013518e927b10",
+   "rng_sha256": "dc937b59892604f5a86ac96936cd7ff09e25f18ae6b758e8014a24c7fa039e91"
+  }
+ },
+ {
+  "python_hash_seed": "2",
+  "argv": [
+   "/opt/homebrew/opt/python@3.12/bin/python3.12",
+   "-c",
+   "from abm.domains import AgentState\nfrom abm.definition import FrequencyTable\nfrom hashlib import sha256\nimport json\ns=AgentState(p_hat=FrequencyTable({'fold':1,'wrap':1,'lock':1,'push':1},4,0.5,frozenset(('fold','wrap','lock','push'))))\nprint(json.dumps({'state_repr':repr(s),'state_sha256':sha256(repr(s).encode()).hexdigest(),'rng_sha256':sha256(repr(s.rng_state).encode()).hexdigest()}))"
+  ],
+  "data": {
+   "state_repr": "AgentState(prototype=Prototype(traces=()), public_history=(), rng_state=None, definitions={}, merit={}, embed={}, exceptions={}, p_hat=FrequencyTable(counts={'fold': 1, 'wrap': 1, 'lock': 1, 'push': 1}, total=4, lambda_mix=0.5, alive_vocab=frozenset({'push', 'fold', 'wrap', 'lock'})), slot_history={}, pending_claims=())",
+   "state_sha256": "41e79e688d736e3c84d42eb4ec0ebd8faa4ed8d59f9f8f17a370b1450025ec16",
+   "rng_sha256": "dc937b59892604f5a86ac96936cd7ff09e25f18ae6b758e8014a24c7fa039e91"
+  }
+ },
+ {
+  "python_hash_seed": "3",
+  "argv": [
+   "/opt/homebrew/opt/python@3.12/bin/python3.12",
+   "-c",
+   "from abm.domains import AgentState\nfrom abm.definition import FrequencyTable\nfrom hashlib import sha256\nimport json\ns=AgentState(p_hat=FrequencyTable({'fold':1,'wrap':1,'lock':1,'push':1},4,0.5,frozenset(('fold','wrap','lock','push'))))\nprint(json.dumps({'state_repr':repr(s),'state_sha256':sha256(repr(s).encode()).hexdigest(),'rng_sha256':sha256(repr(s.rng_state).encode()).hexdigest()}))"
+  ],
+  "data": {
+   "state_repr": "AgentState(prototype=Prototype(traces=()), public_history=(), rng_state=None, definitions={}, merit={}, embed={}, exceptions={}, p_hat=FrequencyTable(counts={'fold': 1, 'wrap': 1, 'lock': 1, 'push': 1}, total=4, lambda_mix=0.5, alive_vocab=frozenset({'wrap', 'fold', 'push', 'lock'})), slot_history={}, pending_claims=())",
+   "state_sha256": "b38071f8bcdd569a671b491334d4155ea3017be3f217bc4ae50541c4f30acc7f",
+   "rng_sha256": "dc937b59892604f5a86ac96936cd7ff09e25f18ae6b758e8014a24c7fa039e91"
+  }
+ }
+]
