@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="0.188" timestamp="2026-10-03T19:21:40.858067+09:00" hostname="tatsu-adminnoMacBook-Air.local"><testcase classname="tests.test_selectn3" name="test_1_same_representation_is_one" time="0.000" /><testcase classname="tests.test_selectn3" name="test_2_U_name_gets_no_point" time="0.000" /><testcase classname="tests.test_selectn3" name="test_3_hidden_relation_name_not_used" time="0.000" /><testcase classname="tests.test_selectn3" name="test_4_mismatch_not_in_numerator" time="0.000" /><testcase classname="tests.test_selectn3" name="test_5_bounded_0_1" time="0.004" /><testcase classname="tests.test_selectn3" name="test_6_selects_max_N3_not_ratio_and_gate_unchanged" time="0.003" /><testcase classname="tests.test_attnsel" name="test_01_unit_weights_match_N3_selection_and_answer" time="0.006" /><testcase classname="tests.test_attnsel" name="test_02_flag_off_ledger_and_all_generated_side_bytes_identical" time="0.029" /><testcase classname="tests.test_attnsel" name="test_03_same_weights_in_three_scores_and_recomputed_self_scores" time="0.001" /><testcase classname="tests.test_attnsel" name="test_04_H_once_max_self_and_U_never_reads_erased_name" time="0.001" /><testcase classname="tests.test_attnsel" name="test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric" time="0.001"><failure message="assert 0.045454545454545456 == 0.09090909090909091 ± 9.1e-08&#10;  &#10;  comparison failed&#10;  Obtained: 0.045454545454545456&#10;  Expected: 0.09090909090909091 ± 9.1e-08">def test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric():
+        d = OLD.same_def(); al = OLD.al(OLD.ID)
+        d = replace(d, constituents=tuple(replace(r, alive=False) if r.slot_index == 0 else r for r in d.constituents))
+        hist = dict(OLD.HIST); hist[(d.name, 0)] = {}
+        tt = A.terms(d, hist, al, OLD.SCENE)
+        assert tt.empty_histories == 1
+        assert tt.value({}) == N.n3_value(N.n3_terms(d, hist, al, OLD.SCENE))
+        hist[(d.name, 0)] = {"fold": 1, "wrap": 1}
+        tt = A.terms(d, hist, al, OLD.SCENE)
+        w = {"fold": 1., "wrap": 1., "lock": 1., "cause": 1.}
+        g = tt.gradient(w)
+        # cross の fold による差を除いた自己の微分は両名に等分。
+        s, dd, xx = tt.scores(w)
+&gt;       assert g["fold"] - g["wrap"] == pytest.approx(float(2 / (dd + xx)))
+E       assert 0.045454545454545456 == 0.09090909090909091 ± 9.1e-08
+E         
+E         comparison failed
+E         Obtained: 0.045454545454545456
+E         Expected: 0.09090909090909091 ± 9.1e-08
+
+tests/test_attnsel.py:169: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,1830 @@
+{
+  "scope": "段①の最初の不合格で停止。段②作り直し・再選択と段③は未開始。",
+  "code_branch": "attn-2026-10-03",
+  "base_commit": "d2068a96cb3ce3ab75d016a4c962127ea9bd9d14",
+  "code_commit": "a6fe166562eda47316160540a53cc16464221036",
+  "source_changed_files": [
+    "tools/attnsel.py",
+    "tools/attnsel_checks.py",
+    "tests/test_attnsel.py"
+  ],
+  "abm_and_v3_run_changed": false,
+  "gate_status": "failed_stop",
+  "pytest_execution": {
+    "command": [
+      "nice",
+      "-n",
+      "19",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_v310ans_2026-09-30/verify-env/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-x",
+      "-rA",
+      "tests/test_selectn3.py",
+      "tests/test_attnsel.py",
+      "--junitxml=../stage1_tests.xml"
+    ],
+    "returncode": 1,
+    "wall_seconds": 0.38312887500000004,
+    "child_cpu_user_seconds": 0.274362,
+    "child_cpu_system_seconds": 0.053831,
+    "child_max_rss_bytes": 45023232
+  },
+  "pytest_suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "1",
+    "skipped": "0",
+    "tests": "11",
+    "time": "0.188",
+    "timestamp": "2026-10-03T19:21:40.858067+09:00",
+    "hostname": "tatsu-adminnoMacBook-Air.local"
+  },
+  "pytest_cases": [
+    {
+      "name": "tests.test_selectn3::test_1_same_representation_is_one",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_2_U_name_gets_no_point",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_3_hidden_relation_name_not_used",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_4_mismatch_not_in_numerator",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_5_bounded_0_1",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_selectn3::test_6_selects_max_N3_not_ratio_and_gate_unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_01_unit_weights_match_N3_selection_and_answer",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_02_flag_off_ledger_and_all_generated_side_bytes_identical",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_03_same_weights_in_three_scores_and_recomputed_self_scores",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_04_H_once_max_self_and_U_never_reads_erased_name",
+      "status": "passed"
+    },
+    {
+      "name": "tests.test_attnsel::test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric",
+      "status": "failed"
+    }
+  ],
+  "stop_failure": {
+    "test": "test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric",
+    "test_line": 169,
+    "observed": 0.045454545454545456,
+    "expected": 0.09090909090909091,
+    "suspected_cause": "検査の期待値が S(x,x) の fold による変化を落とした可能性。修正・再実行はせず未確認。"
+  },
+  "after_failure": {
+    "code_or_test_repair": false,
+    "further_tests": false,
+    "grid_run": false,
+    "stage2_rebuild_or_replay": false,
+    "stage3_run": false
+  },
+  "flag_off_test_scope": [
+    "手例の台帳行 seed001.jsonl",
+    "手例用 side seed001.side.jsonl（世界走行の side 本体ではない）",
+    "既存 select ロガー seed001.select.jsonl.gz"
+  ],
+  "provisional_parameters": {
+    "beta": 5,
+    "eta": 0.05,
+    "grid_beta": [
+      1,
+      5,
+      10
+    ],
+    "grid_eta": [
+      0.01,
+      0.05,
+      0.1
+    ],
+    "grid_executed": false,
+    "production_calibration": false
+  },
+  "machine_start": {
+    "timestamp_jst": "2026-10-03T18:49:48.859610+09:00",
+    "disk": {
+      "returncode": 0,
+      "stdout": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    59Gi    18%    484k  616M    0%   /\n",
+      "stderr": ""
+    },
+    "memory": {
+      "returncode": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     7800.\nPages active:                                 882445.\nPages inactive:                               882872.\nPages speculative:                               184.\nPages throttled:                                   0.\nPages wired down:                             157508.\nPages purgeable:                               36321.\n\"Translation faults\":                      282350552.\nPages copy-on-write:                        12728027.\nPages zero filled:                         156736296.\nPages reactivated:                          25075155.\nPages purged:                                1705446.\nFile-backed pages:                            840503.\nAnonymous pages:                              925000.\nPages stored in compressor:                   233940.\nPages occupied by compressor:                 113966.\nDecompressions:                             50609866.\nCompressions:                               56403324.\nPageins:                                    27351309.\nPageouts:                                      31247.\nSwapins:                                    10019357.\nSwapouts:                                   11946411.\nPages tagged:                                 128835.\nPages tagged resident:                        110857.\nPages tagged compressed:                       17978.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5795.\nPages tag-storage free:                           97.\nPages tag-storage non-tag pageable:            59500.\nPages tag-storage non-tag wired:                  24.\nBytes of compressed tags:                    2528000.\nTagged compressions:                          316217.\nTagged decompressions:                        292296.\n",
+      "stderr": ""
+    },
+    "swap": {
+      "returncode": 0,
+      "stdout": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\nhw.memsize: 34359738368\n",
+      "stderr": ""
+    },
+    "thermal": {
+      "returncode": 0,
+      "stdout": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "stderr": ""
+    },
+    "processes": {
+      "returncode": 0,
+      "stdout": "  PID  PPID  %CPU %MEM    RSS     ELAPSED COMM\n 5558  5555  98.8  0.9 306752       03:38 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4020  4017  98.2  7.5 2530976       49:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5823 67172  47.7  0.1  34608       00:30 /Library/Developer/CommandLineTools/usr/bin/git\n  434     1  18.6  0.4 128960 01-06:16:41 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 6167     1  10.7  0.0   8064       00:00 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared\n67249 67172   7.2  2.5 838400    05:51:39 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.98/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n 1810  1809   0.0  1.2 386656 01-06:14:46 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n 6168 67250   0.0  0.0  11328       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  0.1  19520       02:18 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5557  5555   0.0  0.0  15840       03:38 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5555  5552   0.0  0.1  30976       03:38 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5552 67250   0.0  0.0  16272       03:38 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4019  4017   0.0  0.0  15824       49:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4017  4014   0.0  0.1  30816       49:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4014 67250   0.0  0.0  16112       49:39 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python",
+      "stderr": ""
+    }
+  },
+  "machine_before_tests": {
+    "timestamp_jst": "2026-10-03T19:12:00.154645+09:00",
+    "purpose": "段①の関門検査の直前",
+    "disk": {
+      "returncode": 0,
+      "stdout": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    57Gi    19%    484k  598M    0%   /\n",
+      "stderr": ""
+    },
+    "memory": {
+      "returncode": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     9617.\nPages active:                                 875876.\nPages inactive:                               896170.\nPages speculative:                               177.\nPages throttled:                                   0.\nPages wired down:                             149555.\nPages purgeable:                               42485.\n\"Translation faults\":                      286821913.\nPages copy-on-write:                        13206972.\nPages zero filled:                         159125007.\nPages reactivated:                          25077710.\nPages purged:                                1723606.\nFile-backed pages:                            667271.\nAnonymous pages:                             1104952.\nPages stored in compressor:                   232067.\nPages occupied by compressor:                 113388.\nDecompressions:                             50611843.\nCompressions:                               56403324.\nPageins:                                    27467566.\nPageouts:                                      31247.\nSwapins:                                    10019359.\nSwapouts:                                   11946411.\nPages tagged:                                 127831.\nPages tagged resident:                        110135.\nPages tagged compressed:                       17696.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5783.\nPages tag-storage free:                           48.\nPages tag-storage non-tag pageable:            59576.\nPages tag-storage non-tag wired:                  25.\nBytes of compressed tags:                    2468160.\nTagged compressions:                          316217.\nTagged decompressions:                        292578.\n",
+      "stderr": ""
+    },
+    "swap": {
+      "returncode": 0,
+      "stdout": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\nhw.memsize: 34359738368\n",
+      "stderr": ""
+    },
+    "thermal": {
+      "returncode": 0,
+      "stdout": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "stderr": ""
+    },
+    "processes": {
+      "returncode": 0,
+      "stdout": "  PID  PPID  %CPU %MEM    RSS     ELAPSED COMM\n 4020  4017 100.0  9.7 3238864    01:11:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5558  5555  99.9  4.3 1439968       25:50 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7885  7879  44.4  0.3  90336       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7884  7879  18.2  0.3  86080       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7881  7879  10.0  0.3  91584       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7883  7879   9.0  0.2  78688       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7882  7879   7.8  0.2  83248       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n  434     1   5.6  0.4 128928 01-06:38:53 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 7886  7879   4.6  0.3  86736       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7887  7879   2.9  0.2  83712       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7880  7879   1.9  0.2  77184       03:46 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 1810  1809   0.0  1.2 390176 01-06:36:58 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n 9462 67250   0.0  0.0  11184       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n 7879  7874   0.0  0.1  35904       03:47 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7874  7872   0.0  0.1  31056       03:47 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7629 67250   0.0  0.1  24784       04:13 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 6434 67250   0.0  0.1  17984       21:12 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  0.1  19520       24:30 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5557  5555   0.0  0.0  15840       25:50 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5555  5552   0.0  0.1  30976       25:50 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5552 67250   0.0  0.0  16272       25:50 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4019  4017   0.0  0.0  15824    01:11:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4017  4014   0.0  0.1  30816    01:11:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4014 67250   0.0  0.0  16112    01:11:51 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python",
+      "stderr": ""
+    }
+  },
+  "machine_after_stop": {
+    "time": "2026-10-03T19:25:54.612306+09:00",
+    "checks": {
+      "disk": {
+        "command": [
+          "df",
+          "-h",
+          "/"
+        ],
+        "returncode": 0,
+        "output": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s1s1   926Gi    13Gi    57Gi    19%    484k  594M    0%   /\n"
+      },
+      "ram": {
+        "command": [
+          "sysctl",
+          "hw.memsize"
+        ],
+        "returncode": 0,
+        "output": "hw.memsize: 34359738368\n"
+      },
+      "vm": {
+        "command": [
+          "vm_stat"
+        ],
+        "returncode": 0,
+        "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     9748.\nPages active:                                 887033.\nPages inactive:                               886019.\nPages speculative:                               457.\nPages throttled:                                   0.\nPages wired down:                             140025.\nPages purgeable:                               30137.\n\"Translation faults\":                      292611234.\nPages copy-on-write:                        13961835.\nPages zero filled:                         161336805.\nPages reactivated:                          25115223.\nPages purged:                                1743625.\nFile-backed pages:                            654761.\nAnonymous pages:                             1118748.\nPages stored in compressor:                   251272.\nPages occupied by compressor:                 121501.\nDecompressions:                             50613162.\nCompressions:                               56427518.\nPageins:                                    27538986.\nPageouts:                                      31249.\nSwapins:                                    10019359.\nSwapouts:                                   11946411.\nPages tagged:                                 124825.\nPages tagged resident:                        106290.\nPages tagged compressed:                       18535.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 5685.\nPages tag-storage free:                           13.\nPages tag-storage non-tag pageable:            59697.\nPages tag-storage non-tag wired:                  28.\nBytes of compressed tags:                    2636160.\nTagged compressions:                          317143.\nTagged decompressions:                        292665.\n"
+      },
+      "swap": {
+        "command": [
+          "sysctl",
+          "vm.swapusage"
+        ],
+        "returncode": 0,
+        "output": "vm.swapusage: total = 2048.00M  used = 380.19M  free = 1667.81M  (encrypted)\n"
+      },
+      "thermal": {
+        "command": [
+          "pmset",
+          "-g",
+          "therm"
+        ],
+        "returncode": 0,
+        "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+      },
+      "processes": {
+        "command": [
+          "ps",
+          "-axo",
+          "pid,ppid,%cpu,rss,etime,comm"
+        ],
+        "returncode": 0,
+        "output": "  PID  PPID  %CPU    RSS     ELAPSED COMM\n 1498     1   0.0 395360 01-06:51:51 /Applications/Claude.app/Contents/MacOS/Claude\n 1503     1   0.0   6192 01-06:51:48 /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler\n 1504  1498   0.0  97360 01-06:51:48 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1506  1498   0.0  53632 01-06:51:48 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1514  1498   0.0  60912 01-06:51:48 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1518  1498   0.0 967888 01-06:51:48 /Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)\n 1520  1498   0.0  77584 01-06:51:47 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1530  1498   0.0  20112 01-06:51:46 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1531  1498   0.0  27920 01-06:51:46 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1730  1498   0.0  43440 01-06:50:56 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1731  1498   0.0  51616 01-06:50:56 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 1809  1498   0.0    736 01-06:50:52 /Applications/Claude.app/Contents/Helpers/disclaimer\n 1810  1809   0.1 372976 01-06:50:52 /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude\n 1835  1498   0.0  38000 01-06:50:52 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper\n 4014 67250   0.0  16112    01:25:45 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4017  4014   0.0  30816    01:25:45 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4019  4017   0.0  15824    01:25:45 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 4020  4017  99.8 3582880    01:25:45 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5552 67250   0.0  16272       39:44 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5555  5552   0.0  30976       39:44 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5557  5555   0.0  15840       39:44 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5558  5555   0.0 1962576       39:44 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 5654 67250   0.0  19520       38:24 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 6434 67250   0.0  18192       35:06 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7629 67250   0.6  25632       18:07 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7874  7872   0.0  31056       17:41 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7879  7874   0.0  35904       17:41 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7880  7879   5.2  86352       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7881  7879   7.1  97728       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7882  7879   2.2  96976       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7883  7879   1.7  94112       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7884  7879   3.9 126544       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7885  7879  49.4 121168       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7886  7879  17.7 121376       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n 7887  7879  10.8 120016       17:40 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n10019 67250   0.0  14848       12:36 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python\n15415 67250   7.2  11040       00:00 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python\n"
+      }
+    }
+  },
+  "machine_note": "他の Python 2 本とワーカー 8 本を観測。全セッションの並列上限内とは確認できず、重い計算は開始しない。単一の小検査は実時間0.383秒、最大RSS約43MiB。nice の優先度低下は権限不足で失敗。",
+  "stage2_material_sizes": {
+    "cw1_A_lam0187": {
+      "ledgers/cells/.jsonl.gz": {
+        "count": 20,
+        "mean_bytes": 19282704.25,
+        "min_bytes": 16905898,
+        "max_bytes": 22168222,
+        "sizes": [
+          [
+            1,
+            19632780
+          ],
+          [
+            2,
+            18361230
+          ],
+          [
+            3,
+            17938382
+          ],
+          [
+            4,
+            18221140
+          ],
+          [
+            5,
+            21276497
+          ],
+          [
+            6,
+            18710115
+          ],
+          [
+            7,
+            20052665
+          ],
+          [
+            8,
+            19122019
+          ],
+          [
+            9,
+            22168222
+          ],
+          [
+            10,
+            16905898
+          ],
+          [
+            11,
+            20218269
+          ],
+          [
+            12,
+            19066247
+          ],
+          [
+            13,
+            20332743
+          ],
+          [
+            14,
+            19804322
+          ],
+          [
+            15,
+            18158749
+          ],
+          [
+            16,
+            18536513
+          ],
+          [
+            17,
+            19100526
+          ],
+          [
+            18,
+            18924414
+          ],
+          [
+            19,
+            19060378
+          ],
+          [
+            20,
+            20062976
+          ]
+        ]
+      },
+      "ledgers/cells/.done": {
+        "count": 20,
+        "mean_bytes": 581.65,
+        "min_bytes": 580,
+        "max_bytes": 583,
+        "sizes": [
+          [
+            1,
+            580
+          ],
+          [
+            2,
+            581
+          ],
+          [
+            3,
+            581
+          ],
+          [
+            4,
+            581
+          ],
+          [
+            5,
+            582
+          ],
+          [
+            6,
+            582
+          ],
+          [
+            7,
+            581
+          ],
+          [
+            8,
+            581
+          ],
+          [
+            9,
+            581
+          ],
+          [
+            10,
+            581
+          ],
+          [
+            11,
+            582
+          ],
+          [
+            12,
+            582
+          ],
+          [
+            13,
+            583
+          ],
+          [
+            14,
+            582
+          ],
+          [
+            15,
+            582
+          ],
+          [
+            16,
+            582
+          ],
+          [
+            17,
+            582
+          ],
+          [
+            18,
+            582
+          ],
+          [
+            19,
+            583
+          ],
+          [
+            20,
+            582
+          ]
+        ]
+      },
+      "side/.probe.jsonl": {
+        "count": 20,
+        "mean_bytes": 484934.9,
+        "min_bytes": 480388,
+        "max_bytes": 487334,
+        "sizes": [
+          [
+            1,
+            485036
+          ],
+          [
+            2,
+            486929
+          ],
+          [
+            3,
+            483829
+          ],
+          [
+            4,
+            485687
+          ],
+          [
+            5,
+            482906
+          ],
+          [
+            6,
+            484493
+          ],
+          [
+            7,
+            486862
+          ],
+          [
+            8,
+            481896
+          ],
+          [
+            9,
+            480388
+          ],
+          [
+            10,
+            481655
+          ],
+          [
+            11,
+            485277
+          ],
+          [
+            12,
+            487334
+          ],
+          [
+            13,
+            485860
+          ],
+          [
+            14,
+            486641
+          ],
+          [
+            15,
+            485334
+          ],
+          [
+            16,
+            486569
+          ],
+          [
+            17,
+            486964
+          ],
+          [
+            18,
+            487084
+          ],
+          [
+            19,
+            481759
+          ],
+          [
+            20,
+            486195
+          ]
+        ]
+      },
+      "side/.cfvalue.jsonl": {
+        "count": 20,
+        "mean_bytes": 2745421.75,
+        "min_bytes": 2664236,
+        "max_bytes": 2826002,
+        "sizes": [
+          [
+            1,
+            2826002
+          ],
+          [
+            2,
+            2783864
+          ],
+          [
+            3,
+            2794890
+          ],
+          [
+            4,
+            2707469
+          ],
+          [
+            5,
+            2717813
+          ],
+          [
+            6,
+            2715027
+          ],
+          [
+            7,
+            2809052
+          ],
+          [
+            8,
+            2714916
+          ],
+          [
+            9,
+            2664236
+          ],
+          [
+            10,
+            2745185
+          ],
+          [
+            11,
+            2768786
+          ],
+          [
+            12,
+            2753152
+          ],
+          [
+            13,
+            2729088
+          ],
+          [
+            14,
+            2744139
+          ],
+          [
+            15,
+            2692720
+          ],
+          [
+            16,
+            2708080
+          ],
+          [
+            17,
+            2781825
+          ],
+          [
+            18,
+            2706485
+          ],
+          [
+            19,
+            2728224
+          ],
+          [
+            20,
+            2817482
+          ]
+        ]
+      },
+      "side/.shop.jsonl": {
+        "count": 20,
+        "mean_bytes": 161024.65,
+        "min_bytes": 148647,
+        "max_bytes": 175596,
+        "sizes": [
+          [
+            1,
+            159342
+          ],
+          [
+            2,
+            175596
+          ],
+          [
+            3,
+            156028
+          ],
+          [
+            4,
+            163137
+          ],
+          [
+            5,
+            168976
+          ],
+          [
+            6,
+            157516
+          ],
+          [
+            7,
+            160596
+          ],
+          [
+            8,
+            152572
+          ],
+          [
+            9,
+            158192
+          ],
+          [
+            10,
+            152494
+          ],
+          [
+            11,
+            160113
+          ],
+          [
+            12,
+            163566
+          ],
+          [
+            13,
+            170754
+          ],
+          [
+            14,
+            148647
+          ],
+          [
+            15,
+            160194
+          ],
+          [
+            16,
+            160657
+          ],
+          [
+            17,
+            174861
+          ],
+          [
+            18,
+            164661
+          ],
+          [
+            19,
+            157240
+          ],
+          [
+            20,
+            155351
+          ]
+        ]
+      },
+      "side/.ambig.csv": {
+        "count": 20,
+        "mean_bytes": 1670.05,
+        "min_bytes": 880,
+        "max_bytes": 2902,
+        "sizes": [
+          [
+            1,
+            1893
+          ],
+          [
+            2,
+            1244
+          ],
+          [
+            3,
+            1732
+          ],
+          [
+            4,
+            1334
+          ],
+          [
+            5,
+            1899
+          ],
+          [
+            6,
+            1814
+          ],
+          [
+            7,
+            1931
+          ],
+          [
+            8,
+            1659
+          ],
+          [
+            9,
+            1504
+          ],
+          [
+            10,
+            2902
+          ],
+          [
+            11,
+            2125
+          ],
+          [
+            12,
+            1291
+          ],
+          [
+            13,
+            1541
+          ],
+          [
+            14,
+            2214
+          ],
+          [
+            15,
+            1700
+          ],
+          [
+            16,
+            1529
+          ],
+          [
+            17,
+            880
+          ],
+          [
+            18,
+            1207
+          ],
+          [
+            19,
+            1152
+          ],
+          [
+            20,
+            1850
+          ]
+        ]
+      },
+      "side/.answers.csv": {
+        "count": 20,
+        "mean_bytes": 418522.45,
+        "min_bytes": 403174,
+        "max_bytes": 431144,
+        "sizes": [
+          [
+            1,
+            423136
+          ],
+          [
+            2,
+            419162
+          ],
+          [
+            3,
+            407976
+          ],
+          [
+            4,
+            423419
+          ],
+          [
+            5,
+            421242
+          ],
+          [
+            6,
+            421775
+          ],
+          [
+            7,
+            423435
+          ],
+          [
+            8,
+            403174
+          ],
+          [
+            9,
+            422587
+          ],
+          [
+            10,
+            405267
+          ],
+          [
+            11,
+            425247
+          ],
+          [
+            12,
+            420988
+          ],
+          [
+            13,
+            412987
+          ],
+          [
+            14,
+            413061
+          ],
+          [
+            15,
+            416769
+          ],
+          [
+            16,
+            413055
+          ],
+          [
+            17,
+            430229
+          ],
+          [
+            18,
+            431144
+          ],
+          [
+            19,
+            420569
+          ],
+          [
+            20,
+            415227
+          ]
+        ]
+      },
+      "side/.routing.jsonl": {
+        "count": 20,
+        "mean_bytes": 20307176.3,
+        "min_bytes": 20163832,
+        "max_bytes": 20421849,
+        "sizes": [
+          [
+            1,
+            20361962
+          ],
+          [
+            2,
+            20303167
+          ],
+          [
+            3,
+            20421849
+          ],
+          [
+            4,
+            20259585
+          ],
+          [
+            5,
+            20239162
+          ],
+          [
+            6,
+            20259363
+          ],
+          [
+            7,
+            20371319
+          ],
+          [
+            8,
+            20349361
+          ],
+          [
+            9,
+            20163832
+          ],
+          [
+            10,
+            20406646
+          ],
+          [
+            11,
+            20337519
+          ],
+          [
+            12,
+            20308758
+          ],
+          [
+            13,
+            20260727
+          ],
+          [
+            14,
+            20393218
+          ],
+          [
+            15,
+            20260247
+          ],
+          [
+            16,
+            20293070
+          ],
+          [
+            17,
+            20291255
+          ],
+          [
+            18,
+            20195479
+          ],
+          [
+            19,
+            20272482
+          ],
+          [
+            20,
+            20394525
+          ]
+        ]
+      },
+      "side/.jsonl": {
+        "count": 20,
+        "mean_bytes": 8172336.7,
+        "min_bytes": 8016933,
+        "max_bytes": 8330693,
+        "sizes": [
+          [
+            1,
+            8106746
+          ],
+          [
+            2,
+            8191949
+          ],
+          [
+            3,
+            8097841
+          ],
+          [
+            4,
+            8159259
+          ],
+          [
+            5,
+            8330693
+          ],
+          [
+            6,
+            8016933
+          ],
+          [
+            7,
+            8186998
+          ],
+          [
+            8,
+            8155108
+          ],
+          [
+            9,
+            8157226
+          ],
+          [
+            10,
+            8043755
+          ],
+          [
+            11,
+            8190108
+          ],
+          [
+            12,
+            8176306
+          ],
+          [
+            13,
+            8289475
+          ],
+          [
+            14,
+            8123360
+          ],
+          [
+            15,
+            8105168
+          ],
+          [
+            16,
+            8093395
+          ],
+          [
+            17,
+            8235031
+          ],
+          [
+            18,
+            8202084
+          ],
+          [
+            19,
+            8325250
+          ],
+          [
+            20,
+            8260049
+          ]
+        ]
+      }
+    },
+    "cw2_A_lam0187": {
+      "ledgers/cells/.jsonl.gz": {
+        "count": 20,
+        "mean_bytes": 27055202.75,
+        "min_bytes": 24006348,
+        "max_bytes": 29582370,
+        "sizes": [
+          [
+            1,
+            27337355
+          ],
+          [
+            2,
+            26016530
+          ],
+          [
+            3,
+            24006348
+          ],
+          [
+            4,
+            26980724
+          ],
+          [
+            5,
+            26715010
+          ],
+          [
+            6,
+            28232181
+          ],
+          [
+            7,
+            29582370
+          ],
+          [
+            8,
+            27046295
+          ],
+          [
+            9,
+            27053916
+          ],
+          [
+            10,
+            29012853
+          ],
+          [
+            11,
+            26635853
+          ],
+          [
+            12,
+            25980441
+          ],
+          [
+            13,
+            27504998
+          ],
+          [
+            14,
+            27898563
+          ],
+          [
+            15,
+            28262975
+          ],
+          [
+            16,
+            24552186
+          ],
+          [
+            17,
+            27675000
+          ],
+          [
+            18,
+            26971933
+          ],
+          [
+            19,
+            25583881
+          ],
+          [
+            20,
+            28054643
+          ]
+        ]
+      },
+      "ledgers/cells/.done": {
+        "count": 20,
+        "mean_bytes": 582.35,
+        "min_bytes": 581,
+        "max_bytes": 583,
+        "sizes": [
+          [
+            1,
+            582
+          ],
+          [
+            2,
+            581
+          ],
+          [
+            3,
+            582
+          ],
+          [
+            4,
+            582
+          ],
+          [
+            5,
+            582
+          ],
+          [
+            6,
+            582
+          ],
+          [
+            7,
+            582
+          ],
+          [
+            8,
+            582
+          ],
+          [
+            9,
+            581
+          ],
+          [
+            10,
+            583
+          ],
+          [
+            11,
+            583
+          ],
+          [
+            12,
+            583
+          ],
+          [
+            13,
+            583
+          ],
+          [
+            14,
+            583
+          ],
+          [
+            15,
+            583
+          ],
+          [
+            16,
+            583
+          ],
+          [
+            17,
+            582
+          ],
+          [
+            18,
+            582
+          ],
+          [
+            19,
+            583
+          ],
+          [
+            20,
+            583
+          ]
+        ]
+      },
+      "side/.probe.jsonl": {
+        "count": 20,
+        "mean_bytes": 487277.6,
+        "min_bytes": 481459,
+        "max_bytes": 490084,
+        "sizes": [
+          [
+            1,
+            488581
+          ],
+          [
+            2,
+            488227
+          ],
+          [
+            3,
+            487772
+          ],
+          [
+            4,
+            488065
+          ],
+          [
+            5,
+            488363
+          ],
+          [
+            6,
+            488142
+          ],
+          [
+            7,
+            489641
+          ],
+          [
+            8,
+            485465
+          ],
+          [
+            9,
+            485116
+          ],
+          [
+            10,
+            481459
+          ],
+          [
+            11,
+            484411
+          ],
+          [
+            12,
+            490084
+          ],
+          [
+            13,
+            484545
+          ],
+          [
+            14,
+            489173
+          ],
+          [
+            15,
+            487531
+          ],
+          [
+            16,
+            488301
+          ],
+          [
+            17,
+            487791
+          ],
+          [
+            18,
+            489179
+          ],
+          [
+            19,
+            485824
+          ],
+          [
+            20,
+            487882
+          ]
+        ]
+      },
+      "side/.cfvalue.jsonl": {
+        "count": 20,
+        "mean_bytes": 2747862.55,
+        "min_bytes": 2678285,
+        "max_bytes": 2841494,
+        "sizes": [
+          [
+            1,
+            2836489
+          ],
+          [
+            2,
+            2760176
+          ],
+          [
+            3,
+            2818810
+          ],
+          [
+            4,
+            2754945
+          ],
+          [
+            5,
+            2739732
+          ],
+          [
+            6,
+            2678285
+          ],
+          [
+            7,
+            2841494
+          ],
+          [
+            8,
+            2726670
+          ],
+          [
+            9,
+            2711487
+          ],
+          [
+            10,
+            2731988
+          ],
+          [
+            11,
+            2769569
+          ],
+          [
+            12,
+            2767590
+          ],
+          [
+            13,
+            2733708
+          ],
+          [
+            14,
+            2761347
+          ],
+          [
+            15,
+            2681206
+          ],
+          [
+            16,
+            2711967
+          ],
+          [
+            17,
+            2692266
+          ],
+          [
+            18,
+            2684071
+          ],
+          [
+            19,
+            2769568
+          ],
+          [
+            20,
+            2785883
+          ]
+        ]
+      },
+      "side/.shop.jsonl": {
+        "count": 20,
+        "mean_bytes": 158553.4,
+        "min_bytes": 149058,
+        "max_bytes": 169704,
+        "sizes": [
+          [
+            1,
+            163394
+          ],
+          [
+            2,
+            169704
+          ],
+          [
+            3,
+            151780
+          ],
+          [
+            4,
+            156685
+          ],
+          [
+            5,
+            161115
+          ],
+          [
+            6,
+            150363
+          ],
+          [
+            7,
+            162316
+          ],
+          [
+            8,
+            156631
+          ],
+          [
+            9,
+            158552
+          ],
+          [
+            10,
+            149058
+          ],
+          [
+            11,
+            167019
+          ],
+          [
+            12,
+            164453
+          ],
+          [
+            13,
+            162303
+          ],
+          [
+            14,
+            154425
+          ],
+          [
+            15,
+            162945
+          ],
+          [
+            16,
+            158827
+          ],
+          [
+            17,
+            157983
+          ],
+          [
+            18,
+            160575
+          ],
+          [
+            19,
+            152972
+          ],
+          [
+            20,
+            149968
+          ]
+        ]
+      },
+      "side/.ambig.csv": {
+        "count": 20,
+        "mean_bytes": 788.2,
+        "min_bytes": 375,
+        "max_bytes": 1310,
+        "sizes": [
+          [
+            1,
+            1310
+          ],
+          [
+            2,
+            514
+          ],
+          [
+            3,
+            913
+          ],
+          [
+            4,
+            1038
+          ],
+          [
+            5,
+            637
+          ],
+          [
+            6,
+            1184
+          ],
+          [
+            7,
+            375
+          ],
+          [
+            8,
+            407
+          ],
+          [
+            9,
+            560
+          ],
+          [
+            10,
+            1207
+          ],
+          [
+            11,
+            1199
+          ],
+          [
+            12,
+            860
+          ],
+          [
+            13,
+            559
+          ],
+          [
+            14,
+            591
+          ],
+          [
+            15,
+            572
+          ],
+          [
+            16,
+            664
+          ],
+          [
+            17,
+            924
+          ],
+          [
+            18,
+            852
+          ],
+          [
+            19,
+            615
+          ],
+          [
+            20,
+            783
+          ]
+        ]
+      },
+      "side/.answers.csv": {
+        "count": 20,
+        "mean_bytes": 425006.1,
+        "min_bytes": 404831,
+        "max_bytes": 433983,
+        "sizes": [
+          [
+            1,
+            424378
+          ],
+          [
+            2,
+            424000
+          ],
+          [
+            3,
+            418256
+          ],
+          [
+            4,
+            431816
+          ],
+          [
+            5,
+            431084
+          ],
+          [
+            6,
+            427788
+          ],
+          [
+            7,
+            430754
+          ],
+          [
+            8,
+            404831
+          ],
+          [
+            9,
+            431766
+          ],
+          [
+            10,
+            413416
+          ],
+          [
+            11,
+            432270
+          ],
+          [
+            12,
+            426620
+          ],
+          [
+            13,
+            419975
+          ],
+          [
+            14,
+            427353
+          ],
+          [
+            15,
+            426587
+          ],
+          [
+            16,
+            419958
+          ],
+          [
+            17,
+            430266
+          ],
+          [
+            18,
+            433983
+          ],
+          [
+            19,
+            424648
+          ],
+          [
+            20,
+            420373
+          ]
+        ]
+      },
+      "side/.routing.jsonl": {
+        "count": 20,
+        "mean_bytes": 20016265.4,
+        "min_bytes": 19852223,
+        "max_bytes": 20201422,
+        "sizes": [
+          [
+            1,
+            20075256
+          ],
+          [
+            2,
+            19962092
+          ],
+          [
+            3,
+            20201422
+          ],
+          [
+            4,
+            20020345
+          ],
+          [
+            5,
+            20007048
+          ],
+          [
+            6,
+            19922818
+          ],
+          [
+            7,
+            20054520
+          ],
+          [
+            8,
+            20042678
+          ],
+          [
+            9,
+            19911648
+          ],
+          [
+            10,
+            19999936
+          ],
+          [
+            11,
+            20091317
+          ],
+          [
+            12,
+            20020857
+          ],
+          [
+            13,
+            19938980
+          ],
+          [
+            14,
+            20100896
+          ],
+          [
+            15,
+            19852223
+          ],
+          [
+            16,
+            20067138
+          ],
+          [
+            17,
+            19974363
+          ],
+          [
+            18,
+            19956828
+          ],
+          [
+            19,
+            20065886
+          ],
+          [
+            20,
+            20059057
+          ]
+        ]
+      },
+      "side/.jsonl": {
+        "count": 20,
+        "mean_bytes": 8287272.55,
+        "min_bytes": 8193125,
+        "max_bytes": 8402884,
+        "sizes": [
+          [
+            1,
+            8277859
+          ],
+          [
+            2,
+            8352801
+          ],
+          [
+            3,
+            8208600
+          ],
+          [
+            4,
+            8338253
+          ],
+          [
+            5,
+            8402884
+          ],
+          [
+            6,
+            8223707
+          ],
+          [
+            7,
+            8326308
+          ],
+          [
+            8,
+            8259931
+          ],
+          [
+            9,
+            8245079
+          ],
+          [
+            10,
+            8208716
+          ],
+          [
+            11,
+            8278969
+          ],
+          [
+            12,
+            8242289
+          ],
+          [
+            13,
+            8347315
+          ],
+          [
+            14,
+            8233884
+          ],
+          [
+            15,
+            8311373
+          ],
+          [
+            16,
+            8193125
+          ],
+          [
+            17,
+            8277574
+          ],
+          [
+            18,
+            8293744
+          ],
+          [
+            19,
+            8397181
+          ],
+          [
+            20,
+            8325859
+          ]
+        ]
+      }
+    }
+  },
+  "stage2_size_note": "指定 N3 の実物ではなく N3 なしの同じ世界・A・λ・f の種1〜20の stat。select は未測定。答え・記憶は解析していない。",
+  "publication_authorization": "ユーザーの追指示により二枝の通常 push を明示承認。results は push 前に fetch・rebase、衝突なら解決せず停止。"
+}
