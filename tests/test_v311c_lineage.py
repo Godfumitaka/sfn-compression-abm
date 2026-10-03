@@ -1,6 +1,7 @@
 """研究者用の系譜は元通信を書き換えず、別の定義へ親を混ぜない。"""
 import json
 from hashlib import sha256
+import test_v311c  # tools/ の検査用import経路を既存検査と揃える
 from v311c_lineage import write_lineage
 
 
