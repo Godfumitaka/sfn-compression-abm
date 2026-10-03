@@ -1,0 +1,528 @@
+file,line,text
+abm/abstraction.py,67,"horizon: int,"
+abm/abstraction.py,118,"constituent.slot_index, trial, trial - base_written_at, horizon"
+abm/accounting.py,71,"def decay_ladder(horizon: int) -> tuple[float, ...]:"
+abm/accounting.py,72,"""""""U-001: tau in geomspace(0.3, T*3, 16)。走行長に合わせて 16 本の時定数を返す。"""""""
+abm/accounting.py,75,"exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))"
+abm/accounting.py,84,"horizon: int,"
+abm/accounting.py,86,ladder = decay_ladder(horizon)
+abm/deletion.py,7,"from abm.accounting import constituent_value_terms, decay_ladder, survives"
+abm/deletion.py,17,"horizon: int | None = None,"
+abm/deletion.py,23,if config.beta and horizon is None:
+abm/deletion.py,24,"raise ValueError(""β≠0 の削除判定には走行長（horizon）が要る"")"
+abm/deletion.py,25,decay = decay_ladder(horizon) if config.beta else None
+abm/ledger.py,94,trial_count: int
+abm/ledger.py,123,"""run_seed"", ""trial_count"", ""agent_ids"", ""seed_file_sha256"", ""world_hash"","
+abm/loop.py,12,"from abm.accounting import decay_ladder, exception_cost, score_prediction, update_merit"
+abm/loop.py,45,trial_count: int
+abm/loop.py,93,"len(world.trials), score, coin, trial.held_out_edge,"
+abm/loop.py,114,"horizon=len(world.trials),"
+abm/loop.py,119,"after, deletion_events = apply_theta(after, config, trial.trial, horizon=len(world.trials))"
+abm/loop.py,126,or trial.trial == len(world.trials) - 1
+abm/loop.py,155,"return LoopResult(dict(sorted(current.items())), world.world_hash, len(world.trials))"
+abm/loop.py,187,"horizon: int,"
+abm/loop.py,197,decay = decay_ladder(horizon)
+abm/world.py,90,"trial_count: int,"
+abm/world.py,101,for index in range(trial_count))
+analysis_newlabel_2026-09-19/newlabel_R.py,132,t0=time.time();T=collections.Counter();n=0
+analysis_newlabel_2026-09-19/newlabel_R.py,135,T.update(c);n+=1
+analysis_newlabel_2026-09-19/newlabel_R.py,137,"json.dump(dict(T),open(ROOT/f""analysis_newlabel_2026-09-19/newlabelR_{NAME}.json"",""w""),ensure_ascii=False)"
+analysis_newlabel_2026-09-19/newlabel_R.py,138,"print(f""  完了 経過 {time.time()-t0:.0f}秒  定義 {T['定義']:,}  現行の厳 {T['現行の厳']:,}"",flush=True)"
+analysis_pred_2026-09-22/l2scan2.py,59,"cfg=config_from_header(h); T=h[""trial_count""]"
+analysis_pred_2026-09-22/l2scan2.py,60,"ws=generate_world(h[""run_seed""],T,[""agent""],seed=load_seed(SEEDP),"
+analysis_sbe_2026-09-19/traj8.py,20,"k=(h[""run_seed""],h[""trial_count""],bool(h.get(""arm_holdout_second_order"") or False))"
+analysis_v3a2cf_2026-09-17/rext_port_stage1.py,196,"if t in {0,99,299,869,header['trial_count']-1} or events:"
+analysis_v3a2cf_2026-09-17/rext_port_stage1.py,202,if count['rows']!=header['trial_count']:raise ReconstructionError('走行が未完または行数不一致')
+analyze_rev3.py,11,"M-067  R の同定は NSIM(def, 場面) ≥ T"
+analyze_rev3.py,12,T-026  禁止条項 D20：分類と分母を run 前に固定し、台帳から事後判定する
+analyze_rev3.py,38,"T-045 の三つ組キー (R, slot_index, registered_at) に直した"
+analyze_rev3.py,116,"def world_tables(run_seed, trial_count):"
+analyze_rev3.py,121,"key = (str(run_seed), int(trial_count))"
+analyze_rev3.py,123,"world = generate_world(run_seed, trial_count, (""agent"",))"
+analyze_rev3.py,173,"def stage2_time(supplies, lifetime, horizon):"
+analyze_rev3.py,181,return death if death <= horizon else None
+analyze_rev3.py,183,return death if death <= horizon else None
+analyze_rev3.py,189,def decay_ladder(horizon):
+analyze_rev3.py,192,"math.exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))"
+analyze_rev3.py,197,"def tau_settle(snapshot, name, theta_prime, horizon, cap=4000):"
+analyze_rev3.py,211,ladder = decay_ladder(horizon)
+analyze_rev3.py,257,"def e2_time(series, horizon):"
+analyze_rev3.py,266,return last + 1 if last < horizon else None
+analyze_rev3.py,269,"def e3_estimators(series, window, horizon):"
+analyze_rev3.py,279,marks = [born] + changes + [horizon]
+analyze_rev3.py,285,tail = [t for t in changes if t > horizon - window]
+analyze_rev3.py,288,"""A"": bool(horizon - last_change >= window),               # 走行末で静かか"
+analyze_rev3.py,308,"★ 三つ組キー (slot_index, registered_at) で引く（T-045 / U-033）。"
+analyze_rev3.py,372,horizon = len(trials) - 1
+analyze_rev3.py,380,"header.get(""run_seed""), header.get(""trial_count""))"
+analyze_rev3.py,410,"window = tau_settle(snapshot, name, theta, header.get(""trial_count"") or len(trials))"
+analyze_rev3.py,411,"estimators = e3_estimators(series[name], window, horizon)"
+analyze_rev3.py,421,"""E2_time"": e2_time(series[name], horizon),"
+analyze_rev3.py,422,"""horizon"": horizon,"
+analyze_rev3.py,437,"supplies[pattern].get(name, set()), lifetime, horizon)"
+analyze_rev3.py,457,# ★ 逐語ベースライン（T-039）。水位の命題(i) の直接の材料
+analyze_rev3.py,479,"""T"": len(trials), ""verbatim_lifetime"": lifetime + 1,"
+analyze_rev3.py,491,"""pending_rate"": count(""保留"", ""pending"") / len(trials),"
+analyze_rev3.py,492,# ── 逐語ベースライン（T-039）──
+analyze_rev3.py,493,"""coverage"": len(spoke) / len(trials),"
+analyze_rev3.py,499,"""verbatim_rescue_rate"": rescued / len(trials),"
+analyze_rev3.py,508,"def pass_rate(defs, pattern, estimator, report_horizon=None):"
+analyze_rev3.py,512,段階2 到達時刻 s から report_horizon 試行ぶん追跡できた def だけを分母に入れ、
+analyze_rev3.py,526,"if estimator == ""C"" and report_horizon is not None:"
+analyze_rev3.py,527,deadline = stage2 + report_horizon
+analyze_rev3.py,528,"if deadline > record.get(""horizon"", 0):"
+analyze_rev3.py,643,for horizon in HORIZONS:
+analyze_rev3.py,644,"tag = ""★ 主"" if horizon == HORIZONS[0] else ""副"""
+analyze_rev3.py,645,"print(""\n--- 報告地平 %d 試行（U-016 %s）--- 推定量 C は地平で読む"" % (horizon, tag))"
+analyze_rev3.py,649,"result = pass_rate(defs, pattern, ""C"", report_horizon=horizon)"
+analyze_rev3.py,675,"*PRIMARY, report_horizon=HORIZONS[0])"
+analyze_rev4.py,20,"M-067  R の同定は NSIM(def, 場面) ≥ T"
+analyze_rev4.py,21,T-026  禁止条項 D20：分類と分母を run 前に固定し、台帳から事後判定する
+analyze_rev4.py,47,"T-045 の三つ組キー (R, slot_index, registered_at) に直した"
+analyze_rev4.py,125,"def world_tables(run_seed, trial_count):"
+analyze_rev4.py,130,"key = (str(run_seed), int(trial_count))"
+analyze_rev4.py,132,"world = generate_world(run_seed, trial_count, (""agent"",))"
+analyze_rev4.py,182,"def stage2_time(supplies, lifetime, horizon):"
+analyze_rev4.py,190,return death if death <= horizon else None
+analyze_rev4.py,192,return death if death <= horizon else None
+analyze_rev4.py,198,def decay_ladder(horizon):
+analyze_rev4.py,201,"math.exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))"
+analyze_rev4.py,206,"def tau_settle(snapshot, name, theta_prime, horizon, cap=4000):"
+analyze_rev4.py,220,ladder = decay_ladder(horizon)
+analyze_rev4.py,266,"def e2_time(series, horizon):"
+analyze_rev4.py,275,return last + 1 if last < horizon else None
+analyze_rev4.py,278,"def e3_estimators(series, window, horizon):"
+analyze_rev4.py,288,marks = [born] + changes + [horizon]
+analyze_rev4.py,294,tail = [t for t in changes if t > horizon - window]
+analyze_rev4.py,297,"""A"": bool(horizon - last_change >= window),               # 走行末で静かか"
+analyze_rev4.py,317,"★ 三つ組キー (slot_index, registered_at) で引く（T-045 / U-033）。"
+analyze_rev4.py,381,horizon = len(trials) - 1
+analyze_rev4.py,389,"header.get(""run_seed""), header.get(""trial_count""))"
+analyze_rev4.py,419,"window = tau_settle(snapshot, name, theta, header.get(""trial_count"") or len(trials))"
+analyze_rev4.py,420,"estimators = e3_estimators(series[name], window, horizon)"
+analyze_rev4.py,431,"""E2_time"": e2_time(series[name], horizon),"
+analyze_rev4.py,432,"""horizon"": horizon,"
+analyze_rev4.py,447,"supplies[pattern].get(name, set()), lifetime, horizon)"
+analyze_rev4.py,467,# ★ 逐語ベースライン（T-039）。水位の命題(i) の直接の材料
+analyze_rev4.py,489,"""T"": len(trials), ""verbatim_lifetime"": lifetime + 1,"
+analyze_rev4.py,501,"""pending_rate"": count(""保留"", ""pending"") / len(trials),"
+analyze_rev4.py,502,# ── 逐語ベースライン（T-039）──
+analyze_rev4.py,503,"""coverage"": len(spoke) / len(trials),"
+analyze_rev4.py,509,"""verbatim_rescue_rate"": rescued / len(trials),"
+analyze_rev4.py,518,"def pass_rate(defs, pattern, estimator, report_horizon=None):"
+analyze_rev4.py,522,段階2 到達時刻 s から report_horizon 試行ぶん追跡できた def だけを分母に入れ、
+analyze_rev4.py,536,"if estimator == ""C"" and report_horizon is not None:"
+analyze_rev4.py,537,deadline = stage2 + report_horizon
+analyze_rev4.py,538,"if deadline > record.get(""horizon"", 0):"
+analyze_rev4.py,653,for horizon in HORIZONS:
+analyze_rev4.py,654,"tag = ""★ 主"" if horizon == HORIZONS[0] else ""副"""
+analyze_rev4.py,655,"print(""\n--- 報告地平 %d 試行（U-016 %s）--- 推定量 C は地平で読む"" % (horizon, tag))"
+analyze_rev4.py,659,"result = pass_rate(defs, pattern, ""C"", report_horizon=horizon)"
+analyze_rev4.py,685,"*PRIMARY, report_horizon=HORIZONS[0])"
+analyze_rev5.py,33,"M-067  R の同定は NSIM(def, 場面) ≥ T"
+analyze_rev5.py,34,T-026  禁止条項 D20：分類と分母を run 前に固定し、台帳から事後判定する
+analyze_rev5.py,60,"T-045 の三つ組キー (R, slot_index, registered_at) に直した"
+analyze_rev5.py,138,"def world_tables(run_seed, trial_count):"
+analyze_rev5.py,143,"key = (str(run_seed), int(trial_count))"
+analyze_rev5.py,145,"world = generate_world(run_seed, trial_count, (""agent"",))"
+analyze_rev5.py,195,"def stage2_time(supplies, lifetime, horizon):"
+analyze_rev5.py,203,return death if death <= horizon else None
+analyze_rev5.py,205,return death if death <= horizon else None
+analyze_rev5.py,211,def decay_ladder(horizon):
+analyze_rev5.py,214,"math.exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))"
+analyze_rev5.py,219,"def tau_settle(snapshot, name, theta_prime, horizon, cap=4000):"
+analyze_rev5.py,233,ladder = decay_ladder(horizon)
+analyze_rev5.py,279,"def e2_time(series, horizon):"
+analyze_rev5.py,288,return last + 1 if last < horizon else None
+analyze_rev5.py,291,"def e3_estimators(series, window, horizon):"
+analyze_rev5.py,301,marks = [born] + changes + [horizon]
+analyze_rev5.py,307,tail = [t for t in changes if t > horizon - window]
+analyze_rev5.py,310,"""A"": bool(horizon - last_change >= window),               # 走行末で静かか"
+analyze_rev5.py,332,"★ 三つ組キー (slot_index, registered_at) で引く（T-045 / U-033）。"
+analyze_rev5.py,403,horizon = len(trials) - 1
+analyze_rev5.py,411,"header.get(""run_seed""), header.get(""trial_count""))"
+analyze_rev5.py,441,"window = tau_settle(snapshot, name, theta, header.get(""trial_count"") or len(trials))"
+analyze_rev5.py,442,"estimators = e3_estimators(series[name], window, horizon)"
+analyze_rev5.py,456,"""E2_time"": e2_time(series[name], horizon),"
+analyze_rev5.py,457,"""horizon"": horizon,"
+analyze_rev5.py,472,"supplies[pattern].get(name, set()), lifetime, horizon)"
+analyze_rev5.py,492,# ★ 逐語ベースライン（T-039）。水位の命題(i) の直接の材料
+analyze_rev5.py,514,"""T"": len(trials), ""verbatim_lifetime"": lifetime + 1,"
+analyze_rev5.py,526,"""pending_rate"": count(""保留"", ""pending"") / len(trials),"
+analyze_rev5.py,527,# ── 逐語ベースライン（T-039）──
+analyze_rev5.py,528,"""coverage"": len(spoke) / len(trials),"
+analyze_rev5.py,534,"""verbatim_rescue_rate"": rescued / len(trials),"
+analyze_rev5.py,543,"def pass_rate(defs, pattern, estimator, report_horizon=None):"
+analyze_rev5.py,547,段階2 到達時刻 s から report_horizon 試行ぶん追跡できた def だけを分母に入れ、
+analyze_rev5.py,561,"if estimator == ""C"" and report_horizon is not None:"
+analyze_rev5.py,562,deadline = stage2 + report_horizon
+analyze_rev5.py,563,"if deadline > record.get(""horizon"", 0):"
+analyze_rev5.py,678,for horizon in HORIZONS:
+analyze_rev5.py,679,"tag = ""★ 主"" if horizon == HORIZONS[0] else ""副"""
+analyze_rev5.py,680,"print(""\n--- 報告地平 %d 試行（U-016 %s）--- 推定量 C は地平で読む"" % (horizon, tag))"
+analyze_rev5.py,684,"result = pass_rate(defs, pattern, ""C"", report_horizon=horizon)"
+analyze_rev5.py,710,"*PRIMARY, report_horizon=HORIZONS[0])"
+analyze_rev6.py,44,"M-067  R の同定は NSIM(def, 場面) ≥ T"
+analyze_rev6.py,45,T-026  禁止条項 D20：分類と分母を run 前に固定し、台帳から事後判定する
+analyze_rev6.py,71,"T-045 の三つ組キー (R, slot_index, registered_at) に直した"
+analyze_rev6.py,149,"def world_tables(run_seed, trial_count):"
+analyze_rev6.py,154,"key = (str(run_seed), int(trial_count))"
+analyze_rev6.py,156,"world = generate_world(run_seed, trial_count, (""agent"",))"
+analyze_rev6.py,206,"def stage2_time(supplies, lifetime, horizon):"
+analyze_rev6.py,214,return death if death <= horizon else None
+analyze_rev6.py,216,return death if death <= horizon else None
+analyze_rev6.py,222,def decay_ladder(horizon):
+analyze_rev6.py,225,"math.exp(-1.0 / (0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (index / 15))))"
+analyze_rev6.py,230,"def tau_settle(snapshot, name, theta_prime, horizon, cap=4000):"
+analyze_rev6.py,244,ladder = decay_ladder(horizon)
+analyze_rev6.py,290,"def e2_time(series, horizon):"
+analyze_rev6.py,299,return last + 1 if last < horizon else None
+analyze_rev6.py,302,"def e3_estimators(series, window, horizon):"
+analyze_rev6.py,312,marks = [born] + changes + [horizon]
+analyze_rev6.py,318,tail = [t for t in changes if t > horizon - window]
+analyze_rev6.py,321,"""A"": bool(horizon - last_change >= window),               # 走行末で静かか"
+analyze_rev6.py,343,"★ 三つ組キー (slot_index, registered_at) で引く（T-045 / U-033）。"
+analyze_rev6.py,362,"""""""走行末の (生存述語, 墓石述語) を返す。★ T-045 の三つ組キーで突き合わせる。"
+analyze_rev6.py,441,horizon = len(trials) - 1
+analyze_rev6.py,449,"header.get(""run_seed""), header.get(""trial_count""))"
+analyze_rev6.py,479,"window = tau_settle(snapshot, name, theta, header.get(""trial_count"") or len(trials))"
+analyze_rev6.py,480,"estimators = e3_estimators(series[name], window, horizon)"
+analyze_rev6.py,498,"""E2_time"": e2_time(series[name], horizon),"
+analyze_rev6.py,499,"""horizon"": horizon,"
+analyze_rev6.py,514,"supplies[pattern].get(name, set()), lifetime, horizon)"
+analyze_rev6.py,534,# ★ 逐語ベースライン（T-039）。水位の命題(i) の直接の材料
+analyze_rev6.py,556,"""T"": len(trials), ""verbatim_lifetime"": lifetime + 1,"
+analyze_rev6.py,568,"""pending_rate"": count(""保留"", ""pending"") / len(trials),"
+analyze_rev6.py,569,# ── 逐語ベースライン（T-039）──
+analyze_rev6.py,570,"""coverage"": len(spoke) / len(trials),"
+analyze_rev6.py,576,"""verbatim_rescue_rate"": rescued / len(trials),"
+analyze_rev6.py,585,"def pass_rate(defs, pattern, estimator, report_horizon=None):"
+analyze_rev6.py,589,段階2 到達時刻 s から report_horizon 試行ぶん追跡できた def だけを分母に入れ、
+analyze_rev6.py,603,"if estimator == ""C"" and report_horizon is not None:"
+analyze_rev6.py,604,deadline = stage2 + report_horizon
+analyze_rev6.py,605,"if deadline > record.get(""horizon"", 0):"
+analyze_rev6.py,720,for horizon in HORIZONS:
+analyze_rev6.py,721,"tag = ""★ 主"" if horizon == HORIZONS[0] else ""副"""
+analyze_rev6.py,722,"print(""\n--- 報告地平 %d 試行（U-016 %s）--- 推定量 C は地平で読む"" % (horizon, tag))"
+analyze_rev6.py,726,"result = pass_rate(defs, pattern, ""C"", report_horizon=horizon)"
+analyze_rev6.py,752,"*PRIMARY, report_horizon=HORIZONS[0])"
+build_battery.py,8,統合決定台帳 T-041                  Sel・電池・収量は保留。★ 採否は未判断
+build_battery.py,9,統合決定台帳 T-043                  λ_mix は掃引軸ではない
+build_battery.py,55,# （T-038 と同型）。出所: 依頼L返答 §3-4 の Fable 案 ／ 2026-08-28 アストラさん承認
+build_battery_v2.py,8,統合決定台帳 T-041                  Sel・電池・収量は保留。★ 採否は未判断
+build_battery_v2.py,9,統合決定台帳 T-043                  λ_mix は掃引軸ではない
+build_battery_v2.py,55,# （T-038 と同型）。出所: 依頼L返答 §3-4 の Fable 案 ／ 2026-08-28 アストラさん承認
+checks.py,38,"""n_changes"", ""last_change"", ""tau_settle"", ""horizon"", ""thin"","
+checks.py,104,horizon_ok = [r for r in scored
+checks.py,105,"if r.get(""horizon"") is not None"
+checks.py,106,"and r[""stage2_b""] + HORIZON <= r[""horizon""]]"
+checks.py,107,if horizon_ok:
+checks.py,108,clean = sum(1 for r in horizon_ok
+checks.py,110,"counted = sum(1 for r in horizon_ok if r[""E3_C""] <= r[""stage2_b""] + HORIZON)"
+checks2.py,34,"""born"", ""n_changes"", ""change_times"", ""last_change"", ""tau_settle"", ""horizon"","
+checks2.py,160,"and r.get(""horizon"") is not None]"
+checks2.py,167,"print(""\n  m_live 平均（行 ＝ 年齢 ＝ horizon − born、列 ＝ θ′）"")"
+checks2.py,174,"and low <= (r[""horizon""] - r[""born""]) < high]"
+checks3.py,15,"台帳 U-071 は「本問いは本走行（40 seed × T=1,740）が答える」と明記している。"
+checks3.py,52,"""born"", ""horizon"", ""n_changes"", ""change_times"", ""tau_settle"", ""thin"","
+checks3.py,223,"and r.get(""born"") is not None and r.get(""horizon"") is not None]"
+checks3.py,236,"and low <= (r[""horizon""] - r[""born""]) < high]"
+checks3.py,252,"and low <= (r[""horizon""] - r[""born""]) < high]"
+checks3.py,274,"and r.get(""horizon"") is not None]"
+checks3.py,280,"span = max(1, record[""horizon""] - record[""born""])"
+ld.py,38,"""born"", ""horizon"", ""n_changes"", ""stage2_b"", ""E3_C"", ""change_times"","
+probe4.py,7,1  ★ def ごとの  λ_err（一適用あたり ② が立つ確率）と T（採択回数）
+probe4.py,8,★ ★ 神話の条件  λ_err × T < 1（生涯を通じて期待訂正回数が 1 回未満）
+probe4.py,64,horizon = 0
+probe4.py,79,T = len(rows)
+probe4.py,80,"horizon = max(horizon, T)"
+probe4.py,94,"d[""T""] += 1"
+probe4.py,103,"b = min(NBAND - 1, (t - 1) * NBAND // max(T, 1))"
+probe4.py,126,"print(f""試行行 {n_trial} ／ 適用あり {n_applied} ／ def 実体 {len(per_def)} ／ 地平 {horizon}"")"
+probe4.py,128,# ---- 1. λ_err × T ----
+probe4.py,131,"print(""★ 1  反証到着率 λ_err と 寿命 T（★ def 単位で直接数えた）"")"
+probe4.py,132,"print(""     λ_err = ② が立った適用 / 全適用   T = 採択回数"")"
+probe4.py,133,"print(""     ★ 期待訂正回数 = λ_err × T = ② が立った適用の 実数"")"
+probe4.py,137,"k = round(d[""k_sum""] / d[""T""])"
+probe4.py,143,"lam = sum(x[""fired""] for x in g) / sum(x[""T""] for x in g)"
+probe4.py,146,"print(f""{k:13d} {len(g):7d} {statistics.median([x['T'] for x in g]):7.0f} """
+probe4.py,147,"f""{statistics.mean(x['T'] for x in g):8.1f} {lam:8.4f} """
+probe4.py,157,"print(f""  {lab:>4}  def {len(g):6d}  T平均 {statistics.mean(x['T'] for x in g):7.1f}  """
+probe4.py,158,"f""λ_err {sum(x['fired'] for x in g)/sum(x['T'] for x in g):.4f}  """
+probe5.py,82,T = 0
+probe5.py,89,T += 1
+probe5.py,107,w = T - t0
+probe5.py,113,waits2.append(T - t0)
+probe5.py,116,open_san[key].append(T)
+probe5.py,118,open_fail[key].append(T)
+probe6.py,75,T = len(rows)
+probe6.py,79,n_trial += T
+probe6.py,95,"events.append((t0, T, t - t0, k0))"
+probe6.py,101,"events.append((t0, T, None, k0))"
+probe6.py,118,"elig = [(t0, T, w, k) for (t0, T, w, k) in events if t0 + W <= T]"
+probe6.py,137,"for (t0, T, w, k) in events:"
+probe6.py,138,if t0 + W > T:
+probe7.py,105,T = len(rows)
+probe7.py,106,n_trial += T
+probe7.py,133,if t + W > T:
+probe8.py,115,T = len(rows)
+probe8.py,149,if v != FAIL or t + W > T:
+probe9.py,98,T = len(rows)
+probe9.py,121,if t + W > T:
+sel.py,5,★ このスクリプトを走らせることは「Sel を採る」ことを意味しない（T-041 は保留のまま）。
+sel.py,11,統合決定台帳 T-041                  Sel・電池・収量は保留。★ 採否は未判断
+sel.py,237,"print(""★ Sel（選択性）  log2(p1/p0)。符号つき。★ T-041 は保留のまま"")"
+sweep.py,14,格子      決定台帳 T-030（f 0〜0.5 の 8 点）／T-044（等間隔）／
+sweep.py,15,試験 1-10（θ′ 4 点）／U-008（罰の射程 実質 2 点）／T-043（λ_mix は軸でない）
+sweep.py,16,"T         決定台帳 T-010（T ≈ 1,740）"
+sweep.py,17,シード     決定台帳 T-016（40）／依頼L §7-2（ΔAUC は 40 で足りる）
+sweep.py,57,"f(t) = f0 + (f1 - f0) * min(t / T, 1.0)"
+sweep.py,58,★ f0 > f1 のとき単調減衰。t は 0 起点（abm/world.py の range(trial_count)）。
+sweep.py,62,"def __init__(self, f0: float, f1: float, T: int):"
+sweep.py,65,if T <= 0:
+sweep.py,66,"raise ValueError(""T は正"")"
+sweep.py,69,self.T = T
+sweep.py,72,"return self.f0 + (self.f1 - self.f0) * min(t / self.T, 1.0)"
+sweep.py,151,"world = generate_world(task[""seed""], cfg[""trial_count""], tuple(cfg[""agent_ids""]), seed=seed,"
+sweep.py,156,"frequency = (DecayF(fixed[""f0""], fixed[""f1""], cfg[""trial_count""])"
+sweep.py,178,"run_seed=task[""seed""], trial_count=cfg[""trial_count""],"
+sweep.py,226,"""world_hash"": result.world_hash, ""trial_count"": result.trial_count,"
+sweep.py,263,"if cfg[""seeds""][""count""] < 1 or cfg[""trial_count""] < 1:"
+sweep.py,264,"raise SystemExit(""★ seeds.count と trial_count は 1 以上"")"
+sweep.py,299,if args.trial_count:
+sweep.py,300,"cfg[""trial_count""] = args.trial_count"
+sweep.py,320,"cfg[""trial_count""] = args.trial_count or 200"
+sweep.py,330,"print(f""T           {cfg['trial_count']}"")"
+sweep.py,365,"print(f""\n=== 較正（T={cfg['trial_count']} × {len(tasks)} 走行）==="")"
+sweep.py,380,"scale = (1740 / cfg[""trial_count""]) ** 1.63          # 走行時間の伸び（実測）"
+sweep.py,381,"size_scale = (1740 / cfg[""trial_count""]) ** 1.85     # 台帳の伸び（実測）"
+sweep.py,386,"print(f""\n  ★ 本走行への外挿（T=1,740 × {full_runs} 走行）"")"
+sweep.py,394,"""calibration_trial_count"": cfg[""trial_count""], ""n_runs"": len(tasks),"
+sweep_ORIGINAL.py,14,格子      決定台帳 T-030（f 0〜0.5 の 8 点）／T-044（等間隔）／
+sweep_ORIGINAL.py,15,試験 1-10（θ′ 4 点）／U-008（罰の射程 実質 2 点）／T-043（λ_mix は軸でない）
+sweep_ORIGINAL.py,16,"T         決定台帳 T-010（T ≈ 1,740）"
+sweep_ORIGINAL.py,17,シード     決定台帳 T-016（40）／依頼L §7-2（ΔAUC は 40 で足りる）
+sweep_ORIGINAL.py,109,"world = generate_world(task[""seed""], cfg[""trial_count""], tuple(cfg[""agent_ids""]), seed=seed)"
+sweep_ORIGINAL.py,120,"run_seed=task[""seed""], trial_count=cfg[""trial_count""],"
+sweep_ORIGINAL.py,154,"""world_hash"": result.world_hash, ""trial_count"": result.trial_count,"
+sweep_ORIGINAL.py,181,"if cfg[""seeds""][""count""] < 1 or cfg[""trial_count""] < 1:"
+sweep_ORIGINAL.py,182,"raise SystemExit(""★ seeds.count と trial_count は 1 以上"")"
+sweep_ORIGINAL.py,216,if args.trial_count:
+sweep_ORIGINAL.py,217,"cfg[""trial_count""] = args.trial_count"
+sweep_ORIGINAL.py,237,"cfg[""trial_count""] = args.trial_count or 200"
+sweep_ORIGINAL.py,246,"print(f""T           {cfg['trial_count']}"")"
+sweep_ORIGINAL.py,281,"print(f""\n=== 較正（T={cfg['trial_count']} × {len(tasks)} 走行）==="")"
+sweep_ORIGINAL.py,296,"scale = (1740 / cfg[""trial_count""]) ** 1.63          # 走行時間の伸び（実測）"
+sweep_ORIGINAL.py,297,"size_scale = (1740 / cfg[""trial_count""]) ** 1.85     # 台帳の伸び（実測）"
+sweep_ORIGINAL.py,302,"print(f""\n  ★ 本走行への外挿（T=1,740 × {full_runs} 走行）"")"
+sweep_ORIGINAL.py,310,"""calibration_trial_count"": cfg[""trial_count""], ""n_runs"": len(tasks),"
+sweep_ldecouple.py,14,格子      決定台帳 T-030（f 0〜0.5 の 8 点）／T-044（等間隔）／
+sweep_ldecouple.py,15,試験 1-10（θ′ 4 点）／U-008（罰の射程 実質 2 点）／T-043（λ_mix は軸でない）
+sweep_ldecouple.py,16,"T         決定台帳 T-010（T ≈ 1,740）"
+sweep_ldecouple.py,17,シード     決定台帳 T-016（40）／依頼L §7-2（ΔAUC は 40 で足りる）
+sweep_ldecouple.py,128,"world = generate_world(task[""seed""], cfg[""trial_count""], tuple(cfg[""agent_ids""]), seed=seed)"
+sweep_ldecouple.py,141,"run_seed=task[""seed""], trial_count=cfg[""trial_count""],"
+sweep_ldecouple.py,178,"""world_hash"": result.world_hash, ""trial_count"": result.trial_count,"
+sweep_ldecouple.py,215,"if cfg[""seeds""][""count""] < 1 or cfg[""trial_count""] < 1:"
+sweep_ldecouple.py,216,"raise SystemExit(""★ seeds.count と trial_count は 1 以上"")"
+sweep_ldecouple.py,250,if args.trial_count:
+sweep_ldecouple.py,251,"cfg[""trial_count""] = args.trial_count"
+sweep_ldecouple.py,271,"cfg[""trial_count""] = args.trial_count or 200"
+sweep_ldecouple.py,281,"print(f""T           {cfg['trial_count']}"")"
+sweep_ldecouple.py,316,"print(f""\n=== 較正（T={cfg['trial_count']} × {len(tasks)} 走行）==="")"
+sweep_ldecouple.py,331,"scale = (1740 / cfg[""trial_count""]) ** 1.63          # 走行時間の伸び（実測）"
+sweep_ldecouple.py,332,"size_scale = (1740 / cfg[""trial_count""]) ** 1.85     # 台帳の伸び（実測）"
+sweep_ldecouple.py,337,"print(f""\n  ★ 本走行への外挿（T=1,740 × {full_runs} 走行）"")"
+sweep_ldecouple.py,345,"""calibration_trial_count"": cfg[""trial_count""], ""n_runs"": len(tasks),"
+tests/test_b1_acceptance.py,12,"constituent_value, decay_ladder, exception_cost, initial_merit, participation,"
+tests/test_b1_acceptance.py,189,"horizon=400,"
+tests/test_b1_acceptance.py,278,"name=""R"", base_written_at=0, horizon=400,"
+tests/test_b1_acceptance.py,292,ladder = decay_ladder(400)
+tests/test_b1_acceptance.py,326,"horizon=400,"
+tests/test_b1_acceptance.py,382,"trial_count: int = 400,"
+tests/test_b1_acceptance.py,387,"generate_world(1, trial_count, (""agent"",)),"
+tests/test_b3_beta.py,16,"decay_ladder,"
+tests/test_b3_beta.py,42,LADDER = decay_ladder(HORIZON)
+tests/test_b3_beta.py,306,def test_c2_4_beta_run_without_horizon_stops() -> None:
+tests/test_b3_beta.py,316,"with pytest.raises(ValueError, match=""horizon""):"
+tests/test_v310_be.py,17,import test_v39_budget as T  # noqa: E402
+tests/test_v310_be.py,22,"T.MODE[""decay""] = ""actr"""
+tests/test_v310_be.py,25,"KW = dict(base_written_at=0, horizon=100, pricing_rule=""legacy"", refill_rule=""legacy"", local_lambda=1.0)"
+tests/test_v310_be.py,29,T.setup(price=lam)
+tests/test_v310_be.py,38,"B.CTX.update(R_B_trial=0.0, R_E_trial=0.0, L_score=v39.code_lengths(T.p_hat(**PH)))"
+tests/test_v310_be.py,43,"return T.S39(definitions={d.name: d for d in defs}, slot_history=hist, p_hat=T.p_hat(**PH), v39_seats=seats or {})"
+tests/test_v310_be.py,51,"return T.definition(T.row(0, ""fold"", (""x"", ""y"")), T.row(1, ""lock"", (""y"", ""z"")), T.row(2, ""push"", (""x"", ""z""), alive=False),"
+tests/test_v310_be.py,71,"lw = v39.code_lengths(T.p_hat(**PH))[""wrap""]"
+tests/test_v310_be.py,158,"v39.CFG[""T""] = 1740"
+tests/test_v310_be.py,159,"v39.CFG[""decay""] = __import__(""abm.accounting"", fromlist=[""decay_ladder""]).decay_ladder(1740)"
+tests/test_v310_be.py,160,"v39.CFG[""mean_weights""] = v39.actr_weights(1740)"
+tests/test_v310_be.py,167,"d = T.definition(T.row(0, ""fold"", (""x"", ""y"")), T.row(1, ""lock"", (""y"", ""z"")))"
+tests/test_v310_be.py,178,"d = T.definition(T.row(0, ""fold"", (""x"", ""y"")), T.row(1, ""lock"", (""y"", ""z"")), T.row(2, ""push"", (""x"", ""z"")))"
+tests/test_v310_be.py,216,"d = T.definition(T.row(0, ""fold"", (""x"", ""y""), alive=False))"
+tests/test_v310h_hist_role.py,13,import test_v39_budget as T  # noqa: E402
+tests/test_v310h_hist_role.py,19,"KW = dict(base_written_at=0, horizon=100, pricing_rule=""legacy"", refill_rule=""legacy"", local_lambda=1.0)"
+tests/test_v310h_hist_role.py,46,T.setup()
+tests/test_v310h_hist_role.py,47,"st0 = T.state([], {}, {})"
+tests/test_v310h_hist_role.py,78,T.setup()
+tests/test_v310h_hist_role.py,79,"st0 = T.state([], {}, {})"
+tests/test_v310hs_score_role.py,14,import test_v39_budget as T  # noqa: E402
+tests/test_v310hs_score_role.py,20,"DEF = T.definition(T.row(0, ""push"", (""x"", ""y""), rid=""r_push""), T.row(1, ""fold"", (""x"", ""y""), rid=""r_fold""),"
+tests/test_v310hs_score_role.py,21,"T.row(2, ""cause"", (""r_push"", ""r_fold""), rid=""r_c""), name=""R_x"")"
+tests/test_v310hs_score_role.py,75,"lp = v39.code_lengths(T.p_hat(**E.PH))[""pull""]"
+tests/test_v310hs_score_role.py,94,"d = T.definition(T.row(0, ""push"", (""x"", ""y""), rid=""r_push""), T.row(1, ""fold"", (""x"", ""y""), rid=""r_fold""),"
+tests/test_v310hs_score_role.py,95,"T.row(2, ""cause"", (""r_push"", ""r_fold""), rid=""r_c""), T.row(3, ""cause"", (""r_fold"", ""r_push""), rid=""r_d""),"
+tests/test_v310u.py,16,import test_v39_budget as T  # noqa: E402
+tests/test_v310u.py,27,"return T.definition(T.row(0, ""cause"", (""r1"", ""r2""), rid=""c1""), T.row(1, r1_pred, r1_args, alive=False, rid=""r1""),"
+tests/test_v310u.py,28,"T.row(2, ""brk"", (""x"", ""y""), rid=""r2""), name=""R_u"")"
+tests/test_v310u.py,46,T.setup()
+tests/test_v310u.py,56,T.setup()
+tests/test_v310u.py,61,T.setup()
+tests/test_v310u.py,69,T.setup()
+tests/test_v310u.py,74,T.setup()
+tests/test_v310u.py,82,T.setup()
+tests/test_v310u.py,90,T.setup()
+tests/test_v310u.py,92,"st = T.state([d], {(""R_u"", 0): {""cause"": 1}, (""R_u"", 2): {""brk"": 1}}, {})"
+tests/test_v310urta_amb_local.py,13,import test_v39_budget as T  # noqa: E402
+tests/test_v310urta_amb_local.py,18,"PH = T.p_hat(fold=2, wrap=2, lock=2, push=2, pull=2, cause=2)"
+tests/test_v310urta_amb_local.py,28,T.setup()
+tests/test_v310urta_amb_local.py,34,"d = T.definition(T.row(0, ""fold"", (""x"", ""y""), rid=""r0""), T.row(1, v39.ERASED, (""x"", ""y""), alive=False, rid=""r1""),"
+tests/test_v310urta_amb_local.py,35,"T.row(2, v39.ERASED, (""x"", ""y""), alive=False, rid=""r2""), name=""R_a"")"
+tests/test_v310urta_amb_local.py,55,"d = T.definition(T.row(0, ""fold"", (""x"", ""y""), rid=""r0""), T.row(1, v39.ERASED, (""x"", ""y""), alive=False, rid=""r1""),"
+tests/test_v310urta_amb_local.py,56,"T.row(2, ""cause"", (""r1"", ""r0""), rid=""c1""), name=""R_a"")"
+tests/test_v310urta_amb_local.py,82,"d2 = T.definition(T.row(0, ""fold"", (""x"", ""y""), rid=""r0""), T.row(1, v39.ERASED, (""x"", ""y""), alive=False, rid=""r1""),"
+tests/test_v310urta_amb_local.py,83,"T.row(2, v39.ERASED, (""y"", ""x""), alive=False, rid=""r2""), T.row(3, v39.ERASED, (""x"", ""y""), alive=False, rid=""r3""),"
+tests/test_v310urta_amb_local.py,95,"d = T.definition(T.row(0, ""fold"", (""x"", ""y""), rid=""r0""), T.row(1, v39.ERASED, (""x"", ""y""), alive=False, rid=""r1""), name=""R_a"")"
+tests/test_v310urta_amb_local.py,104,"T.setup(u=""abstain"")"
+tests/test_v310urta_amb_local.py,107,"d = T.definition(T.row(0, ""fold"", (""x"", ""y""), rid=""r0""), T.row(1, v39.ERASED, (""x"", ""y""), alive=False, rid=""r1""),"
+tests/test_v310urta_amb_local.py,108,"T.row(2, v39.ERASED, (""y"", ""x""), alive=False, rid=""r2""), T.row(3, v39.ERASED, (""x"", ""y""), alive=False, rid=""r3""),"
+tests/test_v38_own_evidence.py,19,"from abm.accounting import decay_ladder, initial_merit  # noqa: E402"
+tests/test_v38_own_evidence.py,100,decay = decay_ladder(1740)
+tests/test_v38_own_evidence.py,129,"def inner(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tests/test_v38_own_evidence.py,134,"def d32_like(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tests/test_v38_own_evidence.py,136,"return inner(state, output, scene, config, horizon, score, replace(coin, f_fired=False), revealed_edge)"
+tests/test_v39_budget.py,16,from abm.accounting import decay_ladder  # noqa: E402
+tests/test_v39_budget.py,31,"def setup(budget=None, init=""two"", a=0.5, u=""global"", T=100, price=None):"
+tests/test_v39_budget.py,34,"v39.CFG.update(seed=1, T=T, budget=budget, init=init, a=a, u_abstain=(u == ""abstain""), decay=decay_ladder(T),"
+tests/test_v39_budget.py,37,"v39.CFG[""mean_weights""] = v39.actr_weights(T)"
+tools/answerlog.py,185,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/answerlog.py,194,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/answerseat_analysis.py,128,"worlds[s] = generate_world(h[""run_seed""], h[""trial_count""], [""agent""], seed=seedobj,"
+tools/cflearn.py,79,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/cflearn.py,97,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/cfvalue.py,5,答えた席・答えた席の親（その席の関係を引数に持つ行）・根（一番上の関係）・T 階（部分木 T をまとめる関係）・
+tools/cfvalue.py,7,根と T 階は、席の関係 ID と同じ ID の世界の関係の述語（研究者の側。種ファイルの骨組みの語）で見分ける。シールと link は tools/shopworld.py の IDS。
+tools/cfvalue.py,61,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/cfvalue.py,65,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/cfvalue.py,116,"k.append(""T 階"")"
+tools/checks_v37.py,26,"def wrapped(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tools/checks_v37.py,27,"next_state, acc = real(state, output, scene, config, horizon, score, coin, revealed_edge)"
+tools/deathterms.py,21,"from abm.accounting import constituent_value_terms, decay_ladder, participation"
+tools/deathterms.py,32,"horizon = kw.get(""horizon"")"
+tools/deathterms.py,33,decay = decay_ladder(horizon) if config.beta else None
+tools/extrap_reader.py,58,"world = generate_world(header[""run_seed""], header[""trial_count""], [""agent""], seed=load_seed(seedf),"
+tools/fp_check_v31.py,11,"print(f""{time.strftime('%F %T')} 指紋 {fpf}（{len(cloud)} 本）走行根 {root} pid {pid}"", flush=True)"
+tools/fp_check_v31.py,54,"print(f""{time.strftime('%F %T')} {k[0]} seed{k[1]:03d} {'一致' if not bad else '不一致 ' + '・'.join(bad)}"""
+tools/fp_check_v31.py,57,"mm.write_text(f""{time.strftime('%F %T')} {root} {k} {bad}\n"")"
+tools/fp_check_v31.py,62,"print(f""{time.strftime('%F %T')} 不一致のため走行を止めた（pid {pid} と子 {kids}）"", flush=True)"
+tools/fp_check_v31.py,65,"print(f""{time.strftime('%F %T')} 走行が終わった。比べた台帳 {len(done)} 本（指紋 {len(cloud)} 本）"", flush=True)"
+tools/l2scan_spoke.py,75,"cfg=config_from_header(h); T=h[""trial_count""]"
+tools/l2scan_spoke.py,76,"ws=generate_world(h[""run_seed""],T,[""agent""],seed=load_seed(SEEDP),"
+tools/l2scan_spoke_v6.py,81,"cfg=config_from_header(h); T=h[""trial_count""]"
+tools/l2scan_spoke_v6.py,82,"ws=generate_world(h[""run_seed""],T,[""agent""],seed=load_seed(SEEDP),"
+tools/l2scan_spoke_v7.py,128,"cfg=config_from_header(h); T=h[""trial_count""]"
+tools/l2scan_spoke_v7.py,129,"ws=generate_world(h[""run_seed""],T,[""agent""],seed=load_seed(SEEDP),"
+tools/l2scan_spoke_v8.py,177,"cfg=config_from_header(h); T=h[""trial_count""]; LATE=T//2   # ★ 版 8：試行数の半分"
+tools/l2scan_spoke_v8.py,178,"ws=generate_world(h[""run_seed""],T,[""agent""],seed=load_seed(SEEDP),"
+tools/matcher_audit.py,55,"def score(B, T, pairs):"
+tools/matcher_audit.py,58,tids = {r.relation_id: r for r in T.relations}
+tools/matcher_audit.py,76,"def reference(B, T):"
+tools/matcher_audit.py,78,tids = {r.relation_id for r in T.relations}
+tools/matcher_audit.py,79,tents = {e.entity_id for e in T.entities}
+tools/matcher_audit.py,84,for r in T.relations:
+tools/matcher_audit.py,101,"s, rm = score(B, T, pairs)"
+tools/matcher_audit.py,141,"def compare(B, T):"
+tools/matcher_audit.py,142,"al = sme.map_graphs(B, T).alignment"
+tools/matcher_audit.py,144,"best, bs = reference(B, T)"
+tools/matcher_audit.py,146,"res = sme.map_graphs(B, T)"
+tools/matcher_audit.py,148,"s_re, _ = score(B, T, pairs)"
+tools/matcher_audit.py,229,"B, T = G(""b"", be, b), G(""t"", te, t)"
+tools/matcher_audit.py,230,"res[""手で作った例""][k] = {""基"": b, ""相手"": t, **compare(B, T)}"
+tools/matcher_audit.py,237,"B, T = G(""b"", be, b), G(""t"", te, t)"
+tools/matcher_audit.py,238,"c = compare(B, T)"
+tools/per_seed_outcome.py,23,"T = list(csv.DictReader(open(f, encoding=""utf-8"")))"
+tools/per_seed_outcome.py,24,"arm = T[0][""arm""]"
+tools/per_seed_outcome.py,25,"seeds = sorted({r[""seed""] for r in T})"
+tools/per_seed_outcome.py,27,"if ""rate_in"" + s not in T[0] or all(num(r[""rate_in"" + s]) is None for r in T):"
+tools/per_seed_outcome.py,31,for r in T:
+tools/probeworld.py,81,"def install(path, *, run_seed, agent_ids, seed_file, horizon, holdout_second) -> None:"
+tools/probeworld.py,88,"ST.update(f=open(path, ""w"", encoding=""utf-8""), run_seed=run_seed, sd=sd, horizon=horizon, trials={}, disclosed={}, probes=[],"
+tools/probeworld.py,125,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/probeworld.py,128,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/probeworld.py,136,if nxt % 100 == 0 and nxt < horizon:
+tools/probeworld.py,138,if trial == horizon - 1:
+tools/probeworld.py,139,"_probe(after, config, horizon)"
+tools/relearninit.py,39,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/relearninit.py,41,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/shop/check_g1b.py,24,"W_ = w.generate_world(h[""run_seed""], h[""trial_count""], [""agent""], seed=sd, holdout_include_second_order=bool(h.get(""arm_holdout_second_order"")))"
+tools/shop/gate2.py,37,"KW = dict(base_written_at=0, horizon=1740, pricing_rule=""spec"", refill_rule=""one_per_slot"", local_lambda=1.0)"
+tools/shop/gate2.py,48,"sw.setup(T=1740, lam=lam)"
+tools/strictpc.py,302,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/strictpc.py,304,"return real_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/strictpc.py,356,"bits = v39.clog2(v39.CFG[""T""]) + v39.I(m) + v39.I(e)"
+tools/strictpc.py,395,"def _probe5(prev, cands, out, g, T):"
+tools/strictpc.py,405,"c2 = prev(g, T)"
+tools/strictpc.py,406,"o2, n2, r2, _u = filter_candidates(c2, g, T)"
+tools/subtree_split.py,62,"T = list(csv.DictReader(io.StringIO(sp.extractfile(dm).read().decode(""utf-8""))))"
+tools/subtree_split.py,69,for r in T:
+tools/subtree_split_f.py,85,"T = list(csv.DictReader(open(csvp, encoding=""utf-8"")))"
+tools/subtree_split_f.py,87,"src.append(f""f={fv}：{csvp.name}（{len(T):,} 定義）・{pack.name} の side（台帳 {nled}）"")"
+tools/subtree_split_f.py,91,for r in T:
+tools/traj8_par.py,16,"k=(h[""run_seed""],h[""trial_count""],bool(h.get(""arm_holdout_second_order"") or False))"
+tools/v31.py,63,"def wrapped(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tools/v31.py,69,"return real(state, output, scene, config, horizon, score, coin, revealed_edge)"
+tools/v31.py,70,"next_state, acc = real(state, output, scene, config, horizon, score, replace(coin, f_fired=False), revealed_edge)"
+tools/v310be.py,450,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/v310be.py,454,"return inner_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/v310be_summary.py,92,"tasks[(cell, sd)] = header[""trial_count""]"
+tools/v32_try_tab.py,8,"T = Path(""/Users/tatsu-admin/sfn/sfn-compression-abm/analysis_v32_2026-09-26/try"")"
+tools/v32_try_tab.py,14,"for side in sorted((T / arm / ""side"").glob(""*/seed*.jsonl"")):"
+tools/v32_try_tab.py,24,"man = T / arm / ""manifest.jsonl"""
+tools/v38.py,124,"def update_accounting(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tools/v38.py,140,"next_state, acc = real_accounting(state, output, scene, config, horizon, score, coin, revealed_edge)"
+tools/v38_checks/handcalc.py,9,"T = int(os.environ[""HC_T""]); OUT = os.environ[""HC_OUT""]"
+tools/v38_checks/handcalc.py,23,"real_theta = loop.apply_theta; real_acc = loop._update_accounting; res = {""T"": T, ""V38_FROM"": os.environ.get(""V38_FROM"")}"
+tools/v38_checks/handcalc.py,34,"def acc(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tools/v38_checks/handcalc.py,35,if coin.t == T:
+tools/v38_checks/handcalc.py,39,"out = real_acc(state, output, scene, config, horizon, score, coin, revealed_edge)"
+tools/v38_checks/handcalc.py,40,if coin.t == T:
+tools/v38_checks/handcalc.py,46,if trial == T:
+tools/v38_checks/handcalc.py,57,if trial == T:
+tools/v38_checks/t02.py,21,"def acc(state, output, scene, config, horizon, score, coin, revealed_edge):"
+tools/v38_checks/t02.py,22,"out1 = inner(state, output, scene, config, horizon, score, coin, revealed_edge)"
+tools/v38_checks/t02.py,29,"out2 = inner(state, output, scene, config, horizon, score, coin, fake)"
+tools/v39.py,31,構造：ceil(log2 T)＋I(m)＋I(e)＋Σ 席［I(引数数)＋Σ 引数（型 1 ビット＋ceil(log2(e または m))）］。
+tools/v39.py,124,"bits = clog2(CFG[""T""]) + I(m) + I(e)"
+tools/v39.py,220,def actr_weights(horizon: int) -> tuple:
+tools/v39.py,221,"""""""--v39-decay actr の平均の重み：abm/accounting.py の decay_ladder と同じ時定数 τₖ（0.3〜3T の等比 16 本）に対し τₖ^(−0.5) ∝、合計 1。"""""""
+tools/v39.py,222,"taus = [0.3 * ((max(horizon * 3, 0.3) / 0.3) ** (k / 15)) for k in range(16)]"
+tools/v39.py,970,"def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a: float, u: str,"
+tools/v39.py,977,from abm.accounting import decay_ladder
+tools/v39.py,986,"CFG.update(seed=seed, T=horizon, budget=budget, init=init, a=float(a), u_abstain=(u == ""abstain""),"
+tools/v39.py,987,"decay=decay_ladder(horizon), D=len(dictionary), dict_index={p: i for i, p in enumerate(dictionary)},"
+tools/v39.py,995,"CFG[""mean_weights""] = actr_weights(horizon)"
+tools/v39.py,1002,"price_conv=0, cfg={**{k: CFG[k] for k in (""budget"", ""init"", ""a"", ""u_abstain"", ""D"", ""T"", ""rho"", ""argmax"", ""commons"")},"
+tools/v39.py,1018,"def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):"
+tools/v39.py,1021,"next_state, acc = real_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge)"
+tools/v39.py,1105,"def apply(state, config, trial, *, horizon=None):"
+tools/v39_summary.py,36,"ws = generate_world(header[""run_seed""], header[""trial_count""], [""agent""], seed=load_seed(seedf),"
+tools/v3_run.py,431,"v39.install(fo, seed=int(task[""seed""]), horizon=int(task[""cfg""][""trial_count""]),"
+tools/v3_run.py,493,"seed_file=str(ROOT / task[""cfg""][""seed_file""]), horizon=int(task[""cfg""][""trial_count""]),"
+tools/v3_run.py,756,if args.trial_count is not None:
+tools/v3_run.py,757,"cfg2[""trial_count""] = args.trial_count"
+tools/v3_run.py,846,"print(f""{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} """
+tools/v3_run.py,859,"print(f""{time.strftime('%F %T')} {rec['cell']} seed{rec['seed']:03d} 秒={rec.get('elapsed_sec')} """
+tools/v3_run.py,866,"print(f""{time.strftime('%F %T')} ALLDONE {cfg['name']}"", flush=True)"
+tools/worldvariant.py,24,"INFO: dict = {}      # G_star.graph_id → {""variant"", ""switch"": {T: relation_id}, ""held_out_switch""}"
+tools/worldvariant_checks/world_stats.py,15,T = int(sys.argv[2])
+tools/worldvariant_checks/world_stats.py,22,for t in range(T):
+tools/worldvariant_checks/world_stats.py,68,"print({""種"": seeds, ""試行"": T, ""変種 A の確率"": p})"

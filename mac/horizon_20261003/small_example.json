@@ -1,0 +1,111 @@
+{
+  "source_commit": "88e0e38bbd4f8ebbdc3f087de36801ce64a673e2",
+  "branch": "horizon-2026-10-03",
+  "python": "3.12.13 (main, Mar  3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "simulation_runs": 0,
+  "seed_data_read": false,
+  "cases": [
+    {
+      "case": "tools/v39.py:124",
+      "m": 2,
+      "e": 2,
+      "relations": [
+        {
+          "id": "r0",
+          "name": "push",
+          "arguments": [
+            "x",
+            "y"
+          ],
+          "state": "F",
+          "history": {
+            "push": 1
+          },
+          "name_code_bits": 2
+        },
+        {
+          "id": "r1",
+          "name": "fold",
+          "arguments": [
+            "x",
+            "y"
+          ],
+          "state": "F",
+          "history": {
+            "fold": 1
+          },
+          "name_code_bits": 2
+        }
+      ],
+      "measurements": [
+        {
+          "T": 1740,
+          "ceil_log2_T": 11,
+          "structure_bits": 31,
+          "definition_bits": 57
+        },
+        {
+          "T": 3480,
+          "ceil_log2_T": 12,
+          "structure_bits": 32,
+          "definition_bits": 58
+        }
+      ],
+      "structure_difference_bits": 1,
+      "definition_difference_bits": 1
+    },
+    {
+      "case": "tools/strictpc.py:356",
+      "m": 2,
+      "e": 2,
+      "relations": [
+        {
+          "id": "r2",
+          "name": "parent",
+          "arguments": [
+            "missing_child",
+            "x"
+          ],
+          "state": "F",
+          "history": {
+            "parent": 1
+          },
+          "name_code_bits": 2
+        },
+        {
+          "id": "r3",
+          "name": "leaf",
+          "arguments": [
+            "x",
+            "y"
+          ],
+          "state": "F",
+          "history": {
+            "leaf": 1
+          },
+          "name_code_bits": 2
+        }
+      ],
+      "measurements": [
+        {
+          "T": 1740,
+          "ceil_log2_T": 11,
+          "structure_bits": 31,
+          "definition_bits": 57
+        },
+        {
+          "T": 3480,
+          "ceil_log2_T": 12,
+          "structure_bits": 32,
+          "definition_bits": 58
+        }
+      ],
+      "structure_difference_bits": 1,
+      "definition_difference_bits": 1
+    }
+  ],
+  "lambda": 0.01873710622997919,
+  "lambda_times_one_bit": 0.01873710622997919,
+  "inventory_files": 73,
+  "inventory_lines": 527
+}
