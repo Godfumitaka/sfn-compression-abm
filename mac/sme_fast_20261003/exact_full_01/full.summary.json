@@ -1,0 +1,47 @@
+{
+  "baseline_commit": "bdaa110097395f97fa920461ba96a61843a2b73b",
+  "candidate_commit": "869a2496dbe2ab0963ce7eaf3560719af58cd263",
+  "all_requested_bytes_equal": true,
+  "sec_trial_only_exclusion": true,
+  "full_run_has_sec_trial": false,
+  "compared_records": 9,
+  "tie_rng_trials": 1740,
+  "ledger_header_different_keys": [
+    "code_commit"
+  ],
+  "measurements": [
+    {
+      "run": "baseline",
+      "code_commit": "bdaa110097395f97fa920461ba96a61843a2b73b",
+      "wall_seconds": 6983.662688958997,
+      "manifest_elapsed_sec": 6977.94,
+      "peak_rss_mb": 4378.3,
+      "trial_count": 1740,
+      "cache_count": 82606,
+      "self_cache_count": 2445,
+      "cache_rng_count": 82606,
+      "min_free_gib": 42.018028259277344,
+      "max_observed_python_heavy": 4,
+      "thermal_warning_samples": 0,
+      "samples": 233
+    },
+    {
+      "run": "fast",
+      "code_commit": "869a2496dbe2ab0963ce7eaf3560719af58cd263",
+      "wall_seconds": 3971.4774331250082,
+      "manifest_elapsed_sec": 3965.65,
+      "peak_rss_mb": 4267.6,
+      "trial_count": 1740,
+      "cache_count": 82606,
+      "self_cache_count": 2445,
+      "cache_rng_count": 82606,
+      "min_free_gib": 41.623817443847656,
+      "max_observed_python_heavy": 4,
+      "thermal_warning_samples": 0,
+      "samples": 133
+    }
+  ],
+  "wall_speed_factor": 1.758454581841552,
+  "manifest_speed_factor": 1.7595955265845447,
+  "cache_eviction_changes": 0
+}
