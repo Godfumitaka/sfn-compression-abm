@@ -36,7 +36,7 @@ for name in paths:
         if pattern.search(line):
             hits.append({"file": name, "line": line_number, "text": line.strip()})
 with (OUT / "T_使用候補.csv").open("w", encoding="utf-8", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=["file", "line", "text"])
+    writer = csv.DictWriter(f, fieldnames=["file", "line", "text"], lineterminator="\n")
     writer.writeheader()
     writer.writerows(hits)
 
