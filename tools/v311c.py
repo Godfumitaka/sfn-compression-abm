@@ -39,6 +39,7 @@ from hashlib import sha256
 from random import Random
 from types import SimpleNamespace
 from typing import Mapping
+from v311c_fingerprint import fingerprint
 
 STATS: dict = {}
 CFG: dict = {}
@@ -489,7 +490,7 @@ def probe(state, items, config):
     from abm.domains import AgentInput, EdgePrediction
     import random
     audit = CFG.get("audit", False)
-    before = (repr(state), random.getstate()) if audit else None
+    before = (fingerprint(state), random.getstate()) if audit else None
     snap = _snapshot_modules()
     out = []
     try:
@@ -501,7 +502,7 @@ def probe(state, items, config):
             out.append([p.edge.predicate, list(p.edge.arguments)] if isinstance(p, EdgePrediction) else None)
     finally:
         _restore_modules(snap)
-    if audit and before != (repr(state), random.getstate()):
+    if audit and before != (fingerprint(state), random.getstate()):
         raise RuntimeError("一致の試験で学習状態又は本走行の乱数状態が変わった")
     return out
 
@@ -644,7 +645,7 @@ def install(fo, task, REAL) -> None:
                        if CFG["tags"] else [])
             reply = {"type": "received", "t": trial, "records": recs, "tags": present, "defs": len(state.definitions)}
             if CFG.get("audit"):
-                reply["audit"] = {"state": sha256(repr(state).encode()).hexdigest(),
+                reply["audit"] = {"state": fingerprint(state),
                                   "rng": sha256(repr(state.rng_state).encode()).hexdigest()}
             if serial is not None:
                 serial.release()
