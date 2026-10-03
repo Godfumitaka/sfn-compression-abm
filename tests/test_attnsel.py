@@ -164,9 +164,72 @@ def test_04b_empty_H_preserves_unit_N3_and_max_tie_subgradient_is_symmetric():
     tt = A.terms(d, hist, al, OLD.SCENE)
     w = {"fold": 1., "wrap": 1., "lock": 1., "cause": 1.}
     g = tt.gradient(w)
-    # cross の fold による差を除いた自己の微分は両名に等分。
+    # H の max の自己微分は fold/wrap へ等分する。一方、場面には fold が
+    # 一回あり wrap は無いので、分子の微分差だけでなく S(x,x) の微分差も 1。
+    # Q=2S/D より g_fold-g_wrap=2*(D-S)/D²。S=11,D=22 では 1/22。
+    # 旧期待値 2/D は場面の自己点の変化を落としていた（ユーザーの再開指示）。
     s, dd, xx = tt.scores(w)
-    assert g["fold"] - g["wrap"] == pytest.approx(float(2 / (dd + xx)))
+    den = dd + xx
+    expected = float(2 * (den - s) / den**2)
+    assert expected == pytest.approx(1 / 22)
+    assert g["fold"] - g["wrap"] == pytest.approx(expected)
+    # 解析勾配を呼ばない点の式で独立に中央差分を取る。
+    measured = []
+    for eps in (1e-4, 1e-5, 1e-6):
+        lo, hi = dict(w), dict(w)
+        lo["fold"] -= eps; lo["wrap"] += eps
+        hi["fold"] += eps; hi["wrap"] -= eps
+        slope = (reference_q(tt, hi) - reference_q(tt, lo)) / (2 * eps)
+        assert slope == pytest.approx(expected, abs=2e-9)
+        measured.append({"epsilon": eps, "central_Q_fold_minus_wrap": slope})
+    print(json.dumps({"H_tie_corrected_expected": expected, "measured": measured}))
+
+
+def reference_scores(tt, weights):
+    """検算専用。実装の scores/value/gradient を使わず点の式を評価する。"""
+    cross = tt.cross_structure + math.fsum(n * weights.get(p, 1.) for p, n in tt.cross)
+    dd = (tt.definition_structure + tt.empty_histories
+          + math.fsum(n * weights.get(p, 1.) for p, n in tt.fixed)
+          + math.fsum(max(weights.get(p, 1.) for p in h) for h in tt.histories))
+    xx = tt.scene_structure + math.fsum(n * weights.get(p, 1.) for p, n in tt.scene_names)
+    return cross, dd, xx
+
+
+def reference_q(tt, weights):
+    s, dd, xx = reference_scores(tt, weights)
+    return 2 * s / (dd + xx)
+
+
+def reference_loss(cands, weights, correct, beta):
+    """検算専用。実装の loss_gradient を使わず softmax の損失を評価する。"""
+    logits = [beta * reference_q(c.terms, weights) for c in cands]
+    top = max(logits)
+    ex = [math.exp(z - top) for z in logits]
+    return math.log(math.fsum(ex)) - math.log(math.fsum(z for z, ok in zip(ex, correct) if ok))
+
+
+def reference_loss_direction(cands, weights, correct, beta, direction):
+    """同点の max の片側微分は、その同点名の方向成分の最大値。
+
+    H 同点では一意な勾配がないため、等分勾配の内積を片側微分と同一視しない。
+    更新で同点を崩す場合も、max の方向微分を含む予測と実測 L を比べる。
+    """
+    qs, dqs = [], []
+    for c in cands:
+        tt = c.terms
+        s, dd, xx = reference_scores(tt, weights)
+        ds = math.fsum(n * direction[p] for p, n in tt.cross)
+        dden = math.fsum(n * direction[p] for p, n in (*tt.fixed, *tt.scene_names))
+        for h in tt.histories:
+            top = max(weights[p] for p in h)
+            dden += max(direction[p] for p in h if weights[p] == top)
+        qs.append(2 * s / (dd + xx))
+        dqs.append(2 * (ds * (dd + xx) - s * dden) / (dd + xx)**2)
+    top = max(qs)
+    ex = [math.exp(beta * (q - top)) for q in qs]
+    all_z, good_z = math.fsum(ex), math.fsum(z for z, ok in zip(ex, correct) if ok)
+    return beta * math.fsum((z / all_z - (z / good_z if ok else 0)) * dq
+                           for z, ok, dq in zip(ex, correct, dqs))
 
 
 def test_05_analytic_gradient_matches_measured_loss_and_projected_step():
@@ -175,19 +238,23 @@ def test_05_analytic_gradient_matches_measured_loss_and_projected_step():
     w = dict(learner.weights); w.update(sig_e=1.3, hold=0.9)
     mask = tuple(c.answer == (y.predicate, y.arguments) for c in cs)
     loss, grad, pi = A.loss_gradient(cs, w, mask, 5.)
+    errors = []
     for p in w:
         left, right = dict(w), dict(w)
         left[p] -= 1e-6; right[p] += 1e-6
-        measured = (A.loss_gradient(cs, right, mask, 5.)[0] - A.loss_gradient(cs, left, mask, 5.)[0]) / 2e-6
+        measured = (reference_loss(cs, right, mask, 5.) - reference_loss(cs, left, mask, 5.)) / 2e-6
         assert measured == pytest.approx(grad[p], abs=2e-9)
+        errors.append(abs(measured - grad[p]))
     # 平均 1 の射影まで含め、実際の小さな一歩の L と勾配による予測を照合。
     w = {p: 1. for p in w}
     loss, grad, _pi = A.loss_gradient(cs, w, mask, 5.)
     after = A.normalized_step(w, grad, 1e-6)
-    delta = A.loss_gradient(cs, after, mask, 5.)[0] - loss
+    delta = reference_loss(cs, after, mask, 5.) - reference_loss(cs, w, mask, 5.)
     predicted = math.fsum(grad[p] * (after[p] - w[p]) for p in w)
     assert delta < 0 and delta == pytest.approx(predicted, abs=2e-12)
     assert sum(pi) == pytest.approx(1.)
+    print(json.dumps({"smooth_max_central_L_error": max(errors), "eta": 1e-6,
+                      "L_change_measured": delta, "L_change_gradient_prediction": predicted}))
 
 
 def test_05b_H_smooth_gradient_and_multiple_correct_candidates():
@@ -201,6 +268,59 @@ def test_05b_H_smooth_gradient_and_multiple_correct_candidates():
     for p in w:
         lo, hi = dict(w), dict(w); lo[p] -= 1e-6; hi[p] += 1e-6
         assert g[p] == pytest.approx((A.loss_gradient(cs, hi, mask, 10.)[0] - A.loss_gradient(cs, lo, mask, 10.)[0]) / 2e-6, abs=2e-9)
+
+
+def test_05c_H_tie_measured_loss_and_actual_normalized_update_direction():
+    # 通常の定義のシールは U、例外の定義のシールを sig_e/sig_n 同点の H にする。
+    # 門と答えは既存 predict が決め、開示の前に確定させる。
+    st, ai, cfg, truth = C.example(extra_unknown=True)
+    d = st.definitions["R_exception"]
+    h_d = replace(d, constituents=tuple(replace(r, alive=False) if r.slot_index == 3 else r
+                                        for r in d.constituents))
+    hist = dict(st.slot_history); hist[(d.name, 3)] = {"sig_e": 1, "sig_n": 1}
+    st = replace(st, definitions={**st.definitions, d.name: h_d}, slot_history=hist)
+    learner = A.Attention(enabled=True, beta=5., eta=1e-6, seen=C.SEEN)
+    pre = learner.prepare("agent", 1, ai, st, cfg, Random(1))
+    weights = dict(pre.before)
+    cs = pre.candidates
+    assert any(("sig_e", "sig_n") in c.terms.histories for c in cs)
+    correct = tuple(c.answer == (truth.predicate, truth.arguments) for c in cs)
+    assert any(correct) and not all(correct)
+    loss, gradient, _pi = A.loss_gradient(cs, weights, correct, learner.beta)
+    base_loss = reference_loss(cs, weights, correct, learner.beta)
+    assert base_loss == pytest.approx(loss, abs=2e-15)
+    numerical, errors = {}, []
+    for eps in (1e-4, 1e-5, 1e-6):
+        for p in weights:
+            lo, hi = dict(weights), dict(weights)
+            lo[p] -= eps; hi[p] += eps
+            numerical[p] = (reference_loss(cs, hi, correct, learner.beta)
+                            - reference_loss(cs, lo, correct, learner.beta)) / (2 * eps)
+        errors.append({"epsilon": eps, "max_central_L_error": max(abs(numerical[p] - gradient[p]) for p in weights)})
+    assert errors[-1]["max_central_L_error"] < 2e-8
+    # 数値勾配から独立に一歩と平均 1 の射影を作り、実際の finish の重みと比較。
+    clipped = {p: max(0., weights[p] - learner.eta * numerical[p]) for p in weights}
+    mean = math.fsum(clipped.values()) / len(clipped)
+    numerical_after = {p: x / mean for p, x in clipped.items()}
+    rec = learner.finish(pre, C.feedback(1, truth))
+    assert rec["updated"] and rec["weights_after"] == pytest.approx(numerical_after, abs=2e-13, rel=0)
+    direction = {p: learner.weights[p] - weights[p] for p in weights}
+    predicted = reference_loss_direction(cs, weights, correct, learner.beta, direction)
+    measured = reference_loss(cs, learner.weights, correct, learner.beta) - base_loss
+    assert measured < 0 and measured == pytest.approx(predicted, abs=2e-12)
+    # η を半分にした検算でも一次の変化が一致することを確かめる。
+    half = A.normalized_step(weights, gradient, learner.eta / 2)
+    half_direction = {p: half[p] - weights[p] for p in weights}
+    half_predicted = reference_loss_direction(cs, weights, correct, learner.beta, half_direction)
+    half_measured = reference_loss(cs, half, correct, learner.beta) - base_loss
+    assert half_measured < 0 and half_measured == pytest.approx(half_predicted, abs=2e-12)
+    print(json.dumps({"H_tie_L_before": base_loss, "central_checks": errors,
+                      "eta": learner.eta, "L_change_measured": measured,
+                      "L_change_directional_prediction": predicted,
+                      "equal_split_gradient_dot_step": math.fsum(gradient[p] * direction[p] for p in weights),
+                      "half_eta_L_change_measured": half_measured,
+                      "half_eta_L_change_directional_prediction": half_predicted,
+                      "weights_before": weights, "weights_after": learner.weights}, sort_keys=True))
 
 
 def test_06_two_candidate_hand_values():
