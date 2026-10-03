@@ -81,6 +81,9 @@ def audit(root):
         else:
             raise ValueError(('分類できない出力', number, row['prediction_kind']))
         counts[outcome] += 1
+        actual_f = row.get('f_realized')
+        if not isinstance(actual_f, (int, float)) or not 0 <= actual_f <= 1:
+            raise ValueError(('実際のfの欠落又は範囲', number, actual_f))
         f_values[str(row.get('f_realized'))] += 1
         kind = row.get('shop_type')
         cue = row.get('shop_cue')
@@ -92,7 +95,7 @@ def audit(root):
     expected = manifest['trial_count']
     if len(trials) != expected or header['trial_count'] != expected:
         raise ValueError('試行数と全課題の分母が違う')
-    if f_values.get('None') or set(f_values) != {str(header['f_setting'])}:
+    if header.get('arm_f_profile', '').startswith('uniform:') and set(f_values) != {str(header['f_setting'])}:
         raise ValueError(('実際のfの記録が設定と違う', f_values))
 
     versions = Counter()
