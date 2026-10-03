@@ -714,8 +714,18 @@ def _agent_main(conn, task):
     if lock is not None:
         lock.acquire()
     try:
-        rec = v3_run.worker(task)
-        conn.send({"type": "done", "rec": _jsonable({k: v for k, v in rec.items() if k != "v311c"} | {"v311c": rec.get("v311c")})})
+        try:
+            rec = v3_run.worker(task)
+            message = {"type": "done", "rec": _jsonable({k: v for k, v in rec.items() if k != "v311c"} | {"v311c": rec.get("v311c")})}
+        finally:
+            if lock is not None:
+                # 終了通知は大きく、個体番号順の読取りを待ち得る。計算と通知の準備だけを直列化する。
+                # ここで一度だけ解放し、送信が詰まっても他の個体の計算を止めない。
+                try:
+                    lock.release()
+                except ValueError:
+                    pass
+        conn.send(message)
     except BaseException as e:  # noqa
         import traceback
         tb = traceback.format_exc()
@@ -724,13 +734,6 @@ def _agent_main(conn, task):
             conn.send({"type": "error", "error": repr(e), "tb": tb})
         except BaseException:
             pass
-    finally:
-        if lock is not None:
-            # 例外で停止する場合は coordinate が残る個体を停止する。
-            try:
-                lock.release()
-            except ValueError:
-                pass
 
 
 def _jsonable(x):
