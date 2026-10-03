@@ -197,24 +197,28 @@ class Matcher:
         self.rng = random.Random(tie_seed)
         self.cache = {}
         self.self_cache = {}
+        self.cache_rng = {}
 
     def snapshot(self):
-        return self.rng.getstate(), dict(self.cache), dict(self.self_cache)
+        return self.rng.getstate(), dict(self.cache), dict(self.self_cache), dict(self.cache_rng)
 
     def restore(self, snapshot):
-        rng, cache, self_cache = snapshot
+        rng, cache, self_cache, cache_rng = snapshot
         self.rng.setstate(rng)
         self.cache = dict(cache)
         self.self_cache = dict(self_cache)
+        self.cache_rng = dict(cache_rng)
 
     def match(self, left, right, *, use_cache=True):
         key = (VERSION, self.settings, left.fingerprint(), right.fingerprint())
         if use_cache and key in self.cache:
             return self.cache[key]
+        rng_before = self.rng.getstate()
         engine = _Engine(left, right, self.settings, self.rng)
         result = engine.run()
         if use_cache:
             self.cache[key] = result
+            self.cache_rng[key] = rng_before
         return result
 
     def self_score(self, graph):

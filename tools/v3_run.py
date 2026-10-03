@@ -480,6 +480,9 @@ def worker(task: dict) -> dict:
     if task.get("score_arg_order"):
         import argorder
         argorder.install()
+    if task.get("sme2017"):
+        import smeshared
+        smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]))
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -490,6 +493,9 @@ def worker(task: dict) -> dict:
         shopworld.install(fo, world=int(task["shop_world"]), exc=float(task["shop_exc"]), keep_cue=bool(task.get("shop_keep_cue")),
                           side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"))
         shopworld.extend_dictionary()
+        if task.get("shop_scatter"):
+            import shopscatter
+            shopscatter.install()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
         if not task.get("v39"):
@@ -533,6 +539,10 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import routelog
         routelog.install(str(side_dir / f"seed{task['seed']:03d}.routing.jsonl"))
+    if task.get("use_forget") is not None:
+        import useforget
+        useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"),
+                          tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -544,6 +554,10 @@ def worker(task: dict) -> dict:
         raise
     if "v39" in sys.modules:
         rec["v39"] = dict(sys.modules["v39"].STATS)
+    if task.get("sme2017"):
+        rec["sme2017"] = sys.modules["smeshared"].close()
+    if task.get("use_forget") is not None:
+        rec["useforget"] = sys.modules["useforget"].close()
     if task.get("v310_be"):
         rec["v310be"] = dict(sys.modules["v310be"].STATS)
     if task.get("hist_role"):
@@ -731,6 +745,9 @@ def main() -> None:
                     help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
     ap.add_argument("--score-arg-order", action="store_true",
                     help="A の採点と初期採点、E の書換費用で対応後の引数の順も比べる（--v310-be --hist-role --score-role と一緒に）")
+    ap.add_argument("--sme2017", action="store_true", help="SME2017の順つき照合と、同じ採点の関数によるN3を使う（--v39と一緒に）")
+    ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+    ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
@@ -838,7 +855,23 @@ def main() -> None:
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
         for task in tasks:
             task["score_arg_order"] = True
-    (out_root / "flag.json").write_text(json.dumps({**({"score_arg_order": True} if args.score_arg_order else {}), "nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
+    if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
+        raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
+    if args.shop_scatter and (args.shop_world is None or args.world_cue):
+        raise SystemExit("--shop-scatterはお店の世界だけで使う")
+    for task in tasks:
+        if args.use_forget is not None:
+            if not (args.v39 and args.v310_be):
+                raise SystemExit("--use-forgetは--v39 --v310-beと一緒に使う")
+            task["use_forget"] = args.use_forget
+        if args.sme2017:
+            task["sme2017"] = True
+        if args.shop_scatter:
+            task["shop_scatter"] = True
+    (out_root / "flag.json").write_text(json.dumps({**({"sme2017": True} if args.sme2017 else {}),
+                                                    **({"use_forget": args.use_forget} if args.use_forget is not None else {}),
+                                                    **({"shop_scatter": True} if args.shop_scatter else {}),
+                                                    **({"score_arg_order": True} if args.score_arg_order else {}), "nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
                                                     "compare_to": args.compare_to, "dump_slot_history": args.dump_slot_history, "config": args.config,
