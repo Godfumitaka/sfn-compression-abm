@@ -3,6 +3,8 @@ from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import gzip, hashlib, json, os, re, signal, subprocess, sys, time, traceback
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import RLock, Event
 
 SOURCE = Path(__file__).resolve().parents[2]
 ROOT = SOURCE.parent
@@ -19,15 +21,34 @@ for flag in ('--v311c-f','--v311c-runs','--workers','--v311c-q','--v311c-recv','
 BASE.remove('--v311c')
 RESULT = (json.loads((EV/'gates.json').read_text()) if (EV/'gates.json').exists()
           else {'status':'running','checks':[], 'runs':[]})
+MUTEX=RLock()
+HALT=Event()
+ACTIVE={}
 
 
 def now(): return datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(timespec='seconds')
 def save(path, data): path.write_text(json.dumps(data,ensure_ascii=False,indent=1)+'\n')
-def checkpoint(): save(EV/'gates.json',RESULT)
+def checkpoint():
+    with MUTEX:save(EV/'gates.json',RESULT)
 def check(name, ok, **details):
-    RESULT['checks'].append({'name':name,'passed':bool(ok),**details}); checkpoint()
-    print(json.dumps(RESULT['checks'][-1],ensure_ascii=False),flush=True)
-    if not ok: raise RuntimeError('関門不成立：'+name)
+    row={'name':name,'passed':bool(ok),**details}
+    with MUTEX:RESULT['checks'].append(row);checkpoint()
+    print(json.dumps(row,ensure_ascii=False),flush=True)
+    if not ok:
+        HALT.set()
+        raise RuntimeError('関門不成立：'+name)
+
+
+def parallel(function, values):
+    # 最初の一本はこの関数を使わない。その後も今回の重い処理は最多2本。
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures=[pool.submit(function,v) for v in values]
+        for future in as_completed(futures):
+            try:future.result()
+            except BaseException:
+                HALT.set()
+                for f in futures:f.cancel()
+                raise
 
 
 def health():
@@ -86,8 +107,12 @@ def run_job(name, count, **kw):
     if (OUT/name).exists(): raise RuntimeError('既存出力を上書きしない：'+name)
     own_cap=1 if kw.get('serial',True) else len(kw.get('fs',FS))
     while True:
+        if HALT.is_set():raise RuntimeError('別の関門の不成立で停止')
         h,rows=health()
-        if len(h['foreign_heavy'])+own_cap<=4: break
+        with MUTEX:
+            if len(h['foreign_heavy'])+sum(ACTIVE.values())+own_cap<=4:
+                ACTIVE[name]=own_cap
+                break
         print('他の重い処理の終了を待つ：'+name,flush=True);time.sleep(30)
     a=argv(name,count,**kw)
     environment=dict(os.environ)
@@ -103,18 +128,24 @@ def run_job(name, count, **kw):
         job['pid']=p.pid
         try:
             while p.poll() is None:
+                if HALT.is_set():raise RuntimeError('別の関門の不成立で停止')
                 hh,rows=health()
-                if len(hh['foreign_heavy'])+own_cap>4: raise RuntimeError('機械の並列上限：SME等を優先して今回の処理を停止')
+                with MUTEX:active_cap=sum(ACTIVE.values())
+                if len(hh['foreign_heavy'])+active_cap>4: raise RuntimeError('機械の並列上限：SME等を優先して今回の処理を停止')
                 descendant={p.pid}
                 for _ in range(5):
                     descendant.update(r['pid'] for r in rows if r['ppid'] in descendant)
                 current=sum(r['rss_kib'] for r in rows if r['pid'] in descendant)*1024
                 max_rss=max(max_rss,current);observations+=1
-                hh.update(job=name,rss_sum_bytes=current)
-                with (EV/'run-health.jsonl').open('a') as f:f.write(json.dumps(hh,ensure_ascii=False)+'\n')
+                hh.update(job=name,rss_sum_bytes=current,own_heavy_cap=active_cap)
+                with MUTEX:
+                    with (EV/'run-health.jsonl').open('a') as f:f.write(json.dumps(hh,ensure_ascii=False)+'\n')
                 time.sleep(1)
         except BaseException:
+            HALT.set()
             os.killpg(p.pid,signal.SIGTERM);p.wait();raise
+        finally:
+            with MUTEX:ACTIVE.pop(name,None)
     end,rows=health()
     measurement={'name':name,'elapsed_seconds':time.monotonic()-start,'exitcode':p.returncode,'finished':now(),
                  'rss_sum_peak_bytes':max_rss,'rss_sample_interval_seconds':1,'samples':observations,
@@ -244,9 +275,10 @@ def main():
     old=run_job('default2_baseline',200,fs=[0.1,0.9],groups=[0,1],serial=False,shop=False,audit=False,lineage=False,source=ROOT/'baseline')
     new=run_job('default2_current',200,fs=[0.1,0.9],groups=[0,1],serial=False,shop=False,audit=False,lineage=False)
     compare('追加旗が全てオフと土台（2体）',old,new,comm=True)
-    for i,f in enumerate(FS):
+    def solo1(i):
         solo=run_job(f'solo_r1_a{i}',1740,solo_agent=i,q=0,m=0)
         check(f'通信なし8体と単独：個体{i}',body(ledger_paths(first)[i])==body(ledger_paths(solo)[0]),collective=body(ledger_paths(first)[i]),solo=body(ledger_paths(solo)[0]))
+    parallel(solo1,range(8))
     # 機能を全部切った8体と固定した個体版（短い配管の試行、全個体を比較）。
     off=run_job('off8',100,fs=[0.5]*8,groups=GROUPS,q=0,m=0,no_tags=True,shop=False,audit=False,lineage=False)
     for i in range(8):
@@ -266,15 +298,17 @@ def main():
         else:
             nocomm=run_job(f'no_comm_r{run}',1740,run=run,q=0,m=0)
             ref=inspect_population(f'no_comm_r{run}',nocomm,FS,GROUPS,1740,0,0)
-            for i in range(8):
+            def solo_later(i):
                 solo=run_job(f'solo_r{run}_a{i}',1740,run=run,solo_agent=i,q=0,m=0)
                 check(f'通信なし8体と単独：種{run}個体{i}',body(ledger_paths(nocomm)[i])==body(ledger_paths(solo)[0]),
                       collective=body(ledger_paths(nocomm)[i]),solo=body(ledger_paths(solo)[0]))
-        for m in (0,0.1,0.3):
+            parallel(solo_later,range(8))
+        def communication(m):
             name=f'comm_m{m}_r{run}'
             pop=run_job(name,1740,run=run,m=m)
             current=inspect_population(name,pop,FS,GROUPS,1740,0.2,m)
             check(name+' 開示の抽選の並び',current==ref,agents=8,trials_per_agent=1740)
+        parallel(communication,(0,0.1,0.3))
     RESULT['status']='passed';RESULT['finished']=now();checkpoint()
 
 if __name__=='__main__':
