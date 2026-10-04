@@ -1,0 +1,120 @@
+"""段B1の停止の証拠を保存する。模型の計算を再開しない。"""
+import gzip,hashlib,json,re,shutil
+from pathlib import Path
+JOB=Path(__file__).resolve().parent
+BASE=JOB.parent
+REPORT=BASE/'report/control'
+main=REPORT/'2026-10-03_注意の選択_Codex2.md'
+s=main.read_text()
+header=s[:s.index('# 注意の選択・初版')]
+d=json.loads((JOB/'restore_difference_trial022.json').read_text())
+p=json.loads((JOB/'partial_baseline_check.json').read_text())
+state=json.loads((JOB/'status.json').read_text())
+assert state['status']=='stopped' and p['trials_compared']==22 and d['predictions_run']==0
+machine=list(map(json.loads,(JOB/'machine.jsonl').read_text().splitlines()))
+priority=list(map(json.loads,(JOB/'priority.jsonl').read_text().splitlines()))
+evidence=REPORT/'attn_stageB1_stop_2026-10-04'
+evidence.mkdir(exist_ok=True)
+items=['status.json','commands.jsonl','machine.jsonl','priority.jsonl','diagnostic_priority.jsonl',
+       'partial_baseline_check.json','w1_seed001.log','restore_difference_trial022.json',
+       'restore_order_analysis.json','diagnostic_measurement.json',
+       'state_trial022.original.json','state_trial022.restored.json',
+       'replay/n3_w1_A_L50/seed001.baseline.jsonl.gz']
+manifest=[]
+for name in items:
+    src=JOB/name;dst=evidence/name
+    dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
+    assert src.read_bytes()==dst.read_bytes()
+    manifest.append({'path':str(dst.relative_to(REPORT)),'bytes':dst.stat().st_size,
+                     'sha256':hashlib.sha256(dst.read_bytes()).hexdigest()})
+for name in ['run_baseline.py','diagnose_restore.py','diagnose_restore_small.py','make_report.py']:
+    dst=evidence/(name+'.txt');shutil.copyfile(JOB/name,dst)
+    manifest.append({'path':str(dst.relative_to(REPORT)),'bytes':dst.stat().st_size,
+                     'sha256':hashlib.sha256(dst.read_bytes()).hexdigest()})
+info={'stage':'B1','status':'stopped_before_prediction_at_trial22',
+      'code_commit':p['code_commit'],'phaseA_trials':69600,'phaseA_non_door_occurrences':0,
+      'answers_verified':p,'restoration_difference':d,'supervisor':state,
+      'comparison_tolerance':None,'later_seeds_started':False,'attention_learning_started':False,
+      'phaseC_started':False,'phaseD_started':False,'phase3_started':False,
+      'machine_first':machine[0],'machine_last':machine[-1],
+      'thermal_warning_count':sum(r['warning'] for r in machine),
+      'outside_heavy_max_in_B_supervision':max(r['external_worker_count'] for r in priority),
+      'manifest':manifest,'order_analysis':json.loads((JOB/'restore_order_analysis.json').read_text()),
+      'diagnostic_measurement':json.loads((JOB/'diagnostic_measurement.json').read_text())}
+(REPORT/'2026-10-04_注意の選択_Codex2_段B1停止.json').write_text(json.dumps(info,ensure_ascii=False,indent=2)+'\n')
+rows='\n'.join('| '+r['path']+' | `'+json.dumps(r['reference'],ensure_ascii=False)+'` | `'+json.dumps(r['restored'],ensure_ascii=False)+'` | '+r['kind']+' |' for r in d['leaf_differences'])
+clock=[]
+for row in [machine[0],next(r for r in reversed(machine) if '種1の段B1検査前' in r['purpose']),machine[-1]]:
+    c=row['checks'];vm=c['vm']['output'];page=int(re.search(r'page size of (\d+)',vm).group(1))
+    value=lambda key:int(re.search(rf'{key}:\s+(\d+)',vm).group(1))*page/1024**3
+    disk=c['disk']['output'].splitlines()[-1].split()[3]
+    clock.append(f"| {row['time']} | {disk} | 32 GiB | {value('Pages free'):.2f} GiB／{value('Pages inactive'):.2f} GiB | {c['swap']['output'].strip()} | {'有' if row['warning'] else '記録なし'} |")
+text=header+f'''# 段A訂正の全件確認と、段B1の停止（2026-10-04）
+
+訂正後の段Aは両世界の全69,600試行で、ドア以外へのhold・hold_bのF名・H履歴名・公開関係名の出現が0件。[段A全件報告](2026-10-04_注意の選択_Codex2_段A訂正.md)のとおり、対応先なしは別集計し全件がドア由来。段Aの訂正で無効になった過去の停止理由は使わない。
+
+段B1を始め、世界1・種1の試行0〜21の**22件は全回答が完全一致**。しかし試行22（0起点、23番目）の予測前記憶の復元指紋が元と一致せず、**その予測の前に停止**。これは回答不一致の観測ではない。停止したのは、委任書の回答比較そのものではなく、私が再生器に追加した復元指紋の全欄照合（attnreplay.py:95〜98）。記録の数列の整列が、復元して再び正準化すると同じ順序に留まるとは限らないことを、この検査の実装で見落としていた。記憶の復元を全欄の一字一句で確認できなかったため、今回はその先の再選択を進めなかった。回答・指紋の比較に許容を足していない。種2以降、世界2の再選択、注意の学習、段C・D・段③は実行していない。材料の全40種は完成したまま保存してある。
+
+**課題の指示として本人にドアを問うことが伝えられているとみなし、世界の記録held_out_is_doorを使う**という仮定は維持する。今回、注意ありの新しい腕はまだ実行していない。
+
+## 比較した欄と止まった位置
+
+コード `attn-2026-10-03` の `{p['code_commit']}`、旗は `tools/attnreplay.py --verify-baseline --root <マックの世界1の材料の根> --seed 1 --output <段B1の出力>`。元のflag.jsonから構成し、コード3380344の全走行旗を保持する。設定のnsimはflag.jsonの0.7、vtは0.3842を反映したtask['cfg']を使う。
+
+| 検査 | 件数・結果 |
+|---|---|
+| 実際に回答した試行 | 世界1・種1、0〜21の22件 |
+| prediction_kind／predicted_edge全欄／abstain_reason | 全22件、正準JSONの全バイト一致 |
+| R_used／support_at_adoption | 同じ22件、全バイト一致 |
+| 復元後の記憶の指紋 | 試行1〜21で一致、22で不一致 |
+| 試行22の予測と回答比較 | 未実施（不一致件数0と扱わない） |
+| 後続の種と注意の学習 | 未実施 |
+
+元の予測前dictのsha256：`{d['pre_reference_sha256']}`。前試行の台帳に記録されたsha256：`{d['stored_previous_post_sha256']}`。復元した状態のsha256：`{d['restored_sha256']}`。引数を戻せなかった件数は{d['bad_arguments_count']}。
+
+## 停止後の読み取り診断
+
+全1,740場面を展開する診断は、他の計算が4本以上のため待機し、解析を始めずに自分の待機役だけを終了した。代わりに23場面だけを作り、その公開関係ID・伏せた関係の全内容・場面IDを台帳の23行と厳密に照合した。同じ種の試行22までの記録から元のdictと復元した状態の正準形を比較した。**診断で予測した件数0、更新した件数0**。後続の試行の回答や注意の成績は計算していない。差は次の{len(d['leaf_differences'])}個の数値位置。全て同じ席のinit[2]とinit[3]の交換による。16値の数列同士は全バイト同一であり、数値の丸め差や欠落はない。このinit部分以外の状態の正準JSONは全バイト同一。
+
+| 欄の位置 | 元の予測前記憶 | 復元後 | 差の種類 |
+|---|---|---|---|
+{rows}
+
+記録の整列は `abm/loop.py:652〜664` と `tools/fastledger.py:132〜165`。入れ子の並びの外側を元の要素のreprで整列してから、内側の浮動小数もreprで整列する。復元器 `tools/sealrestore.py:160〜162` は、その整列済みの数列をtupleへ戻す。再び正準化した時は、外側の整列の鍵が元の数列の順序ではなく内側を整列済みの順序になる。この例では、記録済み4数列をtupleのreprで整列するだけで、復元後の4数列に全バイト一致することを独立に確かめた。
+
+これらの列は `tools/v39.py:175〜176` の誕生時・誕生後の成績であり、同194〜195・212行などで記憶の採点・変換に使う。列の順序の情報が落ちているので、単なる無害な書式差と全模型について断定しない。段②では記憶の採点・変換を実行しない。`sealrestore.py` 冒頭にも、16本の列は元の順へ戻せず台帳の並びで復元し、予測には使わないという既存の仮定が記されている。ただし今回の残り全試行の回答一致は未確認であり、予測への影響が0と実測したわけではない。
+
+再開の方法の案（今回は採用していない）：台帳から復号した予測前dictは元の指紋と厳密に照合し、復元状態はinit/post以外の全欄を厳密に照合する。init/postは原文をそのまま別に保持し、復元前後の全数値の一致と順序差を別に記録する。復元状態の予測前後の指紋を照合して記憶不変を確認し、**腕0の全回答の全バイト一致という委任書の関門は維持する**。段③にはこの方法を持ち越さず、元の列順序を保つ記録が必要。今回、欄の除外・条件変更・この案による再実行は行っていない。
+
+原文の両状態、全欄の差、停止ログ、比較済み22行、機械の原記録は[証拠の一覧](2026-10-04_注意の選択_Codex2_段B1停止.json)と `attn_stageB1_stop_2026-10-04/` に保存。復元器の修正、比較する欄の削除、許容の導入、再実行は行っていない。
+
+## 機械の記録
+
+こちらの実行は直列1本。他の重い処理が4本以上の時は待機し、他の処理へ信号を送っていない。受付前には最大{info['outside_heavy_max_in_B_supervision']}本を観測した。自分の検査を始めた時点の外部処理数は3本。23場面の読み取り診断は、実時間0.59秒、CPU user0.36秒＋system0.17秒、最大RSS59,408,384 B（56.66 MiB）の小さい処理として行った。診断の前後の外部処理数は4本を超えていたが、重い全場面読み手は実行していない。Pythonのspawn_mainはCPU率が低くても数え、RSS100 MB以上またはCPU20%以上の単独Pythonも数える。小さい待機役とjobs.pyの観測役は除く。
+
+| 時点JST | 空き容量 | RAM | 空き／非活動ページ換算 | スワップ | 熱・性能警告 |
+|---|---:|---:|---:|---|---|
+{chr(10).join(clock)}
+
+全{len(machine)}回の機械点検で熱・性能警告{info['thermal_warning_count']}件。温度自体は測っていない。段B1の再選択検査はRSSを監視で採取する前に短時間で止まったため、その最大RSSは未測定（小さい読み取り診断の最大RSSとは区別する）。既存の材料、乱数、記憶、台帳・sideを変更していない。種21〜40は読まず、走らせていない。SMEの作業場所・枝とabm/は変更していない。
+
+## 確認済みと未確認
+
+確認済み：段①の既存25件、両世界の材料の11列表69,600行の一致、訂正後の段Aの非ドア出現0件、今回の22回答の一致、上記の復元差。
+
+未確認：試行22の回答、段B1の残り、段B2〜B5、三腕と九点の格子、段C・Dの全指標。これらを0件・合格・効果なしとは扱わない。段③には進まない。段Dの「学習の後」の時点の解釈は未決定であり、まだ計算へ使っていない。
+'''
+(REPORT/'2026-10-04_注意の選択_Codex2_段B1停止.md').write_text(text)
+s=s.replace('段①・訂正後の段A完了、段Bを準備','段①・訂正後の段A完了、段B1で停止')
+old=s[s.index('**段①の25件合格'):s.index('\n\n## コード・旗・再現')]
+new='**段①の25件合格を維持。両世界・種1〜20の材料69,600試行の11列表は元と全行一致。訂正後の段Aでは非ドアへのhold・hold_bの出現は0件。** 対応先なしは別集計し全件がドア由来。[段A全件報告](2026-10-04_注意の選択_Codex2_段A訂正.md)。段B1では世界1・種1の22回答が完全一致したが、試行22の予測前状態の復元指紋が不一致となり、その予測前で停止した。**回答不一致はまだ観測していない。** [停止位置・復元の差・機械・証拠](2026-10-04_注意の選択_Codex2_段B1停止.md)。**課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う**という仮定を維持する。段B1の残り、段B2〜B5、段C・Dは未確認。段③には進まない。'
+s=s.replace(old,new)
+s=s.replace('段B1の再生器 `tools/attnreplay.py --verify-baseline` は準備済み。','段B1の再生器 `tools/attnreplay.py --verify-baseline` を実行し、試行22の復元指紋不一致で停止。')
+s=s.replace('段B1を準備し、B2〜B5・段C・Dは未着手。','段B1の22回答の一致を確認し、次の記憶復元で停止。B2〜B5・段C・Dは未実行。')
+old='世界1は種1〜13（22,620試行）の11列の表が元と全バイト一致。世界2は0/20種を照合済み。現在は世界1・種14を、別の計算の空きができるまで待機中。 '
+s=s.replace(old,'両世界の種1〜20、各34,800試行（計69,600試行）の11列表がデスクトップの元と全行一致。材料は2026-10-04 13:49 JSTに完成し保存済み。 ')
+s=s.replace('**段Aの追記のH非出現条件で停止し、段B・C・Dは未開始。**','**段Aの訂正後の条件は全件で通った。段B1で22回答が一致し、試行22の記憶復元で停止。段B2〜B5・C・Dは未実行。**')
+s=s.replace('段②の段B・Cは未開始。','段②の段B1は上記の位置で停止。段B2〜B5・C・Dは未実行。')
+s=s.replace('および今回の世界定義からのドア名の確定。','両世界の全材料の一致、段A全件の非ドア出現0件、今回の22回答の一致と試行22の復元差。')
+main.write_text(s)
+print(json.dumps({'files':len(manifest),'difference_fields':len(d['leaf_differences']),'report':str(REPORT/'2026-10-04_注意の選択_Codex2_段B1停止.md')},ensure_ascii=False))

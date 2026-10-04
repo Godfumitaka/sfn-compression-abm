@@ -1,0 +1,80 @@
+"""停止した試行の記憶の差だけを読む。予測・更新・後続試行は行わない。"""
+import datetime,gzip,hashlib,importlib.util,itertools,json,os,shutil,subprocess,sys,tempfile,time
+from pathlib import Path
+from zoneinfo import ZoneInfo
+JOB=Path(__file__).resolve().parent
+BASE=JOB.parent
+SOURCE=BASE/'source'
+sys.path[:0]=[str(SOURCE/'tools'),str(SOURCE),str(BASE/'stageA_corrected_2026-10-04')]
+import workers
+spec=importlib.util.spec_from_file_location('machine',BASE/'world1_rebuild_supervisor.py')
+checks=importlib.util.module_from_spec(spec);spec.loader.exec_module(checks)
+checks.JOB=JOB
+checks.stamp=lambda:datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+while True:
+    checks.machine('段B1停止後：試行22の復元の差を読む前')
+    count=len(workers.external_workers(None))
+    with (JOB/'diagnostic_priority.jsonl').open('a') as f:
+        f.write(json.dumps({'time':checks.stamp(),'external_worker_count':count})+'\n')
+    if count<4:break
+    time.sleep(30)
+import sweep,v3_run,sealrestore as sr
+ROOT=BASE/'world1_rebuild/n3_w1_A_L50'
+CELL='f0.5000_th2.1000_vt0.3842_first_order'
+scratch=tempfile.mkdtemp(prefix='attn_restore_diagnostic_')
+task,_cfg=sr.make_task(str(ROOT),CELL,1,scratch)
+
+def diffs(a,b,path='$'):
+    if type(a)!=type(b):return [{'path':path,'reference':a,'restored':b,'kind':'type'}]
+    if isinstance(a,dict):
+        result=[]
+        for k in sorted(a.keys()|b.keys()):
+            if k not in a or k not in b:
+                result.append({'path':f'{path}.{k}','reference':a.get(k),'restored':b.get(k),'kind':'key'})
+            else:result.extend(diffs(a[k],b[k],f'{path}.{k}'))
+        return result
+    if isinstance(a,list):
+        if len(a)!=len(b):return [{'path':path,'reference':a,'restored':b,'kind':'length'}]
+        return list(itertools.chain.from_iterable(diffs(x,y,f'{path}[{i}]') for i,(x,y) in enumerate(zip(a,b))))
+    return [] if a==b else [{'path':path,'reference':a,'restored':b,'kind':'value'}]
+
+def fake_run_one(task):
+    import abm.loop as loop,abm.world as wmod
+    from extrap_reader import iter_run
+    wrapped=wmod.generate_trial;base=wrapped
+    while getattr(base,'__module__',None)!='abm.world':
+        choices=[c.cell_contents for c in (base.__closure__ or ()) if getattr(getattr(c,'cell_contents',None),'__name__','')=='generate_trial']
+        assert len(choices)==1;base=choices[0]
+    wmod.generate_trial=base
+    it=iter_run(str(ROOT),CELL,1,check_hash=True,check_world=True)
+    try:first=next(it)
+    finally:wmod.generate_trial=wrapped
+    argmap,scenes={},{}
+    previous=None
+    for tr in itertools.chain((first,),it):
+        t,wt,pre,row=tr['t'],tr['world'],tr['pre'],tr['row']
+        assert t<=22
+        for r in wt.G_star.relations:argmap.setdefault(r.relation_id,tuple(r.arguments))
+        scenes.setdefault(wt.target_graph_partial.graph_id,wt.target_graph_partial)
+        if t==22:
+            state,bad=sr.restore_state(pre,argmap,scenes)
+            sr._clear_caches(loop)
+            restored=json.loads(loop._json_bytes(loop._canonical(state)))
+            data={'world':1,'seed':1,'trial':22,'predictions_run':0,'updates_run':0,
+                  'pre_reference_sha256':hashlib.sha256(loop._json_bytes(pre)).hexdigest(),
+                  'stored_previous_post_sha256':previous,
+                  'restored_sha256':hashlib.sha256(loop._json_bytes(restored)).hexdigest(),
+                  'bad_arguments_count':bad,'leaf_differences':diffs(pre,restored)}
+            (JOB/'restore_difference_trial022.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+            for label,obj in [('original',pre),('restored',restored)]:
+                (JOB/f'state_trial022.{label}.json').write_bytes(loop._json_bytes(obj))
+            print(json.dumps(data,ensure_ascii=False),flush=True)
+            break
+        previous=row['agent_state_snapshot_hash']
+    return {'cell':CELL,'seed':1}
+old=sweep.run_one;sweep.run_one=fake_run_one
+try:v3_run.worker(task)
+finally:
+    sweep.run_one=old
+    shutil.rmtree(scratch)
+checks.machine('段B1停止後：試行22の復元の差を読んだ後')

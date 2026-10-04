@@ -1,0 +1,90 @@
+"""停止した試行の記憶の差だけを読む。予測・更新・後続試行は行わない。"""
+import datetime,gzip,hashlib,importlib.util,itertools,json,os,resource,shutil,subprocess,sys,tempfile,time
+from pathlib import Path
+from zoneinfo import ZoneInfo
+JOB=Path(__file__).resolve().parent
+BASE=JOB.parent
+SOURCE=BASE/'source'
+sys.path[:0]=[str(SOURCE/'tools'),str(SOURCE),str(BASE/'stageA_corrected_2026-10-04')]
+import workers
+spec=importlib.util.spec_from_file_location('machine',BASE/'world1_rebuild_supervisor.py')
+checks=importlib.util.module_from_spec(spec);spec.loader.exec_module(checks)
+checks.JOB=JOB
+checks.stamp=lambda:datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+checks.machine('段B1停止後：23場面だけを読む小さい診断の前')
+started=time.monotonic()
+os.chdir(SOURCE)  # 既存のmake_taskが種の構造ファイルを相対パスで読む。
+import sweep,v3_run,sealrestore as sr
+ROOT=BASE/'world1_rebuild/n3_w1_A_L50'
+CELL='f0.5000_th2.1000_vt0.3842_first_order'
+scratch=tempfile.mkdtemp(prefix='attn_restore_diagnostic_')
+task,_cfg=sr.make_task(str(ROOT),CELL,1,scratch)
+
+def diffs(a,b,path='$'):
+    if type(a)!=type(b):return [{'path':path,'reference':a,'restored':b,'kind':'type'}]
+    if isinstance(a,dict):
+        result=[]
+        for k in sorted(a.keys()|b.keys()):
+            if k not in a or k not in b:
+                result.append({'path':f'{path}.{k}','reference':a.get(k),'restored':b.get(k),'kind':'key'})
+            else:result.extend(diffs(a[k],b[k],f'{path}.{k}'))
+        return result
+    if isinstance(a,list):
+        if len(a)!=len(b):return [{'path':path,'reference':a,'restored':b,'kind':'length'}]
+        return list(itertools.chain.from_iterable(diffs(x,y,f'{path}[{i}]') for i,(x,y) in enumerate(zip(a,b))))
+    return [] if a==b else [{'path':path,'reference':a,'restored':b,'kind':'value'}]
+
+def fake_run_one(task):
+    import abm.loop as loop,abm.world as wmod
+    from abm.seed import load_seed
+    from abm.world import generate_world
+    path=ROOT/'ledgers/cells'/CELL/'seed001.jsonl.gz'
+    with gzip.open(path,'rt') as f:
+        header=json.loads(next(f))
+        raw=[json.loads(next(f)) for _ in range(23)]
+    cfg=task['cfg']
+    world=generate_world(header['run_seed'],23,['agent'],seed=load_seed(str(SOURCE/cfg['seed_file'])),holdout_include_second_order=False)
+    def recorded():
+        previous=None
+        for row,wt in zip(raw,world.trials):
+            t=row['prediction_order']
+            assert [r.relation_id for r in wt.target_graph_partial.relations]==row['observable_mask_edges']
+            assert wt.held_out_edge.to_dict()==row['held_out_content']
+            assert wt.G_star.graph_id==row['instance_id']
+            ss=row['state_snapshot']
+            current=ss['value'] if ss['kind']=='full' else loop._apply(previous,ss['changes'])
+            assert hashlib.sha256(loop._json_bytes(current)).hexdigest()==row['agent_state_snapshot_hash']
+            yield {'t':t,'world':wt,'pre':previous,'row':row}
+            previous=current
+    it=recorded()
+    argmap,scenes={},{}
+    previous=None
+    for tr in it:
+        t,wt,pre,row=tr['t'],tr['world'],tr['pre'],tr['row']
+        assert t<=22
+        for r in wt.G_star.relations:argmap.setdefault(r.relation_id,tuple(r.arguments))
+        scenes.setdefault(wt.target_graph_partial.graph_id,wt.target_graph_partial)
+        if t==22:
+            state,bad=sr.restore_state(pre,argmap,scenes)
+            sr._clear_caches(loop)
+            restored=json.loads(loop._json_bytes(loop._canonical(state)))
+            data={'world':1,'seed':1,'trial':22,'predictions_run':0,'updates_run':0,
+                  'pre_reference_sha256':hashlib.sha256(loop._json_bytes(pre)).hexdigest(),
+                  'stored_previous_post_sha256':previous,
+                  'restored_sha256':hashlib.sha256(loop._json_bytes(restored)).hexdigest(),
+                  'bad_arguments_count':bad,'leaf_differences':diffs(pre,restored),
+                  'diagnostic_world_trials':23,'diagnostic_elapsed_seconds':time.monotonic()-started,
+                  'diagnostic_maxrss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
+            (JOB/'restore_difference_trial022.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+            for label,obj in [('original',pre),('restored',restored)]:
+                (JOB/f'state_trial022.{label}.json').write_bytes(loop._json_bytes(obj))
+            print(json.dumps(data,ensure_ascii=False),flush=True)
+            break
+        previous=row['agent_state_snapshot_hash']
+    return {'cell':CELL,'seed':1}
+old=sweep.run_one;sweep.run_one=fake_run_one
+try:v3_run.worker(task)
+finally:
+    sweep.run_one=old
+    shutil.rmtree(scratch)
+checks.machine('段B1停止後：23場面だけを読む小さい診断の後')

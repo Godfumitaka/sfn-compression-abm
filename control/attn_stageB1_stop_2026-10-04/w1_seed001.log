@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/attnreplay.py", line 173, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/attnreplay.py", line 168, in main
+    result = baseline_one(args.root,args.cell,args.seed,args.output)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/attnreplay.py", line 153, in baseline_one
+    v3_run.worker(task)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/v3_run.py", line 553, in worker
+    rec = sweep.run_one(task)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/attnreplay.py", line 148, in fake_run_one
+    box['result'] = baseline_analysis(tk,cfg,root,cell,seed,out)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/source/tools/attnreplay.py", line 98, in baseline_analysis
+    raise RuntimeError(f'世界{fl["shop_world"]}種{seed}試行{t}：復元した予測前状態の指紋が不一致')
+RuntimeError: 世界1種1試行22：復元した予測前状態の指紋が不一致
