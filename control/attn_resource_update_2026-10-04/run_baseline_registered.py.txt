@@ -1,0 +1,235 @@
+"""既存の段B1を引き継ぎ、受付表の種別claimで最大4本まで検査する。"""
+import datetime
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import signal
+import subprocess
+import time
+from zoneinfo import ZoneInfo
+
+JOB = Path(__file__).resolve().parent
+BASE = JOB.parent
+SOURCE = BASE / 'source'
+ROOTS = {1: BASE / 'world1_rebuild/n3_w1_A_L50',
+         2: BASE / 'material_rebuild_2026-10-04/n3_w2_A_L50'}
+PYTHON = '/opt/homebrew/bin/python3.12'
+JOBS = '/Users/tatsu-admin/jobs/jobs.py'
+OUTPUT = JOB / 'replay'
+MAX_WORKERS = 4
+MEM_GB = 1.0  # 既存の15秒標本最大0.373GiB×1.2を上回る予約。真のピークではない。
+CODE = '5d2c48743b148162efdf4bfa22b6d935831ed11b'
+spec = importlib.util.spec_from_file_location('shared_jobs', JOBS)
+jobs = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(jobs)
+state = {}
+active = []
+last_swap = None
+
+
+def stamp():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+
+
+def append(name, record):
+    with (JOB / name).open('a') as f:
+        f.write(json.dumps({'time': stamp(), **record}, ensure_ascii=False) + '\n')
+
+
+def status(**changes):
+    state.update(changes)
+    state.update(time=stamp(), controller_pid=os.getpid(), workers=MAX_WORKERS,
+                 active_jobs=[{k: r[k] for k in ('world', 'seed', 'pid', 'adopted')} for r in active])
+    state['child_pid'] = active[0]['pid'] if active else None
+    if active:
+        state.update(current_world=active[0]['world'], current_seed=active[0]['seed'])
+    temporary = JOB / 'status.registered.tmp'
+    temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + '\n')
+    temporary.replace(JOB / 'status.json')
+
+
+def registration(operation, *args):
+    r = subprocess.run([PYTHON, JOBS, operation, *args], capture_output=True, text=True)
+    append('registration_registered.jsonl', {'operation': operation, 'args': args,
+                                           'exit_code': r.returncode,
+                                           'stdout': r.stdout, 'stderr': r.stderr})
+    return r.returncode
+
+
+def machine(purpose):
+    global last_swap
+    swap = jobs.swap_used_mb()
+    swap_ok, swap_message = jobs.swap_ok()
+    warning, limit, thermal = jobs.therm()
+    free = shutil.disk_usage(OUTPUT).free / 1024 ** 3
+    rows = jobs.read_reg()
+    ps = jobs.procs()
+    unregistered = [{'pid': pid, 'rss_mb': rss} for pid, rss, _cmd in jobs.unregistered_heavy(rows, ps)]
+    record = {'purpose': purpose, 'disk_path': str(OUTPUT), 'disk_free_gib': free,
+              'memory': jobs.mem_free(), 'swap_mb': swap, 'swap_window_ok': swap_ok,
+              'swap_message': swap_message, 'thermal_warnings': warning,
+              'cpu_speed_limit': limit, 'thermal_raw': thermal,
+              'registered_memory_gb': sum(r['mem_gb'] for r in rows),
+              'registered_jobs': [{'pid': r['pid'], 'owner': r['owner'], 'mem_gb': r['mem_gb']} for r in rows],
+              'unregistered_heavy_python': unregistered,
+              'own_rss_mb': {str(r['pid']): sum(ps[p][1] for p in jobs.registered_pids([{'pid': r['pid']}], ps) if p in ps) for r in active}}
+    append('machine_registered.jsonl', record)
+    # 本数・SME優先は停止条件にしない。開始条件はjobs.py自身が判定する。
+    if warning or free < 18.5 or (last_swap is not None and swap is not None and swap > last_swap):
+        raise RuntimeError('走行中の機械の停止条件：' + json.dumps(record, ensure_ascii=False))
+    if active and not swap_ok and '増えた' in swap_message:
+        raise RuntimeError('走行中のスワップ増加：' + swap_message)
+    last_swap = swap
+    return record
+
+
+def check_path(world, seed):
+    return OUTPUT / ROOTS[world].name / f'seed{seed:03d}.baseline.check.json'
+
+
+def collect(world, seed):
+    result = json.loads(check_path(world, seed).read_text())
+    if not (result['full_census'] and result['trials_compared'] == 1740 and result['answers_match']):
+        raise RuntimeError('段B1の回答一致の関門不合格：' + json.dumps(result, ensure_ascii=False))
+    if seed not in state['completed'][str(world)]:
+        append('summaries.jsonl', result)
+        state['completed'][str(world)].append(seed)
+        state['completed'][str(world)].sort()
+    print(stamp(), f'世界{world}・種{seed}：1740試行の回答全欄が一致', flush=True)
+
+
+def pid_running(pid):
+    r = subprocess.run(['ps', '-p', str(pid), '-o', 'stat='], capture_output=True, text=True)
+    return bool(r.stdout.strip()) and not r.stdout.lstrip().startswith('Z')
+
+
+def end_old_controller(pid):
+    try:
+        os.kill(pid, signal.SIGTERM)
+        os.kill(pid, signal.SIGCONT)
+    except ProcessLookupError:
+        pass
+    for _ in range(50):
+        if not pid_running(pid):
+            break
+        time.sleep(0.1)
+    if pid_running(pid):
+        raise RuntimeError('旧監督処理が終了していないため重複した監督を始めない')
+    registration('release', '--pid', str(pid))
+
+
+def start_one(world, seed):
+    machine(f'世界{world}・種{seed}の開始前')
+    out = OUTPUT / ROOTS[world].name / f'seed{seed:03d}.baseline.jsonl.gz'
+    if out.exists() or check_path(world, seed).exists():
+        raise RuntimeError(f'未完了扱いの既存出力を上書きしない：世界{world}・種{seed}')
+    leaf = [PYTHON, 'tools/attnreplay.py', '--verify-baseline', '--root', str(ROOTS[world]),
+            '--seed', str(seed), '--output', str(OUTPUT)]
+    command = [PYTHON, JOBS, 'run', '--wait', '--owner', f'Codex2 段B1 W{world} seed{seed:03d}',
+               '--mem', str(MEM_GB), '--disk-path', str(OUTPUT), '--', *leaf]
+    log = (JOB / f'w{world}_seed{seed:03d}.registered.log').open('x')
+    process = subprocess.Popen(command, cwd=SOURCE, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    active.append({'world': world, 'seed': seed, 'pid': process.pid, 'process': process,
+                   'log': log, 'adopted': False})
+    append('commands_registered.jsonl', {'world': world, 'seed': seed, 'command': command,
+                                        'cwd': str(SOURCE), 'registration_pid': process.pid})
+    status(status='running_or_waiting_for_claim')
+
+
+def stop_own_jobs():
+    state['stopped_jobs'] = [{k: r[k] for k in ('world', 'seed', 'pid', 'adopted')} for r in active]
+    for r in active:
+        if pid_running(r['pid']):
+            try:
+                os.killpg(r['pid'], signal.SIGCONT)
+                os.killpg(r['pid'], signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+    for r in active:
+        process = r.get('process')
+        if process is not None:
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                os.killpg(r['pid'], signal.SIGKILL)
+                process.wait()
+        registration('release', '--pid', str(r['pid']))
+        if r.get('log'):
+            r['log'].close()
+    active.clear()
+
+
+def main():
+    global state
+    h = json.loads((JOB / 'policy_update_handoff_2026-10-04.json').read_text())
+    state = json.loads((JOB / 'status.json').read_text())
+    if state.get('resource_policy') == 'jobs_claim_per_seed_2026-10-04_night':
+        raise RuntimeError('既存の受付表版監督を重複起動しない')
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip()
+    assert head == CODE and not subprocess.check_output(['git', 'status', '--porcelain'], cwd=SOURCE, text=True)
+    for world in (1, 2):
+        for seed in state['completed'][str(world)]:
+            assert 1 <= seed <= 20
+            r = json.loads(check_path(world, seed).read_text())
+            assert r['full_census'] and r['trials_compared'] == 1740 and r['answers_match']
+    state.update(resource_policy='jobs_claim_per_seed_2026-10-04_night',
+                 worker_count_policy='本数では止めない。種別claim・並列最大4・SME優先なし。',
+                 policy_received_at=h['received_at'], reservation_gb_per_seed=MEM_GB,
+                 adopted_previous_outputs=True)
+    machine('受付表版監督への切替前')
+    child = h['adopt_child_pid']
+    world, seed = state['current_world'], state['current_seed']
+    if child and pid_running(child):
+        command = subprocess.check_output(['ps', '-p', str(child), '-o', 'command='], text=True)
+        assert '--verify-baseline' in command and f'--seed {seed} ' in command and str(ROOTS[world]) in command
+        while registration('claim', '--owner', f'Codex2 段B1 W{world} seed{seed:03d}',
+                           '--mem', str(MEM_GB), '--pid', str(child), '--disk-path', str(OUTPUT),
+                           '--cmd', f'既存の固定記憶N3再生 W{world} seed{seed:03d}を引継ぎ'):
+            status(status='waiting_for_adoption_claim')
+            time.sleep(30)
+            machine('既存の子の種別claim待機中')
+        active.append({'world': world, 'seed': seed, 'pid': child, 'adopted': True})
+        end_old_controller(h['old_controller_pid'])
+        machine('引き継ぐ子の再開直前')
+        os.kill(child, signal.SIGCONT)
+    else:
+        # 一時停止直前に完走した子は、既存の控えだけを確認する。
+        collect(world, seed)
+        end_old_controller(h['old_controller_pid'])
+    pending = [(w, s) for w in (1, 2) for s in range(1, 21)
+               if s not in state['completed'][str(w)] and not any(r['world'] == w and r['seed'] == s for r in active)]
+    status(status='running_or_waiting_for_claim', restarted_at=stamp())
+    while active or pending:
+        machine('段B1受付表版の稼働中')
+        for r in list(active):
+            process = r.get('process')
+            running = process.poll() is None if process is not None else pid_running(r['pid'])
+            if running:
+                continue
+            if process is not None and process.returncode:
+                raise RuntimeError(f"世界{r['world']}・種{r['seed']}の終了値={process.returncode}。回答の控えとログを報告する")
+            collect(r['world'], r['seed'])
+            registration('release', '--pid', str(r['pid']))
+            if r.get('log'):
+                r['log'].close()
+            active.remove(r)
+            status(status='running_or_waiting_for_claim')
+        while pending and len(active) < MAX_WORKERS:
+            w, s = pending.pop(0)
+            start_one(w, s)
+        if active:
+            time.sleep(10)
+    assert state['completed'] == {'1': list(range(1, 21)), '2': list(range(1, 21))}
+    machine('段B1全40種の検査終了後')
+    status(status='complete_baseline_gate', finished_at=stamp(), child_pid=None)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except BaseException as error:
+        stop_own_jobs()
+        status(status='stopped', error=repr(error), child_pid=None)
+        raise

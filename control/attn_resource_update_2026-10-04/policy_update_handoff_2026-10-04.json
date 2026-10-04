@@ -1,0 +1,55 @@
+{
+  "received_at": "2026-10-04T22:07:49+09:00",
+  "handoff_at": "2026-10-04T22:09:48.014494+09:00",
+  "old_controller_pid": 24759,
+  "old_status": {
+    "status": "running",
+    "workers": 1,
+    "completed": {
+      "1": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "2": []
+    },
+    "phaseB_started": true,
+    "phaseC_started": false,
+    "phaseD_started": false,
+    "phase3_started": false,
+    "seeds21_to40_read_or_run": false,
+    "time": "2026-10-04T22:08:32.974680+09:00",
+    "code_commit": "5d2c48743b148162efdf4bfa22b6d935831ed11b",
+    "worker_count_policy": "Python: spawn_main OR RSS>=100MB OR CPU>=20%; 小さい待機役とjobs.pyを除く。計算の子は低CPUや一時停止でも数える。",
+    "resume_authorization": "2026-10-04：復元指紋は記録だけ。回答不一致で停止。",
+    "trial022_sorting_check": {
+      "time": "2026-10-04T16:50:14.868392+09:00",
+      "world": 1,
+      "seed": 1,
+      "trial": 22,
+      "rule": "該当席v39_seats.init[2:4]の2本の16数値列だけをtupleのrepr昇順に並べ替える。両側同じ規則。他の欄は触れない。",
+      "original_input_sha256": "262c3cecf8db3da79fdc8091b25cc0b389b9245decb9cf2578129c671d775ca4",
+      "restored_input_sha256": "a7a724ef0feca4b78a4da0bfcf9ea88ddff71c27bd11b6cfa52d0aa7f632d98e",
+      "original_after_sort_sha256": "a7a724ef0feca4b78a4da0bfcf9ea88ddff71c27bd11b6cfa52d0aa7f632d98e",
+      "restored_after_sort_sha256": "a7a724ef0feca4b78a4da0bfcf9ea88ddff71c27bd11b6cfa52d0aa7f632d98e",
+      "all_fields_bytes_identical_after_same_sort": true,
+      "prediction_comparison_changed": false,
+      "predictions_run": 0,
+      "updates_run": 0
+    },
+    "current_world": 1,
+    "current_seed": 11,
+    "child_pid": 70087
+  },
+  "adopt_child_pid": 70087,
+  "child_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/world1_rebuild/n3_w1_A_L50 --seed 11 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay",
+  "scientific_code_changed": false,
+  "existing_outputs_preserved": true
+}
