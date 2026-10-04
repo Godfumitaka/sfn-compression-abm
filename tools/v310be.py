@@ -213,10 +213,13 @@ def init_rec(d, row, state, base, target, trial, base_age, config):
     r_old = (0.0, 0.0 if h == p else lp, 0.0 if u_old == p else lp, 1.0)
     r_cur = (0.0, 0.0 if h == p else lp, 0.0 if u_cur == p else lp, 1.0)
     if CFG.get("score_logp"):
-        P_old = probabilities(d, row, state, base, config)
-        P_cur = probabilities(d, row, state, target, config)
-        r_old = tuple(log_cost(P_old[x], p, L) for x in ("F", "H", "U")) + (1.0,)
-        r_cur = tuple(log_cost(P_cur[x], p, L) for x in ("F", "H", "U")) + (1.0,)
+        # 新しい定義の形で二材料を再現し、確率・符号表は開示前の記憶から計る。
+        score_state = CTX.get("score_state", state)
+        L_score = v39.code_lengths(score_state.p_hat)
+        P_old = probabilities(d, row, score_state, base, config)
+        P_cur = probabilities(d, row, score_state, target, config)
+        r_old = tuple(log_cost(P_old[x], p, L_score) for x in ("F", "H", "U")) + (1.0,)
+        r_cur = tuple(log_cost(P_cur[x], p, L_score) for x in ("F", "H", "U")) + (1.0,)
     w = tuple(f ** max(base_age, 0) for f in v39.CFG["decay"])
     init = tuple(tuple(k * so + sc for k in w) for so, sc in zip(r_old, r_cur))
     v39.CTX["births_rec"].append({"slot": row.slot_index, "rF": r_cur[0], "rH": r_cur[1], "rU旧": r_old[2], "rU今": r_cur[2],
@@ -516,6 +519,13 @@ def install(fo, *, seed: int, nohash: bool, score_role: bool = False, score_logp
         STATS["cfg"].update(score_logp=True, score_logp_e=bool(score_logp_e), epsilon=EPSILON,
                             empty_history="q_H=b")
         v39.three_answers = three_answers_logp(v39.three_answers)
+        inner_predict = loop.predict
+
+        def predict_logp(agent_input, state, config, rng):
+            CTX["score_state"] = state
+            return inner_predict(agent_input, state, config, rng)
+
+        loop.predict = predict_logp
     v39._init_rec = init_rec
     v39._candidates = candidates
 
@@ -523,7 +533,8 @@ def install(fo, *, seed: int, nohash: bool, score_role: bool = False, score_logp
     inner_acc = loop._update_accounting
 
     def update_accounting(state, output, scene, config, horizon_, score, coin, revealed_edge):
-        CTX["L_score"] = v39.code_lengths(state.p_hat)
+        score_state = CTX["score_state"] if CFG.get("score_logp") else state
+        CTX["L_score"] = v39.code_lengths(score_state.p_hat)
         CTX["disclosed"] = bool(coin.f_fired)
         CTX["R_B_trial"] = 0.0
         return inner_acc(state, output, scene, config, horizon_, score, coin, revealed_edge)

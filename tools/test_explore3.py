@@ -73,6 +73,18 @@ class Gates(unittest.TestCase):
         for i,name in enumerate(('F','H','U')):self.assertAlmostEqual(rec.init[i][0],2*be.log_cost(P[name],'a',v39.code_lengths(self.state.p_hat)))
         self.assertEqual(rng.getstate(),before)
 
+    def test_initial_values_use_before_disclosure_memory(self):
+        be.CFG['score_logp']=True
+        before=NS(slot_history={},p_hat=self.state.p_hat)
+        be.CTX['score_state']=before
+        after=NS(slot_history={('D',0):{'a':1000}},p_hat=FrequencyTable({'a':1000,'b':2},1002,.1,frozenset({'a','b'})))
+        P=be.probabilities(self.d,self.row,before,self.scene,self.cfg)
+        rec=be.init_rec(self.d,self.row,after,self.scene,self.scene,2,1,self.cfg)
+        for i,name in enumerate(('F','H','U')):
+            self.assertAlmostEqual(rec.init[i][0],2*be.log_cost(P[name],'a',v39.code_lengths(before.p_hat)))
+        self.assertAlmostEqual(rec.init[1][0],-2*math.log2(.8))
+        self.assertAlmostEqual(rec.init[2][0],-2*math.log2(.8))
+
     def test_direct_H09_U08_ell5(self):
         rh=be.log_cost({'a':.9,'b':.1},'a',{'a':5})
         ru=be.log_cost({'a':.8,'b':.2},'a',{'a':5})
