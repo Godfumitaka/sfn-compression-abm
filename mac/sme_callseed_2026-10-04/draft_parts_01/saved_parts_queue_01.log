@@ -1,0 +1,10 @@
+受け付けた：PID 23232、担当 Codex-SME軽量部品-保存入力、見込み 0.8 GB（表の合計 12.8 / 24 GB）。スワップは直近 10 分で増えていない（356.2 MB → 今 356.2 MB）
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/draft_light_01/check_saved_parts.py", line 51, in <module>
+    assert logical(restored.best)==logical(result.best),('再利用した第一位が違う',folder,logical(restored.best),logical(result.best))
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/draft_light_01/check_saved_parts.py", line 25, in logical
+    return {k:getattr(c,k) for k in ('score','premerge_score','relation_mapping','entity_mapping','match_kinds','breakdown','inferences')}
+              ^^^^^^^^^^^^
+AttributeError: 'Candidate' object has no attribute 'premerge_score'
+消した：PID 23232
