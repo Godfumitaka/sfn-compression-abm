@@ -1,0 +1,123 @@
+"""段B3の全件検査後に段B2の三腕・九点を検査。成績は集計しない。"""
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import time
+
+JOB = Path(__file__).resolve().parent
+BASE = JOB.parent
+SOURCE = BASE / 'source'
+BASELINE = BASE / 'stageB1_resumed_2026-10-04'
+ROOTS = {1: BASE / 'world1_rebuild/n3_w1_A_L50',
+         2: BASE / 'material_rebuild_2026-10-04/n3_w2_A_L50'}
+PYTHON = '/opt/homebrew/bin/python3.12'
+CODE = '64e0b9b0'
+spec = importlib.util.spec_from_file_location('resource_supervisor', BASELINE / 'run_baseline_registered.py')
+resource = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(resource)
+resource.JOB = JOB
+resource.OUTPUT = JOB / 'frozen'
+resource.OUTPUT.mkdir(exist_ok=True)
+resource.MAX_WORKERS = 1
+resource.state = {'status': 'preparing', 'stage': 'B3', 'completed_freeze': {'1': [], '2': []},
+                  'completed_replays': [], 'phaseC_started': False, 'phaseD_started': False,
+                  'phase3_started': False, 'seeds21_to40_read_or_run': False,
+                  'resource_policy': 'jobs_claim_per_seed_2026-10-04_night',
+                  'reservation_gb_per_job': 2.0,
+                  'task_instruction_assumption': '本人にドア課題の指示が伝えられるとみなしheld_out_is_doorを使う'}
+
+
+def run_one(label, world, seed, command, check_path):
+    resource.machine(label + 'の開始前')
+    if check_path.exists():
+        raise RuntimeError('既存の検査を重複して実行しない：' + str(check_path))
+    wrapped = [PYTHON, resource.JOBS, 'run', '--wait', '--owner', 'Codex2 ' + label,
+               '--mem', '2.0', '--disk-path', str(JOB), '--', *command]
+    with (JOB / (label + '.log')).open('x') as log:
+        child = subprocess.Popen(wrapped, cwd=SOURCE, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        r = {'world': world, 'seed': seed, 'pid': child.pid, 'process': child, 'adopted': False}
+        resource.active.append(r)
+        resource.append('commands.jsonl', {'label': label, 'command': wrapped, 'cwd': str(SOURCE), 'pid': child.pid})
+        resource.status(status='running_or_waiting_for_claim', current_job=label)
+        while child.poll() is None:
+            time.sleep(10)
+            resource.machine(label + 'の稼働中')
+        if child.returncode:
+            detail = json.loads(check_path.read_text()) if check_path.exists() else None
+            resource.state['failure'] = {'job': label, 'exit_code': child.returncode, 'check': detail}
+            raise RuntimeError(label + 'の検査が停止。控えの不一致欄を報告する')
+        result = json.loads(check_path.read_text())
+        if not result['full_census'] or result['trials_compared'] != 1740 or result['mismatch'] is not None:
+            resource.state['failure'] = {'job': label, 'check': result}
+            raise RuntimeError(label + 'の全件一致が通っていない')
+        resource.registration('release', '--pid', str(child.pid))
+        resource.active.remove(r)
+        resource.append('summaries.jsonl', result)
+        return result
+
+
+def main():
+    if (JOB / 'status.json').exists():
+        raise RuntimeError('既存の段B全件検査の監督を重複起動しない')
+    baseline = json.loads((BASELINE / 'all_baseline_gate.json').read_text())
+    assert baseline['answers_match'] and baseline['trials_compared'] == 69600
+    hand = json.loads((JOB / 'hand_checks.json').read_text())
+    assert hand['exit_code'] == 0 and hand['B4_passed'] and hand['B5_passed']
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip()
+    assert head.startswith(CODE) and not subprocess.check_output(['git', 'status', '--porcelain'], cwd=SOURCE, text=True)
+    resource.state['code_commit'] = head
+    resource.status(status='preparing')
+    freeze_results = []
+    for world in (1, 2):
+        for seed in range(1, 21):
+            check = JOB / 'frozen' / ROOTS[world].name / f'seed{seed:03d}.freeze.check.json'
+            command = [PYTHON, 'tools/attnfreeze.py', '--freeze-door-candidates', '--root', str(ROOTS[world]),
+                       '--seed', str(seed), '--baseline', str(BASELINE / 'replay'), '--output', str(JOB / 'frozen')]
+            result = run_one(f'B3_w{world}_seed{seed:03d}', world, seed, command, check)
+            assert result['unit_weights_answers_match'] and result['unit_weights_scores_match']
+            freeze_results.append(result)
+            resource.state['completed_freeze'][str(world)].append(seed)
+            resource.status(status='collected')
+            print(resource.stamp(), f'段B3：世界{world}・種{seed}の全重み1の点と回答が一致', flush=True)
+    unit = {'B3_passed': True, 'trials_compared': sum(r['trials_compared'] for r in freeze_results),
+            'door_trials_compared': sum(r['door_trials_compared'] for r in freeze_results),
+            'non_door_answers_source': '全件一致した段B1の回答', 'checks': freeze_results}
+    (JOB / 'all_unit_gate.json').write_text(json.dumps(unit, ensure_ascii=False, indent=2) + '\n')
+    resource.status(stage='B2', status='preparing')
+    variants = [(0, 5., .05)] + [(arm, beta, eta) for arm in (1, 2) for beta in (1., 5., 10.) for eta in (.01, .05, .1)]
+    replay_results = []
+    for world in (1, 2):
+        for seed in range(1, 21):
+            for arm, beta, eta in variants:
+                label = f'B2_w{world}_seed{seed:03d}_arm{arm}_b{beta:g}_e{eta:g}'
+                check = JOB / 'replay' / ROOTS[world].name / f'seed{seed:03d}.arm{arm}.b{beta:g}_e{eta:g}.check.json'
+                command = [PYTHON, 'tools/attnreplay_doors.py', '--frozen', str(JOB / 'frozen' / ROOTS[world].name),
+                           '--seed', str(seed), '--output', str(JOB / 'replay'), '--attn-beta', str(beta), '--attn-eta', str(eta)]
+                if arm:
+                    command += ['--attn-select', '--attn-door-only']
+                if arm == 2:
+                    command += ['--attn-fix-door-names']
+                result = run_one(label, world, seed, command, check)
+                assert result['non_door_answers_match']
+                # 重み・Lは原記録へ保存するが、ここでは世界の正誤・成績を読まない。
+                replay_results.append({k: v for k, v in result.items() if k != 'weights_final'})
+                resource.state['completed_replays'].append(label)
+                resource.status(status='collected')
+    gate = {'time': resource.stamp(), 'passed': True, 'B1_passed': True, 'B2_passed': True,
+            'B3_passed': True, 'B4_passed': True, 'B5_passed': True, 'code_commit': head,
+            'baseline_trials_compared': 69600, 'variants': variants, 'replay_checks': replay_results,
+            'task_instruction_assumption': resource.state['task_instruction_assumption'],
+            'phaseC_started': False, 'phaseD_started': False, 'phase3_started': False}
+    (JOB / 'all_door_gates.json').write_text(json.dumps(gate, ensure_ascii=False, indent=2) + '\n')
+    resource.machine('段B全件検査の終了後')
+    resource.status(status='complete_door_gates', finished_at=resource.stamp())
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except BaseException as error:
+        resource.stop_own_jobs()
+        resource.status(status='stopped', error=repr(error), child_pid=None)
+        raise
