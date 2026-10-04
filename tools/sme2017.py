@@ -225,22 +225,30 @@ class Matcher:
         self.self_cache = dict(self_cache)
         self.cache_rng = dict(cache_rng)
 
-    def match(self, left, right, *, use_cache=True):
+    def match_key(self, left, right, tie_seed=None):
         key = (VERSION, self.settings, left.fingerprint(), right.fingerprint())
+        return key if tie_seed is None else key + ("call-seed-v1", tie_seed)
+
+    def match(self, left, right, *, use_cache=True, tie_seed=None):
+        key = self.match_key(left, right, tie_seed)
         if use_cache and key in self.cache:
             return self.cache[key]
-        rng_before = self._capture_rng_state()
-        engine = _Engine(left, right, self.settings, self.rng)
+        # 呼び出し種の旗では、他の照合の有無によらない局所の乱数を使う。
+        rng = self.rng if tie_seed is None else random.Random(tie_seed)
+        rng_before = self._capture_rng_state() if tie_seed is None else {"policy": "call-seed-v1", "seed": tie_seed}
+        engine = _Engine(left, right, self.settings, rng)
         result = engine.run()
         if use_cache:
             self.cache[key] = result
             self.cache_rng[key] = rng_before
         return result
 
-    def self_score(self, graph):
+    def self_score(self, graph, *, tie_seed=None):
         key = (VERSION, self.settings, graph.fingerprint())
+        if tie_seed is not None:
+            key += ("call-seed-v1", tie_seed)
         if key not in self.self_cache:
-            result = self.match(graph, graph)
+            result = self.match(graph, graph, tie_seed=tie_seed)
             self.self_cache[key] = result.best.score if result.best else 0.0
         return self.self_cache[key]
 

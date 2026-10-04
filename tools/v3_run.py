@@ -486,7 +486,7 @@ def worker(task: dict) -> dict:
         selectn3.install_n3()
     if task.get("sme2017"):
         import smeshared
-        smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]))
+        smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]), call_seed=task.get("sme_call_seed", False))
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -756,6 +756,7 @@ def main() -> None:
     ap.add_argument("--score-arg-order", action="store_true",
                     help="A の採点と初期採点、E の書換費用で対応後の引数の順も比べる（--v310-be --hist-role --score-role と一緒に）")
     ap.add_argument("--sme2017", action="store_true", help="SME2017の順つき照合と、同じ採点の関数によるN3を使う（--v39と一緒に）")
+    ap.add_argument("--sme-call-seed", action="store_true", help="SMEの同点を走行の種・試行・正準形・種類から呼び出しごとの種で選ぶ（--sme2017と一緒に）")
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
@@ -867,6 +868,8 @@ def main() -> None:
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
         for task in tasks:
             task["score_arg_order"] = True
+    if args.sme_call_seed and not args.sme2017:
+        raise SystemExit("--sme-call-seed は --sme2017 と一緒に使う")
     if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
     if args.select_n3 and (not args.v39 or args.sme2017):
@@ -882,6 +885,8 @@ def main() -> None:
             task["use_forget"] = args.use_forget
         if args.sme2017:
             task["sme2017"] = True
+            if args.sme_call_seed:
+                task["sme_call_seed"] = True
             if args.sme_replay is not None:
                 task["sme_replay"] = args.sme_replay
         if args.select_n3:
@@ -889,6 +894,7 @@ def main() -> None:
         if args.shop_scatter:
             task["shop_scatter"] = True
     (out_root / "flag.json").write_text(json.dumps({**({"sme2017": True} if args.sme2017 else {}),
+                                                    **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"select_n3": True} if args.select_n3 else {}),
                                                     **({"use_forget": args.use_forget} if args.use_forget is not None else {}),
                                                     **({"shop_scatter": True} if args.shop_scatter else {}),

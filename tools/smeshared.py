@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
 from fractions import Fraction
+from functools import lru_cache
+import random
 from hashlib import sha256
 import gzip
 import inspect
@@ -24,6 +26,7 @@ GRAPHS: dict = {}
 CHOICES: dict = {}
 STATS: dict = {}
 LOG: dict = {}
+CTX: dict = {}
 
 
 class FrozenDict(dict):
@@ -86,9 +89,26 @@ def typed_graph(g):
     return Graph(tuple(nodes))
 
 
+@lru_cache(maxsize=4096)
+def canonical_identity(g):
+    # 字句を匿名の頂点にし、同じ名前の共有・F/H/U・引数の順を保つ。
+    # 控えは純粋な関数の返り値だけ。抽選の状態は持たない。
+    return _Engine(g, g, Settings(), random.Random(0))._key(frozenset())
+
+
 def structural_key(g):
-    # 字句そのものを使わず、名前の等しさと、型・順つきの接続で正準化する。
-    return _Engine(g, g, ENGINE.settings, ENGINE.rng)._key(frozenset())
+    return canonical_identity(g)
+
+
+def call_seed(definition_identity, scene_identity, kind):
+    payload = ("sme-call-seed-v1", CTX["run_seed"], CTX["trial"],
+               definition_identity, scene_identity, kind)
+    return int.from_bytes(sha256(json.dumps(payload, ensure_ascii=False,
+                                          separators=(",", ":")).encode("utf-8")).digest(), "big")
+
+
+def _match_seed(left, right, kind):
+    return call_seed(canonical_identity(left), canonical_identity(right), kind) if CTX.get("call_seed") else None
 
 
 def _caller():
@@ -154,15 +174,16 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
         raise ValueError("SME版は指定された本番のprior=0だけを接続する")
     left, right = typed_graph(base_graph), typed_graph(target_graph_partial)
     lf, rf = left.fingerprint(), right.fingerprint()
-    key = (VERSION, ENGINE.settings, lf, rf)
     use = _caller()
+    seed = _match_seed(left, right, use)
+    key = ENGINE.match_key(left, right, seed)
     STATS["requests"] = STATS.get("requests", 0) + 1
     if key in RESULTS:
         STATS["reused"] = STATS.get("reused", 0) + 1
         out = RESULTS[key]
         _log({"kind": "sme_use", "caller": use, "version": VERSION, "result": out.alignment.sme_result_id, "reused": True})
         return out
-    result = ENGINE.match(left, right)
+    result = ENGINE.match(left, right, tie_seed=seed)
     rng_before = ENGINE.cache_rng[key]
     validate(left, right, result)
     GRAPHS[lf], GRAPHS[rf] = left, right
@@ -191,6 +212,8 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
              "old_selected_score": old.total_score, "old_entity_mapping": dict(old.entity_mapping),
              "old_relation_mapping": dict(old.relation_mapping),
              "new_entity_mapping": em, "new_relation_mapping": rm}
+    if seed is not None:
+        audit.update(tie_policy="call-seed-v1", tie_seed=seed, trial=CTX["trial"], call_kind=use)
     projectable = sme._projectable_base_relation_ids(base_graph, target_graph_partial, em, rm,
                                                     sme._relation_ids(base_graph), sme._relation_ids(target_graph_partial))
     local = 0.0 if best is None else sum(p[2] for p in best.breakdown)
@@ -214,17 +237,29 @@ def _definition_choice(candidates, scene):
     keys = {id(r): structural_key(GRAPHS[r[4].sme_audit["left"]]) for r in tied}
     least = min(keys.values())
     tied = [r for r in tied if keys[id(r)] == least]
-    token = (VERSION, ENGINE.settings, scene.fingerprint(),
-             tuple(sorted((r[4].sme_audit["left"], r[2].name, r[2].registered_at) for r in tied)))
-    if token not in CHOICES:
-        # 集合の提示順を固定してから、一様に一つ選ぶ。名前は確率の重みではない。
-        options = sorted(tied, key=lambda r: (r[4].sme_audit["left"], r[2].name))
-        pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
-        CHOICES[token] = (options[pick][2].name, options[pick][2].registered_at)
+    if CTX.get("call_seed"):
+        forms = tuple(sorted(keys[id(r)] for r in tied))
+        seed = call_seed(forms, canonical_identity(scene), "定義の選び")
+        # 完全に同じ正準形の候補は、承認された登録の順（記憶の辞書の順）。
+        options = sorted(tied, key=lambda r: keys[id(r)])
+        token = ("definition", "call-seed-v1", seed,
+                 tuple((r[2].name, r[2].registered_at) for r in options))
+        if token not in CHOICES:
+            pick = random.Random(seed).randrange(len(options)) if len(options) > 1 else 0
+            CHOICES[token] = (options[pick][2].name, options[pick][2].registered_at)
+    else:
+        token = (VERSION, ENGINE.settings, scene.fingerprint(),
+                 tuple(sorted((r[4].sme_audit["left"], r[2].name, r[2].registered_at) for r in tied)))
+        if token not in CHOICES:
+            options = sorted(tied, key=lambda r: (r[4].sme_audit["left"], r[2].name))
+            pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
+            CHOICES[token] = (options[pick][2].name, options[pick][2].registered_at)
     selected = CHOICES[token]
     chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
     _log({"kind": "sme_definition_tie", "version": VERSION,
-          "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected})
+          "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
+          **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
+              "canonical_multiset": forms} if CTX.get("call_seed") else {})})
     return chosen, len(tied) > 1
 
 
@@ -235,15 +270,27 @@ def choose_trace(ranked, scene):
     keys = {id(tr): structural_key(GRAPHS[m.alignment.sme_audit["left"]]) for m, tr in tied}
     least = min(keys.values())
     tied = [(m, tr) for m, tr in tied if keys[id(tr)] == least]
-    token = ("trace", VERSION, ENGINE.settings, typed_graph(scene).fingerprint(),
-             tuple(sorted((m.alignment.sme_audit["left"], tr.written_at, tr.scene.graph_id) for m, tr in tied)))
-    if token not in CHOICES:
-        options = sorted(tied, key=lambda it: (it[0].alignment.sme_audit["left"], it[1].scene.graph_id))
-        pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
-        CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
+    if CTX.get("call_seed"):
+        forms = tuple(sorted(keys[id(tr)] for m, tr in tied))
+        seed = call_seed(forms, canonical_identity(typed_graph(scene)), "逐語の選び")
+        options = sorted(tied, key=lambda it: keys[id(it[1])])
+        token = ("trace", "call-seed-v1", seed,
+                 tuple((m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in options))
+        if token not in CHOICES:
+            pick = random.Random(seed).randrange(len(options)) if len(options) > 1 else 0
+            CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
+    else:
+        token = ("trace", VERSION, ENGINE.settings, typed_graph(scene).fingerprint(),
+                 tuple(sorted((m.alignment.sme_audit["left"], tr.written_at, tr.scene.graph_id) for m, tr in tied)))
+        if token not in CHOICES:
+            options = sorted(tied, key=lambda it: (it[0].alignment.sme_audit["left"], it[1].scene.graph_id))
+            pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
+            CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
     selected = CHOICES[token]
     _log({"kind": "sme_trace_tie", "version": VERSION, "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
-          "selected": selected})
+          "selected": selected,
+          **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
+              "canonical_multiset": forms} if CTX.get("call_seed") else {})})
     return next(it for it in tied if (it[0].alignment.sme_audit["left"], it[1].scene.graph_id) == selected)
 
 
@@ -283,38 +330,51 @@ def select_definition(state, scene, config):
 
 def self_score(graph):
     """自己の点も通常の照合の第一位から。旧い行ごとの自己点は使わない。"""
-    result = ENGINE.match(graph, graph)
+    seed = _match_seed(graph, graph, "自己照合")
+    result = ENGINE.match(graph, graph, tie_seed=seed)
     validate(graph, graph, result)
     best = result.best
     _log({"kind": "sme_self", "version": VERSION, "settings": asdict(ENGINE.settings),
           "input": graph.fingerprint(), "selected": result.selected, "tied": result.tied,
           "entity_mapping": () if best is None else best.entity_mapping,
           "relation_mapping": () if best is None else best.relation_mapping,
-          "points": () if best is None else best.breakdown, "score": 0.0 if best is None else best.score})
-    return ENGINE.self_score(graph)
+          "points": () if best is None else best.breakdown, "score": 0.0 if best is None else best.score,
+          **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"], "call_kind": "自己照合"}
+             if seed is not None else {})})
+    return ENGINE.self_score(graph, tie_seed=seed)
 
 
 def snapshot():
-    return ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS)
+    return ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS), dict(CTX)
 
 
 def restore(snap):
-    engine, results, graphs, choices, stats = snap
+    engine, results, graphs, choices, stats, context = snap
     ENGINE.restore(engine)
-    for current, saved in ((RESULTS, results), (GRAPHS, graphs), (CHOICES, choices), (STATS, stats)):
+    for current, saved in ((RESULTS, results), (GRAPHS, graphs), (CHOICES, choices), (STATS, stats), (CTX, context)):
         current.clear()
         current.update(saved)
 
 
-def install(path, *, tie_seed):
+def install(path, *, tie_seed, call_seed=False):
     global ENGINE, OLD_MAP
     import abm.sme as sme
     import probeworld
     import v39
     ENGINE = Matcher(Settings(), tie_seed=int.from_bytes(sha256(f"sme-tie\x1f{tie_seed}".encode()).digest(), "big"))
     OLD_MAP = sme.map_graphs
-    for d in (RESULTS, GRAPHS, CHOICES, STATS, LOG):
+    for d in (RESULTS, GRAPHS, CHOICES, STATS, LOG, CTX):
         d.clear()
+    CTX.update(call_seed=call_seed, run_seed=tie_seed, trial=0)
+    if call_seed:
+        import abm.loop as loop
+        real_input = loop._agent_input
+
+        def agent_input(trial, before):
+            CTX["trial"] = trial.trial
+            return real_input(trial, before)
+
+        loop._agent_input = agent_input
     LOG.update(f=_text_gzip(path) if path is not None else None, path=path, diagnostic=False, diagnostic_f=None)
     # 既に読み込まれた全入口と、これから読み込む入口を同じ窓口にする。
     for module in tuple(sys.modules.values()):
@@ -348,4 +408,5 @@ def close():
         LOG["f"].close()
     if LOG.get("diagnostic_f") is not None:
         LOG["diagnostic_f"].close()
-    return {"version": VERSION, "settings": asdict(ENGINE.settings), **STATS}
+    return {"version": VERSION, "settings": asdict(ENGINE.settings), **STATS,
+            **({"tie_policy": "call-seed-v1"} if CTX.get("call_seed") else {})}
