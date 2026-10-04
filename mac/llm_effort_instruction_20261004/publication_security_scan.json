@@ -1,0 +1,45 @@
+{
+ "checks": [
+  {
+   "check": "credential_value",
+   "tool": "grep -rIlE",
+   "matches": 0,
+   "archive_members_included": true
+  },
+  {
+   "check": "email_address",
+   "tool": "grep -rIlE",
+   "matches": 0,
+   "archive_members_included": true
+  },
+  {
+   "check": "private_account_path",
+   "tool": "grep -rIlE",
+   "matches": 0,
+   "archive_members_included": true
+  },
+  {
+   "check": "org_account_id_value",
+   "tool": "grep -rIlE",
+   "matches": 0,
+   "archive_members_included": true
+  },
+  {
+   "check": "auth_header_value",
+   "tool": "grep -rIlE",
+   "matches": 0,
+   "archive_members_included": true
+  },
+  {
+   "check": "actual_environment_API_keys",
+   "tool": "grep -rIlF -f /dev/stdin",
+   "matches": 0,
+   "archive_members_included": true
+  }
+ ],
+ "files_checked": 166,
+ "archive_file_members_checked": 39,
+ "files_over_100MB": 0,
+ "largest_file_bytes": 671382,
+ "note": "API鍵の環境変数名・認証の実装例・使用量のtokensという列名は認証値ではない。公開先リポジトリ名は持ち主の指定通り。"
+}

@@ -1,0 +1,336 @@
+{
+ "time": "2026-10-04T17:09:48+09:00",
+ "conditions": [
+  {
+   "condition": "baseline",
+   "name": "既存 medium",
+   "pattern": "店だけで答える",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "puga",
+    "乙・n": "repi",
+    "乙・e": "repi"
+   },
+   "best_correct": 9,
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 1
+   },
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 1,
+    "乙・n": 4,
+    "乙・e": 0
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "誤答": 7,
+     "正解": 1
+    }
+   },
+   "errors": {
+    "例外で通常の答え": 7
+   },
+   "wrong_confidence": [
+    0.6,
+    0.6,
+    0.6,
+    0.9,
+    0.93,
+    0.95,
+    0.97
+   ],
+   "high_confidence_wrong": 4,
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "puga",
+     "puga",
+     "repi",
+     "puga"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ]
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.6,
+     0.6,
+     0.7,
+     0.8
+    ],
+    "甲・e": [
+     0.6,
+     0.6,
+     0.85,
+     0.6
+    ],
+    "乙・n": [
+     0.97,
+     0.97,
+     0.97,
+     0.97
+    ],
+    "乙・e": [
+     0.9,
+     0.93,
+     0.95,
+     0.97
+    ]
+   },
+   "costs": {
+    "calls": 16,
+    "input": 177240,
+    "output": 665,
+    "thinking": 265,
+    "thinking_missing": 0,
+    "thinking_zero": 15,
+    "thinking_mean": 16.5625,
+    "thinking_max": 265,
+    "dollars": "0.361130"
+   },
+   "exception_summary_matching": {
+    "questions": 8,
+    "summary_nonempty": 1,
+    "current_seal_questions": 1,
+    "any_seal_questions": 1,
+    "current_seal_occurrences": 2,
+    "any_seal_occurrences": 2
+   }
+  },
+  {
+   "condition": "A",
+   "name": "A：一文変更・medium",
+   "pattern": "その他",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "repi",
+    "乙・n": "repi",
+    "乙・e": "repi"
+   },
+   "best_correct": 13,
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 5
+   },
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 4,
+    "乙・n": 4,
+    "乙・e": 1
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "正解": 5,
+     "誤答": 3
+    }
+   },
+   "errors": {
+    "例外で通常の答え": 3
+   },
+   "wrong_confidence": [
+    0.9,
+    0.97,
+    0.93
+   ],
+   "high_confidence_wrong": 3,
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "repi",
+     "repi",
+     "puga",
+     "repi"
+    ]
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.93,
+     0.93,
+     0.8,
+     0.93
+    ],
+    "甲・e": [
+     0.85,
+     0.85,
+     0.85,
+     0.8
+    ],
+    "乙・n": [
+     0.93,
+     0.97,
+     0.8,
+     0.97
+    ],
+    "乙・e": [
+     0.9,
+     0.97,
+     0.6,
+     0.93
+    ]
+   },
+   "costs": {
+    "calls": 16,
+    "input": 177192,
+    "output": 2095,
+    "thinking": 1694,
+    "thinking_missing": 0,
+    "thinking_zero": 8,
+    "thinking_mean": 105.875,
+    "thinking_max": 364,
+    "dollars": "0.375334"
+   },
+   "exception_summary_matching": {
+    "questions": 8,
+    "summary_nonempty": 5,
+    "current_seal_questions": 5,
+    "any_seal_questions": 5,
+    "current_seal_occurrences": 12,
+    "any_seal_occurrences": 13
+   }
+  },
+  {
+   "condition": "B",
+   "name": "B：元の指示・max",
+   "pattern": "正しい表",
+   "modal": {
+    "甲・n": "puga",
+    "甲・e": "repi",
+    "乙・n": "repi",
+    "乙・e": "puga"
+   },
+   "best_correct": 16,
+   "best_correct_by_day": {
+    "通常": 8,
+    "例外": 8
+   },
+   "best_correct_by_case": {
+    "甲・n": 4,
+    "甲・e": 4,
+    "乙・n": 4,
+    "乙・e": 4
+   },
+   "actual_by_day": {
+    "通常": {
+     "正解": 8
+    },
+    "例外": {
+     "正解": 8
+    }
+   },
+   "errors": {},
+   "wrong_confidence": [],
+   "high_confidence_wrong": 0,
+   "answers_by_case": {
+    "甲・n": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ],
+    "甲・e": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・n": [
+     "repi",
+     "repi",
+     "repi",
+     "repi"
+    ],
+    "乙・e": [
+     "puga",
+     "puga",
+     "puga",
+     "puga"
+    ]
+   },
+   "confidence_by_case": {
+    "甲・n": [
+     0.95,
+     0.96,
+     0.97,
+     0.97
+    ],
+    "甲・e": [
+     0.96,
+     0.96,
+     0.96,
+     0.97
+    ],
+    "乙・n": [
+     0.97,
+     0.97,
+     0.96,
+     0.97
+    ],
+    "乙・e": [
+     0.97,
+     0.96,
+     0.96,
+     0.95
+    ]
+   },
+   "costs": {
+    "calls": 16,
+    "input": 177240,
+    "output": 18238,
+    "thinking": 17838,
+    "thinking_missing": 0,
+    "thinking_zero": 0,
+    "thinking_mean": 1114.875,
+    "thinking_max": 1570,
+    "dollars": "0.536860"
+   },
+   "exception_summary_matching": {
+    "questions": 8,
+    "summary_nonempty": 8,
+    "current_seal_questions": 8,
+    "any_seal_questions": 8,
+    "current_seal_occurrences": 45,
+    "any_seal_occurrences": 77
+   }
+  }
+ ],
+ "known_task_dollars": "0.912194"
+}

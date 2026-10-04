@@ -1,0 +1,8 @@
+I need to figure out the missing predicate for the nape/tuni relation. Scanning past scenes, when metu appears alongside a `?` placeholder for nape's first argument, the answer tends to be "repi" in several cases, though I notice scenes with metu and vadi instead gave "puga" — so the pattern isn't purely metu-dependent and depends on which co-occurring element is present.
+
+Checking further, scenes pairing vadi with vefe also lean toward "repi," while scenes pairing vefe with pilu consistently give "puga." So the determining factor seems to be the specific pair of co-occurring entities rather than any single one, with metu+pilu and vadi+vefe both pointing to repi, and metu+vadi and vefe+pilu both pointing to puga.
+
+It's like an XOR relation: pilu+vefe→puga, pilu+metu→repi, vadi+metu→puga, vadi+vefe→repi. I'm verifying this against the full scene list and it checks out consistently across scenes 1, 4, 6, 8, 9, 10.
+
+repi, and Scene 40: pilu, vefe: puga — all consistent with the pattern. So for the current scene, pilu + metu reliably maps to repi, giving me high confidence, around 0.97.
+
