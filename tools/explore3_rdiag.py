@@ -79,6 +79,23 @@ def one(root,seed,dest):
     shutil.rmtree(scratch)
     return box['result']
 
+def tables(dest,arm):
+    results=[json.loads((dest/f'seed{seed:03d}.summary.json').read_text()) for seed in range(1,21)]
+    combined={day:{rule:Counter() for rule in ('今の規則','N3','r')} for day in ('e','n')}
+    for result in results:
+        for day,by_rule in result['days'].items():
+            for rule,values in by_rule.items():combined[day][rule].update(values)
+    rows=['| 腕 | 日 | 選び方 | 正解 | 外れ | 黙り | 選び間違い | 区別の喪失 |',
+          '|---|---|---|---:|---:|---:|---:|---:|']
+    for day,label in (('e','例外の日'),('n','通常の日')):
+        for rule in ('今の規則','N3','r'):
+            values=combined[day][rule]
+            assert values['外れ']==values['選び間違い']+values['区別の喪失']
+            rows.append('| '+arm+' | '+label+' | '+rule+' | '+' | '.join(str(values[k]) for k in ('正解','外れ','黙り','選び間違い','区別の喪失'))+' |')
+    (dest/'表.md').write_text('\n'.join(rows)+'\n')
+    (dest/'summary.json').write_text(json.dumps({'arm':arm,'seeds':list(range(1,21)),'days':combined},ensure_ascii=False,indent=2)+'\n')
+
+
 if __name__=='__main__':
     # 一種ごとに別プロセスで差し替えを初期化。親の受付枠の子として実行する。
     import subprocess
