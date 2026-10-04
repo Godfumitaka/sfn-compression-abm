@@ -1,0 +1,122 @@
+"""両世界の材料完成を待ち、訂正された段Aの全件集計だけを直列で行う。"""
+import datetime
+import importlib.util
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import time
+from zoneinfo import ZoneInfo
+
+JOB = Path(__file__).resolve().parent
+BASE = JOB.parent
+SOURCE = BASE/'source'
+MATERIAL = BASE/'material_rebuild_2026-10-04'
+ROOTS = {1:BASE/'world1_rebuild/n3_w1_A_L50',2:MATERIAL/'n3_w2_A_L50'}
+PYTHON = '/opt/homebrew/bin/python3.12'
+state = {'status':'preparing','workers':1,'completed':{'1':[],'2':[]},
+         'phaseB_started':False,'phaseC_started':False,'phaseD_started':False,
+         'phase3_started':False,'seeds21_to40_read_or_run':False}
+child = None
+
+
+def stamp():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+
+
+def status(**changes):
+    state.update(changes)
+    state['time'] = stamp()
+    temporary = JOB/'status.tmp'
+    temporary.write_text(json.dumps(state,ensure_ascii=False,indent=2)+'\n')
+    temporary.replace(JOB/'status.json')
+
+
+def main():
+    global child
+    if (JOB/'status.json').exists():
+        raise RuntimeError('既存の集計記録を上書きしない')
+    status(status='waiting_for_materials')
+    while True:
+        material = json.loads((MATERIAL/'status.json').read_text())
+        if material['status'] == 'stopped':
+            raise RuntimeError('材料作成が停止したため全件集計を始めない')
+        if material['status'] == 'complete_materials':
+            break
+        time.sleep(15)
+    assert material['completed'] == {'1':list(range(1,21)),'2':list(range(1,21))}
+    state['code_commit'] = subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()
+    assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
+    machine_spec = importlib.util.spec_from_file_location('machine_control',BASE/'world1_rebuild_supervisor.py')
+    checks = importlib.util.module_from_spec(machine_spec)
+    machine_spec.loader.exec_module(checks)
+    checks.JOB, checks.stamp = JOB,stamp
+    guard_spec = importlib.util.spec_from_file_location('worker_count',MATERIAL/'priority_guard.py')
+    guard = importlib.util.module_from_spec(guard_spec)
+    guard_spec.loader.exec_module(guard)
+    guard.CONTROLLER = os.getpid()
+
+    def machine(purpose,group=None):
+        checks.machine(purpose,group=group)
+        workers = guard.external_workers(group)
+        record = {'time':stamp(),'external_worker_count':len(workers),'external_workers':workers,
+                  'child_group':group,'controller_pid':os.getpid()}
+        with (JOB/'priority.jsonl').open('a') as output:
+            output.write(json.dumps(record,ensure_ascii=False)+'\n')
+        return len(workers)
+
+    machine('訂正後の段A全件集計の開始前')
+    for world in (1,2):
+        for seed in range(1,21):
+            while machine(f'世界{world}・種{seed}の集計前') >= 4:
+                status(status='waiting_for_slot',current_world=world,current_seed=seed)
+                time.sleep(30)
+            command = [PYTHON,'tools/attnsel_stagea.py','--root',str(ROOTS[world]),
+                       '--seed',str(seed),'--output',str(JOB/'census')]
+            with (JOB/'commands.jsonl').open('a') as output:
+                output.write(json.dumps({'world':world,'seed':seed,'command':command,'cwd':str(SOURCE)},ensure_ascii=False)+'\n')
+            with (JOB/f'w{world}_seed{seed:03d}.log').open('w') as output:
+                child = subprocess.Popen(command,cwd=SOURCE,stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
+                status(status='running',current_world=world,current_seed=seed,child_pid=child.pid)
+                print(stamp(),f'訂正後の段A：世界{world}・種{seed}、全1740試行の集計開始',flush=True)
+                paused = False
+                while child.poll() is None:
+                    time.sleep(15)
+                    count = machine(f'世界{world}・種{seed}の集計中',group=child.pid)
+                    if count >= 4 and not paused:
+                        os.killpg(child.pid,signal.SIGSTOP)
+                        paused = True
+                        status(status='paused_for_sme_priority')
+                    elif count < 4 and paused:
+                        os.killpg(child.pid,signal.SIGCONT)
+                        paused = False
+                        status(status='running')
+            if child.returncode:
+                raise RuntimeError(f'世界{world}・種{seed}の全件集計の終了値={child.returncode}')
+            child = None
+            result = json.loads((JOB/'census'/ROOTS[world].name/f'seed{seed:03d}.summary.json').read_text())
+            assert result['full_trial_census'] and result['counts']['trials']==1740
+            with (JOB/'summaries.jsonl').open('a') as output:
+                output.write(json.dumps(result,ensure_ascii=False)+'\n')
+            state['completed'][str(world)].append(seed)
+            status(status='collected',child_pid=None)
+            print(stamp(),f'世界{world}・種{seed}の全件集計終了、フラグ={result["counts"].get("flags",0)}',flush=True)
+    machine('訂正後の段A全40種の全件集計終了後')
+    status(status='complete_census',child_pid=None,finished_at=stamp())
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except BaseException as error:
+        if child is not None and child.poll() is None:
+            os.killpg(child.pid,signal.SIGCONT)
+            os.killpg(child.pid,signal.SIGTERM)
+            try:
+                child.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                os.killpg(child.pid,signal.SIGKILL)
+                child.wait()
+        status(status='stopped',child_pid=None,error=repr(error))
+        raise

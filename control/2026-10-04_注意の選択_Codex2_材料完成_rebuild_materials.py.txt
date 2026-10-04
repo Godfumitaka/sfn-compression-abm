@@ -1,0 +1,173 @@
+"""世界1の種1を採用し、残り39本を直列で作る。11列の表の完全一致で停止を判定する。"""
+import datetime
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+from zoneinfo import ZoneInfo
+
+JOB = Path(__file__).resolve().parent
+BASE = JOB.parent
+CODE = BASE / 'run3380344'
+COMMIT = '3380344add7f85ce2c3608656de5805995dcf971'
+CELL = 'f0.5000_th2.1000_vt0.3842_first_order'
+OUTPUTS = {1: BASE/'world1_rebuild/n3_w1_A_L50', 2: JOB/'n3_w2_A_L50'}
+REFERENCES = {w: Path(f'/Users/tatsu-admin/v33prod/results/ataru-0608/n3/n3_w{w}_A_L50') for w in (1,2)}
+state = {'status':'preparing','workers':1,'criterion':'11列の試行表の元バイトが全行一致','body_hash_is_stop_criterion':False,'completed':{'1':[],'2':[]},'phase2_started':False,'phase3_started':False,'seeds21_to40_read_or_run':False}
+child = None
+
+
+def stamp():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+
+
+def status(**changes):
+    state.update(changes); state['time']=stamp()
+    temporary=JOB/'status.tmp'; temporary.write_text(json.dumps(state,ensure_ascii=False,indent=2)+'\n'); temporary.replace(JOB/'status.json')
+
+
+def references(world):
+    ref=REFERENCES[world]
+    flags=json.loads((ref/'flag.json').read_text()); flags['workers']=1
+    hashes={r['seed']:r for r in map(json.loads,(ref/'sha256.jsonl').read_text().splitlines())}
+    assert set(hashes)==set(range(1,21))
+    table={s:[] for s in range(1,21)}
+    with gzip.open(ref/'trials.tsv.gz','rb') as source:
+        columns=source.readline()
+        for raw in source:
+            seed=int(raw.split(b'\t',1)[0]); assert 1 <= seed <= 20
+            table[seed].append(raw)
+    assert len(columns.strip().split(b'\t'))==11 and all(len(x)==1740 for x in table.values())
+    return flags,hashes,columns,table
+
+
+def verify(world,seed,ref,adopted=False):
+    flags,hashes,columns,expected=ref
+    out=OUTPUTS[world]; ledger=out/f'ledgers/cells/{CELL}/seed{seed:03d}.jsonl.gz'
+    side=out/f'side/{CELL}'
+    assert ledger.with_name(f'seed{seed:03d}.done').exists()
+    assert json.loads((out/'flag.json').read_text())==flags
+    required=('.jsonl','.answers.csv','.select.jsonl.gz','.shop.jsonl','.routing.jsonl','.probe.jsonl','.cfvalue.jsonl')
+    assert all((side/f'seed{seed:03d}{suffix}').exists() for suffix in required)
+    bits={}
+    with (side/f'seed{seed:03d}.jsonl').open() as source:
+        for line in source:
+            r=json.loads(line)
+            if r.get('kind')=='v39': bits[r['trial']]=(r['bits_after'],r['defs'])
+    body=hashlib.sha256(); rows=[]; snapshots={}; line_hashes=[]; ambiguous_events=0
+    with gzip.open(ledger,'rb') as source:
+        header=json.loads(source.readline())
+        assert header['code_commit']==COMMIT and header['run_seed']==seed
+        for raw in source:
+            body.update(raw); line_hashes.append(hashlib.sha256(raw).hexdigest())
+            r=json.loads(raw); t=len(rows)
+            assert r['record_type']=='trial' and r['prediction_order']==t
+            kind=r['state_snapshot']['kind']; assert kind in ('full','delta')
+            if t==0: assert kind=='full'
+            snapshots[kind]=snapshots.get(kind,0)+1
+            outcome='a' if r['prediction_kind']=='Abstain' else ('c' if r['hit']==1 else 'w')
+            ambiguous_events += int(r.get('abstain_reason')=='ambiguous_projection' and bool(r.get('R_used')))
+            bit_count,defs=bits.get(t,('',''))
+            values=(seed,t,int(bool(r['f_fired'])),outcome,r.get('abstain_reason') or '',int(bool(r.get('held_out_is_door'))),r.get('shop_type',''),r.get('shop_cue',''),r.get('door_pred',''),bit_count,defs)
+            rows.append(('\t'.join(str(x) for x in values)+'\n').encode())
+    assert len(rows)==1740
+    # answerlog.pyは最初の該当イベントでだけambig.csvを作る。0件なら未作成が正常。
+    ambiguity_path=side/f'seed{seed:03d}.ambig.csv'
+    assert ambiguity_path.exists() or ambiguous_events==0
+    actual=columns+b''.join(rows); reference=columns+b''.join(expected[seed])
+    different=[t for t,(a,b) in enumerate(zip(rows,expected[seed])) if a!=b]
+    tables=JOB/f'tables_w{world}'; tables.mkdir(exist_ok=True)
+    (tables/f'seed{seed:03d}.trials.tsv.gz').write_bytes(gzip.compress(actual,mtime=0))
+    diagnostic={'mac_body_sha256':body.hexdigest(),'desktop_body_sha256':hashes[seed]['body_sha256'],'body_hash_match':body.hexdigest()==hashes[seed]['body_sha256'],'different_body_rows':None,'different_fields':None,'max_relative_difference':None,'full_desktop_raw_available':False,'diagnostic_status':'元の台帳原文が未取得のため欄別・最大相対差は未測定。材料の採否には使わない。'}
+    if diagnostic['body_hash_match']:
+        diagnostic.update(different_body_rows=0,different_fields=[],max_relative_difference=0.0,diagnostic_status='本体hash一致')
+    elif world==1 and seed==1:
+        known=json.loads((BASE/'world1_desktop_rowcheck/line_comparison.json').read_text())
+        partial=json.loads((BASE/'world1_hashseed_diagnostic/desktop_excerpt_comparison.json').read_text())
+        leaves=[leaf for row in partial['rows'] for leaf in row['leaf_differences'] if leaf['kind']=='float_value']
+        diagnostic.update(different_body_rows=known['different_body_rows'],available_desktop_raw_rows=5,changed_fields_in_available_rows=['deletion_event','reg_del_events'],max_relative_difference_in_available_rows=max(abs(d['mac']-d['desktop'])/max(abs(d['mac']),abs(d['desktop'])) for d in leaves),diagnostic_status='全行hashの差は366行。原文5行の欄別と相対差のみ測定済み。全不一致行の欄別・最大相対差は未取得。')
+    result={'world':world,'seed':seed,'adopted_existing_seed1':adopted,'trial_count':len(rows),'table_match':actual==reference,'different_table_rows':len(different),'first_different_trial':different[0] if different else None,'first_different_actual_row':rows[different[0]].decode() if different else None,'first_different_desktop_row':expected[seed][different[0]].decode() if different else None,'trial_table_sha256':hashlib.sha256(actual).hexdigest(),'reference_trial_table_sha256':hashlib.sha256(reference).hexdigest(),'flag_exact_match_except_reference_workers':True,'snapshots':snapshots,'ledger_bytes':ledger.stat().st_size,'side_bytes':sum(p.stat().st_size for p in side.glob(f'seed{seed:03d}.*')),'ledger_path':str(ledger),'ledger_diagnostic':diagnostic,'ambiguous_log_events':ambiguous_events,'ambig_file_exists':ambiguity_path.exists()}
+    with (JOB/'verification.jsonl').open('a') as f: f.write(json.dumps(result,ensure_ascii=False)+'\n')
+    if not result['table_match']:
+        raise RuntimeError(f'世界{world}・種{seed}の試行表が{len(different)}行で不一致。最初の試行={different[0]}。後続を止める。')
+    state['completed'][str(world)].append(seed); status(status='verified',current_world=world,current_seed=seed,child_pid=None)
+    print(stamp(),f'世界{world}・種{seed}：11列の表1740行が全バイト一致、本体hash一致={diagnostic["body_hash_match"]}',flush=True)
+
+
+def main():
+    global child, state
+    if (JOB/'status.json').exists():
+        if sys.argv[1:]!=['--resume']: raise RuntimeError('既存の再開記録を上書きしない')
+        state=json.loads((JOB/'status.json').read_text())
+        assert state['status']=='stopped' and state['child_pid'] is None
+        state.pop('error',None)
+        state['resumed_at']=stamp()
+    assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=CODE,text=True).strip()==COMMIT
+    assert not subprocess.check_output(['git','status','--porcelain'],cwd=CODE,text=True)
+    initial=json.loads((BASE/'world1_rebuild/commands.jsonl').read_text())
+    assert initial['seed']==1 and initial['command'][-2:]==['--seeds','1']
+    refs={world:references(world) for world in (1,2)}
+    spec=importlib.util.spec_from_file_location('machine_control',BASE/'world1_rebuild_supervisor.py'); c=importlib.util.module_from_spec(spec); spec.loader.exec_module(c)
+    c.JOB,c.stamp=JOB,stamp
+    guard_spec=importlib.util.spec_from_file_location('worker_count',JOB/'priority_guard.py'); guard=importlib.util.module_from_spec(guard_spec); guard_spec.loader.exec_module(guard)
+    original_machine=c.machine
+    def machine(purpose,group=None):
+        original_machine(purpose,group=group)
+        workers=guard.external_workers(group)
+        priority={'time':stamp(),'external_worker_count':len(workers),'external_workers':workers,'own_paused':len(workers)>=4,'controller_pid':os.getpid(),'child_group':group,'current_world':state.get('current_world'),'current_seed':state.get('current_seed')}
+        with (JOB/'priority_guard.jsonl').open('a') as f: f.write(json.dumps(priority,ensure_ascii=False)+'\n')
+        (JOB/'priority_status.json').write_text(json.dumps(priority,ensure_ascii=False,indent=2)+'\n')
+        return len(workers)
+    c.machine=machine
+    env=dict(os.environ); env.pop('V38_FROM',None)
+    (JOB/'environment.json').write_text(json.dumps({k:env.get(k) for k in ('PYTHONHASHSEED','V38_FROM','PYTHONPATH','LANG','LC_ALL','TZ')},ensure_ascii=False,indent=2)+'\n')
+    status(status='preparing'); c.machine('材料作成の再開前')
+    if 1 not in state['completed']['1']: verify(1,1,refs[1],adopted=True)
+    for world,seeds in ((1,range(2,21)),(2,range(1,21))):
+        for seed in seeds:
+            if seed in state['completed'][str(world)]: continue
+            assert 1<=seed<=20
+            ledger=OUTPUTS[world]/f'ledgers/cells/{CELL}/seed{seed:03d}.jsonl.gz'
+            while c.machine(f'世界{world}・種{seed}の開始前')>=4:
+                status(status='waiting_for_slot',current_world=world,current_seed=seed); time.sleep(30)
+            if ledger.exists():
+                # 走行済み・未照合の種を再走行せず、同じ厳密な表の検査から再開する。
+                status(status='verifying',current_world=world,current_seed=seed,child_pid=None)
+                verify(world,seed,refs[world]); continue
+            args=list(initial['command']); args[3]=str(OUTPUTS[world]); args[args.index('--shop-world')+1]=str(world); args[-1]=str(seed)
+            with (JOB/'commands.jsonl').open('a') as f: f.write(json.dumps({'world':world,'seed':seed,'command':args,'cwd':str(CODE)},ensure_ascii=False)+'\n')
+            with (JOB/f'w{world}_seed{seed:03d}.log').open('w') as log:
+                child=subprocess.Popen(args,cwd=CODE,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+                status(status='running',current_world=world,current_seed=seed,child_pid=child.pid,started_at=stamp())
+                print(stamp(),f'世界{world}・種{seed}開始、並列1',flush=True)
+                paused=False
+                while child.poll() is None:
+                    time.sleep(15); count=c.machine(f'世界{world}・種{seed}の走行中',group=child.pid)
+                    if count>=4 and not paused:
+                        os.killpg(child.pid,signal.SIGSTOP); paused=True; status(status='paused_for_sme_priority')
+                    elif count<4 and paused:
+                        os.killpg(child.pid,signal.SIGCONT); paused=False; status(status='running')
+            if child.returncode: raise RuntimeError(f'世界{world}・種{seed}の終了値={child.returncode}')
+            child=None; status(status='verifying',child_pid=None); verify(world,seed,refs[world])
+        tables=JOB/f'tables_w{world}'
+        combined=gzip.decompress((tables/'seed001.trials.tsv.gz').read_bytes()).splitlines(keepends=True)[0]+b''.join(gzip.decompress((tables/f'seed{s:03d}.trials.tsv.gz').read_bytes()).split(b'\n',1)[1] for s in range(1,21))
+        assert combined==gzip.decompress((REFERENCES[world]/'trials.tsv.gz').read_bytes())
+        (tables/'trials.tsv.gz').write_bytes(gzip.compress(combined,mtime=0))
+        print(stamp(),f'世界{world}の全20種・34800行の表も完全一致',flush=True)
+    c.machine('両世界の材料作成と照合終了後'); status(status='complete_materials',finished_at=stamp(),child_pid=None)
+
+
+if __name__=='__main__':
+    try: main()
+    except BaseException as error:
+        if child is not None and child.poll() is None:
+            os.killpg(child.pid,signal.SIGCONT); os.killpg(child.pid,signal.SIGTERM)
+            try: child.wait(timeout=15)
+            except subprocess.TimeoutExpired: os.killpg(child.pid,signal.SIGKILL); child.wait()
+        status(status='stopped',child_pid=None,error=repr(error)); raise
