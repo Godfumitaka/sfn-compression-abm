@@ -490,18 +490,31 @@ def worker(task: dict) -> dict:
         if task.get("shop_door_p") is not None and task["cfg"]["fixed"].get("holdout_include_second_order"):
             raise ValueError("--shop-door-p は二階を伏せない設定（hide1）で使う")
         shopworld.extend_dictionary()
+    if task.get("verb_world"):
+        # 動詞の世界：世界と研究者の台帳だけを包む。旗オフなら import もしない。
+        if not (task.get("v39") and task.get("v310_be")):
+            raise ValueError("--verb-world は --v39 --v310-be と一緒に使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import verbworld
+        verbworld.install(variant=task["verb_variant"], frequency_file=task.get("verb_frequencies"))
+        verbworld.extend_dictionary()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
         if not task.get("v39"):
             raise ValueError("--probe-world は --v39 と一緒に使う")
         sys.path.insert(0, str(ROOT / "tools"))
         import probeworld
+        if task.get("verb_world"):
+            verbworld.prepare_probe_snapshot(probeworld)
         probeworld.install(side_dir / f"seed{task['seed']:03d}.probe.jsonl", run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
                            seed_file=str(ROOT / task["cfg"]["seed_file"]), horizon=int(task["cfg"]["trial_count"]),
                            holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
         if task.get("shop_world"):
             # ★ お店の世界の試験（対になった試験・共有部分の試験）を足す：tools/shopworld.py add_probes
             shopworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
+                                 holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
+        if task.get("verb_world"):
+            verbworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
                                  holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
     if task.get("cf_value"):
         # ★ 反実仮想の保持価値の診断（--cf-value、記録だけ。2026-10-01 午前の返事の段 5）：tools/cfvalue.py。試験の旗のあと、答えごとの記録より前
@@ -587,6 +600,8 @@ def worker(task: dict) -> dict:
         rec["probeworld"] = sys.modules["probeworld"].close()
     if task.get("shop_world"):
         rec["shopworld"] = sys.modules["shopworld"].close()
+    if task.get("verb_world"):
+        rec["verbworld"] = dict(sys.modules["verbworld"].STATS)
     if task.get("strict_pc"):
         rec["strictpc"] = sys.modules["strictpc"].stats()
     if task.get("cf_value"):
@@ -736,6 +751,10 @@ def main() -> None:
     ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
                     help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
     ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
+    ap.add_argument("--verb-world", action="store_true", help="動詞の世界：M1 一型・動詞名と link・0.0.0 の過去形。既定5000試行")
+    ap.add_argument("--verb-variant", choices=("default", "schuler54", "schuler36"), default="default")
+    ap.add_argument("--verb-frequencies", default=None, help="Schuler の出典確認済みの項目別出現数の JSON 表")
+    ap.add_argument("--horizon", type=int, default=None, help="動詞の世界の走行長（--trial-count と同じ値を指定。既定5000）")
     ap.add_argument("--select-n3", action="store_true", help="選び方 N3：定義を N3＝2S(d,x)÷(S(d,d)＋S(x,x)) の大きい順で選ぶ（tools/selectn3.py）。門は今のまま")
     ap.add_argument("--select-log", action="store_true", help="記録だけ：本物の予測ごとに候補の定義の支持・N3 の三項・順位・選ばれたか・門を書く")
     ap.add_argument("--shop-door-p", type=float, default=None,
@@ -790,6 +809,30 @@ def main() -> None:
     if args.trial_count is not None:
         cfg2["trial_count"] = args.trial_count
         args.no_compare = True
+    if args.verb_world:
+        if args.shop_world is not None or args.world_cue or args.shop_door_p is not None or args.shop_keep_cue:
+            raise SystemExit("--verb-world はお店・世界の変種の旗と併用しない")
+        if not (args.v39 and args.v310_be):
+            raise SystemExit("--verb-world は --v39 --v310-be と一緒に使う")
+        if cfg2["fixed"].get("holdout_include_second_order"):
+            raise SystemExit("--verb-world はお店の n3 と同じ hide1 設定で使う")
+        if args.seeds and any(not 1 <= int(s) <= 20 for s in args.seeds.split(",")):
+            raise SystemExit("動詞の世界では種1〜20だけを使う")
+        sys.path.insert(0, str(ROOT / "tools"))
+        import verbworld
+        try:
+            verbworld.training_items(args.verb_variant, args.verb_frequencies)
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
+        cfg2["seed_file"] = "tools/verb/U-011_seed_verb.json"
+        cfg2["trial_count"] = args.trial_count if args.trial_count is not None else (args.horizon or 5000)
+        if args.horizon is not None and args.horizon != cfg2["trial_count"]:
+            raise SystemExit("--horizon と --trial-count は同じ値にする")
+        if cfg2["trial_count"] <= 0:
+            raise SystemExit("動詞の世界の走行長は正にする")
+        args.no_compare = True
+    elif args.verb_variant != "default" or args.verb_frequencies is not None or args.horizon is not None:
+        raise SystemExit("--verb-variant・--verb-frequencies・--horizon は --verb-world と一緒に使う")
     if args.nsim is not None:
         cfg2["fixed"]["nsim_threshold"] = args.nsim
     if args.vt is not None:
@@ -799,6 +842,8 @@ def main() -> None:
     if args.seeds:
         keep = {int(s) for s in args.seeds.split(",")}
         runs = [r for r in runs if r["seed"] in keep]
+    if args.verb_world and any(not 1 <= r["seed"] <= 20 for r in runs):
+        raise SystemExit("動詞の世界では設定の種も1〜20だけにする")
     if args.cells:
         # ★ v2 のセル名（vt を付けない名前）で選ぶ
         keep_c = set(args.cells.split(","))
@@ -820,7 +865,7 @@ def main() -> None:
         raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
-    seed = sweep.load_seed(cfg["seed_file"])
+    seed = sweep.load_seed(cfg2["seed_file"])
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
                and args.extend_rule == "v2" and args.charge1 == "v2"
@@ -828,7 +873,7 @@ def main() -> None:
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
                and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None and not args.select_n3 and not args.select_log
-               and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
+               and not args.nohist and not args.verb_world)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
@@ -851,7 +896,8 @@ def main() -> None:
               "world_cue": args.world_cue, "world_cue_p": args.world_cue_p, "dump_answers": args.dump_answers, "dump_routing": args.dump_routing,
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
-              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "select_n3": args.select_n3, "select_log": args.select_log, "compare": do_compare} for r in runs]
+              "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "select_n3": args.select_n3, "select_log": args.select_log, "compare": do_compare,
+              **({"verb_world": True, "verb_variant": args.verb_variant, "verb_frequencies": args.verb_frequencies} if args.verb_world else {})} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -877,7 +923,10 @@ def main() -> None:
                                                     "select_n3": args.select_n3, "select_log": args.select_log,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
-                                                    "workers": args.workers}) + "\n")
+                                                    "workers": args.workers,
+                                                    **({"verb_world": True, "verb_variant": args.verb_variant,
+                                                        "verb_frequencies": args.verb_frequencies, "horizon": cfg2["trial_count"],
+                                                        "effective_seed_file": cfg2["seed_file"]} if args.verb_world else {})}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
