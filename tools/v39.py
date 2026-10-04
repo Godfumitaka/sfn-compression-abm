@@ -545,6 +545,18 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
 
 
 # ---------------------------------------------------------------- 定義の選び方（支持＝写った F と H の席、分母＝F＋H）
+def random_definition_tie(ranked, seed, trial):
+    """支持の最大割合が同じものを、模型から独立の乱数で一様に選ぶ。"""
+    from hashlib import sha256
+    from random import Random
+    maximum = max(it[0] for it in ranked)
+    tied = sorted((it for it in ranked if it[0] == maximum), key=lambda it: it[2].name)
+    if len(tied) == 1:
+        return tied[0]
+    key = sha256(f"select-tie-random\x1f{seed}\x1f{trial}".encode()).digest()
+    return Random(int.from_bytes(key, "big")).choice(tied)
+
+
 def select_definition(state, scene, config):
     import abm.agent_runtime as ar
     STATS["select_calls"] = STATS.get("select_calls", 0) + 1
@@ -564,10 +576,14 @@ def select_definition(state, scene, config):
         return None
     ranked.sort(key=lambda it: (-it[0], -it[5], -it[2].registered_at, it[2].name))
     best = ranked[0]
+    if CFG.get("tie_random"):
+        best = random_definition_tie(ranked, CFG["seed"], CTX["select_trial"])
     tie_event = sum(it[0] == best[0] and it[5] == best[5] and it[2].registered_at == best[2].registered_at
                     for it in ranked) > 1
     passed = [{"R": d.name, "support": s, "m_live": n, "ratio": r, "selected": d.name == best[2].name}
               for r, s, d, _g, _a, n in ranked if s >= ar._need(config.tau_acc, n)]
+    if CFG.get("tie_random"):
+        tie_event = sum(it[0] == best[0] for it in ranked) > 1
     ratio, support, d, graph, alignment, n = best
     f_ids = {row.relation.relation_id for row in d.constituents if row.alive}
     alignment = replace(alignment, candidate_projections=tuple(x for x in alignment.candidate_projections if x in f_ids))
@@ -968,7 +984,7 @@ def run_conversions(state, trial):
 
 # ---------------------------------------------------------------- 入れる所
 def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a: float, u: str,
-            decay_mode: str = "uniform", price=None, dump_cands=None) -> None:
+            decay_mode: str = "uniform", price=None, dump_cands=None, tie_random=False) -> None:
     import abm.abstraction as ab
     import abm.agent_runtime as ar
     import abm.loop as loop
@@ -1006,6 +1022,17 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
 
     # 状態の型（席の記録を足す）
     sweep.AgentState = _state_class()
+
+    if tie_random:
+        CFG["tie_random"] = True
+        STATS["tie_random"] = True
+        real_ai = loop._agent_input
+
+        def agent_input(trial, state):
+            CTX["select_trial"] = trial.trial
+            return real_ai(trial, state)
+
+        loop._agent_input = agent_input
 
     # 予測・同定・反実仮想
     loop.predict = predict

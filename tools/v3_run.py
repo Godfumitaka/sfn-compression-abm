@@ -431,11 +431,11 @@ def worker(task: dict) -> dict:
         v39.install(fo, seed=int(task["seed"]), horizon=int(task["cfg"]["trial_count"]),
                     seed_file=str(ROOT / task["cfg"]["seed_file"]), budget=task["v39_budget"], init=task["v39_init"],
                     a=task["v39_a"], u=task["v39_u"], decay_mode=task.get("v39_decay", "uniform"), price=task.get("v39_price"),
-                    dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None))
+                    dump_cands=(str(side_dir / f"seed{task['seed']:03d}.v39cands.f64") if task.get("v39_dump_cands") else None), tie_random=bool(task.get("tie_random")))
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
-            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")))
+            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")), score_logp=bool(task.get("score_logp")), score_logp_e=bool(task.get("score_logp_e")))
             if task.get("e_price") is not None:
                 # ★ まとめの値段（--e-price、2026-10-01 午前・改訂の段 2）：E（tools/v310be.py choose_and_register の K＝A＋r＋λ dC）の λ だけを
                 #   別の値にする。B（忘れる判断）は --v39-price のまま
@@ -713,6 +713,9 @@ def main() -> None:
     ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
+    ap.add_argument("--score-logp", action="store_true", help="L-B：保持の採点を開示前の確率の対数費用にする（epsilon=1/2）")
+    ap.add_argument("--score-logp-e", action="store_true", help="L-BE：Eの費用も対数にする（--score-logpと一緒に）")
+    ap.add_argument("--tie-random", action="store_true", help="T：支持の割合の同点を（種,試行）から作る専用乱数で一様に選ぶ")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
     ap.add_argument("--probe-world", action="store_true",
                     help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
@@ -806,6 +809,12 @@ def main() -> None:
                                                    r["fill_selection"]) in keep_c]
     # ★ 種の順に並べる（締め切りで打ち切っても、終わった種は 4 セルがそろいやすいように）。
     runs.sort(key=lambda r: (r["seed"], r["cell"]))
+    if args.score_logp and not args.v310_be:
+        raise SystemExit("--score-logp は --v310-be と一緒に使う")
+    if args.score_logp_e and not args.score_logp:
+        raise SystemExit("--score-logp-e は --score-logp と一緒に使う")
+    if args.tie_random and (not args.v39 or args.select_n3):
+        raise SystemExit("--tie-random は今の選び方の --v39 と一緒に使う")
     if args.score_role and not args.v310_be:
         raise SystemExit("--score-role は --v310-be と一緒に使う")
     if args.u_struct and (not args.v39 or not args.hist_role):
@@ -827,7 +836,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None and not args.select_n3 and not args.select_log
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn and args.use_forget is None and not args.select_n3 and not args.select_log and not args.score_logp and not args.tie_random
                and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -853,6 +862,11 @@ def main() -> None:
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
               "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "select_n3": args.select_n3, "select_log": args.select_log, "compare": do_compare} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
+    for task in tasks:
+        if args.score_logp:
+            task.update(score_logp=True, score_logp_e=args.score_logp_e)
+        if args.tie_random:
+            task["tie_random"] = True
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
                                                     "extend_rule": args.extend_rule, "charge1": args.charge1,
@@ -878,6 +892,14 @@ def main() -> None:
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
+    if args.score_logp or args.tie_random:
+        path = out_root / "flag.json"
+        fl = json.loads(path.read_text())
+        if args.score_logp:
+            fl.update(score_logp=True, score_logp_e=args.score_logp_e, score_logp_epsilon=0.5)
+        if args.tie_random:
+            fl["tie_random"] = True
+        path.write_text(json.dumps(fl, ensure_ascii=False) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)

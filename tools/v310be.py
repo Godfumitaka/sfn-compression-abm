@@ -42,8 +42,55 @@ def _ell(p, L) -> float:
     return float(v39.L_of(p, L))
 
 
+# ---------------------------------------------------------------- L：開示前の確率を控え、対数費用で採点する
+EPSILON = 0.5  # 委任書の仮定。結果から変えない。
+
+
+def probabilities(d, row, state, scene, config):
+    """答えの候補・重みをそのまま正規化する。乱数・正解は使わない。"""
+    import v39
+    from collections.abc import Mapping
+    from abm.domains import RelationGraph
+    from abm.filling import _predicate_has_signature, _distribution, slot_signature
+    dg = RelationGraph("definition", relations=tuple(c.relation for c in d.constituents))
+    sig = slot_signature(row.relation, dg)
+    pool = frozenset(p for p in state.p_hat.alive_vocab if _predicate_has_signature(p, sig, scene, dg))
+    pool = v39._order_pool(pool, d, row, config.higher_order_predicates)
+    b = dict(_distribution(pool, state.p_hat))
+    if not b or sum(b.values()) == 0:
+        b = {None: 1.0}  # 名前の無い候補範囲。名前に対する確率は0。
+    h = state.slot_history.get((d.name, row.slot_index))
+    hp = v39._order_pool(frozenset(h or ()), d, row, config.higher_order_predicates)
+    q = dict(_distribution(hp, state.p_hat, config.local_lambda, h if isinstance(h, Mapping) else None))
+    if not q or sum(q.values()) == 0:
+        q = b.copy()  # 履歴が無いときは基底分布へ戻る。
+    names = sorted((set(b) | set(q) | {row.relation.predicate}) - {None})
+    if None in b or None in q:
+        names.append(None)
+    return {"U": b, "H": {n: (1-EPSILON)*q.get(n, 0.0)+EPSILON*b.get(n, 0.0) for n in names},
+            "F": {n: (1-EPSILON)*(n == row.relation.predicate)+EPSILON*b.get(n, 0.0) for n in names}}
+
+
+def log_cost(distribution, predicate, L):
+    """未経験名を含め確率0は L_of の既存の規則で払う。"""
+    p = distribution.get(predicate, 0.0)
+    return -math.log2(p) if p > 0 else _ell(predicate, L)
+
+
+def three_answers_logp(inner):
+    def three_answers(d, alignment, state, config, scene):
+        items = inner(d, alignment, state, config, scene)
+        rows = {row.slot_index: row for row in d.constituents}
+        for it in items:
+            if "ans" in it:
+                it["P"] = probabilities(d, rows[it["slot"]], state, scene, config)
+        return items
+    return three_answers
+
+
 def score_answers(seats, ans, received, t):
     """控えた三答え（開示前）を、受け取った開示で採点する。r＝0（名前・引数が一致）又は 正解の名前の ℓ（外れ・棄権）。
+    --score-logp では、開示前に控えた P_X から −log₂P_X(正解) を払う。
     写した位置が開示の引数と違う席・U の席・世代や状態が変わった席は、全列を更新しない。"""
     import v39
     L = CTX["L_score"]
@@ -62,6 +109,8 @@ def score_answers(seats, ans, received, t):
             continue
         lp = _ell(received.predicate, L)
         r = {x: (0.0 if it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
+        if CFG.get("score_logp"):
+            r = {x: log_cost(it["P"][x], received.predicate, L) for x in ("F", "H", "U")}
         inc = (r["F"] if it["st"] == "F" else 0.0, r["H"], r["U"], 1.0)
         seats[key] = v39.rec_add(rec, t, inc)
         scored.append([it["slot"], it["st"], r["F"] if it["st"] == "F" else None, r["H"], r["U"]])
@@ -141,6 +190,8 @@ def score_answers_role(seats, ans, received, t):
         STATS["score_role_scored_pos_differs"] += not old
         lp = _ell(received.predicate, L)
         r = {x: (0.0 if it["ans"].get(x) == received.predicate else lp) for x in ("F", "H", "U")}
+        if CFG.get("score_logp"):
+            r = {x: log_cost(it["P"][x], received.predicate, L) for x in ("F", "H", "U")}
         inc = (r["F"] if it["st"] == "F" else 0.0, r["H"], r["U"], 1.0)
         seats[key] = v39.rec_add(rec, t, inc)
         scored.append([it["slot"], it["st"], r["F"] if it["st"] == "F" else None, r["H"], r["U"]])
@@ -149,7 +200,7 @@ def score_answers_role(seats, ans, received, t):
 
 
 def init_rec(d, row, state, base, target, trial, base_age, config):
-    """誕生の初期値：二材料の再現採点をビットに（F の答えは固定名なので 0。H・U は外れなら ℓ）。旧い場面は φ^年齢。"""
+    """誕生の二材料の再現採点。--score-logp ではF/H/Uの対数費用、旗なしでは既存の0/ℓ。旧い場面はφ^年齢。"""
     import v39
     if v39.CFG["init"] == "zero":
         return v39.SeatRec(0, "F", trial, trial, v39.ZERO4, v39.ZERO4)
@@ -161,9 +212,14 @@ def init_rec(d, row, state, base, target, trial, base_age, config):
     u_old, u_why_old = v39.u_answer(d, row, base, state.p_hat, config.higher_order_predicates)
     r_old = (0.0, 0.0 if h == p else lp, 0.0 if u_old == p else lp, 1.0)
     r_cur = (0.0, 0.0 if h == p else lp, 0.0 if u_cur == p else lp, 1.0)
+    if CFG.get("score_logp"):
+        P_old = probabilities(d, row, state, base, config)
+        P_cur = probabilities(d, row, state, target, config)
+        r_old = tuple(log_cost(P_old[x], p, L) for x in ("F", "H", "U")) + (1.0,)
+        r_cur = tuple(log_cost(P_cur[x], p, L) for x in ("F", "H", "U")) + (1.0,)
     w = tuple(f ** max(base_age, 0) for f in v39.CFG["decay"])
     init = tuple(tuple(k * so + sc for k in w) for so, sc in zip(r_old, r_cur))
-    v39.CTX["births_rec"].append({"slot": row.slot_index, "rF": 0.0, "rH": r_cur[1], "rU旧": r_old[2], "rU今": r_cur[2],
+    v39.CTX["births_rec"].append({"slot": row.slot_index, "rF": r_cur[0], "rH": r_cur[1], "rU旧": r_old[2], "rU今": r_cur[2],
                                   "H答え": h, "U答え": [u_old, u_cur], "理由": [h_why, u_why_old, u_why],
                                   "履歴": v39.hist_counts(state.slot_history.get((d.name, row.slot_index)))})
     return v39.SeatRec(0, "F", trial, trial, init, v39.ZERO4)
@@ -311,6 +367,9 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
     mapped_x = {}
     n_map = 0
     ren = []
+    fixed_ren = []
+    h_log_cost = 0.0
+    h_log_count = 0
     unmapped_seats = 0
     for row in d.constituents:
         st = v39.seat_state(d, row, hist)
@@ -325,8 +384,14 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
                 got = row.relation.predicate
             else:
                 got, _ = v39.h_answer(d, row, hist, state_a.p_hat, config.local_lambda, config.higher_order_predicates)
+            if CFG.get("score_logp_e") and st == "H":
+                P = probabilities(d, row, state_a, x, config)
+                h_log_cost += log_cost(P["H"], want, L)
+                h_log_count += 1
             if got != want:
                 ren.append(want)
+                if st == "F":
+                    fixed_ren.append(want)
         else:
             unmapped_seats += 1
     adds = [r for r in x.relations if r.relation_id not in mapped_x]
@@ -334,11 +399,15 @@ def rewrite(state_a, R, x, L, config, scene_rel_ids):
     m = len(x.relations)
     x_rel_ids = set(x_by_id)
     b_ren = v39.I(len(ren)) + len(ren) * v39.clog2(max(n_map, 1)) + sum(_ell(p, L) for p in ren)
+    if CFG.get("score_logp_e"):
+        b_ren = v39.I(len(ren)) + len(ren) * v39.clog2(max(n_map, 1)) + sum(_ell(p, L) for p in fixed_ren) + h_log_cost
     b_add = v39.I(len(adds)) + sum(_ell(r.predicate, L) + _arg_bits(r, x_rel_ids, e, m) for r in adds)
     n_FH = sum(1 for row in d.constituents if v39.seat_state(d, row, hist) != "U")
     b_can = d1_bits(n_FH, 0)              # ★ D₁(k, 0)：不在が確かめられないので取消は 0 本（案 1）。k＝固定順の F・H の席数
     parts = {"書換": b_ren, "追加": b_add, "取消": b_can, "書換数": len(ren), "追加数": len(adds),
              "写った席": n_map, "一致": n_map - len(ren), "取消の未確認": unmapped_seats}
+    if CFG.get("score_logp_e"):
+        parts.update(H_logp_cost=h_log_cost, H_logp_count=h_log_count)
     return b_ren + b_add + b_can, parts
 
 
@@ -416,7 +485,7 @@ def choose_and_register(state, base, target, alignment, trial, kw, inner_m1):
 
 
 # ---------------------------------------------------------------- 入れる所
-def install(fo, *, seed: int, nohash: bool, score_role: bool = False) -> None:
+def install(fo, *, seed: int, nohash: bool, score_role: bool = False, score_logp: bool = False, score_logp_e: bool = False) -> None:
     import abm.loop as loop
     import v39
     if v39.CFG.get("mean_weights") is None:
@@ -441,6 +510,12 @@ def install(fo, *, seed: int, nohash: bool, score_role: bool = False) -> None:
         STATS["cfg"]["score_role"] = True
         v39.three_answers = three_answers_role(v39.three_answers)
         v39.score_answers = score_answers_role
+    if score_logp:
+        CFG["score_logp"] = True
+        CFG["score_logp_e"] = bool(score_logp_e)
+        STATS["cfg"].update(score_logp=True, score_logp_e=bool(score_logp_e), epsilon=EPSILON,
+                            empty_history="q_H=b")
+        v39.three_answers = three_answers_logp(v39.three_answers)
     v39._init_rec = init_rec
     v39._candidates = candidates
 
