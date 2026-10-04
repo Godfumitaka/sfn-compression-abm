@@ -1,0 +1,489 @@
+{
+  "base_commit": "3380344add7f85ce2c3608656de5805995dcf971",
+  "design_expectations_not_run_results": {
+    "additional_relation_count_mean": 3.10743,
+    "current_door_holdout_rate": 0.09058775679875679,
+    "naive_skeleton_door_holdout_rate": 0.125
+  },
+  "dictionary": {
+    "current_bits_per_word": 7,
+    "current_size": 80,
+    "proposed_plus_bits_per_word": 7,
+    "proposed_plus_size": 92
+  },
+  "door_table": [
+    {
+      "cue": "n",
+      "predicate": "hold",
+      "type": "甲",
+      "world": 1
+    },
+    {
+      "cue": "e",
+      "predicate": "hold",
+      "type": "甲",
+      "world": 1
+    },
+    {
+      "cue": "n",
+      "predicate": "hold_b",
+      "type": "乙",
+      "world": 1
+    },
+    {
+      "cue": "e",
+      "predicate": "hold_b",
+      "type": "乙",
+      "world": 1
+    },
+    {
+      "cue": "n",
+      "predicate": "hold",
+      "type": "甲",
+      "world": 2
+    },
+    {
+      "cue": "e",
+      "predicate": "hold_b",
+      "type": "甲",
+      "world": 2
+    },
+    {
+      "cue": "n",
+      "predicate": "hold_b",
+      "type": "乙",
+      "world": 2
+    },
+    {
+      "cue": "e",
+      "predicate": "hold",
+      "type": "乙",
+      "world": 2
+    }
+  ],
+  "examples": [
+    {
+      "additional_relations": [
+        {
+          "predicate": "chain",
+          "role": "mediator"
+        },
+        {
+          "predicate": "near",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 1,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 0,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "tree_other",
+      "seed": 1,
+      "shop_type": "甲",
+      "total": 20,
+      "trial_index_zero_based": 1,
+      "visible": 19,
+      "visible_entities": 3,
+      "world": 2
+    },
+    {
+      "additional_relations": [
+        {
+          "predicate": "cord",
+          "role": "mediator"
+        },
+        {
+          "predicate": "under",
+          "role": "glue"
+        },
+        {
+          "predicate": "inside",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 2,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 0,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "tree_other",
+      "seed": 1,
+      "shop_type": "乙",
+      "total": 21,
+      "trial_index_zero_based": 0,
+      "visible": 20,
+      "visible_entities": 3,
+      "world": 2
+    },
+    {
+      "additional_relations": [
+        {
+          "predicate": "stone",
+          "role": "mediator"
+        },
+        {
+          "predicate": "beside",
+          "role": "glue"
+        },
+        {
+          "predicate": "inside",
+          "role": "glue"
+        },
+        {
+          "predicate": "inside",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 3,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 0,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "glue",
+      "seed": 1,
+      "shop_type": "甲",
+      "total": 22,
+      "trial_index_zero_based": 5,
+      "visible": 21,
+      "visible_entities": 3,
+      "world": 2
+    },
+    {
+      "additional_relations": [
+        {
+          "predicate": "water",
+          "role": "mediator"
+        },
+        {
+          "predicate": "cold",
+          "role": "peripheral"
+        },
+        {
+          "predicate": "toward",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 1,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 1,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "glue",
+      "seed": 1,
+      "shop_type": "甲",
+      "total": 21,
+      "trial_index_zero_based": 8,
+      "visible": 20,
+      "visible_entities": 4,
+      "world": 2
+    },
+    {
+      "additional_relations": [
+        {
+          "predicate": "wood",
+          "role": "mediator"
+        },
+        {
+          "predicate": "cold",
+          "role": "peripheral"
+        },
+        {
+          "predicate": "beside",
+          "role": "glue"
+        },
+        {
+          "predicate": "near",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 2,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 1,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "tree_other",
+      "seed": 1,
+      "shop_type": "甲",
+      "total": 22,
+      "trial_index_zero_based": 12,
+      "visible": 21,
+      "visible_entities": 4,
+      "world": 2
+    },
+    {
+      "additional_relations": [
+        {
+          "predicate": "water",
+          "role": "mediator"
+        },
+        {
+          "predicate": "cold",
+          "role": "peripheral"
+        },
+        {
+          "predicate": "along",
+          "role": "glue"
+        },
+        {
+          "predicate": "near",
+          "role": "glue"
+        },
+        {
+          "predicate": "outside",
+          "role": "glue"
+        }
+      ],
+      "counts": {
+        "door": 1,
+        "glue": 3,
+        "link": 1,
+        "mediator": 1,
+        "peripheral": 1,
+        "role_unary": 1,
+        "sig": 1,
+        "tree_other": 14
+      },
+      "cue": "n",
+      "held_role": "tree_other",
+      "seed": 1,
+      "shop_type": "甲",
+      "total": 23,
+      "trial_index_zero_based": 18,
+      "visible": 22,
+      "visible_entities": 4,
+      "world": 2
+    }
+  ],
+  "generated_trial_count": 19,
+  "mediator_bags": {
+    "M1": [
+      "stone",
+      "water",
+      "chain",
+      "rope",
+      "wood",
+      "bridge",
+      "wall",
+      "gate",
+      "pipe",
+      "river"
+    ],
+    "M2": [
+      "stone",
+      "road",
+      "cable",
+      "wire",
+      "board",
+      "beam",
+      "post",
+      "cord",
+      "plank",
+      "rail"
+    ]
+  },
+  "peak_rss_bytes_macos": 24739840,
+  "peripheral_predicates": {
+    "M1": "cold",
+    "M2": "wet"
+  },
+  "role_unary": {
+    "M1": "supported",
+    "M2": "carried"
+  },
+  "run_seed_21_to_40_accessed": false,
+  "run_seeds_used": [
+    1
+  ],
+  "scope": "段1の生成だけ。走行・予測・採点・学習・分類は未実施。",
+  "skeleton": {
+    "M1": {
+      "by_level": {
+        "1": 8,
+        "2": 4,
+        "3": 2,
+        "4": 1
+      },
+      "paths": [
+        {
+          "path": "0.0.0",
+          "predicate": "hold"
+        },
+        {
+          "path": "0.0.1",
+          "predicate": "push"
+        },
+        {
+          "path": "0.1.0",
+          "predicate": "carry"
+        },
+        {
+          "path": "0.1.1",
+          "predicate": "lift"
+        },
+        {
+          "path": "1.0.0",
+          "predicate": "break"
+        },
+        {
+          "path": "1.0.1",
+          "predicate": "cut"
+        },
+        {
+          "path": "1.1.0",
+          "predicate": "turn"
+        },
+        {
+          "path": "1.1.1",
+          "predicate": "press"
+        },
+        {
+          "path": "0.0",
+          "predicate": "cause"
+        },
+        {
+          "path": "0.1",
+          "predicate": "require"
+        },
+        {
+          "path": "1.0",
+          "predicate": "enable"
+        },
+        {
+          "path": "1.1",
+          "predicate": "avert"
+        },
+        {
+          "path": "0",
+          "predicate": "couple"
+        },
+        {
+          "path": "1",
+          "predicate": "anchor"
+        },
+        {
+          "path": "root",
+          "predicate": "govern"
+        }
+      ]
+    },
+    "M2": {
+      "by_level": {
+        "1": 8,
+        "2": 4,
+        "3": 2,
+        "4": 1
+      },
+      "paths": [
+        {
+          "path": "0.0.0",
+          "predicate": "hold"
+        },
+        {
+          "path": "0.0.1",
+          "predicate": "push"
+        },
+        {
+          "path": "0.1.0",
+          "predicate": "carry"
+        },
+        {
+          "path": "0.1.1",
+          "predicate": "lift"
+        },
+        {
+          "path": "1.0.0",
+          "predicate": "pull"
+        },
+        {
+          "path": "1.0.1",
+          "predicate": "drag"
+        },
+        {
+          "path": "1.1.0",
+          "predicate": "lock"
+        },
+        {
+          "path": "1.1.1",
+          "predicate": "bend"
+        },
+        {
+          "path": "0.0",
+          "predicate": "cause"
+        },
+        {
+          "path": "0.1",
+          "predicate": "require"
+        },
+        {
+          "path": "1.0",
+          "predicate": "permit"
+        },
+        {
+          "path": "1.1",
+          "predicate": "hinder"
+        },
+        {
+          "path": "0",
+          "predicate": "couple"
+        },
+        {
+          "path": "1",
+          "predicate": "steer"
+        },
+        {
+          "path": "root",
+          "predicate": "govern"
+        }
+      ]
+    }
+  },
+  "source_files": {
+    "abm/seed.py": {
+      "git_blob": "dcc6065c4a0ac09d8ff1fd122eb254d19f0a00bc",
+      "sha256": "bfa6a2184cc2025fc034b661e60dd53d007c14925884c6467f71af156b1b07d1"
+    },
+    "abm/world.py": {
+      "git_blob": "c942048ad6745d2f4cc340c8be349d6497bf49d1",
+      "sha256": "62cd00c724db2b591333124bea7d7de709c623586fb3ac71585d7a0476ab4654"
+    },
+    "tools/shop/U-011_seed_shop.json": {
+      "git_blob": "45e43b45497b6da65cbacefec7689452f00c56f4",
+      "sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1"
+    },
+    "tools/shopworld.py": {
+      "git_blob": "1a05e20d8659d08d170e88e9965e6e665c73ff5d",
+      "sha256": "20acf4218fd6564d50dfbe73b4467ef1d4a00ae10b3c27222b55235d23281ce9"
+    }
+  }
+}
