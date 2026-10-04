@@ -147,10 +147,10 @@ class Result:
 
 
 def _canonical(labels, edges):
-    """名前を含まない色つき有向図の正準形。区別不能な色を個別化して全探索。
+    """同じJSONの文字列・順位・個別化を保ち、関数内で符号を再利用する。
 
-    順つき引数を辺の色で保つ。色の細分だけで同型と決めず、残った組を
-    個別化する。ID は探索の順にだけ使い、最小の符号には含めない。
+    整数の自然順でJSONの順位を代用しない。文字列以外の辺の色も、
+    従前と同じエンコーダで書く。乱数・記憶・設定は読み取らない。
     """
     incoming = [[] for _ in labels]
     outgoing = [[] for _ in labels]
@@ -158,15 +158,39 @@ def _canonical(labels, edges):
         outgoing[a].append((label, b))
         incoming[b].append((label, a))
 
-    def ranks(values):
-        values = [json.dumps(v, separators=(",", ":")) for v in values]
-        table = {s: i for i, s in enumerate(sorted(set(values)))}
-        return tuple(table[s] for s in values)
+    encode = json.JSONEncoder(separators=(",", ":")).encode
+    label_codes = [encode(v) for v in labels]
+    edge_colors = [p for row in outgoing for p, _ in row]
+    string_edges = all(type(p) is str for p in edge_colors)
+    quoted = {p: encode(p) for p in set(edge_colors)} if string_edges else {}
+    # ranksの色は0以上の整数。個別化後も頂点数より小さい。
+    color_codes = tuple(map(str, range(len(labels))))
+    adjacency_codes = {}
+
+    def ranks(codes):
+        table = {s: i for i, s in enumerate(sorted(set(codes)))}
+        return tuple(table[s] for s in codes)
+
+    def adjacency_code(pairs):
+        key = tuple(pairs)
+        code = adjacency_codes.get(key)
+        if code is None:
+            code = "[" + ",".join(f"[{quoted[p]},{color_codes[c]}]" for p, c in pairs) + "]"
+            # 対称の大きな図でも一回の呼び出し内の控えを増やし続けない。
+            if len(adjacency_codes) < 256:
+                adjacency_codes[key] = code
+        return code
 
     def refine(colors):
         while True:
-            nxt = ranks([(colors[i], sorted((p, colors[j]) for p, j in outgoing[i]),
-                          sorted((p, colors[j]) for p, j in incoming[i])) for i in range(len(labels))])
+            values = [(colors[i], sorted((p, colors[j]) for p, j in outgoing[i]),
+                       sorted((p, colors[j]) for p, j in incoming[i])) for i in range(len(labels))]
+            if string_edges:
+                codes = [f"[{color_codes[c]},{adjacency_code(out)},{adjacency_code(inc)}]"
+                         for c, out, inc in values]
+            else:
+                codes = [encode(v) for v in values]
+            nxt = ranks(codes)
             if len(set(nxt)) == len(set(colors)):
                 return nxt
             colors = nxt
@@ -181,12 +205,14 @@ def _canonical(labels, edges):
         if not ambiguous:
             order = sorted(range(len(labels)), key=colors.__getitem__)
             pos = {v: i for i, v in enumerate(order)}
-            return json.dumps(([labels[v] for v in order],
-                               sorted((pos[a], pos[b], p) for a, b, p in edges)), separators=(",", ":"))
+            # 二つのJSON配列を元と同じ括弧・カンマでつなぐ。
+            ordered_labels = "[" + ",".join(label_codes[v] for v in order) + "]"
+            ordered_edges = encode(sorted((pos[a], pos[b], p) for a, b, p in edges))
+            return "[" + ordered_labels + "," + ordered_edges + "]"
         _, _, cell = min(ambiguous)
         return min(search(tuple(max(colors) + 1 if j == i else c for j, c in enumerate(colors))) for i in cell)
 
-    return search(ranks(labels))
+    return search(ranks(label_codes))
 
 
 class Matcher:
