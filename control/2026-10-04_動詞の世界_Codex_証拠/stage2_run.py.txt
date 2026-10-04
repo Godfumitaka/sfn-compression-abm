@@ -1,0 +1,68 @@
+"""段2の一本を監督し、実時間とRSSだけを記録する。jobs.py run の内側で使う。"""
+from __future__ import annotations
+
+import json
+import re
+import subprocess
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+SOURCE = ROOT / "source"
+
+
+def main():
+    seed, horizon, label = int(sys.argv[1]), int(sys.argv[2]), sys.argv[3]
+    if seed not in (1, 2, 3) or horizon not in (500, 2000, 5000):
+        raise SystemExit("段2は種1〜3、500（見積り）/2000/5000試行だけ")
+    output = ROOT / "stage2" / label
+    output.mkdir(parents=True, exist_ok=False)
+    cmd = json.loads((ROOT / "gates/flag_off_final_command.json").read_text())["command"]
+    cmd[2] = "config/sweep_verb_hide1_s1_2026-10-04.json"
+    cmd[3] = str(output / "run")
+    for flag in ("--shop-world", "--shop-exc"):
+        index = cmd.index(flag)
+        del cmd[index:index + 2]
+    cmd[cmd.index("--seeds") + 1] = str(seed)
+    cmd += ["--verb-world", "--horizon", str(horizon), "--trial-count", str(horizon)]
+    commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=SOURCE, text=True).strip()
+    (output / "command.json").write_text(json.dumps({"cwd": str(SOURCE), "commit": commit, "command": cmd}, ensure_ascii=False, indent=2) + "\n")
+    started = datetime.now().astimezone().isoformat()
+    begin = time.monotonic()
+    max_aggregate_mb = 0.0
+    with (output / "run.log").open("w") as log:
+        proc = subprocess.Popen(["/usr/bin/time", "-l", "-o", str(output / "time.txt"), *cmd], cwd=SOURCE, stdout=log, stderr=subprocess.STDOUT)
+        while proc.poll() is None:
+            table = {}
+            for line in subprocess.check_output(["/bin/ps", "-axo", "pid=,ppid=,rss="], text=True).splitlines():
+                pid, ppid, rss = map(int, line.split())
+                table[pid] = (ppid, rss)
+            descendants = {proc.pid}
+            while True:
+                more = {pid for pid, (ppid, _) in table.items() if ppid in descendants}
+                if more <= descendants:
+                    break
+                descendants |= more
+            max_aggregate_mb = max(max_aggregate_mb, sum(table.get(pid, (0, 0))[1] for pid in descendants) / 1024)
+            time.sleep(1)
+    seconds = time.monotonic() - begin
+    timed = (output / "time.txt").read_text()
+    peak = re.search(r"(\d+)\s+maximum resident set size", timed)
+    result = {"seed": seed, "trial_count": horizon, "horizon": horizon, "commit": commit,
+              "started": started, "ended": datetime.now().astimezone().isoformat(),
+              "returncode": proc.returncode, "supervised_wall_seconds": round(seconds, 3),
+              "process_peak_rss_bytes_time": int(peak.group(1)) if peak else None,
+              "max_aggregate_rss_mib_sampled_1s": round(max_aggregate_mb, 3)}
+    manifest = output / "run/manifest.jsonl"
+    if manifest.exists():
+        rows = [json.loads(line) for line in manifest.read_text().splitlines() if line.strip()]
+        result["manifest_resources"] = [{key: row.get(key) for key in ("seed", "cell", "elapsed_sec", "peak_rss_mb", "ledger_path")} for row in rows]
+    (output / "resources.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+    print(json.dumps(result, ensure_ascii=False), flush=True)
+    return proc.returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
