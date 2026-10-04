@@ -19,10 +19,22 @@ import os
 from collections import defaultdict
 
 
+def _stored_path(path):
+    """分類後の可逆な圧縮も読める。未圧縮の入力は従来どおり。"""
+    if path and not os.path.exists(path) and os.path.exists(path + ".gz"):
+        return path + ".gz"
+    return path
+
+
+def _text_open(path):
+    return gzip.open(path, "rt", encoding="utf-8") if path.endswith(".gz") else open(path, encoding="utf-8")
+
+
 def _side_by_trial(path):
     out = defaultdict(lambda: defaultdict(list))
+    path = _stored_path(path)
     if path and os.path.exists(path):
-        for line in open(path, encoding="utf-8"):
+        for line in _text_open(path):
             d = json.loads(line)
             t = d.get("trial")
             if t is not None:
@@ -32,8 +44,9 @@ def _side_by_trial(path):
 
 def _answers_by_trial(path):
     out = {}
+    path = _stored_path(path)
     if path and os.path.exists(path):
-        with open(path, encoding="utf-8", newline="") as f:
+        with _text_open(path) as f:
             for r in csv.DictReader(f):
                 out[int(r["trial"])] = r
     return out

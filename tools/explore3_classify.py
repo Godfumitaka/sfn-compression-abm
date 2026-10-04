@@ -67,6 +67,8 @@ def main():
         d=result['days'][cue];rows.append('| '+root.name+' | '+day+' | '+' | '.join(str(d[x]) for x in ('正解','外れ','黙り','選び間違い','区別の喪失'))+' |')
     (dest/'表.md').write_text('\n'.join(rows)+'\n');print(json.dumps(result['days'],ensure_ascii=False),flush=True)
     import subprocess
+    from explore3_archive import archive
+    archive(root)
     subprocess.run([sys.executable,str(W.parent/'report.py')],check=True)
 
 if __name__=='__main__':main()
