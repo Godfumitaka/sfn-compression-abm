@@ -73,6 +73,28 @@ class Gates(unittest.TestCase):
         for i,name in enumerate(('F','H','U')):self.assertAlmostEqual(rec.init[i][0],2*be.log_cost(P[name],'a',v39.code_lengths(self.state.p_hat)))
         self.assertEqual(rng.getstate(),before)
 
+    def test_direct_H09_U08_ell5(self):
+        rh=be.log_cost({'a':.9,'b':.1},'a',{'a':5})
+        ru=be.log_cost({'a':.8,'b':.2},'a',{'a':5})
+        self.assertAlmostEqual(rh,.15200309344504995)
+        self.assertAlmostEqual(ru,.3219280948873623)
+        self.assertAlmostEqual((ru-rh)/12,.014160416786859363)
+        self.assertEqual(be.log_cost({},'unknown',{'a':5}),6)
+
+    def test_role_score_uses_snapshot_and_L_creates_no_RNG(self):
+        from unittest.mock import patch
+        P=be.probabilities(self.d,self.row,self.state,self.scene,self.cfg)
+        it={'slot':0,'st':'F','pos':['x','y'],'gen':0,'ans':{'F':'a','H':'a','U':'a'},'P':P,'cid':'s'}
+        seats={('D',0):v39.SeatRec(0,'F',0,0,v39.ZERO4,v39.ZERO4)}
+        be.CFG['score_logp']=True
+        be.STATS.update(score_role_scored=0,score_role_scored_pos_differs=0)
+        with patch('random.Random',side_effect=AssertionError('L が乱数を作った')),patch('random.random',side_effect=AssertionError('L が共用乱数を使った')):
+            be.probabilities(self.d,self.row,self.state,self.scene,self.cfg)
+            be.init_rec(self.d,self.row,self.state,self.scene,self.scene,1,1,self.cfg)
+            _,new=be.score_answers_role(seats,{'R':'D','items':[it]},Relation('s','a',('x','y')),0)
+        self.assertAlmostEqual(new[0][3],-math.log2(.85))
+        self.assertAlmostEqual(new[0][4],-math.log2(.8))
+
     def test_E_logp_H_matches_and_misses_F_unchanged(self):
         from unittest.mock import patch
         import abm.sme as sme
