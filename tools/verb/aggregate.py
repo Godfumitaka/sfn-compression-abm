@@ -50,7 +50,8 @@ def aggregate(base, plan):
             novel.append({**meta, **row})
             novel_totals[(*group, row["verb"])].update({k: v for k, v in row.items() if k not in ("t", "verb")})
         events += [{**meta, **row} for row in r["recovery"]]
-        memories += [{**meta, **row} for row in r["memory"]]
+        # Uの条件名とUの席数を別欄にする。生の記録はそのまま。
+        memories += [{**meta, **{k: v for k, v in row.items() if k != "U"}, "U_seats": row["U"]} for row in r["memory"]]
         responses += [{**meta, **row} for row in r["answering"]]
         classifications[group].update(r["classification"])
         name_states[group].update(r["selected_name_states"])
