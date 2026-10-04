@@ -1,0 +1,617 @@
+{
+  "role": "C",
+  "baseline": "6e93e0b",
+  "trials": 200,
+  "profile_total_seconds": 636.4901419309998,
+  "key_cumulative_seconds": 490.96362773100003,
+  "key_share": 0.7713609298668825,
+  "canonical_cumulative_seconds": 472.16235621400006,
+  "canonical_share": 0.7418219468121564,
+  "stage1a_over_half": true,
+  "top_cumulative": [
+    {
+      "file": "v39.py",
+      "line": 1100,
+      "function": "predict_wrapped",
+      "primitive_calls": 1958,
+      "total_calls": 1958,
+      "self_seconds": 0.015911329000000002,
+      "cumulative_seconds": 513.603256436
+    },
+    {
+      "file": "v39.py",
+      "line": 578,
+      "function": "predict",
+      "primitive_calls": 1958,
+      "total_calls": 1958,
+      "self_seconds": 0.20240642,
+      "cumulative_seconds": 513.587345107
+    },
+    {
+      "file": "sme2017.py",
+      "line": 228,
+      "function": "match",
+      "primitive_calls": 36334,
+      "total_calls": 36334,
+      "self_seconds": 0.251054274,
+      "cumulative_seconds": 501.523164456
+    },
+    {
+      "file": "sme2017.py",
+      "line": 485,
+      "function": "run",
+      "primitive_calls": 10264,
+      "total_calls": 10264,
+      "self_seconds": 1.9685648550000001,
+      "cumulative_seconds": 497.218686821
+    },
+    {
+      "file": "sme2017.py",
+      "line": 257,
+      "function": "_key",
+      "primitive_calls": 192206,
+      "total_calls": 192206,
+      "self_seconds": 13.818813895000002,
+      "cumulative_seconds": 490.96362773100003
+    },
+    {
+      "file": "sme2017.py",
+      "line": 375,
+      "function": "_scores",
+      "primitive_calls": 30764,
+      "total_calls": 30764,
+      "self_seconds": 2.275105054,
+      "cumulative_seconds": 479.334279061
+    },
+    {
+      "file": "sme2017.py",
+      "line": 149,
+      "function": "_canonical",
+      "primitive_calls": 159043,
+      "total_calls": 159043,
+      "self_seconds": 6.848127603,
+      "cumulative_seconds": 472.16235621400006
+    },
+    {
+      "file": "answerlog.py",
+      "line": 94,
+      "function": "select_definition",
+      "primitive_calls": 1956,
+      "total_calls": 1956,
+      "self_seconds": 0.373905095,
+      "cumulative_seconds": 423.909922246
+    },
+    {
+      "file": "smeshared.py",
+      "line": 250,
+      "function": "select_definition",
+      "primitive_calls": 1956,
+      "total_calls": 1956,
+      "self_seconds": 0.28551044800000003,
+      "cumulative_seconds": 422.89012234
+    },
+    {
+      "file": "sme2017.py",
+      "line": 174,
+      "function": "search",
+      "primitive_calls": 159043,
+      "total_calls": 249084,
+      "self_seconds": 8.418640094,
+      "cumulative_seconds": 421.969238312
+    },
+    {
+      "file": "smeshared.py",
+      "line": 151,
+      "function": "map_graphs",
+      "primitive_calls": 44091,
+      "total_calls": 44091,
+      "self_seconds": 0.9342370390000001,
+      "cumulative_seconds": 395.6540459
+    },
+    {
+      "file": "sme2017.py",
+      "line": 166,
+      "function": "refine",
+      "primitive_calls": 249084,
+      "total_calls": 249084,
+      "self_seconds": 32.143022704,
+      "cumulative_seconds": 386.46462127800004
+    },
+    {
+      "file": "answerlog.py",
+      "line": 185,
+      "function": "update_accounting",
+      "primitive_calls": 200,
+      "total_calls": 200,
+      "self_seconds": 0.012331614000000001,
+      "cumulative_seconds": 335.074537039
+    },
+    {
+      "file": "cflearn.py",
+      "line": 79,
+      "function": "update_accounting",
+      "primitive_calls": 200,
+      "total_calls": 200,
+      "self_seconds": 0.0036000090000000004,
+      "cumulative_seconds": 335.03782788200004
+    },
+    {
+      "file": "cflearn.py",
+      "line": 36,
+      "function": "variants_correct",
+      "primitive_calls": 111,
+      "total_calls": 111,
+      "self_seconds": 0.058497633,
+      "cumulative_seconds": 331.63647174600004
+    },
+    {
+      "file": "sme2017.py",
+      "line": 161,
+      "function": "ranks",
+      "primitive_calls": 994270,
+      "total_calls": 994270,
+      "self_seconds": 38.397641754000006,
+      "cumulative_seconds": 298.803042086
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.sorted>",
+      "primitive_calls": 80564063,
+      "total_calls": 133555657,
+      "self_seconds": 68.81554436200001,
+      "cumulative_seconds": 277.76142838600003
+    },
+    {
+      "file": "__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 73239930,
+      "total_calls": 73239930,
+      "self_seconds": 58.13596891700001,
+      "cumulative_seconds": 275.19320775
+    },
+    {
+      "file": "sme2017.py",
+      "line": 284,
+      "function": "_ordered",
+      "primitive_calls": 480289,
+      "total_calls": 480289,
+      "self_seconds": 1.229793194,
+      "cumulative_seconds": 270.71897113200004
+    },
+    {
+      "file": "strictpc.py",
+      "line": 368,
+      "function": "map_v39",
+      "primitive_calls": 24860,
+      "total_calls": 24860,
+      "self_seconds": 0.019921598000000002,
+      "cumulative_seconds": 258.350894523
+    },
+    {
+      "file": "v39.py",
+      "line": 345,
+      "function": "map_v39",
+      "primitive_calls": 24860,
+      "total_calls": 24860,
+      "self_seconds": 0.46260636600000005,
+      "cumulative_seconds": 258.330972925
+    },
+    {
+      "file": "answerlog.py",
+      "line": 98,
+      "function": "map_v39",
+      "primitive_calls": 24114,
+      "total_calls": 24114,
+      "self_seconds": 0.022369245000000003,
+      "cumulative_seconds": 257.94657666300003
+    },
+    {
+      "file": "smereplay.py",
+      "line": 106,
+      "function": "predict",
+      "primitive_calls": 200,
+      "total_calls": 200,
+      "self_seconds": 0.024894142,
+      "cumulative_seconds": 213.191688115
+    },
+    {
+      "file": "sme2017.py",
+      "line": 395,
+      "function": "<lambda>",
+      "primitive_calls": 67222,
+      "total_calls": 67222,
+      "self_seconds": 0.18483232100000002,
+      "cumulative_seconds": 210.108511477
+    },
+    {
+      "file": "encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 73273796,
+      "total_calls": 73273796,
+      "self_seconds": 46.676092213000004,
+      "cumulative_seconds": 205.60848630200002
+    }
+  ],
+  "top_self": [
+    {
+      "file": "encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 73273796,
+      "total_calls": 73273796,
+      "self_seconds": 138.372395367,
+      "cumulative_seconds": 138.372395367
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.sorted>",
+      "primitive_calls": 80564063,
+      "total_calls": 133555657,
+      "self_seconds": 68.81554436200001,
+      "cumulative_seconds": 277.76142838600003
+    },
+    {
+      "file": "__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 73239930,
+      "total_calls": 73239930,
+      "self_seconds": 58.13596891700001,
+      "cumulative_seconds": 275.19320775
+    },
+    {
+      "file": "encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 73273796,
+      "total_calls": 73273796,
+      "self_seconds": 46.676092213000004,
+      "cumulative_seconds": 205.60848630200002
+    },
+    {
+      "file": "sme2017.py",
+      "line": 161,
+      "function": "ranks",
+      "primitive_calls": 994270,
+      "total_calls": 994270,
+      "self_seconds": 38.397641754000006,
+      "cumulative_seconds": 298.803042086
+    },
+    {
+      "file": "sme2017.py",
+      "line": 166,
+      "function": "refine",
+      "primitive_calls": 249084,
+      "total_calls": 249084,
+      "self_seconds": 32.143022704,
+      "cumulative_seconds": 386.46462127800004
+    },
+    {
+      "file": "sme2017.py",
+      "line": 169,
+      "function": "<genexpr>",
+      "primitive_calls": 147938481,
+      "total_calls": 147938481,
+      "self_seconds": 20.987926738000002,
+      "cumulative_seconds": 20.987926738000002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.isinstance>",
+      "primitive_calls": 221820730,
+      "total_calls": 222019490,
+      "self_seconds": 20.890771017000002,
+      "cumulative_seconds": 22.603841216000003
+    },
+    {
+      "file": "sme2017.py",
+      "line": 168,
+      "function": "<genexpr>",
+      "primitive_calls": 147938481,
+      "total_calls": 147938481,
+      "self_seconds": 19.928727749,
+      "cumulative_seconds": 19.928727749
+    },
+    {
+      "file": "smereplay.py",
+      "line": 44,
+      "function": "encode",
+      "primitive_calls": 1400,
+      "total_calls": 25584768,
+      "self_seconds": 19.13430577,
+      "cumulative_seconds": 31.629967229000002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'compress' of 'zlib.Compress' objects>",
+      "primitive_calls": 10970,
+      "total_calls": 10970,
+      "self_seconds": 14.549764026,
+      "cumulative_seconds": 14.549764026
+    },
+    {
+      "file": "sme2017.py",
+      "line": 257,
+      "function": "_key",
+      "primitive_calls": 192206,
+      "total_calls": 192206,
+      "self_seconds": 13.818813895000002,
+      "cumulative_seconds": 490.96362773100003
+    },
+    {
+      "file": "encoder.py",
+      "line": 105,
+      "function": "__init__",
+      "primitive_calls": 73239731,
+      "total_calls": 73239731,
+      "self_seconds": 11.693475444,
+      "cumulative_seconds": 11.693475444
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'append' of 'list' objects>",
+      "primitive_calls": 85286048,
+      "total_calls": 85286048,
+      "self_seconds": 8.586690809,
+      "cumulative_seconds": 8.586690809
+    },
+    {
+      "file": "sme2017.py",
+      "line": 174,
+      "function": "search",
+      "primitive_calls": 159043,
+      "total_calls": 249084,
+      "self_seconds": 8.418640094,
+      "cumulative_seconds": 421.969238312
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'str' objects>",
+      "primitive_calls": 73421376,
+      "total_calls": 73421376,
+      "self_seconds": 7.615198867,
+      "cumulative_seconds": 7.6163975950000005
+    },
+    {
+      "file": "sme2017.py",
+      "line": 149,
+      "function": "_canonical",
+      "primitive_calls": 159043,
+      "total_calls": 159043,
+      "self_seconds": 6.848127603,
+      "cumulative_seconds": 472.16235621400006
+    },
+    {
+      "file": "sme2017.py",
+      "line": 164,
+      "function": "<genexpr>",
+      "primitive_calls": 73620349,
+      "total_calls": 73620349,
+      "self_seconds": 6.2211049030000005,
+      "cumulative_seconds": 6.2211049030000005
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.len>",
+      "primitive_calls": 67052857,
+      "total_calls": 67052857,
+      "self_seconds": 4.970039752,
+      "cumulative_seconds": 4.970039752
+    },
+    {
+      "file": "sme2017.py",
+      "line": 333,
+      "function": "_grow",
+      "primitive_calls": 3113389,
+      "total_calls": 3929013,
+      "self_seconds": 4.143888518000001,
+      "cumulative_seconds": 8.06561036
+    },
+    {
+      "file": "smeshared.py",
+      "line": 65,
+      "function": "typed_graph",
+      "primitive_calls": 92095,
+      "total_calls": 92095,
+      "self_seconds": 3.601029875,
+      "cumulative_seconds": 15.205638209000002
+    },
+    {
+      "file": "sme2017.py",
+      "line": 95,
+      "function": "visit",
+      "primitive_calls": 3207965,
+      "total_calls": 7279359,
+      "self_seconds": 2.8078606010000002,
+      "cumulative_seconds": 5.821599308000001
+    },
+    {
+      "file": "sme2017.py",
+      "line": 185,
+      "function": "<genexpr>",
+      "primitive_calls": 21591587,
+      "total_calls": 21591587,
+      "self_seconds": 2.7471126970000004,
+      "cumulative_seconds": 2.7471126970000004
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'setdefault' of 'dict' objects>",
+      "primitive_calls": 19095328,
+      "total_calls": 19095328,
+      "self_seconds": 2.5133599280000003,
+      "cumulative_seconds": 2.5133599280000003
+    },
+    {
+      "file": "sme2017.py",
+      "line": 375,
+      "function": "_scores",
+      "primitive_calls": 30764,
+      "total_calls": 30764,
+      "self_seconds": 2.275105054,
+      "cumulative_seconds": 479.334279061
+    }
+  ],
+  "trial_bins": [
+    {
+      "human_trials": [
+        1,
+        50
+      ],
+      "mean_seconds": 1.920414667419973,
+      "median_seconds": 2.000098208503914,
+      "max_seconds": 4.354717415990308,
+      "last_cache_counts": {
+        "cache": 1322,
+        "cache_rng": 1322,
+        "self_cache": 66
+      }
+    },
+    {
+      "human_trials": [
+        51,
+        100
+      ],
+      "mean_seconds": 2.3683702749788065,
+      "median_seconds": 1.6152100625040475,
+      "max_seconds": 7.068283625005279,
+      "last_cache_counts": {
+        "cache": 3045,
+        "cache_rng": 3045,
+        "self_cache": 125
+      }
+    },
+    {
+      "human_trials": [
+        101,
+        150
+      ],
+      "mean_seconds": 4.081281500802724,
+      "median_seconds": 4.460331062495243,
+      "max_seconds": 7.956066957995063,
+      "last_cache_counts": {
+        "cache": 4899,
+        "cache_rng": 4899,
+        "self_cache": 184
+      }
+    },
+    {
+      "human_trials": [
+        151,
+        200
+      ],
+      "mean_seconds": 4.522506175760063,
+      "median_seconds": 4.525855896004941,
+      "max_seconds": 27.569792166992556,
+      "last_cache_counts": {
+        "cache": 6807,
+        "cache_rng": 6807,
+        "self_cache": 247
+      }
+    }
+  ],
+  "deep_size_samples": [
+    {
+      "trial": 0,
+      "trial_number": 1,
+      "model_seconds": 0.006390708003891632,
+      "peak_rss_before_measure_bytes": 35438592,
+      "cache_count": 0,
+      "cache_shallow_bytes": 64,
+      "cache_rng_count": 0,
+      "cache_rng_shallow_bytes": 64,
+      "self_cache_count": 0,
+      "self_cache_shallow_bytes": 64,
+      "cache_deep_bytes": 64,
+      "cache_rng_deep_bytes": 64,
+      "self_cache_deep_bytes": 64,
+      "deep_measure_seconds": 7.458002073690295e-06,
+      "peak_rss_after_measure_bytes": 35438592
+    },
+    {
+      "trial": 49,
+      "trial_number": 50,
+      "model_seconds": 3.7281074579805136,
+      "peak_rss_before_measure_bytes": 90095616,
+      "cache_count": 1322,
+      "cache_shallow_bytes": 36952,
+      "cache_rng_count": 1322,
+      "cache_rng_shallow_bytes": 36952,
+      "self_cache_count": 66,
+      "self_cache_shallow_bytes": 2264,
+      "cache_deep_bytes": 13275573,
+      "cache_rng_deep_bytes": 674204,
+      "self_cache_deep_bytes": 15314,
+      "deep_measure_seconds": 0.17529116701916791,
+      "peak_rss_after_measure_bytes": 108822528
+    },
+    {
+      "trial": 99,
+      "trial_number": 100,
+      "model_seconds": 0.9596019999880809,
+      "peak_rss_before_measure_bytes": 132546560,
+      "cache_count": 3045,
+      "cache_shallow_bytes": 147544,
+      "cache_rng_count": 3045,
+      "cache_rng_shallow_bytes": 147544,
+      "self_cache_count": 125,
+      "self_cache_shallow_bytes": 4688,
+      "cache_deep_bytes": 30452008,
+      "cache_rng_deep_bytes": 1517018,
+      "self_cache_deep_bytes": 29125,
+      "deep_measure_seconds": 0.41723245798493735,
+      "peak_rss_after_measure_bytes": 176029696
+    },
+    {
+      "trial": 149,
+      "trial_number": 150,
+      "model_seconds": 4.46778154198546,
+      "peak_rss_before_measure_bytes": 190021632,
+      "cache_count": 4899,
+      "cache_shallow_bytes": 147544,
+      "cache_rng_count": 4899,
+      "cache_rng_shallow_bytes": 147544,
+      "self_cache_count": 184,
+      "self_cache_shallow_bytes": 9304,
+      "cache_deep_bytes": 49009197,
+      "cache_rng_deep_bytes": 2550262,
+      "self_cache_deep_bytes": 45128,
+      "deep_measure_seconds": 0.9757335830072407,
+      "peak_rss_after_measure_bytes": 273285120
+    },
+    {
+      "trial": 199,
+      "trial_number": 200,
+      "model_seconds": 7.253025999991223,
+      "peak_rss_before_measure_bytes": 273285120,
+      "cache_count": 6807,
+      "cache_shallow_bytes": 294992,
+      "cache_rng_count": 6807,
+      "cache_rng_shallow_bytes": 294992,
+      "self_cache_count": 247,
+      "self_cache_shallow_bytes": 9304,
+      "cache_deep_bytes": 68126757,
+      "cache_rng_deep_bytes": 3680622,
+      "self_cache_deep_bytes": 57287,
+      "deep_measure_seconds": 1.328201458993135,
+      "peak_rss_after_measure_bytes": 326811648
+    }
+  ],
+  "profile_meta": {
+    "wall_seconds": 648.2052347080025,
+    "deep_measure_seconds": 2.8964661250065546,
+    "scope": "試行0〜199の模型と台帳。観測の書出しと大きさの測定はcProfileから除外",
+    "size_scope": "各控え単独。合算は共有対象を二重に数える",
+    "peak_rss_bytes": 326811648
+  }
+}
