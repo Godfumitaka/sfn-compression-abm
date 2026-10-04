@@ -198,9 +198,25 @@ class Matcher:
         self.cache = {}
         self.self_cache = {}
         self.cache_rng = {}
+        self._rng_words = None
+        self._last_rng_state = None
+
+    def _capture_rng_state(self):
+        # 値・型・順を変えず、不変の整数列の実体だけを共有する。
+        state = self.rng.getstate()
+        if state == self._last_rng_state:
+            return self._last_rng_state
+        words = state[1][:-1]
+        if words == self._rng_words:
+            words = self._rng_words
+        else:
+            self._rng_words = words
+        state = state[0], words + (state[1][-1],), state[2]
+        self._last_rng_state = state
+        return state
 
     def snapshot(self):
-        return self.rng.getstate(), dict(self.cache), dict(self.self_cache), dict(self.cache_rng)
+        return self._capture_rng_state(), dict(self.cache), dict(self.self_cache), dict(self.cache_rng)
 
     def restore(self, snapshot):
         rng, cache, self_cache, cache_rng = snapshot
@@ -213,7 +229,7 @@ class Matcher:
         key = (VERSION, self.settings, left.fingerprint(), right.fingerprint())
         if use_cache and key in self.cache:
             return self.cache[key]
-        rng_before = self.rng.getstate()
+        rng_before = self._capture_rng_state()
         engine = _Engine(left, right, self.settings, self.rng)
         result = engine.run()
         if use_cache:
