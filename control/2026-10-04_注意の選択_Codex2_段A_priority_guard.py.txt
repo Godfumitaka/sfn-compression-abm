@@ -1,0 +1,104 @@
+"""他の計算の子ワーカーをCPU率によらず数え、こちらだけ空きを待つ。"""
+import datetime
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import signal
+import subprocess
+import time
+from zoneinfo import ZoneInfo
+
+JOB = Path(__file__).resolve().parent
+PAUSE = json.loads((JOB / 'priority_pause.json').read_text())
+CONTROLLER = PAUSE['controller_pid']
+
+
+def stamp():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+
+
+def external_workers(group):
+    rows = subprocess.check_output(['ps', '-axo', 'pid,ppid,pgid,%cpu,state,args'], text=True).splitlines()[1:]
+    parsed = [r.split(None, 5) for r in rows]
+    parents = {int(r[1]) for r in parsed}
+    workers = []
+    for pid, ppid, pgid, cpu, state, args in parsed:
+        comm = args.split(None, 1)[0]
+        pid = int(pid)
+        if pid in (os.getpid(), CONTROLLER) or int(pgid) == group or state.startswith(('T', 'Z')):
+            continue
+        if 'multiprocessing.resource_tracker' in args:
+            continue
+        # 計算の親を二重に数えず、その子ワーカーを数える。
+        if pid in parents:
+            continue
+        is_calculation = bool(re.search(r'python|julia|ffmpeg', comm, re.I)) or Path(comm).name == 'R'
+        is_active_node_or_claude = bool(re.search(r'node|claude', comm, re.I)) and float(cpu) >= 20
+        if is_calculation or is_active_node_or_claude:
+            workers.append({'pid': pid, 'ppid': int(ppid), 'pgid': int(pgid), 'cpu': float(cpu), 'state': state, 'comm': comm})
+    return workers
+
+
+def pause(group):
+    os.kill(CONTROLLER, signal.SIGSTOP)
+    if group is not None:
+        try:
+            os.killpg(group, signal.SIGSTOP)
+        except ProcessLookupError:
+            pass
+
+
+def resume(group):
+    if group is not None:
+        try:
+            os.killpg(group, signal.SIGCONT)
+        except ProcessLookupError:
+            pass
+    os.kill(CONTROLLER, signal.SIGCONT)
+
+
+def main():
+    spec = importlib.util.spec_from_file_location('machine_control', JOB.parent / 'world1_rebuild_supervisor.py')
+    checks = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(checks)
+    checks.JOB, checks.stamp = JOB, stamp
+    paused = True
+    previous = None
+    last_machine = 0
+    while True:
+        s = json.loads((JOB / 'status.json').read_text())
+        if s['status'] in ('complete_materials', 'stopped'):
+            break
+        group = s.get('child_pid')
+        workers = external_workers(group)
+        if len(workers) >= 4:
+            pause(group)
+            paused = True
+        elif paused:
+            resume(group)
+            paused = False
+        row = {'time': stamp(), 'external_worker_count': len(workers), 'external_workers': workers,
+               'own_paused': paused, 'controller_pid': CONTROLLER, 'child_group': group,
+               'current_world': s.get('current_world'), 'current_seed': s.get('current_seed')}
+        with (JOB / 'priority_guard.jsonl').open('a') as f:
+            f.write(json.dumps(row, ensure_ascii=False) + '\n')
+        (JOB / 'priority_status.json').write_text(json.dumps(row, ensure_ascii=False, indent=2) + '\n')
+        transition = (paused, len(workers))
+        if transition != previous:
+            print(stamp(), f'別の計算ワーカー={len(workers)}、こちらの停止={paused}', flush=True)
+            previous = transition
+        if time.monotonic() - last_machine >= 15:
+            try:
+                checks.machine('並列数を保守的に数える監視', group=group)
+            except BaseException:
+                pause(group)
+                (JOB / 'priority_error.txt').write_text('機械の点検で警告または失敗。こちらの計算を停止。\n')
+                raise
+            last_machine = time.monotonic()
+        time.sleep(5)
+
+
+if __name__ == '__main__':
+    main()

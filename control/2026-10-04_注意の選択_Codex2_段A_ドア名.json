@@ -1,0 +1,105 @@
+{
+  "created_jst": "2026-10-04T10:28:13.580952+09:00",
+  "commits": {
+    "attention": "828e5dbce1c61787980fd8072679200f119ac612",
+    "run": "3380344add7f85ce2c3608656de5805995dcf971",
+    "report_base": "5a45d4230d051f7117b8360d39f7db05bee23ba8"
+  },
+  "door_path": "0.0.0",
+  "seed_paths": [
+    {
+      "motif": "M1",
+      "shop_type": "甲",
+      "path": "0.0.0",
+      "schema_path": [
+        "M1",
+        "T1",
+        "A",
+        0
+      ],
+      "original_predicate": "hold"
+    },
+    {
+      "motif": "M2",
+      "shop_type": "乙",
+      "path": "0.0.0",
+      "schema_path": [
+        "M2",
+        "T1",
+        "A",
+        0
+      ],
+      "original_predicate": "hold"
+    }
+  ],
+  "mapping": [
+    {
+      "world": 1,
+      "shop_type": "甲",
+      "shop_cue": "n",
+      "door_name": "hold"
+    },
+    {
+      "world": 1,
+      "shop_type": "甲",
+      "shop_cue": "e",
+      "door_name": "hold"
+    },
+    {
+      "world": 1,
+      "shop_type": "乙",
+      "shop_cue": "n",
+      "door_name": "hold_b"
+    },
+    {
+      "world": 1,
+      "shop_type": "乙",
+      "shop_cue": "e",
+      "door_name": "hold_b"
+    },
+    {
+      "world": 2,
+      "shop_type": "甲",
+      "shop_cue": "n",
+      "door_name": "hold"
+    },
+    {
+      "world": 2,
+      "shop_type": "甲",
+      "shop_cue": "e",
+      "door_name": "hold_b"
+    },
+    {
+      "world": 2,
+      "shop_type": "乙",
+      "shop_cue": "n",
+      "door_name": "hold_b"
+    },
+    {
+      "world": 2,
+      "shop_type": "乙",
+      "shop_cue": "e",
+      "door_name": "hold"
+    }
+  ],
+  "door_names": {
+    "1": [
+      "hold",
+      "hold_b"
+    ],
+    "2": [
+      "hold",
+      "hold_b"
+    ]
+  },
+  "uniquely_determined": true,
+  "source_sha256": {
+    "tools/shopworld.py": "20acf4218fd6564d50dfbe73b4467ef1d4a00ae10b3c27222b55235d23281ce9",
+    "tools/shop/U-011_seed_shop.json": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+    "tools/attnsel_checks.py": "30ecb6e6caf5094fb78fab687ac290c4ceb960e0f30722692d5f468f8eb144b7"
+  },
+  "method": "世界の定義と種の構造だけから列挙。試行の成績、記憶、注意の更新は参照しない。",
+  "phaseB_started": false,
+  "phaseC_started": false,
+  "phase3_started": false
+}
