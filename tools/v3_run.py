@@ -486,7 +486,8 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import shopworld
         shopworld.install(fo, world=int(task["shop_world"]), exc=float(task["shop_exc"]), keep_cue=bool(task.get("shop_keep_cue")),
-                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"), door_p=task.get("shop_door_p"))
+                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"), door_p=task.get("shop_door_p"),
+                          deco=task.get("shop_deco"))
         if task.get("shop_door_p") is not None and task["cfg"]["fixed"].get("holdout_include_second_order"):
             raise ValueError("--shop-door-p は二階を伏せない設定（hide1）で使う")
         shopworld.extend_dictionary()
@@ -736,6 +737,8 @@ def main() -> None:
     ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
                     help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
     ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
+    ap.add_argument("--shop-deco", choices=("skeleton", "current", "plus4", "plus8"), default=None,
+                    help="お店の飾り：skeletonはつなぎだけを除く。currentは現状と同じ。plus4／plus8は独立乱数で一項の関係を追加する")
     ap.add_argument("--select-n3", action="store_true", help="選び方 N3：定義を N3＝2S(d,x)÷(S(d,d)＋S(x,x)) の大きい順で選ぶ（tools/selectn3.py）。門は今のまま")
     ap.add_argument("--select-log", action="store_true", help="記録だけ：本物の予測ごとに候補の定義の支持・N3 の三項・順位・選ばれたか・門を書く")
     ap.add_argument("--shop-door-p", type=float, default=None,
@@ -821,6 +824,8 @@ def main() -> None:
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
     seed = sweep.load_seed(cfg["seed_file"])
+    if args.shop_deco is not None and args.shop_world is None:
+        ap.error("--shop-deco は --shop-world と一緒に使う")
     commit = sweep.code_commit()
     all_off = ((not args.nohash) and args.nsim is None and args.vt is None and not args.greedy and not args.extgreedy
                and args.extend_rule == "v2" and args.charge1 == "v2"
@@ -852,6 +857,8 @@ def main() -> None:
               "u_struct": args.u_struct, "relearn_init": args.relearn_init, "tie_struct": args.tie_struct, "amb_local": args.amb_local,
               "answer_gap": args.answer_gap, "probe_world": args.probe_world,
               "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "shop_door_p": args.shop_door_p, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "use_forget": args.use_forget, "use_forget_dump_s": args.use_forget_dump_s, "select_n3": args.select_n3, "select_log": args.select_log, "compare": do_compare} for r in runs]
+    for task in tasks:
+        task["shop_deco"] = args.shop_deco
     out_root.mkdir(parents=True, exist_ok=True)
     (out_root / "flag.json").write_text(json.dumps({"nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
@@ -878,6 +885,11 @@ def main() -> None:
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
                                                     "workers": args.workers}) + "\n")
+    if args.shop_deco is not None:
+        flag_path = out_root / "flag.json"
+        flag = json.loads(flag_path.read_text())
+        flag["shop_deco"] = args.shop_deco
+        flag_path.write_text(json.dumps(flag) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)

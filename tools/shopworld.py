@@ -23,10 +23,13 @@ from __future__ import annotations
 import json
 from dataclasses import replace
 from hashlib import sha256
+from pathlib import Path
 from random import Random
 
 SIG_N, SIG_E, ATTACH, X, Y = "sig_n", "sig_e", "attach", "hold", "hold_b"
 NEW_PREDICATES = (SIG_N, SIG_E, ATTACH, Y)
+DECO_LEVELS = ("skeleton", "current", "plus4", "plus8")
+DECO_PREDICATES = tuple(f"dz_{i}" for i in range(1, 13))
 DOOR_PATH = "0.0.0"
 TYPE = {"M1": "甲", "M2": "乙"}
 INFO: dict = {}   # G_star.graph_id → 研究者の側の記録
@@ -83,6 +86,62 @@ def _bump(k, n=1):
     STATS[k] = STATS.get(k, 0) + n
 
 
+def deco_rng(run_seed, trial_index, stream) -> Random:
+    """飾りの語・引数・振替は世界と別の流れ。水準は種に混ぜず、最初の4本を共有する。"""
+    material = f"{run_seed}\x1f{trial_index}\x1fshopdeco:{stream}".encode("utf-8")
+    return Random(int.from_bytes(sha256(material).digest(), "big"))
+
+
+def _relation_record(r):
+    return {"id": r.relation_id, "predicate": r.predicate, "arguments": list(r.arguments)}
+
+
+def decorate(tr, run_seed, trial_index, level):
+    """生成・元の伏せ辺抽選の後で、つなぎだけを除く／一項の飾りを足す。"""
+    if level in (None, "current"):
+        return tr, None
+    if level not in DECO_LEVELS:
+        raise ValueError(f"お店の飾りに無い水準: {level}")
+    import abm.world as w
+    from abm.domains import Relation, RelationGraph
+    original = tr.held_out_edge
+    door_id = w.opaque_id(run_seed, trial_index, f"relation:tree:{DOOR_PATH}")
+    unary_id = w.opaque_id(run_seed, trial_index, "relation:role_unary")
+    sig_id = w.opaque_id(run_seed, trial_index, "relation:shop:sig")
+    glue_ids = {w.opaque_id(run_seed, trial_index, f"relation:glue:{i}") for i in range(3)}
+    entities = tuple(e.entity_id for e in tr.G_star.entities)
+    removed, added = [], []
+    rels = list(tr.G_star.relations)
+    held = original
+    if level == "skeleton":
+        removed = [r for r in rels if r.relation_id in glue_ids]
+        rels = [r for r in rels if r.relation_id not in glue_ids]
+        if original.relation_id in glue_ids:
+            candidates = [r for r in rels if r.relation_id not in (door_id, unary_id, sig_id)
+                          and all(a in entities for a in r.arguments)]
+            held = deco_rng(run_seed, trial_index, "holdout").choice(candidates)
+    else:
+        count = 4 if level == "plus4" else 8
+        predicates = deco_rng(run_seed, trial_index, "predicates").sample(DECO_PREDICATES, 8)
+        argument_rng = deco_rng(run_seed, trial_index, "arguments")
+        for index, predicate in enumerate(predicates[:count]):
+            added.append(Relation(w.opaque_id(run_seed, trial_index, f"relation:shop:deco:{index}"),
+                                  predicate, (argument_rng.choice(entities),)))
+        rels.extend(added)
+    graph = RelationGraph(graph_id=tr.G_star.graph_id, entities=tr.G_star.entities, relations=tuple(rels))
+    visible = tuple(r for r in rels if r.relation_id != held.relation_id)
+    ids = frozenset(r.relation_id for r in visible)
+    reach = frozenset(a for r in visible for a in r.arguments if a not in ids and a in entities)
+    partial = RelationGraph(graph_id=tr.target_graph_partial.graph_id,
+                            entities=tuple(e for e in graph.entities if e.entity_id in reach), relations=visible)
+    metadata = {"kind": "shop_deco", "trial": trial_index, "level": level,
+                "added": [_relation_record(r) for r in added], "removed": [_relation_record(r) for r in removed],
+                "added_predicates": [r.predicate for r in added],
+                "original_held_out": _relation_record(original), "held_out": _relation_record(held),
+                "rerouted": original.relation_id != held.relation_id}
+    return replace(tr, G_star=graph, target_graph_partial=partial, held_out_edge=held), metadata
+
+
 def build(tr, run_seed, trial_index, *, cue, world):
     """元の場面 tr に、ドアの述語・シール・link を当てる（試験の場面を作るときにも使う）。"""
     import abm.world as w
@@ -116,7 +175,11 @@ def build(tr, run_seed, trial_index, *, cue, world):
     IDS[link_id] = "link"
     info = {"shop_type": typ, "shop_cue": cue, "door_pred": "X" if dp == X else "Y", "held_out_is_door": held_id == door_id,
             "door_id": door_id, "sig_id": sig_id, "link_id": link_id, "root_id": root_id}
-    return replace(tr, G_star=graph, target_graph_partial=partial, held_out_edge=held), info
+    out = replace(tr, G_star=graph, target_graph_partial=partial, held_out_edge=held)
+    out, deco_info = decorate(out, run_seed, trial_index, CFG.get("deco"))
+    if deco_info is not None:
+        info["deco"] = deco_info
+    return out, info
 
 
 def shop_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_include_second_order=False):
@@ -126,6 +189,8 @@ def shop_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
     cue = "e" if cue_rng(run_seed, trial_index).random() < CFG["exc"] else "n"
     out, info = build(tr, run_seed, trial_index, cue=cue, world=CFG["world"])
     INFO[out.G_star.graph_id] = info
+    if "deco" in info and CTX.get("deco_f") is not None:
+        CTX["deco_f"].write(json.dumps(info["deco"], ensure_ascii=False) + "\n")
     _bump("trials")
     _bump(f"{info['shop_type']}_{cue}")
     _bump("held_out_is_door", int(info["held_out_is_door"]))
@@ -143,7 +208,7 @@ def _seat_states(state):
     return out
 
 
-def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str, door_p=None) -> None:
+def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str, door_p=None, deco=None) -> None:
     """tools/v3_run.py の worker で、v39・v310be・U の旗・同点の並べ方のあと、世界を作る前に入れる。"""
     import abm.ledger as ledger
     import abm.loop as loop
@@ -154,8 +219,13 @@ def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str, door_
     STATS.clear()
     CTX.clear()
     CFG.clear()
-    CFG.update(world=int(world), exc=float(exc), keep_cue=bool(keep_cue), door_p=(None if door_p is None else float(door_p)))
+    if deco is not None and deco not in DECO_LEVELS:
+        raise ValueError(f"お店の飾りに無い水準: {deco}")
+    CFG.update(world=int(world), exc=float(exc), keep_cue=bool(keep_cue), door_p=(None if door_p is None else float(door_p)),
+               deco=(None if deco == "current" else deco))
     CTX.update(f=open(side_path, "w", encoding="utf-8"), prev={}, cand={}, scored={})
+    if CFG["deco"] is not None:
+        CTX["deco_f"] = open(Path(side_path).with_suffix(".deco.jsonl"), "w", encoding="utf-8")
     original = w.generate_trial
     CTX["orig_gen"] = original
 
@@ -309,7 +379,8 @@ def extend_dictionary() -> None:
     if not v39.CFG.get("dict_index"):
         return
     idx = dict(v39.CFG["dict_index"])
-    for p in NEW_PREDICATES:
+    predicates = NEW_PREDICATES + (DECO_PREDICATES if CFG.get("deco") in ("plus4", "plus8") else ())
+    for p in predicates:
         if p not in idx:
             idx[p] = len(idx)
     v39.CFG["dict_index"] = idx
@@ -320,4 +391,6 @@ def close() -> dict:
     f = CTX.get("f")
     if f is not None:
         f.close()
+    if CTX.get("deco_f") is not None:
+        CTX["deco_f"].close()
     return dict(STATS)
