@@ -1,0 +1,256 @@
+diff --git a/tests/test_v311c_dictionary_guard.py b/tests/test_v311c_dictionary_guard.py
+new file mode 100644
+index 0000000..b4c5a27
+--- /dev/null
++++ b/tests/test_v311c_dictionary_guard.py
+@@ -0,0 +1,116 @@
++"""辞書外の名前の計算を修正せず、個体・試行・名前を残して必ず停止する。"""
++import io
++import json
++import sys
++from pathlib import Path
++from types import SimpleNamespace
++
++import pytest
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1] / 'tools'),
++               str(Path(__file__).resolve().parents[1])]
++import v311c
++import v39
++
++
++@pytest.fixture
++def guard(monkeypatch):
++    stream = io.StringIO()
++    monkeypatch.setattr(v311c, 'CFG', {'run': 1, 'agent': 6})
++    monkeypatch.setattr(v311c, 'CTX', {'t': 17, 'fo': stream})
++    monkeypatch.setattr(v311c, 'STATS', {})
++    monkeypatch.setattr(v39, 'CFG', {'dict_index': {'fold': 0, 'wrap': 1}})
++    monkeypatch.setattr(v39, 'STATS', {})
++    monkeypatch.setattr(v39, 'dict_order', v39.dict_order)
++    v311c._install_dictionary_guard()
++    return stream
++
++
++def test_known_name_passes_without_changing_cost_or_model_counter(guard):
++    assert v39.dict_order('fold') == 0
++    assert v39.dict_order('wrap') == 1
++    v311c._check_dictionary_guard(17, 'world')
++    assert v39.STATS == {}
++    assert v311c.STATS['dictionary_checks'] == 1
++    assert not guard.getvalue()
++
++
++@pytest.mark.parametrize('phase', ['world', 'received', 'probe'])
++def test_unknown_collision_keeps_cost_and_counter_then_stops_with_names(guard, phase):
++    # 状態に残らない一時的な候補も、呼出しを控えれば名前を記録できる。
++    assert v39.dict_order('abc') == v39.dict_order('acb') == 296
++    assert v39.STATS['not_in_dictionary'] == 2
++    with pytest.raises(v311c.NotInDictionary) as error:
++        v311c._check_dictionary_guard(17, phase)
++    expected = {'kind': 'v311c_not_in_dictionary', 'run': 1, 'agent': 6,
++                'trial': 17, 'phase': phase, 'count': 2, 'names': ['abc', 'acb']}
++    assert json.loads(guard.getvalue()) == expected
++    assert error.value.diagnostic == expected
++    assert v39.STATS['not_in_dictionary'] == 2
++
++
++def test_probe_stops_before_module_restore_erases_counter(guard):
++    def predict(*args):
++        v39.dict_order('abc')
++        return SimpleNamespace(prediction=None), None
++
++    v311c.CFG.update(inner_predict=predict)
++    with pytest.raises(v311c.NotInDictionary, match='abc'):
++        v311c.probe(None, [{'scene': SimpleNamespace(relations=())}], None)
++    assert json.loads(guard.getvalue())['phase'] == 'probe'
++    assert 'not_in_dictionary' not in v39.STATS  # 旧い試験と同じ復元。
++
++
++def test_agent_error_contains_diagnostic_and_releases_serial_lock(monkeypatch, guard):
++    import v3_run
++    messages = []
++    class Lock:
++        releases = 0
++        def acquire(self): pass
++        def release(self): self.releases += 1
++    lock = Lock()
++    def worker(task):
++        v39.dict_order('abc')
++        v311c._check_dictionary_guard(17, 'received')
++    monkeypatch.setattr(v3_run, 'worker', worker)
++    v311c._agent_main(SimpleNamespace(send=messages.append),
++                     {'v311c': {'serial_lock': lock}})
++    assert lock.releases == 1
++    assert messages[0]['type'] == 'error'
++    assert messages[0]['diagnostic'] == json.loads(guard.getvalue())
++
++
++@pytest.mark.parametrize('phase', ['world', 'received', 'probe'])
++def test_coordinator_keeps_diagnostic_in_each_phase(monkeypatch, tmp_path, phase):
++    diagnostic = {'kind': 'v311c_not_in_dictionary', 'agent': 0, 'trial': 0,
++                  'run': 1, 'names': ['abc'], 'count': 1, 'phase': phase}
++
++    def agent(conn, task):
++        i = task['v311c']['agent']
++        def fail(where):
++            if i == 0 and phase == where:
++                conn.send({'type': 'error', 'diagnostic': diagnostic})
++                return True
++            return False
++        if fail('world'): return
++        conn.send({'type': 'trial', 'bundle': None, 'research': None, 'tags': []})
++        conn.recv()
++        if fail('received'): return
++        conn.send({'type': 'received', 'records': [], 'tags': []})
++        conn.recv()
++        if fail('probe'): return
++        conn.send({'type': 'probe', 'answers': []})
++        conn.recv()
++        conn.send({'type': 'done', 'rec': {}})
++
++    monkeypatch.setattr(v311c, '_agent_main', agent)
++    monkeypatch.setattr(v311c, 'probe_items', lambda *args: [])
++    task = {'cfg': {'trial_count': 1, 'seed_file': 'unused', 'fixed': {}},
++            'v311c': {'run': 1, 'agent': 0}}
++    tasks = [dict(task, v311c=dict(task['v311c'], agent=i)) for i in range(2)]
++    procs = []
++    summary = v311c._coordinate(tasks, tmp_path / 'comm.jsonl', 1, procs)
++    assert summary['errors'][0]['msg']['diagnostic'] == diagnostic
++    assert all(not p.is_alive() for p in procs)
++    saved = [json.loads(line) for line in (tmp_path / 'comm.jsonl').read_text().splitlines()]
++    assert saved[-1]['errors'][0]['msg']['diagnostic'] == diagnostic
+diff --git a/tools/v311c.py b/tools/v311c.py
+index c1e2968..0d68a43 100644
+--- a/tools/v311c.py
++++ b/tools/v311c.py
+@@ -44,6 +44,42 @@ from v311c_fingerprint import fingerprint
+ STATS: dict = {}
+ CFG: dict = {}
+ CTX: dict = {}
++
++
++class NotInDictionary(RuntimeError):
++    """研究者側の停止。模型の費用や候補を修正しない。"""
++
++    def __init__(self, diagnostic):
++        self.diagnostic = diagnostic
++        super().__init__(json.dumps(diagnostic, ensure_ascii=False, sort_keys=True))
++
++
++def _install_dictionary_guard():
++    import v39
++    real_order = v39.dict_order
++    CTX["dictionary_unknown_names"] = set()
++
++    def record_order(name):
++        result = real_order(name)
++        if name not in v39.CFG["dict_index"]:
++            CTX["dictionary_unknown_names"].add(name)
++        return result
++
++    # 元の関数の返り値・カウンタを継承し、取り除かれた候補の名前も控える。
++    v39.dict_order = record_order
++
++
++def _check_dictionary_guard(trial, phase):
++    import v39
++    count = v39.STATS.get("not_in_dictionary", 0)
++    if count >= 1:
++        diagnostic = {"kind": "v311c_not_in_dictionary", "run": CFG["run"],
++                      "agent": CFG["agent"], "trial": trial, "phase": phase,
++                      "count": count, "names": sorted(CTX["dictionary_unknown_names"])}
++        CTX["fo"].write(json.dumps(diagnostic, ensure_ascii=False) + "\n")
++        CTX["fo"].flush()
++        raise NotInDictionary(diagnostic)
++    STATS["dictionary_checks"] = STATS.get("dictionary_checks", 0) + 1
+ _STATE_CLS: list = []
+ 
+ 
+@@ -500,6 +536,7 @@ def probe(state, items, config):
+             o, _ = CFG["inner_predict"](ai, state, config, rng_for("probe", CFG["run"], k))
+             p = o.prediction
+             out.append([p.edge.predicate, list(p.edge.arguments)] if isinstance(p, EdgePrediction) else None)
++        _check_dictionary_guard(CTX.get("t", 0), "probe")
+     finally:
+         _restore_modules(snap)
+     if audit and before != (fingerprint(state), random.getstate()):
+@@ -530,6 +567,7 @@ def install(fo, task, REAL) -> None:
+                  recv_score_changed=0, recv_merit_changed=0,
+                  cfg={k: CFG[k] for k in ("run", "agent", "n", "T", "q", "m", "recv", "groups", "tags", "b")})
+     CTX.update(t=0, tag_counter=0, bundle=None, recv=None, fo=fo)
++    _install_dictionary_guard()
+     if CFG["tags"]:
+         sweep.AgentState = _state_class()   # ★ 機能を切った検査 ① では状態の型を換えない（台帳の状態の記録が個体版と同じになるように）
+ 
+@@ -608,6 +646,7 @@ def install(fo, task, REAL) -> None:
+ 
+     def apply(state, config, trial, **kw):
+         state, events = real_apply(state, config, trial, **kw)
++        _check_dictionary_guard(trial, "world")
+         if CFG["tags"]:
+             state = ensure(state)
+             # 消えた定義の名札表・消えた逐語の記憶の名札を片付ける（同じ名前で生まれ直した定義が古い表を引き継がないように）
+@@ -641,6 +680,7 @@ def install(fo, task, REAL) -> None:
+                 _dbg("agent", CFG["agent"], "t", trial, "received", k, rec.get("result"))
+                 rec["from"] = deliver[k]["sender"]
+                 recs.append(rec)
++            _check_dictionary_guard(trial, "received")
+             present = (sorted({tg for tags in state.c_tags.values() for tg in tags} | set(state.c_trace_tags.values()))
+                        if CFG["tags"] else [])
+             reply = {"type": "received", "t": trial, "records": recs, "tags": present, "defs": len(state.definitions)}
+@@ -732,7 +772,10 @@ def _agent_main(conn, task):
+         tb = traceback.format_exc()
+         print(tb, file=sys.stderr, flush=True)
+         try:
+-            conn.send({"type": "error", "error": repr(e), "tb": tb})
++            message = {"type": "error", "error": repr(e), "tb": tb}
++            if isinstance(e, NotInDictionary):
++                message["diagnostic"] = e.diagnostic
++            conn.send(message)
+         except BaseException:
+             pass
+ 
+@@ -872,12 +915,21 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
+         tags_now = set()
+         for i, c in enumerate(conns):
+             m = c.recv()
++            if m["type"] in ("error", "done"):
++                summ["errors"].append({"agent": i, "t": t, "phase": "received", "msg": m})
++                done[i] = m
++                for p in procs:
++                    if p.is_alive():
++                        p.terminate()
++                break
+             if audit_file is not None:
+                 audit_file.write(json.dumps({"t": t, "agent": i, **m["audit"]}) + "\n")
+             for r in m["records"]:
+                 summ["recv"][r.get("result", "?")] = summ["recv"].get(r.get("result", "?"), 0) + 1
+                 fo.write(json.dumps({"kind": "recv", "t": t, "agent": i, **r}, ensure_ascii=False, default=str) + "\n")
+             tags_now |= set(m["tags"])
++        if summ["errors"]:
++            break
+         lost = sorted(tags_prev - tags_now)
+         if lost:
+             summ["tag_lost"] += len(lost)
+@@ -887,8 +939,18 @@ def _coordinate(tasks, out_path, probe_every, procs_out):
+             answers = []
+             for c in conns:
+                 c.send({"type": "probe", "items": items})
+-            for c in conns:
+-                answers.append(c.recv()["answers"])
++            for i, c in enumerate(conns):
++                m = c.recv()
++                if m["type"] in ("error", "done"):
++                    summ["errors"].append({"agent": i, "t": t, "phase": "probe", "msg": m})
++                    done[i] = m
++                    for p in procs:
++                        if p.is_alive():
++                            p.terminate()
++                    break
++                answers.append(m["answers"])
++            if summ["errors"]:
++                break
+             cats = {"双方正解": 0, "同じ誤答": 0, "双方棄権": 0, "その他": 0}
+             for a in range(n):
+                 for b2 in range(a + 1, n):

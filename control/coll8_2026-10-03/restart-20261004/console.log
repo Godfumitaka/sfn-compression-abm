@@ -1,0 +1,119 @@
+{"name": "段2の保存走行と全引数一致（出力場所を除く）", "passed": true, "old": ["/opt/homebrew/opt/python@3.12/bin/python3.12", "tools/v3_run.py", "config/sweep_shop_hide1_s1_2026-10-01.json", "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/record8_logged", "--nohash", "--vt", "0.3842", "--extend-rule", "none", "--charge1", "d32", "--fast", "--no-public-history", "--dump-slot-history", "--fix2-full", "--fix-order2", "--proj-first", "--fill-norestate", "--no-charge2", "--own-evidence", "--v39", "--v39-budget", "inf", "--v39-decay", "actr", "--v310-be", "--hist-role", "--score-role", "--nsim", "0.7", "--ident-rho", "0.5", "--ident-argmax", "--ident-commons", "--u-struct", "--relearn-init", "--tie-struct", "--amb-local", "--dump-answers", "--dump-routing", "--answer-gap", "--strict-pc", "--cf-value", "--probe-world", "--cells", "f0.5000_th2.1000_first_order", "--no-compare", "--shop-world", "2", "--shop-exc", "0.2", "--trial-count", "200", "--v39-price", "0.01873710622997919", "--e-price", "0.01873710622997919", "--workers", "1", "--seeds", "1", "--v311c", "--v311c-f", "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9", "--v311c-groups", "0,0,0,0,1,1,1,1", "--v311c-runs", "1", "--v311c-q", "0.2", "--v311c-m", "0.1", "--v311c-recv", "A", "--v311c-b-n", "8", "--v311c-serial", "--v311c-probe-shop", "--v311c-audit", "--v311c-lineage"], "new": ["/opt/homebrew/opt/python@3.12/bin/python3.12", "tools/v3_run.py", "config/sweep_shop_hide1_s1_2026-10-01.json", "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/restart-20261004/guard_equivalence_seed1", "--nohash", "--vt", "0.3842", "--extend-rule", "none", "--charge1", "d32", "--fast", "--no-public-history", "--dump-slot-history", "--fix2-full", "--fix-order2", "--proj-first", "--fill-norestate", "--no-charge2", "--own-evidence", "--v39", "--v39-budget", "inf", "--v39-decay", "actr", "--v310-be", "--hist-role", "--score-role", "--nsim", "0.7", "--ident-rho", "0.5", "--ident-argmax", "--ident-commons", "--u-struct", "--relearn-init", "--tie-struct", "--amb-local", "--dump-answers", "--dump-routing", "--answer-gap", "--strict-pc", "--cf-value", "--probe-world", "--cells", "f0.5000_th2.1000_first_order", "--no-compare", "--shop-world", "2", "--shop-exc", "0.2", "--trial-count", "200", "--v39-price", "0.01873710622997919", "--e-price", "0.01873710622997919", "--workers", "1", "--seeds", "1", "--v311c", "--v311c-f", "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9", "--v311c-groups", "0,0,0,0,1,1,1,1", "--v311c-runs", "1", "--v311c-q", "0.2", "--v311c-m", "0.1", "--v311c-recv", "A", "--v311c-b-n", "8", "--v311c-serial", "--v311c-probe-shop", "--v311c-audit", "--v311c-lineage"]}
+開始 guard_equivalence_seed1
+{"name": "guard_equivalence_seed1 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "guard_equivalence_seed1 受信の採点・名札費用", "passed": true}
+終了 guard_equivalence_seed1
+{"name": "guard_equivalence_seed1 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [400, 400, 400, 400, 400, 400, 400, 400]}
+{"name": "段2・停止検査追加前後（種1） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}, "right": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}}
+開始 serial2_simultaneous
+{"name": "serial2_simultaneous 完走", "passed": true, "trials": 100, "errors": []}
+{"name": "serial2_simultaneous 受信の採点・名札費用", "passed": true}
+終了 serial2_simultaneous
+{"name": "serial2_simultaneous 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0], "checks": [200, 200]}
+開始 serial2_serial
+{"name": "serial2_serial 完走", "passed": true, "trials": 100, "errors": []}
+{"name": "serial2_serial 受信の採点・名札費用", "passed": true}
+終了 serial2_serial
+{"name": "serial2_serial 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0], "checks": [200, 200]}
+{"name": "直列と同時（2体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209", "rows": 100}, "seed1001.jsonl.gz": {"sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be", "rows": 100}}, "right": {"seed001.jsonl.gz": {"sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209", "rows": 100}, "seed1001.jsonl.gz": {"sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be", "rows": 100}}}
+{"name": "直列と同時（2体） 通信事象", "passed": true, "left": {"sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f", "rows": 157}, "right": {"sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f", "rows": 157}}
+開始 default2_baseline
+{"name": "default2_baseline 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "default2_baseline 受信の採点・名札費用", "passed": true}
+終了 default2_baseline
+開始 default2_current
+{"name": "default2_current 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "default2_current 受信の採点・名札費用", "passed": true}
+終了 default2_current
+{"name": "default2_current 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0], "checks": [400, 400]}
+{"name": "追加旗が全てオフと土台（2体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339", "rows": 200}}, "right": {"seed001.jsonl.gz": {"sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339", "rows": 200}}}
+{"name": "追加旗が全てオフと土台（2体） 通信事象", "passed": true, "left": {"sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b", "rows": 332}, "right": {"sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b", "rows": 332}}
+開始 off8
+{"name": "off8 完走", "passed": true, "trials": 100, "errors": []}
+{"name": "off8 受信の採点・名札費用", "passed": true}
+終了 off8
+{"name": "off8 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [200, 200, 200, 200, 200, 200, 200, 200]}
+開始 baseline_a0
+終了 baseline_a0
+{"name": "集団化全部オフと固定個体版：個体0", "passed": true}
+開始 baseline_a1
+終了 baseline_a1
+{"name": "集団化全部オフと固定個体版：個体1", "passed": true}
+開始 baseline_a2
+終了 baseline_a2
+{"name": "集団化全部オフと固定個体版：個体2", "passed": true}
+開始 baseline_a3
+終了 baseline_a3
+{"name": "集団化全部オフと固定個体版：個体3", "passed": true}
+開始 baseline_a4
+終了 baseline_a4
+{"name": "集団化全部オフと固定個体版：個体4", "passed": true}
+開始 baseline_a5
+終了 baseline_a5
+{"name": "集団化全部オフと固定個体版：個体5", "passed": true}
+開始 baseline_a6
+終了 baseline_a6
+{"name": "集団化全部オフと固定個体版：個体6", "passed": true}
+開始 baseline_a7
+終了 baseline_a7
+{"name": "集団化全部オフと固定個体版：個体7", "passed": true}
+開始 record8_plain
+{"name": "record8_plain 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "record8_plain 受信の採点・名札費用", "passed": true}
+終了 record8_plain
+{"name": "record8_plain 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [400, 400, 400, 400, 400, 400, 400, 400]}
+開始 record8_logged
+{"name": "record8_logged 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "record8_logged 受信の採点・名札費用", "passed": true}
+終了 record8_logged
+{"name": "record8_logged 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [400, 400, 400, 400, 400, 400, 400, 400]}
+{"name": "お店試験・系譜の非干渉（8体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}, "right": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}}
+{"name": "お店試験・系譜の学習状態と本走行乱数（新指紋）", "passed": true}
+開始 record8_no_audit
+{"name": "record8_no_audit 完走", "passed": true, "trials": 200, "errors": []}
+{"name": "record8_no_audit 受信の採点・名札費用", "passed": true}
+終了 record8_no_audit
+{"name": "record8_no_audit 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [400, 400, 400, 400, 400, 400, 400, 400]}
+{"name": "状態指紋の非干渉（8体） 台帳本体", "passed": true, "left": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}, "right": {"seed001.jsonl.gz": {"sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f", "rows": 200}, "seed1001.jsonl.gz": {"sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c", "rows": 200}, "seed2001.jsonl.gz": {"sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870", "rows": 200}, "seed3001.jsonl.gz": {"sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c", "rows": 200}, "seed4001.jsonl.gz": {"sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002", "rows": 200}, "seed5001.jsonl.gz": {"sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c", "rows": 200}, "seed6001.jsonl.gz": {"sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8", "rows": 200}, "seed7001.jsonl.gz": {"sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b", "rows": 200}}}
+{"name": "状態指紋の非干渉（8体） 通信事象", "passed": true, "left": {"sha256": "e489394d894e69b2ed8a89263b94dcbb31eb5cac5f200c5e867a1fea38a4dc4c", "rows": 1278}, "right": {"sha256": "e489394d894e69b2ed8a89263b94dcbb31eb5cac5f200c5e867a1fea38a4dc4c", "rows": 1278}}
+開始 no_comm_r1
+{"name": "no_comm_r1 完走", "passed": true, "trials": 1740, "errors": []}
+{"name": "no_comm_r1 受信の採点・名札費用", "passed": true}
+終了 no_comm_r1
+{"name": "no_comm_r1 辞書外カウンタと毎試行の停止検査", "passed": true, "counts": [0, 0, 0, 0, 0, 0, 0, 0], "checks": [3480, 3480, 3480, 3480, 3480, 3480, 3480, 3480]}
+{"name": "no_comm_r1 個体数", "passed": true}
+{"name": "no_comm_r1 fの毎試行値", "passed": true, "checked_rows": 13920}
+{"name": "no_comm_r1 世界課題の分母", "passed": true, "correct": 9629, "wrong": 63, "silence": 4228, "total": 13920}
+{"name": "no_comm_r1 答えの出どころの台帳照合", "passed": true, "answer_rows": 9692, "wrong_sources": {"H": 63}}
+{"name": "no_comm_r1 送信配送受信・同試行・自己配送なし", "passed": true, "sent": 0, "recv": 0}
+{"name": "no_comm_r1 黙りから送らない・答えは増やさない", "passed": true, "bundles": 9692}
+{"name": "no_comm_r1 束の参照本数", "passed": true}
+{"name": "no_comm_r1 m=0の組間配送", "passed": true, "cross": 0, "total": 0}
+{"name": "no_comm_r1 問い・対の再集計", "passed": true, "split": {"within": {"双方正解": 2876, "同じ誤答": 78, "双方棄権": 428, "その他": 698}, "cross": {"双方正解": 3795, "同じ誤答": 63, "双方棄権": 574, "その他": 1008}}}
+{"name": "no_comm_r1 報告の初期採点のsource", "passed": true, "births": 0}
+{"name": "no_comm_r1 未記載は反証・取消にしない", "passed": true}
+{"name": "no_comm_r1 世界の学習のsource", "passed": true, "counts": {"initial_unscored": 8, "scored": 13912}, "errors": []}
+{"name": "no_comm_r1 報告の採点欄とsource", "passed": true, "counts": {}, "errors": []}
+開始 solo_r1_a0
+終了 solo_r1_a0
+{"name": "solo_r1_a0 辞書外カウンタと毎試行の停止検査", "passed": true}
+{"name": "通信なし8体と単独：種1個体0", "passed": true}
+開始 solo_r1_a1
+終了 solo_r1_a1
+{"name": "solo_r1_a1 辞書外カウンタと毎試行の停止検査", "passed": true}
+{"name": "通信なし8体と単独：種1個体1", "passed": true}
+開始 solo_r1_a2
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py", line 99, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py", line 85, in main
+    solo = run_job(f'solo_r{run}_a{i}', 1740, run=run, solo_agent=i, q=0, m=0)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py", line 28, in run_job
+    path = g.run_job(name, count, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 135, in run_job
+    if len(hh['foreign_heavy'])+active_cap>4: raise RuntimeError('機械の並列上限：SME等を優先して今回の処理を停止')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 機械の並列上限：SME等を優先して今回の処理を停止
+

@@ -1,0 +1,1200 @@
+{
+ "status": "stopped",
+ "checks": [
+  {
+   "name": "段2の保存走行と全引数一致（出力場所を除く）",
+   "passed": true,
+   "old": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "tools/v3_run.py",
+    "config/sweep_shop_hide1_s1_2026-10-01.json",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/record8_logged",
+    "--nohash",
+    "--vt",
+    "0.3842",
+    "--extend-rule",
+    "none",
+    "--charge1",
+    "d32",
+    "--fast",
+    "--no-public-history",
+    "--dump-slot-history",
+    "--fix2-full",
+    "--fix-order2",
+    "--proj-first",
+    "--fill-norestate",
+    "--no-charge2",
+    "--own-evidence",
+    "--v39",
+    "--v39-budget",
+    "inf",
+    "--v39-decay",
+    "actr",
+    "--v310-be",
+    "--hist-role",
+    "--score-role",
+    "--nsim",
+    "0.7",
+    "--ident-rho",
+    "0.5",
+    "--ident-argmax",
+    "--ident-commons",
+    "--u-struct",
+    "--relearn-init",
+    "--tie-struct",
+    "--amb-local",
+    "--dump-answers",
+    "--dump-routing",
+    "--answer-gap",
+    "--strict-pc",
+    "--cf-value",
+    "--probe-world",
+    "--cells",
+    "f0.5000_th2.1000_first_order",
+    "--no-compare",
+    "--shop-world",
+    "2",
+    "--shop-exc",
+    "0.2",
+    "--trial-count",
+    "200",
+    "--v39-price",
+    "0.01873710622997919",
+    "--e-price",
+    "0.01873710622997919",
+    "--workers",
+    "1",
+    "--seeds",
+    "1",
+    "--v311c",
+    "--v311c-f",
+    "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9",
+    "--v311c-groups",
+    "0,0,0,0,1,1,1,1",
+    "--v311c-runs",
+    "1",
+    "--v311c-q",
+    "0.2",
+    "--v311c-m",
+    "0.1",
+    "--v311c-recv",
+    "A",
+    "--v311c-b-n",
+    "8",
+    "--v311c-serial",
+    "--v311c-probe-shop",
+    "--v311c-audit",
+    "--v311c-lineage"
+   ],
+   "new": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "tools/v3_run.py",
+    "config/sweep_shop_hide1_s1_2026-10-01.json",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/restart-20261004/guard_equivalence_seed1",
+    "--nohash",
+    "--vt",
+    "0.3842",
+    "--extend-rule",
+    "none",
+    "--charge1",
+    "d32",
+    "--fast",
+    "--no-public-history",
+    "--dump-slot-history",
+    "--fix2-full",
+    "--fix-order2",
+    "--proj-first",
+    "--fill-norestate",
+    "--no-charge2",
+    "--own-evidence",
+    "--v39",
+    "--v39-budget",
+    "inf",
+    "--v39-decay",
+    "actr",
+    "--v310-be",
+    "--hist-role",
+    "--score-role",
+    "--nsim",
+    "0.7",
+    "--ident-rho",
+    "0.5",
+    "--ident-argmax",
+    "--ident-commons",
+    "--u-struct",
+    "--relearn-init",
+    "--tie-struct",
+    "--amb-local",
+    "--dump-answers",
+    "--dump-routing",
+    "--answer-gap",
+    "--strict-pc",
+    "--cf-value",
+    "--probe-world",
+    "--cells",
+    "f0.5000_th2.1000_first_order",
+    "--no-compare",
+    "--shop-world",
+    "2",
+    "--shop-exc",
+    "0.2",
+    "--trial-count",
+    "200",
+    "--v39-price",
+    "0.01873710622997919",
+    "--e-price",
+    "0.01873710622997919",
+    "--workers",
+    "1",
+    "--seeds",
+    "1",
+    "--v311c",
+    "--v311c-f",
+    "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9",
+    "--v311c-groups",
+    "0,0,0,0,1,1,1,1",
+    "--v311c-runs",
+    "1",
+    "--v311c-q",
+    "0.2",
+    "--v311c-m",
+    "0.1",
+    "--v311c-recv",
+    "A",
+    "--v311c-b-n",
+    "8",
+    "--v311c-serial",
+    "--v311c-probe-shop",
+    "--v311c-audit",
+    "--v311c-lineage"
+   ]
+  },
+  {
+   "name": "guard_equivalence_seed1 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "guard_equivalence_seed1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "guard_equivalence_seed1 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400
+   ]
+  },
+  {
+   "name": "段2・停止検査追加前後（種1） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "serial2_simultaneous 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_simultaneous 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_simultaneous 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0
+   ],
+   "checks": [
+    200,
+    200
+   ]
+  },
+  {
+   "name": "serial2_serial 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "serial2_serial 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "serial2_serial 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0
+   ],
+   "checks": [
+    200,
+    200
+   ]
+  },
+  {
+   "name": "直列と同時（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "539752ee429f495b7fe9a81a89fa76903a9ec18c71c227d23e8f269dffefb209",
+     "rows": 100
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "527e9e3fd7360279c33f094f2510299ab04c0c15861dda1bcc49c05d180536be",
+     "rows": 100
+    }
+   }
+  },
+  {
+   "name": "直列と同時（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   },
+   "right": {
+    "sha256": "8d6771990832b53aba2be2d97a647d3b08eb4577256af1e665d8ee58be257b5f",
+    "rows": 157
+   }
+  },
+  {
+   "name": "default2_baseline 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_baseline 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "default2_current 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "default2_current 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "default2_current 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0
+   ],
+   "checks": [
+    400,
+    400
+   ]
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "e701a65cfaf594ce8d83d343d987b0726cea87e64bd3bc76bc2a37060aa4a681",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "20cba43d819dde393c9feaf03a896b8e73d546d0693644bc8355727fbda85339",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "追加旗が全てオフと土台（2体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   },
+   "right": {
+    "sha256": "a2086d926fa5adb0044943b5fa7aa9b6ebfcc37bf9e7db0f5663d1c4004abd8b",
+    "rows": 332
+   }
+  },
+  {
+   "name": "off8 完走",
+   "passed": true,
+   "trials": 100,
+   "errors": []
+  },
+  {
+   "name": "off8 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "off8 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+   ]
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体0",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体1",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体2",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体3",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体4",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体5",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体6",
+   "passed": true
+  },
+  {
+   "name": "集団化全部オフと固定個体版：個体7",
+   "passed": true
+  },
+  {
+   "name": "record8_plain 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "record8_plain 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "record8_plain 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400
+   ]
+  },
+  {
+   "name": "record8_logged 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "record8_logged 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "record8_logged 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400
+   ]
+  },
+  {
+   "name": "お店試験・系譜の非干渉（8体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "お店試験・系譜の学習状態と本走行乱数（新指紋）",
+   "passed": true
+  },
+  {
+   "name": "record8_no_audit 完走",
+   "passed": true,
+   "trials": 200,
+   "errors": []
+  },
+  {
+   "name": "record8_no_audit 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "record8_no_audit 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    400
+   ]
+  },
+  {
+   "name": "状態指紋の非干渉（8体） 台帳本体",
+   "passed": true,
+   "left": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   },
+   "right": {
+    "seed001.jsonl.gz": {
+     "sha256": "1ca3910c228daf0d5df15a239a107dfecdcbd3e263ef0baa697311619f07562f",
+     "rows": 200
+    },
+    "seed1001.jsonl.gz": {
+     "sha256": "9ca02098a1c857fce2b45ed4a4b3ec866b740d79d6dda57167e5302c4d8abb5c",
+     "rows": 200
+    },
+    "seed2001.jsonl.gz": {
+     "sha256": "b4c3fe023377f1608914dba7785fb46bfd386bdd28f1c4f5ebc197fdabe90870",
+     "rows": 200
+    },
+    "seed3001.jsonl.gz": {
+     "sha256": "51ccc77b79440e85ccd5934fdcaff421ddff560d5a192d6129417a92564b8a1c",
+     "rows": 200
+    },
+    "seed4001.jsonl.gz": {
+     "sha256": "4587490aa18482b18b11d893fa48a3fcb00d8a641fae0b0712a0a4ae7043c002",
+     "rows": 200
+    },
+    "seed5001.jsonl.gz": {
+     "sha256": "c4a1ebba0f41e99807db6f4fcb0ca78f276ac2d3d284b08e9e0313675587a19c",
+     "rows": 200
+    },
+    "seed6001.jsonl.gz": {
+     "sha256": "83711947fe2210bff86a4b445c3d70494be2935496e486c7151c83b8916805e8",
+     "rows": 200
+    },
+    "seed7001.jsonl.gz": {
+     "sha256": "d9ccb38744fffd20d309a901e806a91ca6963d93831d4879ad64d4e5846c5b1b",
+     "rows": 200
+    }
+   }
+  },
+  {
+   "name": "状態指紋の非干渉（8体） 通信事象",
+   "passed": true,
+   "left": {
+    "sha256": "e489394d894e69b2ed8a89263b94dcbb31eb5cac5f200c5e867a1fea38a4dc4c",
+    "rows": 1278
+   },
+   "right": {
+    "sha256": "e489394d894e69b2ed8a89263b94dcbb31eb5cac5f200c5e867a1fea38a4dc4c",
+    "rows": 1278
+   }
+  },
+  {
+   "name": "no_comm_r1 完走",
+   "passed": true,
+   "trials": 1740,
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 受信の採点・名札費用",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 辞書外カウンタと毎試行の停止検査",
+   "passed": true,
+   "counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "checks": [
+    3480,
+    3480,
+    3480,
+    3480,
+    3480,
+    3480,
+    3480,
+    3480
+   ]
+  },
+  {
+   "name": "no_comm_r1 個体数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 fの毎試行値",
+   "passed": true,
+   "checked_rows": 13920
+  },
+  {
+   "name": "no_comm_r1 世界課題の分母",
+   "passed": true,
+   "correct": 9629,
+   "wrong": 63,
+   "silence": 4228,
+   "total": 13920
+  },
+  {
+   "name": "no_comm_r1 答えの出どころの台帳照合",
+   "passed": true,
+   "answer_rows": 9692,
+   "wrong_sources": {
+    "H": 63
+   }
+  },
+  {
+   "name": "no_comm_r1 送信配送受信・同試行・自己配送なし",
+   "passed": true,
+   "sent": 0,
+   "recv": 0
+  },
+  {
+   "name": "no_comm_r1 黙りから送らない・答えは増やさない",
+   "passed": true,
+   "bundles": 9692
+  },
+  {
+   "name": "no_comm_r1 束の参照本数",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 m=0の組間配送",
+   "passed": true,
+   "cross": 0,
+   "total": 0
+  },
+  {
+   "name": "no_comm_r1 問い・対の再集計",
+   "passed": true,
+   "split": {
+    "within": {
+     "双方正解": 2876,
+     "同じ誤答": 78,
+     "双方棄権": 428,
+     "その他": 698
+    },
+    "cross": {
+     "双方正解": 3795,
+     "同じ誤答": 63,
+     "双方棄権": 574,
+     "その他": 1008
+    }
+   }
+  },
+  {
+   "name": "no_comm_r1 報告の初期採点のsource",
+   "passed": true,
+   "births": 0
+  },
+  {
+   "name": "no_comm_r1 未記載は反証・取消にしない",
+   "passed": true
+  },
+  {
+   "name": "no_comm_r1 世界の学習のsource",
+   "passed": true,
+   "counts": {
+    "initial_unscored": 8,
+    "scored": 13912
+   },
+   "errors": []
+  },
+  {
+   "name": "no_comm_r1 報告の採点欄とsource",
+   "passed": true,
+   "counts": {},
+   "errors": []
+  },
+  {
+   "name": "solo_r1_a0 辞書外カウンタと毎試行の停止検査",
+   "passed": true
+  },
+  {
+   "name": "通信なし8体と単独：種1個体0",
+   "passed": true
+  },
+  {
+   "name": "solo_r1_a1 辞書外カウンタと毎試行の停止検査",
+   "passed": true
+  },
+  {
+   "name": "通信なし8体と単独：種1個体1",
+   "passed": true
+  }
+ ],
+ "runs": [
+  {
+   "name": "guard_equivalence_seed1",
+   "elapsed_seconds": 135.20679445800488,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:16:55+09:00",
+   "rss_sum_peak_bytes": 1408712704,
+   "rss_sample_interval_seconds": 1,
+   "samples": 129,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    250.3,
+    97.2,
+    248.6,
+    263.1,
+    241.1,
+    255.5,
+    129.7,
+    90.4
+   ]
+  },
+  {
+   "name": "serial2_simultaneous",
+   "elapsed_seconds": 9.453710208006669,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:17:05+09:00",
+   "rss_sum_peak_bytes": 375341056,
+   "rss_sample_interval_seconds": 1,
+   "samples": 9,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    221.3,
+    96.3
+   ]
+  },
+  {
+   "name": "serial2_serial",
+   "elapsed_seconds": 14.655879958008882,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:17:20+09:00",
+   "rss_sum_peak_bytes": 382058496,
+   "rss_sample_interval_seconds": 1,
+   "samples": 14,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    222.6,
+    95.6
+   ]
+  },
+  {
+   "name": "default2_baseline",
+   "elapsed_seconds": 17.878433915990172,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:17:38+09:00",
+   "rss_sum_peak_bytes": 239566848,
+   "rss_sample_interval_seconds": 1,
+   "samples": 17,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    97.2,
+    88.5
+   ]
+  },
+  {
+   "name": "default2_current",
+   "elapsed_seconds": 16.80790962500032,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:17:55+09:00",
+   "rss_sum_peak_bytes": 227262464,
+   "rss_sample_interval_seconds": 1,
+   "samples": 16,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    94.1,
+    87.3
+   ]
+  },
+  {
+   "name": "off8",
+   "elapsed_seconds": 31.455984208005248,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:27+09:00",
+   "rss_sum_peak_bytes": 417693696,
+   "rss_sample_interval_seconds": 1,
+   "samples": 30,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    46.2,
+    51.8,
+    48.2,
+    48.3,
+    45.0,
+    43.8,
+    42.1,
+    49.6
+   ]
+  },
+  {
+   "name": "baseline_a0",
+   "elapsed_seconds": 4.232307792000938,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:31+09:00",
+   "rss_sum_peak_bytes": 106807296,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a1",
+   "elapsed_seconds": 4.199180291994708,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:35+09:00",
+   "rss_sum_peak_bytes": 107380736,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a2",
+   "elapsed_seconds": 4.2098384170094505,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:39+09:00",
+   "rss_sum_peak_bytes": 100401152,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a3",
+   "elapsed_seconds": 5.255215749988565,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:45+09:00",
+   "rss_sum_peak_bytes": 102858752,
+   "rss_sample_interval_seconds": 1,
+   "samples": 5,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a4",
+   "elapsed_seconds": 4.211888374993578,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:49+09:00",
+   "rss_sum_peak_bytes": 103251968,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a5",
+   "elapsed_seconds": 4.217008125007851,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:53+09:00",
+   "rss_sum_peak_bytes": 102498304,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a6",
+   "elapsed_seconds": 4.21858704200713,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:18:57+09:00",
+   "rss_sum_peak_bytes": 98500608,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "baseline_a7",
+   "elapsed_seconds": 4.210818624997046,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:19:02+09:00",
+   "rss_sum_peak_bytes": 106070016,
+   "rss_sample_interval_seconds": 1,
+   "samples": 4,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19
+  },
+  {
+   "name": "record8_plain",
+   "elapsed_seconds": 138.02262837500894,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:21:20+09:00",
+   "rss_sum_peak_bytes": 1374257152,
+   "rss_sample_interval_seconds": 1,
+   "samples": 132,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    241.5,
+    92.7,
+    243.1,
+    281.1,
+    240.3,
+    277.6,
+    130.5,
+    93.2
+   ]
+  },
+  {
+   "name": "record8_logged",
+   "elapsed_seconds": 132.5958717080066,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:23:32+09:00",
+   "rss_sum_peak_bytes": 1584955392,
+   "rss_sample_interval_seconds": 1,
+   "samples": 127,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    264.3,
+    99.7,
+    284.8,
+    281.5,
+    253.1,
+    290.1,
+    131.8,
+    105.6
+   ]
+  },
+  {
+   "name": "record8_no_audit",
+   "elapsed_seconds": 84.91524416598259,
+   "exitcode": 0,
+   "finished": "2026-10-04T10:24:58+09:00",
+   "rss_sum_peak_bytes": 612007936,
+   "rss_sample_interval_seconds": 1,
+   "samples": 81,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 372.19,
+   "agent_peak_rss_mb_decimal": [
+    71.6,
+    57.6,
+    82.8,
+    65.6,
+    70.5,
+    76.2,
+    67.4,
+    62.2
+   ]
+  },
+  {
+   "name": "no_comm_r1",
+   "elapsed_seconds": 2631.85549633301,
+   "exitcode": 0,
+   "finished": "2026-10-04T11:23:31+09:00",
+   "rss_sum_peak_bytes": 1971044352,
+   "rss_sample_interval_seconds": 1,
+   "samples": 2488,
+   "swap_start_mib": 372.19,
+   "swap_end_mib": 356.19,
+   "agent_peak_rss_mb_decimal": [
+    245.1,
+    283.5,
+    294.4,
+    295.7,
+    310.5,
+    296.9,
+    347.1,
+    289.2
+   ]
+  },
+  {
+   "name": "solo_r1_a0",
+   "elapsed_seconds": 106.0690767079941,
+   "exitcode": 0,
+   "finished": "2026-10-04T11:25:46+09:00",
+   "rss_sum_peak_bytes": 110526464,
+   "rss_sample_interval_seconds": 1,
+   "samples": 98,
+   "swap_start_mib": 356.19,
+   "swap_end_mib": 356.19
+  },
+  {
+   "name": "solo_r1_a1",
+   "elapsed_seconds": 125.59735358299804,
+   "exitcode": 0,
+   "finished": "2026-10-04T11:27:52+09:00",
+   "rss_sum_peak_bytes": 123371520,
+   "rss_sample_interval_seconds": 1,
+   "samples": 116,
+   "swap_start_mib": 356.19,
+   "swap_end_mib": 356.19
+  }
+ ],
+ "started": "2026-10-04T10:14:40+09:00",
+ "source_commit": "822c161d38986e8924a9842814bd2f556f5bc2b3",
+ "fingerprint_version": "sets-sorted-v1",
+ "old_runtime_fingerprints_used": false,
+ "main_run_started": false,
+ "stage2_passed": true,
+ "finished": "2026-10-04T11:28:22+09:00",
+ "reason": "機械の並列上限：SME等を優先して今回の処理を停止",
+ "traceback": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py\", line 99, in <module>\n    main()\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py\", line 85, in main\n    solo = run_job(f'solo_r{run}_a{i}', 1740, run=run, solo_agent=i, q=0, m=0)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/restart_gate_20261004.py\", line 28, in run_job\n    path = g.run_job(name, count, **kw)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 135, in run_job\n    if len(hh['foreign_heavy'])+active_cap>4: raise RuntimeError('機械の並列上限：SME等を優先して今回の処理を停止')\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: 機械の並列上限：SME等を優先して今回の処理を停止\n"
+}
