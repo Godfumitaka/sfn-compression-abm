@@ -90,3 +90,4 @@ if __name__=='__main__':
             assert len(list(root.glob(f'ledgers/cells/*/seed{seed:03d}.jsonl.gz')))==1,('記憶なし',seed)
         for seed in range(1,21):
             subprocess.run([sys.executable,__file__,str(root),str(dest),str(seed)],check=True)
+        tables(dest,root.name)
