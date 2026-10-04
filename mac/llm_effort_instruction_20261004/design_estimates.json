@@ -1,0 +1,357 @@
+{
+ "time": "2026-10-04T16:55:02+09:00",
+ "API_calls": 0,
+ "calibration": {
+  "basis": "既存medium 0.5の56要求。入力tokens = slope×指示本文の文字数＋intercept",
+  "observations": 56,
+  "slope": 0.585197098797264,
+  "intercept": -123.3580383956496,
+  "max_absolute_residual": 2.41087422557257,
+  "RMSE": 1.1693886373178495,
+  "tokenizer_measurement": false,
+  "limitations": "新しい語彙・メモは未測定。費用の設計値であり、トークンAPIによる確定値や請求の保証ではない"
+ },
+ "output_assumptions": {
+  "JSON_tokens": 25,
+  "thinking_tokens_per_call": [
+   100,
+   2000
+  ],
+  "memo_output_tokens": "更新ごとに仮の上限分を出すとして計算",
+  "retry_included": false,
+  "additional_planning_margin": 0.25
+ },
+ "memo": [
+  {
+   "world": 1,
+   "condition": "full",
+   "memo_limit_provisional": null,
+   "prediction_calls": 64,
+   "update_calls": 0,
+   "writeback_and_control_calls": 0,
+   "calls": 64,
+   "input_tokens_estimate": 412375,
+   "memo_output_tokens_assumed": 0,
+   "reasoning_100_per_call_dollars": 0.90475,
+   "reasoning_2000_per_call_dollars": 2.12075,
+   "output_limit_32000_per_call_dollars": 21.30475
+  },
+  {
+   "world": 1,
+   "condition": "long",
+   "memo_limit_provisional": 1000,
+   "prediction_calls": 64,
+   "update_calls": 40,
+   "writeback_and_control_calls": 0,
+   "calls": 104,
+   "input_tokens_estimate": 208920,
+   "memo_output_tokens_assumed": 40000,
+   "reasoning_100_per_call_dollars": 0.94784,
+   "reasoning_2000_per_call_dollars": 2.92384,
+   "output_limit_32000_per_call_dollars": 33.69784
+  },
+  {
+   "world": 1,
+   "condition": "short",
+   "memo_limit_provisional": 150,
+   "prediction_calls": 96,
+   "update_calls": 40,
+   "writeback_and_control_calls": 32,
+   "calls": 136,
+   "input_tokens_estimate": 176716,
+   "memo_output_tokens_assumed": 6000,
+   "reasoning_100_per_call_dollars": 0.583432,
+   "reasoning_2000_per_call_dollars": 3.167432,
+   "output_limit_32000_per_call_dollars": 43.873432
+  },
+  {
+   "world": 2,
+   "condition": "full",
+   "memo_limit_provisional": null,
+   "prediction_calls": 64,
+   "update_calls": 0,
+   "writeback_and_control_calls": 0,
+   "calls": 64,
+   "input_tokens_estimate": 412375,
+   "memo_output_tokens_assumed": 0,
+   "reasoning_100_per_call_dollars": 0.90475,
+   "reasoning_2000_per_call_dollars": 2.12075,
+   "output_limit_32000_per_call_dollars": 21.30475
+  },
+  {
+   "world": 2,
+   "condition": "long",
+   "memo_limit_provisional": 1000,
+   "prediction_calls": 64,
+   "update_calls": 40,
+   "writeback_and_control_calls": 0,
+   "calls": 104,
+   "input_tokens_estimate": 208920,
+   "memo_output_tokens_assumed": 40000,
+   "reasoning_100_per_call_dollars": 0.94784,
+   "reasoning_2000_per_call_dollars": 2.92384,
+   "output_limit_32000_per_call_dollars": 33.69784
+  },
+  {
+   "world": 2,
+   "condition": "short",
+   "memo_limit_provisional": 150,
+   "prediction_calls": 96,
+   "update_calls": 40,
+   "writeback_and_control_calls": 32,
+   "calls": 136,
+   "input_tokens_estimate": 176716,
+   "memo_output_tokens_assumed": 6000,
+   "reasoning_100_per_call_dollars": 0.583432,
+   "reasoning_2000_per_call_dollars": 3.167432,
+   "output_limit_32000_per_call_dollars": 43.873432
+  }
+ ],
+ "writeback_eligibility": {
+  "1": [
+   {
+    "時点": 10,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr54: foga(r22, r49)\n  r22: pilu(o2)\n  r49: nudi(r45, r17)\n    r45: nasa(r61, r72)\n      r61: nape(?, r83)\n        r83: tuni(o2, o7)\n      r72: badu(r27, r40)\n        r27: biva(o2, o7)\n        r40: tibu(o2, o7)\n    r17: metu(r63, r98)\n      r63: geri(r39, r50)\n        r39: dago(o2, o7)\n        r50: zimu(o2, o7)\n      r98: lega(r86, r67)\n        r86: dole(o2, o7)\n        r67: fodu(o2, o7)\nr90: reso(o7)\nAnswer: repi\n\nScene:\nr59: foga(r23, r49)\n  r23: vadi(o7)\n  r49: nudi(r68, r62)\n    r68: nasa(r22, r86)\n      r22: nape(?, r95)\n        r95: tuni(o7, o4)\n      r86: badu(r53, r98)\n        r53: biva(o7, o4)\n        r98: tibu(o7, o4)\n    r62: metu(r24, r88)\n      r24: geri(r39, r75)\n        r39: dago(o7, o4)\n        r75: zimu(o7, o4)\n      r88: lega(r38, r16)\n        r38: dole(o7, o4)\n        r16: fodu(o7, o4)\nr40: reso(o4)\nAnswer: repi",
+    "対照": "Scene:\nr22: foga(r49, r53)\n  r49: pilu(o1)\n  r53: nudi(r86, r38)\n    r86: nasa(r82, r98)\n      r82: nape(?, r95)\n        r95: tuni(o1, o5)\n      r98: badu(r16, r19)\n        r16: biva(o1, o5)\n        r19: tibu(o1, o5)\n    r38: metu(r81, r90)\n      r81: geri(r48, r62)\n        r48: dago(o1, o5)\n        r62: zimu(o1, o5)\n      r90: lega(r76, r96)\n        r76: dole(o1, o5)\n        r96: fodu(o1, o5)\nr65: reso(o5)\nAnswer: repi\n\nScene:\nr54: foga(r22, r49)\n  r22: pilu(o2)\n  r49: nudi(r45, r17)\n    r45: nasa(r61, r72)\n      r61: nape(?, r83)\n        r83: tuni(o2, o7)\n      r72: badu(r27, r40)\n        r27: biva(o2, o7)\n        r40: tibu(o2, o7)\n    r17: metu(r63, r98)\n      r63: geri(r39, r50)\n        r39: dago(o2, o7)\n        r50: zimu(o2, o7)\n      r98: lega(r86, r67)\n        r86: dole(o2, o7)\n        r67: fodu(o2, o7)\nr90: reso(o7)\nAnswer: repi",
+    "書き戻しの場面": [
+     8,
+     4
+    ],
+    "対照の場面": [
+     7,
+     8
+    ]
+   },
+   {
+    "時点": 20,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr55: foga(r81, r79)\n  r81: pilu(o9)\n  r79: nudi(r83, r19)\n    r83: nasa(r59, r14)\n      r59: nape(?, r48)\n        r48: tuni(o9, o2)\n      r14: badu(r63, r23)\n        r63: biva(o9, o2)\n        r23: tibu(o9, o2)\n    r19: metu(r46, r65)\n      r46: geri(r36, r54)\n        r36: dago(o9, o2)\n        r54: zimu(o9, o2)\n      r65: lega(r51, r20)\n        r51: dole(o9, o2)\n        r20: fodu(o9, o2)\nr27: reso(o2)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: repi",
+    "対照": "Scene:\nr87: foga(r43, r62)\n  r43: pilu(o1)\n  r62: nudi(r89, r13)\n    r89: nasa(r49, r46)\n      r49: nape(?, r97)\n        r97: tuni(o1, o4)\n      r46: badu(r82, r57)\n        r82: biva(o1, o4)\n        r57: tibu(o1, o4)\n    r13: metu(r34, r60)\n      r34: geri(r72, r39)\n        r72: dago(o1, o4)\n        r39: zimu(o1, o4)\n      r60: lega(r33, r61)\n        r33: dole(o1, o4)\n        r61: fodu(o1, o4)\nr23: reso(o4)\nAnswer: repi\n\nScene:\nr55: foga(r81, r79)\n  r81: pilu(o9)\n  r79: nudi(r83, r19)\n    r83: nasa(r59, r14)\n      r59: nape(?, r48)\n        r48: tuni(o9, o2)\n      r14: badu(r63, r23)\n        r63: biva(o9, o2)\n        r23: tibu(o9, o2)\n    r19: metu(r46, r65)\n      r46: geri(r36, r54)\n        r36: dago(o9, o2)\n        r54: zimu(o9, o2)\n      r65: lega(r51, r20)\n        r51: dole(o9, o2)\n        r20: fodu(o9, o2)\nr27: reso(o2)\nAnswer: repi",
+    "書き戻しの場面": [
+     14,
+     17
+    ],
+    "対照の場面": [
+     12,
+     14
+    ]
+   },
+   {
+    "時点": 30,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr86: foga(r26, r32)\n  r26: pilu(o7)\n  r32: nudi(r37, r94)\n    r37: nasa(r36, r52)\n      r36: nape(?, r55)\n        r55: tuni(o7, o2)\n      r52: badu(r21, r63)\n        r21: biva(o7, o2)\n        r63: tibu(o7, o2)\n    r94: metu(r83, r49)\n      r83: geri(r25, r48)\n        r25: dago(o7, o2)\n        r48: zimu(o7, o2)\n      r49: lega(r82, r68)\n        r82: dole(o7, o2)\n        r68: fodu(o7, o2)\nr88: reso(o2)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: repi",
+    "対照": "Scene:\nr52: foga(r67, r49)\n  r67: pilu(o1)\n  r49: nudi(r91, r74)\n    r91: nasa(r10, r56)\n      r10: nape(?, r34)\n        r34: tuni(o1, o4)\n      r56: badu(r57, r90)\n        r57: biva(o1, o4)\n        r90: tibu(o1, o4)\n    r74: metu(r22, r28)\n      r22: geri(r13, r61)\n        r13: dago(o1, o4)\n        r61: zimu(o1, o4)\n      r28: lega(r83, r12)\n        r83: dole(o1, o4)\n        r12: fodu(o1, o4)\nr11: reso(o4)\nAnswer: repi\n\nScene:\nr86: foga(r26, r32)\n  r26: pilu(o7)\n  r32: nudi(r37, r94)\n    r37: nasa(r36, r52)\n      r36: nape(?, r55)\n        r55: tuni(o7, o2)\n      r52: badu(r21, r63)\n        r21: biva(o7, o2)\n        r63: tibu(o7, o2)\n    r94: metu(r83, r49)\n      r83: geri(r25, r48)\n        r25: dago(o7, o2)\n        r48: zimu(o7, o2)\n      r49: lega(r82, r68)\n        r82: dole(o7, o2)\n        r68: fodu(o7, o2)\nr88: reso(o2)\nAnswer: repi",
+    "書き戻しの場面": [
+     28,
+     17
+    ],
+    "対照の場面": [
+     26,
+     28
+    ]
+   },
+   {
+    "時点": 40,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr65: foga(r86, r41)\n  r86: pilu(o7)\n  r41: nudi(r54, r96)\n    r54: nasa(r13, r82)\n      r13: nape(?, r25)\n        r25: tuni(o7, o4)\n      r82: badu(r16, r78)\n        r16: biva(o7, o4)\n        r78: tibu(o7, o4)\n    r96: metu(r53, r36)\n      r53: geri(r67, r81)\n        r67: dago(o7, o4)\n        r81: zimu(o7, o4)\n      r36: lega(r49, r90)\n        r49: dole(o7, o4)\n        r90: fodu(o7, o4)\nr35: reso(o4)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: repi",
+    "対照": "Scene:\nr36: foga(r83, r17)\n  r83: pilu(o7)\n  r17: nudi(r38, r26)\n    r38: nasa(r23, r37)\n      r23: nape(?, r57)\n        r57: tuni(o7, o4)\n      r37: badu(r32, r27)\n        r32: biva(o7, o4)\n        r27: tibu(o7, o4)\n    r26: metu(r73, r12)\n      r73: geri(r81, r87)\n        r81: dago(o7, o4)\n        r87: zimu(o7, o4)\n      r12: lega(r45, r13)\n        r45: dole(o7, o4)\n        r13: fodu(o7, o4)\nr65: reso(o4)\nAnswer: repi\n\nScene:\nr65: foga(r86, r41)\n  r86: pilu(o7)\n  r41: nudi(r54, r96)\n    r54: nasa(r13, r82)\n      r13: nape(?, r25)\n        r25: tuni(o7, o4)\n      r82: badu(r16, r78)\n        r16: biva(o7, o4)\n        r78: tibu(o7, o4)\n    r96: metu(r53, r36)\n      r53: geri(r67, r81)\n        r67: dago(o7, o4)\n        r81: zimu(o7, o4)\n      r36: lega(r49, r90)\n        r49: dole(o7, o4)\n        r90: fodu(o7, o4)\nr35: reso(o4)\nAnswer: repi",
+    "書き戻しの場面": [
+     36,
+     17
+    ],
+    "対照の場面": [
+     35,
+     36
+    ]
+   }
+  ],
+  "2": [
+   {
+    "時点": 10,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr54: foga(r22, r49)\n  r22: pilu(o2)\n  r49: nudi(r45, r17)\n    r45: nasa(r61, r72)\n      r61: nape(?, r83)\n        r83: tuni(o2, o7)\n      r72: badu(r27, r40)\n        r27: biva(o2, o7)\n        r40: tibu(o2, o7)\n    r17: metu(r63, r98)\n      r63: geri(r39, r50)\n        r39: dago(o2, o7)\n        r50: zimu(o2, o7)\n      r98: lega(r86, r67)\n        r86: dole(o2, o7)\n        r67: fodu(o2, o7)\nr90: reso(o7)\nAnswer: repi\n\nScene:\nr59: foga(r23, r49)\n  r23: vadi(o7)\n  r49: nudi(r68, r62)\n    r68: nasa(r22, r86)\n      r22: nape(?, r95)\n        r95: tuni(o7, o4)\n      r86: badu(r53, r98)\n        r53: biva(o7, o4)\n        r98: tibu(o7, o4)\n    r62: metu(r24, r88)\n      r24: geri(r39, r75)\n        r39: dago(o7, o4)\n        r75: zimu(o7, o4)\n      r88: lega(r38, r16)\n        r38: dole(o7, o4)\n        r16: fodu(o7, o4)\nr40: reso(o4)\nAnswer: puga",
+    "対照": "Scene:\nr22: foga(r49, r53)\n  r49: pilu(o1)\n  r53: nudi(r86, r38)\n    r86: nasa(r82, r98)\n      r82: nape(?, r95)\n        r95: tuni(o1, o5)\n      r98: badu(r16, r19)\n        r16: biva(o1, o5)\n        r19: tibu(o1, o5)\n    r38: metu(r81, r90)\n      r81: geri(r48, r62)\n        r48: dago(o1, o5)\n        r62: zimu(o1, o5)\n      r90: lega(r76, r96)\n        r76: dole(o1, o5)\n        r96: fodu(o1, o5)\nr65: reso(o5)\nAnswer: repi\n\nScene:\nr54: foga(r22, r49)\n  r22: pilu(o2)\n  r49: nudi(r45, r17)\n    r45: nasa(r61, r72)\n      r61: nape(?, r83)\n        r83: tuni(o2, o7)\n      r72: badu(r27, r40)\n        r27: biva(o2, o7)\n        r40: tibu(o2, o7)\n    r17: metu(r63, r98)\n      r63: geri(r39, r50)\n        r39: dago(o2, o7)\n        r50: zimu(o2, o7)\n      r98: lega(r86, r67)\n        r86: dole(o2, o7)\n        r67: fodu(o2, o7)\nr90: reso(o7)\nAnswer: repi",
+    "書き戻しの場面": [
+     8,
+     4
+    ],
+    "対照の場面": [
+     7,
+     8
+    ]
+   },
+   {
+    "時点": 20,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr55: foga(r81, r79)\n  r81: pilu(o9)\n  r79: nudi(r83, r19)\n    r83: nasa(r59, r14)\n      r59: nape(?, r48)\n        r48: tuni(o9, o2)\n      r14: badu(r63, r23)\n        r63: biva(o9, o2)\n        r23: tibu(o9, o2)\n    r19: metu(r46, r65)\n      r46: geri(r36, r54)\n        r36: dago(o9, o2)\n        r54: zimu(o9, o2)\n      r65: lega(r51, r20)\n        r51: dole(o9, o2)\n        r20: fodu(o9, o2)\nr27: reso(o2)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: puga",
+    "対照": "Scene:\nr87: foga(r43, r62)\n  r43: pilu(o1)\n  r62: nudi(r89, r13)\n    r89: nasa(r49, r46)\n      r49: nape(?, r97)\n        r97: tuni(o1, o4)\n      r46: badu(r82, r57)\n        r82: biva(o1, o4)\n        r57: tibu(o1, o4)\n    r13: metu(r34, r60)\n      r34: geri(r72, r39)\n        r72: dago(o1, o4)\n        r39: zimu(o1, o4)\n      r60: lega(r33, r61)\n        r33: dole(o1, o4)\n        r61: fodu(o1, o4)\nr23: reso(o4)\nAnswer: repi\n\nScene:\nr55: foga(r81, r79)\n  r81: pilu(o9)\n  r79: nudi(r83, r19)\n    r83: nasa(r59, r14)\n      r59: nape(?, r48)\n        r48: tuni(o9, o2)\n      r14: badu(r63, r23)\n        r63: biva(o9, o2)\n        r23: tibu(o9, o2)\n    r19: metu(r46, r65)\n      r46: geri(r36, r54)\n        r36: dago(o9, o2)\n        r54: zimu(o9, o2)\n      r65: lega(r51, r20)\n        r51: dole(o9, o2)\n        r20: fodu(o9, o2)\nr27: reso(o2)\nAnswer: repi",
+    "書き戻しの場面": [
+     14,
+     17
+    ],
+    "対照の場面": [
+     12,
+     14
+    ]
+   },
+   {
+    "時点": 30,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr86: foga(r26, r32)\n  r26: pilu(o7)\n  r32: nudi(r37, r94)\n    r37: nasa(r36, r52)\n      r36: nape(?, r55)\n        r55: tuni(o7, o2)\n      r52: badu(r21, r63)\n        r21: biva(o7, o2)\n        r63: tibu(o7, o2)\n    r94: metu(r83, r49)\n      r83: geri(r25, r48)\n        r25: dago(o7, o2)\n        r48: zimu(o7, o2)\n      r49: lega(r82, r68)\n        r82: dole(o7, o2)\n        r68: fodu(o7, o2)\nr88: reso(o2)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: puga",
+    "対照": "Scene:\nr52: foga(r67, r49)\n  r67: pilu(o1)\n  r49: nudi(r91, r74)\n    r91: nasa(r10, r56)\n      r10: nape(?, r34)\n        r34: tuni(o1, o4)\n      r56: badu(r57, r90)\n        r57: biva(o1, o4)\n        r90: tibu(o1, o4)\n    r74: metu(r22, r28)\n      r22: geri(r13, r61)\n        r13: dago(o1, o4)\n        r61: zimu(o1, o4)\n      r28: lega(r83, r12)\n        r83: dole(o1, o4)\n        r12: fodu(o1, o4)\nr11: reso(o4)\nAnswer: repi\n\nScene:\nr86: foga(r26, r32)\n  r26: pilu(o7)\n  r32: nudi(r37, r94)\n    r37: nasa(r36, r52)\n      r36: nape(?, r55)\n        r55: tuni(o7, o2)\n      r52: badu(r21, r63)\n        r21: biva(o7, o2)\n        r63: tibu(o7, o2)\n    r94: metu(r83, r49)\n      r83: geri(r25, r48)\n        r25: dago(o7, o2)\n        r48: zimu(o7, o2)\n      r49: lega(r82, r68)\n        r82: dole(o7, o2)\n        r68: fodu(o7, o2)\nr88: reso(o2)\nAnswer: repi",
+    "書き戻しの場面": [
+     28,
+     17
+    ],
+    "対照の場面": [
+     26,
+     28
+    ]
+   },
+   {
+    "時点": 40,
+    "店": "乙",
+    "実施": true,
+    "書き戻し": "Scene:\nr65: foga(r86, r41)\n  r86: pilu(o7)\n  r41: nudi(r54, r96)\n    r54: nasa(r13, r82)\n      r13: nape(?, r25)\n        r25: tuni(o7, o4)\n      r82: badu(r16, r78)\n        r16: biva(o7, o4)\n        r78: tibu(o7, o4)\n    r96: metu(r53, r36)\n      r53: geri(r67, r81)\n        r67: dago(o7, o4)\n        r81: zimu(o7, o4)\n      r36: lega(r49, r90)\n        r49: dole(o7, o4)\n        r90: fodu(o7, o4)\nr35: reso(o4)\nAnswer: repi\n\nScene:\nr21: foga(r77, r48)\n  r77: vadi(o2)\n  r48: nudi(r33, r55)\n    r33: nasa(r46, r56)\n      r46: nape(?, r51)\n        r51: tuni(o2, o3)\n      r56: badu(r98, r10)\n        r98: biva(o2, o3)\n        r10: tibu(o2, o3)\n    r55: metu(r81, r16)\n      r81: geri(r76, r95)\n        r76: dago(o2, o3)\n        r95: zimu(o2, o3)\n      r16: lega(r20, r25)\n        r20: dole(o2, o3)\n        r25: fodu(o2, o3)\nr69: reso(o3)\nAnswer: puga",
+    "対照": "Scene:\nr36: foga(r83, r17)\n  r83: pilu(o7)\n  r17: nudi(r38, r26)\n    r38: nasa(r23, r37)\n      r23: nape(?, r57)\n        r57: tuni(o7, o4)\n      r37: badu(r32, r27)\n        r32: biva(o7, o4)\n        r27: tibu(o7, o4)\n    r26: metu(r73, r12)\n      r73: geri(r81, r87)\n        r81: dago(o7, o4)\n        r87: zimu(o7, o4)\n      r12: lega(r45, r13)\n        r45: dole(o7, o4)\n        r13: fodu(o7, o4)\nr65: reso(o4)\nAnswer: repi\n\nScene:\nr65: foga(r86, r41)\n  r86: pilu(o7)\n  r41: nudi(r54, r96)\n    r54: nasa(r13, r82)\n      r13: nape(?, r25)\n        r25: tuni(o7, o4)\n      r82: badu(r16, r78)\n        r16: biva(o7, o4)\n        r78: tibu(o7, o4)\n    r96: metu(r53, r36)\n      r53: geri(r67, r81)\n        r67: dago(o7, o4)\n        r81: zimu(o7, o4)\n      r36: lega(r49, r90)\n        r49: dole(o7, o4)\n        r90: fodu(o7, o4)\nr35: reso(o4)\nAnswer: repi",
+    "書き戻しの場面": [
+     36,
+     17
+    ],
+    "対照の場面": [
+     35,
+     36
+    ]
+   }
+  ]
+ },
+ "distractor_rows": [
+  {
+   "condition": "0行",
+   "independent_root_lines": 0,
+   "scene_lines": 16,
+   "final16_only": {
+    "calls": 16,
+    "input_tokens_estimate": 171856,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 0.363712,
+    "reasoning_2000_per_call_dollars": 0.667712,
+    "output_limit_32000_per_call_dollars": 5.463712
+   },
+   "training40_plus_final16": {
+    "calls": 56,
+    "input_tokens_estimate": 402644,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 0.875288,
+    "reasoning_2000_per_call_dollars": 1.939288,
+    "output_limit_32000_per_call_dollars": 18.725288
+   }
+  },
+  {
+   "condition": "今のまま",
+   "independent_root_lines": 1,
+   "scene_lines": 17,
+   "final16_only": {
+    "calls": 16,
+    "input_tokens_estimate": 177232,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 0.374464,
+    "reasoning_2000_per_call_dollars": 0.678464,
+    "output_limit_32000_per_call_dollars": 5.474464
+   },
+   "training40_plus_final16": {
+    "calls": 56,
+    "input_tokens_estimate": 414734,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 0.899468,
+    "reasoning_2000_per_call_dollars": 1.963468,
+    "output_limit_32000_per_call_dollars": 18.749468
+   }
+  },
+  {
+   "condition": "増やす",
+   "independent_root_lines": 17,
+   "scene_lines": 33,
+   "final16_only": {
+    "calls": 16,
+    "input_tokens_estimate": 263232,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 0.546464,
+    "reasoning_2000_per_call_dollars": 0.850464,
+    "output_limit_32000_per_call_dollars": 5.646464
+   },
+   "training40_plus_final16": {
+    "calls": 56,
+    "input_tokens_estimate": 608227,
+    "memo_output_tokens_assumed": 0,
+    "reasoning_100_per_call_dollars": 1.286454,
+    "reasoning_2000_per_call_dollars": 2.350454,
+    "output_limit_32000_per_call_dollars": 19.136454
+   }
+  }
+ ],
+ "meaning_words": {
+  "mapping": {
+   "anchor": "anchor",
+   "attach": "has_sticker",
+   "avert": "avert",
+   "bend": "bend",
+   "break": "break",
+   "carried": "carried",
+   "carry": "carry",
+   "cause": "cause",
+   "couple": "couple",
+   "cut": "cut",
+   "drag": "drag",
+   "enable": "enable",
+   "govern": "store",
+   "hinder": "hinder",
+   "hold": "red_door",
+   "hold_b": "blue_door",
+   "lift": "lift",
+   "lock": "lock",
+   "permit": "permit",
+   "press": "press",
+   "pull": "pull",
+   "push": "push",
+   "require": "require",
+   "sig_e": "square_sticker",
+   "sig_n": "round_sticker",
+   "steer": "steer",
+   "supported": "supported",
+   "turn": "turn"
+  },
+  "final16_only": {
+   "calls": 16,
+   "input_tokens_estimate": 191860,
+   "memo_output_tokens_assumed": 0,
+   "reasoning_100_per_call_dollars": 0.40372,
+   "reasoning_2000_per_call_dollars": 0.70772,
+   "output_limit_32000_per_call_dollars": 5.50372
+  },
+  "training40_plus_final16": {
+   "calls": 56,
+   "input_tokens_estimate": 447555,
+   "memo_output_tokens_assumed": 0,
+   "reasoning_100_per_call_dollars": 0.96511,
+   "reasoning_2000_per_call_dollars": 2.02911,
+   "output_limit_32000_per_call_dollars": 18.81511
+  }
+ },
+ "future_common_settings": {
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "thinking": "adaptive",
+  "display": "summarized",
+  "instruction": "Do not explain your reasoning. Output nothing except the JSON object.",
+  "max_tokens": 32000
+ }
+}

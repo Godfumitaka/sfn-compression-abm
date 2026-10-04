@@ -1,0 +1,54 @@
+{
+ "date": "2026-10-04",
+ "model": "claude-sonnet-5-5",
+ "world": 2,
+ "set_seed": 1,
+ "door_fraction": 0.5,
+ "run_training": false,
+ "tests_per_condition": 16,
+ "thinking": "adaptive",
+ "display": "summarized",
+ "max_tokens": 32000,
+ "format": {
+  "type": "object",
+  "properties": {
+   "answer": {
+    "type": "string"
+   },
+   "confidence": {
+    "type": "number"
+   },
+   "respond": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "answer",
+   "confidence",
+   "respond"
+  ],
+  "additionalProperties": false
+ },
+ "task_limit_dollars": 4,
+ "A": {
+  "effort": "medium",
+  "replace_from": "Do not explain your reasoning. Output nothing except the JSON object.",
+  "replace_to": "You may think the problem through before answering. Output only the JSON object."
+ },
+ "B": {
+  "effort": "max",
+  "instruction": "Do not explain your reasoning. Output nothing except the JSON object."
+ },
+ "pricing": {
+  "input": 2.0,
+  "output": 10.0
+ },
+ "pricing_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+ "effort_source": "https://platform.claude.com/docs/en/build-with-claude/effort",
+ "thinking_source": "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost",
+ "summary_matching": {
+  "case_sensitive": true,
+  "word_boundary": "ASCII英数字と下線を記号の前後に許さない",
+  "count": "各問の最終試みのsummarized欄だけ。今のシールの語と通常・例外いずれかの語を別々に数える"
+ }
+}

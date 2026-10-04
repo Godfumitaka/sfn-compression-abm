@@ -1,0 +1,8 @@
+I'm examining scenes with the metu/geri/lega structure to figure out whether the removed relation inside nape is puga or repi, checking how the first argument (like vadi) correlates with the answer across different scenes.
+
+Looking at vadi+metu scenes, the answer consistently seems to be puga (scenes 5, 11, 12, 18), while pilu+metu scenes consistently give repi. But vadi+vefe scenes (25, 30, 33, 39) give repi instead, suggesting the second relation (metu vs vefe) matters as much as the first argument.
+
+Continuing with vadi+metu+reso combos, both give puga consistently. Now checking the pilu combinations: pilu+vefe+roti scenes all yield puga, while pilu+metu+reso scenes all yield repi, so I'm scanning through the remaining scene numbers to confirm this pattern holds across all instances.
+
+This reveals a clean XOR-like structure: puga occurs when the first and second conditions match in a certain way (pilu+vefe or vadi+metu), while repi occurs for the opposite pairings (pilu+metu or vadi+vefe). I'm verifying this against every remaining scene number to make sure no exceptions exist before applying it to determine the current scene's answer.
+
