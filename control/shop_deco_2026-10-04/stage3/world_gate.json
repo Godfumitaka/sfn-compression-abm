@@ -1,0 +1,7874 @@
+{
+  "passed": true,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "trial_count": 1740,
+  "counts": {
+    "skeleton": 69600,
+    "current": 69600,
+    "plus4": 69600,
+    "plus8": 69600,
+    "partial_entity_sets_differ": 7394,
+    "rerouted": 12114
+  },
+  "invariant_sha256": {
+    "skeleton": "ea4413cf1250f3b0837bd35c701fc22ca5dbc81dac4689f804d9af08307e2089",
+    "current": "ea4413cf1250f3b0837bd35c701fc22ca5dbc81dac4689f804d9af08307e2089",
+    "plus4": "ea4413cf1250f3b0837bd35c701fc22ca5dbc81dac4689f804d9af08307e2089",
+    "plus8": "ea4413cf1250f3b0837bd35c701fc22ca5dbc81dac4689f804d9af08307e2089"
+  },
+  "elapsed_sec": 29.596202665998135,
+  "peak_rss_bytes": 26492928,
+  "examples": [
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 1,
+      "level": "current",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 1,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        },
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 1,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f45e9c9387bbf8f1",
+          "predicate": "dz_5",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "abbd9400192bd79a",
+          "predicate": "dz_6",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "b3198bfa740b5ff1",
+          "predicate": "dz_7",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "d11af9981e833658",
+          "predicate": "dz_2",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        },
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f45e9c9387bbf8f1",
+          "predicate": "dz_5",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "abbd9400192bd79a",
+          "predicate": "dz_6",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "b3198bfa740b5ff1",
+          "predicate": "dz_7",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "d11af9981e833658",
+          "predicate": "dz_2",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 1,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 1,
+      "level": "current",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 1,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        },
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 1,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "8626219d3214d27b",
+          "predicate": "dz_1",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "80597914169e7fb8",
+          "predicate": "dz_11",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "ab2f863c4846b6d8",
+          "predicate": "dz_2",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "1fc4ae9ab5c36877",
+          "predicate": "dz_7",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        },
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "8626219d3214d27b",
+          "predicate": "dz_1",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "80597914169e7fb8",
+          "predicate": "dz_11",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "ab2f863c4846b6d8",
+          "predicate": "dz_2",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "1fc4ae9ab5c36877",
+          "predicate": "dz_7",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 1,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "6877a6ec33a2d094",
+        "predicate": "break",
+        "arguments": [
+          "946f56b6120053d9",
+          "5da0462fd7b02364"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 1,
+      "level": "current",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 1,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        },
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 1,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "da43b19a860203cc",
+          "predicate": "dz_4",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "4dd26a283b0430ea",
+          "predicate": "dz_6",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "b94f707c7beec30f",
+          "predicate": "dz_3",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "e96185035045b34c",
+          "predicate": "dz_5",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        },
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "da43b19a860203cc",
+          "predicate": "dz_4",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "4dd26a283b0430ea",
+          "predicate": "dz_6",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "b94f707c7beec30f",
+          "predicate": "dz_3",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "e96185035045b34c",
+          "predicate": "dz_5",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 1,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 1,
+      "level": "current",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 1,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        },
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 1,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "ff6764df0dd2480d",
+          "predicate": "dz_7",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "f62cfa44fd28a5da",
+          "predicate": "dz_4",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "a629dfb19174818a",
+          "predicate": "dz_6",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "6d014d6e48222a3a",
+          "predicate": "dz_8",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        },
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "ff6764df0dd2480d",
+          "predicate": "dz_7",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "f62cfa44fd28a5da",
+          "predicate": "dz_4",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "a629dfb19174818a",
+          "predicate": "dz_6",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "6d014d6e48222a3a",
+          "predicate": "dz_8",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 1,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 2,
+      "level": "current",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 2,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        },
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 2,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f45e9c9387bbf8f1",
+          "predicate": "dz_5",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "abbd9400192bd79a",
+          "predicate": "dz_6",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "b3198bfa740b5ff1",
+          "predicate": "dz_7",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "d11af9981e833658",
+          "predicate": "dz_2",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        },
+        {
+          "id": "e2cefb9fc899f6de",
+          "predicate": "dz_1",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "23f0fc850fae68f7",
+          "predicate": "dz_12",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "489bb44eec2fafe7",
+          "predicate": "dz_4",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "271583abe2ec478d",
+          "predicate": "dz_9",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f45e9c9387bbf8f1",
+          "predicate": "dz_5",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "abbd9400192bd79a",
+          "predicate": "dz_6",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "b3198bfa740b5ff1",
+          "predicate": "dz_7",
+          "arguments": [
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "d11af9981e833658",
+          "predicate": "dz_2",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 10,
+      "world": 2,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "held_out": {
+        "id": "181742a70219ac7f",
+        "predicate": "hold_b",
+        "arguments": [
+          "784ffa1458570b5b",
+          "55c97a92c1754f44"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "e5f4902bb115ee81",
+          "predicate": "toward",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "7ee899e280f360de",
+          "predicate": "inside",
+          "arguments": [
+            "55c97a92c1754f44",
+            "a14a9cb6f06c38b4"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "181742a70219ac7f",
+          "predicate": "hold_b",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "799d4cc215ca0560",
+          "predicate": "push",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "b4faea98414bbb0f",
+          "predicate": "carry",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "5df145353fff5371",
+          "predicate": "lift",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "26a36357464ab556",
+          "predicate": "pull",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "f0909c5eb441d3cb",
+          "predicate": "drag",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "130a615006f3e676",
+          "predicate": "lock",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "9cfbeb3dc76d872a",
+          "predicate": "bend",
+          "arguments": [
+            "784ffa1458570b5b",
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "d3932ae7c7b8d135",
+          "predicate": "cause",
+          "arguments": [
+            "181742a70219ac7f",
+            "799d4cc215ca0560"
+          ]
+        },
+        {
+          "id": "a92c9b983bf0d367",
+          "predicate": "require",
+          "arguments": [
+            "b4faea98414bbb0f",
+            "5df145353fff5371"
+          ]
+        },
+        {
+          "id": "068ee0e9ee464ded",
+          "predicate": "permit",
+          "arguments": [
+            "26a36357464ab556",
+            "f0909c5eb441d3cb"
+          ]
+        },
+        {
+          "id": "15f59451cf522460",
+          "predicate": "hinder",
+          "arguments": [
+            "130a615006f3e676",
+            "9cfbeb3dc76d872a"
+          ]
+        },
+        {
+          "id": "d1bf04f8513f383c",
+          "predicate": "couple",
+          "arguments": [
+            "d3932ae7c7b8d135",
+            "a92c9b983bf0d367"
+          ]
+        },
+        {
+          "id": "ea4aeecc22a8b4d7",
+          "predicate": "steer",
+          "arguments": [
+            "068ee0e9ee464ded",
+            "15f59451cf522460"
+          ]
+        },
+        {
+          "id": "c7f2508c6b5040f4",
+          "predicate": "govern",
+          "arguments": [
+            "d1bf04f8513f383c",
+            "ea4aeecc22a8b4d7"
+          ]
+        },
+        {
+          "id": "600c463b1961255b",
+          "predicate": "road",
+          "arguments": [
+            "784ffa1458570b5b",
+            "a14a9cb6f06c38b4"
+          ]
+        },
+        {
+          "id": "f6697342fb72469d",
+          "predicate": "carried",
+          "arguments": [
+            "55c97a92c1754f44"
+          ]
+        },
+        {
+          "id": "3345cf0200002c3c",
+          "predicate": "sig_n",
+          "arguments": [
+            "784ffa1458570b5b"
+          ]
+        },
+        {
+          "id": "479ae0eb5352e079",
+          "predicate": "attach",
+          "arguments": [
+            "3345cf0200002c3c",
+            "c7f2508c6b5040f4"
+          ]
+        }
+      ],
+      "entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ],
+      "visible_entities": [
+        "784ffa1458570b5b",
+        "55c97a92c1754f44",
+        "a14a9cb6f06c38b4"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "current",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        },
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "added": [
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "8626219d3214d27b",
+          "predicate": "dz_1",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "80597914169e7fb8",
+          "predicate": "dz_11",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "ab2f863c4846b6d8",
+          "predicate": "dz_2",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "1fc4ae9ab5c36877",
+          "predicate": "dz_7",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        },
+        {
+          "id": "9bb5fcc91b8b9b08",
+          "predicate": "dz_12",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "7bf4ddc47bad0582",
+          "predicate": "dz_9",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "01a5be6c2250713e",
+          "predicate": "dz_8",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "04e68866c08bc6e1",
+          "predicate": "dz_6",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "8626219d3214d27b",
+          "predicate": "dz_1",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "80597914169e7fb8",
+          "predicate": "dz_11",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "ab2f863c4846b6d8",
+          "predicate": "dz_2",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "1fc4ae9ab5c36877",
+          "predicate": "dz_7",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ]
+      },
+      "held_out": {
+        "id": "6877a6ec33a2d094",
+        "predicate": "break",
+        "arguments": [
+          "946f56b6120053d9",
+          "5da0462fd7b02364"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "e3ebe4a797dede42",
+          "predicate": "beside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "99cf1a7b5da39320",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "c94b938f4cf2a315",
+          "predicate": "inside",
+          "arguments": [
+            "5da0462fd7b02364",
+            "98ab371fa6e82941"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "e14b89702df3e83c",
+          "predicate": "hold",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9ff3b8f728a77a7b",
+          "predicate": "push",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "50e17bdb48d06fe8",
+          "predicate": "carry",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "2e030b0993501b52",
+          "predicate": "lift",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "6877a6ec33a2d094",
+          "predicate": "break",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "94f46cdb91259b20",
+          "predicate": "cut",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "eea9bdc3a7749cdd",
+          "predicate": "turn",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "d76aef06f29d2192",
+          "predicate": "press",
+          "arguments": [
+            "946f56b6120053d9",
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "9b738847c599462c",
+          "predicate": "cause",
+          "arguments": [
+            "e14b89702df3e83c",
+            "9ff3b8f728a77a7b"
+          ]
+        },
+        {
+          "id": "1ddb25bfac860277",
+          "predicate": "require",
+          "arguments": [
+            "50e17bdb48d06fe8",
+            "2e030b0993501b52"
+          ]
+        },
+        {
+          "id": "85e7e1bd7ec90f73",
+          "predicate": "enable",
+          "arguments": [
+            "6877a6ec33a2d094",
+            "94f46cdb91259b20"
+          ]
+        },
+        {
+          "id": "5407fd5a4c65ee8a",
+          "predicate": "avert",
+          "arguments": [
+            "eea9bdc3a7749cdd",
+            "d76aef06f29d2192"
+          ]
+        },
+        {
+          "id": "906bf46c9c1ff6af",
+          "predicate": "couple",
+          "arguments": [
+            "9b738847c599462c",
+            "1ddb25bfac860277"
+          ]
+        },
+        {
+          "id": "ffaee9b646b3bb9d",
+          "predicate": "anchor",
+          "arguments": [
+            "85e7e1bd7ec90f73",
+            "5407fd5a4c65ee8a"
+          ]
+        },
+        {
+          "id": "01e1c9219a0b7bcb",
+          "predicate": "govern",
+          "arguments": [
+            "906bf46c9c1ff6af",
+            "ffaee9b646b3bb9d"
+          ]
+        },
+        {
+          "id": "abf5439e25a41c51",
+          "predicate": "stone",
+          "arguments": [
+            "946f56b6120053d9",
+            "98ab371fa6e82941"
+          ]
+        },
+        {
+          "id": "691ee1c06b83ac0b",
+          "predicate": "supported",
+          "arguments": [
+            "5da0462fd7b02364"
+          ]
+        },
+        {
+          "id": "678d19e3d13afc1c",
+          "predicate": "sig_n",
+          "arguments": [
+            "946f56b6120053d9"
+          ]
+        },
+        {
+          "id": "4cf2633d6dd3a950",
+          "predicate": "attach",
+          "arguments": [
+            "678d19e3d13afc1c",
+            "01e1c9219a0b7bcb"
+          ]
+        }
+      ],
+      "entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ],
+      "visible_entities": [
+        "946f56b6120053d9",
+        "5da0462fd7b02364",
+        "98ab371fa6e82941"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "current",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        },
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "da43b19a860203cc",
+          "predicate": "dz_4",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "4dd26a283b0430ea",
+          "predicate": "dz_6",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "b94f707c7beec30f",
+          "predicate": "dz_3",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "e96185035045b34c",
+          "predicate": "dz_5",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        },
+        {
+          "id": "228fb7e8feedc838",
+          "predicate": "dz_9",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "2f8efc554144a25e",
+          "predicate": "dz_2",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "cc2b650733a917b0",
+          "predicate": "dz_7",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "ab1915155dc92f76",
+          "predicate": "dz_8",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "da43b19a860203cc",
+          "predicate": "dz_4",
+          "arguments": [
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "4dd26a283b0430ea",
+          "predicate": "dz_6",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "b94f707c7beec30f",
+          "predicate": "dz_3",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "e96185035045b34c",
+          "predicate": "dz_5",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "held_out": {
+        "id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "2f251a8d9395a64a",
+          "predicate": "beside",
+          "arguments": [
+            "98de6bc7b8a6897a",
+            "8e9621d91973aa2b"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "12348a70a494dfa1",
+          "predicate": "hold_b",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "d87aee19a4367eb9",
+          "predicate": "push",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "8a4db198496aea3d",
+          "predicate": "carry",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "31b61651a3c1e227",
+          "predicate": "lift",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "0a6348e0d25d0ddb",
+          "predicate": "pull",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "f1c036f46921e8bd",
+          "predicate": "drag",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "251ca43a4829999a",
+          "predicate": "lock",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "6748e6a739f69332",
+          "predicate": "bend",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "ac64ba74b04ee608",
+          "predicate": "cause",
+          "arguments": [
+            "12348a70a494dfa1",
+            "d87aee19a4367eb9"
+          ]
+        },
+        {
+          "id": "2920ebdc5ff77004",
+          "predicate": "require",
+          "arguments": [
+            "8a4db198496aea3d",
+            "31b61651a3c1e227"
+          ]
+        },
+        {
+          "id": "485b6463ad04fbdb",
+          "predicate": "permit",
+          "arguments": [
+            "0a6348e0d25d0ddb",
+            "f1c036f46921e8bd"
+          ]
+        },
+        {
+          "id": "152dcdc16d6d3e2b",
+          "predicate": "hinder",
+          "arguments": [
+            "251ca43a4829999a",
+            "6748e6a739f69332"
+          ]
+        },
+        {
+          "id": "a087b62682c4387b",
+          "predicate": "couple",
+          "arguments": [
+            "ac64ba74b04ee608",
+            "2920ebdc5ff77004"
+          ]
+        },
+        {
+          "id": "9f616901eac6ec12",
+          "predicate": "steer",
+          "arguments": [
+            "485b6463ad04fbdb",
+            "152dcdc16d6d3e2b"
+          ]
+        },
+        {
+          "id": "d6539b04ac005faf",
+          "predicate": "govern",
+          "arguments": [
+            "a087b62682c4387b",
+            "9f616901eac6ec12"
+          ]
+        },
+        {
+          "id": "4fbb735809727b25",
+          "predicate": "board",
+          "arguments": [
+            "a42c050c1e4c2e84",
+            "98de6bc7b8a6897a"
+          ]
+        },
+        {
+          "id": "62cee22210ec4c7a",
+          "predicate": "carried",
+          "arguments": [
+            "8e9621d91973aa2b"
+          ]
+        },
+        {
+          "id": "bd1df6b917c3c0b3",
+          "predicate": "sig_n",
+          "arguments": [
+            "a42c050c1e4c2e84"
+          ]
+        },
+        {
+          "id": "c1081b05531abf43",
+          "predicate": "attach",
+          "arguments": [
+            "bd1df6b917c3c0b3",
+            "d6539b04ac005faf"
+          ]
+        }
+      ],
+      "entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b",
+        "98de6bc7b8a6897a"
+      ],
+      "visible_entities": [
+        "a42c050c1e4c2e84",
+        "8e9621d91973aa2b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 2,
+      "level": "current",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 2,
+      "level": "plus4",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        },
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 2,
+      "level": "plus8",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "ff6764df0dd2480d",
+          "predicate": "dz_7",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "f62cfa44fd28a5da",
+          "predicate": "dz_4",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "a629dfb19174818a",
+          "predicate": "dz_6",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "6d014d6e48222a3a",
+          "predicate": "dz_8",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        }
+      ],
+      "removed": [],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        },
+        {
+          "id": "f9a7c34cfaa87f64",
+          "predicate": "dz_3",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "dd784e80d2871dd7",
+          "predicate": "dz_10",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "d21c96cb9da632c7",
+          "predicate": "dz_12",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "99ca8ce9becfeef3",
+          "predicate": "dz_11",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "ff6764df0dd2480d",
+          "predicate": "dz_7",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "f62cfa44fd28a5da",
+          "predicate": "dz_4",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "a629dfb19174818a",
+          "predicate": "dz_6",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "6d014d6e48222a3a",
+          "predicate": "dz_8",
+          "arguments": [
+            "65ec2488ec907b9b"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    },
+    {
+      "seed": 1,
+      "trial": 0,
+      "world": 2,
+      "level": "skeleton",
+      "original_held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "held_out": {
+        "id": "3aaedb638d28ec31",
+        "predicate": "carry",
+        "arguments": [
+          "8861cb487923b34b",
+          "c8d0862e1fe621ea"
+        ]
+      },
+      "added": [],
+      "removed": [
+        {
+          "id": "950c4a53426a82f9",
+          "predicate": "under",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "57432621c81e3e72",
+          "predicate": "inside",
+          "arguments": [
+            "65ec2488ec907b9b",
+            "8861cb487923b34b"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "id": "92b77e51601afcb7",
+          "predicate": "hold_b",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "13483b185cdf4734",
+          "predicate": "push",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "3aaedb638d28ec31",
+          "predicate": "carry",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "9dd7e98e01d261cf",
+          "predicate": "lift",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6e889354ca90627b",
+          "predicate": "pull",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "08c78b78fc9851c6",
+          "predicate": "drag",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "2a2fd9eb7d272f28",
+          "predicate": "lock",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "5c3ebac19d1e9055",
+          "predicate": "bend",
+          "arguments": [
+            "8861cb487923b34b",
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "6cbc2cc7c4f7e443",
+          "predicate": "cause",
+          "arguments": [
+            "92b77e51601afcb7",
+            "13483b185cdf4734"
+          ]
+        },
+        {
+          "id": "0c57cbccac9522c4",
+          "predicate": "require",
+          "arguments": [
+            "3aaedb638d28ec31",
+            "9dd7e98e01d261cf"
+          ]
+        },
+        {
+          "id": "52264225e527d8e4",
+          "predicate": "permit",
+          "arguments": [
+            "6e889354ca90627b",
+            "08c78b78fc9851c6"
+          ]
+        },
+        {
+          "id": "18f09be7487901be",
+          "predicate": "hinder",
+          "arguments": [
+            "2a2fd9eb7d272f28",
+            "5c3ebac19d1e9055"
+          ]
+        },
+        {
+          "id": "1165a55de547dfe1",
+          "predicate": "couple",
+          "arguments": [
+            "6cbc2cc7c4f7e443",
+            "0c57cbccac9522c4"
+          ]
+        },
+        {
+          "id": "74572533704822af",
+          "predicate": "steer",
+          "arguments": [
+            "52264225e527d8e4",
+            "18f09be7487901be"
+          ]
+        },
+        {
+          "id": "f05d90297164227a",
+          "predicate": "govern",
+          "arguments": [
+            "1165a55de547dfe1",
+            "74572533704822af"
+          ]
+        },
+        {
+          "id": "77ebea9f157d199a",
+          "predicate": "cord",
+          "arguments": [
+            "8861cb487923b34b",
+            "65ec2488ec907b9b"
+          ]
+        },
+        {
+          "id": "f7094b9cf0514dac",
+          "predicate": "carried",
+          "arguments": [
+            "c8d0862e1fe621ea"
+          ]
+        },
+        {
+          "id": "530dbc3310cca768",
+          "predicate": "sig_n",
+          "arguments": [
+            "8861cb487923b34b"
+          ]
+        },
+        {
+          "id": "95609a3254abb005",
+          "predicate": "attach",
+          "arguments": [
+            "530dbc3310cca768",
+            "f05d90297164227a"
+          ]
+        }
+      ],
+      "entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ],
+      "visible_entities": [
+        "8861cb487923b34b",
+        "c8d0862e1fe621ea",
+        "65ec2488ec907b9b"
+      ]
+    }
+  ]
+}
