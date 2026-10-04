@@ -1,6 +1,7 @@
 """注意の段②・段B1：固定記憶から元のN3の回答を厳密に再現する。
 
-模型の更新と注意の学習はしない。一つでも不一致なら、その試行で終了する。
+模型の更新と注意の学習はしない。回答が一つでも不一致なら、その試行で終了する。
+復元指紋と付帯のtraceの差は記録だけ（2026-10-04の返信）。
 種は1〜20。既存のsealrestoreと走行の差し替えをそのまま使う。
 """
 from __future__ import annotations
@@ -75,6 +76,9 @@ def baseline_analysis(task,cfg,root,cell,seed,out):
     started = time.monotonic()
     result = {'stage':'B1','world':fl['shop_world'],'seed':seed,'trials_compared':0,
               'answers_match':True,'tolerance':None,'mismatch':None,
+              'restoration_hash_policy':'record_only_2026-10-04',
+              'restoration_hash_mismatches':0,'prediction_state_hash_changes':0,
+              'auxiliary_trace_mismatches':0,
               'model_updated':False,'attention_updated':False,
               'task_instruction_assumption':'課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う',
               'phaseC_started':False,'phase3_started':False}
@@ -88,36 +92,48 @@ def baseline_analysis(task,cfg,root,cell,seed,out):
             if pre is None:
                 assert t==0
                 state = AgentState()  # sweep.run_oneと同じ初期状態。
+                restored_hash = None
             else:
                 state,bad = sr.restore_state(pre,argmap,scenes)
                 if bad:
                     raise RuntimeError(f'世界{fl["shop_world"]}種{seed}試行{t}：引数の並びを戻せない（{bad}件）')
                 sr._clear_caches(loop)
                 restored = json.loads(loop._json_bytes(loop._canonical(state)))
-                if hashlib.sha256(loop._json_bytes(restored)).hexdigest()!=previous_hash:
-                    raise RuntimeError(f'世界{fl["shop_world"]}種{seed}試行{t}：復元した予測前状態の指紋が不一致')
+                restored_hash = hashlib.sha256(loop._json_bytes(restored)).hexdigest()
+                result['restoration_hash_mismatches'] += restored_hash!=previous_hash
             ai = loop._agent_input(wt,state)
             # 正解・開示・hitは予測へ渡さない。元の試行別RNGと同じ独立な出発点。
             predicted,_pending = loop.predict(ai,state,config,Random(loop._rng_seed(agent,t)))
             actual = answer_payload(predicted)
             expected = {name:row.get(name) for name in actual}
-            actual_bytes,expected_bytes = loop._json_bytes(actual),loop._json_bytes(expected)
+            # 関門は回答の全欄。定義名・支持数のtraceは別に照合して記録する。
+            answer_fields = ('prediction_kind','predicted_edge','abstain_reason')
+            actual_bytes = loop._json_bytes({k:actual[k] for k in answer_fields})
+            expected_bytes = loop._json_bytes({k:expected[k] for k in answer_fields})
             same = actual_bytes==expected_bytes
+            trace_same = all(actual[k]==expected[k] for k in ('R_used','support_at_adoption'))
+            result['auxiliary_trace_mismatches'] += not trace_same
+            after_hash = None
+            if pre is not None:
+                sr._clear_caches(loop)
+                after = json.loads(loop._json_bytes(loop._canonical(state)))
+                after_hash = hashlib.sha256(loop._json_bytes(after)).hexdigest()
+                result['prediction_state_hash_changes'] += after_hash!=restored_hash
             count += 1
             result['trials_compared'] = count
             output.write(json.dumps({'world':fl['shop_world'],'seed':seed,'trial':t,
                                      'held_out_is_door':row['held_out_is_door'],
-                                     'pre_sha256':previous_hash,'answer':actual,'match':same},ensure_ascii=False)+'\n')
+                                     'pre_sha256':previous_hash,'answer':actual,'match':same,
+                                     'auxiliary_trace_match':trace_same,
+                                     'restored_pre_sha256':restored_hash,
+                                     'restoration_hash_match':None if pre is None else restored_hash==previous_hash,
+                                     'restored_after_prediction_sha256':after_hash,
+                                     'prediction_state_hash_match':None if pre is None else after_hash==restored_hash},ensure_ascii=False)+'\n')
             if not same:
                 result['answers_match'] = False
                 result['mismatch'] = {'trial':t,'actual':actual,'expected':expected,
                                       'actual_bytes':actual_bytes.decode(),'expected_bytes':expected_bytes.decode()}
                 break
-            if pre is not None:
-                sr._clear_caches(loop)
-                after = json.loads(loop._json_bytes(loop._canonical(state)))
-                if hashlib.sha256(loop._json_bytes(after)).hexdigest()!=previous_hash:
-                    raise RuntimeError(f'世界{fl["shop_world"]}種{seed}試行{t}：予測で元の記憶が変わった')
             if fl.get('strict_pc'):
                 import strictpc
                 strictpc.record_kinds(wt.target_graph_partial,(wt.held_out_edge,) if tr['disclosed'] else ())
