@@ -1,0 +1,64 @@
+{
+  "world": 1,
+  "seed": 15,
+  "counts": {
+    "visible_door_names": 1591,
+    "initial_pre_not_stored": 1,
+    "trials": 1740,
+    "stored_pre_states": 1739,
+    "mapped_definitions_with_door_names": 20452,
+    "H_door_name_occurrences": 20452,
+    "H_at_door": 10174,
+    "non_door_H": 10278,
+    "non_door_H_no_destination": 10278,
+    "flags": 10278
+  },
+  "unique_non_door_seat_name_locations": 72,
+  "first_example": {
+    "world": 1,
+    "seed": 15,
+    "trial": 5,
+    "source": "H",
+    "definition": "R_4f04443e175f8292",
+    "definition_registered_at": 3,
+    "slot": 8,
+    "seat_registered_at": 3,
+    "relation_id": "93756778e4b42685",
+    "name": "hold",
+    "history_count": 1,
+    "origin_kind": "ドア",
+    "direct_target": null,
+    "role_target": null,
+    "role_target_reason": "親が対応しない",
+    "door_id": "07420dbdcb73e1fd",
+    "target_role": "no_destination",
+    "pre_sha256": "272204ec5c8fcc6d53f54f939792da3705618a2ff0760520f68a4058b60b7bac"
+  },
+  "full_trial_census": true,
+  "requested_trials": 1740,
+  "predicate_names": [
+    "hold",
+    "hold_b"
+  ],
+  "door_seat_rule": "role_target==current_door_id OR alignment.relation_mapping[rid]==current_door_id (selcands.py:157)",
+  "unmapped_policy": "対応先なしは非ドア候補としてフラグを保存し、その他の対応先と分けて数える。元の席の種類も保存し、正式な非ドア判定と区別する。",
+  "task_instruction_assumption": "課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う",
+  "initial_state_note": "試行0のpreは未保存。現行の初期状態に定義はない。場面の関係は試行0も検査。",
+  "model_or_attention_updated": false,
+  "answers_or_learning_computed": false,
+  "elapsed_seconds": 53.23004283400951,
+  "artifacts": {
+    "seed015.flags.jsonl.gz": {
+      "bytes": 145856,
+      "sha256": "cd4bdb53a08512061be80214d6833d2bfaf17304252c8085368952ddc2e3d854"
+    },
+    "seed015.trials.jsonl.gz": {
+      "bytes": 10255,
+      "sha256": "a095835dfe96a8b67bdf3d2546ce25f512b5c53670cdd11ac39c4b3e57a5f4ea"
+    },
+    "seed015.locations.jsonl.gz": {
+      "bytes": 20246,
+      "sha256": "8cf5d9e69a264eba3818af7de98c4d4322a613a459d25a7b82791210a80625e6"
+    }
+  }
+}

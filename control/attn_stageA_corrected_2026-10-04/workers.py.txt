@@ -1,0 +1,37 @@
+"""計算の子はCPU率によらず数え、小さい待機役は区別する。
+
+~/jobs/jobs.pyの重いPythonの定義（RSS100MB以上またはspawn_main）を参照。
+単独でCPUを使う小さい計算も数える。外部プロセスを操作しない。
+"""
+import os
+from pathlib import Path
+import re
+import subprocess
+
+
+def is_heavy(command,rss_mb,cpu):
+    if 'multiprocessing.resource_tracker' in command or '/jobs/jobs.py' in command:
+        return False
+    executable = Path(command.split(None,1)[0]).name.lower()
+    if executable.startswith('python'):
+        return 'spawn_main' in command or rss_mb >= 100 or cpu >= 20
+    if executable in ('r','julia','ffmpeg'):
+        return rss_mb >= 100 or cpu >= 20
+    return bool(re.search(r'node|claude',executable)) and cpu >= 20
+
+
+def external_workers(group):
+    lines = subprocess.check_output(['ps','-axo','pid=,ppid=,pgid=,rss=,%cpu=,state=,command='],text=True).splitlines()
+    rows = [line.split(None,6) for line in lines]
+    parents = {int(row[1]) for row in rows}
+    result = []
+    for pid,ppid,pgid,rss,cpu,state,command in rows:
+        pid = int(pid)
+        if pid==os.getpid() or int(pgid)==group or state.startswith('Z') or pid in parents:
+            continue
+        rss_mb,rate = int(rss)/1024,float(cpu)
+        if is_heavy(command,rss_mb,rate):
+            result.append({'pid':pid,'ppid':int(ppid),'pgid':int(pgid),'rss_mb':rss_mb,
+                           'cpu':rate,'state':state,'comm':command.split(None,1)[0],
+                           'spawn_main':'spawn_main' in command})
+    return result

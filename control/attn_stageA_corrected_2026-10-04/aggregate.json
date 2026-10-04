@@ -1,0 +1,101 @@
+{
+  "worlds": {
+    "1": {
+      "counts": {
+        "visible_door_names": 31647,
+        "initial_pre_not_stored": 20,
+        "trials": 34800,
+        "stored_pre_states": 34780,
+        "mapped_definitions_with_door_names": 437769,
+        "H_door_name_occurrences": 426581,
+        "non_door_H": 212835,
+        "non_door_H_no_destination": 212835,
+        "flags": 218976,
+        "H_at_door": 213746,
+        "F_door_name_occurrences": 11188,
+        "non_door_F": 6141,
+        "non_door_F_no_destination": 6141,
+        "F_at_door": 5047
+      },
+      "destination_and_origin": {
+        "F/no_destination/ドア": 6141,
+        "H/no_destination/ドア": 212835
+      },
+      "first_assigned_non_door": null,
+      "first_unmapped": {
+        "world": 1,
+        "seed": 1,
+        "trial": 3,
+        "source": "H",
+        "definition": "R_3229d75e4a4c2e0b",
+        "definition_registered_at": 2,
+        "slot": 4,
+        "seat_registered_at": 2,
+        "relation_id": "2e9b0b0186aa97fd",
+        "name": "hold",
+        "history_count": 1,
+        "origin_kind": "ドア",
+        "direct_target": null,
+        "role_target": null,
+        "role_target_reason": "親が対応しない",
+        "door_id": "c84d0a0f7de860ac",
+        "target_role": "no_destination",
+        "pre_sha256": "d18580a2e951947b083766e031bcf171d6815d386d1658b9936076e957c140a8"
+      }
+    },
+    "2": {
+      "counts": {
+        "visible_door_names": 31647,
+        "initial_pre_not_stored": 20,
+        "trials": 34800,
+        "stored_pre_states": 34780,
+        "mapped_definitions_with_door_names": 615872,
+        "H_door_name_occurrences": 550376,
+        "H_at_door": 280603,
+        "non_door_H": 269773,
+        "non_door_H_no_destination": 269773,
+        "flags": 305466,
+        "F_door_name_occurrences": 65496,
+        "F_at_door": 29803,
+        "non_door_F": 35693,
+        "non_door_F_no_destination": 35693
+      },
+      "destination_and_origin": {
+        "F/no_destination/ドア": 35693,
+        "H/no_destination/ドア": 269773
+      },
+      "first_assigned_non_door": null,
+      "first_unmapped": {
+        "world": 2,
+        "seed": 1,
+        "trial": 4,
+        "source": "H",
+        "definition": "R_3229d75e4a4c2e0b",
+        "definition_registered_at": 2,
+        "slot": 4,
+        "seat_registered_at": 2,
+        "relation_id": "2e9b0b0186aa97fd",
+        "name": "hold",
+        "history_count": 1,
+        "origin_kind": "ドア",
+        "direct_target": null,
+        "role_target": null,
+        "role_target_reason": "親が対応しない",
+        "door_id": "12348a70a494dfa1",
+        "target_role": "no_destination",
+        "pre_sha256": "7c7cadd805db7ebb169490184ce212a83cfd024b01e0ecf764ff4c9638df5785"
+      }
+    }
+  },
+  "trials": 69600,
+  "code_commit": "fee6c8e0928ac62d83c712fbb2b234e0923fe635",
+  "door_names": [
+    "hold",
+    "hold_b"
+  ],
+  "task_instruction_assumption": "課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う",
+  "unmapped_gate_decision": "対応先なしの別集計を保ち、この集計器だけで合否を決めない",
+  "aggregation_note": "全試行から保存したlocationsの出現回数を合算し、各種の試行別総フラグ件数と一致を検査。ドア由来IDの分類はdoor_idsの単調増加により後続でも維持される。",
+  "phaseB_started": false,
+  "phase3_started": false
+}

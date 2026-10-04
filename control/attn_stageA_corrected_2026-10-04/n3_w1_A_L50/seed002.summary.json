@@ -1,0 +1,64 @@
+{
+  "world": 1,
+  "seed": 2,
+  "counts": {
+    "visible_door_names": 1586,
+    "initial_pre_not_stored": 1,
+    "trials": 1740,
+    "stored_pre_states": 1739,
+    "mapped_definitions_with_door_names": 20367,
+    "H_door_name_occurrences": 20367,
+    "non_door_H": 10090,
+    "non_door_H_no_destination": 10090,
+    "flags": 10090,
+    "H_at_door": 10277
+  },
+  "unique_non_door_seat_name_locations": 79,
+  "first_example": {
+    "world": 1,
+    "seed": 2,
+    "trial": 3,
+    "source": "H",
+    "definition": "R_2327f056ad0db4ad",
+    "definition_registered_at": 2,
+    "slot": 4,
+    "seat_registered_at": 2,
+    "relation_id": "27ceaaa46af70ae9",
+    "name": "hold",
+    "history_count": 1,
+    "origin_kind": "ドア",
+    "direct_target": null,
+    "role_target": null,
+    "role_target_reason": "親が対応しない",
+    "door_id": "413a1b8c1446b92c",
+    "target_role": "no_destination",
+    "pre_sha256": "97f318e6e034ba875839d482dfa4688a3c8fcb3a7ac494c96caecbeaf33732f6"
+  },
+  "full_trial_census": true,
+  "requested_trials": 1740,
+  "predicate_names": [
+    "hold",
+    "hold_b"
+  ],
+  "door_seat_rule": "role_target==current_door_id OR alignment.relation_mapping[rid]==current_door_id (selcands.py:157)",
+  "unmapped_policy": "対応先なしは非ドア候補としてフラグを保存し、その他の対応先と分けて数える。元の席の種類も保存し、正式な非ドア判定と区別する。",
+  "task_instruction_assumption": "課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う",
+  "initial_state_note": "試行0のpreは未保存。現行の初期状態に定義はない。場面の関係は試行0も検査。",
+  "model_or_attention_updated": false,
+  "answers_or_learning_computed": false,
+  "elapsed_seconds": 51.03637816698756,
+  "artifacts": {
+    "seed002.flags.jsonl.gz": {
+      "bytes": 145295,
+      "sha256": "a9a9aaa5964adc369730a4dce867c7d8567431c665d8c811d17a79404f1dfc1f"
+    },
+    "seed002.trials.jsonl.gz": {
+      "bytes": 10442,
+      "sha256": "4a61443663755564842f044b68e7969c1bfe8667e6a358e383aacf054475e25b"
+    },
+    "seed002.locations.jsonl.gz": {
+      "bytes": 21761,
+      "sha256": "d82d1ba846c2643cb74f08c8aa4612973784753525d76bf19791341357eda6d9"
+    }
+  }
+}

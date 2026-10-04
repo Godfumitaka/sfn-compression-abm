@@ -1,0 +1,67 @@
+{
+  "stage": "A",
+  "passed": true,
+  "trials": 69600,
+  "code_commit": "fee6c8e0928ac62d83c712fbb2b234e0923fe635",
+  "worlds": {
+    "1": {
+      "trials": 34800,
+      "non_door_F": 0,
+      "non_door_H": 0,
+      "non_door_visible": 0,
+      "unmapped_F_door_origin": 6141,
+      "unmapped_H_door_origin": 212835,
+      "first_unmapped": {
+        "world": 1,
+        "seed": 1,
+        "trial": 3,
+        "source": "H",
+        "definition": "R_3229d75e4a4c2e0b",
+        "definition_registered_at": 2,
+        "slot": 4,
+        "seat_registered_at": 2,
+        "relation_id": "2e9b0b0186aa97fd",
+        "name": "hold",
+        "history_count": 1,
+        "origin_kind": "ドア",
+        "direct_target": null,
+        "role_target": null,
+        "role_target_reason": "親が対応しない",
+        "door_id": "c84d0a0f7de860ac",
+        "target_role": "no_destination",
+        "pre_sha256": "d18580a2e951947b083766e031bcf171d6815d386d1658b9936076e957c140a8"
+      }
+    },
+    "2": {
+      "trials": 34800,
+      "non_door_F": 0,
+      "non_door_H": 0,
+      "non_door_visible": 0,
+      "unmapped_F_door_origin": 35693,
+      "unmapped_H_door_origin": 269773,
+      "first_unmapped": {
+        "world": 2,
+        "seed": 1,
+        "trial": 4,
+        "source": "H",
+        "definition": "R_3229d75e4a4c2e0b",
+        "definition_registered_at": 2,
+        "slot": 4,
+        "seat_registered_at": 2,
+        "relation_id": "2e9b0b0186aa97fd",
+        "name": "hold",
+        "history_count": 1,
+        "origin_kind": "ドア",
+        "direct_target": null,
+        "role_target": null,
+        "role_target_reason": "親が対応しない",
+        "door_id": "12348a70a494dfa1",
+        "target_role": "no_destination",
+        "pre_sha256": "7c7cadd805db7ebb169490184ce212a83cfd024b01e0ecf764ff4c9638df5785"
+      }
+    }
+  },
+  "unmapped_policy": "対応先なしは非ドアへ写った席と断定せず別集計。全件、既存kind_ofでドア由来と確認。",
+  "task_instruction_assumption": "課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う",
+  "phase3_started": false
+}

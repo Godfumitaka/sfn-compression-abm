@@ -1,0 +1,70 @@
+"""段Aの全件集計をまとめる。対応先なしの扱いで合否を自動決定しない。"""
+from collections import Counter
+import csv
+import gzip
+import json
+from pathlib import Path
+
+JOB = Path(__file__).resolve().parent
+
+
+def main():
+    state = json.loads((JOB/'status.json').read_text())
+    assert state['status']=='complete_census'
+    rows = [json.loads(line) for line in (JOB/'summaries.jsonl').read_text().splitlines()]
+    assert len(rows)==40 and {(row['world'],row['seed']) for row in rows}=={(w,s) for w in (1,2) for s in range(1,21)}
+    total = {}
+    fields = set()
+    seed_rows = []
+    for world in (1,2):
+        counts = Counter()
+        marks = Counter()
+        first_assigned_non_door = None
+        first_unmapped = None
+        for row in rows:
+            if row['world'] != world:
+                continue
+            counts.update(row['counts'])
+            seed = row['seed']
+            seed_row = {'world':world,'seed':seed,**row['counts'],
+                        'unique_flagged_locations':row['unique_non_door_seat_name_locations']}
+            fields.update(seed_row)
+            seed_rows.append(seed_row)
+            location_path = JOB/'census'/f'n3_w{world}_A_L50'/f'seed{seed:03d}.locations.jsonl.gz'
+            location_occurrences = 0
+            with gzip.open(location_path,'rt',encoding='utf-8') as source:
+                for line in source:
+                    location = json.loads(line)
+                    flag = location['first_example']
+                    assert sum(location['destination_counts'].values())==location['occurrences']
+                    location_occurrences += location['occurrences']
+                    for destination,n in location['destination_counts'].items():
+                        marks[f'{flag["source"]}/{destination}/{flag.get("origin_kind","visible")}'] += n
+                    if flag['target_role'] == 'no_destination':
+                        key = (flag['seed'],flag['trial'],flag['source'],flag.get('definition',''),flag.get('slot',-1))
+                        old = ((first_unmapped['seed'],first_unmapped['trial'],first_unmapped['source'],
+                                first_unmapped.get('definition',''),first_unmapped.get('slot',-1)) if first_unmapped else None)
+                        if old is None or key < old:
+                            first_unmapped = flag
+                    if flag['target_role'] in ('other_destination','non_door_visible') and first_assigned_non_door is None:
+                        first_assigned_non_door = flag
+            assert location_occurrences==row['counts'].get('flags',0)
+        total[str(world)] = {'counts':dict(counts),'destination_and_origin':dict(marks),
+                             'first_assigned_non_door':first_assigned_non_door,'first_unmapped':first_unmapped}
+    result = {'worlds':total,'trials':sum(w['counts']['trials'] for w in total.values()),
+              'code_commit':state['code_commit'],'door_names':['hold','hold_b'],
+              'task_instruction_assumption':'課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う',
+              'unmapped_gate_decision':'対応先なしの別集計を保ち、この集計器だけで合否を決めない',
+              'aggregation_note':'全試行から保存したlocationsの出現回数を合算し、各種の試行別総フラグ件数と一致を検査。ドア由来IDの分類はdoor_idsの単調増加により後続でも維持される。',
+              'phaseB_started':False,'phase3_started':False}
+    (JOB/'aggregate.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    columns = ['world','seed']+sorted(fields-{'world','seed'})
+    with (JOB/'seed_counts.csv').open('w',newline='') as output:
+        writer=csv.DictWriter(output,fieldnames=columns,restval=0)
+        writer.writeheader()
+        writer.writerows(sorted(seed_rows,key=lambda row:(row['world'],row['seed'])))
+    print(json.dumps(result,ensure_ascii=False,indent=2))
+
+
+if __name__=='__main__':
+    main()

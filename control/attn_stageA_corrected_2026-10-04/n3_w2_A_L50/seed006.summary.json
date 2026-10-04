@@ -1,0 +1,68 @@
+{
+  "world": 2,
+  "seed": 6,
+  "counts": {
+    "visible_door_names": 1580,
+    "initial_pre_not_stored": 1,
+    "trials": 1740,
+    "stored_pre_states": 1739,
+    "mapped_definitions_with_door_names": 32734,
+    "H_door_name_occurrences": 28123,
+    "H_at_door": 14350,
+    "non_door_H": 13773,
+    "non_door_H_no_destination": 13773,
+    "flags": 16332,
+    "F_door_name_occurrences": 4611,
+    "non_door_F": 2559,
+    "non_door_F_no_destination": 2559,
+    "F_at_door": 2052
+  },
+  "unique_non_door_seat_name_locations": 110,
+  "first_example": {
+    "world": 2,
+    "seed": 6,
+    "trial": 3,
+    "source": "H",
+    "definition": "R_c9218d4e01f32519",
+    "definition_registered_at": 1,
+    "slot": 3,
+    "seat_registered_at": 1,
+    "relation_id": "43d85b0f6292ef21",
+    "name": "hold_b",
+    "history_count": 1,
+    "origin_kind": "ドア",
+    "direct_target": null,
+    "role_target": null,
+    "role_target_reason": "親が対応しない",
+    "door_id": "dc988f35b6a046ef",
+    "target_role": "no_destination",
+    "pre_sha256": "a7103e512b00c1584a4ab11c184429b554f12011b6821dcc5602d6a5a4067b48"
+  },
+  "full_trial_census": true,
+  "requested_trials": 1740,
+  "predicate_names": [
+    "hold",
+    "hold_b"
+  ],
+  "door_seat_rule": "role_target==current_door_id OR alignment.relation_mapping[rid]==current_door_id (selcands.py:157)",
+  "unmapped_policy": "対応先なしは非ドア候補としてフラグを保存し、その他の対応先と分けて数える。元の席の種類も保存し、正式な非ドア判定と区別する。",
+  "task_instruction_assumption": "課題の指示として本人にドアを問うことが伝えられているとみなし、held_out_is_doorを使う",
+  "initial_state_note": "試行0のpreは未保存。現行の初期状態に定義はない。場面の関係は試行0も検査。",
+  "model_or_attention_updated": false,
+  "answers_or_learning_computed": false,
+  "elapsed_seconds": 97.65346291597234,
+  "artifacts": {
+    "seed006.flags.jsonl.gz": {
+      "bytes": 189150,
+      "sha256": "bebf1913b4ca21267461b8b4d73225ec2485471006cbd741f097978a8c425f2e"
+    },
+    "seed006.trials.jsonl.gz": {
+      "bytes": 12521,
+      "sha256": "1b852de4d1a9d78783d5d14f8a574273e63d5f9896e29c5384b1112a9943327f"
+    },
+    "seed006.locations.jsonl.gz": {
+      "bytes": 28003,
+      "sha256": "8d7ef71476ffd4276e94fdd17669693b3234082cfb25e5da329bd7090fa26a53"
+    }
+  }
+}
