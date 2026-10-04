@@ -147,6 +147,12 @@ class Result:
 
 
 def _canonical(labels, edges):
+    # 乱数を使わない鍵の計算だけを控える。照合の結果と状態は省かない。
+    return _canonical_cached(tuple(labels), tuple(edges))
+
+
+@lru_cache(maxsize=128)
+def _canonical_cached(labels, edges):
     """名前を含まない色つき有向図の正準形。区別不能な色を個別化して全探索。
 
     順つき引数を辺の色で保つ。色の細分だけで同型と決めず、残った組を
