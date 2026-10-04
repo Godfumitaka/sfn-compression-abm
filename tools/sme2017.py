@@ -192,8 +192,10 @@ def _canonical(labels, edges):
 class Matcher:
     """同点専用の乱数と状態別の控えを持つ。世界の乱数は受け取らない。"""
 
-    def __init__(self, settings=Settings(), tie_seed=0):
+    def __init__(self, settings=Settings(), tie_seed=0, *, tie_uniform=False):
         self.settings = settings
+        if tie_uniform:
+            self.tie_uniform = True
         self.rng = random.Random(tie_seed)
         self.cache = {}
         self.self_cache = {}
@@ -227,6 +229,8 @@ class Matcher:
 
     def match_key(self, left, right, tie_seed=None):
         key = (VERSION, self.settings, left.fingerprint(), right.fingerprint())
+        if getattr(self, "tie_uniform", False):
+            key += ("tie-uniform-v1",)
         return key if tie_seed is None else key + ("call-seed-v1", tie_seed)
 
     def match(self, left, right, *, use_cache=True, tie_seed=None):
@@ -235,8 +239,10 @@ class Matcher:
             return self.cache[key]
         # 呼び出し種の旗では、他の照合の有無によらない局所の乱数を使う。
         rng = self.rng if tie_seed is None else random.Random(tie_seed)
-        rng_before = self._capture_rng_state() if tie_seed is None else {"policy": "call-seed-v1", "seed": tie_seed}
-        engine = _Engine(left, right, self.settings, rng)
+        rng_before = self._capture_rng_state() if tie_seed is None else {
+            "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
+        engine = _Engine(left, right, self.settings, rng,
+                         tie_uniform=getattr(self, "tie_uniform", False))
         result = engine.run()
         if use_cache:
             self.cache[key] = result
@@ -245,6 +251,8 @@ class Matcher:
 
     def self_score(self, graph, *, tie_seed=None):
         key = (VERSION, self.settings, graph.fingerprint())
+        if getattr(self, "tie_uniform", False):
+            key += ("tie-uniform-v1",)
         if tie_seed is not None:
             key += ("call-seed-v1", tie_seed)
         if key not in self.self_cache:
@@ -254,8 +262,9 @@ class Matcher:
 
 
 class _Engine:
-    def __init__(self, left, right, settings, rng):
+    def __init__(self, left, right, settings, rng, *, tie_uniform=False):
         self.left, self.right, self.s, self.rng = left, right, settings, rng
+        self.tie_uniform = tie_uniform
         self.lb, self.rb = left.by_id, right.by_id
         self.lh, self.rh = left.heights(), right.heights()
         self.mhs, self.index, self.memo, self.closures = [], {}, {}, {}
@@ -293,6 +302,15 @@ class _Engine:
         by_score = {}
         for value in set(values):
             by_score.setdefault(-scorer(value), []).append(value)
+        if self.tie_uniform:
+            out = []
+            for score in sorted(by_score):
+                tied = by_score[score]
+                if len(tied) > 1:
+                    self.rng.shuffle(tied)
+                    self.choices.append((phase, tuple(tuple(sorted(v)) for v in tied)))
+                out.extend(tied)
+            return out
         groups = {}
         for score, values_at_score in by_score.items():
             # 点だけで順が決まるものには、構造の同点の鍵を作らない。
@@ -388,7 +406,12 @@ class _Engine:
                 if child in members:
                     parents[child].append(i)
         heights = {i: max(self.lh[self.mhs[i].left], self.rh[self.mhs[i].right]) for i in members}
-        if any(heights[parent] <= heights[child] for child, got in parents.items() for parent in got):
+        if self.tie_uniform:
+            # 高さの降順だけを保ち、同じ高さを構造の鍵で優先しない。
+            queue = [next(iter(v)) for v in self._ordered(
+                [frozenset({i}) for i in members],
+                lambda v: heights[next(iter(v))], "score-height")]
+        elif any(heights[parent] <= heights[child] for child, got in parents.items() for parent in got):
             # 高さが親から子へ減らない入力には、元の順をそのまま使う。
             queue = sorted(members, key=lambda i: (-heights[i], self._key(frozenset({i}))))
         else:
@@ -546,7 +569,7 @@ class _Engine:
         tied = ()
         if candidates:
             at_best_score = tuple(i for i, c in enumerate(candidates) if c.score == candidates[0].score)
-            if len(at_best_score) <= 1:
+            if self.tie_uniform or len(at_best_score) <= 1:
                 tied = at_best_score
             else:
                 best_key = self._key(globals_[0])

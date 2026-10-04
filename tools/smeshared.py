@@ -213,7 +213,8 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
              "old_relation_mapping": dict(old.relation_mapping),
              "new_entity_mapping": em, "new_relation_mapping": rm}
     if seed is not None:
-        audit.update(tie_policy="call-seed-v1", tie_seed=seed, trial=CTX["trial"], call_kind=use)
+        audit.update(tie_policy="call-seed-uniform-v1" if CTX.get("tie_uniform") else "call-seed-v1",
+                     tie_seed=seed, trial=CTX["trial"], call_kind=use)
     projectable = sme._projectable_base_relation_ids(base_graph, target_graph_partial, em, rm,
                                                     sme._relation_ids(base_graph), sme._relation_ids(target_graph_partial))
     local = 0.0 if best is None else sum(p[2] for p in best.breakdown)
@@ -234,6 +235,21 @@ def _definition_choice(candidates, scene):
     # N3の同点では既存の席数・新しさを保ち、最後の名前順だけ構造に替える。
     first = max((r[6], r[5], r[2].registered_at) for r in candidates)
     tied = [r for r in candidates if (r[6], r[5], r[2].registered_at) == first]
+    if CTX.get("tie_uniform"):
+        forms = tuple(sorted(canonical_identity(GRAPHS[r[4].sme_audit["left"]]) for r in tied))
+        seed = call_seed(forms, canonical_identity(scene), "定義の選び")
+        token = ("definition", "call-seed-uniform-v1", seed,
+                 tuple((r[2].name, r[2].registered_at) for r in tied))
+        if token not in CHOICES:
+            pick = random.Random(seed).randrange(len(tied)) if len(tied) > 1 else 0
+            CHOICES[token] = (tied[pick][2].name, tied[pick][2].registered_at)
+        selected = CHOICES[token]
+        chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
+        _log({"kind": "sme_definition_tie", "version": VERSION,
+              "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
+              "tie_policy": "call-seed-uniform-v1", "tie_seed": seed, "trial": CTX["trial"],
+              "canonical_multiset": forms})
+        return chosen, len(tied) > 1
     keys = {id(r): structural_key(GRAPHS[r[4].sme_audit["left"]]) for r in tied}
     least = min(keys.values())
     tied = [r for r in tied if keys[id(r)] == least]
@@ -267,6 +283,20 @@ def choose_trace(ranked, scene):
     """逐語の場面選びにもID順を残さず、同じ状態の同点は同じ選択を戻す。"""
     first = max((m.alignment.total_score, tr.written_at) for m, tr in ranked)
     tied = [(m, tr) for m, tr in ranked if (m.alignment.total_score, tr.written_at) == first]
+    if CTX.get("tie_uniform"):
+        forms = tuple(sorted(canonical_identity(GRAPHS[m.alignment.sme_audit["left"]]) for m, tr in tied))
+        seed = call_seed(forms, canonical_identity(typed_graph(scene)), "逐語の選び")
+        token = ("trace", "call-seed-uniform-v1", seed,
+                 tuple((m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied))
+        if token not in CHOICES:
+            pick = random.Random(seed).randrange(len(tied)) if len(tied) > 1 else 0
+            CHOICES[token] = (tied[pick][0].alignment.sme_audit["left"], tied[pick][1].scene.graph_id)
+        selected = CHOICES[token]
+        _log({"kind": "sme_trace_tie", "version": VERSION,
+              "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
+              "selected": selected, "tie_policy": "call-seed-uniform-v1", "tie_seed": seed,
+              "trial": CTX["trial"], "canonical_multiset": forms})
+        return next(it for it in tied if (it[0].alignment.sme_audit["left"], it[1].scene.graph_id) == selected)
     keys = {id(tr): structural_key(GRAPHS[m.alignment.sme_audit["left"]]) for m, tr in tied}
     least = min(keys.values())
     tied = [(m, tr) for m, tr in tied if keys[id(tr)] == least]
@@ -339,7 +369,8 @@ def self_score(graph):
           "entity_mapping": () if best is None else best.entity_mapping,
           "relation_mapping": () if best is None else best.relation_mapping,
           "points": () if best is None else best.breakdown, "score": 0.0 if best is None else best.score,
-          **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"], "call_kind": "自己照合"}
+          **({"tie_policy": "call-seed-uniform-v1" if CTX.get("tie_uniform") else "call-seed-v1",
+              "tie_seed": seed, "trial": CTX["trial"], "call_kind": "自己照合"}
              if seed is not None else {})})
     return ENGINE.self_score(graph, tie_seed=seed)
 
@@ -356,16 +387,21 @@ def restore(snap):
         current.update(saved)
 
 
-def install(path, *, tie_seed, call_seed=False):
+def install(path, *, tie_seed, call_seed=False, tie_uniform=False):
     global ENGINE, OLD_MAP
     import abm.sme as sme
     import probeworld
     import v39
-    ENGINE = Matcher(Settings(), tie_seed=int.from_bytes(sha256(f"sme-tie\x1f{tie_seed}".encode()).digest(), "big"))
+    if tie_uniform and not call_seed:
+        raise ValueError("同点の一様抽選には呼び出しごとの種が必要")
+    ENGINE = Matcher(Settings(), tie_seed=int.from_bytes(sha256(f"sme-tie\x1f{tie_seed}".encode()).digest(), "big"),
+                     **({"tie_uniform": True} if tie_uniform else {}))
     OLD_MAP = sme.map_graphs
     for d in (RESULTS, GRAPHS, CHOICES, STATS, LOG, CTX):
         d.clear()
     CTX.update(call_seed=call_seed, run_seed=tie_seed, trial=0)
+    if tie_uniform:
+        CTX["tie_uniform"] = True
     if call_seed:
         import abm.loop as loop
         real_input = loop._agent_input
@@ -409,4 +445,5 @@ def close():
     if LOG.get("diagnostic_f") is not None:
         LOG["diagnostic_f"].close()
     return {"version": VERSION, "settings": asdict(ENGINE.settings), **STATS,
-            **({"tie_policy": "call-seed-v1"} if CTX.get("call_seed") else {})}
+            **({"tie_policy": "call-seed-uniform-v1" if CTX.get("tie_uniform") else "call-seed-v1"}
+               if CTX.get("call_seed") else {})}
