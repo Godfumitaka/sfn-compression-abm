@@ -1,0 +1,305 @@
+{
+  "pure_key_inputs": 110,
+  "cache_size_bound": 128,
+  "passed": true,
+  "bounds": [
+    {
+      "score_upper_fraction": "80796739042847837773/4611686018427387904",
+      "candidate_scores": [
+        0.09259999999999999,
+        0.0761
+      ]
+    },
+    {
+      "score_upper_fraction": "5068814783317984408125/4611686018427387904",
+      "candidate_scores": [
+        0.0985,
+        0.0846
+      ]
+    },
+    {
+      "score_upper_fraction": "1041088118659982841/576460752303423488",
+      "candidate_scores": [
+        0.051000000000000004,
+        0.0425
+      ]
+    }
+  ],
+  "canonical_reuse_counterexample": {
+    "left": {
+      "nodes": [
+        {
+          "key": "a",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "p",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "a"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "right": {
+      "nodes": [
+        {
+          "key": "b",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "c",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "q",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "b"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "r",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "c"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "left2": {
+      "nodes": [
+        {
+          "key": "d",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "s",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "d"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "right2": {
+      "nodes": [
+        {
+          "key": "e",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "f",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "t",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "e"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "u",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "f"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "same_structural_key": true,
+    "rng_changes_on_second_match": true,
+    "first_choices": [
+      [
+        "greedy-merge",
+        [
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      [
+        "greedy-merge",
+        [
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      [
+        "final",
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ]
+    ],
+    "second_choices": [
+      [
+        "greedy-merge",
+        [
+          [
+            2,
+            3
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      [
+        "greedy-merge",
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      [
+        "final",
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ]
+    ],
+    "second_match_cache_count": 2
+  },
+  "strict_pruning_record_counterexample": {
+    "left": {
+      "nodes": [
+        {
+          "key": "a",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "p",
+          "kind": "relation",
+          "names": [
+            "fold"
+          ],
+          "args": [
+            "a"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "right": {
+      "nodes": [
+        {
+          "key": "z",
+          "kind": "entity",
+          "names": [],
+          "args": [],
+          "state": "F",
+          "ubiquitous": false
+        },
+        {
+          "key": "v",
+          "kind": "relation",
+          "names": [
+            "different"
+          ],
+          "args": [
+            "z"
+          ],
+          "state": "F",
+          "ubiquitous": false
+        }
+      ]
+    },
+    "strict_SES_upper": "0",
+    "actual_SES": 0.0,
+    "result_still_saved": true,
+    "note": "対応が無い候補でもMatcher.cacheとcache_rngに結果が一件増える。省けば保存状態が違う。"
+  }
+}
