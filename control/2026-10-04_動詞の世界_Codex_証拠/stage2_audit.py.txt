@@ -1,0 +1,78 @@
+"""試走の完了・世界の研究用記録・試験の非学習だけを点検する。成績は集計しない。"""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import sys
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "source"))
+sys.path.insert(0, str(ROOT / "source/tools"))
+from verbworld import draw_verb, training_items
+
+ITEMS = training_items()
+
+COMMIT = "6408c7cfcf30f242e6be3aa43f646f440ad3195e"
+records = []
+for seed in (1, 2, 3):
+    folder = ROOT / "stage2" / f"pilot_s{seed}_5000"
+    resources = json.loads((folder / "resources.json").read_text())
+    assert resources["returncode"] == 0
+    manifest = [json.loads(line) for line in (folder / "run/manifest.jsonl").read_text().splitlines()]
+    assert len(manifest) == 1
+    manifest = manifest[0]
+    assert manifest["seed"] == seed
+    assert manifest["probeworld"] == {"rows": 2400, "fingerprint_checks": 50, "probes": 48}
+    ledger = next((folder / "run/ledgers").rglob("*.jsonl.gz"))
+    digest = hashlib.sha256()
+    n = 0
+    with gzip.open(ledger, "rb") as f:
+        header = json.loads(f.readline())
+        assert header["trial_count"] == 5000
+        assert header["code_commit"] == COMMIT
+        assert header["run_seed"] == seed
+        for t, line in enumerate(f):
+            digest.update(line)
+            row = json.loads(line)
+            verb = draw_verb(seed, t, items=ITEMS)
+            assert row["verb_name"] == verb.name
+            assert row["verb_class"] == verb.verb_class
+            assert row["correct_past"] == verb.past
+            assert 1 <= int(row["verb_name"][1:]) <= 40
+            held = row["held_out_content"]["predicate"]
+            assert row["held_out_is_past"] == (held == verb.past)
+            n += 1
+    assert n == 5000
+    probe_counts = {}
+    novel = 0
+    with next((folder / "run/side").rglob("*.probe.jsonl")).open() as f:
+        for line in f:
+            row = json.loads(line)
+            assert row["t"] in range(100, 5001, 100)
+            assert row["path"] == "0.0.0"
+            probe_counts[row["t"]] = probe_counts.get(row["t"], 0) + 1
+            if int(row["verb_name"][1:]) >= 41:
+                novel += 1
+                assert row["truth"] is None
+                assert row.get("oracle") is None
+                assert row.get("answer_is_truth") is None
+                assert row["exp_path_n"] == 0
+                assert row["verbatim_n"] == 0
+    assert set(probe_counts) == set(range(100, 5001, 100))
+    assert all(count == 48 for count in probe_counts.values())
+    assert novel == 400
+    files = {}
+    for path in sorted((folder / "run").rglob("*")):
+        if path.is_file():
+            dig = hashlib.sha256()
+            with path.open("rb") as f:
+                for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                    dig.update(chunk)
+            files[str(path.relative_to(folder))] = {"bytes": path.stat().st_size, "sha256": dig.hexdigest()}
+    records.append({"seed": seed, "trial_count": n, "world_metadata_matches_independent_draws": True,
+                    "no_novel_training_verbs": True, "probe_rows": sum(probe_counts.values()),
+                    "novel_probe_rows": novel, "state_fingerprint_checks": 50,
+                    "ledger_body_sha256": digest.hexdigest(), "files": files})
+out = ROOT / "stage2/audit.json"
+out.write_text(json.dumps({"commit": COMMIT, "seeds": records, "stage3_started": False}, ensure_ascii=False, indent=2) + "\n")
+print(json.dumps({"audit": str(out), "completed_seeds": [r["seed"] for r in records], "trials_per_seed": 5000}, ensure_ascii=False))
