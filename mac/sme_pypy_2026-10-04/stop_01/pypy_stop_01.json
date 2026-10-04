@@ -1,0 +1,92 @@
+{
+  "recorded_at": "2026-10-04T22:22:12.024520+09:00",
+  "baseline_code": "6e93e0bb0f289d5ed84fa4d18e623852ff207075",
+  "pypy_version": "8.0.0",
+  "python_language_version": "3.11.16",
+  "interpreter": "/opt/homebrew/Cellar/pypy3.11/8.0.0/bin/pypy3.11",
+  "installation": "Homebrew --ignore-dependencies --skip-link; cleanup・auto-update・installed-dependent check・upgradeを無効",
+  "install_reason": "通常のdry-runが既存readline/xzの更新を提案したため、CPythonの共有ライブラリを更新せずPyPyだけを追加",
+  "cpython_changed_fields": [],
+  "completed_runs": 1,
+  "required_runs": 13,
+  "completed_trials": 20,
+  "expanded_all_equal": false,
+  "first_difference": {
+    "record_trial": 1,
+    "human_trial": 2,
+    "ledger_body_line": 2,
+    "field": "deletion_event[0].R_bits[3]",
+    "cpython": 1.410454106748505,
+    "pypy": 1.4104541067485044,
+    "R": "R_f35c5fd29759b79e",
+    "slot_index": 0
+  },
+  "judgment_fields": [
+    "prediction_kind",
+    "predicted_edge",
+    "hit",
+    "R_used",
+    "abstain_reason"
+  ],
+  "judgment_different_trials": [],
+  "other_first_differences": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "line": 2,
+      "trial": null,
+      "human_trial": null,
+      "field": "$.deletion_event[0].R_bits[3]",
+      "cpython": "1.410454106748505",
+      "pypy": "1.4104541067485044"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+      "line": 2,
+      "trial": 10,
+      "human_trial": 11,
+      "field": "$.B_RU",
+      "cpython": "\"1.7449043451144322\"",
+      "pypy": "\"1.7449043451144317\""
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "line": 4,
+      "trial": 1,
+      "human_trial": 2,
+      "field": "JSONの字句（読み戻した値と型は同じ）",
+      "cpython": "\"{\\\"kind\\\": \\\"v310be\\\", \\\"trial\\\": 1, \\\"disclosed\\\": false, \\\"x_rows\\\": 4, \\\"N\\\": 0, \\\"lam\\\": 0.01873710622997919, \\\"chosen\\\": null, \\\"reg\\\": \\\"R_f35c5fd29759b79e\\\", \\\"K\\\": 4.986133260377794, \\\"r\\\": 3, \\\"dC_pred\\\": 106, \\\"dC_rea\"",
+      "pypy": "\"{\\\"kind\\\": \\\"v310be\\\", \\\"trial\\\": 1, \\\"disclosed\\\": false, \\\"x_rows\\\": 4, \\\"N\\\": 0, \\\"lam\\\": 0.01873710622997919, \\\"chosen\\\": null, \\\"reg\\\": \\\"R_f35c5fd29759b79e\\\", \\\"K\\\": 4.986133260377794, \\\"r\\\": 3, \\\"dC_pred\\\": 106, \\\"dC_rea\""
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+      "line": 1,
+      "trial": 1,
+      "human_trial": 2,
+      "field": "$.cand.n",
+      "cpython": "1.410454106748505",
+      "pypy": "1.4104541067485044"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+      "line": 1,
+      "trial": 1,
+      "human_trial": 2,
+      "field": "$.caller",
+      "cpython": "\"v39:predict\"",
+      "pypy": "\"v39:<listcomp>\""
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "line": 8,
+      "trial": 2,
+      "human_trial": 3,
+      "field": "$.output.fields.trace.items[0][1].fields.score_breakdown.items[0][1]",
+      "cpython": "0.0085",
+      "pypy": "0.008500000000000004"
+    }
+  ],
+  "stop_reason": "最初の小走行の展開した中身に不一致。残り12本・200試行の速度比較を実行しない",
+  "model_code_changed": false,
+  "claim_released_pid": 70726,
+  "200_trial_speed_run_started": false
+}
