@@ -1,0 +1,159 @@
+"""段A合格後、元N3の厳密な再選択を一本ずつ検査する。"""
+import datetime
+import importlib.util
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+from zoneinfo import ZoneInfo
+
+JOB = Path(__file__).resolve().parent
+BASE = JOB.parent
+SOURCE = BASE/'source'
+MATERIAL = BASE/'material_rebuild_2026-10-04'
+ROOTS = {1:BASE/'world1_rebuild/n3_w1_A_L50',2:MATERIAL/'n3_w2_A_L50'}
+PYTHON = '/opt/homebrew/bin/python3.12'
+state = {'status':'preparing','workers':1,'completed':{'1':[],'2':[]},
+         'phaseB_started':True,'phaseC_started':False,'phaseD_started':False,
+         'phase3_started':False,'seeds21_to40_read_or_run':False}
+child = None
+registered = False
+
+
+def stamp():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+
+
+def status(**changes):
+    state.update(changes)
+    state['time'] = stamp()
+    temporary = JOB/'status.tmp'
+    temporary.write_text(json.dumps(state,ensure_ascii=False,indent=2)+'\n')
+    temporary.replace(JOB/'status.json')
+
+
+def main():
+    global child, state, registered
+    if (JOB/'status.json').exists():
+        raise RuntimeError('既存の段B1の検査を上書き・再開しない')
+    status(status='waiting_for_materials')
+    while True:
+        material = json.loads((MATERIAL/'status.json').read_text())
+        if material['status'] == 'stopped':
+            raise RuntimeError('材料作成が停止したため全件集計を始めない')
+        if material['status'] == 'complete_materials':
+            break
+        time.sleep(15)
+    assert material['completed'] == {'1':list(range(1,21)),'2':list(range(1,21))}
+    state['code_commit'] = subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()
+    assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
+    machine_spec = importlib.util.spec_from_file_location('machine_control',BASE/'world1_rebuild_supervisor.py')
+    checks = importlib.util.module_from_spec(machine_spec)
+    machine_spec.loader.exec_module(checks)
+    checks.JOB, checks.stamp = JOB,stamp
+    guard_spec = importlib.util.spec_from_file_location('worker_count',BASE/'stageA_corrected_2026-10-04/workers.py')
+    guard = importlib.util.module_from_spec(guard_spec)
+    guard_spec.loader.exec_module(guard)
+    state['worker_count_policy'] = 'Python: spawn_main OR RSS>=100MB OR CPU>=20%; 小さい待機役とjobs.pyを除く。計算の子は低CPUや一時停止でも数える。'
+
+    def machine(purpose,group=None):
+        checks.machine(purpose,group=group)
+        workers = guard.external_workers(group)
+        record = {'time':stamp(),'external_worker_count':len(workers),'external_workers':workers,
+                  'child_group':group,'controller_pid':os.getpid()}
+        with (JOB/'priority.jsonl').open('a') as output:
+            output.write(json.dumps(record,ensure_ascii=False)+'\n')
+        return len(workers)
+
+    gate = json.loads((BASE/'stageA_corrected_2026-10-04/stageA_gate.json').read_text())
+    assert gate['passed'] and gate['trials']==69600
+    proof = json.loads((BASE/'stageB1_2026-10-04/trial022_same_sort_check.json').read_text())
+    assert proof['all_fields_bytes_identical_after_same_sort']
+    state['resume_authorization'] = '2026-10-04：復元指紋は記録だけ。回答不一致で停止。'
+    state['trial022_sorting_check'] = proof
+    machine('段B1再開の全件検査の開始前')
+    for world in (1,2):
+        for seed in range(1,21):
+            if seed in state['completed'][str(world)]:
+                continue
+            while True:
+                if machine(f'世界{world}・種{seed}の段B1検査前') >= 4:
+                    status(status='waiting_for_slot',current_world=world,current_seed=seed)
+                    time.sleep(30)
+                    continue
+                if not registered:
+                    # 自分の親PIDの子孫だけを登録。SME側に未登録の計算と扱わせない。
+                    request = subprocess.run([PYTHON,'/Users/tatsu-admin/jobs/jobs.py','claim',
+                        '--owner','Codex2 注意の選択 段B1','--mem','1.0','--pid',str(os.getpid()),
+                        '--cmd','固定記憶のN3再生、並列1、種1〜20のみ'],capture_output=True,text=True)
+                    with (JOB/'registration.jsonl').open('a') as output:
+                        output.write(json.dumps({'time':stamp(),'exit_code':request.returncode,
+                                                 'stdout':request.stdout,'stderr':request.stderr},ensure_ascii=False)+'\n')
+                    if request.returncode:
+                        status(status='waiting_for_resource_registration',current_world=world,current_seed=seed)
+                        time.sleep(30)
+                        continue
+                    registered = True
+                break
+            command = [PYTHON,'tools/attnreplay.py','--verify-baseline','--root',str(ROOTS[world]),
+                       '--seed',str(seed),'--output',str(JOB/'replay')]
+            with (JOB/'commands.jsonl').open('a') as output:
+                output.write(json.dumps({'world':world,'seed':seed,'command':command,'cwd':str(SOURCE)},ensure_ascii=False)+'\n')
+            with (JOB/f'w{world}_seed{seed:03d}.log').open('w') as output:
+                child = subprocess.Popen(command,cwd=SOURCE,stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
+                status(status='running',current_world=world,current_seed=seed,child_pid=child.pid)
+                print(stamp(),f'段B1：世界{world}・種{seed}、全1740試行の厳密な再選択検査開始',flush=True)
+                paused = False
+                while child.poll() is None:
+                    time.sleep(15)
+                    count = machine(f'世界{world}・種{seed}の段B1検査中',group=child.pid)
+                    # 待機や機械点検の間に終了した子へSIGSTOPを送らない。
+                    if child.poll() is not None:
+                        break
+                    if count >= 4 and not paused:
+                        child.send_signal(signal.SIGSTOP)
+                        paused = True
+                        status(status='paused_for_sme_priority')
+                    elif count < 4 and paused:
+                        child.send_signal(signal.SIGCONT)
+                        paused = False
+                        status(status='running')
+            if child.returncode:
+                raise RuntimeError(f'世界{world}・種{seed}の段B1検査の終了値={child.returncode}')
+            child = None
+            result = json.loads((JOB/'replay'/ROOTS[world].name/f'seed{seed:03d}.baseline.check.json').read_text())
+            assert result['full_census'] and result['trials_compared']==1740 and result['answers_match']
+            with (JOB/'summaries.jsonl').open('a') as output:
+                output.write(json.dumps(result,ensure_ascii=False)+'\n')
+            state['completed'][str(world)].append(seed)
+            status(status='collected',child_pid=None)
+            print(stamp(),f'世界{world}・種{seed}：1740試行の全回答が一致',flush=True)
+    machine('段B1全40種の検査終了後')
+    status(status='complete_baseline_gate',child_pid=None,finished_at=stamp())
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except BaseException as error:
+        if child is not None and child.poll() is None:
+            child.send_signal(signal.SIGCONT)
+            child.terminate()
+            try:
+                child.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                child.kill()
+                child.wait()
+        status(status='stopped',child_pid=None,error=repr(error))
+        raise
+
+    finally:
+        if registered:
+            release = subprocess.run([PYTHON,'/Users/tatsu-admin/jobs/jobs.py','release',
+                                      '--pid',str(os.getpid())],capture_output=True,text=True)
+            with (JOB/'registration.jsonl').open('a') as output:
+                output.write(json.dumps({'time':stamp(),'release_exit_code':release.returncode,
+                                         'stdout':release.stdout,'stderr':release.stderr},ensure_ascii=False)+'\n')
