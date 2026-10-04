@@ -1,0 +1,91 @@
+{
+  "all_equal": true,
+  "records": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz",
+      "equal": true,
+      "old_sha256": "dcfa1fee1aef0e2d5b53a57e49100ccaf32e7f24f49dcefb71b58d4d0bd0f6f9",
+      "new_sha256": "dcfa1fee1aef0e2d5b53a57e49100ccaf32e7f24f49dcefb71b58d4d0bd0f6f9",
+      "old_bytes": 1170894,
+      "new_bytes": 1170894
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.answers.csv",
+      "equal": true,
+      "old_sha256": "aa84f27bcbaeba70db0ea705aa756dcf49d58ffc7aba41494bb0cc4506d9740a",
+      "new_sha256": "aa84f27bcbaeba70db0ea705aa756dcf49d58ffc7aba41494bb0cc4506d9740a",
+      "old_bytes": 3061,
+      "new_bytes": 3061
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.cflearn.jsonl",
+      "equal": true,
+      "old_sha256": "82901b9f197c57fef022769de08f5ce28501dedf12639c0cac73311ff6eb406b",
+      "new_sha256": "82901b9f197c57fef022769de08f5ce28501dedf12639c0cac73311ff6eb406b",
+      "old_bytes": 19557,
+      "new_bytes": 19557
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl",
+      "equal": true,
+      "old_sha256": "83adcbd4e6774578c0e1984f369afc415fec3c57d82b0c83473f33813d352d48",
+      "new_sha256": "83adcbd4e6774578c0e1984f369afc415fec3c57d82b0c83473f33813d352d48",
+      "old_bytes": 127300,
+      "new_bytes": 127300
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.routing.jsonl",
+      "equal": true,
+      "old_sha256": "ab4cef7782b09432bba746c881c970155f3052f0a7a8cbf5f13fe1fa037b3975",
+      "new_sha256": "ab4cef7782b09432bba746c881c970155f3052f0a7a8cbf5f13fe1fa037b3975",
+      "old_bytes": 166553,
+      "new_bytes": 166553
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.shop.jsonl",
+      "equal": true,
+      "old_sha256": "989100f0880affaccc92a1ea7641bec874a13d4b9b62d2e65ef9e271a0db0bdd",
+      "new_sha256": "989100f0880affaccc92a1ea7641bec874a13d4b9b62d2e65ef9e271a0db0bdd",
+      "old_bytes": 3564,
+      "new_bytes": 3564
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.diagnostics.jsonl.gz",
+      "equal": true,
+      "old_sha256": "0be1189bd568e38d2ad8a1db2941794a52a1ee05fa8c2113d2c3d178662f38bf",
+      "new_sha256": "0be1189bd568e38d2ad8a1db2941794a52a1ee05fa8c2113d2c3d178662f38bf",
+      "old_bytes": 1039639,
+      "new_bytes": 1039639
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.jsonl.gz",
+      "equal": true,
+      "old_sha256": "e7b007747fd6432861c0897d18015e9373130654ad60bc0690fc964975276cd3",
+      "new_sha256": "e7b007747fd6432861c0897d18015e9373130654ad60bc0690fc964975276cd3",
+      "old_bytes": 331623,
+      "new_bytes": 331623
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+      "equal": true,
+      "old_sha256": "0fbcb9299e9b31069ed1ce31f278bb231cb177b447a7256cfe09d75a3622f7ba",
+      "new_sha256": "0fbcb9299e9b31069ed1ce31f278bb231cb177b447a7256cfe09d75a3622f7ba",
+      "old_bytes": 1232686,
+      "new_bytes": 1232686
+    },
+    {
+      "file": "tie_rng.jsonl",
+      "equal": true,
+      "old_sha256": "082612b7cc8a2fda3c6ddb45067b2ce10472b4b59796fe95285c47fec341ee31",
+      "new_sha256": "082612b7cc8a2fda3c6ddb45067b2ce10472b4b59796fe95285c47fec341ee31",
+      "old_bytes": 148536,
+      "new_bytes": 148536
+    }
+  ],
+  "exclusions": [
+    "台帳の見出し一行",
+    "cflearn/cfvalueのsec_trialの数値。各行の他のバイトは全て比較"
+  ],
+  "saved_state_file": "side/**/seed*.sme.states.jsonl.gz",
+  "timings_file": "performance.jsonlとmanifestは時間の報告用として別記"
+}

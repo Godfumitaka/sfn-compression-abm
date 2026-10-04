@@ -1,0 +1,168 @@
+{
+  "recorded_at": "2026-10-04T21:42:30.521665+09:00",
+  "stage": "段1d・1e",
+  "run_completed": true,
+  "full_trial_count": 1740,
+  "run_result": {
+    "exit": 0,
+    "wall_seconds": 5495.287670124992
+  },
+  "small_runs_all_byte_equal": 13,
+  "required_small_runs": 13,
+  "full_comparison_performed": false,
+  "full_gate_passed": false,
+  "output_difference_found": null,
+  "stop_reason": "全走行終了後、比較前の空き20GiB確認でAssertionError。比較本体は未実行",
+  "comparator_exit": 1,
+  "free_bytes_at_report": 20930560000,
+  "required_start_free_bytes": 21474836480,
+  "last_resource_sample": {
+    "time": "2026-10-04T21:37:13.915400+09:00",
+    "free_bytes": 20935675904,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 348.19
+  },
+  "minimum_sampled_free_bytes_during_run": 20935675904,
+  "thermal_warning_samples": 0,
+  "swap_increase_samples": 0,
+  "old_manifest": {
+    "code_commit": "6e93e0bb0f289d5ed84fa4d18e623852ff207075",
+    "trial_count": 1740,
+    "elapsed_sec": 3851.68,
+    "peak_rss_mb": 2486.6,
+    "finished_at": "2026-10-04T03:12:34Z",
+    "world_hash": "68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1",
+    "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1"
+  },
+  "new_manifest": {
+    "code_commit": "2a82dc19d772cd5f3d421121bc22f33d94a466e8",
+    "trial_count": 1740,
+    "elapsed_sec": 5486.51,
+    "peak_rss_mb": 2664.7,
+    "finished_at": "2026-10-04T12:37:08Z",
+    "world_hash": "68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1",
+    "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1"
+  },
+  "observed_old_over_new_elapsed_ratio": 0.7020273361390027,
+  "observed_old_over_new_outer_wall_ratio": 0.701813386852645,
+  "new_peak_rss_bytes": 2664562688,
+  "old_load": {
+    "sample_count": 129,
+    "first": "2026-10-04T11:08:22.443190+09:00",
+    "last": "2026-10-04T12:12:29.527231+09:00",
+    "min_cpu_python_count": 1,
+    "max_cpu_python_count": 4,
+    "count_frequency": {
+      "1": 29,
+      "2": 21,
+      "3": 45,
+      "4": 34
+    }
+  },
+  "new_load": {
+    "sample_count": 167,
+    "first": "2026-10-04T20:13:54.574418+09:00",
+    "last": "2026-10-04T21:37:05.374784+09:00",
+    "min_cpu_python_count": 1,
+    "max_cpu_python_count": 13,
+    "count_frequency": {
+      "1": 1,
+      "2": 19,
+      "3": 1,
+      "4": 11,
+      "5": 17,
+      "6": 3,
+      "7": 32,
+      "8": 3,
+      "9": 17,
+      "11": 60,
+      "12": 2,
+      "13": 1
+    }
+  },
+  "load_count_definition": {
+    "old": "CPU使用率20%より大きいPython。実行ファイル名をPython/python3.12/python3に限定",
+    "new": "CPU使用率25%以上で実行ファイル名にpythonを含むPython",
+    "comparison_limit": "測定の閾値・時刻・当時の同時処理が異なる。直接の速度の倍率として扱わない"
+  },
+  "trial_bins": [
+    {
+      "trial_first": 1,
+      "trial_last": 200,
+      "mean_seconds": 0.8310162056445551,
+      "median_seconds": 0.7255632710002828,
+      "max_seconds": 4.635240207979223,
+      "peak_rss_bytes": 270254080
+    },
+    {
+      "trial_first": 201,
+      "trial_last": 400,
+      "mean_seconds": 2.497120048760262,
+      "median_seconds": 2.347480374999577,
+      "max_seconds": 6.655284207983641,
+      "peak_rss_bytes": 647692288
+    },
+    {
+      "trial_first": 401,
+      "trial_last": 600,
+      "mean_seconds": 4.962778104550089,
+      "median_seconds": 4.62938627100084,
+      "max_seconds": 13.06922845801455,
+      "peak_rss_bytes": 927875072
+    },
+    {
+      "trial_first": 601,
+      "trial_last": 800,
+      "mean_seconds": 4.991604734389402,
+      "median_seconds": 4.415352666488616,
+      "max_seconds": 31.85372250000364,
+      "peak_rss_bytes": 1268514816
+    },
+    {
+      "trial_first": 801,
+      "trial_last": 1000,
+      "mean_seconds": 4.15387322455892,
+      "median_seconds": 3.692429083486786,
+      "max_seconds": 12.548275083012413,
+      "peak_rss_bytes": 1533067264
+    },
+    {
+      "trial_first": 1001,
+      "trial_last": 1200,
+      "mean_seconds": 2.5868102452198216,
+      "median_seconds": 2.2692474170034984,
+      "max_seconds": 8.151167999982135,
+      "peak_rss_bytes": 1884766208
+    },
+    {
+      "trial_first": 1201,
+      "trial_last": 1400,
+      "mean_seconds": 2.7718475225348085,
+      "median_seconds": 2.6144841664790874,
+      "max_seconds": 7.034423167002387,
+      "peak_rss_bytes": 2117025792
+    },
+    {
+      "trial_first": 1401,
+      "trial_last": 1600,
+      "mean_seconds": 2.736735093353054,
+      "median_seconds": 2.4176662914978806,
+      "max_seconds": 9.335203958995407,
+      "peak_rss_bytes": 2437857280
+    },
+    {
+      "trial_first": 1601,
+      "trial_last": 1740,
+      "mean_seconds": 2.6797383594921222,
+      "median_seconds": 2.2938596040185075,
+      "max_seconds": 7.971284916013246,
+      "peak_rss_bytes": 2664562688
+    }
+  ],
+  "source_sha256": "45fe8b9656e0628b34923ac12ffc2e3df20f776f8b7e9f0839903bc8fab14b22",
+  "files_preserved": true,
+  "claim_released_pid": 51338,
+  "production_runs_started": 0,
+  "eight_agent_runs_started": 0
+}

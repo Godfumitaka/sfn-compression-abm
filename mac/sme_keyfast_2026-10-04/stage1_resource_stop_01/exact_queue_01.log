@@ -1,0 +1,36 @@
+受け付けた：PID 51338、担当 SME鍵全バイト検査Codex、見込み 5.2 GB（表の合計 18.2 / 24 GB）。スワップは直近 10 分で増えていない（348.2 MB → 今 348.2 MB）
+stage3_learning_01_A {'exit': 0, 'wall_seconds': 9.577641709009185}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_01_A/comparison.json True
+stage3_learning_01_A_diagnostics {'exit': 0, 'wall_seconds': 23.707265665987507}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_01_A_diagnostics/comparison.json True
+stage3_learning_01_C {'exit': 0, 'wall_seconds': 16.254057042009663}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_01_C/comparison.json True
+stage3_learning_01_D {'exit': 0, 'wall_seconds': 8.574790209007915}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_01_D/comparison.json True
+stage3_learning_02_A {'exit': 0, 'wall_seconds': 8.80769537499873}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_02_A/comparison.json True
+stage3_learning_02_A_diagnostics {'exit': 0, 'wall_seconds': 21.67242429201724}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_02_A_diagnostics/comparison.json True
+stage3_learning_02_C {'exit': 0, 'wall_seconds': 15.936508834012784}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_02_C/comparison.json True
+stage3_learning_02_D {'exit': 0, 'wall_seconds': 6.945555833022809}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_02_D/comparison.json True
+stage3_learning_03_A {'exit': 0, 'wall_seconds': 8.05938737501856}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_03_A/comparison.json True
+stage3_learning_03_A_diagnostics {'exit': 0, 'wall_seconds': 20.35639808300766}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_03_A_diagnostics/comparison.json True
+stage3_learning_03_A_zero_s1 {'exit': 0, 'wall_seconds': 8.20218887500232}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_03_A_zero_s1/comparison.json True
+stage3_learning_03_A_zero_s2 {'exit': 0, 'wall_seconds': 7.298092416982399}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_learning_03_A_zero_s2/comparison.json True
+stage3_resume_01_A_seed2 {'exit': 0, 'wall_seconds': 6.942540082993219}
+/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/exact_small_01/stage3_resume_01_A_seed2/comparison.json True
+exact_full_01 {'exit': 0, 'wall_seconds': 5495.287670124992}
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/run_exact.py", line 19, in <module>
+    compare(Path(item['reference'])/'output',folder/'output',folder/'comparison.json')
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_keyfast_2026-10-04/verify_exact.py", line 30, in compare
+    assert shutil.disk_usage(ROOT).free>=20*2**30,'比較前の空き20GiB未満'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 比較前の空き20GiB未満
+消した：PID 51338
