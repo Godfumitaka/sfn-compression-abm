@@ -46,3 +46,20 @@ def test_final_answer_and_vote_do_not_change_weights_candidates_or_finish():
     frame['door_task'] = False
     assert M.static_answer(frame, candidates, weights, 1)[0] is frame['baseline']
     assert M.vote(frame, candidates, weights, 1) is None
+
+
+def test_tables_keep_denominators_two_door_conditioning_and_seed_counts():
+    from collections import Counter, defaultdict
+    import attnaggregate as G
+    import attnsummary as S
+    counts = defaultdict(Counter)
+    counts[(2, 1, 5., .05, '甲', 'exception')].update(exception_door=4, normal_door=1, other_name=2, silent=3, hold=1, hold_b=4)
+    counts[(2, 1, 5., .05, '甲', 'normal')].update(exception_door=2, normal_door=6, other_name=1, silent=1, hold=6, hold_b=2)
+    keys = ('world', 'arm', 'beta', 'eta', 'shop', 'day')
+    rows = list(S.response_rows(counts, keys))
+    assert all(r['total'] == 10 for r in rows)
+    signal = next(S.signal_rows(counts, keys))
+    assert signal['hit_rate'] == .8 and signal['false_alarm_rate'] == .25
+    assert signal['excluded_signal_silence'] == 3 and signal['excluded_signal_other'] == 2
+    pooled = G.fold([{'world': '2', 'seed': str(s), 'correct': str(s), 'wrong': '2', 'silent': '0'} for s in (1, 2)], ('world',), S.OUTCOMES)
+    assert pooled[('2',)] == {'correct': 3, 'wrong': 4, 'silent': 0}
