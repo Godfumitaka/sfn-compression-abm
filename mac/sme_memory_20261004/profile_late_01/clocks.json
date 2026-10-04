@@ -1,0 +1,14 @@
+{
+  "time": {
+    "implementation": "clock_gettime(CLOCK_REALTIME)",
+    "monotonic": false,
+    "adjustable": true,
+    "resolution": 1.0000000000000002e-06
+  },
+  "perf_counter": {
+    "implementation": "mach_absolute_time()",
+    "monotonic": true,
+    "adjustable": false,
+    "resolution": 4.166666666666667e-08
+  }
+}

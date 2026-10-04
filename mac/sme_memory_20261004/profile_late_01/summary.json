@@ -1,0 +1,499 @@
+{
+  "source_commit": "869a2496dbe2ab0963ce7eaf3560719af58cd263",
+  "trial_count": 1740,
+  "late_trial_count": 241,
+  "cprofile_total_seconds": 1173.2829837070003,
+  "late_interval_seconds": 1177.642252118676,
+  "whole_supervisor_wall_seconds": 4617.281925874995,
+  "whole_manifest_elapsed_seconds": 5491.85,
+  "peak_rss_mb_including_size_observer": 10337.1,
+  "profile": {
+    "wall_seconds": 4611.075658791,
+    "deep_measure_seconds": 107.60538649998489,
+    "human_trial_numbers": [
+      1500,
+      1740
+    ],
+    "ledger_trial_indexes": [
+      1499,
+      1739
+    ],
+    "profile_scope": "後半241試行、模型と本体の記録、観測の書出しと大きさの測定を除く",
+    "size_scope": "各控え単独の到達可能なPythonのバイト数、列を足すと共有を二重に数える",
+    "rss_scope": "大きさの観測用に一時的に使ったメモリを含む"
+  },
+  "late_blocks": [
+    {
+      "first": 1500,
+      "last": 1559,
+      "trials": 60,
+      "sum_seconds": 255.99428862487548,
+      "mean_seconds": 4.266571477081258,
+      "median_seconds": 4.025678749982035,
+      "min_seconds": 2.766842750017531,
+      "max_seconds": 6.471182708017295,
+      "cache_count": 73493,
+      "self_cache_count": 2203,
+      "cache_rng_count": 73493
+    },
+    {
+      "first": 1560,
+      "last": 1619,
+      "trials": 60,
+      "sum_seconds": 303.3612917479186,
+      "mean_seconds": 5.056021529131977,
+      "median_seconds": 4.7636867920082295,
+      "min_seconds": 3.0461544579884503,
+      "max_seconds": 7.900621708016843,
+      "cache_count": 76551,
+      "self_cache_count": 2283,
+      "cache_rng_count": 76551
+    },
+    {
+      "first": 1620,
+      "last": 1679,
+      "trials": 60,
+      "sum_seconds": 307.6131328299234,
+      "mean_seconds": 5.12688554716539,
+      "median_seconds": 4.698381270500249,
+      "min_seconds": 2.9655702910094988,
+      "max_seconds": 10.827184624999063,
+      "cache_count": 79569,
+      "self_cache_count": 2361,
+      "cache_rng_count": 79569
+    },
+    {
+      "first": 1680,
+      "last": 1740,
+      "trials": 61,
+      "sum_seconds": 310.6735389159585,
+      "mean_seconds": 5.093008834687844,
+      "median_seconds": 4.438546707999194,
+      "min_seconds": 3.4454661249765195,
+      "max_seconds": 11.629230125021422,
+      "cache_count": 82606,
+      "self_cache_count": 2445,
+      "cache_rng_count": 82606
+    }
+  ],
+  "cache_sizes": [
+    {
+      "trial": 1499,
+      "trial_number": 1500,
+      "model_seconds": 3.0350867499946617,
+      "profiled": true,
+      "peak_rss_before_measure_bytes": 3735093248,
+      "cache_count": 70615,
+      "cache_shallow_bytes": 2621528,
+      "self_cache_count": 2114,
+      "self_cache_shallow_bytes": 73808,
+      "cache_rng_count": 70615,
+      "cache_rng_shallow_bytes": 2621528,
+      "cache_deep_bytes": 857156441,
+      "self_cache_deep_bytes": 482122,
+      "cache_rng_deep_bytes": 1750192186,
+      "deep_measure_seconds": 35.43274283298524,
+      "peak_rss_after_measure_bytes": 9570451456
+    },
+    {
+      "trial": 1619,
+      "trial_number": 1620,
+      "model_seconds": 4.238460665976163,
+      "profiled": true,
+      "peak_rss_before_measure_bytes": 9570451456,
+      "cache_count": 76601,
+      "cache_shallow_bytes": 2621528,
+      "self_cache_count": 2284,
+      "self_cache_shallow_bytes": 73808,
+      "cache_rng_count": 76601,
+      "cache_rng_shallow_bytes": 2621528,
+      "cache_deep_bytes": 932427805,
+      "self_cache_deep_bytes": 514932,
+      "cache_rng_deep_bytes": 1898296626,
+      "deep_measure_seconds": 38.36425099999178,
+      "peak_rss_after_measure_bytes": 9921888256
+    },
+    {
+      "trial": 1739,
+      "trial_number": 1740,
+      "model_seconds": 5.849913042009575,
+      "profiled": true,
+      "peak_rss_before_measure_bytes": 9921888256,
+      "cache_count": 82606,
+      "cache_shallow_bytes": 2621528,
+      "self_cache_count": 2445,
+      "self_cache_shallow_bytes": 73808,
+      "cache_rng_count": 82606,
+      "cache_rng_shallow_bytes": 2621528,
+      "cache_deep_bytes": 1011451787,
+      "self_cache_deep_bytes": 546005,
+      "cache_rng_deep_bytes": 2046855316,
+      "deep_measure_seconds": 33.808392667007865,
+      "peak_rss_after_measure_bytes": 10337058816
+    }
+  ],
+  "functions_own_top20": [
+    {
+      "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 187965644,
+      "total_calls": 187965644,
+      "own_seconds": 231.02845187100002,
+      "cumulative_seconds": 231.02845187100002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.sorted>",
+      "primitive_calls": 195019190,
+      "total_calls": 327625878,
+      "own_seconds": 112.95772639,
+      "cumulative_seconds": 518.5426554200001
+    },
+    {
+      "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 187954482,
+      "total_calls": 187954482,
+      "own_seconds": 106.601620986,
+      "cumulative_seconds": 479.015455485
+    },
+    {
+      "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 187965644,
+      "total_calls": 187965644,
+      "own_seconds": 84.868474868,
+      "cumulative_seconds": 350.91273073300005
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 161,
+      "function": "ranks",
+      "primitive_calls": 2487935,
+      "total_calls": 2487935,
+      "own_seconds": 68.118191819,
+      "cumulative_seconds": 536.108654641
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 166,
+      "function": "refine",
+      "primitive_calls": 646657,
+      "total_calls": 646657,
+      "own_seconds": 56.688345718,
+      "cumulative_seconds": 723.265780422
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 168,
+      "function": "<genexpr>",
+      "primitive_calls": 363296929,
+      "total_calls": 363296929,
+      "own_seconds": 55.937619816,
+      "cumulative_seconds": 55.937619816
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 169,
+      "function": "<genexpr>",
+      "primitive_calls": 363296929,
+      "total_calls": 363296929,
+      "own_seconds": 54.0444898,
+      "cumulative_seconds": 54.0444898
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.isinstance>",
+      "primitive_calls": 555665666,
+      "total_calls": 556023334,
+      "own_seconds": 35.031940312,
+      "cumulative_seconds": 39.700129385000004
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/smereplay.py",
+      "line": 44,
+      "function": "encode",
+      "primitive_calls": 1687,
+      "total_calls": 60265496,
+      "own_seconds": 30.699845971000002,
+      "cumulative_seconds": 56.361105929000004
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 205,
+      "function": "restore",
+      "primitive_calls": 11707,
+      "total_calls": 11707,
+      "own_seconds": 25.959899176,
+      "cumulative_seconds": 26.037734314
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 241,
+      "function": "_key",
+      "primitive_calls": 505065,
+      "total_calls": 505065,
+      "own_seconds": 22.364886603000002,
+      "cumulative_seconds": 911.639554369
+    },
+    {
+      "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+      "line": 105,
+      "function": "__init__",
+      "primitive_calls": 187954241,
+      "total_calls": 187954241,
+      "own_seconds": 21.553107574000002,
+      "cumulative_seconds": 21.553107574000002
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/probeworld.py",
+      "line": 37,
+      "function": "_snapshot_modules",
+      "primitive_calls": 11707,
+      "total_calls": 11707,
+      "own_seconds": 18.402982238,
+      "cumulative_seconds": 19.999239300000003
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 149,
+      "function": "_canonical",
+      "primitive_calls": 383689,
+      "total_calls": 383689,
+      "own_seconds": 17.863014637000003,
+      "cumulative_seconds": 880.962104346
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'compress' of 'zlib.Compress' objects>",
+      "primitive_calls": 12192,
+      "total_calls": 12192,
+      "own_seconds": 15.887629175,
+      "cumulative_seconds": 15.887629175
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 202,
+      "function": "snapshot",
+      "primitive_calls": 11707,
+      "total_calls": 11707,
+      "own_seconds": 14.89217464,
+      "cumulative_seconds": 15.014465787
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 174,
+      "function": "search",
+      "primitive_calls": 383689,
+      "total_calls": 646657,
+      "own_seconds": 14.830480027,
+      "cumulative_seconds": 784.129566143
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'append' of 'list' objects>",
+      "primitive_calls": 196303118,
+      "total_calls": 196303118,
+      "own_seconds": 13.135888566,
+      "cumulative_seconds": 13.135888566
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'str' objects>",
+      "primitive_calls": 188198241,
+      "total_calls": 188198241,
+      "own_seconds": 12.751924128,
+      "cumulative_seconds": 12.752852068000001
+    }
+  ],
+  "functions_cumulative_top20": [
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/smeshared.py",
+      "line": 151,
+      "function": "map_graphs",
+      "primitive_calls": 18758,
+      "total_calls": 18758,
+      "own_seconds": 0.9961482620000001,
+      "cumulative_seconds": 1031.6537606040001
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 212,
+      "function": "match",
+      "primitive_calls": 17043,
+      "total_calls": 17043,
+      "own_seconds": 0.128357984,
+      "cumulative_seconds": 935.684999715
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 469,
+      "function": "run",
+      "primitive_calls": 12039,
+      "total_calls": 12039,
+      "own_seconds": 1.856032061,
+      "cumulative_seconds": 933.422626482
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 359,
+      "function": "_scores",
+      "primitive_calls": 34153,
+      "total_calls": 34153,
+      "own_seconds": 3.218749008,
+      "cumulative_seconds": 917.386739141
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 241,
+      "function": "_key",
+      "primitive_calls": 505065,
+      "total_calls": 505065,
+      "own_seconds": 22.364886603000002,
+      "cumulative_seconds": 911.639554369
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 149,
+      "function": "_canonical",
+      "primitive_calls": 383689,
+      "total_calls": 383689,
+      "own_seconds": 17.863014637000003,
+      "cumulative_seconds": 880.962104346
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/smereplay.py",
+      "line": 106,
+      "function": "predict",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 0.030839982000000002,
+      "cumulative_seconds": 851.708101328
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/answerlog.py",
+      "line": 168,
+      "function": "predict",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 0.002170959,
+      "cumulative_seconds": 798.719296255
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/v39.py",
+      "line": 1100,
+      "function": "predict_wrapped",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 0.003273511,
+      "cumulative_seconds": 798.717002287
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/v39.py",
+      "line": 578,
+      "function": "predict",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 3.210188853,
+      "cumulative_seconds": 798.713728776
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 174,
+      "function": "search",
+      "primitive_calls": 383689,
+      "total_calls": 646657,
+      "own_seconds": 14.830480027,
+      "cumulative_seconds": 784.129566143
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 166,
+      "function": "refine",
+      "primitive_calls": 646657,
+      "total_calls": 646657,
+      "own_seconds": 56.688345718,
+      "cumulative_seconds": 723.265780422
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/answerlog.py",
+      "line": 94,
+      "function": "select_definition",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 0.044874971,
+      "cumulative_seconds": 710.241482721
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/smeshared.py",
+      "line": 250,
+      "function": "select_definition",
+      "primitive_calls": 241,
+      "total_calls": 241,
+      "own_seconds": 0.07000669300000001,
+      "cumulative_seconds": 710.1147238320001
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/strictpc.py",
+      "line": 368,
+      "function": "map_v39",
+      "primitive_calls": 6581,
+      "total_calls": 6581,
+      "own_seconds": 0.008586077000000001,
+      "cumulative_seconds": 683.169703159
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/v39.py",
+      "line": 345,
+      "function": "map_v39",
+      "primitive_calls": 6581,
+      "total_calls": 6581,
+      "own_seconds": 9.141997646,
+      "cumulative_seconds": 683.161117082
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/answerlog.py",
+      "line": 98,
+      "function": "map_v39",
+      "primitive_calls": 4763,
+      "total_calls": 4763,
+      "own_seconds": 0.007588635000000001,
+      "cumulative_seconds": 682.4345221780001
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 161,
+      "function": "ranks",
+      "primitive_calls": 2487935,
+      "total_calls": 2487935,
+      "own_seconds": 68.118191819,
+      "cumulative_seconds": 536.108654641
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.sorted>",
+      "primitive_calls": 195019190,
+      "total_calls": 327625878,
+      "own_seconds": 112.95772639,
+      "cumulative_seconds": 518.5426554200001
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_memory_2026-10-04/source/tools/sme2017.py",
+      "line": 268,
+      "function": "_ordered",
+      "primitive_calls": 843141,
+      "total_calls": 843141,
+      "own_seconds": 1.6788788360000002,
+      "cumulative_seconds": 509.98606439
+    }
+  ]
+}
