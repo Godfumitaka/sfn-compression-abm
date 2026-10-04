@@ -11,7 +11,10 @@ import selcands
 def seed_job(job):
     root,cell,seed,targets,out=job
     os.chdir(W)
-    return selcands.one((root,cell,seed,targets,out))
+    result=selcands.one((root,cell,seed,targets,out))
+    import resource
+    result["peak_rss_bytes"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1 if sys.platform == "darwin" else 1024)
+    return result
 
 
 def main():
@@ -34,9 +37,17 @@ def main():
                 if outcome=='外れ':misses[cue].append((seed,r['prediction_order']))
                 if cue=='e' and outcome!='黙り' or cue=='n' and outcome=='外れ':targets[r['prediction_order']]=r['hit']
         jobs.append((str(root),cell,seed,targets,str(dest/'候補')))
-    nworkers=int(os.environ.get('SC_WORKERS','1'))
+    # 未知の処理はまず一本を測り、実測×1.2と親の余裕から受付枠内の並列数を決める。
+    with get_context('spawn').Pool(1,maxtasksperchild=1) as pool:
+        checks=pool.map(seed_job,jobs[:1],chunksize=1)
+    budget=float(os.environ.get('EXPLORE3_MEM_GB','0.8'))
+    estimate=checks[0]['peak_rss_bytes']/2**30*1.2
+    if estimate+0.15>budget:raise RuntimeError('分類の見込みが受付枠を超えた：'+str(estimate))
+    nworkers=max(1,min(int(os.environ.get('SC_WORKERS','4')),int((budget-0.15)/estimate)))
+    (dest/'resource_plan.json').write_text(json.dumps({'registered_mem_gb':budget,'pilot_peak_rss_bytes':checks[0]['peak_rss_bytes'],
+                                                    'estimate_per_worker_gb':estimate,'workers':nworkers},indent=2)+'\n')
     with get_context('spawn').Pool(nworkers,maxtasksperchild=1) as pool:
-        checks=pool.map(seed_job,jobs,chunksize=1)
+        checks+=pool.map(seed_job,jobs[1:],chunksize=1)
     for ck in checks:
         for key in ('予測が本物と違う','一位が本物の選びと違う','一位でやり直した答えが本物と違う'):
             assert ck[key]==0,ck
