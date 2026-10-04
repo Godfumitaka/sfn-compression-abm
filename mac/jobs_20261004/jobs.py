@@ -3,10 +3,10 @@
 共有の受付表：~/jobs/registry.tsv（PID・担当・見込みの最大メモリ GB・開始時刻・コマンドの要約）。書くときは ~/jobs/registry.lock で排他。
 命令：
   claim  ：始める前に呼ぶ。条件を全部満たせば表に書いて 0 を返す。満たさなければ理由を出して 1 を返す（表には書かない）。
-           python3 ~/jobs/jobs.py claim --owner <担当> (--kind <既知の種類> | --mem <GB>) [--pid <PID>] [--cmd "<要約>"]
+           python3 ~/jobs/jobs.py claim --owner <担当> (--kind <既知の種類> | --mem <GB>) [--pid <PID>] [--cmd "<要約>"] [--disk-path <出力先>]
            --pid を省くと、呼んだシェル（jobs.py の親）の PID を書く。登録した PID の子孫（子・孫…）も登録済みとみなす。
   release：終わったら呼ぶ。表から消す。  python3 ~/jobs/jobs.py release [--pid <PID>]（省くと呼んだシェルの PID）
-  status ：表、表に無い重い Python、空きメモリ、スワップ、熱の状態を出す。  python3 ~/jobs/jobs.py status
+  status ：表、表に無い重い Python、空きメモリ、出力先のディスクの空き、スワップ、熱の状態を出す。  python3 ~/jobs/jobs.py status [--disk-path <出力先>]
   run    ：claim → 実行 → release をまとめて行う。  python3 ~/jobs/jobs.py run --owner <担当> --kind <種類> -- <コマンド …>
            拒まれたら実行せずに 1 を返す（待つかどうかは呼んだ側が決める）。--wait を付けると、通るまで 60 秒ごとに claim をやり直す。
   sampler：スワップと熱を 60 秒ごとに ~/jobs/swap.tsv に書き続ける（claim の条件 2 のため。claim・status は、動いていなければ自動で始める）。
@@ -17,6 +17,9 @@ claim の条件：
   3 pmset -g therm に熱・性能の警告が無く、CPU の速度の制限（CPU_Speed_Limit）が 100。
     制限の行が無い（"No CPU power status has been recorded"）ときは、制限なしとみなす（仮の決定）。
   4 表に無い重い Python があれば拒み、その PID を出す。
+  5 出力先のボリュームの空きが 20 GiB 未満なら拒み、空きを出す。予約の会計はしない。
+    claim・run・status の --disk-path は出力先（未作成でもよい）。省略時は呼んだ場所。
+    未作成なら最も近い既存の親で測る。測れないときは claim を拒む。
 重い Python（仮の決定）：実行ファイルが Python の処理のうち、multiprocessing の resource_tracker と jobs.py 自身を除き、
   常駐メモリ（RSS）が 100 MB 以上か、multiprocessing の計算する子（spawn_main）であるもの。CPU 率は使わない（止まっている処理も数える）。
   監督役・見張り役の小さな処理（RSS 100 MB 未満で spawn_main でない）は数えない。status には全部の Python を出す。
@@ -26,6 +29,7 @@ from __future__ import annotations
 import fcntl
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -39,6 +43,7 @@ LOCK = os.path.join(DIR, "registry.lock")
 SWAP = os.environ.get("JOBS_SWAP") or os.path.join(HOME, "jobs", "swap.tsv")
 SAMPLER_PID = os.path.join(HOME, "jobs", "sampler.pid")
 BUDGET_GB = 24.0
+MIN_DISK_FREE_BYTES = 20 * 1024 ** 3
 SWAP_WINDOW = 600
 HEAVY_RSS_MB = 100
 HEADER = "pid\towner\tmem_gb\tstart\tcmd"
@@ -239,6 +244,22 @@ def mem_free():
             "inactive": f"{gb(get('Pages inactive')):.1f} GB"}
 
 
+def disk_space(path):
+    """出力先を実体に解決し、最も近い既存の親があるボリュームの空きを返す。"""
+    target = os.path.realpath(os.path.expanduser(path or os.getcwd()))
+    probe = target
+    while not os.path.exists(probe):
+        parent = os.path.dirname(probe)
+        if parent == probe:
+            raise OSError(f"既存の親が見つからない：{target}")
+        probe = parent
+    return target, probe, shutil.disk_usage(probe).free
+
+
+def disk_message(target, probe, free):
+    return f"出力先 {target}（測定先 {probe}）の空き {free / 1024 ** 3:.3f} GiB、下限 {MIN_DISK_FREE_BYTES / 1024 ** 3:.0f} GiB"
+
+
 def cmd_claim(a):
     mem = a.mem if a.mem is not None else (KNOWN[a.kind][0] if a.kind in KNOWN else None)
     if mem is None:
@@ -263,6 +284,12 @@ def cmd_claim(a):
         un = unregistered_heavy(rows, ps)
         if un:
             reasons.append("表に無い重い Python がある：" + "、".join(f"PID {p}（{rss:.0f} MB、{short(c, 80)}）" for p, rss, c in un))
+        try:
+            target, probe, free = disk_space(a.disk_path)
+            if free < MIN_DISK_FREE_BYTES:
+                reasons.append("ディスクの空きが足りない：" + disk_message(target, probe, free))
+        except OSError as e:
+            reasons.append(f"出力先のディスクの空きを測れない：{e}")
         if any(r["pid"] == pid for r in rows):
             reasons.append(f"PID {pid} はもう表にある（同じ処理の二重の登録はしない）")
         if not alive(pid):
@@ -288,7 +315,7 @@ def cmd_release(a):
     return 0
 
 
-def cmd_status(_a):
+def cmd_status(a):
     running = ensure_sampler()
     with Locked():
         rows, gone = prune()
@@ -315,6 +342,12 @@ def cmd_status(_a):
     print("\n# 空きメモリ")
     for k, v in mem_free().items():
         print(f"{k}：{v}")
+    print("\n# ディスクの空き")
+    try:
+        target, probe, free = disk_space(a.disk_path)
+        print(disk_message(target, probe, free))
+    except OSError as e:
+        print(f"測れない：{e}")
     ok, msg = swap_ok()
     print(f"\n# スワップ：今 {swap_used_mb()} MB。{msg}。sampler：{'動いている' if running else '今始めた'}")
     warn, limit, raw = therm()
@@ -341,7 +374,7 @@ def cmd_sampler(_a):
 def cmd_run(a):
     import argparse  # noqa
     while True:
-        ns = type("A", (), {"owner": a.owner, "mem": a.mem, "kind": a.kind, "pid": os.getpid(), "cmd": " ".join(a.command)[:200]})
+        ns = type("A", (), {"owner": a.owner, "mem": a.mem, "kind": a.kind, "pid": os.getpid(), "cmd": " ".join(a.command)[:200], "disk_path": a.disk_path})
         rc = cmd_claim(ns)
         if rc == 0:
             break
@@ -365,9 +398,11 @@ def main():
     c.add_argument("--kind", choices=sorted(KNOWN))
     c.add_argument("--pid", type=int)
     c.add_argument("--cmd")
+    c.add_argument("--disk-path", help="出力先のボリュームを測る場所（省略時は呼んだ場所）")
     r = sp.add_parser("release")
     r.add_argument("--pid", type=int)
-    sp.add_parser("status")
+    s = sp.add_parser("status")
+    s.add_argument("--disk-path", help="出力先のボリュームを測る場所（省略時は呼んだ場所）")
     sp.add_parser("sampler")
     sp.add_parser("known")
     u = sp.add_parser("run")
@@ -375,6 +410,7 @@ def main():
     u.add_argument("--mem", type=float)
     u.add_argument("--kind", choices=sorted(KNOWN))
     u.add_argument("--wait", action="store_true")
+    u.add_argument("--disk-path", help="出力先のボリュームを測る場所（省略時は呼んだ場所）")
     u.add_argument("command", nargs=argparse.REMAINDER)
     a = ap.parse_args()
     if a.op == "run" and a.command and a.command[0] == "--":
