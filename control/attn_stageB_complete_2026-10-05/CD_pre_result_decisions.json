@@ -1,0 +1,31 @@
+{
+  "recorded_before_results_at": "2026-10-05T04:23:44.038313+09:00",
+  "all_B_gates_verified": true,
+  "B_gate_proof": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB_doors_2026-10-05/verified_all_gates.json",
+  "stageD_weight_time": "each_seed_final_after_last_trial",
+  "stageD_main_pair": [
+    "final_all_names",
+    "final_door_names_reset_to_one"
+  ],
+  "stageD_additional_pair": [
+    "online_arm1",
+    "final_door_names_reset_to_one"
+  ],
+  "stageD_reset_normalization": false,
+  "stageD_model_or_attention_update": false,
+  "physical_hold_names_mapping": "unknown; retain hold/hold_b code names, do not infer push/pull",
+  "vote_rule": "door tasks only; sum current Q per frozen candidate answer including abstention; ties choose answer of highest-ranked candidate; diagnostic only",
+  "dprime_worlds": [
+    2
+  ],
+  "dprime_response_subset": "two door predicate names only; excludes silence and other names",
+  "dprime_no_response": "undefined, no pseudofill",
+  "dprime_extreme_rule": "if either H or F is 0 or 1, add 0.5 to all four response contingency cells",
+  "world1_same_door_names": "normal and exception door predicates coincide; count shared name under normal, exception column is not applicable",
+  "correct_definition_above": "at least one actual gated frozen candidate answers truth",
+  "correct_definition_below": "none above, but at least one candidate answers truth in posthoc projection/filling with only the gates removed; never used to choose/learn",
+  "correct_definition_absent": "neither actual gated nor posthoc ungated candidate answers truth",
+  "task_instruction_assumption": "本人にドア課題の指示が伝えられるとみなしheld_out_is_doorを使う",
+  "stage3_started": false,
+  "seeds21_to40_read_or_run": false
+}
