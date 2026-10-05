@@ -54,6 +54,12 @@ def descendants_rss(pid):
 def registered(args, out, tag, mem=0.5):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
+    if (out / "resources.json").exists():
+        previous = json.loads((out / "resources.json").read_text())
+        assert json.loads((out / "command.json").read_text())["command"] == args
+        assert previous["exit_code"] == 0 and len(previous["manifest"]) == 1
+        assert not previous["manifest"][0].get("error")
+        return previous
     queue_cmd = ["/usr/bin/python3", JOBS, "run", "--wait", "--owner", tag,
                  "--mem", str(mem), "--disk-path", str(out), "--", *args]
     (out / "command.json").write_text(json.dumps({"command": args, "registered_command": queue_cmd,
@@ -79,8 +85,8 @@ def registered(args, out, tag, mem=0.5):
 
 
 def compare_pair(off, current):
-    ledger_off = Path(off) / "cells" / CELL / "seed001.jsonl.gz"
-    ledger_current = Path(current) / "cells" / CELL / "seed001.jsonl.gz"
+    ledger_off = Path(off) / "ledgers" / "cells" / CELL / "seed001.jsonl.gz"
+    ledger_current = Path(current) / "ledgers" / "cells" / CELL / "seed001.jsonl.gz"
     # 台帳本体は圧縮を解いた全バイト（ヘッダを含む）。行や欄を除外しない。
     a, b = gzip.decompress(ledger_off.read_bytes()), gzip.decompress(ledger_current.read_bytes())
     result = {"ledger_body_equal": a == b, "ledger_body_sha256_off": hashlib.sha256(a).hexdigest(),
