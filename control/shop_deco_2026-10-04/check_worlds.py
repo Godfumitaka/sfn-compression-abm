@@ -3,6 +3,7 @@ from collections import Counter
 from hashlib import sha256
 from pathlib import Path
 import json
+import gzip
 import resource
 import sys
 import time
@@ -22,6 +23,9 @@ def main():
     hashes = {level: sha256() for level in levels}
     counts = Counter()
     examples = {}
+    distributions = {str(world): {level: Counter() for level in levels} for world in (1, 2)}
+    first_five = {str(world): {level: Counter() for level in levels} for world in (1, 2)}
+    entity_log = gzip.open(dest / "world_entities.jsonl.gz", "wt", encoding="utf-8")
     start = time.monotonic()
     for run_seed in range(1, 21):
         for trial in range(1740):
@@ -78,6 +82,12 @@ def main():
                            "link": sw._relation_record(after[link]), "door_day": out.held_out_edge.relation_id == door}
                     hashes[level].update(json.dumps(row, sort_keys=True, separators=(",", ":")).encode())
                     counts[level] += 1
+                    public_n = len(out.target_graph_partial.entities)
+                    entity_log.write(json.dumps({"seed": run_seed, "trial": trial, "world": world, "level": level,
+                        "full_entity_count": len(out.G_star.entities), "public_entity_count": public_n}) + "\n")
+                    distributions[str(world)][level][public_n] += 1
+                    if run_seed <= 5:
+                        first_five[str(world)][level][public_n] += 1
                     if level == "skeleton" and out.target_graph_partial.entities != current.target_graph_partial.entities:
                         counts["partial_entity_sets_differ"] += 1
                     # 小例は元のつなぎ伏せ・仲立ち伏せ・ドア伏せを含めて各1つ。
@@ -95,12 +105,15 @@ def main():
                                          "visible_entities": [e.entity_id for e in out.target_graph_partial.entities]}
                 sw.IDS.clear()
         print(f"種{run_seed}: 1,740試行×世界2×水準4を照合済み", flush=True)
+    entity_log.close()
     signatures = {level: h.hexdigest() for level, h in hashes.items()}
     assert len(set(signatures.values())) == 1
     result = {"passed": True, "seeds": list(range(1, 21)), "trial_count": 1740,
               "counts": dict(counts), "invariant_sha256": signatures,
               "elapsed_sec": time.monotonic() - start,
               "peak_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+              "public_entity_distribution_seeds_1_20": distributions,
+              "public_entity_distribution_seeds_1_5": first_five,
               "examples": [examples[k] for k in sorted(examples)]}
     (dest / "world_gate.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({k:v for k,v in result.items() if k != "examples"}, ensure_ascii=False), flush=True)

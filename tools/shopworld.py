@@ -135,6 +135,7 @@ def decorate(tr, run_seed, trial_index, level):
     partial = RelationGraph(graph_id=tr.target_graph_partial.graph_id,
                             entities=tuple(e for e in graph.entities if e.entity_id in reach), relations=visible)
     metadata = {"kind": "shop_deco", "trial": trial_index, "level": level,
+                "full_entity_count": len(graph.entities), "public_entity_count": len(partial.entities),
                 "added": [_relation_record(r) for r in added], "removed": [_relation_record(r) for r in removed],
                 "added_predicates": [r.predicate for r in added],
                 "original_held_out": _relation_record(original), "held_out": _relation_record(held),
@@ -191,6 +192,11 @@ def shop_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
     INFO[out.G_star.graph_id] = info
     if "deco" in info and CTX.get("deco_f") is not None:
         CTX["deco_f"].write(json.dumps(info["deco"], ensure_ascii=False) + "\n")
+    if CTX.get("entities_f") is not None:
+        # 研究者専用。既存台帳・sideやエージェント入力へ欄を足さない。
+        CTX["entities_f"].write(json.dumps({"kind": "shop_entities", "trial": trial_index,
+            "level": CTX["deco_level"], "full_entity_count": len(out.G_star.entities),
+            "public_entity_count": len(out.target_graph_partial.entities)}, ensure_ascii=False) + "\n")
     _bump("trials")
     _bump(f"{info['shop_type']}_{cue}")
     _bump("held_out_is_door", int(info["held_out_is_door"]))
@@ -226,6 +232,12 @@ def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str, door_
     CTX.update(f=open(side_path, "w", encoding="utf-8"), prev={}, cand={}, scored={})
     if CFG["deco"] is not None:
         CTX["deco_f"] = open(Path(side_path).with_suffix(".deco.jsonl"), "w", encoding="utf-8")
+    if deco is not None:
+        research_dir = Path(side_path).parents[2] / "research" / Path(side_path).parent.name
+        research_dir.mkdir(parents=True, exist_ok=True)
+        CTX["deco_level"] = deco
+        CTX["entities_f"] = open(research_dir / Path(side_path).name.replace(".shop.jsonl", ".entities.jsonl"),
+                                 "w", encoding="utf-8")
     original = w.generate_trial
     CTX["orig_gen"] = original
 
@@ -393,4 +405,6 @@ def close() -> dict:
         f.close()
     if CTX.get("deco_f") is not None:
         CTX["deco_f"].close()
+    if CTX.get("entities_f") is not None:
+        CTX["entities_f"].close()
     return dict(STATS)

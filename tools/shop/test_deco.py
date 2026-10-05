@@ -1,5 +1,7 @@
 """飾りの操作の構造だけを検査する。正誤や期待した誤答方向は検査しない。"""
 from pathlib import Path
+from io import StringIO
+import json
 import subprocess
 import sys
 import types
@@ -91,3 +93,20 @@ def test_dictionary_appends_full_pool_only_for_plus_levels():
         assert all(idx[p] == i for p, i in start.items())
         assert v39.CFG["D"] == (92 if level in ("plus4", "plus8") else 80)
         assert all((p in idx) == (level in ("plus4", "plus8")) for p in sw.DECO_PREDICATES)
+
+
+def test_research_entity_counts_follow_visible_reachability_without_changing_scene():
+    for level in sw.DECO_LEVELS:
+        sink = StringIO()
+        with patch.dict(sw.CFG, {"world": 1, "exc": 0.2, "deco": level}, clear=True), \
+             patch.dict(sw.CTX, {"entities_f": sink, "deco_level": level}, clear=True):
+            out = sw.shop_trial(generate_trial, 1, 4, ("agent",), seed=SEED)
+        row = json.loads(sink.getvalue())
+        assert row["level"] == level and row["trial"] == 4
+        assert row["full_entity_count"] == len(out.G_star.entities) == 3
+        assert row["public_entity_count"] == len(out.target_graph_partial.entities)
+        assert row["public_entity_count"] == (2 if level == "skeleton" else 3)
+        if level == "current":
+            cue = "e" if sw.cue_rng(1, 4).random() < 0.2 else "n"
+            assert (out, sw.INFO[out.G_star.graph_id]) == original.build(
+                generate_trial(1, 4, ("agent",), seed=SEED), 1, 4, world=1, cue=cue)
