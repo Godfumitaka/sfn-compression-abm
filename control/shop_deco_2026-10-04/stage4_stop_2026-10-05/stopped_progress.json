@@ -1,0 +1,34 @@
+{
+  "status": "stopped",
+  "planned": 160,
+  "runs_completed": 2,
+  "analyses_completed": 1,
+  "started_at": "2026-10-05T11:23:40.737219",
+  "current": {
+    "seed": 1,
+    "selection": "N3",
+    "retention": "A",
+    "world": 1,
+    "level": "skeleton",
+    "tag": "skeleton_N3_A_w1_s001",
+    "phase": "analysis"
+  },
+  "run_memory_budget_gb": 0.5,
+  "analysis_memory_budget_gb": 0.8,
+  "records": [
+    {
+      "seed": 1,
+      "selection": "N3",
+      "retention": "D",
+      "world": 2,
+      "level": "plus8",
+      "tag": "plus8_N3_D_w2_s001",
+      "run_resources": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_2026-10-04/preview/runs/plus8_N3_D_w2_s001/resources.json",
+      "analysis_resources": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_2026-10-04/preview/analysis/plus8_N3_D_w2_s001/resources.json",
+      "summary": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_2026-10-04/preview/analysis/plus8_N3_D_w2_s001/summary.json"
+    }
+  ],
+  "updated_at": "2026-10-05T11:40:08.388020",
+  "stopped_reason": "RuntimeError('走行が完了しない: Codex-shop-deco-read-skeleton_N3_A_w1_s001; resources.jsonとrun.logを参照')",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_2026-10-04/source/control/shop_deco_2026-10-04/run_preview.py\", line 52, in main\n    result = registered([PYTHON, \"-B\", \"control/shop_deco_2026-10-04/analyse_run.py\", str(out), str(row[\"seed\"]), str(analysis_out)],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_2026-10-04/source/control/shop_deco_2026-10-04/run_registered.py\", line 88, in registered\n    raise RuntimeError(f\"走行が完了しない: {tag}; resources.jsonとrun.logを参照\")\nRuntimeError: 走行が完了しない: Codex-shop-deco-read-skeleton_N3_A_w1_s001; resources.jsonとrun.logを参照\n"
+}

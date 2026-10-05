@@ -25,6 +25,13 @@ def load_existing():
     sys.path[:0] = [str(ROOT / "tools"), str(ROOT)]
 
 
+def observe_after_trial(iterator, observe):
+    """候補の計算が返した後にだけ、試行の終わりの観測を行う。"""
+    for trial in iterator:
+        yield trial
+        observe(trial)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("root")
@@ -94,22 +101,32 @@ def main():
     mp_keys = ("G", "Idef", "S", "seat2", "Hc", "Fc", "total", "defs", "nF", "nH", "nU")
     mem_f = gzip.open(dest / "memory.jsonl.gz", "wt", encoding="utf-8")
 
-    def measure(*params, **kwargs):
+    def observe(tr):
+        import abm.loop as loop
         import v39
-        for tr in original_iter(*params, **kwargs):
-            mp = sm.mem_parts(v39, tr["post"])
-            entity_expected[tr["t"]] = {"graph_id": tr["world"].G_star.graph_id,
-                "full_entity_count": len(tr["world"].G_star.entities),
-                "public_entity_count": len(tr["world"].target_graph_partial.entities)}
-            actual = (tr["side"].get("v310be") or [{}])[0].get("C_end")
-            if actual is not None and mp["total"] != actual:
-                bits_mismatch[0] += 1
-            mem_f.write(json.dumps({"seed": args.seed, "trial": tr["t"], **mp, "C_end": actual}) + "\n")
-            mem_count[0] += 1
-            mem_sum.update({k: mp[k] for k in mp_keys})
-            mem_max[0] = max(mem_max[0], mp["total"])
-            mem_final.clear(); mem_final.update(mp)
-            yield tr
+        # 本物の会計と同じ、公開された場面と開示だけで種類を控える。
+        # 当日の開示を候補の予測に先渡ししない。候補の読取終了後も全試行で行う。
+        if fl.get("strict_pc"):
+            import strictpc
+            strictpc.record_kinds(tr["world"].target_graph_partial,
+                                  (tr["world"].held_out_edge,) if tr["disclosed"] else ())
+        mp = sm.mem_parts(v39, tr["post"])
+        entity_expected[tr["t"]] = {"graph_id": tr["world"].G_star.graph_id,
+            "full_entity_count": len(tr["world"].G_star.entities),
+            "public_entity_count": len(tr["world"].target_graph_partial.entities)}
+        actual = (tr["side"].get("v310be") or [{}])[0].get("C_end")
+        if actual is not None and mp["total"] != actual:
+            bits_mismatch[0] += 1
+        mem_f.write(json.dumps({"seed": args.seed, "trial": tr["t"], **mp, "C_end": actual}) + "\n")
+        mem_count[0] += 1
+        mem_sum.update({k: mp[k] for k in mp_keys})
+        mem_max[0] = max(mem_max[0], mp["total"])
+        mem_final.clear(); mem_final.update(mp)
+        # 既存の分類道具と同じ、idで控える一時記憶の解放を全試行に適用する。
+        sr._clear_caches(loop)
+
+    def measure(*params, **kwargs):
+        return observe_after_trial(original_iter(*params, **kwargs), observe)
 
     def iter_measured(*params, **kwargs):
         holder["iterator"] = measure(*params, **kwargs)

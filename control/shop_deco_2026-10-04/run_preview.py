@@ -1,6 +1,7 @@
 """段4の160本。模型走行も読取も一本ずつ受付で待ち、失敗したら停止する。"""
 from datetime import datetime
 from pathlib import Path
+import argparse
 import itertools
 import hashlib
 import json
@@ -10,6 +11,9 @@ from run_registered import AREA, CONFIG, PYTHON, ROOT, command, registered
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--resume", action="store_true")
+    args = parser.parse_args()
     dest = AREA / "preview"
     dest.mkdir(exist_ok=True)
     gate = json.loads((ROOT / "control/shop_deco_2026-10-04/stage3/run_gate_approved.json").read_text())
@@ -17,6 +21,16 @@ def main():
     model_files = subprocess.check_output(["git", "ls-files", "abm", "tools", "config/sweep_shop_hide1_s1_2026-10-01.json"], cwd=ROOT, text=True).splitlines()
     model_files = [name for name in model_files if name.endswith((".py", ".json"))]
     fingerprints = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in model_files}
+    if args.resume:
+        # 修復で模型の開始時の指紋を更新しない。全完了印の保存証拠を必須とする。
+        original_fingerprints = json.loads((dest / "model_fingerprints.json").read_text())
+        assert fingerprints == original_fingerprints, "開始時の模型の指紋から変更がある"
+        from resume_proof import HERE, protected_files
+        proof = json.loads((HERE / "resume_proof.json").read_text())
+        assert proof["passed"]
+        assert protected_files() == json.loads((HERE / "protected_before.json").read_text())
+        analysis = dest / "analysis" / proof["repaired_tag"]
+        assert hashlib.sha256((analysis / "summary.json").read_bytes()).hexdigest() == proof["summary_sha256"]
     combinations = list(itertools.product(range(1, 6), ("N3", "support"), ("A", "D"), (1, 2),
                                           ("skeleton", "current", "plus4", "plus8")))
     pilot = (1, "N3", "D", 2, "plus8")
@@ -25,12 +39,22 @@ def main():
     plan = [{"seed": seed, "selection": selection, "retention": retention, "world": world, "level": level,
              "tag": f"{level}_{selection}_{retention}_w{world}_s{seed:03d}"}
             for seed, selection, retention, world, level in combinations]
-    (dest / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
-    (dest / "model_fingerprints.json").write_text(json.dumps(fingerprints, indent=2) + "\n")
+    if args.resume:
+        assert json.loads((dest / "plan.json").read_text()) == plan
+        previous = json.loads((dest / "progress.json").read_text())
+        assert previous["status"] == "stopped"
+    else:
+        assert not (dest / "progress.json").exists(), "既存の下見は--resumeで再開する"
+        (dest / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+        (dest / "model_fingerprints.json").write_text(json.dumps(fingerprints, indent=2) + "\n")
     progress = {"status": "running", "planned": 160, "runs_completed": 0, "analyses_completed": 0,
                 "started_at": datetime.now().isoformat(), "current": None, "run_memory_budget_gb": 0.5,
                 "analysis_memory_budget_gb": 0.8, "records": []}
     path = dest / "progress.json"
+    if args.resume:
+        progress["started_at"] = previous["started_at"]
+        progress["resumed_at"] = datetime.now().isoformat()
+        progress["resume_proof"] = str(HERE / "resume_proof.json")
 
     def save():
         progress["updated_at"] = datetime.now().isoformat()
