@@ -109,7 +109,14 @@ def main():
 
     def iter_measured(*params, **kwargs):
         holder["iterator"] = measure(*params, **kwargs)
-        return holder["iterator"]
+        class ReadProxy:
+            # 分類のyield fromが早く終わっても、記憶用の読み手を閉じない。
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                return next(holder["iterator"])
+        return ReadProxy()
 
     er.iter_run = iter_measured
     original_analysis = sc.analysis
