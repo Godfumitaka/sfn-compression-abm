@@ -2,6 +2,7 @@
 from datetime import datetime
 from pathlib import Path
 import itertools
+import hashlib
 import json
 import subprocess
 import traceback
@@ -13,6 +14,9 @@ def main():
     dest.mkdir(exist_ok=True)
     gate = json.loads((ROOT / "control/shop_deco_2026-10-04/stage3/run_gate_approved.json").read_text())
     assert gate["passed"]
+    model_files = subprocess.check_output(["git", "ls-files", "abm", "tools", "config/sweep_shop_hide1_s1_2026-10-01.json"], cwd=ROOT, text=True).splitlines()
+    model_files = [name for name in model_files if name.endswith((".py", ".json"))]
+    fingerprints = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in model_files}
     combinations = list(itertools.product(range(1, 6), ("N3", "support"), ("A", "D"), (1, 2),
                                           ("skeleton", "current", "plus4", "plus8")))
     pilot = (1, "N3", "D", 2, "plus8")
@@ -22,6 +26,7 @@ def main():
              "tag": f"{level}_{selection}_{retention}_w{world}_s{seed:03d}"}
             for seed, selection, retention, world, level in combinations]
     (dest / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+    (dest / "model_fingerprints.json").write_text(json.dumps(fingerprints, indent=2) + "\n")
     progress = {"status": "running", "planned": 160, "runs_completed": 0, "analyses_completed": 0,
                 "started_at": datetime.now().isoformat(), "current": None, "run_memory_budget_gb": 0.5,
                 "analysis_memory_budget_gb": 0.8, "records": []}
@@ -34,6 +39,7 @@ def main():
     save()
     try:
         for row in plan:
+            assert all(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == value for name, value in fingerprints.items()), "模型のファイルが開始後に変わった"
             assert 1 <= row["seed"] <= 5
             tag = row["tag"]
             out, analysis_out = dest / "runs" / tag, dest / "analysis" / tag
@@ -61,7 +67,11 @@ def main():
         raise
     finally:
         # 終了・停止時の報告は同じスレッドの承認済みの報告へ追記する。
-        subprocess.run([PYTHON, "-B", "control/shop_deco_2026-10-04/report_preview.py"], cwd=ROOT, check=True)
+        with (dest / "completion_report.log").open("a") as log:
+            subprocess.run(["/usr/bin/python3", "/Users/tatsu-admin/jobs/jobs.py", "run", "--wait",
+                            "--owner", "Codex-shop-deco-completion-report", "--mem", "0.2", "--disk-path", str(dest), "--",
+                            PYTHON, "-B", "control/shop_deco_2026-10-04/report_preview.py"], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
 
 
 if __name__ == "__main__":
