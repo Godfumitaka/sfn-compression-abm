@@ -3,7 +3,12 @@ import json
 import resource
 import time
 from pathlib import Path
-from logp_seals_stage1_2026-10-05 import ARMS, ROOT, input_paths, op
+from importlib.util import spec_from_file_location, module_from_spec
+
+spec=spec_from_file_location('logp_seal_records',Path(__file__).with_name('logp_seals_stage1_2026-10-05.py'))
+records=module_from_spec(spec)
+spec.loader.exec_module(records)
+ARMS,ROOT,input_paths,op=records.ARMS,records.ROOT,records.input_paths,records.op
 
 start=time.monotonic(); counts={}; missing=[]
 for arm in ARMS:
