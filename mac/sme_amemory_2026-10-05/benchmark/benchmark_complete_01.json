@@ -1,0 +1,68 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "condition": "A",
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 3258.7061309159617,
+          "started": "2026-10-06T05:35:57.901240+09:00",
+          "finished": "2026-10-06T06:30:16.632216+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 3251.57,
+        "peak_rss_mb": 5455.3,
+        "trial_count": 1740,
+        "seed": 1,
+        "commit": "374e3524a9e310c8295f87ac12506bba0b236696"
+      },
+      "sampled_process_group_peak_bytes": 5503156224,
+      "planning_peak_bytes": 5503156224,
+      "measurement_period_seconds": 15,
+      "desktop_ram_bytes": 24696061952,
+      "desktop_cores": 16,
+      "memory_only_concurrency_upper": 4,
+      "seconds_for_160_if_each_like_this_run": 130348.24523663847,
+      "assumptions": [
+        "23GiBの全量を走行に使える場合の上限。OSと他の処理の領域を引くと小さくなる",
+        "一本の速度は同じマックの実測を代入。デスクトップの速度は未測定",
+        "160本全てがこの世界2・保持A・種1の重さと同じという仮定。C/D/世界1の重さは未代入",
+        "同時走行で速度が変わらないという仮定。実際の多重実行の時間は未測定"
+      ]
+    },
+    {
+      "condition": "L",
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 2192.819294999994,
+          "started": "2026-10-06T06:30:17.455596+09:00",
+          "finished": "2026-10-06T07:06:50.295223+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 2184.29,
+        "peak_rss_mb": 3993.4,
+        "trial_count": 1740,
+        "seed": 1,
+        "commit": "ca80f61012c52514d29974adf41fe8ccc357deb4"
+      },
+      "sampled_process_group_peak_bytes": 4032167936,
+      "planning_peak_bytes": 4032167936,
+      "measurement_period_seconds": 15,
+      "desktop_ram_bytes": 24696061952,
+      "desktop_cores": 16,
+      "memory_only_concurrency_upper": 6,
+      "seconds_for_160_if_each_like_this_run": 58475.18119999984,
+      "assumptions": [
+        "23GiBの全量を走行に使える場合の上限。OSと他の処理の領域を引くと小さくなる",
+        "一本の速度は同じマックの実測を代入。デスクトップの速度は未測定",
+        "160本全てがこの世界2・保持A・種1の重さと同じという仮定。C/D/世界1の重さは未代入",
+        "同時走行で速度が変わらないという仮定。実際の多重実行の時間は未測定"
+      ]
+    }
+  ],
+  "at": "2026-10-06T07:06:51.465403+09:00"
+}
