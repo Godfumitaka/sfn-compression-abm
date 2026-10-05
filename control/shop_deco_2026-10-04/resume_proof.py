@@ -68,8 +68,13 @@ def main():
         manifest = [json.loads(s) for s in (run / "manifest.jsonl").read_text().splitlines()]
         assert len(manifest) == 1 and all(manifest[0][k] == v for k, v in marker.items())
         assert marker["ledger_bytes"] == (done.with_suffix(".jsonl.gz")).stat().st_size
+        observed = json.loads((preview / "analysis" / tag / "summary.json").read_text())
+        assert observed["trial_count"] == marker["trial_count"]
+        assert observed["memory"]["final"]["defs"] == marker["final_def_count"]
+        assert observed["memory"]["final"]["nF"] == marker["final_m_live_total"]
         done_checks.append({"tag": tag, "done_sha256": digest(done), "done_raw_bytes_equal": True,
-                            "all_done_fields_equal_to_manifest": True})
+                            "all_done_fields_equal_to_manifest": True,
+                            "observed_final_counts_equal_to_done": True})
     result = {"passed": True, "repaired_tag": TAG, "fix_commit": subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "protected_files": len(protected), "protected_file_sets_and_raw_bytes_equal": True,
