@@ -1,0 +1,23 @@
+{
+  "model_reruns_for_this_request": 0,
+  "original_model_commit": "9e4bdea37573f2772ee1dcbb1c9d6babbff1787e",
+  "read_environment_work_commit": "7f48b75badd3854616449d9ab6464ccbb5f7b011",
+  "audit_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式停止報告確認 --mem 0.4 --disk-path ./h_formula_2026-10-05 -- /usr/bin/time -l python3.12 ./h_formula_2026-10-05/audit.py",
+  "first_audit_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式記録検証 --mem 0.4 --disk-path ./h_formula_2026-10-05 -- /usr/bin/time -l python3.12 ./h_formula_2026-10-05/first_gate_partial/audit.py",
+  "first_audit_stop": "1本目の試験の黙り483件に席の記録が無いことを確認して、自分の読取専用処理を停止。後続の数えは行わず、全30本の段1の件数を確認する処理だけに切り替えた。",
+  "independent_probe_check_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式独立確認 --mem 0.4 --disk-path ./h_formula_2026-10-05 -- /usr/bin/time -l python3.12 ./h_formula_2026-10-05/refine.py",
+  "report_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式停止報告作成 --mem 0.4 --disk-path ./h_formula_2026-10-05 -- python3.12 ./h_formula_2026-10-05/report.py",
+  "working_directory": "codex_verb_2026-10-04（各パスはこのフォルダからの相対パス）",
+  "formula_and_existing_classification_files_unchanged": [
+    "abm/filling.py",
+    "abm/definition.py",
+    "tools/v39.py",
+    "tools/probeworld.py",
+    "tools/answerlog.py",
+    "tools/verb/analyze.py",
+    "tools/selectn3.py"
+  ],
+  "rerun_model_serial_seconds_estimate": 21574.214,
+  "rerun_extra_recording_overhead": "未実測、待ち時間と全バイト照合の時間を別に加える",
+  "report_script_sha256": "b7ee583473fd117f7ae5a3ff38f39c3f2f3cee22f4deb6f365d151f1003c0b6c"
+}
