@@ -106,3 +106,85 @@ Pythonのmake_dataclassで作ったHypothesisの所属名がsme2017ではなくs
 
 報告用のfetchをsandbox内で呼んだ一時的な名前解決失敗で、全長の開始待ちの親二つだけが退出した。模型の停止は0本。失敗と旧PIDの記録を保持し、ネットワーク権限で通常のfetch/rebase/pushが成功後に、待機の親だけ再起動した。元の記録を消していない。
 
+
+## progress_20261005_195019：2026-10-05T19:50:20.479061+09:00
+
+SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず、既存のC・log P・key/combinedは停止していない。
+
+[
+  {
+    "folder": "diagnostic_01/A_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "diagnostic_01/L_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "gates200_01/A_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/L_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_diagnostic_01/A",
+    "completed": false,
+    "last_recorded_trial": null,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_diagnostic_01/L",
+    "completed": false,
+    "last_recorded_trial": null,
+    "gate_passed": null
+  }
+]
+
+停止の記録：[]
+
