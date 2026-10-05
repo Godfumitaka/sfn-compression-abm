@@ -716,8 +716,15 @@ def install(fo, task, REAL) -> None:
                        if CFG["tags"] else [])
             reply = {"type": "received", "t": trial, "records": recs, "tags": present, "defs": len(state.definitions)}
             if CFG.get("audit"):
-                reply["audit"] = {"state": learning_fingerprint(state),
+                reply["audit"] = {"state": fingerprint(state),
                                   "rng": sha256(repr(state.rng_state).encode()).hexdigest()}
+            if CFG.get("audit") and CFG.get("sme2017"):
+                import smeshared
+                # 全控えの指紋は試験の前後で照合する。毎試行は記憶・乱数と控えの件数を残す。
+                reply["audit"]["sme_rng"] = fingerprint(smeshared.ENGINE.rng.getstate())
+                reply["audit"]["sme_cache_counts"] = {
+                    "matches": len(smeshared.ENGINE.cache), "self": len(smeshared.ENGINE.self_cache),
+                    "results": len(smeshared.RESULTS), "graphs": len(smeshared.GRAPHS), "choices": len(smeshared.CHOICES)}
             if serial is not None:
                 serial.release()
             conn.send(reply)
