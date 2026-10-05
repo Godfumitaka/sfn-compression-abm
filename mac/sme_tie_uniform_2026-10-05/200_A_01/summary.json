@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "arm": "A",
+  "trials": 200,
+  "launch_delta_seconds": 0.045626417006133124,
+  "cprofile": false,
+  "observation_wrapper": false,
+  "processes": [
+    {
+      "label": "baseline",
+      "pid": 87721,
+      "at": "2026-10-05T08:54:47.140907+09:00"
+    },
+    {
+      "label": "uniform",
+      "pid": 87724,
+      "at": "2026-10-05T08:54:47.186840+09:00"
+    }
+  ],
+  "differing_judgment_trials": 0,
+  "field_differing_trials": {
+    "prediction_kind": 0,
+    "predicted_edge": 0,
+    "hit": 0,
+    "R_used": 0,
+    "abstain_reason": 0
+  },
+  "first_difference": null,
+  "world_and_disclosure_equal": true,
+  "baseline_over_uniform_wall": 4.12367453405493,
+  "cases": {
+    "baseline": {
+      "run": {
+        "exit": 0,
+        "wall_seconds": 377.46796679199906,
+        "started": "2026-10-05T08:54:47.140907+09:00",
+        "finished": "2026-10-05T09:01:04.619666+09:00",
+        "cprofile": false
+      },
+      "elapsed_sec": 376.05,
+      "peak_rss_mb": 355.0
+    },
+    "uniform": {
+      "run": {
+        "exit": 0,
+        "wall_seconds": 91.53679895799723,
+        "started": "2026-10-05T08:54:47.186840+09:00",
+        "finished": "2026-10-05T08:56:18.732942+09:00",
+        "cprofile": false
+      },
+      "elapsed_sec": 90.05,
+      "peak_rss_mb": 522.7
+    }
+  },
+  "resources_sha256": "96db29ebf03f41d75b48ce6bdbec2e5dcb928c03371764355cbec5d9366e2018"
+}
