@@ -38,3 +38,7 @@ def test_absolute_surprise_counts_U_and_separates_exclusions():
 
 def test_ambiguous_reason_does_not_invent_U_tie():
     assert D.silence_cause({'predicted_edge': None, 'abstain_reason': 'ambiguous_projection'}) == 'ambiguous_projection_U_or_H_tie_unknown'
+
+
+def test_gap_rejection_has_its_saved_reason():
+    assert D.silence_cause({'predicted_edge': None, 'abstain_reason': 'no_gap_candidate'}) == 'no_answer_at_visible_gap'

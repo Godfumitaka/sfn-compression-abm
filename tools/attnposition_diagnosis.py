@@ -76,6 +76,7 @@ def silence_cause(payload):
     reason = payload['abstain_reason']
     return {'below_tau': 'below_speech_gate', 'below_threshold': 'below_structure_gate',
             'no_definition': 'no_candidate_definition', 'no_prototype': 'no_prototype',
+            'no_gap_candidate': 'no_answer_at_visible_gap',
             'no_projectable_relation': 'no_projectable_or_fillable_answer',
             'ambiguous_projection': 'ambiguous_projection_U_or_H_tie_unknown'}.get(reason, 'unknown')
 
