@@ -43,6 +43,7 @@ def main():
     signal.signal(signal.SIGINT, request_stop)
     signal.signal(signal.SIGTERM, request_stop)
     done = {r['label'] for r in plan['runs'] if (BASE/r['axis']/r['label']/'complete.json').exists()}
+    previous_count = json.loads((BASE/'status.json').read_text()).get('complete')
     active = {}
     adopted = []
     for r in plan['runs']:
@@ -65,12 +66,14 @@ def main():
                    'pending_on_resume': [r['label'] for r in pending], 'work_commit': plan['commit'],
                    'supervisor_script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                    'model_reruns_of_completed_or_adopted': 0, 'persistent_supervisor_stdout': 'ファイルへ保存'}
+    resume_info['previous_status_completed'] = previous_count
+    resume_info['resource_model_exit_field'] = 'returncode'
     night.write_json(BASE/'resume_info.json', resume_info)
     pub_dir = night.REPORT_REPO/axes.EVIDENCE
     shutil.copy2(Path(__file__), pub_dir/'resume.py')
     shutil.copy2(BASE/'resume_info.json', pub_dir/'resume_info.json')
     try:
-        axes.publish(f"二軸の監督再開（{night.now()}）：以前の監督が終了し、状態表が41本で止まっていた。完走ファイルを確認すると{len(done)}本が完了。進行中の{', '.join(r['label'] for r in adopted)}を元の受付・プロセスのまま引き継ぎ、未着手{len(pending)}本を共有受付へ続ける。完走分・引継ぎ分の模型再走行0。作業コミットは{plan['commit']}、種1〜5のみ。新しい監督は出力をファイルへ保存して切断に備える。[監督の再開記録](./{Path(axes.EVIDENCE).name}/resume_info.json)。")
+        axes.publish(f"二軸の監督再開（{night.now()}）：状態表の完了数は{previous_count}本。完走ファイルを確認すると{len(done)}本が完了。進行中の{', '.join(r['label'] for r in adopted) or '該当なし'}を元の受付・プロセスのまま引き継ぎ、未着手{len(pending)}本を共有受付へ続ける。完走分・引継ぎ分の模型再走行0。資源記録の模型終了コードの欄名returncodeを確認し、監督の読み取りを合わせた。作業コミットは{plan['commit']}、種1〜5のみ。新しい監督は出力をファイルへ保存して切断に備える。[監督の再開記録](./{Path(axes.EVIDENCE).name}/resume_info.json)。")
         while pending or active:
             if stop:
                 raise InterruptedError('停止指示')
@@ -98,7 +101,7 @@ def main():
                         continue
                 assert (out/'complete.json').exists(), label+'完走・照合未完了'
                 res = json.loads((out/'resources.json').read_text())
-                assert res['model_returncode'] == res['analysis_returncode'] == res['record_returncode'] == 0
+                assert res['returncode'] == res['analysis_returncode'] == res['record_returncode'] == 0
                 done.add(label)
                 del active[label]
                 print('完了', len(done), '/50', label, flush=True)
