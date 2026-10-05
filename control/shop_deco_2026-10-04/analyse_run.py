@@ -89,6 +89,7 @@ def main():
     mem_sum = Counter()
     mem_max = [0]
     mem_final = {}
+    entity_expected = {}
     bits_mismatch = [0]
     mp_keys = ("G", "Idef", "S", "seat2", "Hc", "Fc", "total", "defs", "nF", "nH", "nU")
     mem_f = gzip.open(dest / "memory.jsonl.gz", "wt", encoding="utf-8")
@@ -97,6 +98,9 @@ def main():
         import v39
         for tr in original_iter(*params, **kwargs):
             mp = sm.mem_parts(v39, tr["post"])
+            entity_expected[tr["t"]] = {"graph_id": tr["world"].G_star.graph_id,
+                "full_entity_count": len(tr["world"].G_star.entities),
+                "public_entity_count": len(tr["world"].target_graph_partial.entities)}
             actual = (tr["side"].get("v310be") or [{}])[0].get("C_end")
             if actual is not None and mp["total"] != actual:
                 bits_mismatch[0] += 1
@@ -131,6 +135,9 @@ def main():
     sc.analysis = analysis
     check = sc.one((str(root), cell, args.seed, targets, str(dest / "candidates")))
     mem_f.close()
+    (dest / "validation.json").write_text(json.dumps({"check": check, "args_unrestored": restored_bad[0],
+        "C_end_mismatch": bits_mismatch[0], "memory_trials_read": mem_count[0],
+        "expected_trials": header["trial_count"]}, ensure_ascii=False, indent=2) + "\n")
     for key in ("予測が本物と違う", "一位が本物の選びと違う", "一位でやり直した答えが本物と違う"):
         assert check[key] == 0, check
     assert check["作った試行"] == len(targets)
@@ -149,11 +156,14 @@ def main():
                      **{k: cls[k] for k in ("選び間違い", "区別の喪失")}}
     public = Counter()
     entity_file = root / "research" / cell / f"seed{args.seed:03d}.entities.jsonl"
-    entity_rows = [json.loads(s) for s in entity_file.read_text().splitlines()]
+    all_entity_rows = [json.loads(s) for s in entity_file.read_text().splitlines()]
+    # probe-worldの診断用の別種も同じ生成器を通る。本番の種と場面IDで区別する。
+    entity_rows = [r for r in all_entity_rows if r["run_seed"] == header["run_seed"]]
     assert len(entity_rows) == header["trial_count"]
     assert [r["trial"] for r in entity_rows] == list(range(header["trial_count"]))
     for row in entity_rows:
         assert row["level"] == fl["shop_deco"]
+        assert all(row[k] == v for k, v in entity_expected[row["trial"]].items())
         public[row["public_entity_count"]] += 1
     result = {"seed": args.seed, "level": fl["shop_deco"], "world": fl["shop_world"],
         "selection": "N3" if fl["select_n3"] else "support", "retention": "D" if fl["use_forget"] is not None else "A",
@@ -162,6 +172,7 @@ def main():
         "memory": {"trials": mem_count[0], "mean": {k: mem_sum[k] / mem_count[0] for k in mp_keys},
                    "max_total_bits": mem_max[0], "final": mem_final},
         "public_entity_distribution": dict(public), "pilot_all_spoken": args.pilot_all_spoken,
+        "extra_research_scene_records_excluded": len(all_entity_rows) - len(entity_rows),
         "peak_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
     (dest / "summary.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"completed": True, "targets_checked": len(targets), "trials_read": mem_count[0],

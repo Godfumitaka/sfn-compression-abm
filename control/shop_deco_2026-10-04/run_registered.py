@@ -52,14 +52,17 @@ def descendants_rss(pid):
         chosen |= extra
 
 
-def registered(args, out, tag, mem=0.5):
+def registered(args, out, tag, mem=0.5, result_file=None):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     if (out / "resources.json").exists():
         previous = json.loads((out / "resources.json").read_text())
         assert json.loads((out / "command.json").read_text())["command"] == args
-        assert previous["exit_code"] == 0 and len(previous["manifest"]) == 1
-        assert not previous["manifest"][0].get("error")
+        assert previous["exit_code"] == 0
+        if result_file is None:
+            assert len(previous["manifest"]) == 1 and not previous["manifest"][0].get("error")
+        else:
+            assert (out / result_file).is_file()
         return previous
     queue_cmd = ["/usr/bin/python3", JOBS, "run", "--wait", "--owner", tag,
                  "--mem", str(mem), "--disk-path", str(out), "--", *args]
@@ -80,7 +83,8 @@ def registered(args, out, tag, mem=0.5):
         "peak_descendants_rss_bytes": peak, "logical_output_bytes": logical_bytes,
         "allocated_output_bytes": allocated_bytes, "manifest": manifest}
     (out / "resources.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
-    if process.returncode or len(manifest) != 1 or manifest[0].get("error"):
+    complete = (len(manifest) == 1 and not manifest[0].get("error")) if result_file is None else (out / result_file).is_file()
+    if process.returncode or not complete:
         raise RuntimeError(f"走行が完了しない: {tag}; resources.jsonとrun.logを参照")
     return record
 

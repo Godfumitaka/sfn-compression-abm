@@ -135,6 +135,7 @@ def decorate(tr, run_seed, trial_index, level):
     partial = RelationGraph(graph_id=tr.target_graph_partial.graph_id,
                             entities=tuple(e for e in graph.entities if e.entity_id in reach), relations=visible)
     metadata = {"kind": "shop_deco", "trial": trial_index, "level": level,
+                "run_seed": run_seed, "graph_id": graph.graph_id,
                 "full_entity_count": len(graph.entities), "public_entity_count": len(partial.entities),
                 "added": [_relation_record(r) for r in added], "removed": [_relation_record(r) for r in removed],
                 "added_predicates": [r.predicate for r in added],
@@ -195,6 +196,7 @@ def shop_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
     if CTX.get("entities_f") is not None:
         # 研究者専用。既存台帳・sideやエージェント入力へ欄を足さない。
         CTX["entities_f"].write(json.dumps({"kind": "shop_entities", "trial": trial_index,
+            "run_seed": run_seed, "graph_id": out.G_star.graph_id,
             "level": CTX["deco_level"], "full_entity_count": len(out.G_star.entities),
             "public_entity_count": len(out.target_graph_partial.entities)}, ensure_ascii=False) + "\n")
     _bump("trials")

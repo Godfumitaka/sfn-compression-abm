@@ -103,6 +103,7 @@ def test_research_entity_counts_follow_visible_reachability_without_changing_sce
             out = sw.shop_trial(generate_trial, 1, 4, ("agent",), seed=SEED)
         row = json.loads(sink.getvalue())
         assert row["level"] == level and row["trial"] == 4
+        assert row["run_seed"] == 1 and row["graph_id"] == out.G_star.graph_id
         assert row["full_entity_count"] == len(out.G_star.entities) == 3
         assert row["public_entity_count"] == len(out.target_graph_partial.entities)
         assert row["public_entity_count"] == (2 if level == "skeleton" else 3)
