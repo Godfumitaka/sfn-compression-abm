@@ -8,12 +8,14 @@ class Gates(unittest.TestCase):
     def test_csv_keeps_ids_selection_and_no_material_distinct(self):
         rec={'world':2,'seed':1,'trial':5,'day':'e','shop':'甲','selector':'N3','classification':'distinction_loss',
              'original_R':'old','original':{'outcome':'外れ','predicate':'p','arguments':['a','b']},
-             'restored':[],'unrestored':[],'i':{'outcome':'黙り'},'ii':None,'iii_a':{'outcome':'正解'},
+             'restored':[],'unrestored':[],'i':{'outcome':'黙り'},'ii':None,'iii_a':{'outcome':'正解','R':'new'},
              'iii_b':{'outcome':'外れ','selected_R':'old','added_selected':False},
              'iii_c':{'status':'材料なし','material_trials':[2]}}
         row=batch.flatten(rec)
         self.assertEqual((row['world'],row['seed'],row['trial']),(2,1,5))
         self.assertFalse(row['iii_b_added_selected'])
+        self.assertEqual(row['condition_birth_status'],'適用')
+        self.assertEqual(row['iii_a_added_R'],'new');self.assertEqual(row['iii_b_added_R'],'new')
         self.assertEqual(row['iii_c_status'],'材料なし');self.assertEqual(row['iii_c_outcome'],'')
         self.assertEqual(row['baseline_arguments'],'["a", "b"]')
 

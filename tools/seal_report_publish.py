@@ -22,7 +22,7 @@ def publish(note=None):
         fcntl.flock(lock,fcntl.LOCK_EX)
         memo=read(CHECKPOINT) or {'arms':read(EX/'status.json').get('completed',[])[:8],'worlds':[],'rebuild':[],'initial':False}
         status=read(EX/'status.json');arms=[x for x in status.get('completed',[]) if x not in memo['arms']]
-        worlds=[w for w in (1,2) if (ROOT/f'attention_2026-10-05/w{w}/summary.json').exists() and w not in memo['worlds']]
+        worlds=[w for w in (1,2) if (ROOT/f'attention_2026-10-05/w{w}/csv_refresh.json').exists() and w not in memo['worlds']]
         comparisons=sorted((ROOT/'memory_rebuild_2026-10-05').glob('*/seed*.comparison.json'))
         comparisons=[p for p in comparisons if str(p) not in memo['rebuild']]
         failure=str(status.get('error',''))
@@ -84,7 +84,7 @@ def publish(note=None):
                     assert sum(tallies.values())==len(subset)
                     lines.append('| '+label+' | '+method+' | '+str(len(subset))+' | '+' | '.join(map(str,tallies.values()))+' |')
             lines.append('')
-            for name in ('all_doors.csv','exception_wrong.csv','summary.json'):lines.append('- '+copy(dest/name,f'介入_w{world}_'+name))
+            for name in ('all_doors.csv','exception_wrong.csv','summary.json','csv_refresh.json'):lines.append('- '+copy(dest/name,f'介入_w{world}_'+name))
             memo['worlds'].append(world)
         for p in comparisons:
             d=read(p)

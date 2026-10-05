@@ -32,8 +32,13 @@ def flatten(rec):
                          ('iii_a',rec['iii_a']),('iii_b',rec['iii_b']),('iii_c',rec['iii_c'])]:
         result=result or {}
         for key in ('status','outcome','predicate','reason','selected_R','R_used','added_R','added_selected'):
-            row[field+'_'+key]=result.get(key,'')
+            column=field+'_'+key
+            row[column]=result.get(key,row.get(column,''))
         row[field+'_arguments']=json.dumps(result.get('arguments'),ensure_ascii=False)
+    if rec['iii_a'] is not None:
+        added=rec['iii_a'].get('R',f'DIAG_CONTENT_{rec["seed"]}_{rec["trial"]}')
+        row['iii_a_added_R']=added
+        row['iii_b_added_R']=added
     row['iii_c_material_trials']=json.dumps((rec['iii_c'] or {}).get('material_trials',[]))
     return row
 
@@ -67,6 +72,11 @@ def export(world,seed,dest):
         writer=csv.DictWriter(stream,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
     result={'world':world,'seed':seed,'door_cases':len(rows),'attention_keys_and_classifications_match':True,
             'exception_wrong_classes':dict(classes)}
+    previous=dest/f'seed{seed:03d}.join_check.json'
+    if previous.exists():
+        checked=json.loads(previous.read_text())
+        if 'input_files_unchanged' in checked:
+            result['input_files_unchanged']=checked['input_files_unchanged']
     (dest/f'seed{seed:03d}.join_check.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     return result
 
