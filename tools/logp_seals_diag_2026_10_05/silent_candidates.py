@@ -18,10 +18,11 @@ def work(job):
     import selcands
     result=selcands.one((str(arm_root(arm)),paths['ledger'].parent.name,seed,targets,str(ROOT/'silent_cands')))
     assert result['予測が本物と違う']==0,result
+    assert result['一位が本物の選びと違う']==result['一位でやり直した答えが本物と違う']==0,result
     assert result['対象']==result['作った試行']==len(targets),result
     assert old=={str(p):sha(p) for p in paths.values()}
     result.update(seconds=time.monotonic()-start,peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-                  input_unchanged=True,notes='黙りではR_usedがないため、発話した定義の一位一致の検査は適用しない。')
+                  input_unchanged=True,notes='既存手続きの三再現チェックはすべて0。台帳のR_usedが空の試行には選択の一位一致を適用しない。黙りでもR_usedがある試行には適用する。')
     print(json.dumps(result,ensure_ascii=False),flush=True)
     return result
 

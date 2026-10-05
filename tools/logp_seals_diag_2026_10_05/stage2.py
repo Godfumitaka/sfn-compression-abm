@@ -130,12 +130,15 @@ def work(job):
                 births.append(rowborn)
                 count[('birth',days,rowborn['post_state'])]+=1
             if row['held_out_is_door'] and row['shop_cue']=='e':
-                saved=doors_saved[t];R=row['R_used']
+                saved=doors_saved[t];R=vrecords[t].get('R_used') or row['R_used']
+                if row['R_used'] and vrecords[t].get('R_used'):assert row['R_used']==vrecords[t]['R_used']
                 seals=seal_info(pre['definitions'][R],pre['slot_history'],ids) if R else []
                 category=compact_seal(seals) if R else '選択なし'
                 doors.append({'arm':arm,'world':world,'lambda':price,'seed':seed,'trial':t,'shop_type':row['shop_type'],
                               'day':'e','outcome':saved['outcome'],'classification':saved['class'] or '',
-                              'R_used':R or '', 'seal_class':category,'seal_count':len(seals),
+                              'R_used':row['R_used'] or '', 'R_selected':R or '',
+                              'selection_source':'side v39.R_used' if vrecords[t].get('R_used') else '台帳 R_used' if R else '記録に選択なし',
+                              'seal_class':category,'seal_count':len(seals),
                               'seal_details':json.dumps(seals,ensure_ascii=False),'correct_candidates':saved['correct_candidates'],
                               'correct_exception_definition_exists':None if saved['correct_candidates'] is None else bool(saved['correct_candidates'])})
             if (t+1)%500==0 or t==1739:

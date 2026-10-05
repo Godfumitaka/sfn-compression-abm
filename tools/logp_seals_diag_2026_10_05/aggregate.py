@@ -29,6 +29,8 @@ def main():
     checks=json.loads((ROOT/'stage2_summary.json').read_text())
     assert len(checks)==100 and {(r['arm'],r['seed']) for r in checks}=={(a,s) for a in ARMS for s in range(1,21)}
     assert all(r['input_unchanged'] and r['memory_side_matches'] and r['checkpoints']==4 for r in checks)
+    selected_checks=json.loads((ROOT/'selected_seals_summary.json').read_text())
+    assert len(selected_checks)==100 and all(r['input_unchanged'] and r['nonempty_selection_disagreements']==0 for r in selected_checks)
     silentchecks=json.loads((ROOT/'silent_candidates_summary.json').read_text())
     assert sum(r['対象'] for r in silentchecks)==212
     assert all(r['input_unchanged'] and r['予測が本物と違う']==0 and r['対象']==r['作った試行'] for r in silentchecks)
@@ -154,6 +156,9 @@ def main():
             'final_points_match_prior_table':100,'definition_records':len(df),'all_original_inputs_unchanged':True,
             'wrong_classifications_match':True,'unresolved_availability':0,
             'earlier_birth_and_memory_tables_equal':True,
+            'side_selection_checked_cases':sum(r['cases'] for r in selected_checks),
+            'side_selected_ledger_empty_cases':sum(r['side_only_selected'] for r in selected_checks),
+            'selected_refresh_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in selected_checks),
             'stage2_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in checks),
             'silent_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in silentchecks),
             'seconds':time.monotonic()-start,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}

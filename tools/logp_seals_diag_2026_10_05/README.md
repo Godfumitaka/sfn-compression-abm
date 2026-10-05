@@ -4,7 +4,9 @@
 
 実行した順序と受付枠は `commands.json` に残す。各処理は `~/jobs/jobs.py run --wait --mem --disk-path` に通す。`stage1.py` が停止条件を検査し、その関門を通過した場合だけ `priority.py`、`stage2.py`、`silent_candidates.py`、`aggregate.py` を実行する。最後の処理は前二者の完了ファイルが必要である。
 
-独立診断の保存先は作業枝の `tools/logp_seals_diag_2026_10_05/`。この保存された版を直接使う場合は、環境変数 `LOGP_SEAL_WORKSPACE` に実際の診断の作業場所を渡す。そこにある入力由来の中間記録も読むので、作業場所の指定は必須とする。実走行で使用したファイルと保存版の指紋一致は `diagnostic_code_sha256.csv` に残す。
+今回の初回集計は台帳のR_usedを読んでいたため、`selected_seals.py` でsideの実際の選択と全件照合し、両欄を明示してから統合する。誕生と記憶の表は変わらない。現在の `stage2.py` 自体もsideを先に読む。初回の集計に使った版はコミットa7e099c6に残し、最終版と区別して `execution_code_versions.json` に記録する。
+
+独立診断の保存先は作業枝の `tools/logp_seals_diag_2026_10_05/`。この保存された版を直接使う場合は、環境変数 `LOGP_SEAL_WORKSPACE` に実際の診断の作業場所を渡す。そこにある入力由来の中間記録も読むので、作業場所の指定は必須とする。最終の作業場所と保存版の指紋一致は `diagnostic_code_sha256.csv` に残す。実行当時の版は別に記録する。
 
 初回の欄確認 `inspect_records.py` と報告保存用の補助は、実行時の作業場所から使う版をそのまま保存している。これらを使う場合は作業場所へ写して実行する。主要な段1・段2の診断は前段落の環境変数による指定を使える。
 

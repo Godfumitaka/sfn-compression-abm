@@ -53,7 +53,7 @@ def main():
             yes=sum(r['correct_exception_definition_exists']=='True' for r in x)
             available.append([label(a),outcome,len(x),yes,len(x)-yes])
     out.append(table(['腕','実際の答え','課題数','正解できる定義あり','なし'],available)+'\n')
-    out.append('正解できる定義とは、その予測前の記憶で、既存の門とその腕の答え方を通って当該ドアを正しく答える候補である。世界1は通常と例外のドア名が同じなので「共通」の答えとして記録した。実際に選ばれた定義のシールは、予測前の記憶から F sig_n / F sig_e / H[sig_n] / H[sig_e] / H[両方] / U を読む。シール席なし、複数、選択なしは別欄に残す。'+link('exception_doors.csv','3060件のCSV（種・試行で接続可能）')+'、'+link('exception_door_seal_summary.csv','全結果と選択シールの内訳')+'。\n')
+    out.append('正解できる定義とは、その予測前の記憶で、既存の門とその腕の答え方を通って当該ドアを正しく答える候補である。世界1は通常と例外のドア名が同じなので「共通」の答えとして記録した。実際に採用された定義のシールは、予測前の記憶から F sig_n / F sig_e / H[sig_n] / H[sig_e] / H[両方] / U を読む。R_selectedはsideのv39.R_usedと台帳R_usedを全件照合して読む。これは門通過後の採用の記録で、黙りでも採用された定義があればシールを数える。両方が空の試行は記録に採用なしとする。シール席なし、複数、選択なしは別欄に残す。'+link('exception_doors.csv','3060件のCSV（種・試行で接続可能）')+'、'+link('exception_door_seal_summary.csv','全結果と選択シールの内訳')+'、'+link('selected_seals_summary.json','sideの選択と予測前の記憶の全件照合')+'。\n')
     out.append('外れの三分類は次のとおり。136件の診断との照合はN3・世界2の選び間違いの行を使う。三分類に含まれない状態も分母から除かない。\n')
     wrong=read('wrong_seal_summary.csv');wt=[]
     for a in arms:
@@ -85,7 +85,7 @@ def main():
     out.append('### 5. 記憶量と外れの比較の範囲\n')
     out.append('四点の表は上の段2先行表の5と'+link('final_memory_errors.csv','比較CSV')+'にある。同じλ主で最終総ビットはL-Bが187400、N3が214468、例外の外れは11と179だった。最終量だけを指して「L-Bが多く残した」という順序には一致しない。選択規則も異なり、λ=0.065の対照は欠測なので、記憶量を揃えた介入の結果としては扱わない。\n')
     out.append('### 記録・コード・受付の確定情報\n')
-    out.append(f'旧照合3380344、L-B実装e0a1f2ed0f3a62c8396f346e4f39ef4802c35237、診断前の作業枝2ee8eccf1b5c9cf0d7101aa059a1c07b37a80348。今回の独立診断の保存コミットは `{head}`。作業枝の `tools/logp_seals_diag_2026_10_05/` に実行版と同じバイトの診断と仕様を保存した。模型・照合・既存分類のファイル差分は0。'+link('code_check.json','差分と構文の確認')+'、'+link('diagnostic_code_sha256.csv','実行版と保存版のsha256')+'。\n')
+    out.append(f'旧照合3380344、L-B実装e0a1f2ed0f3a62c8396f346e4f39ef4802c35237、診断前の作業枝2ee8eccf1b5c9cf0d7101aa059a1c07b37a80348。今回の独立診断の最終保存コミットは `{head}`。作業枝の `tools/logp_seals_diag_2026_10_05/` に作業場所と同じバイトの最終版と仕様を保存した。模型・照合・既存分類のファイル差分は0。'+link('code_check.json','差分と構文の確認')+'、'+link('diagnostic_code_sha256.csv','作業場所と保存版のsha256')+'、'+link('execution_code_versions.json','処理ごとの実行版のコミットと指紋')+'。\n')
     out.append('入力のパスとsha256は'+link('input_sha256.csv','元記録の指紋')+'、件別中間出力の指紋は'+link('derived_inputs_sha256.csv','診断出力の指紋')+'。コマンドと受付枠は'+link('commands.json','コマンド記録')+'。全件の段1は0.7GB・二並列、誕生/記憶集計は0.3GB・二並列、黙り候補の既存診断は1.0GB・二並列で、すべてjobs.py run --waitと実出力先のdisk-pathを指定した。\n')
     out.append(f'最大実測RSSは誕生/記憶の一処理 {q["stage2_max_worker_rss_bytes"]:,} バイト、黙り候補の一処理 {q["silent_max_worker_rss_bytes"]:,} バイト。'+link('stage2_summary.json','全100処理の検算と実測')+'。T/L-BEの受付・走行は本診断のために停止していない。\n')
     report=ROOT/(NAME+'.md');text=report.read_text()
