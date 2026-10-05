@@ -3,6 +3,7 @@ import io
 import json
 import random
 import sys
+import os
 import subprocess
 import unittest
 from dataclasses import replace
@@ -107,6 +108,17 @@ class PortTest(unittest.TestCase):
         smereplay.collective_phase('received', 7, state, deliveries=({'sender': 1},))
         smereplay.ST.update(f=io.StringIO(), replay=io.StringIO(saved))
         with self.assertRaises(RuntimeError):smereplay.collective_phase('received', 7, ('different',), deliveries=({'sender': 1},))
+
+    def test_hashseed_independent_and_shared_content_equivalent(self):
+        data = (tuple(range(640)), {"a", "b", "c"}, Fraction(2, 3))
+        self.assertEqual(fingerprint([data, data]), fingerprint([data, (tuple(range(640)), {"c", "b", "a"}, Fraction(2, 3))]))
+        code = 'from fractions import Fraction; from v311c_fingerprint import fingerprint; print(fingerprint(({"a","b","c"},Fraction(2,3))))'
+        answers=[]
+        for seed in (0, 1, 2):
+            env = dict(os.environ, PYTHONHASHSEED=str(seed), PYTHONPATH=str(Path(__file__).resolve().parents[1]))
+            answers.append(subprocess.check_output([sys.executable, "-c", code],env=env,text=True).strip())
+        self.assertEqual(len(set(answers)), 1)
+        print("PYTHONHASHSEED=0/1/2", answers)
 
     def test_fingerprint_keeps_order_but_sorts_sets(self):
         self.assertEqual(fingerprint({'names': {'a', 'b'}, 'ratio': Fraction(1, 2)}), fingerprint({'names': {'b', 'a'}, 'ratio': Fraction(1, 2)}))
