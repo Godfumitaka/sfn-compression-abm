@@ -1,0 +1,106 @@
+[
+  {
+    "purpose": "記録の欄確認",
+    "mem_gb": 0.6,
+    "owner": "Codex-Lシール記録確認1005",
+    "script": "inspect_records.py",
+    "command": [
+      "python3",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-Lシール記録確認1005",
+      "--mem",
+      "0.6",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/inspect_records.py"
+    ]
+  },
+  {
+    "purpose": "各腕の種1全状態指紋確認",
+    "mem_gb": 0.3,
+    "owner": "Codex-Lシール段1実測1005",
+    "script": "stage1.py",
+    "args": [
+      "--pilot",
+      "--workers",
+      "1"
+    ],
+    "command": [
+      "python3",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-Lシール段1実測1005",
+      "--mem",
+      "0.3",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage1.py",
+      "--pilot",
+      "--workers",
+      "1"
+    ]
+  },
+  {
+    "purpose": "全20種の誕生と同試行退役の有無",
+    "mem_gb": 0.1,
+    "owner": "Codex-Lシール誕生欄関門1005",
+    "script": "preflight.py",
+    "command": [
+      "python3",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-Lシール誕生欄関門1005",
+      "--mem",
+      "0.1",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/preflight.py"
+    ]
+  },
+  {
+    "purpose": "全20種の段1（実測枠で再開）",
+    "mem_gb": 0.7,
+    "owner": "Codex-Lシール段1全20種実測枠1005",
+    "script": "stage1.py",
+    "args": [
+      "--workers",
+      "2",
+      "--resume"
+    ],
+    "env": {
+      "LOGP_SEAL_HASH_MODE": "birth_and_checkpoints",
+      "LOGP_SEAL_STAGE1_FOLDER": "stage1_full"
+    },
+    "command": [
+      "python3",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-Lシール段1全20種実測枠1005",
+      "--mem",
+      "0.7",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage1.py",
+      "--workers",
+      "2",
+      "--resume"
+    ]
+  }
+]
