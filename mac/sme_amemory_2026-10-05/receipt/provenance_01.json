@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-05T18:51:05.443147+09:00",
+  "sources": {
+    "source_a": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/source_a",
+      "commit": "858f7089e3d033cf5aa8ceb1c52c97bf8095019b",
+      "branch": "codex/sme-amemory-a-2026-10-05"
+    },
+    "source_logp": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/source_logp",
+      "commit": "da3521bfab488c9bd1afc89915cd8a6cb0600f5e",
+      "branch": "codex/sme-amemory-logp-2026-10-05"
+    }
+  },
+  "reference_runs": {
+    "A_on": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/full_01/A_on/case_complete.json",
+      "value": {
+        "passed": true,
+        "case": "A_on",
+        "run": {
+          "exit": 0,
+          "wall_seconds": 6707.392127875006,
+          "at": "2026-10-05T17:15:04.804153+09:00",
+          "cprofile": false
+        },
+        "comparison": {
+          "passed": true,
+          "trials": 1740,
+          "differing_judgment_trials": 0,
+          "field_differing_trials": {
+            "prediction_kind": 0,
+            "predicted_edge": 0,
+            "hit": 0,
+            "R_used": 0,
+            "abstain_reason": 0
+          },
+          "first_difference": null,
+          "world_and_disclosure_equal": true,
+          "all_matches_validated_in_production": true,
+          "same_answers_required": false
+        },
+        "elapsed_sec": 6341.65,
+        "peak_rss_mb": 7697.8
+      }
+    },
+    "logP": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_logp_2026-10-05/runs_01/L_B_s01/run_complete.json",
+      "value": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 6088.593148124986,
+          "started": "2026-10-05T13:40:52.326329+09:00",
+          "finished": "2026-10-05T15:22:20.965680+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 6075.18,
+        "peak_rss_mb": 4918.0,
+        "trial_count": 1740,
+        "seed": 1,
+        "commit": "da3521bfab488c9bd1afc89915cd8a6cb0600f5e"
+      }
+    }
+  }
+}
