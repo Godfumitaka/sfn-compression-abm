@@ -66,6 +66,44 @@ def append_arm(lines,relative,entry):
         lines += ['', '- '+copy(rdest/'all_doors.csv',name+'/R/all_doors.csv'),'- '+copy(rdest/'summary.json',name+'/R/summary.json')]
     lines.append('')
 
+def comparison(lines,state):
+    rows=[]
+    targets=('f_grid/fg_f050_A_L50','f_grid/fg_f050_C_L50','lambda_grid/lg_w2_A_lam0.065')
+    for arm in targets:
+        entry=state['arms'].get(arm,{})
+        if entry.get('phase')!='complete':continue
+        dest=Path(entry['analysis_root']);d=read(dest/'summary.json');c=d['counts'];loss=Counter()
+        with (dest/'exception_wrong.csv').open(newline='') as stream:
+            for row in csv.DictReader(stream):
+                if row['classification']!='distinction_loss':continue
+                for method in ('iii_a','iii_b','iii_c'):
+                    status=row[method+'_status'];value=status if status in ('材料なし','誕生なし') else row[method+'_outcome']
+                    loss[method+'_'+value]+=1
+        denominator=c.get('exception_wrong',0)-c.get('exception_unrestored',0)
+        row={'arm':Path(arm).name,'world':d['world'],'mode':d['mode'],'lambda':d['lambda_'],'selector':d['selector'],
+             'exception_wrong':c.get('exception_wrong',0),'i_usable_wrong':denominator,'i_correct':c.get('i_正解',0),
+             'i_correct_fraction':c.get('i_正解',0)/denominator if denominator else None,
+             'i_correct_selection_mistake':c.get('i_correct_selection_mistake',0),
+             'i_correct_distinction_loss':c.get('i_correct_distinction_loss',0),
+             'i_unrestored':c.get('exception_unrestored',0),'normal_correct':c.get('normal_correct',0),
+             'normal_changed_wrong':c.get('normal_changed_外れ',0),'normal_changed_silent':c.get('normal_changed_黙り',0),
+             'distinction_loss_wrong':c.get('distinction_loss_e',0),'iii_a_correct_in_loss':loss['iii_a_正解'],
+             'iii_b_correct_in_loss':loss['iii_b_正解'],'iii_c_correct_in_loss':loss['iii_c_正解'],
+             'iii_c_no_material_in_loss':loss['iii_c_材料なし'],'iii_c_no_birth_in_loss':loss['iii_c_誕生なし'],'material':diag.LABEL}
+        rows.append(row)
+    if not rows:return
+    with (OUT/'intervention_comparison.csv').open('w',newline='') as stream:
+        writer=csv.DictWriter(stream,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+    lines += ['',f'### 当初の介入3腕の比較 — {diag.LABEL}','',
+              f'| 腕・世界・保持・λ — {diag.LABEL} | 例外の外れ | (i)適用可能 | (i)正解 | 適用可能外れに対する割合 | 正解になった選び間違い | 正解になった区別の喪失 | 通常の正解から外れ・黙り |',
+              '|---|---:|---:|---:|---:|---:|---:|---:|']
+    for r in rows:
+        frac='—' if r['i_correct_fraction'] is None else f'{r["i_correct_fraction"]:.6f}'
+        lines.append('| '+r['arm']+f'・世界{r["world"]}・{r["mode"]}・{r["lambda"]} | '+
+                     ' | '.join(map(str,[r['exception_wrong'],r['i_usable_wrong'],r['i_correct'],frac,r['i_correct_selection_mistake'],r['i_correct_distinction_loss'],r['normal_changed_wrong']+r['normal_changed_silent']]))+' |')
+    lines += ['', '割合の分母は未復元を除く例外の日の外れ。未復元件数、通常の日の変化の外れ／黙り内訳、区別の喪失に限ったiii-a/b/cと材料不足はCSVに併記。Aのλ主と0.065は同じ世界・選び方で並べ、Cは保持方法の異なる条件として表示する。未完了の腕はこの表に入れない。','',
+              '- '+copy(OUT/'intervention_comparison.csv','介入3腕の比較.csv'),'']
+
 def publish():
     with (ROOT/'publish.lock').open('w') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
@@ -89,6 +127,7 @@ def publish():
             memo['initial']=True
         for arm in done:
             append_arm(lines,arm,state['arms'][arm]);memo['arms'].append(arm)
+        if done or final:comparison(lines,state)
         if errors:
             for arm,error in errors.items():
                 if memo['errors'].get(arm)!=error:lines += [f'新関門または解析の停止：{arm}、`{error}`。当該腕の後続は停止。','']
