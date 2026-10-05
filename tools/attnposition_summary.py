@@ -14,6 +14,10 @@ def outcome(payload,truth):
  if edge is None:return 'abstain'
  return 'correct' if (edge['predicate'],tuple(edge['arguments']))==(truth[0],tuple(truth[1])) else 'wrong'
 
+def saved_outcome_name(name):
+ # 元の段Cのsilentと、CSVのabstainは同じ黙りの区分。未知の名は拒む。
+ return {'correct':'correct','wrong':'wrong','silent':'abstain'}[name]
+
 def seal_class(seal):
  if seal['state']=='U':return 'U'
  assert seal['state']=='H' and len(seal['seats'])==1
@@ -67,7 +71,7 @@ def aggregate(job,out):
        assert frame['conditions'][c['id']]['answer_before_update']==case['baseline'];non_door[w,s,c['id']]+=1
       count+=1;continue
      door_count+=1
-     day='exception' if case['shop_cue']=='e' else 'normal';shop=case['shop_type'];before=outcome(case['baseline'],case['truth']);assert before==case['baseline_outcome']
+     day='exception' if case['shop_cue']=='e' else 'normal';shop=case['shop_type'];before=outcome(case['baseline'],case['truth']);assert before==saved_outcome_name(case['baseline_outcome'])
      error_class='selection_error' if before=='wrong' and case['actual_correct_candidates']>0 else 'distinction_loss' if before=='wrong' else ''
      seal=classes.get((s,count),'') if w==2 and day=='exception' and error_class=='selection_error' else ''
      if w==2 and day=='exception' and before=='wrong':

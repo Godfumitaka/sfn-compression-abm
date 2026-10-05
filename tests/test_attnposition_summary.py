@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from attnposition_summary import outcome,seal_class
+from attnposition_summary import outcome,seal_class,saved_outcome_name
 
 def test_correct_requires_name_and_arguments_quiet_is_separate():
  truth=['e',['a','b']]
@@ -15,3 +15,8 @@ def test_keeps_original_three_seal_classes():
  assert seal_class({'state':'U'})=='U'
  for name in ('sig_n','sig_e'):
   assert seal_class({'state':'H','seats':[{'names':[name]}]})=='H['+name+']'
+
+
+def test_saved_silent_is_same_abstention_without_score_change():
+ assert saved_outcome_name('silent')=='abstain'
+ for name in ('correct','wrong'):assert saved_outcome_name(name)==name
