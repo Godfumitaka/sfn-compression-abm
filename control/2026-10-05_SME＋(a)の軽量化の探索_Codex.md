@@ -1872,3 +1872,115 @@ SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず
 
 内訳を測った基準の最大常駐は測定の補助領域を含むため、削減率の基準にしない。採用候補は全長の一致を通った案だけ。模型の式・ε・b・q_H・採点・選び・同点・世界の変更は0。本番0、8体0。
 
+
+## progress_20261006_055132：2026-10-06T05:51:33.377908+09:00
+
+SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず、既存のC・log P・key/combinedは停止していない。
+
+[
+  {
+    "folder": "diagnostic_01/A_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "diagnostic_01/L_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "gates200_01/A_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/L_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_diagnostic_01/A",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_diagnostic_01/L",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_gates_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "vanilla_01/A",
+    "completed": false,
+    "last_recorded_trial": null,
+    "gate_passed": null
+  }
+]
+
+停止の記録：[]
+
