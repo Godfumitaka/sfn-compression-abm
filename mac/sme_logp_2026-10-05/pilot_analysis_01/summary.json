@@ -1,0 +1,60 @@
+{
+  "seed": 1,
+  "trials": 200,
+  "days": {
+    "e": {
+      "正解": 7
+    },
+    "n": {
+      "正解": 9
+    }
+  },
+  "all_task_days": {
+    "e": {
+      "黙り": 20,
+      "正解": 19
+    },
+    "n": {
+      "黙り": 63,
+      "正解": 98
+    }
+  },
+  "birth_groups": [
+    {
+      "base_day": "e",
+      "current_day": "e",
+      "誕生数": 7,
+      "シール席ありの定義数": 7,
+      "登録直後_F": 7,
+      "同試行の忘却後_F": 7
+    },
+    {
+      "base_day": "n",
+      "current_day": "e",
+      "誕生数": 1,
+      "シール席ありの定義数": 0
+    },
+    {
+      "base_day": "n",
+      "current_day": "n",
+      "誕生数": 6,
+      "シール席ありの定義数": 6,
+      "登録直後_F": 6,
+      "同試行の忘却後_F": 6
+    }
+  ],
+  "memory_bits_mean": 5603.865,
+  "memory_bits_final": 7091,
+  "definitions_mean": 11.365,
+  "definitions_final": 14,
+  "wall_seconds": 250.9258632500132,
+  "peak_rss_mb": 425.9,
+  "table": "|日|ドア課題数|正解|外れ|黙り|選び間違い|区別の喪失|\n|---|---:|---:|---:|---:|---:|---:|\n|例外|7|7|0|0|0|0|\n|通常|9|9|0|0|0|0|\n\n|基の材料の日|今の材料の日|誕生数|シール席あり定義数|登録直後F/H/U|同試行の忘却後F/H/U|同試行に退役|\n|---|---|---:|---:|---|---|---:|\n|e|e|7|7|7/0/0|7/0/0|0|\n|n|e|1|0|0/0/0|0/0/0|0|\n|n|n|6|6|6/0/0|6/0/0|0|\n\n材料の日のeは例外、nは通常。登録直後はregistration_event、忘却後は同じ試行のsme.statesのpostを使用。\n全200試行の記憶総ビット（v39のbits_after）の平均5603.865000、最後7091。定義数の平均11.365000、最後14。",
+  "prediction_and_selection_mismatches": 0,
+  "classification_tool": "tools/selcands_sme.py",
+  "replay": {
+    "predictions": 200,
+    "updates": 200,
+    "replayed": true
+  }
+}
