@@ -20,3 +20,42 @@ log Pは、名前の確率Pを−log₂Pのビットの費用で採点する旗�
 
 
 コマンド・出力のパス・sha256の証拠：mac/sme_logp_2026-10-05/gates_01。大きな台帳と状態は自分の作業場所に残し、結果枝には小さい証拠だけを写す。種21〜40を読まず、走らせていない。進行中の段2と(a)の比較は停止していない。
+
+## pilot：2026-10-05T13:40:05.031894+09:00
+
+200試行の計測と、初めの全1740試行の受付の見込み。cProfileなし。
+
+{
+  "pilot": {
+    "passed": true,
+    "run": {
+      "exit": 0,
+      "wall_seconds": 250.9258632500132,
+      "started": "2026-10-05T13:30:48.806989+09:00",
+      "finished": "2026-10-05T13:34:59.734782+09:00",
+      "cprofile": false
+    },
+    "elapsed_sec": 246.64,
+    "peak_rss_mb": 425.9,
+    "trial_count": 200,
+    "seed": 1,
+    "commit": "da3521bfab488c9bd1afc89915cd8a6cb0600f5e"
+  },
+  "old_full_active_seconds": 15411.004142,
+  "old_200_seconds": 377.46796679199906,
+  "full_over_early200_factor": 40.8273164819099,
+  "projected_logp_full_seconds": 10244.629632404733,
+  "three_logp_projected_seconds": 30733.888897214198,
+  "three_logp_with_time_margin_seconds": 61467.777794428395,
+  "time_margin_multiplier": 2,
+  "three_logp_end_excluding_queue_and_analysis": "2026-10-06T06:44:23.697003+09:00",
+  "unknown": "受付待ち時間と解析はこの三本の時間の外。最初の全走行の実測後に残りの見込みを更新。",
+  "memory_estimate_gb": 7.1,
+  "memory_formula": "旧い全走行4718.9MB × logP200試行の最大常駐 / 旧200試行355.0MB ×1.25を0.1GB単位で切り上げ",
+  "adoption_decided": false,
+  "production_runs": 0
+}
+
+この200試行は時間とメモリの確認用で、種1〜3の全走行の表には足さない。最初の全走行の実測後に残りの走行の完了見込みを再計算する。
+
+コマンド・出力のパス・sha256の証拠：mac/sme_logp_2026-10-05/pilot_01。大きな台帳と状態は自分の作業場所に残し、結果枝には小さい証拠だけを写す。種21〜40を読まず、走らせていない。進行中の段2と(a)の比較は停止していない。
