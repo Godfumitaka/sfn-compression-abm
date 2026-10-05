@@ -2226,3 +2226,121 @@ SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず
 
 確認値は同じマックの一本の時間・常駐だけ。右二列は23GiBを全部使えて、160本がこの種1と同じ重さで、デスクトップの速度も同じ、多重実行で速度が落ちないと仮定した上限と見込み。OS・他の処理・C/D・世界1の重さが未測定なので、実際に使える本数や完了時刻の確認値ではない。式はmin(16, floor(23GiB / 一本の最大常駐))、160×一本の時間/本数。採用はアストラの判断を待つ。本番を開始していない。
 
+
+## progress_20261006_072143：2026-10-06T07:21:44.058526+09:00
+
+SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず、既存のC・log P・key/combinedは停止していない。
+
+[
+  {
+    "folder": "diagnostic_01/A_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "diagnostic_01/L_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "gates200_01/A_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/L_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_diagnostic_01/A",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_diagnostic_01/L",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_gates_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_gates_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": true
+  },
+  {
+    "folder": "vanilla_01/A",
+    "completed": true,
+    "last_recorded_trial": null,
+    "gate_passed": null
+  },
+  {
+    "folder": "vanilla_01/L",
+    "completed": true,
+    "last_recorded_trial": null,
+    "gate_passed": null
+  }
+]
+
+停止の記録：[]
+
