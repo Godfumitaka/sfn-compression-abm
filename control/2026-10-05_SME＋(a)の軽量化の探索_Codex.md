@@ -1188,3 +1188,91 @@ SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず
 
 自己の点、控えの乱数、図、同点の選択、統計、逐語の記憶、定義、残る記憶、書き出しのPythonのオブジェクトも別の列に記録。全区間の時間・常駐・各用途の照合器の実行回数と秒は添付の表。用途別は実行した照合器の時間で、キャッシュの検索やI/Oの時間を含めない。Aの二条件にはCの反実仮想の旗は無く、その使い道は0。routingの記録のための呼び出しは別。
 
+
+## progress_20261006_022107：2026-10-06T02:21:08.054754+09:00
+
+SME＋(a)軽量化の30分の進行。完成した記録を二重に走らせず、既存のC・log P・key/combinedは停止していない。
+
+[
+  {
+    "folder": "diagnostic_01/A_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "diagnostic_01/L_diag200",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": null
+  },
+  {
+    "folder": "gates200_01/A_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/L_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_off",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/L_prune",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": false
+  },
+  {
+    "folder": "gates200_01/A_intern",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "gates200_01/A_reuse",
+    "completed": true,
+    "last_recorded_trial": 199,
+    "gate_passed": true
+  },
+  {
+    "folder": "full_diagnostic_01/A",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_diagnostic_01/L",
+    "completed": true,
+    "last_recorded_trial": 1739,
+    "gate_passed": null
+  },
+  {
+    "folder": "full_gates_01/A_reuse",
+    "completed": false,
+    "last_recorded_trial": 532,
+    "gate_passed": null
+  }
+]
+
+停止の記録：[]
+
