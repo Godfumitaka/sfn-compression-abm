@@ -1,0 +1,114 @@
+{
+  "trial": 199,
+  "rows": [
+    {
+      "table": "cache",
+      "live_entries": 11203,
+      "observed_entries_including_restored_diagnostics": 11203,
+      "eligible_entries": 11136,
+      "last_read_at_least_100_trials_ago": 1015,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 0
+    },
+    {
+      "table": "self_cache",
+      "live_entries": 2457,
+      "observed_entries_including_restored_diagnostics": 2457,
+      "eligible_entries": 2442,
+      "last_read_at_least_100_trials_ago": 1015,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 0
+    },
+    {
+      "table": "cache_rng",
+      "live_entries": 11203,
+      "observed_entries_including_restored_diagnostics": 11203,
+      "eligible_entries": 11136,
+      "last_read_at_least_100_trials_ago": 3720,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 0
+    },
+    {
+      "table": "results",
+      "live_entries": 8746,
+      "observed_entries_including_restored_diagnostics": 8746,
+      "eligible_entries": 8694,
+      "last_read_at_least_100_trials_ago": 400,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 0
+    },
+    {
+      "table": "graphs",
+      "live_entries": 688,
+      "observed_entries_including_restored_diagnostics": 688,
+      "eligible_entries": 0,
+      "last_read_at_least_100_trials_ago": 65,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 2633
+    },
+    {
+      "table": "choices",
+      "live_entries": 397,
+      "observed_entries_including_restored_diagnostics": 397,
+      "eligible_entries": 0,
+      "last_read_at_least_100_trials_ago": 197,
+      "last_read_at_least_500_trials_ago": 0,
+      "cross_trial_successful_lookups": 0
+    }
+  ],
+  "memory_rows": [
+    {
+      "table": "cache",
+      "exclusive_bytes": 147999422,
+      "eligible_bytes": 147999422,
+      "age100_bytes": 9529054,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 589896
+    },
+    {
+      "table": "self_cache",
+      "exclusive_bytes": 471306,
+      "eligible_bytes": 471306,
+      "age100_bytes": 195895,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 73792
+    },
+    {
+      "table": "cache_rng",
+      "exclusive_bytes": 2049024,
+      "eligible_bytes": 2049024,
+      "age100_bytes": 684480,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 589896
+    },
+    {
+      "table": "results",
+      "exclusive_bytes": 98420977,
+      "eligible_bytes": 98420977,
+      "age100_bytes": 5074627,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 294976
+    },
+    {
+      "table": "graphs",
+      "exclusive_bytes": 0,
+      "eligible_bytes": 0,
+      "age100_bytes": 0,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 26016
+    },
+    {
+      "table": "choices",
+      "exclusive_bytes": 0,
+      "eligible_bytes": 0,
+      "age100_bytes": 0,
+      "age500_bytes": 0,
+      "dictionary_shallow_bytes": 18496
+    }
+  ],
+  "retained_before_eligible_bytes": 15799971,
+  "measurement_seen_bytes": 5180834,
+  "memory_definition": "非対象の記憶・最終試行の項目・internのPOOLを先に数え、その後cache/self_cache/cache_rng/RESULTS/GRAPHS/CHOICES順でsys.getsizeofの重複を除く。辞書の空き領域と観測の表は別。解放見込みの下限でありRSSではない。",
+  "read_definition": "成功したin・添字・get。snapshotの辞書の丸写しと復元、保存・測定の列挙は含めない。",
+  "eligibility": "呼び出しごとの種があり、完了済みの前の試行で作られた4種類の項目。墓石検査で将来の参照を別途確認する。"
+}
