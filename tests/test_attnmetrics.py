@@ -94,3 +94,6 @@ def test_streamed_weight_table_is_byte_identical_to_collected_rows(tmp_path):
     assert (tmp_path/'collected.csv').read_bytes() == (tmp_path/'streamed.csv').read_bytes()
     assert [m['path'] for m in manifest] == list(map(str, paths))
     assert list(csv.DictReader((tmp_path/'streamed.csv').open())) == collected
+    chain = G.CsvChain(paths)
+    assert list(chain) == list(chain) == collected
+    assert G.fold(chain, ('world', 'name'), ('seed',)) == G.fold(collected, ('world', 'name'), ('seed',))

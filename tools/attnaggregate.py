@@ -58,6 +58,16 @@ def concatenate_csv_stream(paths, destination):
     return manifest
 
 
+class CsvChain:
+    """種・行の順を保ち、必要な表だけを何度でも逐次読み出す。"""
+    def __init__(self, paths):
+        self.paths = tuple(paths)
+
+    def __iter__(self):
+        for path in self.paths:
+            yield from read_rows(path)
+
+
 def aggregate(output, stage, *, grid_name='original'):
     if stage not in ('C', 'D'):
         raise ValueError('段C又はD')
@@ -77,9 +87,11 @@ def aggregate(output, stage, *, grid_name='original'):
     all_rows = {}
     manifest = []
     for name in files:
-        if grid_name == 'large-eta' and name == 'weights_100_trials.csv':
-            # この表は数の計算に使わず、種別の原表を結合して保存するだけ。
-            manifest.extend(concatenate_csv_stream([seed/name for seed in seeds], folder/('seed_'+name)))
+        if grid_name == 'large-eta':
+            # 列挙の順と以下の合算の式は同じ。全表の行を同時に保持しない。
+            paths = [seed/name for seed in seeds]
+            manifest.extend(concatenate_csv_stream(paths, folder/('seed_'+name)))
+            all_rows[name] = CsvChain(paths)
             continue
         rows = []
         fields = None
