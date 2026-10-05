@@ -439,7 +439,9 @@ def worker(task: dict) -> dict:
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
-            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")))
+            v310be.install(fo, seed=int(task["seed"]), nohash=bool(task["nohash"]), score_role=bool(task.get("score_role")),
+                           **({"score_logp": True, "score_logp_e": bool(task.get("score_logp_e"))}
+                              if task.get("score_logp") else {}))
             if task.get("e_price") is not None:
                 # ★ まとめの値段（--e-price、2026-10-01 午前・改訂の段 2）：E（tools/v310be.py choose_and_register の K＝A＋r＋λ dC）の λ だけを
                 #   別の値にする。B（忘れる判断）は --v39-price のまま
@@ -719,6 +721,8 @@ def main() -> None:
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--score-logp", action="store_true", help="保持の採点を開示前の確率の対数費用にする（epsilon=1/2）")
+    ap.add_argument("--score-logp-e", action="store_true", help="EのH席の費用も対数にする（--score-logpと一緒に）")
     ap.add_argument("--probe-world", action="store_true",
                     help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
     ap.add_argument("--dump-answers", action="store_true",
@@ -815,6 +819,10 @@ def main() -> None:
                                                    r["fill_selection"]) in keep_c]
     # ★ 種の順に並べる（締め切りで打ち切っても、終わった種は 4 セルがそろいやすいように）。
     runs.sort(key=lambda r: (r["seed"], r["cell"]))
+    if args.score_logp and not args.v310_be:
+        raise SystemExit("--score-logp は --v310-be と一緒に使う")
+    if args.score_logp_e and not args.score_logp:
+        raise SystemExit("--score-logp-e は --score-logp と一緒に使う")
     if args.score_role and not args.v310_be:
         raise SystemExit("--score-role は --v310-be と一緒に使う")
     if args.u_struct and (not args.v39 or not args.hist_role):
@@ -839,7 +847,7 @@ def main() -> None:
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
                and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
-               and args.horizon is None and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
+               and args.horizon is None and not args.score_logp and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
         orig_dir = str(Path(args.compare_to).resolve())
@@ -865,6 +873,9 @@ def main() -> None:
               "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare,
               **({"horizon": args.horizon} if args.horizon is not None else {})} for r in runs]
     out_root.mkdir(parents=True, exist_ok=True)
+    if args.score_logp:
+        for task in tasks:
+            task.update(score_logp=True, score_logp_e=args.score_logp_e)
     if args.score_arg_order:
         if not (args.v310_be and args.hist_role and args.score_role):
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
@@ -899,7 +910,8 @@ def main() -> None:
             task["select_n3"] = True
         if args.shop_scatter:
             task["shop_scatter"] = True
-    (out_root / "flag.json").write_text(json.dumps({**({"sme2017": True} if args.sme2017 else {}),
+    (out_root / "flag.json").write_text(json.dumps({**({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": 0.5} if args.score_logp else {}),
+                                                    **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
                                                     **({"select_n3": True} if args.select_n3 else {}),
