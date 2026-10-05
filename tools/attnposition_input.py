@@ -155,7 +155,8 @@ def extract(root, frozen, seed, output):
                         seats.append(item)
                     q = D.decode_candidate(candidate).terms.value({})
                     candidates.append({k:candidate[k] for k in ('R','n','registered_at','answer','payload')}|
-                                      {'q':q,'seats':seats,'signature_rows':signature_rows})
+                                      {'q':float(q),'q_numerator':q.numerator,'q_denominator':q.denominator,
+                                       'seats':seats,'signature_rows':signature_rows})
             feedback = {'prediction_order':t,'f_realized':row['f_realized'],'f_fired':row['f_fired']}
             if row['f_fired']:
                 feedback['feedback_content'] = dict(row['feedback_content'])

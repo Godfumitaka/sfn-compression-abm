@@ -1,6 +1,7 @@
 """位置注意の解析勾配・開示順・既定のN3を変えないこと。"""
 import copy
 import math
+from fractions import Fraction
 from pathlib import Path
 import sys
 
@@ -75,6 +76,16 @@ def test_zero_attention_keeps_n3_and_tie_order():
     assert P.select(tuple(reversed(candidates)), {}).name == '1'
     for c, z in P.log_scores(candidates, {}):
         assert z == math.log(c.q)
+
+
+def test_zero_penalty_keeps_exact_fraction_order():
+    # floatでは同じになる二つのQも、元のN3の大小を維持する。
+    small=Fraction(10**20,10**20+1)
+    large=Fraction(10**20+1,10**20+2)
+    candidates=(P.Candidate('newer',small,100,100,(),None,{}),
+                P.Candidate('larger',large,1,1,(),None,{}))
+    assert float(small)==float(large)
+    assert P.select(candidates,{}).name=='larger'
 
 
 def test_no_correct_candidate_does_not_update():

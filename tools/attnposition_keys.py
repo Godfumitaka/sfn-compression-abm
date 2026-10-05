@@ -167,6 +167,9 @@ def enrich(public, table):
                 reason = 'no_visible_position'
             item = {'slot':seat['slot'],'state':st,'key':key,'reason':reason}
             if reason is not None:
+                if key is not None and reason!='queried_hidden_position':
+                    for values in terms.values():
+                        values[key] = 0.
                 details.append(item)
                 audit.append({'R':candidate['R'],**item})
                 continue

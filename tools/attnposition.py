@@ -45,6 +45,10 @@ def select(candidates, attention):
     scored = log_scores(candidates, attention)
     if not scored:
         return None
+    # lnは単調だが、浮動小数への変換で分数の大小を潰さないよう、
+    # ペナルティが全て0の縮退では元N3の分数を直接比較する。
+    if all(all(attention.get(key,0.)*m==0 for key,m in c.mismatch) for c,_ in scored):
+        return min((c for c,_ in scored),key=lambda c:(-c.q,-c.n,-c.registered_at,c.name))
     # 今のN3の同点順（席の数、新しさ、名前）を保つ。
     return min(scored, key=lambda item: (-item[1], -item[0].n,
                -item[0].registered_at, item[0].name))[0]
