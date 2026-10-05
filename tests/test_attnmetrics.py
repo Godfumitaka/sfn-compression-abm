@@ -63,3 +63,14 @@ def test_tables_keep_denominators_two_door_conditioning_and_seed_counts():
     assert signal['excluded_signal_silence'] == 3 and signal['excluded_signal_other'] == 2
     pooled = G.fold([{'world': '2', 'seed': str(s), 'correct': str(s), 'wrong': '2', 'silent': '0'} for s in (1, 2)], ('world',), S.OUTCOMES)
     assert pooled[('2',)] == {'correct': 3, 'wrong': 4, 'silent': 0}
+
+
+def test_additional_grid_keeps_one_baseline_and_original_configuration():
+    import attnsummary as S
+    before = tuple(S.VARIANTS), tuple(S.GRID)
+    variants, grid = S.grid_spec('large-eta')
+    assert tuple(v for v in variants if v[0] == 0) == ((0, 5., .05),)
+    assert set(variants[1:]) == {(a, b, e) for a in (1, 2) for b in (5., 20.) for e in (.5, 1., 2., 5.)}
+    assert len(variants) == 17 and len(grid) == 8
+    assert S.grid_spec() == S.grid_spec('original') == before
+    assert (tuple(S.VARIANTS), tuple(S.GRID)) == before

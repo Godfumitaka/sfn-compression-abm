@@ -32,6 +32,16 @@ CLASSES = ('normal_door', 'exception_door', 'other_name', 'silent')
 PARAM = ('world', 'seed', 'arm', 'beta', 'eta')
 
 
+def grid_spec(name='original'):
+    """集計する設定値だけを切り替える。候補・点・学習・門は共通。"""
+    if name == 'original':
+        return tuple(VARIANTS), tuple(GRID)
+    if name == 'large-eta':
+        grid = tuple((b, e) for b in (5., 20.) for e in (.5, 1., 2., 5.))
+        return ((0, 5., .05),) + tuple((arm, b, e) for arm in (1, 2) for b, e in grid), grid
+    raise ValueError('未定義の格子')
+
+
 def read_jsonl(path):
     with gzip.open(path, 'rt', encoding='utf-8') as stream:
         yield from (json.loads(line) for line in stream)
@@ -84,9 +94,10 @@ def signal_rows(responses, keys):
         yield row
 
 
-def summarize_seed(world, seed, stageB, cases, output):
+def summarize_seed(world, seed, stageB, cases, output, *, grid_name='original'):
     if world not in (1, 2) or seed not in range(1, 21):
         raise ValueError('両世界・種1〜20だけ')
+    variants, grid = grid_spec(grid_name)
     root_name = f'n3_w{world}_A_L50'
     folder = output/root_name/f'seed{seed:03d}'
     if folder.exists():
@@ -113,7 +124,7 @@ def summarize_seed(world, seed, stageB, cases, output):
                 first_seen.append({'world': world, 'seed': seed, 'name': name, 'trial': frame['trial'], 'when': 'after_disclosure'})
                 seen.add(name)
     started = time.monotonic()
-    check = {'world': world, 'seed': seed, 'trial_records': 0, 'variants': len(VARIANTS),
+    check = {'world': world, 'seed': seed, 'trial_records': 0, 'variants': len(variants),
              'door_trials': len(decoded), 'distinction_loss_to_correct': 0,
              'non_door_answer_mismatches': 0, 'analysis_changed_inputs': False,
              'model_updated': False, 'attention_updated': False, 'existing_rng_consumed': False,
@@ -125,7 +136,7 @@ def summarize_seed(world, seed, stageB, cases, output):
             lossfields = (*PARAM, 'trial', 'shop', 'day', 'door_task', 'outcome', 'availability', 'actual_correct_candidates', 'f_realized', 'f_fired', 'updated', 'reason', 'L', 'L_recorded', 'L_source')
             losswriter = csv.DictWriter(lossfile, fieldnames=lossfields)
             losswriter.writeheader()
-            for arm, beta, eta in VARIANTS:
+            for arm, beta, eta in variants:
                 param = (world, seed, arm, beta, eta)
                 stem = f'seed{seed:03d}.arm{arm}.b{beta:g}_e{eta:g}'
                 source = stageB/'replay'/root_name/(stem+'.attn.jsonl.gz')
@@ -191,7 +202,7 @@ def summarize_seed(world, seed, stageB, cases, output):
                     check['trial_records'] += 1
                 assert len(answers) == 1740
                 predictions[(arm, beta, eta)] = answers
-        for beta, eta in GRID:
+        for beta, eta in grid:
             arms = {0: predictions[(0, 5., .05)], 1: predictions[(1, beta, eta)], 2: predictions[(2, beta, eta)]}
             for source_arm, target_arm in ((0, 1), (0, 2), (1, 2)):
                 for t, case in enumerate(metadata):
@@ -222,7 +233,9 @@ def summarize_seed(world, seed, stageB, cases, output):
             'excluded_noise_silence', 'excluded_noise_other', 'dprime', 'criterion', 'hit_rate', 'false_alarm_rate', 'adjusted_hit_rate',
             'adjusted_false_alarm_rate', 'corrected', 'undefined_reason')
         write_csv(folder/'signal_detection.csv', signal, signal_fields)
-        assert check['trial_records'] == 1740*19
+        assert check['trial_records'] == 1740*len(variants)
+        if grid_name != 'original':
+            check['grid'] = grid_name
         check['stageD_trial_records'] = 0
         check['passed'] = True
     except BaseException as error:
@@ -319,14 +332,20 @@ def main():
     ap.add_argument('--stageB', type=Path, required=True)
     ap.add_argument('--cases', type=Path, required=True)
     ap.add_argument('--output', type=Path, required=True)
+    ap.add_argument('--attn-grid', choices=('original', 'large-eta'), default='original')
     args = ap.parse_args()
     gate = json.loads((args.stageB/'all_door_gates.json').read_text())
     if not all(gate[f'B{i}_passed'] for i in range(1, 6)):
         raise RuntimeError('段B全ての合格前に成績を読まない')
     check = json.loads((args.cases/f'n3_w{args.world}_A_L50'/f'seed{args.seed:03d}.case.check.json').read_text())
     assert check['full_census'] and not check['mismatch'] and not check['memory_state_hash_changes']
-    function = intervene_seed if args.intervene_final_door_weights else summarize_seed
-    print(json.dumps(function(args.world, args.seed, args.stageB, args.cases, args.output), ensure_ascii=False), flush=True)
+    if args.intervene_final_door_weights:
+        if args.attn_grid != 'original':
+            ap.error('追加の大きなηの格子では段Dを実行しない')
+        result = intervene_seed(args.world, args.seed, args.stageB, args.cases, args.output)
+    else:
+        result = summarize_seed(args.world, args.seed, args.stageB, args.cases, args.output, grid_name=args.attn_grid)
+    print(json.dumps(result, ensure_ascii=False), flush=True)
 
 
 if __name__ == '__main__':

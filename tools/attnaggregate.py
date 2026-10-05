@@ -39,9 +39,12 @@ def decoded(counter, keys):
     return result
 
 
-def aggregate(output, stage):
+def aggregate(output, stage, *, grid_name='original'):
     if stage not in ('C', 'D'):
         raise ValueError('段C又はD')
+    variants, grid = S.grid_spec(grid_name)
+    if stage == 'D' and grid_name != 'original':
+        raise ValueError('追加の大きなηの格子では段Dを実行しない')
     folder = output/'aggregate'
     folder.mkdir(exist_ok=True)
     marker = output/f'all_{stage}.json'
@@ -69,6 +72,7 @@ def aggregate(output, stage):
         all_rows[name] = rows
         S.write_csv(folder/('seed_'+name), rows, fields)
     if stage == 'C':
+        assert all(c['variants'] == len(variants) and c.get('grid', 'original') == grid_name for c in checks)
         response_keys = ('world', 'arm', 'beta', 'eta', 'shop', 'day')
         response = decoded(fold(all_rows['responses.csv'], response_keys, (*S.CLASSES, 'hold', 'hold_b')), response_keys)
         responses = list(S.response_rows(response, response_keys))
@@ -97,11 +101,11 @@ def aggregate(output, stage):
         S.write_csv(folder/'loss_100_trials.csv', ({**dict(zip(keys, key)), **cell, 'mean_L': cell['sum_L']/cell['defined_count']}
                     for key, cell in sorted(losses.items())), (*keys, 'defined_count', 'updated_count', 'sum_L', 'mean_L'))
         checks_total = sum(c['trial_records'] for c in checks)
-        assert checks_total == 69600*19
-        assert sum(int(r['total']) for r in all_rows['responses.csv']) == 6306*19
+        assert checks_total == 69600*len(variants)
+        assert sum(int(r['total']) for r in all_rows['responses.csv']) == 6306*len(variants)
         assert sum(int(r['count']) for r in all_rows['update_reasons.csv']) == checks_total
         assert all(c['distinction_loss_to_correct'] == 0 and c['non_door_answer_mismatches'] == 0 for c in checks)
-        marker_data = {'passed': True, 'seeds': 40, 'trial_records': checks_total, 'door_trial_records': 6306*19,
+        marker_data = {'passed': True, 'seeds': 40, 'trial_records': checks_total, 'door_trial_records': 6306*len(variants),
                        'distinction_loss_to_correct': 0, 'non_door_answer_mismatches': 0, 'phaseD_started': False}
         transition_name, transition_keys = 'transitions.csv', ('world', 'beta', 'eta', 'source_arm', 'target_arm', 'task', 'shop', 'day', 'before', 'after')
     else:
@@ -115,6 +119,8 @@ def aggregate(output, stage):
                 for key, count in sorted(transitions.items())), (*transition_keys, 'count'))
     marker_data.update(stage=stage, manifest=manifest, checks=checks, phase3_started=False,
         task_instruction_assumption='本人にドア課題の指示が伝えられるとみなしheld_out_is_doorを使う')
+    if grid_name != 'original':
+        marker_data.update(grid=grid_name, parameter_pairs=grid)
     marker.write_text(json.dumps(marker_data, ensure_ascii=False, indent=2)+'\n')
     return {k: v for k, v in marker_data.items() if k not in ('manifest', 'checks')}
 
@@ -124,8 +130,9 @@ def main():
     ap.add_argument('--aggregate-fixed-memory', action='store_true', required=True)
     ap.add_argument('--stage', choices=('C', 'D'), required=True)
     ap.add_argument('--output', type=Path, required=True)
+    ap.add_argument('--attn-grid', choices=('original', 'large-eta'), default='original')
     args = ap.parse_args()
-    print(json.dumps(aggregate(args.output, args.stage), ensure_ascii=False), flush=True)
+    print(json.dumps(aggregate(args.output, args.stage, grid_name=args.attn_grid), ensure_ascii=False), flush=True)
 
 
 if __name__ == '__main__':
