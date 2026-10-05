@@ -173,7 +173,7 @@ def baseline_tables(summaries):
         model = list(csv.DictReader(f))
     write_csv(output / "model_and_baseline_bins.csv", model + bins)
     md = ["### 比べの学び手：例外の辞書＋REG（種1〜5）", "",
-          "|学び手|区間|REG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---:|---:|---:|---:|"]
+          "|学び手|区間|不規則語のREG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---:|---:|---:|---:|"]
     for r in bins:
         md.append(f"|例外辞書|{r['start']}–{r['end']}|{fmt(r['REG_all_queries'])}|{fmt(r['frequency_weighted_full8'])}|{fmt(r['uniform_full8'])}|{r['observed_verbs']}|")
     md += ["", "|種|過去形質問|正答|REG回答（規則語含む）|崩れ→回復|終点例外辞書の語数|", "|---:|---:|---:|---:|---:|---:|"]

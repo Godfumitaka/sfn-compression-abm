@@ -99,7 +99,7 @@ def aggregate(base, plan):
               "baseline": "design_only", "seeds": sorted({r["seed"] for r in plan["runs"] if r["label"] in completed})}
     (output / "status.json").write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n")
     md = [f"完走・照合済み {len(completed)}/30本。種は1〜5のみ。区間は試行番号0始まり、右端を含まない。", "",
-          "|保持|U|区間|REG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---|---:|---:|---:|---:|"]
+          "|保持|U|区間|不規則語のREG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---|---:|---:|---:|---:|"]
     for r in bin_totals:
         md.append(f"|{r['arm']}|{r['U']}|{r['start']}–{r['end']}|{fmt(r['REG_all_queries'])}|{fmt(r['frequency_weighted_full8'])}|{fmt(r['uniform_full8'])}|{r['observed_verbs']}|")
     md += ["", "8語全体の平均は、1語でも分母が0なら欠測（—）。観測できた語だけの平均と重みの被覆率はCSVに別記。頻度加重の重みは当区間の動詞の実際の出現数。", "",
