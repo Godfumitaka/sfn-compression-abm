@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from collections import Counter
-import csv,fcntl,json,shutil,subprocess,time
+import argparse,csv,fcntl,json,shutil,subprocess,time
 import seal_mac_intervention as diag
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -104,7 +104,7 @@ def comparison(lines,state):
     lines += ['', '割合の分母は未復元を除く例外の日の外れ。未復元件数、通常の日の変化の外れ／黙り内訳、区別の喪失に限ったiii-a/b/cと材料不足はCSVに併記。Aのλ主と0.065は同じ世界・選び方で並べ、Cは保持方法の異なる条件として表示する。未完了の腕はこの表に入れない。','',
               '- '+copy(OUT/'intervention_comparison.csv','介入3腕の比較.csv'),'']
 
-def publish():
+def publish(force=False):
     with (ROOT/'publish.lock').open('w') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         memo=read(OUT/'published.json') or {'initial':False,'arms':[],'errors':{},'final':False}
@@ -112,7 +112,7 @@ def publish():
         done=[arm for arm,entry in state['arms'].items() if entry['phase']=='complete' and arm not in memo['arms']]
         errors={arm:e['error'] for arm,e in state['arms'].items() if e.get('error')}
         final=state['phase'] in ('complete','stopped') and not memo['final']
-        if memo['initial'] and not (done or errors!=memo['errors'] or final):return
+        if memo['initial'] and not (done or errors!=memo['errors'] or final or force):return
         git('pull','--rebase','origin','results-2026-09-27')
         stamp=datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
         lines=['',f'## マック再作成の承認後の追記 {stamp}','',diag.LABEL+'。元の台帳本体との一致は主張しない。デスクトップの160本終了後の別依頼による本体照合は未実施。','']
@@ -131,12 +131,24 @@ def publish():
         if errors:
             for arm,error in errors.items():
                 if memo['errors'].get(arm)!=error:lines += [f'新関門または解析の停止：{arm}、`{error}`。当該腕の後続は停止。','']
-        lines += [f'| 腕 — {diag.LABEL} | 新関門を通過した種 | 解析した種 | 状態 |','|---|---:|---:|---|']
+        lines += ['',f'| 腕 — {diag.LABEL} | 新関門を通過した種 | 解析した種 | 状態 |','|---|---:|---:|---|']
         from seal_memory_rebuild import ARMS
         for arm in ARMS:
             e=state['arms'].get(arm,{})
             lines.append('| '+arm+' | '+str(len(e.get('gate_seeds',[])))+'/20 | '+str(len(e.get('analysis_seeds',[])))+'/20 | '+e.get('phase','待機')+' |')
         lines += ['', '- '+copy(OUT/'status.json','進捗.json')]
+        if (OUT/'diagnostic_code_sha256.json').exists():lines.append('- '+copy(OUT/'diagnostic_code_sha256.json','道具の指紋.json'))
+        if force:
+            for filename,label in [('mac_pilot_2026-10-05.log','lg種1_接続確認.txt'),('mac_C_pilot_2026-10-05.log','C種1_接続確認.txt'),('mac_R_pilot_2026-10-05.log','R種1_接続確認.txt')]:
+                p=ROOT/'gates'/filename
+                if p.exists():lines.append('- '+copy(p,label))
+            for name,relative in [('lg種1','lg_w2_A_lam0.065'),('C種1','fg_f050_C_L50'),('R種1','fg_f050_A_L50/R')]:
+                dest=OUT/'interventions'/relative
+                check=read(dest/'seed001.mac_check.json')
+                if not check:continue
+                lines += ['',f'{name}の接続確認：全ドア{check["rows"]}件。元の予測の再現と入力材料の指紋保持を確認。これは種1だけの接続確認で、全20種の集計に混ぜていない。']
+                for filename in ('seed001.cases.csv','seed001.mac_check.json'):lines.append('- '+copy(dest/filename,'接続確認/'+name+'/'+filename))
+            lines += ['', '接続実測はlg種1の関門と介入が約268秒、R種1が約270秒。残りの材料作成と全20種の解析・Rを含む全体は半日から一日程度を目安とし、受付・並行処理により変動する。']
         if (OUT/'commands.jsonl').exists():lines.append('- '+copy(OUT/'commands.jsonl','実行コマンド.jsonl'))
         if final:lines += ['', '再作成・介入の処理の最終状態：'+state['phase']+'。結果の良し悪しの評価は記載しない。'];memo['final']=True
         DOC.write_text(DOC.read_text()+'\n'.join(lines)+'\n')
@@ -151,4 +163,6 @@ def publish():
         (OUT/'published.json').write_text(json.dumps(memo,ensure_ascii=False,indent=2)+'\n')
         print(json.dumps(memo,ensure_ascii=False),flush=True)
 
-if __name__=='__main__':publish()
+if __name__=='__main__':
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--progress',action='store_true');a=ap.parse_args()
+    publish(a.progress)
