@@ -176,11 +176,19 @@ def expected(arm):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--pilot',action='store_true');ap.add_argument('--workers',type=int,default=1)
+    ap.add_argument('--resume',action='store_true')
     args=ap.parse_args(); seeds=[1] if args.pilot else range(1,21)
     jobs=[(a,s) for a in ARMS for s in seeds]
-    results=[]
+    results=[]; pending=[]
+    for arm,seed in jobs:
+        path=ROOT/os.environ.get('LOGP_SEAL_STAGE1_FOLDER','stage1')/arm/f'seed{seed:03d}.json'
+        if args.resume and path.exists():
+            r=json.loads(path.read_text())
+            assert r['input_sha256']=={str(p):sha(p) for p in input_paths(arm,seed).values()}, ('再開時の入力不一致',arm,seed)
+            results.append(r)
+        else: pending.append((arm,seed))
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
-        for r in pool.map(work,jobs,chunksize=1): results.append(r)
+        for r in pool.map(work,pending,chunksize=1): results.append(r)
     full=not args.pilot; summed={}; mismatch=[]
     for arm in ARMS:
         rows=[r for r in results if r['arm']==arm]
