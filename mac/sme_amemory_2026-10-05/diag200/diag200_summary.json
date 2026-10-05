@@ -1,0 +1,1052 @@
+[
+  {
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/diagnostic_01/A_diag200",
+    "run": {
+      "passed": true,
+      "run": {
+        "exit": 0,
+        "wall_seconds": 252.82643083299627,
+        "started": "2026-10-05T18:59:38.706719+09:00",
+        "finished": "2026-10-05T19:03:51.535050+09:00",
+        "cprofile": false
+      },
+      "elapsed_sec": 210.19,
+      "peak_rss_mb": 1271.3,
+      "trial_count": 200,
+      "seed": 1,
+      "commit": "858f7089e3d033cf5aa8ceb1c52c97bf8095019b"
+    },
+    "blocks": [
+      {
+        "start": 0,
+        "end": 99,
+        "trials": 100,
+        "trial_seconds": 69.33907250108314,
+        "peak_before_walk_mb": 232.177664
+      },
+      {
+        "start": 100,
+        "end": 199,
+        "trials": 100,
+        "trial_seconds": 114.85535558391712,
+        "peak_before_walk_mb": 538.558464
+      }
+    ],
+    "memory": [
+      {
+        "trial": 99,
+        "rss_before_measurement": 232194048,
+        "peak_before": 232194048,
+        "groups_cumulative": [
+          {
+            "group": "prediction_definition_or_trace",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker",
+            "calls": 672,
+            "seconds": 2.3070695222122595
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > histrole:capture > abm.abstraction:m1 > histrole:m1 > v310be:hypo_m1 > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1",
+            "calls": 1124,
+            "seconds": 2.2627081729879137
+          },
+          {
+            "group": "E_rewrite_cost",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v310be:rewrite > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1 > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 1124,
+            "seconds": 1.7890202736016363
+          },
+          {
+            "group": "other",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > routelog:_sources > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker > __main__:<module>",
+            "calls": 99,
+            "seconds": 0.26300620596157387
+          },
+          {
+            "group": "self_score",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:self_score > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one",
+            "calls": 1123,
+            "seconds": 2.1803813017031644
+          },
+          {
+            "group": "prediction_definition_or_trace",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:map_v39 > strictpc:map_v39 > answerlog:map_v39 > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict",
+            "calls": 1025,
+            "seconds": 2.199376409436809
+          }
+        ],
+        "attribution": "順に重複を除いたsys.getsizeof。RSS全体との差は別記。型と内容は変更しない。",
+        "rows": [
+          {
+            "name": "matcher_cache",
+            "exclusive_bytes": 103946885,
+            "objects": 1529808,
+            "types": {
+              "builtins.dict": 192935,
+              "sme2017.Result": 5167,
+              "builtins.tuple": 1014544,
+              "sme2017.Hypothesis": 182593,
+              "builtins.float": 94863,
+              "builtins.str": 24102,
+              "builtins.NoneType": 1,
+              "builtins.int": 5254,
+              "sme2017.Candidate": 5173,
+              "builtins.frozenset": 5173,
+              "sme2017.Settings": 1,
+              "builtins.bool": 2
+            }
+          },
+          {
+            "name": "matcher_self_cache",
+            "exclusive_bytes": 253691,
+            "objects": 2247,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 1123,
+              "builtins.str": 1123
+            }
+          },
+          {
+            "name": "matcher_cache_rng",
+            "exclusive_bytes": 1098425,
+            "objects": 5171,
+            "types": {
+              "builtins.dict": 5168,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "RESULTS",
+            "exclusive_bytes": 46873094,
+            "objects": 614772,
+            "types": {
+              "builtins.dict": 1,
+              "abm.sme.MappingResult": 4044,
+              "smeshared.SharedAlignment": 4044,
+              "smeshared.FrozenDict": 40440,
+              "builtins.str": 24328,
+              "builtins.int": 13,
+              "builtins.float": 16176,
+              "builtins.tuple": 525726
+            }
+          },
+          {
+            "name": "GRAPHS",
+            "exclusive_bytes": 3155188,
+            "objects": 27990,
+            "types": {
+              "builtins.dict": 9706,
+              "sme2017.Graph": 366,
+              "builtins.tuple": 2421,
+              "sme2017.Node": 9339,
+              "builtins.str": 41,
+              "builtins.frozenset": 6117
+            }
+          },
+          {
+            "name": "CHOICES",
+            "exclusive_bytes": 71344,
+            "objects": 1065,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 788,
+              "builtins.str": 79,
+              "builtins.int": 197
+            }
+          },
+          {
+            "name": "STATS",
+            "exclusive_bytes": 413,
+            "objects": 7,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.int": 3,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "verbatim_memory",
+            "exclusive_bytes": 24733,
+            "objects": 455,
+            "types": {
+              "builtins.tuple": 16,
+              "abm.domains.VerbatimTrace": 7,
+              "abm.domains.RelationGraph": 7,
+              "abm.domains.Relation": 146,
+              "builtins.mappingproxy": 210,
+              "abm.domains.Entity": 64,
+              "builtins.str": 5
+            }
+          },
+          {
+            "name": "definitions",
+            "exclusive_bytes": 53194,
+            "objects": 1066,
+            "types": {
+              "builtins.dict": 1,
+              "abm.definition.NamedDefinition": 13,
+              "builtins.tuple": 13,
+              "abm.definition.Constituent": 173,
+              "abm.definition.FrozenPrice": 173,
+              "builtins.float": 346,
+              "abm.domains.Relation": 173,
+              "builtins.mappingproxy": 173,
+              "builtins.str": 1
+            }
+          },
+          {
+            "name": "other_agent_state",
+            "exclusive_bytes": 728808,
+            "objects": 18384,
+            "types": {
+              "v39.AgentStateV39": 1,
+              "builtins.dict": 160,
+              "v39.SeatRec": 173,
+              "builtins.tuple": 1938,
+              "builtins.float": 14963,
+              "abm.definition.FrequencyTable": 1,
+              "builtins.frozenset": 1,
+              "builtins.int": 627,
+              "abm.definition.ExceptionAccumulator": 173,
+              "abm.definition.EmbedState": 173,
+              "abm.definition.MeritAccumulator": 163,
+              "v38.MeritAccumulatorV38": 10,
+              "abm.domains.Prototype": 1
+            }
+          },
+          {
+            "name": "CTX",
+            "exclusive_bytes": 335,
+            "objects": 4,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "native_writer_objects",
+            "exclusive_bytes": 1298,
+            "objects": 13,
+            "types": {
+              "builtins.tuple": 1,
+              "builtins.dict": 2,
+              "_io.TextIOWrapper": 2,
+              "builtins.str": 7,
+              "pathlib.PosixPath": 1
+            }
+          },
+          {
+            "name": "task_parameters",
+            "exclusive_bytes": 10726,
+            "objects": 162,
+            "types": {
+              "builtins.dict": 6,
+              "builtins.int": 2,
+              "builtins.float": 22,
+              "builtins.str": 126,
+              "builtins.list": 6
+            }
+          }
+        ],
+        "retained_python_bytes": 156218134,
+        "measurement_seen_bytes": 137545688,
+        "objects": 2201144,
+        "rss_after_measurement": 431161344,
+        "peak_after": 443744256
+      },
+      {
+        "trial": 199,
+        "rss_before_measurement": 538558464,
+        "peak_before": 538558464,
+        "groups_cumulative": [
+          {
+            "group": "prediction_definition_or_trace",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker",
+            "calls": 1372,
+            "seconds": 4.195397656323621
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > histrole:capture > abm.abstraction:m1 > histrole:m1 > v310be:hypo_m1 > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1",
+            "calls": 2770,
+            "seconds": 6.1809640140563715
+          },
+          {
+            "group": "E_rewrite_cost",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v310be:rewrite > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1 > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 2770,
+            "seconds": 5.408965556736803
+          },
+          {
+            "group": "other",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > routelog:_sources > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker > __main__:<module>",
+            "calls": 199,
+            "seconds": 0.8598583349667024
+          },
+          {
+            "group": "self_score",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:self_score > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one",
+            "calls": 2769,
+            "seconds": 7.028779060085071
+          },
+          {
+            "group": "prediction_definition_or_trace",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:map_v39 > strictpc:map_v39 > answerlog:map_v39 > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > answerlog:predict > smereplay:predict",
+            "calls": 2571,
+            "seconds": 6.230979411600856
+          }
+        ],
+        "attribution": "順に重複を除いたsys.getsizeof。RSS全体との差は別記。型と内容は変更しない。",
+        "rows": [
+          {
+            "name": "matcher_cache",
+            "exclusive_bytes": 270365048,
+            "objects": 3967045,
+            "types": {
+              "builtins.dict": 529673,
+              "sme2017.Result": 12451,
+              "builtins.tuple": 2598055,
+              "sme2017.Hypothesis": 504819,
+              "builtins.float": 228021,
+              "builtins.str": 56605,
+              "builtins.NoneType": 1,
+              "builtins.int": 12615,
+              "sme2017.Candidate": 12401,
+              "builtins.frozenset": 12401,
+              "sme2017.Settings": 1,
+              "builtins.bool": 2
+            }
+          },
+          {
+            "name": "matcher_self_cache",
+            "exclusive_bytes": 681961,
+            "objects": 5539,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 2769,
+              "builtins.str": 2769
+            }
+          },
+          {
+            "name": "matcher_cache_rng",
+            "exclusive_bytes": 2881049,
+            "objects": 12455,
+            "types": {
+              "builtins.dict": 12452,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "RESULTS",
+            "exclusive_bytes": 116082349,
+            "objects": 1546669,
+            "types": {
+              "builtins.dict": 1,
+              "abm.sme.MappingResult": 9682,
+              "smeshared.SharedAlignment": 9682,
+              "smeshared.FrozenDict": 96820,
+              "builtins.str": 58177,
+              "builtins.int": 36,
+              "builtins.float": 38552,
+              "builtins.tuple": 1333719
+            }
+          },
+          {
+            "name": "GRAPHS",
+            "exclusive_bytes": 6823646,
+            "objects": 60341,
+            "types": {
+              "builtins.dict": 21043,
+              "sme2017.Graph": 791,
+              "builtins.tuple": 4911,
+              "sme2017.Node": 20251,
+              "builtins.str": 59,
+              "builtins.frozenset": 13286
+            }
+          },
+          {
+            "name": "CHOICES",
+            "exclusive_bytes": 143074,
+            "objects": 2137,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 1588,
+              "builtins.str": 151,
+              "builtins.int": 397
+            }
+          },
+          {
+            "name": "STATS",
+            "exclusive_bytes": 413,
+            "objects": 7,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.int": 3,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "verbatim_memory",
+            "exclusive_bytes": 24012,
+            "objects": 442,
+            "types": {
+              "builtins.tuple": 16,
+              "abm.domains.VerbatimTrace": 7,
+              "abm.domains.RelationGraph": 7,
+              "abm.domains.Relation": 141,
+              "builtins.mappingproxy": 204,
+              "abm.domains.Entity": 63,
+              "builtins.str": 4
+            }
+          },
+          {
+            "name": "definitions",
+            "exclusive_bytes": 73474,
+            "objects": 1476,
+            "types": {
+              "builtins.dict": 1,
+              "abm.definition.NamedDefinition": 17,
+              "builtins.tuple": 17,
+              "abm.definition.Constituent": 240,
+              "abm.definition.FrozenPrice": 240,
+              "builtins.float": 480,
+              "abm.domains.Relation": 240,
+              "builtins.mappingproxy": 240,
+              "builtins.str": 1
+            }
+          },
+          {
+            "name": "other_agent_state",
+            "exclusive_bytes": 904492,
+            "objects": 23007,
+            "types": {
+              "v39.AgentStateV39": 1,
+              "builtins.dict": 175,
+              "v39.SeatRec": 240,
+              "builtins.tuple": 2458,
+              "builtins.float": 18783,
+              "abm.definition.FrequencyTable": 1,
+              "builtins.frozenset": 1,
+              "builtins.int": 627,
+              "abm.definition.ExceptionAccumulator": 240,
+              "abm.definition.EmbedState": 240,
+              "abm.definition.MeritAccumulator": 230,
+              "v38.MeritAccumulatorV38": 10,
+              "abm.domains.Prototype": 1
+            }
+          },
+          {
+            "name": "CTX",
+            "exclusive_bytes": 335,
+            "objects": 4,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "native_writer_objects",
+            "exclusive_bytes": 1298,
+            "objects": 13,
+            "types": {
+              "builtins.tuple": 1,
+              "builtins.dict": 2,
+              "_io.TextIOWrapper": 2,
+              "builtins.str": 7,
+              "pathlib.PosixPath": 1
+            }
+          },
+          {
+            "name": "task_parameters",
+            "exclusive_bytes": 10698,
+            "objects": 161,
+            "types": {
+              "builtins.dict": 6,
+              "builtins.int": 1,
+              "builtins.float": 22,
+              "builtins.str": 126,
+              "builtins.list": 6
+            }
+          }
+        ],
+        "retained_python_bytes": 397991849,
+        "measurement_seen_bytes": 448253144,
+        "objects": 5619296,
+        "rss_after_measurement": 1183236096,
+        "peak_after": 1271316480
+      }
+    ],
+    "engine_groups_per_interval": [
+      {
+        "end_trial": 99,
+        "groups": {
+          "prediction_definition_or_trace": {
+            "calls": 1697,
+            "seconds": 4.506445931649068
+          },
+          "birth_assimilation": {
+            "calls": 1124,
+            "seconds": 2.2627081729879137
+          },
+          "E_rewrite_cost": {
+            "calls": 1124,
+            "seconds": 1.7890202736016363
+          },
+          "other": {
+            "calls": 99,
+            "seconds": 0.26300620596157387
+          },
+          "self_score": {
+            "calls": 1123,
+            "seconds": 2.1803813017031644
+          }
+        }
+      },
+      {
+        "end_trial": 199,
+        "groups": {
+          "prediction_definition_or_trace": {
+            "calls": 2246,
+            "seconds": 5.919931136275409
+          },
+          "birth_assimilation": {
+            "calls": 1646,
+            "seconds": 3.918255841068458
+          },
+          "E_rewrite_cost": {
+            "calls": 1646,
+            "seconds": 3.6199452831351664
+          },
+          "other": {
+            "calls": 100,
+            "seconds": 0.5968521290051285
+          },
+          "self_score": {
+            "calls": 1646,
+            "seconds": 4.848397758381907
+          }
+        }
+      }
+    ]
+  },
+  {
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/diagnostic_01/L_diag200",
+    "run": {
+      "passed": true,
+      "run": {
+        "exit": 0,
+        "wall_seconds": 242.74172233298304,
+        "started": "2026-10-05T19:03:52.389344+09:00",
+        "finished": "2026-10-05T19:07:55.132893+09:00",
+        "cprofile": false
+      },
+      "elapsed_sec": 207.38,
+      "peak_rss_mb": 851.8,
+      "trial_count": 200,
+      "seed": 1,
+      "commit": "da3521bfab488c9bd1afc89915cd8a6cb0600f5e"
+    },
+    "blocks": [
+      {
+        "start": 0,
+        "end": 99,
+        "trials": 100,
+        "trial_seconds": 67.55045924815931,
+        "peak_before_walk_mb": 222.035968
+      },
+      {
+        "start": 100,
+        "end": 199,
+        "trials": 100,
+        "trial_seconds": 114.11913758033188,
+        "peak_before_walk_mb": 426.409984
+      }
+    ],
+    "memory": [
+      {
+        "trial": 99,
+        "rss_before_measurement": 222052352,
+        "peak_before": 222052352,
+        "groups_cumulative": [
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker",
+            "calls": 672,
+            "seconds": 1.5084509158914443
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > histrole:capture > abm.abstraction:m1 > histrole:m1 > v310be:hypo_m1 > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1",
+            "calls": 1016,
+            "seconds": 1.8938716195116285
+          },
+          {
+            "group": "E_rewrite_cost",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v310be:rewrite > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1 > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 1016,
+            "seconds": 1.5073679914348759
+          },
+          {
+            "group": "other",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > routelog:_sources > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker > __main__:<module>",
+            "calls": 99,
+            "seconds": 0.19905033300165087
+          },
+          {
+            "group": "self_score",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:self_score > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 1015,
+            "seconds": 1.8127386303094681
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:map_v39 > strictpc:map_v39 > answerlog:map_v39 > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict",
+            "calls": 917,
+            "seconds": 1.86642837052932
+          }
+        ],
+        "attribution": "順に重複を除いたsys.getsizeof。RSS全体との差は別記。型と内容は変更しない。",
+        "rows": [
+          {
+            "name": "matcher_cache",
+            "exclusive_bytes": 91714055,
+            "objects": 1351519,
+            "types": {
+              "builtins.dict": 164500,
+              "sme2017.Result": 4735,
+              "builtins.tuple": 903674,
+              "sme2017.Hypothesis": 155022,
+              "builtins.float": 86960,
+              "builtins.str": 22328,
+              "builtins.NoneType": 1,
+              "builtins.int": 4814,
+              "sme2017.Candidate": 4741,
+              "builtins.frozenset": 4741,
+              "sme2017.Settings": 1,
+              "builtins.bool": 2
+            }
+          },
+          {
+            "name": "matcher_self_cache",
+            "exclusive_bytes": 232847,
+            "objects": 2031,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 1015,
+              "builtins.str": 1015
+            }
+          },
+          {
+            "name": "matcher_cache_rng",
+            "exclusive_bytes": 1018937,
+            "objects": 4739,
+            "types": {
+              "builtins.dict": 4736,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "RESULTS",
+            "exclusive_bytes": 42547125,
+            "objects": 554811,
+            "types": {
+              "builtins.dict": 1,
+              "abm.sme.MappingResult": 3720,
+              "smeshared.SharedAlignment": 3720,
+              "smeshared.FrozenDict": 37200,
+              "builtins.str": 22427,
+              "builtins.int": 21,
+              "builtins.float": 14880,
+              "builtins.tuple": 472842
+            }
+          },
+          {
+            "name": "GRAPHS",
+            "exclusive_bytes": 2933165,
+            "objects": 26135,
+            "types": {
+              "builtins.dict": 9007,
+              "sme2017.Graph": 337,
+              "builtins.tuple": 2392,
+              "sme2017.Node": 8669,
+              "builtins.str": 43,
+              "builtins.frozenset": 5687
+            }
+          },
+          {
+            "name": "CHOICES",
+            "exclusive_bytes": 71222,
+            "objects": 1063,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 788,
+              "builtins.str": 77,
+              "builtins.int": 197
+            }
+          },
+          {
+            "name": "STATS",
+            "exclusive_bytes": 413,
+            "objects": 7,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.int": 3,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "verbatim_memory",
+            "exclusive_bytes": 24733,
+            "objects": 455,
+            "types": {
+              "builtins.tuple": 16,
+              "abm.domains.VerbatimTrace": 7,
+              "abm.domains.RelationGraph": 7,
+              "abm.domains.Relation": 146,
+              "builtins.mappingproxy": 210,
+              "abm.domains.Entity": 64,
+              "builtins.str": 5
+            }
+          },
+          {
+            "name": "definitions",
+            "exclusive_bytes": 41226,
+            "objects": 826,
+            "types": {
+              "builtins.dict": 1,
+              "abm.definition.NamedDefinition": 11,
+              "builtins.tuple": 11,
+              "abm.definition.Constituent": 140,
+              "abm.definition.FrozenPrice": 140,
+              "builtins.float": 280,
+              "abm.domains.Relation": 121,
+              "builtins.mappingproxy": 121,
+              "builtins.str": 1
+            }
+          },
+          {
+            "name": "other_agent_state",
+            "exclusive_bytes": 815544,
+            "objects": 22239,
+            "types": {
+              "v39.AgentStateV39": 1,
+              "builtins.dict": 136,
+              "v39.SeatRec": 140,
+              "builtins.tuple": 1889,
+              "builtins.float": 19023,
+              "abm.definition.FrequencyTable": 1,
+              "builtins.frozenset": 1,
+              "builtins.int": 627,
+              "abm.definition.ExceptionAccumulator": 140,
+              "abm.definition.EmbedState": 140,
+              "v38.MeritAccumulatorV38": 140,
+              "abm.domains.Prototype": 1
+            }
+          },
+          {
+            "name": "CTX",
+            "exclusive_bytes": 335,
+            "objects": 4,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "native_writer_objects",
+            "exclusive_bytes": 1298,
+            "objects": 13,
+            "types": {
+              "builtins.tuple": 1,
+              "builtins.dict": 2,
+              "_io.TextIOWrapper": 2,
+              "builtins.str": 7,
+              "pathlib.PosixPath": 1
+            }
+          },
+          {
+            "name": "task_parameters",
+            "exclusive_bytes": 10830,
+            "objects": 164,
+            "types": {
+              "builtins.dict": 6,
+              "builtins.int": 2,
+              "builtins.float": 22,
+              "builtins.str": 128,
+              "builtins.list": 6
+            }
+          }
+        ],
+        "retained_python_bytes": 139411730,
+        "measurement_seen_bytes": 129957272,
+        "objects": 1964006,
+        "rss_after_measurement": 415531008,
+        "peak_after": 424968192
+      },
+      {
+        "trial": 199,
+        "rss_before_measurement": 426917888,
+        "peak_before": 426917888,
+        "groups_cumulative": [
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker",
+            "calls": 1372,
+            "seconds": 4.3463836412120145
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > histrole:capture > abm.abstraction:m1 > histrole:m1 > v310be:hypo_m1 > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1",
+            "calls": 2458,
+            "seconds": 5.211265874182573
+          },
+          {
+            "group": "E_rewrite_cost",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v310be:rewrite > v310be:choose_and_register > v310be:m1 > relearninit:m1 > argorder:m1 > answerlog:m1 > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 2458,
+            "seconds": 4.3534723675693385
+          },
+          {
+            "group": "other",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > routelog:_sources > routelog:m1 > abm.loop:run_longitudinal > sweep:run_one > __mp_main__:run_one > v3_run:worker > __mp_main__:worker > __main__:<module>",
+            "calls": 199,
+            "seconds": 0.46140283305430785
+          },
+          {
+            "group": "self_score",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:self_score > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict > smereplay:predict > abm.loop:run_longitudinal > sweep:run_one",
+            "calls": 2457,
+            "seconds": 5.4364987543958705
+          },
+          {
+            "group": "birth_assimilation",
+            "stack": "sme2017:match > __mp_main__:match > smeshared:map_graphs > v39:map_v39 > strictpc:map_v39 > answerlog:map_v39 > smeshared:select_definition > answerlog:select_definition > v39:predict > v39:predict_wrapped > v310be:predict_logp > answerlog:predict",
+            "calls": 2259,
+            "seconds": 4.920175172097515
+          }
+        ],
+        "attribution": "順に重複を除いたsys.getsizeof。RSS全体との差は別記。型と内容は変更しない。",
+        "rows": [
+          {
+            "name": "matcher_cache",
+            "exclusive_bytes": 216899856,
+            "objects": 3191567,
+            "types": {
+              "builtins.dict": 391307,
+              "sme2017.Result": 11203,
+              "builtins.tuple": 2130774,
+              "sme2017.Hypothesis": 368890,
+              "builtins.float": 204130,
+              "builtins.str": 51553,
+              "builtins.NoneType": 1,
+              "builtins.int": 11282,
+              "sme2017.Candidate": 11212,
+              "builtins.frozenset": 11212,
+              "sme2017.Settings": 1,
+              "builtins.bool": 2
+            }
+          },
+          {
+            "name": "matcher_self_cache",
+            "exclusive_bytes": 548009,
+            "objects": 4915,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 2457,
+              "builtins.str": 2457
+            }
+          },
+          {
+            "name": "matcher_cache_rng",
+            "exclusive_bytes": 2651417,
+            "objects": 11207,
+            "types": {
+              "builtins.dict": 11204,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "RESULTS",
+            "exclusive_bytes": 99396736,
+            "objects": 1295383,
+            "types": {
+              "builtins.dict": 1,
+              "abm.sme.MappingResult": 8746,
+              "smeshared.SharedAlignment": 8746,
+              "smeshared.FrozenDict": 87460,
+              "builtins.str": 52616,
+              "builtins.int": 121,
+              "builtins.float": 34984,
+              "builtins.tuple": 1102709
+            }
+          },
+          {
+            "name": "GRAPHS",
+            "exclusive_bytes": 6004289,
+            "objects": 53335,
+            "types": {
+              "builtins.dict": 18420,
+              "sme2017.Graph": 688,
+              "builtins.tuple": 4808,
+              "sme2017.Node": 17731,
+              "builtins.str": 63,
+              "builtins.frozenset": 11625
+            }
+          },
+          {
+            "name": "CHOICES",
+            "exclusive_bytes": 142883,
+            "objects": 2134,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.tuple": 1588,
+              "builtins.str": 148,
+              "builtins.int": 397
+            }
+          },
+          {
+            "name": "STATS",
+            "exclusive_bytes": 413,
+            "objects": 7,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.int": 3,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "verbatim_memory",
+            "exclusive_bytes": 24012,
+            "objects": 442,
+            "types": {
+              "builtins.tuple": 16,
+              "abm.domains.VerbatimTrace": 7,
+              "abm.domains.RelationGraph": 7,
+              "abm.domains.Relation": 141,
+              "builtins.mappingproxy": 204,
+              "abm.domains.Entity": 63,
+              "builtins.str": 4
+            }
+          },
+          {
+            "name": "definitions",
+            "exclusive_bytes": 54882,
+            "objects": 1102,
+            "types": {
+              "builtins.dict": 1,
+              "abm.definition.NamedDefinition": 14,
+              "builtins.tuple": 14,
+              "abm.definition.Constituent": 185,
+              "abm.definition.FrozenPrice": 185,
+              "builtins.float": 370,
+              "abm.domains.Relation": 166,
+              "builtins.mappingproxy": 166,
+              "builtins.str": 1
+            }
+          },
+          {
+            "name": "other_agent_state",
+            "exclusive_bytes": 1089156,
+            "objects": 29333,
+            "types": {
+              "v39.AgentStateV39": 1,
+              "builtins.dict": 179,
+              "v39.SeatRec": 185,
+              "builtins.tuple": 2507,
+              "builtins.float": 25276,
+              "abm.definition.FrequencyTable": 1,
+              "builtins.frozenset": 1,
+              "builtins.int": 627,
+              "abm.definition.ExceptionAccumulator": 185,
+              "abm.definition.EmbedState": 185,
+              "v38.MeritAccumulatorV38": 185,
+              "abm.domains.Prototype": 1
+            }
+          },
+          {
+            "name": "CTX",
+            "exclusive_bytes": 335,
+            "objects": 4,
+            "types": {
+              "builtins.dict": 1,
+              "builtins.str": 3
+            }
+          },
+          {
+            "name": "native_writer_objects",
+            "exclusive_bytes": 1298,
+            "objects": 13,
+            "types": {
+              "builtins.tuple": 1,
+              "builtins.dict": 2,
+              "_io.TextIOWrapper": 2,
+              "builtins.str": 7,
+              "pathlib.PosixPath": 1
+            }
+          },
+          {
+            "name": "task_parameters",
+            "exclusive_bytes": 10802,
+            "objects": 163,
+            "types": {
+              "builtins.dict": 6,
+              "builtins.int": 1,
+              "builtins.float": 22,
+              "builtins.str": 128,
+              "builtins.list": 6
+            }
+          }
+        ],
+        "retained_python_bytes": 326824088,
+        "measurement_seen_bytes": 281085304,
+        "objects": 4589605,
+        "rss_after_measurement": 777338880,
+        "peak_after": 851787776
+      }
+    ],
+    "engine_groups_per_interval": [
+      {
+        "end_trial": 99,
+        "groups": {
+          "birth_assimilation": {
+            "calls": 2605,
+            "seconds": 5.268750905932393
+          },
+          "E_rewrite_cost": {
+            "calls": 1016,
+            "seconds": 1.5073679914348759
+          },
+          "other": {
+            "calls": 99,
+            "seconds": 0.19905033300165087
+          },
+          "self_score": {
+            "calls": 1015,
+            "seconds": 1.8127386303094681
+          }
+        }
+      },
+      {
+        "end_trial": 199,
+        "groups": {
+          "birth_assimilation": {
+            "calls": 3484,
+            "seconds": 9.20907378155971
+          },
+          "E_rewrite_cost": {
+            "calls": 1442,
+            "seconds": 2.8461043761344627
+          },
+          "other": {
+            "calls": 100,
+            "seconds": 0.262352500052657
+          },
+          "self_score": {
+            "calls": 1442,
+            "seconds": 3.6237601240864024
+          }
+        }
+      }
+    ]
+  }
+]
