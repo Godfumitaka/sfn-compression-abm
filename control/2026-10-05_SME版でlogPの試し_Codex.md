@@ -68,3 +68,36 @@ log Pは、名前の確率Pを−log₂Pのビットの費用で採点する旗�
 
 
 コマンド・出力のパス・sha256の証拠：mac/sme_logp_2026-10-05/pilot_analysis_01。大きな台帳と状態は自分の作業場所に残し、結果枝には小さい証拠だけを写す。種21〜40を読まず、走らせていない。進行中の段2と(a)の比較は停止していない。
+
+## first_time：2026-10-05T18:07:16.547910+09:00
+
+最初のlogP種1の全1740試行が完了。最大常駐は、その走行で同時にメモリに置いた量の最大。
+
+{
+  "first": {
+    "passed": true,
+    "run": {
+      "exit": 0,
+      "wall_seconds": 6088.593148124986,
+      "started": "2026-10-05T13:40:52.326329+09:00",
+      "finished": "2026-10-05T15:22:20.965680+09:00",
+      "cprofile": false
+    },
+    "elapsed_sec": 6075.18,
+    "peak_rss_mb": 4918.0,
+    "trial_count": 1740,
+    "seed": 1,
+    "commit": "da3521bfab488c9bd1afc89915cd8a6cb0600f5e"
+  },
+  "remaining_logp_runs": 2,
+  "time_margin_multiplier": 2,
+  "remaining_projected_end": "2026-10-06T00:53:09.371913+09:00",
+  "conservative_before_night_for_plan": "2026-10-07T18:00:00+09:00",
+  "additional_three_seed_runs_allowed": true,
+  "registered_memory_for_following_gb": 7.1,
+  "queue_and_analysis_excluded": true
+}
+
+残りの走行を始める前に、この実測で三本の完了見込みを更新。受付待ち時間は別記。結果の方向を採用の基準にしていない。
+
+コマンド・出力のパス・sha256の証拠：mac/sme_logp_2026-10-05/first_time_01。大きな台帳と状態は自分の作業場所に残し、結果枝には小さい証拠だけを写す。種21〜40を読まず、走らせていない。進行中の段2と(a)の比較は停止していない。
