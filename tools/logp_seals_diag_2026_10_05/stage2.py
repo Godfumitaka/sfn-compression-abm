@@ -49,6 +49,7 @@ def strict_structure(d,relation_ids):
     return bits
 
 def group_answer(pred,shop,world):
+    pred={'X':'hold','Y':'hold_b'}.get(pred,pred)
     if pred is None:return '未確定'
     n=normal_pred(shop);e=n if world==1 else 'hold_b' if n=='hold' else 'hold'
     if pred==n==e:return '共通'

@@ -25,6 +25,9 @@ def main():
     start=time.monotonic()
     earlier_path=ROOT/'counts14_tables_sha256.json'
     earlier=json.loads(earlier_path.read_text()) if earlier_path.exists() else {}
+    repaired=json.loads((ROOT/'birth_label_repair_check.json').read_text())
+    assert repaired['only_birth_labels_changed'] and repaired['origin_base_checked']
+    earlier.pop('birth_records.csv',None)
     stage1=json.loads((ROOT/'stage1_summary.json').read_text());assert stage1['stage1_pass']
     checks=json.loads((ROOT/'stage2_summary.json').read_text())
     assert len(checks)==100 and {(r['arm'],r['seed']) for r in checks}=={(a,s) for a in ARMS for s in range(1,21)}
@@ -156,6 +159,7 @@ def main():
             'final_points_match_prior_table':100,'definition_records':len(df),'all_original_inputs_unchanged':True,
             'wrong_classifications_match':True,'unresolved_availability':0,
             'earlier_birth_and_memory_tables_equal':True,
+            'birth_labels_repaired_other_fields_equal':True,
             'side_selection_checked_cases':sum(r['cases'] for r in selected_checks),
             'side_selected_ledger_empty_cases':sum(r['side_only_selected'] for r in selected_checks),
             'selected_refresh_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in selected_checks),

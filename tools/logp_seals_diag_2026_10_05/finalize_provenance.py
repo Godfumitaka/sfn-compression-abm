@@ -31,7 +31,8 @@ def main():
     refs={
         'a7e099c67a2af2752d401151a415a5a0d92bda2e':['inspect_records.py','preflight.py','stage1.py','priority.py','stage2.py','silent_candidates.py'],
         'fb501b26d2408a3cb22a7c2ace13a2afddc9663a':['counts14.py','birth_score_conditions.py','append_conditions_report.py'],
-        '3c0951b5':['selected_seals.py','aggregate.py','append_complete_report.py'],
+        '3c0951b5':['selected_seals.py'],
+        head:['aggregate.py','append_complete_report.py','repair_birth_labels.py'],
         '08bd1b3b2e6985550d7c89bbcc671ccc2f1d9732':['publish_report.py','append_priority_report.py']}
     versions=[]
     for ref,names in refs.items():
@@ -47,7 +48,7 @@ def main():
                    '最終版のstage2.pyとsilent_candidates.pyの追加検証は保存されている。元の模型、照合、既存分類は変更しない。']}
     (ROOT/'public/execution_code_versions.json').write_text(json.dumps(info,ensure_ascii=False,indent=2)+'\n')
     for name in ('stage1_summary.json','stage2_summary.json','silent_candidates_summary.json','selected_seals_summary.json',
-                 'aggregate_summary.json','birth_score_conditions_check.json'):
+                 'aggregate_summary.json','birth_score_conditions_check.json','birth_label_repair_check.json','birth_label_repair_files.json'):
         shutil.copyfile(ROOT/name,ROOT/'public'/name)
     print(json.dumps({'commit':head,'archived_files':len(rows),'recorded_versions':len(versions),'model_changes':0},ensure_ascii=False))
 
