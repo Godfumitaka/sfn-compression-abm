@@ -39,6 +39,25 @@ def decoded(counter, keys):
     return result
 
 
+def concatenate_csv_stream(paths, destination):
+    """値・欄・種の順序を維持し、大きな記録だけを一行ずつ結合する。"""
+    manifest = []
+    fields = writer = None
+    with destination.open('w', encoding='utf-8', newline='') as target:
+        for path in paths:
+            with path.open(encoding='utf-8', newline='') as source:
+                reader = csv.DictReader(source)
+                if fields is None:
+                    fields = reader.fieldnames
+                    writer = csv.DictWriter(target, fieldnames=fields)
+                    writer.writeheader()
+                assert fields == reader.fieldnames
+                writer.writerows(reader)
+            manifest.append({'path': str(path), 'bytes': path.stat().st_size,
+                             'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+    return manifest
+
+
 def aggregate(output, stage, *, grid_name='original'):
     if stage not in ('C', 'D'):
         raise ValueError('段C又はD')
@@ -58,6 +77,10 @@ def aggregate(output, stage, *, grid_name='original'):
     all_rows = {}
     manifest = []
     for name in files:
+        if grid_name == 'large-eta' and name == 'weights_100_trials.csv':
+            # この表は数の計算に使わず、種別の原表を結合して保存するだけ。
+            manifest.extend(concatenate_csv_stream([seed/name for seed in seeds], folder/('seed_'+name)))
+            continue
         rows = []
         fields = None
         for seed in seeds:

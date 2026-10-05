@@ -74,3 +74,23 @@ def test_additional_grid_keeps_one_baseline_and_original_configuration():
     assert len(variants) == 17 and len(grid) == 8
     assert S.grid_spec() == S.grid_spec('original') == before
     assert (tuple(S.VARIANTS), tuple(S.GRID)) == before
+
+
+def test_streamed_weight_table_is_byte_identical_to_collected_rows(tmp_path):
+    import csv
+    import attnaggregate as G
+    import attnsummary as S
+    fields = ('world', 'seed', 'name', 'weight_after')
+    paths = []
+    for seed, data in ((1, [('sig_e', '0.0000000000000001'), ('hold', '1.0')]),
+                       (2, [('sig_e', '2.345678901234567'), ('未観測', '')])):
+        path = tmp_path/f'seed{seed}.csv'
+        S.write_csv(path, ({'world': '2', 'seed': str(seed), 'name': name, 'weight_after': value}
+                          for name, value in data), fields)
+        paths.append(path)
+    collected = [row for path in paths for row in G.read_rows(path)]
+    S.write_csv(tmp_path/'collected.csv', collected, fields)
+    manifest = G.concatenate_csv_stream(paths, tmp_path/'streamed.csv')
+    assert (tmp_path/'collected.csv').read_bytes() == (tmp_path/'streamed.csv').read_bytes()
+    assert [m['path'] for m in manifest] == list(map(str, paths))
+    assert list(csv.DictReader((tmp_path/'streamed.csv').open())) == collected
