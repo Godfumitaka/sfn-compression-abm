@@ -23,6 +23,8 @@ def write_csv(name,rows):
 
 def main():
     start=time.monotonic()
+    earlier_path=ROOT/'counts14_tables_sha256.json'
+    earlier=json.loads(earlier_path.read_text()) if earlier_path.exists() else {}
     stage1=json.loads((ROOT/'stage1_summary.json').read_text());assert stage1['stage1_pass']
     checks=json.loads((ROOT/'stage2_summary.json').read_text())
     assert len(checks)==100 and {(r['arm'],r['seed']) for r in checks}=={(a,s) for a in ARMS for s in range(1,21)}
@@ -146,10 +148,12 @@ def main():
         for day in ('e','n'):
             gate.append({'arm':arm,'day':day,**stage1['arms'][arm]['actual'][day],'expected_match':True})
     write_csv('stage1_counts.csv',gate);write_csv('derived_inputs_sha256.csv',manifest)
+    assert earlier=={name:sha(PUBLIC/name) for name in earlier},'先行した誕生・記憶表との不一致'
     result={'stage1_pass':True,'stage2_pass':True,'conditions':5,'seeds_per_condition':20,'births':len(rows['births']),
             'exception_door_cases':len(rows['doors']),'silent_candidates_completed':212,'memory_checkpoints':400,
             'final_points_match_prior_table':100,'definition_records':len(df),'all_original_inputs_unchanged':True,
             'wrong_classifications_match':True,'unresolved_availability':0,
+            'earlier_birth_and_memory_tables_equal':True,
             'stage2_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in checks),
             'silent_max_worker_rss_bytes':max(r['peak_rss_bytes'] for r in silentchecks),
             'seconds':time.monotonic()-start,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
