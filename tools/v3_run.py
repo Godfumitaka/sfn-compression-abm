@@ -496,7 +496,8 @@ def worker(task: dict) -> dict:
             raise ValueError("--verb-world は --v39 --v310-be と一緒に使う")
         sys.path.insert(0, str(ROOT / "tools"))
         import verbworld
-        verbworld.install(variant=task["verb_variant"], frequency_file=task.get("verb_frequencies"))
+        verbworld.install(variant=task["verb_variant"], frequency_file=task.get("verb_frequencies"),
+                          door_p=task.get("shop_door_p"))
         verbworld.extend_dictionary()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
@@ -758,7 +759,7 @@ def main() -> None:
     ap.add_argument("--select-n3", action="store_true", help="選び方 N3：定義を N3＝2S(d,x)÷(S(d,d)＋S(x,x)) の大きい順で選ぶ（tools/selectn3.py）。門は今のまま")
     ap.add_argument("--select-log", action="store_true", help="記録だけ：本物の予測ごとに候補の定義の支持・N3 の三項・順位・選ばれたか・門を書く")
     ap.add_argument("--shop-door-p", type=float, default=None,
-                    help="お店の世界：各場面で確率 d でドアを伏せ、それ以外はドア以外の候補から一様に一本（別の乱数の流れ）。付けなければ今のまま")
+                    help="お店／動詞の世界：確率 p でドア／過去形を伏せ、それ以外は他の候補から一様に一本（別の乱数の流れ）。付けなければ今のまま")
     ap.add_argument("--shop-keep-cue", action="store_true", help="お店の世界の診断：B の変換の候補からシールと link の席を外す")
     ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
     ap.add_argument("--u-struct", action="store_true",
@@ -810,8 +811,10 @@ def main() -> None:
         cfg2["trial_count"] = args.trial_count
         args.no_compare = True
     if args.verb_world:
-        if args.shop_world is not None or args.world_cue or args.shop_door_p is not None or args.shop_keep_cue:
+        if args.shop_world is not None or args.world_cue or args.shop_keep_cue:
             raise SystemExit("--verb-world はお店・世界の変種の旗と併用しない")
+        if args.shop_door_p is not None and not 0.0 <= args.shop_door_p <= 1.0:
+            raise SystemExit("--shop-door-p は0〜1の確率にする")
         if not (args.v39 and args.v310_be):
             raise SystemExit("--verb-world は --v39 --v310-be と一緒に使う")
         if cfg2["fixed"].get("holdout_include_second_order"):

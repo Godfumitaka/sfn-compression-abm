@@ -64,6 +64,28 @@ def test_past_holdout_changes_truth_only():
     assert rid not in {r.relation_id for r in out.target_graph_partial.relations}
 
 
+@pytest.mark.parametrize("p", [None, 0.0, 0.25, 0.5, 1.0])
+def test_past_probability_reuses_shop_choice_before_name(monkeypatch, p):
+    import shopworld
+    monkeypatch.setattr(vw, "CFG", {"items": vw.training_items(), "door_p": p})
+    monkeypatch.setattr(vw, "INFO", {})
+    monkeypatch.setattr(vw, "IDS", {})
+    monkeypatch.setattr(vw, "STATS", {})
+    monkeypatch.setattr(shopworld, "STATS", {})
+    sd = load_seed(ROOT / "tools/verb/U-011_seed_verb.json")
+    for t in range(40):
+        tr = base(t)
+        expected = tr if p is None else shopworld.rehide(tr, 1, t, p)
+        expected, info = vw.build(expected, 1, t, verb=vw.draw_verb(1, t))
+        actual = vw.verb_trial(world.generate_trial, 1, t, ("agent",), seed=sd)
+        assert actual == expected
+        assert actual.u_coins == tr.u_coins
+        assert info["name_id"] in {r.relation_id for r in actual.target_graph_partial.relations}
+        assert info["link_id"] in {r.relation_id for r in actual.target_graph_partial.relations}
+        if p in (0.0, 1.0):
+            assert info["held_out_is_past"] == bool(p)
+
+
 def test_dictionary_keeps_existing_indices(monkeypatch):
     import v39
     monkeypatch.setattr(v39, "CFG", {"dict_index": {"hold": 0, "push": 1, "attach": 2}, "D": 3})

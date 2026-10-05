@@ -119,6 +119,12 @@ def build(tr, run_seed, trial_index, *, verb: Verb):
 
 def verb_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_include_second_order=False):
     tr = original(run_seed, trial_index, agent_ids, seed=seed, holdout_include_second_order=holdout_include_second_order)
+    if CFG.get("door_p") is not None:
+        # 名前を足す前に、お店と同じ候補・別乱数で伏せ辺を選ぶ。
+        if holdout_include_second_order:
+            raise ValueError("--shop-door-p は二階を伏せない設定（hide1）で使う")
+        import shopworld
+        tr = shopworld.rehide(tr, run_seed, trial_index, CFG["door_p"])
     out, info = build(tr, run_seed, trial_index, verb=draw_verb(run_seed, trial_index))
     INFO[out.G_star.graph_id] = info
     IDS[info["name_id"]] = "name"
@@ -128,7 +134,7 @@ def verb_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
     return out
 
 
-def install(*, variant="default", frequency_file=None):
+def install(*, variant="default", frequency_file=None, door_p=None):
     """v39・選び方の旗の後、probe-world の前に入れる。"""
     import abm.ledger as ledger
     import abm.loop as loop
@@ -139,7 +145,7 @@ def install(*, variant="default", frequency_file=None):
     CTX.clear()
     STATS.clear()
     CFG.clear()
-    CFG.update(items=training_items(variant, frequency_file), variant=variant)
+    CFG.update(items=training_items(variant, frequency_file), variant=variant, door_p=door_p)
     original = w.generate_trial
     CTX["orig_gen"] = original
 

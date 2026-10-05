@@ -96,9 +96,9 @@ def aggregate(base, plan):
     write_csv(output / "classification.csv", [{"arm": a, "U": u, **dict(c)} for (a, u), c in sorted(classifications.items())])
     write_csv(output / "name_seats.csv", [{"arm": a, "U": u, "state": s, "count": n} for (a, u), c in sorted(name_states.items()) for s, n in sorted(c.items())])
     status = {"complete": len(completed), "planned": len(plan["runs"]), "completed_runs": completed,
-              "baseline": "design_only", "seeds": sorted({r["seed"] for r in plan["runs"] if r["label"] in completed})}
+              "baseline": plan.get("baseline", "design_only"), "seeds": sorted({r["seed"] for r in plan["runs"] if r["label"] in completed})}
     (output / "status.json").write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n")
-    md = [f"完走・照合済み {len(completed)}/30本。種は1〜5のみ。区間は試行番号0始まり、右端を含まない。", "",
+    md = [f"完走・照合済み {len(completed)}/{len(plan['runs'])}本。種は1〜5のみ。区間は試行番号0始まり、右端を含まない。", "",
           "|保持|U|区間|不規則語のREG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---|---:|---:|---:|---:|"]
     for r in bin_totals:
         md.append(f"|{r['arm']}|{r['U']}|{r['start']}–{r['end']}|{fmt(r['REG_all_queries'])}|{fmt(r['frequency_weighted_full8'])}|{fmt(r['uniform_full8'])}|{r['observed_verbs']}|")
