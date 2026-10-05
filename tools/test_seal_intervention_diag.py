@@ -135,5 +135,12 @@ class Gates(unittest.TestCase):
             self.assertFalse(inv['ready']);self.assertEqual(inv['missing'],list(range(1,21)))
             self.assertEqual(inv['present'],[])
 
+    def test_initial_state_is_the_models_empty_v39_state(self):
+        state=diag.initial_state()
+        self.assertEqual(state.definitions,{})
+        self.assertEqual(state.prototype.traces,())
+        self.assertEqual(state.p_hat.counts,{})
+        self.assertEqual(state.v39_seats,{})
+
 
 if __name__=='__main__':unittest.main()

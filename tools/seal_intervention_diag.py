@@ -12,6 +12,13 @@ SEEDS=tuple(range(1,21))
 ARMS=('fg_f050_A_L50','fg_f050_C_L50','lg_w2_A_lam0.065')
 
 
+def initial_state():
+    """試行0だけは、模型の初期状態と同じ空の型を使う。"""
+    import v39
+    from abm.domains import AgentState
+    return v39.ensure(AgentState())
+
+
 def seat_key(d,row):
     return (d.name,d.registered_at,row.slot_index,row.registered_at)
 
@@ -131,6 +138,17 @@ def record_model_counts(counts,variant,result):
     if not result['added_selected'] and result['outcome']=='外れ':counts[variant+'_added_not_selected_wrong']+=1
 
 
+def content_variants(state,wt,trial,seed,ai,config,rng_seed,past,horizon):
+    augmented,d=add_content_definition(state,wt.G_star,trial,f'DIAG_CONTENT_{seed}_{trial}')
+    pred,gate,ratio=answer_definition(augmented,d,ai,config,rng_seed)
+    a={'R':d.name,'gate':gate,'ratio':ratio,**outcome(pred,wt.held_out_edge)} if pred is not None else {'outcome':'黙り','reason':'写しなし'}
+    b=model_answer(augmented,ai,config,rng_seed,wt.held_out_edge,d.name)
+    augmented_c,d_c,reason=add_past_definition(state,past,trial,config,horizon,f'{seed}_{trial}')
+    c={'material_trials':[x[0] for x in past],'status':reason or '追加','added_R':d_c.name if d_c else None}
+    if d_c is not None:c.update(model_answer(augmented_c,ai,config,rng_seed,wt.held_out_edge,d_c.name))
+    return {'iii_a':a,'iii_b':b,'iii_c':c}
+
+
 def outcome(pred,held):
     from abm.domains import EdgePrediction
     if hasattr(pred,'prediction'):pred=pred.prediction
@@ -194,7 +212,7 @@ def inventory(roots):
     return rows
 
 
-def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False):
+def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False,all_doors=False):
     import abm.loop as loop,abm.world as wm,shopworld as sw,sealrestore as sr,v39
     from extrap_reader import iter_run
     flags=json.loads((root/'flag.json').read_text())
@@ -220,17 +238,20 @@ def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False):
             seal_ids={rid for rid,kind in sw.IDS.items() if kind=='sig'}
             exceptional=info['held_out_is_door'] and info['shop_cue']=='e' and row['prediction_kind']!='Abstain' and row['hit']==0
             normal=info['held_out_is_door'] and info['shop_cue']=='n' and row['prediction_kind']!='Abstain' and row['hit']==1
-            if exceptional or normal:
-                if tr['pre'] is None:raise RuntimeError('対象試行の予測前の記憶が無い')
-                state,bad=sr.restore_state(tr['pre'],argmap,scenes)
+            wrong=info['held_out_is_door'] and row['prediction_kind']!='Abstain' and row['hit']==0
+            if (all_doors and info['held_out_is_door']) or exceptional or normal:
+                if tr['pre'] is None:
+                    if t!=0:raise RuntimeError('対象試行の予測前の記憶が無い')
+                    state=initial_state();bad=0;checks['initial_empty_state']+=1
+                else:state,bad=sr.restore_state(tr['pre'],argmap,scenes)
                 if bad:raise RuntimeError('引数の順を復元できない')
                 sr._clear_caches(loop)
                 restored=json.loads(loop._json_bytes(loop._canonical(state)))
                 digest=hashlib.sha256(loop._json_bytes(restored)).hexdigest()
                 # e15ef19 と同じ。席の成績の列は正準化で並びが失われ、予測には使われない。
-                if sr._strip(restored)!=sr._strip(tr['pre']):raise RuntimeError('予測に使う記憶の復元が一致しない')
+                if tr['pre'] is not None and sr._strip(restored)!=sr._strip(tr['pre']):raise RuntimeError('予測に使う記憶の復元が一致しない')
                 checks['state_structure_reproduced']+=1
-                if restored!=tr['pre']:checks['score_columns_order_changed']+=1
+                if tr['pre'] is not None and restored!=tr['pre']:checks['score_columns_order_changed']+=1
                 ai=loop._agent_input(wt,state);rng_seed=loop._rng_seed(agent,t)
                 actual,_=loop.predict(ai,state,config,Random(rng_seed))
                 if not same_prediction(actual,row):raise RuntimeError(f'本物の答えと一致しない：{seed}/{t}')
@@ -238,11 +259,16 @@ def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False):
                 copied,changed,missing=restore_conditions(state,birth_names,seal_ids)
                 repaired,_=loop.predict(ai,copied,config,Random(rng_seed))
                 i=outcome(repaired,wt.held_out_edge)
-                rec={'seed':seed,'trial':t,'day':info['shop_cue'],'original_R':actual.trace.get('R_used'),'original':outcome(actual,wt.held_out_edge),
+                rec={'world':flags['shop_world'],'seed':seed,'trial':t,'day':info['shop_cue'],'original_R':actual.trace.get('R_used'),'original':outcome(actual,wt.held_out_edge),
                      'shop':info['shop_type'],'selector':'N3' if flags.get('select_n3') else 'current',
                      'i':i,'restored':changed,'unrestored':missing,'classification':None,'ii':None,'iii_a':None,'iii_b':None,'iii_c':None}
-                if exceptional:
-                    counts['exception_wrong']+=1
+                counts['door_cases']+=1
+                counts['door_'+info['shop_cue']+'_'+rec['original']['outcome']]+=1
+                counts['i_'+info['shop_cue']+'_'+rec['original']['outcome']+'_to_'+('未復元' if missing else i['outcome'])]+=1
+                good=[]
+                if wrong:
+                    counts['classified_wrong']+=1
+                    if exceptional:counts['exception_wrong']+=1
                     candidates=candidate_answers(state,ai,config,rng_seed,wt.held_out_edge)
                     selected=next((c for c in candidates if c['R']==actual.trace.get('R_used')),None)
                     if selected is None or not selected['gate'] or any(selected[k]!=rec['original'][k] for k in ('outcome','predicate','arguments','reason')):
@@ -250,30 +276,24 @@ def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False):
                     checks['selected_candidate_reproduced']+=1
                     good=[c for c in candidates if c['gate'] and c['outcome']=='正解']
                     cls='selection_mistake' if good else 'distinction_loss';rec['classification']=cls;rec['candidates']=candidates
-                    counts[cls]+=1
+                    counts[cls]+=1;counts[cls+'_'+info['shop_cue']]+=1
                     if good:rec['ii']=good[0];counts['ii_correct']+=1
+                    else:counts['iii_needed']+=1
+                if all_doors or (wrong and not good):
+                    counts['iii_target']+=1
+                    rec.update(content_variants(state,wt,t,seed,ai,config,rng_seed,tuple(past.get(info['shop_type'],())),horizon))
+                    counts['iii_a_'+rec['iii_a']['outcome']]+=1
+                    record_model_counts(counts,'iii_b',rec['iii_b'])
+                    if rec['iii_c']['status']!='追加':counts['iii_c_'+('no_material' if rec['iii_c']['status']=='材料なし' else 'no_birth')]+=1
                     else:
-                        counts['iii_needed']+=1
-                        augmented,d=add_content_definition(state,wt.G_star,t,f'DIAG_CONTENT_{seed}_{t}')
-                        pred,gate,ratio=answer_definition(augmented,d,ai,config,rng_seed)
-                        rec['iii_a']={'R':d.name,'gate':gate,'ratio':ratio,**outcome(pred,wt.held_out_edge)} if pred is not None else {'outcome':'黙り','reason':'写しなし'}
-                        counts['iii_a_'+rec['iii_a']['outcome']]+=1
-                        rec['iii_b']=model_answer(augmented,ai,config,rng_seed,wt.held_out_edge,d.name)
-                        record_model_counts(counts,'iii_b',rec['iii_b'])
-                        materials=tuple(past.get(info['shop_type'],()))
-                        augmented_c,d_c,reason=add_past_definition(state,materials,t,config,horizon,f'{seed}_{t}')
-                        rec['iii_c']={'material_trials':[x[0] for x in materials],'status':reason or '追加',
-                                      'added_R':d_c.name if d_c else None}
-                        if reason:counts['iii_c_'+('no_material' if reason=='材料なし' else 'no_birth')]+=1
-                        else:
-                            rec['iii_c'].update(model_answer(augmented_c,ai,config,rng_seed,wt.held_out_edge,d_c.name))
-                            record_model_counts(counts,'iii_c',rec['iii_c'])
-                            checks['past_birth_exercised']+=1;past_exercised=True
+                        record_model_counts(counts,'iii_c',rec['iii_c'])
+                        checks['past_birth_exercised']+=1;past_exercised=True
+                if exceptional:
                     if missing:counts['exception_unrestored']+=1
                     else:
                         counts['i_'+i['outcome']]+=1
                         if i['outcome']=='正解':counts['i_correct_'+cls]+=1
-                else:
+                elif normal:
                     counts['normal_correct']+=1
                     if missing:counts['normal_unrestored']+=1
                     elif i['outcome']!='正解':counts['normal_changed_'+i['outcome']]+=1
@@ -302,18 +322,18 @@ def analysis(task,cfg,root,cell,seed,dest,limit=None,exercise_upper=False):
                 strictpc.record_kinds(wt.target_graph_partial,(wt.held_out_edge,) if tr['disclosed'] else ())
             sr._clear_caches(loop)
     if exercise_upper and not upper_exercised:raise RuntimeError('上限の構成を接続確認できる対象が無い')
-    assert counts['exception_wrong']==counts['selection_mistake']+counts['distinction_loss']
-    assert counts['exception_wrong']==checks['selected_candidate_reproduced']
+    assert counts['classified_wrong']==counts['selection_mistake']+counts['distinction_loss']
+    assert counts['classified_wrong']==checks['selected_candidate_reproduced']
     assert counts['exception_wrong']==sum(counts['i_'+x] for x in ('正解','外れ','黙り'))+counts['exception_unrestored']
-    assert counts['iii_needed']==sum(counts['iii_a_'+x] for x in ('正解','外れ','黙り'))==counts['iii_b_answered']
-    assert counts['iii_needed']==counts['iii_c_answered']+counts['iii_c_no_material']+counts['iii_c_no_birth']
+    assert counts['iii_target']==sum(counts['iii_a_'+x] for x in ('正解','外れ','黙り'))==counts['iii_b_answered']
+    assert counts['iii_target']==counts['iii_c_answered']+counts['iii_c_no_material']+counts['iii_c_no_birth']
     result={'arm':root.name,'seed':seed,'counts':dict(counts),'checks':dict(checks),'birth_names':len(birth_names),'limit':limit,
-            'iii_variants':['a','b','c'],'selector':'N3' if flags.get('select_n3') else 'current'}
+            'iii_variants':['a','b','c'],'all_doors':all_doors,'selector':'N3' if flags.get('select_n3') else 'current'}
     (dest/f'seed{seed:03d}.summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     return result
 
 
-def one(root,dest,seed,limit=None,exercise_upper=False):
+def one(root,dest,seed,limit=None,exercise_upper=False,all_doors=False):
     if seed not in SEEDS:raise ValueError('種は1〜20だけ')
     import sweep,v3_run,sealrestore as sr
     cells=list(root.glob(f'ledgers/cells/*/seed{seed:03d}.jsonl.gz'))
@@ -321,7 +341,7 @@ def one(root,dest,seed,limit=None,exercise_upper=False):
     dest.mkdir(parents=True,exist_ok=True);scratch=Path(tempfile.mkdtemp(prefix='diagnostic_',dir=dest));box={}
     task,cfg=sr.make_task(str(root),cells[0].parent.name,seed,str(scratch))
     def only_read(tk):
-        box['result']=analysis(tk,cfg,root,cells[0].parent.name,seed,dest,limit,exercise_upper)
+        box['result']=analysis(tk,cfg,root,cells[0].parent.name,seed,dest,limit,exercise_upper,all_doors)
         return {'cell':cells[0].parent.name,'seed':seed}
     sweep.run_one=only_read
     try:v3_run.worker(task)
@@ -345,12 +365,13 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('root',type=Path);ap.add_argument('dest',type=Path)
     ap.add_argument('--seed',type=int);ap.add_argument('--limit',type=int);ap.add_argument('--exercise-upper',action='store_true')
+    ap.add_argument('--all-doors',action='store_true')
     args=ap.parse_args();root=args.root.resolve();dest=args.dest.resolve();os.chdir(W)
-    if args.seed is not None:print(json.dumps(one(root,dest,args.seed,args.limit,args.exercise_upper),ensure_ascii=False));return
+    if args.seed is not None:print(json.dumps(one(root,dest,args.seed,args.limit,args.exercise_upper,args.all_doors),ensure_ascii=False));return
     inv=inventory([root])[0]
     if not inv['ready']:raise SystemExit('全20種の記憶が無い：'+json.dumps(inv,ensure_ascii=False))
     if args.limit is not None or args.exercise_upper:raise SystemExit('接続確認の指定は--seedと一緒に使う')
-    for seed in SEEDS:subprocess.run([sys.executable,__file__,str(root),str(dest),'--seed',str(seed)],check=True)
+    for seed in SEEDS:subprocess.run([sys.executable,__file__,str(root),str(dest),'--seed',str(seed),*(['--all-doors'] if args.all_doors else [])],check=True)
     print(json.dumps(aggregate(dest,root.name),ensure_ascii=False))
 
 
