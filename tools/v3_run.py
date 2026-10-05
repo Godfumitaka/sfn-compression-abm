@@ -844,40 +844,6 @@ def main() -> None:
     ap.add_argument("--v311c-lineage", action="store_true", help="研究者用：走行後に通信記録から定義ごとの出どころ候補の系譜を書く")
     ap.add_argument("--v311c-sme-replay", default=None, help="集団化の個体別SME状態記録のディレクトリから再生する（集団の種一本）")
     ap.add_argument("--v311c-serial", action="store_true", help="個体の重い計算を全体で一つずつ実行する（試行の歩調は同じ）")
-    ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
-    ap.add_argument("--probe-world", action="store_true",
-                    help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
-    ap.add_argument("--dump-answers", action="store_true",
-                    help="答えごとの記録（記録だけ）：実際に答えた試行ごとに side/<セル>/seed<種>.answers.csv へ一行（tools/answerlog.py）")
-    ap.add_argument("--dump-routing", action="store_true",
-                    help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
-    ap.add_argument("--world-cue", action="store_true",
-                    help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
-    ap.add_argument("--cf-learn", action="store_true",
-                    help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
-    ap.add_argument("--e-price", type=float, default=None,
-                    help="まとめの値段：E（新しい場面を既存の定義にまとめるか新しく作るか）の λ を、--v39-price（B の忘れる値段）と別に与える（--v310-be と一緒に）")
-    ap.add_argument("--cf-value", action="store_true",
-                    help="反実仮想の保持価値の診断（記録だけ）：開示のあった試行で、選ばれた定義の席を一段薄くした写しで答え直し、書き直し費用の差を書く（tools/cfvalue.py）")
-    ap.add_argument("--strict-pc", action="store_true",
-                    help="照合の直し：親の候補の対は、その子の対がすべて（見えていない相手か、採れる直接の候補）のときだけ採る（tools/strictpc.py）")
-    ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
-                    help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
-    ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
-    ap.add_argument("--shop-keep-cue", action="store_true", help="お店の世界の診断：B の変換の候補からシールと link の席を外す")
-    ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
-    ap.add_argument("--u-struct", action="store_true",
-                    help="U の照合：U の席を名前の条件を持たない関係の位置として照合に参加させる（--v39 --hist-role と一緒に。tools/ustruct.py）")
-    ap.add_argument("--relearn-init", action="store_true",
-                    help="覚え直しの初期の評価：U→H の覚え直しの観察一回を H と U で採点して初期値に入れる（--u-struct --v310-be と一緒に。tools/relearninit.py）")
-    ap.add_argument("--amb-local", action="store_true",
-                    help="候補ごとの棄権：穴埋めで決まった候補があれば、ほかの席の同点（あいまい）で答え全体を止めない（--v39 と一緒に。tools/v39.py amb_blocks）")
-    ap.add_argument("--answer-gap", action="store_true",
-                    help="欠けた位置にだけ答える：投影・穴埋めの候補を、対応先が提示の場面の欠けた位置（ぶら下がった参照）に入るものに絞ってから今の決まりで選ぶ（--v39 --v310-be と一緒に。tools/answergap.py）")
-    ap.add_argument("--tie-struct", action="store_true",
-                    help="同点の並べ方：変換の同点を、名前や番号ではなく構造だけの鍵（生まれた試行・階・親の述語と位置）で並べる（--v39 と一緒に。tools/tiestruct.py）")
-    ap.add_argument("--score-role", action="store_true",
-                    help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")

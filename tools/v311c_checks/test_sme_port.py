@@ -3,6 +3,7 @@ import io
 import json
 import random
 import sys
+import subprocess
 import unittest
 from dataclasses import replace
 from fractions import Fraction
@@ -31,6 +32,11 @@ class PortTest(unittest.TestCase):
         for k, d in self.own.items():
             current = getattr(smeshared, k); current.clear(); current.update(d)
         smereplay.ST.clear(); smereplay.ST.update(self.st)
+
+    def test_cli_parses_without_duplicate_flags(self):
+        p = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1]/"v3_run.py"), "--help"], capture_output=True, text=True)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        self.assertIn("--v311c-sme-replay", p.stdout)
 
     def test_receiver_uses_uniform_trace_choice(self):
         v311c.CFG.update(sme2017=True)
