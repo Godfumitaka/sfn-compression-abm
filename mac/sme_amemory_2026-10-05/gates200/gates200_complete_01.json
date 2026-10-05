@@ -1,0 +1,210 @@
+{
+  "complete": true,
+  "results": [
+    {
+      "case": "A_off",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 226.72045845800312,
+          "started": "2026-10-05T19:08:07.246115+09:00",
+          "finished": "2026-10-05T19:11:53.968276+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 185.89,
+        "peak_rss_mb": 525.7,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "374e3524a9e310c8295f87ac12506bba0b236696"
+      }
+    },
+    {
+      "case": "A_reuse",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 268.8519069579779,
+          "started": "2026-10-05T19:11:54.551181+09:00",
+          "finished": "2026-10-05T19:16:23.405107+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 227.85,
+        "peak_rss_mb": 523.9,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "374e3524a9e310c8295f87ac12506bba0b236696"
+      }
+    },
+    {
+      "case": "A_prune",
+      "passed": false,
+      "different_files": [
+        "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+        "tie_state.jsonl",
+        "saved_matcher.jsonl.gz"
+      ],
+      "first_difference": {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "equal": false,
+        "left_sha256": "f9dccc458eaa8a53880df67f2d3d59e1bab90cf946a28de80860bf75413b3b79",
+        "right_sha256": "97940e27a0da0043428468f48d6d82254fbfcd24f22420de691d493f8f4f8227",
+        "left_bytes": 41266,
+        "right_bytes": 40041,
+        "first_byte_difference": 620,
+        "first_content_difference": {
+          "line": 2,
+          "left": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,H_fill,12,hold_b,1,0,H,2,2,1.0,1,0.0,0,15,1,2,6,15,15,1.0,0.0,0.0,1.7449043451144322,0.2908173908524054,0.014705882352941176,7,1.0,1.0000;1.0000;0.9167;0.4545;0.4375,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,14,1,0,14,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10;0.4545:4/1/6/4;0.4375:6/1/9/6\n",
+          "right": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,H_fill,12,hold_b,1,0,H,2,2,1.0,1,0.0,0,15,1,2,6,15,15,1.0,0.0,0.0,1.7449043451144322,0.2908173908524054,0.014705882352941176,4,1.0,1.0000;1.0000;0.9167,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,14,1,0,14,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10\n"
+        }
+      },
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 212.70806666702265,
+          "started": "2026-10-05T19:16:23.969036+09:00",
+          "finished": "2026-10-05T19:19:56.678690+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 175.79,
+        "peak_rss_mb": 479.4,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "374e3524a9e310c8295f87ac12506bba0b236696"
+      }
+    },
+    {
+      "case": "A_intern",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 224.71703979198355,
+          "started": "2026-10-05T19:19:57.228471+09:00",
+          "finished": "2026-10-05T19:23:41.947198+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 183.52,
+        "peak_rss_mb": 448.3,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "374e3524a9e310c8295f87ac12506bba0b236696"
+      }
+    },
+    {
+      "case": "L_off",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 216.69396820897236,
+          "started": "2026-10-05T19:23:42.479928+09:00",
+          "finished": "2026-10-05T19:27:19.175526+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 183.54,
+        "peak_rss_mb": 412.0,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "ca80f61012c52514d29974adf41fe8ccc357deb4"
+      }
+    },
+    {
+      "case": "L_reuse",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 238.67947412497597,
+          "started": "2026-10-05T19:27:19.829357+09:00",
+          "finished": "2026-10-05T19:31:18.510624+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 210.35,
+        "peak_rss_mb": 426.8,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "ca80f61012c52514d29974adf41fe8ccc357deb4"
+      }
+    },
+    {
+      "case": "L_prune",
+      "passed": false,
+      "different_files": [
+        "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+        "tie_state.jsonl",
+        "saved_matcher.jsonl.gz"
+      ],
+      "first_difference": {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "equal": false,
+        "left_sha256": "64a190a9dbb353b6c84e95227157b2e4c5a050b4698596ae0035195e2dff9b9f",
+        "right_sha256": "f46c30e3ebcbe9ea46e8a601bf30c22c0bf3822b80a191a3e675f4d7dc4be3f4",
+        "left_bytes": 43579,
+        "right_bytes": 40566,
+        "first_byte_difference": 641,
+        "first_content_difference": {
+          "line": 2,
+          "left": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,F_proj,12,hold_b,1,0,F,,,,,,16,0,0,2,6,16,16,1.0,0.2809449163560598,1.5681796835404858,1.5681796835404858,0.2908173908524054,0.014705882352941176,7,1.0,1.0000;1.0000;0.9167;0.4706;0.4545,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,15,1,0,15,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10;0.4706:7/1/9/7;0.4545:4/1/6/4\n",
+          "right": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,F_proj,12,hold_b,1,0,F,,,,,,16,0,0,2,6,16,16,1.0,0.2809449163560598,1.5681796835404858,1.5681796835404858,0.2908173908524054,0.014705882352941176,4,1.0,1.0000;1.0000;0.9167,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,15,1,0,15,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10\n"
+        }
+      },
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 170.56042470800458,
+          "started": "2026-10-05T19:31:19.107878+09:00",
+          "finished": "2026-10-05T19:34:09.669582+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 148.25,
+        "peak_rss_mb": 384.5,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "ca80f61012c52514d29974adf41fe8ccc357deb4"
+      }
+    },
+    {
+      "case": "L_intern",
+      "passed": true,
+      "different_files": [],
+      "first_difference": null,
+      "run": {
+        "passed": true,
+        "run": {
+          "exit": 0,
+          "wall_seconds": 152.52670350001426,
+          "started": "2026-10-05T19:34:10.296510+09:00",
+          "finished": "2026-10-05T19:36:42.824358+09:00",
+          "cprofile": false
+        },
+        "elapsed_sec": 129.45,
+        "peak_rss_mb": 357.6,
+        "trial_count": 200,
+        "seed": 1,
+        "commit": "ca80f61012c52514d29974adf41fe8ccc357deb4"
+      }
+    }
+  ],
+  "at": "2026-10-05T19:36:43.137250+09:00"
+}
