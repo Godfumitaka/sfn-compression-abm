@@ -436,6 +436,9 @@ def worker(task: dict) -> dict:
             # ★ 時間の幅の旗（--horizon H、2026-10-03）：古さの重み・平均の重み・誕生の初期の成績の時間の幅を、走行の長さ T でなく H に（tools/horizon.py）
             import horizon
             horizon.install(int(task["horizon"]))
+        if task.get("v311c"):
+            import abm.loop as _loop
+            _REAL["m1_before_be"] = _loop.m1
         if task.get("v310_be"):
             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
             import v310be
@@ -446,6 +449,10 @@ def worker(task: dict) -> dict:
                 v310be.CFG["lam"] = float(task["e_price"])
                 v310be.STATS["cfg"]["lam"] = v310be.CFG["lam"]
         _REAL["theta_impl"] = v39.CTX["apply"]
+        if task.get("v311c"):
+            # 集団化の会計と受信を個体の既存の道へ接続する。
+            import v311c
+            v311c.install(fo, task, _REAL)
         if task.get("u_struct"):
             # ★ U の照合（--u-struct）と覚え直しの初期の評価（--relearn-init）：tools/ustruct.py・tools/relearninit.py。v39・v310be のあとに入れる
             import ustruct
@@ -628,6 +635,8 @@ def worker(task: dict) -> dict:
         rec["lowmem"] = {"evictions": lowmem.STATE["evictions"], "max_cache": lowmem.STATE["max_cache"]}
     rec["nohist"] = bool(task.get("nohist"))
     import resource
+    if task.get("v311c"):
+        rec["v311c"] = dict(sys.modules["v311c"].STATS)
     rec["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 1)  # macOS はバイト
     alive_end = _LAST_ALIVE.pop("__alive__", [])
     final = {"kind": "final", "alive_end": alive_end, "removed_defs": _STATS["removed"],
@@ -673,6 +682,63 @@ def compare(task: dict) -> dict:
     return {"records_new": len(h1), "records_old": len(h2), "snapshot_hash_equal": h1 == h2,
             "first_diff_record": next((i for i, (a, b) in enumerate(zip(h1, h2)) if a != b), None),
             "body_sha_equal": b1 == b2}
+
+
+def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
+    """★ v3.11c：集団の走行。走行（集団）ごとに、まとめ役を一つのプロセスで動かし、その中で個体ごとのプロセスを歩調を合わせて走らせる。"""
+    import multiprocessing as mp
+    import v311c
+    if len({t["cell"] for t in tasks}) != 1:
+        raise SystemExit(f"--v311c はセルを一つに絞って使う（--cells）。いま {len({t['cell'] for t in tasks})} セル")
+    tmpl = tasks[0]
+    fs = [float(x) for x in args.v311c_f.split(",")]
+    n = len(fs)
+    groups = [int(x) for x in args.v311c_groups.split(",")] if args.v311c_groups else [0] * n
+    if len(groups) != n:
+        raise SystemExit("--v311c-groups の長さが個体の数と違う")
+    comm = out_root / "comm"
+    comm.mkdir(parents=True, exist_ok=True)
+    pops = []
+    for r in [int(x) for x in args.v311c_runs.split(",")]:
+        ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
+                   v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
+                          "groups": groups, "tags": not args.v311c_no_tags, "b_n": args.v311c_b_n}) for i in range(n)]
+        for key in ("probe_shop", "audit", "serial"):
+            if getattr(args, "v311c_" + key):
+                for task in ts:
+                    task["v311c"][key] = True
+        if args.v311c_sme_replay:
+            for task in ts:
+                task["sme_replay"] = str(Path(args.v311c_sme_replay) / f"seed{task['seed']:03d}.sme.states.jsonl.gz")
+        pops.append((r, ts))
+
+    def one(r, ts):
+        s = v311c.coordinate(ts, comm / f"run{r:03d}.jsonl", probe_every=args.v311c_probe_every)
+        if args.v311c_lineage and not s["errors"]:
+            from v311c_lineage import write_lineage
+            write_lineage(comm / f"run{r:03d}.jsonl", comm / f"run{r:03d}.lineage.jsonl", groups)
+        (comm / f"run{r:03d}.summary.json").write_text(json.dumps(s, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
+
+    ctx = mp.get_context("fork")
+    running = []
+    queue = list(pops)
+    while queue or running:
+        while queue and len(running) < max(1, args.workers):
+            r, ts = queue.pop(0)
+            p = ctx.Process(target=one, args=(r, ts))
+            p.start()
+            running.append((r, p))
+            print(f"{time.strftime('%F %T')} 集団 run{r:03d} を始めた（個体 {n}）", flush=True)
+        r, p = running.pop(0)
+        p.join()
+        sp = comm / f"run{r:03d}.summary.json"
+        s = json.loads(sp.read_text(encoding="utf-8")) if sp.exists() else {"errors": ["summary が無い"], "exitcode": p.exitcode}
+        with open(man, "a", encoding="utf-8") as fm:
+            for i, a in enumerate(s.get("agents") or []):
+                fm.write(json.dumps({"run": r, "agent": i, **(a if isinstance(a, dict) else {"raw": str(a)})}, ensure_ascii=False, default=str) + "\n")
+        print(f"{time.strftime('%F %T')} 集団 run{r:03d} 終わり 試行 {s.get('trials')} 束 {s.get('bundles')} 送信 {s.get('sent')} "
+              f"受信 {s.get('recv')} 失敗 {len(s.get('errors') or [])}", flush=True)
+
 
 
 def main() -> None:
@@ -763,6 +829,55 @@ def main() -> None:
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
+    ap.add_argument("--v311c", action="store_true", help="v3.11c：集団化・事例伝達（tools/v311c.py）。B＋E の旗一式と一緒に")
+    ap.add_argument("--v311c-f", default="0.5,0.5", help="v3.11c：個体ごとの f（開示の確率）。個体の数はこの並びの長さ")
+    ap.add_argument("--v311c-groups", default=None, help="v3.11c：個体ごとの組（既定は全員 0）")
+    ap.add_argument("--v311c-q", type=float, default=0.2, help="v3.11c：実際に答えた人が束を送る確率 q")
+    ap.add_argument("--v311c-m", type=float, default=0.0, help="v3.11c：別の組の相手を選ぶ確率 m（二体では使わない）")
+    ap.add_argument("--v311c-recv", default="B", choices=["A", "B"], help="v3.11c：受信 A（名前を使わない）／受信 B（同じ名札を優先）")
+    ap.add_argument("--v311c-runs", default="1", help="v3.11c：走行（集団）の番号。個体 i の世界の種は 走行＋1000×i")
+    ap.add_argument("--v311c-b-n", type=int, default=None, help="v3.11c：名札の固定長 b を決める個体の数（既定は集団の個体数。単独の比べの走行で集団と同じ b にするとき）")
+    ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
+    ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
+    ap.add_argument("--v311c-probe-shop", action="store_true", help="一致の試験を店×日ごとの固定20問にする（学習には戻さない）")
+    ap.add_argument("--v311c-audit", action="store_true", help="研究者用：各試行の状態・乱数の指紋と試験の非干渉を検査する")
+    ap.add_argument("--v311c-lineage", action="store_true", help="研究者用：走行後に通信記録から定義ごとの出どころ候補の系譜を書く")
+    ap.add_argument("--v311c-sme-replay", default=None, help="集団化の個体別SME状態記録のディレクトリから再生する（集団の種一本）")
+    ap.add_argument("--v311c-serial", action="store_true", help="個体の重い計算を全体で一つずつ実行する（試行の歩調は同じ）")
+    ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
+    ap.add_argument("--probe-world", action="store_true",
+                    help="内的世界の試験（記録だけ）：100 試行ごとに、固定した試験の場面の骨組みの関係を一本ずつ伏せた問いに答えさせる（学習しない。tools/probeworld.py）")
+    ap.add_argument("--dump-answers", action="store_true",
+                    help="答えごとの記録（記録だけ）：実際に答えた試行ごとに side/<セル>/seed<種>.answers.csv へ一行（tools/answerlog.py）")
+    ap.add_argument("--dump-routing", action="store_true",
+                    help="証拠の届け先の記録（記録だけ）：m1 が席に足した観察と出どころ・採点の届け先と届かなかった理由を side/<セル>/seed<種>.routing.jsonl へ（tools/routelog.py）")
+    ap.add_argument("--world-cue", action="store_true",
+                    help="世界 v4（型の変種）：場面ごとの変種 A／B で、二つの部分木の最初の一階の葉の述語を切り替える（tools/worldvariant.py）")
+    ap.add_argument("--cf-learn", action="store_true",
+                    help="反実仮想で学ぶ腕 C：B の R̄F・R̄H・R̄U を、席自身の答えでなく、その席を F・H・U にした写しで言う最終的な答えの書き直し費用で積む（tools/cflearn.py）")
+    ap.add_argument("--e-price", type=float, default=None,
+                    help="まとめの値段：E（新しい場面を既存の定義にまとめるか新しく作るか）の λ を、--v39-price（B の忘れる値段）と別に与える（--v310-be と一緒に）")
+    ap.add_argument("--cf-value", action="store_true",
+                    help="反実仮想の保持価値の診断（記録だけ）：開示のあった試行で、選ばれた定義の席を一段薄くした写しで答え直し、書き直し費用の差を書く（tools/cfvalue.py）")
+    ap.add_argument("--strict-pc", action="store_true",
+                    help="照合の直し：親の候補の対は、その子の対がすべて（見えていない相手か、採れる直接の候補）のときだけ採る（tools/strictpc.py）")
+    ap.add_argument("--shop-world", type=int, choices=(1, 2), default=None,
+                    help="お店の世界：種は M1（甲）・M2（乙）だけのもの（tools/shop/U-011_seed_shop.json）。シールと link を足し、ドアの述語を世界 1／2 の表で決める（tools/shopworld.py）")
+    ap.add_argument("--shop-exc", type=float, default=0.2, help="お店の世界：例外のシールの割合（既定 0.2）")
+    ap.add_argument("--shop-keep-cue", action="store_true", help="お店の世界の診断：B の変換の候補からシールと link の席を外す")
+    ap.add_argument("--world-cue-p", type=float, default=0.8, help="世界 v4（型の変種）：変種 A の確率（既定 0.8）")
+    ap.add_argument("--u-struct", action="store_true",
+                    help="U の照合：U の席を名前の条件を持たない関係の位置として照合に参加させる（--v39 --hist-role と一緒に。tools/ustruct.py）")
+    ap.add_argument("--relearn-init", action="store_true",
+                    help="覚え直しの初期の評価：U→H の覚え直しの観察一回を H と U で採点して初期値に入れる（--u-struct --v310-be と一緒に。tools/relearninit.py）")
+    ap.add_argument("--amb-local", action="store_true",
+                    help="候補ごとの棄権：穴埋めで決まった候補があれば、ほかの席の同点（あいまい）で答え全体を止めない（--v39 と一緒に。tools/v39.py amb_blocks）")
+    ap.add_argument("--answer-gap", action="store_true",
+                    help="欠けた位置にだけ答える：投影・穴埋めの候補を、対応先が提示の場面の欠けた位置（ぶら下がった参照）に入るものに絞ってから今の決まりで選ぶ（--v39 --v310-be と一緒に。tools/answergap.py）")
+    ap.add_argument("--tie-struct", action="store_true",
+                    help="同点の並べ方：変換の同点を、名前や番号ではなく構造だけの鍵（生まれた試行・階・親の述語と位置）で並べる（--v39 と一緒に。tools/tiestruct.py）")
+    ap.add_argument("--score-role", action="store_true",
+                    help="v3.10hs：B の採点を、席の親が対応した場面の関係の同じ位置の子（関係 ID）が開示の関係と一致する席だけにする（--v310-be と一緒に。tools/v310be.py）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
@@ -790,6 +905,14 @@ def main() -> None:
     ap.add_argument("--dump-slot-history", action="store_true",
                     help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
     args = ap.parse_args()
+    if args.v311c and not (args.v39 and args.v310_be):
+        ap.error("--v311c は --v39 --v310-be と一緒に使う")
+    if args.v311c_probe_shop and args.shop_world is None:
+        ap.error("--v311c-probe-shop は --shop-world と一緒に使う")
+    if args.v311c_sme_replay and not (args.v311c and args.sme2017 and len(args.v311c_runs.split(",")) == 1):
+        ap.error("--v311c-sme-replay は --v311c --sme2017 と集団の種一本で使う")
+    if args.v311c and args.sme_replay:
+        ap.error("集団化の再生は個体別の受信段階を含む別の記録を使う")
     import sweep
     cfg = json.load(open(args.config, encoding="utf-8"))
     orig_dir = cfg["output"]["dir"]
@@ -927,11 +1050,21 @@ def main() -> None:
                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
                                                     "commit": commit, "driver": "tools/v3_run.py",
+                                                    **({"v311c": {"f": args.v311c_f, "groups": args.v311c_groups, "q": args.v311c_q, "m": args.v311c_m,
+                                                                  "recv": args.v311c_recv, "runs": args.v311c_runs, "no_tags": args.v311c_no_tags,
+                                                                  "probe_every": args.v311c_probe_every,
+                                                                  **({"sme_replay": args.v311c_sme_replay} if args.v311c_sme_replay else {}),
+                                                                  **{k: True for k in ("probe_shop", "audit", "serial", "lineage")
+                                                                     if getattr(args, "v311c_" + k)}}} if args.v311c else {}),
                                                     "workers": args.workers,
                                                     **({"horizon": args.horizon} if args.horizon is not None else {})}) + "\n")
     man = out_root / "manifest.jsonl"
     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
+    if args.v311c:
+        _run_collective(args, tasks, out_root, man)
+        print(f"{time.strftime('%F %T')} ALLDONE {cfg['name']}", flush=True)
+        return
     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
         futs = {ex.submit(worker, t): t for t in tasks}
         for fu in as_completed(futs):
