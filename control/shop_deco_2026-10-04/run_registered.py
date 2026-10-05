@@ -4,6 +4,7 @@ import gzip
 import hashlib
 import json
 import os
+import re
 import subprocess
 import time
 
@@ -84,6 +85,19 @@ def registered(args, out, tag, mem=0.5):
     return record
 
 
+def without_measured_sec(data):
+    """承認されたcfvalueのsec_trial値だけを除く。ほかの文字・順・空白は保つ。"""
+    pattern = rb'("sec_trial"\s*:\s*)(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(?=\s*[,}])'
+    out = []
+    for line in data.splitlines(keepends=True):
+        record = json.loads(line)
+        assert isinstance(record["sec_trial"], (int, float))
+        stripped, n = re.subn(pattern, rb'\1<measured_time>', line)
+        assert n == 1
+        out.append(stripped)
+    return b"".join(out)
+
+
 def compare_pair(off, current):
     ledger_off = Path(off) / "ledgers" / "cells" / CELL / "seed001.jsonl.gz"
     ledger_current = Path(current) / "ledgers" / "cells" / CELL / "seed001.jsonl.gz"
@@ -98,9 +112,16 @@ def compare_pair(off, current):
     for name in sorted(set(old) | set(new)):
         x = old[name].read_bytes() if name in old else None
         y = new[name].read_bytes() if name in new else None
-        result["side"][name] = {"equal": x == y,
+        xc, yc = x, y
+        exception = None
+        if name.endswith(".cfvalue.jsonl") and x is not None and y is not None:
+            xc, yc = without_measured_sec(x), without_measured_sec(y)
+            exception = "sec_trial value only; original files unchanged"
+        result["side"][name] = {"equal": xc == yc, "raw_equal": x == y, "exception": exception,
             "off_sha256": hashlib.sha256(x).hexdigest() if x is not None else None,
-            "current_sha256": hashlib.sha256(y).hexdigest() if y is not None else None}
+            "current_sha256": hashlib.sha256(y).hexdigest() if y is not None else None,
+            "comparison_off_sha256": hashlib.sha256(xc).hexdigest() if xc is not None else None,
+            "comparison_current_sha256": hashlib.sha256(yc).hexdigest() if yc is not None else None}
     result["passed"] = result["ledger_body_equal"] and result["side_file_sets_equal"] and all(
         r["equal"] for r in result["side"].values())
     return result

@@ -12,7 +12,8 @@ def main():
     config["seeds"] = {"start": 1, "count": 1}
     config_path = dest / "small_config.json"
     config_path.write_text(json.dumps(config, indent=2) + "\n")
-    result = {"passed": False, "trial_count": 64, "seed": 1, "comparisons": [], "resources": []}
+    result = {"passed": False, "trial_count": 64, "seed": 1, "comparisons": [], "resources": [],
+              "approved_exception": "2026-10-05: cfvalue.jsonl sec_trial value only; original times preserved"}
     result_path = dest / "run_gate.json"
     try:
         # 先に旗なし／currentの8組。研究者用research/はside比較の外。
