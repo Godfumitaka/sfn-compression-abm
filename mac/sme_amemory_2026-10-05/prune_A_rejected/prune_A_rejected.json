@@ -1,0 +1,155 @@
+{
+  "case": "A_prune",
+  "candidate_discarded": true,
+  "body_equal": true,
+  "first_answer_difference": {
+    "trial": "10",
+    "different_fields": {
+      "cand_n": {
+        "baseline": "7",
+        "prune": "4"
+      },
+      "cand_other_ratios": {
+        "baseline": "1.0000;1.0000;0.9167;0.4545;0.4375",
+        "prune": "1.0000;1.0000;0.9167"
+      },
+      "cand_tri": {
+        "baseline": "1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10;0.4545:4/1/6/4;0.4375:6/1/9/6",
+        "prune": "1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10"
+      }
+    }
+  },
+  "comparison": {
+    "passed": false,
+    "records": [
+      {
+        "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+        "equal": true,
+        "left_sha256": "484a29b113a2aa29a95c98b1383ee2b883e40c8f7ab4a04a83478747083fd167",
+        "right_sha256": "484a29b113a2aa29a95c98b1383ee2b883e40c8f7ab4a04a83478747083fd167",
+        "left_bytes": 14380264,
+        "right_bytes": 14380264,
+        "first_byte_difference": null
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "equal": false,
+        "left_sha256": "f9dccc458eaa8a53880df67f2d3d59e1bab90cf946a28de80860bf75413b3b79",
+        "right_sha256": "97940e27a0da0043428468f48d6d82254fbfcd24f22420de691d493f8f4f8227",
+        "left_bytes": 41266,
+        "right_bytes": 40041,
+        "first_byte_difference": 620,
+        "first_content_difference": {
+          "line": 2,
+          "left": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,H_fill,12,hold_b,1,0,H,2,2,1.0,1,0.0,0,15,1,2,6,15,15,1.0,0.0,0.0,1.7449043451144322,0.2908173908524054,0.014705882352941176,7,1.0,1.0000;1.0000;0.9167;0.4545;0.4375,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,14,1,0,14,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10;0.4545:4/1/6/4;0.4375:6/1/9/6\n",
+          "right": "10,1,R_9d6e4b5f291af53c,4,R_9d6e4b5f291af53c@4,H_fill,12,hold_b,1,0,H,2,2,1.0,1,0.0,0,15,1,2,6,15,15,1.0,0.0,0.0,1.7449043451144322,0.2908173908524054,0.014705882352941176,4,1.0,1.0000;1.0000;0.9167,M2,M2,M2,1,M2:1,1,0,hold_b,cause#0,1,0,14,1,0,14,1.0000:4/0/0/4;1.0000:6/1/0/6;0.9167:10/1/1/10\n"
+        }
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+        "equal": true,
+        "left_sha256": "00a7ef3e81402b3ebc895cfc87d356a8b4f9a798ee81a6a0baa5fc89b99ea846",
+        "right_sha256": "00a7ef3e81402b3ebc895cfc87d356a8b4f9a798ee81a6a0baa5fc89b99ea846",
+        "left_bytes": 1068181,
+        "right_bytes": 1068181,
+        "first_byte_difference": null
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+        "equal": true,
+        "left_sha256": "3e729ae8ce4f52aa0893fdb39ed0a1d0c6de5f7252136197c6ec157641313aad",
+        "right_sha256": "3e729ae8ce4f52aa0893fdb39ed0a1d0c6de5f7252136197c6ec157641313aad",
+        "left_bytes": 2007457,
+        "right_bytes": 2007457,
+        "first_byte_difference": null
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+        "equal": true,
+        "left_sha256": "20366b72c495c65cdca781c697a3a71ebc2d378fb3f2ba78845769084467ce42",
+        "right_sha256": "20366b72c495c65cdca781c697a3a71ebc2d378fb3f2ba78845769084467ce42",
+        "left_bytes": 15412,
+        "right_bytes": 15412,
+        "first_byte_difference": null
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+        "equal": false,
+        "left_sha256": "2fea75aa40ee7a698d5cc8f09178fdffa43eabfaf0fe359cfb0957a2a527a922",
+        "right_sha256": "d9f8586247d6b1b74a8bb7c287a7db6c16574686ee2941354cd2b99b1306274b",
+        "left_bytes": 9553531,
+        "right_bytes": 8868606,
+        "first_byte_difference": 105,
+        "first_content_difference": {
+          "line": 11,
+          "left": {
+            "caller": "v39:map_v39",
+            "kind": "sme_result",
+            "result": "97485b912318395b2598c9625e9501d419b4cdae283ace6a7301ac2bb8fe684f",
+            "tie_policy": "call-seed-uniform-v1",
+            "tie_seed": 49399823450112226674161754316083055490467587831740030727004234549345835080188,
+            "trial": 2
+          },
+          "right": {
+            "kind": "sme_self",
+            "tie_policy": "call-seed-uniform-v1",
+            "tie_seed": 37138580992556897293573856371232655300765175239847122513127640022938428571703,
+            "trial": 2
+          }
+        }
+      },
+      {
+        "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+        "equal": true,
+        "left_sha256": "30898caa66173ddbab3f0955d216f032e67046ff7e1adc59e5b2667c09c83a7b",
+        "right_sha256": "30898caa66173ddbab3f0955d216f032e67046ff7e1adc59e5b2667c09c83a7b",
+        "left_bytes": 28296202,
+        "right_bytes": 28296202,
+        "first_byte_difference": null
+      },
+      {
+        "file": "tie_state.jsonl",
+        "equal": false,
+        "left_sha256": "c6dec677294a8a36f448913034a270d5c96eb3a67969f3657bafc58c99c93124",
+        "right_sha256": "8776765957ed709f57b7bf3d3806f57e5848148d64bb55e816c88f30d20e6034",
+        "left_bytes": 1517862,
+        "right_bytes": 1517826,
+        "first_byte_difference": 22669,
+        "first_content_difference": {
+          "line": 3,
+          "left": {
+            "trial": 2
+          },
+          "right": {
+            "trial": 2
+          }
+        }
+      },
+      {
+        "file": "saved_matcher.jsonl.gz",
+        "equal": false,
+        "left_sha256": "78cc73b1f7c8fa98fea8bc76c0958fd77cc9d33316740e2090d0e8856475af3e",
+        "right_sha256": "60e327acdeb747ab3b5779ab2d96069617ef0cdff1d361379829070b9ed72141",
+        "left_bytes": 20366742,
+        "right_bytes": 18271296,
+        "first_byte_difference": 32,
+        "first_content_difference": {
+          "line": 10,
+          "left": {},
+          "right": {}
+        }
+      }
+    ],
+    "excluded": [
+      "台帳見出し一行",
+      "cflearn/cfvalueの実測sec_trialの数値だけ"
+    ],
+    "compressed_bytes_compared": true,
+    "model_and_tie_state": true,
+    "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/diagnostic_01/A_diag200",
+    "case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/gates200_01/A_prune",
+    "full_byte_requirement": true
+  },
+  "future_full_case_disabled": true,
+  "model_formula_changed": false
+}
