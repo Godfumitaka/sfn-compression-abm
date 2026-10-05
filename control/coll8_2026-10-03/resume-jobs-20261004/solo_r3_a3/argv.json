@@ -1,0 +1,248 @@
+{
+ "name": "solo_r3_a3",
+ "kind": "solo",
+ "run": 3,
+ "q": 0,
+ "m": 0,
+ "agent": 3,
+ "argv": [
+  "/opt/homebrew/opt/python@3.12/bin/python3.12",
+  "tools/v311c_checks/coll8_solo.py",
+  "config/sweep_shop_hide1_s1_2026-10-01.json",
+  "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/solo_r3_a3",
+  "--nohash",
+  "--vt",
+  "0.3842",
+  "--extend-rule",
+  "none",
+  "--charge1",
+  "d32",
+  "--fast",
+  "--no-public-history",
+  "--dump-slot-history",
+  "--fix2-full",
+  "--fix-order2",
+  "--proj-first",
+  "--fill-norestate",
+  "--no-charge2",
+  "--own-evidence",
+  "--v39",
+  "--v39-budget",
+  "inf",
+  "--v39-decay",
+  "actr",
+  "--v310-be",
+  "--hist-role",
+  "--score-role",
+  "--nsim",
+  "0.7",
+  "--ident-rho",
+  "0.5",
+  "--ident-argmax",
+  "--ident-commons",
+  "--u-struct",
+  "--relearn-init",
+  "--tie-struct",
+  "--amb-local",
+  "--dump-answers",
+  "--dump-routing",
+  "--answer-gap",
+  "--strict-pc",
+  "--cf-value",
+  "--probe-world",
+  "--cells",
+  "f0.5000_th2.1000_first_order",
+  "--no-compare",
+  "--shop-world",
+  "2",
+  "--shop-exc",
+  "0.2",
+  "--trial-count",
+  "1740",
+  "--v39-price",
+  "0.01873710622997919",
+  "--e-price",
+  "0.01873710622997919",
+  "--workers",
+  "1",
+  "--seeds",
+  "1",
+  "--v311c",
+  "--v311c-f",
+  "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9",
+  "--v311c-groups",
+  "0,0,0,0,1,1,1,1",
+  "--v311c-runs",
+  "3",
+  "--v311c-q",
+  "0",
+  "--v311c-m",
+  "0",
+  "--v311c-recv",
+  "A",
+  "--v311c-b-n",
+  "8",
+  "--v311c-serial",
+  "--v311c-probe-shop",
+  "--v311c-audit",
+  "--v311c-lineage"
+ ],
+ "source_commit": "822c161d38986e8924a9842814bd2f556f5bc2b3",
+ "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/no_comm_r3",
+ "extra_env": {
+  "COLL8_SOLO_AGENT": "3"
+ },
+ "dependency": "no_comm_r3",
+ "initial": {
+  "time": "2026-10-05T08:34:35+09:00",
+  "disk_free_bytes": 417970352128,
+  "memory": {
+   "returncode": 0,
+   "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    84726.\nPages active:                                 755496.\nPages inactive:                               822461.\nPages speculative:                             14077.\nPages throttled:                                   0.\nPages wired down:                             159514.\nPages purgeable:                               21851.\n\"Translation faults\":                      942091467.\nPages copy-on-write:                        78736443.\nPages zero filled:                         511221192.\nPages reactivated:                          30723757.\nPages purged:                                2590263.\nFile-backed pages:                            960759.\nAnonymous pages:                              631275.\nPages stored in compressor:                   393533.\nPages occupied by compressor:                 208509.\nDecompressions:                             52196509.\nCompressions:                               59274813.\nPageins:                                    48106086.\nPageouts:                                      31579.\nSwapins:                                    10021391.\nSwapouts:                                   11946411.\nPages tagged:                                 127058.\nPages tagged resident:                         97643.\nPages tagged compressed:                       29415.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 4944.\nPages tag-storage free:                          561.\nPages tag-storage non-tag pageable:            59844.\nPages tag-storage non-tag wired:                  23.\nBytes of compressed tags:                    4142912.\nTagged compressions:                          413267.\nTagged decompressions:                        376465.\n"
+  },
+  "swap": {
+   "returncode": 0,
+   "output": "vm.swapusage: total = 2048.00M  used = 348.19M  free = 1699.81M  (encrypted)\n"
+  },
+  "thermal": {
+   "returncode": 0,
+   "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+  },
+  "swap_mib": 348.19,
+  "processes": [
+   {
+    "pid": 1809,
+    "ppid": 1498,
+    "cpu": 0.0,
+    "rss_kib": 736,
+    "command": "/Applications/Claude.app/Contents/Helpers/disclaimer --pgroup -- /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --effort high --model claude-opus-5-5 --permission-prompt-tool stdio --resume=bc4d2c52-61a9-488c-a438-c2c599098c52 --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"ultracode\":false,\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 1810,
+    "ppid": 1809,
+    "cpu": 0.4,
+    "rss_kib": 285344,
+    "command": "/Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --effort high --model claude-opus-5-5 --permission-prompt-tool stdio --resume=bc4d2c52-61a9-488c-a438-c2c599098c52 --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"ultracode\":false,\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 21559,
+    "ppid": 1498,
+    "cpu": 0.0,
+    "rss_kib": 736,
+    "command": "/Applications/Claude.app/Contents/Helpers/disclaimer --pgroup -- /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --thinking adaptive --effort xhigh --model claude-opus-5 --permission-prompt-tool stdio --resume=48334183-2072-4ba5-a919-4c568bd06cec --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 21560,
+    "ppid": 21559,
+    "cpu": 0.6,
+    "rss_kib": 209552,
+    "command": "/Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --thinking adaptive --effort xhigh --model claude-opus-5 --permission-prompt-tool stdio --resume=48334183-2072-4ba5-a919-4c568bd06cec --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 69926,
+    "ppid": 1,
+    "cpu": 1.9,
+    "rss_kib": 24176,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_gates_20261004.py"
+   },
+   {
+    "pid": 69931,
+    "ppid": 69926,
+    "cpu": 0.0,
+    "rss_kib": 18960,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 solo_r3_a1 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a1/spec.json"
+   },
+   {
+    "pid": 69944,
+    "ppid": 69931,
+    "cpu": 0.0,
+    "rss_kib": 27136,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a1/spec.json"
+   },
+   {
+    "pid": 69971,
+    "ppid": 69944,
+    "cpu": 0.0,
+    "rss_kib": 1312,
+    "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 tools/v311c_checks/coll8_solo.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/solo_r3_a1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 3 --v311c-q 0 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 69973,
+    "ppid": 69971,
+    "cpu": 99.3,
+    "rss_kib": 116400,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v311c_checks/coll8_solo.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/solo_r3_a1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 3 --v311c-q 0 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 70862,
+    "ppid": 69926,
+    "cpu": 6.6,
+    "rss_kib": 18896,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 solo_r3_a3 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a3/spec.json"
+   },
+   {
+    "pid": 70863,
+    "ppid": 69926,
+    "cpu": 6.1,
+    "rss_kib": 18864,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 solo_r3_a4 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a4/spec.json"
+   },
+   {
+    "pid": 70876,
+    "ppid": 70862,
+    "cpu": 0.0,
+    "rss_kib": 25328,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a3/spec.json"
+   },
+   {
+    "pid": 70880,
+    "ppid": 70863,
+    "cpu": 0.0,
+    "rss_kib": 23984,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/solo_r3_a4/spec.json"
+   },
+   {
+    "pid": 97541,
+    "ppid": 1,
+    "cpu": 0.0,
+    "rss_kib": 9824,
+    "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+   }
+  ],
+  "foreign_heavy": []
+ },
+ "receipt": {
+  "time": "2026-10-05T08:34:35+09:00",
+  "rows": [
+   {
+    "pid": 69931,
+    "owner": "Codex3 集団化 solo_r3_a1",
+    "mem_gb": 4.0,
+    "start": "2026-10-05T08:33:23",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   },
+   {
+    "pid": 70862,
+    "owner": "Codex3 集団化 solo_r3_a3",
+    "mem_gb": 4.0,
+    "start": "2026-10-05T08:34:35",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   },
+   {
+    "pid": 70863,
+    "owner": "Codex3 集団化 solo_r3_a4",
+    "mem_gb": 4.0,
+    "start": "2026-10-05T08:34:35",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   }
+  ],
+  "own": {
+   "pid": 70862,
+   "owner": "Codex3 集団化 solo_r3_a3",
+   "mem_gb": 4.0,
+   "start": "2026-10-05T08:34:35",
+   "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+  },
+  "jobs_sha256": "b0b1f4b273c6ecd9dba0da37dbc69cc8df2b97dbbcd61723e14a6d52e277019f"
+ }
+}

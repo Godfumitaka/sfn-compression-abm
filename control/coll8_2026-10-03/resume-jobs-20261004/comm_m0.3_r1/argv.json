@@ -1,0 +1,604 @@
+{
+ "name": "comm_m0.3_r1",
+ "kind": "population",
+ "run": 1,
+ "q": 0.2,
+ "m": 0.3,
+ "agent": null,
+ "argv": [
+  "/opt/homebrew/opt/python@3.12/bin/python3.12",
+  "tools/v3_run.py",
+  "config/sweep_shop_hide1_s1_2026-10-01.json",
+  "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.3_r1",
+  "--nohash",
+  "--vt",
+  "0.3842",
+  "--extend-rule",
+  "none",
+  "--charge1",
+  "d32",
+  "--fast",
+  "--no-public-history",
+  "--dump-slot-history",
+  "--fix2-full",
+  "--fix-order2",
+  "--proj-first",
+  "--fill-norestate",
+  "--no-charge2",
+  "--own-evidence",
+  "--v39",
+  "--v39-budget",
+  "inf",
+  "--v39-decay",
+  "actr",
+  "--v310-be",
+  "--hist-role",
+  "--score-role",
+  "--nsim",
+  "0.7",
+  "--ident-rho",
+  "0.5",
+  "--ident-argmax",
+  "--ident-commons",
+  "--u-struct",
+  "--relearn-init",
+  "--tie-struct",
+  "--amb-local",
+  "--dump-answers",
+  "--dump-routing",
+  "--answer-gap",
+  "--strict-pc",
+  "--cf-value",
+  "--probe-world",
+  "--cells",
+  "f0.5000_th2.1000_first_order",
+  "--no-compare",
+  "--shop-world",
+  "2",
+  "--shop-exc",
+  "0.2",
+  "--trial-count",
+  "1740",
+  "--v39-price",
+  "0.01873710622997919",
+  "--e-price",
+  "0.01873710622997919",
+  "--workers",
+  "1",
+  "--seeds",
+  "1",
+  "--v311c",
+  "--v311c-f",
+  "0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9",
+  "--v311c-groups",
+  "0,0,0,0,1,1,1,1",
+  "--v311c-runs",
+  "1",
+  "--v311c-q",
+  "0.2",
+  "--v311c-m",
+  "0.3",
+  "--v311c-recv",
+  "A",
+  "--v311c-b-n",
+  "8",
+  "--v311c-serial",
+  "--v311c-probe-shop",
+  "--v311c-audit",
+  "--v311c-lineage"
+ ],
+ "source_commit": "822c161d38986e8924a9842814bd2f556f5bc2b3",
+ "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/restart-20261004/no_comm_r1",
+ "extra_env": {},
+ "dependency": "no_comm_r1",
+ "initial": {
+  "time": "2026-10-04T23:57:06+09:00",
+  "disk_free_bytes": 428564127744,
+  "memory": {
+   "returncode": 0,
+   "output": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   127942.\nPages active:                                 761018.\nPages inactive:                               777599.\nPages speculative:                               881.\nPages throttled:                                   0.\nPages wired down:                             151900.\nPages purgeable:                               11903.\n\"Translation faults\":                      653722172.\nPages copy-on-write:                        48143909.\nPages zero filled:                         356568434.\nPages reactivated:                          29831383.\nPages purged:                                2456430.\nFile-backed pages:                            655280.\nAnonymous pages:                              884218.\nPages stored in compressor:                   438171.\nPages occupied by compressor:                 225443.\nDecompressions:                             51734443.\nCompressions:                               58400421.\nPageins:                                    46499070.\nPageouts:                                      31571.\nSwapins:                                    10021340.\nSwapouts:                                   11946411.\nPages tagged:                                 125814.\nPages tagged resident:                         95208.\nPages tagged compressed:                       30606.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 4945.\nPages tag-storage free:                           84.\nPages tag-storage non-tag pageable:            60381.\nPages tag-storage non-tag wired:                  22.\nBytes of compressed tags:                    4442560.\nTagged compressions:                          399432.\nTagged decompressions:                        361574.\n"
+  },
+  "swap": {
+   "returncode": 0,
+   "output": "vm.swapusage: total = 2048.00M  used = 348.19M  free = 1699.81M  (encrypted)\n"
+  },
+  "thermal": {
+   "returncode": 0,
+   "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+  },
+  "swap_mib": 348.19,
+  "processes": [
+   {
+    "pid": 1809,
+    "ppid": 1498,
+    "cpu": 0.0,
+    "rss_kib": 736,
+    "command": "/Applications/Claude.app/Contents/Helpers/disclaimer --pgroup -- /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --effort high --model claude-opus-5-5 --permission-prompt-tool stdio --resume=bc4d2c52-61a9-488c-a438-c2c599098c52 --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"ultracode\":false,\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 1810,
+    "ppid": 1809,
+    "cpu": 0.1,
+    "rss_kib": 213232,
+    "command": "/Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --effort high --model claude-opus-5-5 --permission-prompt-tool stdio --resume=bc4d2c52-61a9-488c-a438-c2c599098c52 --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"ultracode\":false,\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 5879,
+    "ppid": 67250,
+    "cpu": 0.0,
+    "rss_kib": 19648,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --owner SME段2 四案1740試行の一致検査 --kind sme --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_01 -- /opt/homebrew/opt/python@3.12/bin/python3.12 run_full_01.py"
+   },
+   {
+    "pid": 5884,
+    "ppid": 5879,
+    "cpu": 0.0,
+    "rss_kib": 24176,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python run_full_01.py"
+   },
+   {
+    "pid": 5891,
+    "ppid": 5884,
+    "cpu": 0.0,
+    "rss_kib": 27248,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_01/reuse/command.json"
+   },
+   {
+    "pid": 5894,
+    "ppid": 5891,
+    "cpu": 0.0,
+    "rss_kib": 15968,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+   },
+   {
+    "pid": 5895,
+    "ppid": 5891,
+    "cpu": 97.6,
+    "rss_kib": 1315104,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+   },
+   {
+    "pid": 9647,
+    "ppid": 70745,
+    "cpu": 0.0,
+    "rss_kib": 19152,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 comm_m0_r1 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0_r1/spec.json"
+   },
+   {
+    "pid": 9656,
+    "ppid": 9647,
+    "cpu": 0.8,
+    "rss_kib": 28672,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0_r1/spec.json"
+   },
+   {
+    "pid": 9663,
+    "ppid": 9656,
+    "cpu": 0.0,
+    "rss_kib": 1280,
+    "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9665,
+    "ppid": 9663,
+    "cpu": 0.0,
+    "rss_kib": 31120,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9675,
+    "ppid": 9665,
+    "cpu": 0.0,
+    "rss_kib": 35824,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9682,
+    "ppid": 9675,
+    "cpu": 7.8,
+    "rss_kib": 180064,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9683,
+    "ppid": 9675,
+    "cpu": 25.2,
+    "rss_kib": 156128,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9684,
+    "ppid": 9675,
+    "cpu": 33.0,
+    "rss_kib": 167024,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9685,
+    "ppid": 9675,
+    "cpu": 28.5,
+    "rss_kib": 157008,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9686,
+    "ppid": 9675,
+    "cpu": 0.0,
+    "rss_kib": 194000,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9687,
+    "ppid": 9675,
+    "cpu": 0.0,
+    "rss_kib": 162448,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9688,
+    "ppid": 9675,
+    "cpu": 4.6,
+    "rss_kib": 200992,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 9689,
+    "ppid": 9675,
+    "cpu": 0.6,
+    "rss_kib": 196896,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 21559,
+    "ppid": 1498,
+    "cpu": 0.0,
+    "rss_kib": 736,
+    "command": "/Applications/Claude.app/Contents/Helpers/disclaimer --pgroup -- /Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --thinking adaptive --effort xhigh --model claude-opus-5 --permission-prompt-tool stdio --resume=48334183-2072-4ba5-a919-4c568bd06cec --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 21560,
+    "ppid": 21559,
+    "cpu": 0.1,
+    "rss_kib": 170048,
+    "command": "/Users/tatsu-admin/Library/Application Support/Claude/claude-code/2.1.286/f2326db61802/claude.app/Contents/MacOS/claude --output-format stream-json --verbose --input-format stream-json --thinking adaptive --effort xhigh --model claude-opus-5 --permission-prompt-tool stdio --resume=48334183-2072-4ba5-a919-4c568bd06cec --allowedTools mcp__computer-use,mcp__ccd_session__spawn_task,mcp__ccd_session__dismiss_task,mcp__ccd_session__mark_chapter,mcp__ccd_session_mgmt__list_sessions,mcp__ccd_session_mgmt__get_session,mcp__ccd_session_mgmt__get_usage,mcp__ccd_host__get_storage_usage,mcp__ccd_session_mgmt__set_session_title,mcp__ccd_session_mgmt__send_message,mcp__ccd_session_mgmt__detach_session,mcp__ccd_sidebar__list_groups,mcp__ccd_sidebar__create_group,mcp__ccd_sidebar__set_view,mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_session_mgmt__search_session_transcripts,mcp__ccd_session_mgmt__list_events,mcp__ccd_session_mgmt__export_transcript,mcp__scheduled-tasks__list_task_runs,mcp__ccd_session__read_widget_context,mcp__ccd_session__list_start_targets,mcp__ccd_view__show_pane,mcp__ccd_view__close_pane,mcp__ccd_view__get_layout,mcp__ccd_view__set_transcript_view,mcp__ccd_settings__get_settings,mcp__mcp-registry__search_mcp_registry,mcp__mcp-registry__suggest_connectors,mcp__mcp-registry__list_connectors,mcp__ccd_connectors__session_connectors_status,mcp__ccd_connectors__reconnect_session_connector,mcp__ccd_pr__get_status,mcp__ccd_window__open_session_in,mcp__ccd_window__close_split,mcp__ccd_window__set_sidebar_collapsed,mcp__ccd_window__get_window_layout,mcp__claude-in-chrome__request_credentials,mcp__claude-in-chrome__list_granted_credentials,mcp__claude-in-chrome__autofill_credential,mcp__claude-in-chrome__release_credentials,mcp__claude-in-chrome__enter_verification_code --disallowedTools SubscribePR --setting-sources=user,project,local --permission-mode auto --include-partial-messages --await-initialize --thinking-display omitted --replay-user-messages --settings {\"deniedMcpServers\":[{\"serverName\":\"Claude Browser\"},{\"serverName\":\"Claude Code Android Emulator\"},{\"serverName\":\"Claude Code iOS Simulator\"},{\"serverName\":\"Claude Preview\"},{\"serverName\":\"Claude_Browser\"},{\"serverName\":\"Claude_Code_Android_Emulator\"},{\"serverName\":\"Claude_Code_iOS_Simulator\"},{\"serverName\":\"Claude_Preview\"},{\"serverName\":\"Claude_for_Chrome\"},{\"serverName\":\"Framebuffer\"},{\"serverName\":\"Window Halo\"},{\"serverName\":\"Window_Halo\"},{\"serverName\":\"ccd_connectors\"},{\"serverName\":\"ccd_directory\"},{\"serverName\":\"ccd_host\"},{\"serverName\":\"ccd_pr\"},{\"serverName\":\"ccd_session\"},{\"serverName\":\"ccd_session_mgmt\"},{\"serverName\":\"ccd_settings\"},{\"serverName\":\"ccd_sidebar\"},{\"serverName\":\"ccd_turn\"},{\"serverName\":\"ccd_view\"},{\"serverName\":\"ccd_window\"},{\"serverName\":\"claude-in-chrome\"},{\"serverName\":\"claude_browser\"},{\"serverName\":\"claude_code_android_emulator\"},{\"serverName\":\"claude_code_ios_simulator\"},{\"serverName\":\"claude_for_chrome\"},{\"serverName\":\"claude_in_chrome\"},{\"serverName\":\"claude_preview\"},{\"serverName\":\"computer-use\"},{\"serverName\":\"computer_use\"},{\"serverName\":\"cowork\"},{\"serverName\":\"cowork-onboarding\"},{\"serverName\":\"cowork_onboarding\"},{\"serverName\":\"dev-debug\"},{\"serverName\":\"dev_debug\"},{\"serverName\":\"dispatch\"},{\"serverName\":\"framebuffer\"},{\"serverName\":\"mcp-registry\"},{\"serverName\":\"mcp_registry\"},{\"serverName\":\"plugins\"},{\"serverName\":\"remote-devices\"},{\"serverName\":\"remote_devices\"},{\"serverName\":\"scheduled-tasks\"},{\"serverName\":\"scheduled_tasks\"},{\"serverName\":\"session_info\"},{\"serverName\":\"skills\"},{\"serverName\":\"window_halo\"}]}"
+   },
+   {
+    "pid": 28736,
+    "ppid": 78474,
+    "cpu": 0.0,
+    "rss_kib": 19312,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex-動詞段3-C_global_s01 --mem 0.4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/stage3_night/C_global_s01 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/night.py one C_global_s01"
+   },
+   {
+    "pid": 28740,
+    "ppid": 28736,
+    "cpu": 0.0,
+    "rss_kib": 21504,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/night.py one C_global_s01"
+   },
+   {
+    "pid": 43552,
+    "ppid": 70529,
+    "cpu": 0.0,
+    "rss_kib": 20032,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W2 seed015 --mem 1.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay -- /opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 15 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 43561,
+    "ppid": 43552,
+    "cpu": 96.9,
+    "rss_kib": 379840,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 15 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 45034,
+    "ppid": 70529,
+    "cpu": 0.0,
+    "rss_kib": 19408,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W2 seed016 --mem 1.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay -- /opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 16 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 45047,
+    "ppid": 45034,
+    "cpu": 98.7,
+    "rss_kib": 283776,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 16 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 49430,
+    "ppid": 70745,
+    "cpu": 0.0,
+    "rss_kib": 19264,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 comm_m0.1_r1 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0.1_r1/spec.json"
+   },
+   {
+    "pid": 49441,
+    "ppid": 49430,
+    "cpu": 1.3,
+    "rss_kib": 28304,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0.1_r1/spec.json"
+   },
+   {
+    "pid": 49450,
+    "ppid": 49441,
+    "cpu": 0.0,
+    "rss_kib": 1312,
+    "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49452,
+    "ppid": 49450,
+    "cpu": 0.0,
+    "rss_kib": 31056,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49459,
+    "ppid": 49452,
+    "cpu": 0.0,
+    "rss_kib": 42608,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49467,
+    "ppid": 49459,
+    "cpu": 0.0,
+    "rss_kib": 169104,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49468,
+    "ppid": 49459,
+    "cpu": 0.0,
+    "rss_kib": 119664,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49469,
+    "ppid": 49459,
+    "cpu": 0.0,
+    "rss_kib": 139376,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49470,
+    "ppid": 49459,
+    "cpu": 0.0,
+    "rss_kib": 138656,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49471,
+    "ppid": 49459,
+    "cpu": 0.0,
+    "rss_kib": 93376,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49472,
+    "ppid": 49459,
+    "cpu": 1.2,
+    "rss_kib": 102160,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49473,
+    "ppid": 49459,
+    "cpu": 41.1,
+    "rss_kib": 92272,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 49474,
+    "ppid": 49459,
+    "cpu": 54.1,
+    "rss_kib": 95808,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004/comm_m0.1_r1 --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --u-struct --relearn-init --tie-struct --amb-local --dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world --cells f0.5000_th2.1000_first_order --no-compare --shop-world 2 --shop-exc 0.2 --trial-count 1740 --v39-price 0.01873710622997919 --e-price 0.01873710622997919 --workers 1 --seeds 1 --v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9 --v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1 --v311c-q 0.2 --v311c-m 0.1 --v311c-recv A --v311c-b-n 8 --v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage"
+   },
+   {
+    "pid": 50252,
+    "ppid": 70529,
+    "cpu": 0.0,
+    "rss_kib": 19296,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W2 seed017 --mem 1.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay -- /opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 17 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 50256,
+    "ppid": 50252,
+    "cpu": 98.2,
+    "rss_kib": 318688,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 17 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 52777,
+    "ppid": 70529,
+    "cpu": 0.0,
+    "rss_kib": 19152,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W2 seed018 --mem 1.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay -- /opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 18 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 52785,
+    "ppid": 52777,
+    "cpu": 96.9,
+    "rss_kib": 262000,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 18 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 53136,
+    "ppid": 28740,
+    "cpu": 96.5,
+    "rss_kib": 162000,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/verb/analyze.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/stage3_night/C_global_s01/run 1 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/stage3_night/C_global_s01/analysis"
+   },
+   {
+    "pid": 53772,
+    "ppid": 67250,
+    "cpu": 0.0,
+    "rss_kib": 20080,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python report_full_finish_01.py"
+   },
+   {
+    "pid": 54244,
+    "ppid": 70745,
+    "cpu": 7.7,
+    "rss_kib": 19120,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化 comm_m0.3_r1 --mem 4.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0.3_r1/spec.json"
+   },
+   {
+    "pid": 54248,
+    "ppid": 54244,
+    "cpu": 25.1,
+    "rss_kib": 25760,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/resume-jobs-20261004/comm_m0.3_r1/spec.json"
+   },
+   {
+    "pid": 70529,
+    "ppid": 67250,
+    "cpu": 0.0,
+    "rss_kib": 23504,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u codex_attn_2026-10-03/stageB1_resumed_2026-10-04/run_baseline_registered.py"
+   },
+   {
+    "pid": 70745,
+    "ppid": 67250,
+    "cpu": 0.8,
+    "rss_kib": 18320,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python resume_registered_gates_20261004.py"
+   },
+   {
+    "pid": 78474,
+    "ppid": 1,
+    "cpu": 0.0,
+    "rss_kib": 18832,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/night.py run"
+   },
+   {
+    "pid": 97541,
+    "ppid": 1,
+    "cpu": 0.0,
+    "rss_kib": 9664,
+    "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+   }
+  ],
+  "foreign_heavy": [
+   {
+    "pid": 5895,
+    "ppid": 5891,
+    "cpu": 97.6,
+    "rss_kib": 1315104,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+   },
+   {
+    "pid": 43561,
+    "ppid": 43552,
+    "cpu": 96.9,
+    "rss_kib": 379840,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 15 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 45047,
+    "ppid": 45034,
+    "cpu": 98.7,
+    "rss_kib": 283776,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 16 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 50256,
+    "ppid": 50252,
+    "cpu": 98.2,
+    "rss_kib": 318688,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 17 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 52785,
+    "ppid": 52777,
+    "cpu": 96.9,
+    "rss_kib": 262000,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 18 --output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stageB1_resumed_2026-10-04/replay"
+   },
+   {
+    "pid": 53136,
+    "ppid": 28740,
+    "cpu": 96.5,
+    "rss_kib": 162000,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/verb/analyze.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/stage3_night/C_global_s01/run 1 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/stage3_night/C_global_s01/analysis"
+   }
+  ]
+ },
+ "receipt": {
+  "time": "2026-10-04T23:57:06+09:00",
+  "rows": [
+   {
+    "pid": 5879,
+    "owner": "SME段2 四案1740試行の一致検査",
+    "mem_gb": 5.2,
+    "start": "2026-10-04T22:56:20",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 run_full_01.py"
+   },
+   {
+    "pid": 9647,
+    "owner": "Codex3 集団化 comm_m0_r1",
+    "mem_gb": 4.0,
+    "start": "2026-10-04T23:00:37",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   },
+   {
+    "pid": 28736,
+    "owner": "Codex-動詞段3-C_global_s01",
+    "mem_gb": 0.4,
+    "start": "2026-10-04T23:24:32",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/night.py one C_global_s01"
+   },
+   {
+    "pid": 43552,
+    "owner": "Codex2 段B1 W2 seed015",
+    "mem_gb": 1.0,
+    "start": "2026-10-04T23:43:16",
+    "cmd": "/opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 15 --out"
+   },
+   {
+    "pid": 45034,
+    "owner": "Codex2 段B1 W2 seed016",
+    "mem_gb": 1.0,
+    "start": "2026-10-04T23:45:08",
+    "cmd": "/opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 16 --out"
+   },
+   {
+    "pid": 49430,
+    "owner": "Codex3 集団化 comm_m0.1_r1",
+    "mem_gb": 4.0,
+    "start": "2026-10-04T23:50:43",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   },
+   {
+    "pid": 50252,
+    "owner": "Codex2 段B1 W2 seed017",
+    "mem_gb": 1.0,
+    "start": "2026-10-04T23:51:43",
+    "cmd": "/opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 17 --out"
+   },
+   {
+    "pid": 52777,
+    "owner": "Codex2 段B1 W2 seed018",
+    "mem_gb": 1.0,
+    "start": "2026-10-04T23:54:55",
+    "cmd": "/opt/homebrew/bin/python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/material_rebuild_2026-10-04/n3_w2_A_L50 --seed 18 --out"
+   },
+   {
+    "pid": 54244,
+    "owner": "Codex3 集団化 comm_m0.3_r1",
+    "mem_gb": 4.0,
+    "start": "2026-10-04T23:57:06",
+    "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+   }
+  ],
+  "own": {
+   "pid": 54244,
+   "owner": "Codex3 集団化 comm_m0.3_r1",
+   "mem_gb": 4.0,
+   "start": "2026-10-04T23:57:06",
+   "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py /Users/tatsu-admin/Documents/ChatGPT/New proje"
+  },
+  "jobs_sha256": "b0b1f4b273c6ecd9dba0da37dbc69cc8df2b97dbbcd61723e14a6d52e277019f"
+ }
+}

@@ -1,0 +1,18 @@
+{
+ "status": "stopped",
+ "checks": [
+  {
+   "name": "profile_r1_m0.1 実行の終了コード",
+   "passed": false,
+   "exitcode": -15
+  }
+ ],
+ "runs": [],
+ "name": "profile_r1_m0.1",
+ "started": "2026-10-05T10:48:09+09:00",
+ "fingerprint_version": "sets-sorted-v1",
+ "model_changed": false,
+ "reason": "関門不成立：profile_r1_m0.1 実行の終了コード",
+ "finished": "2026-10-05T10:52:22+09:00",
+ "traceback": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py\", line 162, in <module>\n    main()\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py\", line 124, in main\n    path = run_model()\n           ^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py\", line 95, in run_model\n    g.check(name + ' 実行の終了コード', model_process.returncode == 0, exitcode=model_process.returncode)\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py\", line 40, in check\n    raise RuntimeError('関門不成立：'+name)\nRuntimeError: 関門不成立：profile_r1_m0.1 実行の終了コード\n"
+}

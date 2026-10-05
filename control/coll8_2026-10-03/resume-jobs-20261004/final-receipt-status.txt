@@ -1,0 +1,60 @@
+# 受付表（2026-10-05T10:54:23）  見込みの合計 12.3 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+78878	SME段2の未完了三案1740再開	5.2	2026-10-05T08:43:53	2.77 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026
+99072	SME一様同点の1740比較 A_off	5.9	2026-10-05T09:09:27	2.27 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_20
+63759	Codex-動詞二軸-D_tau0.1_s03	0.4	2026-10-05T10:41:11	0.24 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-0
+80943	Codex-動詞二軸-D_tau0.1_s04	0.4	2026-10-05T10:52:14	0.22 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-0
+81159	Codex-動詞二軸-D_tau0.1_s05	0.4	2026-10-05T10:52:57	0.20 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-0
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+   PID 3325（親 1）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/resource_and_progress_01.
+   PID 63628（親 67250）	16 MB	Python tools/verb/axes.py run
+ R PID 63759（親 63628）	16 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex-動詞二軸-D_tau0.1_s03 --mem 0.4 --disk-path /Users
+ R PID 76116（親 63759）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/axes.py one D_
+ R PID 76122（親 76120）	31 MB	Python tools/v3_run.py config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New pro
+ R PID 76124（親 76122）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(9)
+*R PID 76125（親 76122）	163 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=10, pipe_handle=18) --multiproce
+ R PID 78878（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME段2の未完了三案1740再開 --kind sme --disk-path /Users/tats
+   PID 78879（親 1）	13 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/report_full_finish_02.py
+   PID 78880（親 1）	12 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/progress_reporting_02.py
+ R PID 78884（親 78878）	18 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/run_full_02.py
+ R PID 78885（親 78884）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/observe.py /Users/tatsu-adm
+ R PID 78887（親 78885）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 78888（親 78885）	2798 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 80943（親 63628）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex-動詞二軸-D_tau0.1_s04 --mem 0.4 --disk-path /Users
+ R PID 80947（親 80943）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/axes.py one D_
+ R PID 80953（親 80951）	30 MB	Python tools/v3_run.py config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New pro
+ R PID 80955（親 80953）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(9)
+*R PID 80956（親 80953）	132 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=10, pipe_handle=18) --multiproce
+ R PID 81159（親 63628）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex-動詞二軸-D_tau0.1_s05 --mem 0.4 --disk-path /Users
+ R PID 81166（親 81159）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/source/tools/verb/axes.py one D_
+ R PID 81173（親 81171）	31 MB	Python tools/v3_run.py config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New pro
+ R PID 81175（親 81173）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(9)
+*R PID 81176（親 81173）	117 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=10, pipe_handle=18) --multiproce
+   PID 81612（親 67250）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+   PID 87713（親 1）	7 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/pairs200_pipeline_01.py
+   PID 97541（親 1）	9 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+   PID 99071（親 87713）	7 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/pipeline_01.py
+ R PID 99072（親 99071）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME一様同点の1740比較 A_off --mem 5.9 --disk-path /Users/ta
+ R PID 99076（親 99072）	18 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/run_full_case_01.py A_off
+ R PID 99079（親 99076）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_uniform_2026-10-05/observe.py /Users/tatsu-a
+ R PID 99081（親 99079）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 99082（親 99079）	2285 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+
+# 空きメモリ
+空きの割合（memory_pressure）：77%
+free：6.4 GB
+inactive：9.9 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03）の空き 383.251 GiB、下限 20 GiB
+
+# スワップ：今 348.19 MB。スワップは直近 10 分で増えていない（348.2 MB → 今 348.2 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded

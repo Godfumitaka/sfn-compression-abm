@@ -1,0 +1,39 @@
+# 受付表（2026-10-04T22:15:09）  見込みの合計 9.2 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+70087	Codex2 段B1 W1 seed011	1.0	2026-10-04T22:13:34	0.26 GB	既存の固定記憶N3再生 W1 seed011を引継ぎ
+70562	Codex2 段B1 W1 seed012	1.0	2026-10-04T22:13:34	0.27 GB	python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Docum
+70569	Codex2 段B1 W1 seed013	1.0	2026-10-04T22:13:34	0.27 GB	python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Docum
+70578	Codex2 段B1 W1 seed014	1.0	2026-10-04T22:13:34	0.26 GB	python3.12 tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Docum
+70726	SME PyPy小走行13本Codex	5.2	2026-10-04T22:15:06	0.23 GB	python3.12 run_small.py
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+*R PID 70087（親 1）	262 MB	Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_att
+   PID 70529（親 67250）	22 MB	Python -u codex_attn_2026-10-03/stageB1_resumed_2026-10-04/run_baseline_registered.py
+ R PID 70562（親 70529）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W1 seed012 --mem 1.0 --disk-path /Users/t
+ R PID 70569（親 70529）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W1 seed013 --mem 1.0 --disk-path /Users/t
+ R PID 70578（親 70529）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 段B1 W1 seed014 --mem 1.0 --disk-path /Users/t
+*R PID 70579（親 70562）	254 MB	Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_att
+*R PID 70583（親 70569）	255 MB	Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_att
+*R PID 70586（親 70578）	253 MB	Python tools/attnreplay.py --verify-baseline --root /Users/tatsu-admin/Documents/ChatGPT/New project/codex_att
+ R PID 70726（親 67250）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --owner SME PyPy小走行13本Codex --kind sme --disk-path /Users/tatsu-adm
+ R PID 70731（親 70726）	20 MB	Python run_small.py
+   PID 70748（親 70745）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/cod
+   PID 97541（親 1）	9 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：80%
+free：0.3 GB
+inactive：12.4 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/resume-jobs-20261004）の空き 36.456 GiB、下限 20 GiB
+
+# スワップ：今 348.19 MB。スワップは直近 10 分で増えていない（348.2 MB → 今 348.2 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded

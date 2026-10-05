@@ -1,0 +1,18 @@
+{
+ "error": "ValueError: Another profiling tool is already active",
+ "error_occurrences": 8,
+ "error_site": "profile_collective_20261004.py:20 profiler.enable(), original_agentの呼出し前",
+ "cause_inference": "親のmainでcProfileを有効にしてからforkし、個体入口で別のcProfileを有効にする構造と、8個体すべての起動エラーから、引き継いだ計測との衝突と推定。模型の関門不成立ではない。",
+ "world_ledger_files": 0,
+ "world_state_rows": 0,
+ "comm_kinds": {
+  "probe_items": 1
+ },
+ "profile_files": 0,
+ "output_logical_bytes": 35525,
+ "corrective_proposal": "個体入口で親から引き継いだプロファイルを無効化してから、個体用のcProfileを有効にする。親の起動処理と実際の集団のまとめ役の計測対象も区別する。小さなfork例で起動と保存を確かめてから、同じ設定の試走一本で非干渉を照合する。",
+ "proposal_implemented": false,
+ "model_source_changed": false,
+ "full_trial_completed": false,
+ "performance_forecast_valid": false
+}

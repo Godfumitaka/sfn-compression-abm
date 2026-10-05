@@ -1,0 +1,15 @@
+受け付けた：PID 79257、担当 Codex3 集団化 profile_r1_m0.1、見込み 4.0 GB（表の合計 16.3 / 24 GB）。スワップは直近 10 分で増えていない（348.2 MB → 今 348.2 MB）
+{"name": "profile_r1_m0.1 実行の終了コード", "passed": false, "exitcode": -15}
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py", line 162, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py", line 124, in main
+    path = run_model()
+           ^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/resume_registered_worker_20261004.py", line 95, in run_model
+    g.check(name + ' 実行の終了コード', model_process.returncode == 0, exitcode=model_process.returncode)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/source/tools/v311c_checks/coll8_gate.py", line 40, in check
+    raise RuntimeError('関門不成立：'+name)
+RuntimeError: 関門不成立：profile_r1_m0.1 実行の終了コード
+
+消した：PID 79257
