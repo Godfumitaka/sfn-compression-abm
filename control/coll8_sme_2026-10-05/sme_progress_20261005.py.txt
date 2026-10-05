@@ -1,0 +1,30 @@
+"""自分の二関門の進捗だけを読む。途中の記録は合否に使わない。"""
+from pathlib import Path
+import gzip
+import json
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-port-20261005'
+s=json.loads((EV/'first-gates.json').read_text())
+print(json.dumps({'status':s['status'],'completed_count':len(s['completed']),'active':s['active'],'reason':s.get('reason')},ensure_ascii=False))
+for name in s['active']:
+    spec=json.loads((EV/name/'spec.json').read_text())
+    recorded={}
+    for path in (Path(spec['output'])/'ledgers/cells').glob('*/*.jsonl.gz'):
+        n=0
+        try:
+            with gzip.open(path,'rt') as f:
+                next(f)
+                for line in f:
+                    try:row=json.loads(line)
+                    except json.JSONDecodeError:continue
+                    if 'f_realized' in row:n+=1
+        except (EOFError,StopIteration):pass
+        recorded[path.name]=n
+    latest=None;peak=0
+    try:
+        with gzip.open(EV/name/'health.jsonl.gz','rt') as f:
+            for line in f:
+                latest=json.loads(line);peak=max(peak,latest['rss_sum_bytes'])
+    except (EOFError,FileNotFoundError):pass
+    print(json.dumps({'name':name,'recorded_trials_min_max':[min(recorded.values()),max(recorded.values())] if recorded else None,'agents':len(recorded),'latest_health':latest['time'] if latest else None,
+                      'rss_peak_GB':peak/1e9,'swap':latest['swap'] if latest else None},ensure_ascii=False))

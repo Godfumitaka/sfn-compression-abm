@@ -1,0 +1,242 @@
+"""自分のSME移植の証拠だけを保存し、二関門の報告を更新する。模型を起動しない。"""
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import shutil
+import subprocess
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT/'evidence/sme-port-20261005'
+OUT = ROOT/'outputs/sme-port-20261005'
+REPO = ROOT/'report'
+DEST = REPO/'control/coll8_sme_2026-10-05'
+REPORT = REPO/'control/2026-10-05_集団化_SME移植_Codex3.md'
+SOURCE = ROOT/'sme-source'
+BASE = '858f7089e3d033cf5aa8ceb1c52c97bf8095019b'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE).decode()
+
+def save(path, obj):
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n')
+
+def link(path, text=None):
+    return f'[{text or path}]({DEST.name}/{path})'
+
+DEST.mkdir(parents=True, exist_ok=True)
+state = json.loads((EV/'first-gates.json').read_text())
+code = git('rev-parse', 'HEAD').strip()
+assert code == state['code_commit']
+assert not git('status', '--porcelain')
+assert not git('diff', BASE, '--', 'abm', 'tools/v39.py')
+assert not git('diff', BASE, '--', 'tools/smeshared.py', 'tools/sme2017.py', 'tools/cfvalue.py', 'tools/cflearn.py')
+files = git('diff', '--name-only', BASE).splitlines()
+provenance = {'base': BASE, 'code': code, 'branch': git('branch', '--show-current').strip(),
+              'protected_diff_empty': True,
+              'files': [{'path': p, 'sha256': hashlib.sha256((SOURCE/p).read_bytes()).hexdigest()} for p in files],
+              'abm_tree_base': git('rev-parse', BASE+':abm').strip(),
+              'abm_tree_port': git('rev-parse', 'HEAD:abm').strip(),
+              'v39_blob_base': git('rev-parse', BASE+':tools/v39.py').strip(),
+              'v39_blob_port': git('rev-parse', 'HEAD:tools/v39.py').strip()}
+save(DEST/'source-provenance.json', provenance)
+(DEST/'port.patch').write_text(git('diff', BASE))
+(DEST/'fingerprint-and-audit.patch').write_text(git('diff', '16af51f797bd70426639156ca10019d6cfbb48b4', 'HEAD', '--', 'tools/v311c_fingerprint.py', 'tools/v311c.py'))
+for script in ('sme_registered_run_20261005.py', 'sme_first_gates_20261005.py', 'sme_gate_checks_20261005.py', 'sme_progress_20261005.py', 'sme_report_20261005.py'):
+    shutil.copyfile(ROOT/script, DEST/(script+'.txt'))
+for p in EV.iterdir():
+    if p.is_file() and p.suffix in ('.json', '.log', '.txt', '.md'):
+        shutil.copyfile(p, DEST/p.name)
+    elif p.is_dir():
+        dst = DEST/p.name; dst.mkdir(exist_ok=True)
+        for q in p.iterdir():
+            if q.is_file() and (q.suffix in ('.json', '.log') or q.name == 'health.jsonl.gz'):
+                shutil.copyfile(q, dst/q.name)
+
+measurements=[]; health=[]; dictionaries=[]
+ended = list(state['completed'])
+for folder in sorted(EV.glob('gate*')):
+    if folder.is_dir() and (folder/'resource.json').exists() and folder.name not in ended:
+        ended.append(folder.name)
+for name in ended:
+    r=json.loads((EV/name/'resource.json').read_text()); measurements.append(r)
+    for stage in ('initial', 'final'):
+        path=EV/name/(stage+'.json')
+        if not path.exists():continue
+        h=json.loads(path.read_text())
+        swap=float(re.search(r'used = ([\d.]+)M',h['swap']).group(1))
+        disk=int(h['disk'].splitlines()[-1].split()[3])*1024/2**30
+        free=int(re.search(r'Pages free:\s*(\d+)',h['memory']).group(1))*16384/1e9
+        inactive=int(re.search(r'Pages inactive:\s*(\d+)',h['memory']).group(1))*16384/1e9
+        health.append({'name':name,'stage':stage,'time':h['time'],'swap_mib':swap,'disk_free_gib':disk,'memory_free_gb':free,'memory_inactive_gb':inactive,'thermal':h['thermal']})
+    output=OUT/name
+    manifest=output/'manifest.jsonl'
+    if manifest.exists():
+        for line in manifest.read_text().splitlines():
+            row=json.loads(line)
+            if 'v311c' in row:
+                dictionaries.append({'name':name,'agent':row['v311c']['cfg']['agent'],
+                                     'dictionary_checks':row['v311c'].get('dictionary_checks'),
+                                     'not_in_dictionary':row.get('v39',{}).get('not_in_dictionary',0),
+                                     'probes':row['v311c'].get('probes')})
+    if name.startswith('gate2_q0'):
+        comm=output/'comm/run001.jsonl'
+        with comm.open('rb') as raw, gzip.open(DEST/name/'comm-run001.jsonl.gz','wb') as archive:
+            shutil.copyfileobj(raw,archive)
+        with Path(str(comm)+'.state.jsonl').open('rb') as raw, gzip.open(DEST/name/'comm-run001.state.jsonl.gz','wb') as archive:
+            shutil.copyfileobj(raw,archive)
+        shutil.copyfile(output/'comm/run001.summary.json', DEST/name/'comm-run001.summary.json')
+    if (output/'solo-task.json').exists():
+        shutil.copyfile(output/'solo-task.json', DEST/name/'solo-task.json')
+save(DEST/'completed-resources.json', measurements)
+save(DEST/'machine-endpoints.json', health)
+save(DEST/'dictionary-checks.json', dictionaries)
+
+gate1=json.loads((EV/'gate-off.json').read_text()) if (EV/'gate-off.json').exists() else None
+gate2=json.loads((EV/'gate-q0.json').read_text()) if (EV/'gate-q0.json').exists() else None
+gate_links=' と '.join(link(f'gate-{mode}.json') for mode in ('off','q0') if (EV/f'gate-{mode}.json').exists()) or '未保存'
+checks=(gate1['checks'] if gate1 else [])+(gate2['checks'] if gate2 else [])
+status={'passed':'最初の二関門が合格したため停止。後続の関門と本番は始めていない。',
+        'stopped':'停止条件に達したため停止。後続の関門と本番は始めていない。'}.get(state['status'],'検査中。これは作成中の報告であり、合格の報告ではない。')
+gate_rows='\n'.join(f"| {r['name']} | {r['left_rows']} / {r['right_rows']} | {'合格' if r['passed'] else '不合格'} | `{r['left_sha256']}` |" for r in checks)
+if not checks:gate_rows='| 二関門 | 200試行の比較を予定 | 未確定 | — |'
+elif not gate2:gate_rows+='\n| 通信なし8体と単独（8個体） | 200 / 200 を予定 | 未判定 | — |'
+resource_rows='\n'.join(f"| {link(r['name']+'/resource.json',r['name'])} | {'完走' if r['name'] in state['completed'] else '停止'} | {r['elapsed_seconds']/60:.3f} | {r['rss_sum_peak_bytes']/1e9:.3f} | {r['allocation_gb']:.1f} | {r['output_bytes']/1e6:.3f} |" for r in measurements)
+pilot=json.loads((EV/'pilot8_32_v4/resource.json').read_text())
+population=next((r for r in measurements if r['name']=='gate2_q0_200'),None)
+pop_text=(f"200試行の通信なし8体は{population['elapsed_seconds']/60:.3f}分、RSS合計の観測最大{population['rss_sum_peak_bytes']/1e9:.3f}GB、出力{population['output_bytes']/1e6:.3f}MB。個体別の最大常駐（MB）は `{population['agent_peak_rss_mb']}`。" if population and population['name'] in state['completed'] else '200試行の通信なし8体は未完走。')
+stop_details='\n'.join(f"- {link(r['name']+'/resource.json',r['name'])}：終了コード{r['exitcode']}、停止理由 `{r.get('stop')}`、エラー `{r.get('errors')}`。" for r in measurements if r['name'] not in state['completed'])
+health_text=(f"正式な走行の開始・終了で、出力先の空きは{min(h['disk_free_gib'] for h in health):.3f}〜{max(h['disk_free_gib'] for h in health):.3f}GiB、freeは{min(h['memory_free_gb'] for h in health):.3f}〜{max(h['memory_free_gb'] for h in health):.3f}GB、inactiveは{min(h['memory_inactive_gb'] for h in health):.3f}〜{max(h['memory_inactive_gb'] for h in health):.3f}GB、スワップ使用は{min(h['swap_mib'] for h in health):.2f}〜{max(h['swap_mib'] for h in health):.2f}MiB。" if health else '')
+
+text=f'''# 集団化のSME移植：最初の二関門（Codex3）
+
+記録日：2026-10-05。更新：{datetime.datetime.now().astimezone().isoformat()}。アストラの同日の委任による作業。
+
+## 1. 結果と止まった位置
+
+**{status}**
+
+制御器の状態は `{state['status']}`。停止理由：`{state.get('reason','なし')}`。今回の集団の種は1のみ、各個体の世界の種は1＋1000×個体番号。種1〜20の本番160本を始めず、種21〜40の結果・種ファイルを読まず、走らせていない。今回の合格を世界1、通信あり、1740試行、別の配置・時間の幅の旗へ拡張しない。
+
+{stop_details}
+
+## 2. 版と変更範囲
+
+- 土台：`codex/sme-tie-uniform-2026-10-05`、`{BASE}`。
+- コード枝：`codex/coll8-sme-2026-10-05`、`{code}`。
+- 引き継いだ集団化：`822c161d38986e8924a9842814bd2f556f5bc2b3`。
+- 報告枝：`results-2026-09-27`。この報告と固有の証拠ディレクトリを追加。
+
+`abm/` と `tools/v39.py` の土台との差分は空。同じ木・ファイルのGit番号を {link('source-provenance.json')} に保存した。SMEの照合器・窓口（`sme2017.py`・`smeshared.py`）、`cfvalue.py`・`cflearn.py` も土台から変更していない。log P は載せていない。会計は前回と同じalpha=beta=0で、S1の充填の使用へのalpha寄与は0、GのR外使用はbeta=0のため数えない。設定名のs1を使用会計が有効な証拠には扱わない。保持の採点の選択、受信時の予測採点、協調報酬は追加・変更していない。全差分は {link('port.patch')}。
+
+## 3. 指定された順番で移した配管
+
+| 順 | 関数・ファイル（コード版での行） | 実装した内容 |
+|---|---|---|
+| 1 | `v3_run.worker` 325、`_run_collective` 687、CLI 832〜846 | 集団化を条件付きで取り付け、SMEの既存の旗を全個体へ渡す。名札費用の入口として `m1_before_be` を取り、既存の取り付け順を保つ。集団化OFFはSME個体版の経路を使う |
+| 2 | `v311c.choose_partner` 192、`build_bundle` 212、`choose_and_register` 315、`receive_one` 406 | 既存のSME窓口へ接続。SME+(a)の受信Aは `smeshared.choose_trace` を呼び、点・新しさまで同点の最後を呼び出しごとの種で抽選する。旗OFFの元の最後の基準を保つ |
+| 3 | `v311c._snapshot_modules` 503、`_restore_modules` 524、`learning_fingerprint` 538、`probe` 546 | SMEの控え、文脈、選んだ対応、統計、専用乱数を保存・復元し、試験を診断ログへ分ける。試験前後は個体状態・全SME控えの新しい指紋と本乱数を照合する |
+| 4 | `smereplay.decode` 62、`collective_phase` 93、`v311c.apply` 672〜714、`v311c_lineage.py` | 集団化の状態型を限定して復元可能にする。8体では世界後／受信後を別の行に記録し、再生時に比較する。単独比較には通信管がないので世界後と既存postが記録される。系譜は走行後の研究者側のまま |
+| 5 | `tools/v311c_checks/coll8_solo.py`、`test_sme_port.py`、{link('sme_gate_checks_20261005.py.txt','二関門の台本')} | 名札の費用を揃えた独立単独と比較。型復元・段階の記録と再生・状態隔離・同点の接続・指紋を小例で検査する |
+
+記録と再生の小例は通ったが、実際の受信が起きる走行の再生は今回の二関門に含めていない。二体の直列／同時、受入検査①〜⑫、受信の各経路の実走行検査は後続として残す。一致試験の問いは旧い版から引き継ぎ、種900001の固定1740場面から、店×通常・例外それぞれドア3件・その他2件の20問を選ぶ。不足なら引き直さず停止する。この1740場面は学習する本番の走行ではない。
+
+## 4. 旗、全引数、比較の意味
+
+移した集団化の旗の既定は旧い版と同じ：`--v311c` OFF、f=`0.5,0.5`、groups未指定（全員0）、q=0.2、m=0、recv=B、runs=1、b-n未指定（個体数）、no-tags OFF、probe-every=100、probe-shop/audit/lineage/serial OFF。追加した `--v311c-sme-replay DIR` は既定None、SME集団化・集団の種一本で個体別の状態記録から再生する。個体版の `--sme-replay` との併用は起動時に拒む。
+
+今回の模型の共通設定は、前回のA・世界2にSME+(a)の三旗を足したもの。価格は忘却・学習とも `0.01873710622997919`。10月2日の旧い二体の実引数が `0.0187` だった事実を維持し、その値へ戻していない。
+
+```text
+config/sweep_shop_hide1_s1_2026-10-01.json OUTPUT
+--nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast
+--no-public-history --dump-slot-history --fix2-full --fix-order2
+--proj-first --fill-norestate --no-charge2 --own-evidence
+--v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role
+--nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons
+--u-struct --relearn-init --tie-struct --amb-local
+--dump-answers --dump-routing --answer-gap --strict-pc --cf-value --probe-world
+--cells f0.5000_th2.1000_first_order --no-compare
+--shop-world 2 --shop-exc 0.2 --trial-count 200
+--v39-price 0.01873710622997919 --e-price 0.01873710622997919
+--workers 1 --seeds 1 --sme2017 --sme-call-seed --sme-tie-uniform
+```
+
+関門1は比較元・移植版のどちらも上記だけ、`tools/v3_run.py` から起動する。関門2の8体と独立単独の引数には次を加える（短い測定だけtrial-count=32）。
+
+```text
+--v311c --v311c-f 0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9
+--v311c-groups 0,0,0,0,1,1,1,1 --v311c-runs 1
+--v311c-q 0 --v311c-m 0 --v311c-recv A --v311c-b-n 8
+--v311c-serial --v311c-probe-shop --v311c-audit --v311c-lineage
+```
+
+独立単独は `tools/v311c_checks/coll8_solo.py` と `COLL8_SOLO_AGENT=0..7` を使い、他個体も通信管も起動しない。集団の番号、f、個体の世界の種、8体分の名札長、名札会計は8体と同じ。仕様v2の通信なし比較として費用を揃えるためである。集団全体のprobe・serial・audit・lineageの処理は単独には実行されない。セル名のf0.5000は選択用の基準セル名で、関門2は個体別のtaskのfを0.1/0.9へ替え、既存の `UniformF` を通す（`sweep.py` 157）。各試行の実値は `f_realized` に残る。すべての模型走行で `PYTHONHASHSEED=0`、Pythonは `/opt/homebrew/opt/python@3.12/bin/python3.12`。
+
+`--horizon`、`--shop-scatter`、`--score-arg-order`、`--select-n3`、`--cf-learn` は足していない。時間の幅は土台の既定なので、短い測定は32、正式な比較は200。比較の両側は同じ設定である。採用する凍結設定の決定とは区別する。
+
+各仕事の `spec.json` は絶対パスを含む起動引数と環境変数を省略せず保存し、`receipt-command.json` は受付への提出引数を保存する。短い測定の受付は各 `receipt.log` と `spec.json` に残る。全設定ファイル・種ファイルのハッシュは各走行のmanifestに記録されている。
+
+## 5. 最初の二関門の証拠
+
+台帳本体は、先頭のmetadata一行だけを除いた、解凍後の全行の生バイト列。JSONの並べ替え、列の削除、採点の無い行の除外をしない。両側とも200行であることを確認し、生バイト列の等値とSHA-256を照合する。関門2は8個体の毎試行の `f_realized` が割当値0.1/0.9であることも確認する。
+
+| 比較 | 行数（左 / 右） | 判定 | 左の台帳本体SHA-256（合格時は右も同じ） |
+|---|---:|---|---|
+{gate_rows}
+
+比較結果の全精度・双方のパスとハッシュは {gate_links}、完走と停止位置は {link('first-gates.json')}。存在しない比較結果を合格として扱わない。辞書に無い名前の停止検査は集団化で常時オンのまま。通常経路の保存された検査回数と `not_in_dictionary` は {link('dictionary-checks.json')}（未出現のカウンタキーは0として表示）に保存した。probe内の検査回数は隔離の復元で戻る。未知名があれば個体・試行・名前を記録して止まる。
+
+今回の通信なし8体と独立単独8体の3,200行は、割当f=0.1/0.9と全て一致した。個体・比較側ごとの件数は {link('f-realized-counts.json')}。単独では各200回、8体では各400回の通常経路の辞書検査が保存され、辞書外カウンタは全て0。8体の100・200試行目の試験前後の状態隔離検査も、全個体が通過した。
+
+SME配管の小例は最終版9件合格（{link('unit-v4.log')}）。受信Aの選び、旗OFFの元の同点、SME保存・復元、試験の隔離、集団状態型の往復、世界／受信段階の再生・不一致検出、CLIの重複なしを確認した。PYTHONHASHSEED=0/1/2は同じ指紋 `ca2702bddc76eeb01fbe01211982304b726b937e1eeb270cf85fec28e9bb6bba`。共有の有無だけが違う同じ内容も同じ指紋で、辞書・列の順は指紋に残る。小例は200試行の関門の代わりに使わない。
+
+## 6. 測定値と予約の見込み
+
+短い8体・直列・通信なし32試行は{pilot['elapsed_seconds']:.4f}秒で完走。RSS合計の観測最大は{pilot['rss_sum_peak_bytes']/1e9:.6f}GB、個体別の最大常駐は `{pilot['agent_peak_rss_mb']}` MB、出力は{pilot['output_bytes']}バイト。予約は1.5GBだった。
+
+{pop_text}
+
+| 終了した正式な仕事 | 状態 | 実時間（分） | RSS合計の観測最大（GB） | 受付予約（GB、見込み） | 出力（MB） |
+|---|---|---:|---:|---:|---:|
+{resource_rows}
+
+測定値は機械の状態と診断・状態隔離の監査を含む実時間で、受付の待ち時間は含まない。常駐はおよそ1秒＋検査時間ごとに観測した `/usr/bin/time` の子孫を含むRSS合計の最大。共有ページは重複して足され得る。各個体の `ru_maxrss` は別に記録され、その最大の和と全体の同時刻の最大は別物である。GB/MBは10進、空きGiBとswap MiBは2進。測定にcProfileを使っていない。
+
+予約の算式は {link('sme_first_gates_20261005.py.txt')}：最初の単独は32試行の個体別最大を200/32倍し1.2倍の余裕（最低1GB）、OFF版は比較元のRSS合計を1.2倍、関門2の単独は前二件の大きいRSSを2.4倍（最低1GB）。8体は32試行の全体実測と200試行の単独8件のRSSの和の大きい方に0.5GBを足し、1.2倍して0.1GB単位に切り上げる。これらは予約用の推測であり、1740試行や通信ありの最大常駐の実測ではない。今回から本番160本の時間・メモリを断定しない。
+
+## 7. 機械・受付の記録
+
+すべての模型走行を `~/jobs/jobs.py run --wait --mem ... --disk-path 実出力先 -- ...` で提出。受付の24GB予算と出力先20GiBの条件を使い、旧い固定4本の数え方へ戻していない。実測が予約値を超えたとき、空きが20GiBを下回ったとき、熱・性能警告が出たときは自分の模型処理を止める包みで監視した。
+
+開始前の受付は予約15.2/24GB、表に無い重いPythonなし、出力先363.413GiB、free2.3GB、inactive11.5GB、swap348.19MiB。直近10分のswap増加なし。熱・性能警告なし、速度制限は記録なし。全文は {link('initial-receipt-status.txt')}。
+
+8体の直前にも受付表を再確認し、予約19.2/24GB（最後の単独を含む）、空き358.562GiB、free3.5GB、inactive10.4GB、swap348.19MiBで増加なし、熱・性能警告なしだった（{link('pre-population-receipt-status.txt')}）。他の重い処理の一覧も同じ記録に含めた。
+
+完走後の受付表は {link('final-receipt-status.txt')}。今回の受付予約は全て解放された。正式な11件と最終短測定1件の機械記録6,981点を点検し、熱・性能警告0、スワップ348.19MiBのまま、出力先20GiB以上だった。仕事ごとの全観測範囲は {link('health-validation.json')}。
+
+{health_text}各走行の開始・終了、約1秒ごとのfree/inactive/swap/disk/thermalは証拠ディレクトリの `initial.json`・`final.json`・`health.jsonl.gz` に保存し、端点の数表は {link('machine-endpoints.json')}。熱・性能の警告は記録されていない。
+
+## 8. 正式な関門より前に直した測定器・入口
+
+最初の32試行の起動は、入口を移す際のCLI定義の重複で模型開始前に失敗した（`8a4c000`、zero trials）。重複を除き、小例にCLI検査を追加した（`16af51f`）。
+
+その次の短い測定は研究者用の全SME控えの指紋を毎試行へ広げたため、一時メモリが増え、4GBの予約をRSS4.005GBで超えて包みが停止した。模型の計算・価格・旗は変更せず、研究者用の指紋を共有された実体を一回だけ読む下位指紋方式へ直した（`445c044`、`sets-sorted-sme-dag-v3`）。実体番号はメモの鍵だけに使い、指紋の材料には入れない。集合だけを整列し、辞書・候補・席の列は元の順を保つ。
+
+この版の次の測定はRSS0.962GBまでで熱・性能警告なく進んだが、毎試行の全控え指紋の費用を確認して、自分の短い測定を中断した。毎試行は元の個体状態と本乱数にSMEの専用乱数・控え件数を添える記録とし、全SME控えの不変検査を必要なprobe前後へ限った（最終版`29b89df`）。この最終版で32試行が完走した後に、正式な二関門を最初から始めた。
+
+差分は {link('fingerprint-and-audit.patch')}。指紋変更前後に保存できていた19試行×8体の台帳本体は同一だった（{link('fingerprint-change-prefix-comparison.json')}）。これは完走した正式な関門ではなく、元状態のない古い指紋は再計算せず合格の証拠に使っていない。途中の起動失敗・予約超過・中断の全記録は `pilot8_32`・`pilot8_32_v2`・`pilot8_32_v3` に保存し、合格件数に入れていない。
+
+## 9. 残した作業
+
+今回の停止位置は最初の二関門まで。二体の直列／同時と終了処理、受入検査①〜⑫、q>0の受信・配送、開示抽選列、sourceと会計経路、記録旗の有無、実走行の再生、世界1、1740試行の測定はまだSMEで合格したとは報告しない。log Pは10月8日の採否が決まった場合に後で載せ直す。本番の開始へ進まない。
+'''
+REPORT.write_text(re.sub(r'\n{3,}', '\n\n', text))
+index=[]
+for p in sorted(DEST.rglob('*')):
+    if p.is_file() and p.name!='evidence-index.json':
+        index.append({'path':str(p.relative_to(DEST)), 'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+save(DEST/'evidence-index.json', index)
+print(json.dumps({'report':str(REPORT),'status':state['status'],'evidence_files':len(index),'evidence_bytes':sum(p['bytes'] for p in index)},ensure_ascii=False))

@@ -1,0 +1,543 @@
+{
+  "name": "gate2_solo_a0_200",
+  "start": "2026-10-05T18:22:57.397756+09:00",
+  "finished": "2026-10-05T18:28:04.991912+09:00",
+  "elapsed_seconds": 307.59097037499305,
+  "exitcode": 0,
+  "rss_sum_peak_bytes": 618266624,
+  "rss_sample_interval_seconds": 1,
+  "samples": 282,
+  "allocation_gb": 1.5,
+  "stop": null,
+  "output_bytes": 51922375,
+  "manifests": [
+    {
+      "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+      "seed": 1,
+      "f": 0.1,
+      "theta_prime": 2.1,
+      "verbatim_theta": 0.3842,
+      "repair_scope": "first_order",
+      "world_hash": "96dd5cabc82b16840cfe9fd22837a4d7302582af7e44b4685d3e2a9d8abc84ce",
+      "trial_count": 200,
+      "code_commit": "29b89dfc12edcbd08582c94459aa9056ad68a16c",
+      "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+      "snapshot_mode": "delta",
+      "snapshot_every": 1,
+      "ledger_bytes": 2167574,
+      "elapsed_sec": 304.68,
+      "final_def_count": 19,
+      "final_m_live_total": 11,
+      "finished_at": "2026-10-05T09:28:02Z",
+      "skipped": false,
+      "v39": {
+        "trials": 200,
+        "scored_trials": 7,
+        "scored_seats": 7,
+        "births": 27,
+        "birth_noop": 0,
+        "birth_childless_dropped": 16,
+        "conv_FH": 383,
+        "conv_HU": 415,
+        "retire": 8,
+        "neg_conv": 0,
+        "cap_conv": 0,
+        "ties": 563,
+        "max_usage": 8400,
+        "relearn": 212,
+        "price_conv": 798,
+        "cfg": {
+          "budget": null,
+          "init": "two",
+          "a": 0.5,
+          "u_abstain": false,
+          "D": 76,
+          "T": 200,
+          "rho": 0.5,
+          "argmax": true,
+          "commons": true,
+          "decay_mode": "actr",
+          "price": 0.01873710622997919
+        },
+        "select_calls": 198,
+        "skipped_restatement": 623,
+        "amb_local_spoke": 1
+      },
+      "sme2017": {
+        "version": "sme2017-ordered-component-1",
+        "settings": {
+          "same_functor": 0.0005,
+          "same_function": 0.0002,
+          "trickle_down": 8.0,
+          "max_local_score": null,
+          "functor_trickle_down": false,
+          "greedy_cutoff": 0.8,
+          "greedy_max": 3,
+          "block_most_out_of_mapping": true,
+          "allow_out_of_mapping": true,
+          "less_greedy": true,
+          "fold_attributes": true,
+          "entity_supported_inferences": true
+        },
+        "requests": 12734,
+        "computed": 11437,
+        "reused": 1297,
+        "tie_policy": "call-seed-uniform-v1"
+      },
+      "smereplay": {
+        "predictions": 200,
+        "updates": 200,
+        "replayed": false
+      },
+      "v310be": {
+        "commons_lt2": 0,
+        "chose_new": 27,
+        "chose_existing": 172,
+        "ties": 0,
+        "new_excluded_structure": 0,
+        "assim_impossible": 0,
+        "no_candidate": 0,
+        "dC_mismatch": 0,
+        "assim_match0": 0,
+        "assim_hist0": 0,
+        "zero_release": 0,
+        "retire_candidate_evals": 8,
+        "score_other_position": 0,
+        "cfg": {
+          "alpha": 1.0,
+          "lam": 0.01873710622997919,
+          "cancel_code": "D1",
+          "absence": "案1",
+          "score_role": true
+        },
+        "score_role_scored": 7,
+        "score_role_scored_pos_differs": 0,
+        "score_role_other_target": 193,
+        "score_role_old_would_score_other": 68,
+        "score_role_old_would_score_no_target": 1,
+        "score_role_no_target_高階_親が無い": 12,
+        "score_role_no_target_高階_親が対応しない": 2,
+        "score_role_no_target_一階_親が対応しない": 2,
+        "score_role_no_target_一階_親が無い": 1
+      },
+      "histrole": {
+        "m1_calls": 199,
+        "m1_registered": 199,
+        "seats_first": 1751,
+        "seats_higher": 1502,
+        "first_no_parent": 30,
+        "first_parent_unmapped": 24,
+        "first_child_unseen": 108,
+        "first_observed": 1589,
+        "first_multi_parent_mapped": 0,
+        "first_multi_child": 0,
+        "obs_old_first": 11558,
+        "obs_new_first": 1589,
+        "obs_new_same_as_old_pred": 199,
+        "births": 27,
+        "birth_rows": 394,
+        "birth_first_rows": 210,
+        "birth_first_parentless": 11,
+        "first_seats_F": 212,
+        "first_obs_F": 199,
+        "first_obs_F_same_pred": 199,
+        "first_seats_H": 1291,
+        "first_obs_H": 1179,
+        "first_obs_H_same_pred": 0,
+        "first_seats_U": 248,
+        "first_obs_U": 211,
+        "first_obs_U_same_pred": 0,
+        "u_higher": 54
+      },
+      "ustruct": {},
+      "relearninit": {
+        "relearn_init": 212,
+        "relearn_init_multi_obs": 0,
+        "relearn_init_rU_gt_rH": 75
+      },
+      "tiestruct": {
+        "tie_groups": 563,
+        "tie_struct_unresolved": 196
+      },
+      "answergap": {
+        "decisions": 195,
+        "D_size_1": 143,
+        "fill_dropped": 12,
+        "D_size_0": 52,
+        "spoke": 97,
+        "proj_dropped": 3,
+        "no_gap_candidate": 2
+      },
+      "answerlog": {
+        "rows": 97,
+        "births": 27
+      },
+      "routelog": {
+        "m1_records": 199,
+        "seats": 3253,
+        "seats_added": 3066,
+        "recompute_inconsistent": 0,
+        "score_records": 15,
+        "score_items": 232
+      },
+      "probeworld": {
+        "rows": 92,
+        "fingerprint_checks": 2,
+        "probes": 46
+      },
+      "shopworld": {
+        "probes_added": 16,
+        "trials": 200,
+        "乙_n": 81,
+        "held_out_is_door": 16,
+        "甲_n": 80,
+        "乙_e": 19,
+        "甲_e": 20
+      },
+      "strictpc": {
+        "calls": 0,
+        "dropped": 0,
+        "u_allowed": 0,
+        "ext_cands": 0,
+        "unobs_base_allowed": 0,
+        "kinds_missing_rows": 0,
+        "struct_calls_changed": 87,
+        "struct_bits_diff": -1202,
+        "alt_ii_calls": 0,
+        "alt_ii_changed": 0,
+        "alt_ii_seat_F": 0,
+        "alt_ii_seat_H": 0,
+        "alt_ii_seat_U": 0,
+        "reasons": {
+          "子の対が採れない（その下で落ちた）": 9222,
+          "子の対が無い：hold_b≠hold": 382,
+          "子の対が無い：sig_n≠sig_e": 175,
+          "子の対が無い：anchor≠steer": 326,
+          "子の対が無い：hold≠hold_b": 397,
+          "子の対が無い：⟨H⟩4≠hold_b": 171,
+          "子の対が無い：⟨H⟩3≠hold_b": 174,
+          "子の対が無い：steer≠anchor": 325,
+          "子の対が無い：⟨H⟩12≠hold": 190,
+          "子の対が無い：⟨H⟩1≠steer": 320,
+          "子の対が無い：⟨H⟩16≠steer": 39,
+          "子の対が無い：⟨H⟩0≠hold_b": 321,
+          "子の対が無い：⟨H⟩14≠hold_b": 221,
+          "子の対が無い：⟨H⟩9≠hold_b": 252,
+          "子の対が無い：sig_e≠sig_n": 145,
+          "子の対が無い：⟨H⟩0≠hold": 272,
+          "子の対が無い：⟨H⟩7≠anchor": 359,
+          "子の対が無い：⟨H⟩11≠hold_b": 154,
+          "子の対が無い：⟨H⟩15≠hold": 281,
+          "子の対が無い：⟨H⟩7≠sig_e": 11,
+          "子の対が無い：⟨H⟩11≠anchor": 4,
+          "子の対が無い：⟨H⟩8≠anchor": 28,
+          "子の対が無い：⟨H⟩6≠sig_n": 27,
+          "子の対が無い：⟨H⟩1≠anchor": 417,
+          "子の対が無い：⟨H⟩7≠hold": 130,
+          "子の対が無い：⟨H⟩3≠sig_e": 16,
+          "子の対が無い：⟨H⟩16≠sig_n": 112,
+          "子の対が無い：⟨H⟩13≠anchor": 56,
+          "子の対が無い：⟨H⟩3≠steer": 181,
+          "子の対が無い：⟨H⟩8≠hold_b": 187,
+          "子の対が無い：⟨H⟩12≠hold_b": 362,
+          "子の対が無い：⟨H⟩0≠steer": 156,
+          "子の対が無い：⟨H⟩2≠sig_e": 83,
+          "子の対が無い：⟨H⟩3≠hold": 146,
+          "子の対が無い：⟨H⟩4≠steer": 40,
+          "子の対が無い：⟨H⟩4≠sig_e": 34,
+          "子の対が無い：⟨H⟩16≠anchor": 86,
+          "子の対が無い：⟨H⟩6≠sig_e": 15,
+          "子の対が無い：⟨H⟩5≠sig_n": 239,
+          "子の対が無い：⟨H⟩11≠steer": 135,
+          "子の対が無い：⟨H⟩11≠sig_n": 72,
+          "子の対が無い：⟨H⟩1≠hold": 111,
+          "子の対が無い：⟨H⟩10≠hold_b": 136,
+          "子の対が無い：⟨H⟩6≠steer": 122,
+          "子の対が無い：⟨H⟩9≠sig_n": 186,
+          "子の対が無い：⟨H⟩12≠steer": 104,
+          "子の対が無い：⟨H⟩3≠sig_n": 168,
+          "子の対が無い：⟨H⟩9≠hold": 93,
+          "子の対が無い：⟨H⟩2≠hold_b": 89,
+          "子の対が無い：⟨H⟩5≠steer": 93,
+          "子の対が無い：⟨H⟩8≠steer": 84,
+          "子の対が無い：⟨H⟩2≠sig_n": 72,
+          "子の対が無い：⟨H⟩10≠hold": 25,
+          "子の対が無い：⟨H⟩5≠anchor": 26,
+          "子の対が無い：⟨H⟩1≠sig_e": 8
+        },
+        "use_calls": {
+          "予測の場面の照合（逐語の記憶と提示）": 1372,
+          "E の書き直しの費用（仮の適用）": 3355,
+          "E の書き直しの費用": 3355,
+          "記録の道具（routelog）": 199,
+          "予測の定義の照合": 3232,
+          "試験": 1976
+        },
+        "use_dropped": {
+          "予測の場面の照合（逐語の記憶と提示）": 2958,
+          "E の書き直しの費用（仮の適用）": 4107,
+          "E の書き直しの費用": 3618,
+          "記録の道具（routelog）": 19,
+          "予測の定義の照合": 4112,
+          "試験": 2766
+        }
+      },
+      "cfvalue": {
+        "rows": 76,
+        "trials": 15,
+        "fingerprint_checks": 15
+      },
+      "nocharge2": {
+        "calls": 20,
+        "two_to_three": 3
+      },
+      "v38": {
+        "trials": 200,
+        "received": 16,
+        "confirmed_visible": 17,
+        "confirmed_disclosure": 0,
+        "confirmed_by_prediction": 0,
+        "refuted": 0,
+        "unconfirmed": 3,
+        "undetermined": 0,
+        "seat_obs_added": 7,
+        "seat_obs_skipped": 0,
+        "lazy_init": 11,
+        "seat_reg_mismatch": 0,
+        "active_from": 0
+      },
+      "v32": {
+        "rename_check": false,
+        "rn_calls": 0,
+        "rn_same_ident": 0,
+        "rn_differ_ident": 0,
+        "rn_differ_rev": 0,
+        "rn_differ_hash": 0,
+        "rn_ratio_differ_rev": 0,
+        "rn_ratio_differ_hash": 0,
+        "rn_commons_differ_rev": 0,
+        "rn_commons_differ_hash": 0,
+        "rn_examples": [],
+        "rho": 0.5,
+        "argmax": true,
+        "shadow": false,
+        "commons": true,
+        "fix2": true,
+        "calls": 0,
+        "scored": 0,
+        "reached_calls": 0,
+        "chosen": 0,
+        "tie_at_max": 0,
+        "differ": 0,
+        "argmax_not_first": 0,
+        "commons_lt2": 0,
+        "commons_rows": 0
+      },
+      "fix2": {
+        "registered": 0,
+        "tomb_child_links": 0,
+        "visible_ok": 0,
+        "visible_ng": 0,
+        "hidden": 0,
+        "entity_ng": 0,
+        "select_calls": 0,
+        "select_changed_support": 0,
+        "full": true
+      },
+      "fillnorestate": {
+        "calls": 0,
+        "skipped_restatement": 0,
+        "skipped_with_parent_waiting": 0
+      },
+      "projfirst": {
+        "projections": 0,
+        "fill_ambiguous": 0,
+        "kept_projection": 0
+      },
+      "fixorder2": {
+        "calls": 0,
+        "child_accepted": 0,
+        "tie_groups_with_clash": 0,
+        "tie_dropped": 0,
+        "big_component": 0,
+        "prop_ambiguous": 0,
+        "rebound_modules": 4
+      },
+      "v31": {
+        "ext_calls": 3328,
+        "ext_added": 0,
+        "ext_new_seat": 0,
+        "ext_reused_seat": 0,
+        "ext_returned_dead": 0,
+        "ext_tie_unresolved": 0,
+        "c1_projection": 0,
+        "c1_filling": 1,
+        "c1_other": 0
+      },
+      "fast": {
+        "evictions": 199,
+        "max_cache": 4609
+      },
+      "nohist": true,
+      "v311c": {
+        "speak": 195,
+        "bundles": 195,
+        "bundle_empty": 0,
+        "sent": 0,
+        "new_tags": 27,
+        "birth_world": 27,
+        "birth_report": 0,
+        "assim_report": 0,
+        "recv": 0,
+        "recv_assim": 0,
+        "recv_birth": 0,
+        "recv_none": 0,
+        "recv_memory_empty": 0,
+        "dC_mismatch": 0,
+        "probes": 0,
+        "recv_score_changed": 0,
+        "recv_merit_changed": 0,
+        "cfg": {
+          "run": 1,
+          "agent": 0,
+          "n": 8,
+          "T": 200,
+          "q": 0.0,
+          "m": 0.0,
+          "recv": "A",
+          "groups": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "tags": true,
+          "b": 11
+        },
+        "dictionary_checks": 200,
+        "name_tables_end": {
+          "R_14b19811f0dd5b58": {
+            "born": 76,
+            "tags": {
+              "n4582a29dc821": 1
+            }
+          },
+          "R_14b19811f0dd5b58_t118": {
+            "born": 118,
+            "tags": {
+              "n68804c233733": 1
+            }
+          },
+          "R_3229d75e4a4c2e0b": {
+            "born": 2,
+            "tags": {
+              "nebed157bf84c": 1
+            }
+          },
+          "R_5a211b92885d1ebf": {
+            "born": 147,
+            "tags": {
+              "n207e0da397a2": 1
+            }
+          },
+          "R_5ccd1331eec89856": {
+            "born": 110,
+            "tags": {
+              "n4714aab87db7": 1
+            }
+          },
+          "R_7515a685c55fba68": {
+            "born": 96,
+            "tags": {
+              "nf55799cc7fe3": 1
+            }
+          },
+          "R_78cc438d85d180b8": {
+            "born": 90,
+            "tags": {
+              "n8af18564a2a3": 1
+            }
+          },
+          "R_7b6b1008b48c1115": {
+            "born": 6,
+            "tags": {
+              "nce5d1091c24b": 1
+            }
+          },
+          "R_7b6b1008b48c1115_t154": {
+            "born": 154,
+            "tags": {
+              "n2d478ab78141": 1
+            }
+          },
+          "R_8b0d2a6b7293001d": {
+            "born": 140,
+            "tags": {
+              "n5fbd84a1f220": 1
+            }
+          },
+          "R_926b391830ae3fa0": {
+            "born": 127,
+            "tags": {
+              "nf0015dca3a1a": 1
+            }
+          },
+          "R_9bc40d505af93c42": {
+            "born": 7,
+            "tags": {
+              "n3f812304959d": 1
+            }
+          },
+          "R_aa79ff292461efa7": {
+            "born": 82,
+            "tags": {
+              "n875881492e7f": 1
+            }
+          },
+          "R_b021fe1153ab9472": {
+            "born": 15,
+            "tags": {
+              "n8d8840231fd0": 1
+            }
+          },
+          "R_cb63a1ebfc31098d": {
+            "born": 194,
+            "tags": {
+              "nd68d94c7617a": 1
+            }
+          },
+          "R_cb63a1ebfc31098d_t173": {
+            "born": 173,
+            "tags": {
+              "ne65816191615": 1
+            }
+          },
+          "R_cb63a1ebfc31098d_t83": {
+            "born": 83,
+            "tags": {
+              "n6abf04bdf201": 1
+            }
+          },
+          "R_f35c5fd29759b79e": {
+            "born": 1,
+            "tags": {
+              "n529a68464013": 1
+            }
+          },
+          "R_f987002d54ba9a55": {
+            "born": 63,
+            "tags": {
+              "nb15cff6ce292": 1
+            }
+          }
+        }
+      },
+      "peak_rss_mb": 618.1,
+      "nohash": true
+    }
+  ]
+}

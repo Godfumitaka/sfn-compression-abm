@@ -1,0 +1,44 @@
+"""今回承認された二つの関門だけを比較する。台帳本体は先頭のmetaを除いた生バイト列。"""
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import sys
+ROOT=Path(__file__).resolve().parent
+OUT=ROOT/'outputs/sme-port-20261005'
+EV=ROOT/'evidence/sme-port-20261005'
+def ledgers(name):return sorted((OUT/name/'ledgers/cells').glob('*/*.jsonl.gz'))
+def body(path):
+    with gzip.open(path,'rb') as f:header=next(f);rows=list(f)
+    assert 'agent_ids' in json.loads(header) and 'trial' not in json.loads(header)
+    return b''.join(rows),rows
+
+def compare(left,right):
+    a,ar=body(left);b,br=body(right)
+    result={'passed':a==b,'left':str(left),'right':str(right),'left_sha256':hashlib.sha256(a).hexdigest(),'right_sha256':hashlib.sha256(b).hexdigest(),'left_rows':len(ar),'right_rows':len(br)}
+    if a!=b:
+        for k,(x,y) in enumerate(zip(ar,br)):
+            if x!=y:
+                xx,yy=json.loads(x),json.loads(y)
+                result['first_difference']={'row':k,'left':xx,'right':yy,'keys':[key for key in xx.keys()|yy.keys() if xx.get(key)!=yy.get(key)]};break
+    return result
+mode=sys.argv[1];checks=[]
+if mode=='off':
+    a=ledgers('gate1_baseline_200');b=ledgers('gate1_off_200');assert len(a)==len(b)==1
+    r=compare(a[0],b[0]);r['name']='集団化OFFとSME(a)個体版';checks.append(r)
+    assert r['left_rows']==r['right_rows']==200
+elif mode=='q0':
+    pop=ledgers('gate2_q0_200');assert len(pop)==8
+    summary=json.loads((OUT/'gate2_q0_200/comm/run001.summary.json').read_text());assert summary['trials']==200 and not summary['errors']
+    for i in range(8):
+        solo=ledgers(f'gate2_solo_a{i}_200');assert len(solo)==1
+        r=compare(pop[i],solo[0]);r['name']=f'通信なし8体と単独：個体{i}';checks.append(r)
+        assert r['left_rows']==r['right_rows']==200
+        for path in [pop[i],solo[0]]:
+            _,rows=body(path)
+            assert all(json.loads(x)['f_realized']==(.1 if i<4 else .9) for x in rows)
+else:raise ValueError(mode)
+result={'gate':mode,'status':'passed' if all(r['passed'] for r in checks) else 'stopped','checks':checks,'only_first_two_gates':True}
+(EV/f'gate-{mode}.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'gate':mode,'status':result['status'],'checks':[(r['name'],r['passed']) for r in checks]},ensure_ascii=False))
+if result['status']!='passed':raise SystemExit(1)

@@ -1,0 +1,98 @@
+"""SME移植の最初の二関門だけ。受付は一仕事ずつ独立に出す。"""
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+import datetime
+import json
+import math
+import subprocess
+import sys
+import time
+import threading
+import os
+import signal
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-port-20261005';OUT=ROOT/'outputs/sme-port-20261005'
+PYTHON='/opt/homebrew/opt/python@3.12/bin/python3.12'
+source=ROOT/'sme-source';base=ROOT/'sme-baseline';commit='29b89dfc12edcbd08582c94459aa9056ad68a16c';basecommit='858f7089e3d033cf5aa8ceb1c52c97bf8095019b'
+STATE={'status':'waiting-pilot','first_two_only':True,'started':datetime.datetime.now().astimezone().isoformat(),'code_commit':commit,'baseline_commit':basecommit,'completed':[],'active':[],'main_run_started':False,'runs_read':[1]}
+LOCK=threading.RLock(); HALT=threading.Event()
+def write():
+    with LOCK:
+        tmp=EV/'first-gates.tmp';tmp.write_text(json.dumps(STATE,ensure_ascii=False,indent=2)+'\n');tmp.replace(EV/'first-gates.json')
+def spec(name,count,mem,*,baseline=False,collective=False,solo=None):
+    template=json.loads((EV/'pilot8_32_v4/spec.json').read_text())
+    argv=template['argv'];args=argv[4:argv.index('--v311c')];args[args.index('--trial-count')+1]=str(count)
+    env={'PYTHONHASHSEED':'0'}
+    command=[PYTHON,'tools/v3_run.py','config/sweep_shop_hide1_s1_2026-10-01.json',str(OUT/name),*args]
+    if collective:
+        command+=argv[argv.index('--v311c'):]
+    if solo is not None:
+        command[1]='tools/v311c_checks/coll8_solo.py';env['COLL8_SOLO_AGENT']=str(solo)
+    d=EV/name;d.mkdir()
+    obj={'name':name,'cwd':str(base if baseline else source),'output':str(OUT/name),'argv':command,'env':env,'commit':basecommit if baseline else commit,'mem_gb':mem}
+    (d/'spec.json').write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+    return d,obj
+
+def run(name,count,mem,**kwargs):
+    if HALT.is_set():raise RuntimeError("別の走行の停止後は始めない")
+    if mem>24:raise RuntimeError("一件の予約見込みが受付予算24GBを超える")
+    d,obj=spec(name,count,mem,**kwargs)
+    argv=[PYTHON,'/Users/tatsu-admin/jobs/jobs.py','run','--wait','--owner','Codex3 集団化SME '+name,'--mem',str(mem),'--disk-path',obj['output'],'--',PYTHON,str(ROOT/'sme_registered_run_20261005.py'),str(d/'spec.json')]
+    (d/'receipt-command.json').write_text(json.dumps({'argv':argv,'submitted':datetime.datetime.now().astimezone().isoformat()},ensure_ascii=False,indent=2)+'\n')
+    print('受付へ提出 '+name+' 予約 '+str(mem)+'GB',flush=True)
+    STATE['active'].append(name);write()
+    with (d/'receipt.log').open('w') as log:
+        process=subprocess.Popen(argv,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT)
+        while process.poll() is None:
+            if HALT.is_set():
+                owned=d/'process.json'
+                if owned.exists():
+                    pid=json.loads(owned.read_text())["pid"]
+                    try:os.killpg(pid,signal.SIGTERM)
+                    except ProcessLookupError:pass
+                else:
+                    process.terminate()
+                process.wait();break
+            time.sleep(.5)
+    STATE['active'].remove(name)
+    if process.returncode:
+        HALT.set();write();raise RuntimeError('走行又は受付の停止 '+name+'：'+str(process.returncode))
+    measured=json.loads((d/'resource.json').read_text());STATE['completed'].append(name);write()
+    print('完走 '+name+' 秒 '+str(round(measured['elapsed_seconds'],2))+' RSS '+str(round(measured['rss_sum_peak_bytes']/1e9,3))+'GB',flush=True)
+    return measured
+
+def gate(mode):
+    result=subprocess.run([PYTHON,str(ROOT/'sme_gate_checks_20261005.py'),mode],cwd=ROOT)
+    if result.returncode:raise RuntimeError('一致の関門不合格 '+mode)
+
+try:
+    write()
+    pilot=EV/'pilot8_32_v4/resource.json'
+    while not pilot.exists():time.sleep(5)
+    measurement=json.loads(pilot.read_text())
+    if measurement['exitcode'] or measurement['stop'] or measurement.get('errors') or measurement.get('trials')!=32:
+        raise RuntimeError('短い測定が完走していない')
+    STATE['pilot']=measurement;STATE['status']='gate1';write()
+    # 32試行の個体別の実測に、長さ200への余裕を置く。予約は予測で、包みが実際のRSSを監視する。
+    peak_agent=max(measurement['agent_peak_rss_mb'])/1000
+    solo_mem=max(1.0,math.ceil(peak_agent*(200/32)*1.2*10)/10)
+    STATE['initial_solo_allocation']=solo_mem;write()
+    first=run('gate1_baseline_200',200,solo_mem,baseline=True)
+    off_mem=max(.5,math.ceil(first['rss_sum_peak_bytes']/1e9*1.2*10)/10)
+    second=run('gate1_off_200',200,off_mem)
+    gate('off');STATE['gate1']='passed';STATE['status']='gate2-single-references';write()
+    # 単独を先に測る。同時の二体関門ではなく、独立した単独の比較用走行を受付から出す。
+    solo_mem=max(1.0,math.ceil(max(first['rss_sum_peak_bytes'],second['rss_sum_peak_bytes'])/1e9*2.4*10)/10)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures=[pool.submit(run,f'gate2_solo_a{i}_200',200,solo_mem,collective=True,solo=i) for i in range(8)]
+        singles=[future.result() for future in as_completed(futures)]
+    # 8体の実測32試行と、全単独200試行のRSSの和を合わせた保守的な予約。並びは本来のi順。
+    peak_sum=sum(s['rss_sum_peak_bytes'] for s in singles)/1e9
+    combined=max(measurement['rss_sum_peak_bytes']/1e9,peak_sum)+.5
+    population_mem=math.ceil(combined*1.2*10)/10
+    STATE['population_allocation']=population_mem;STATE['status']='gate2-population';write()
+    run('gate2_q0_200',200,population_mem,collective=True)
+    gate('q0');STATE['gate2']='passed';STATE['status']='passed';STATE['finished']=datetime.datetime.now().astimezone().isoformat();write()
+    print('最初の二つの関門が合格。ここで停止。本番と後続関門は始めない。',flush=True)
+except BaseException as exc:
+    STATE.update(status='stopped',reason=repr(exc),finished=datetime.datetime.now().astimezone().isoformat());write();raise
