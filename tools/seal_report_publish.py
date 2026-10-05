@@ -25,8 +25,10 @@ def publish(note=None):
         worlds=[w for w in (1,2) if (ROOT/f'attention_2026-10-05/w{w}/csv_refresh.json').exists() and w not in memo['worlds']]
         comparisons=sorted((ROOT/'memory_rebuild_2026-10-05').glob('*/seed*.comparison.json'))
         comparisons=[p for p in comparisons if str(p) not in memo['rebuild']]
+        materials=read(ROOT/'memory_rebuild_2026-10-05/status.json')
+        material_final=materials.get('phase') in ('complete_checks','failed') and not memo.get('material_final')
         failure=str(status.get('error',''))
-        if memo['initial'] and not (arms or worlds or comparisons or note or failure!=memo.get('explore_error','')):return False
+        if memo['initial'] and not (arms or worlds or comparisons or material_final or note or failure!=memo.get('explore_error','')):return False
         git('pull','--rebase','origin','results-2026-09-27')
         stamp=datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
         lines=['',f'## 追記 {stamp}','']
@@ -35,7 +37,7 @@ def publish(note=None):
             commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT/'source',text=True).strip()
             lines += [f'全ドア用の診断と再作成の道具を作業枝へ追加した（{commit}）。構造の13検証とCSV・厳密な照合の3検証が通過。模型本体の3380344との差分はない。', '',
                       '全ドアの(iii-a/b)は当該完全場面の全Fの一本を使う。通常の日には通常の当該場面を使い、反実仮想の例外場面を作らない。(iii-c)は全課題で、その店の過去の例外の日の最新二経験を使う。追加した定義はその課題の答え直しだけに用いる。','',
-                      '世界2・種1の全157ドア課題で元の予測・状態の再現と原状態の保持を確認し、注意の追加診断の鍵と分類が一致した。入力11ファイルの指紋も解析前後で一致。これは40種の完了ではなく、残りを並列4・各0.6 GBで受付後に処理中。', '',
+                      '世界2・種1の全157ドア課題で元の予測・状態の再現と原状態の保持を確認し、注意の追加診断の鍵と分類が一致した。入力11ファイルの指紋も解析前後で一致。世界1・2それぞれ種1〜20、計40本のうち残りを並列4・各0.6 GBで受付後に処理中。', '',
                       'CSVの鍵はworld・seed・trial（trialは0始まり）。元の答え・分類、condition_birth（10月4日の(i)）、研究者の選び直し、iii_a/b/cの答え・選択・材料不足を記録する。「3b」の名称の対応の確認は引き続き待っている。','']
             for path,name in [(ROOT/'gates/unit_tests_2026-10-05.log','介入_1005_13検証.txt'),(ROOT/'gates/batch_tests_2026-10-05.log','介入_1005_CSVと関門3検証.txt'),
                               (ROOT/'attention_2026-10-05/w2/seed001.join_check.json','介入_1005_種1結合確認.json'),(ROOT/'source/control/seal_intervention_diag_2026-10-04.md','介入_1005_仕様.md')]:
@@ -93,6 +95,23 @@ def publish(note=None):
                       f'再作成した本体：`{d["body_sha256"]}`。公開済みの本体：`{d["reference_body_sha256"]}`。','']
             if not (d['table_match'] and d['body_hash_match']):lines += ['両方の一致という関門を満たさないため、この再作成の続きは停止した。残りの種と他腕をこの材料で解析しない。原因はこの照合だけでは特定していない。','']
             lines.append(copy(p,'材料_'+p.parent.name+'_'+p.name));memo['rebuild'].append(str(p))
+        if material_final:
+            lines += ['', '### 他腕の記憶の関門・欠測表', '',
+                      '各腕を独立に種1から調べ、不一致の腕では次の種を実行しない。表の一致だけで台帳本体の不一致を免除しない。', '',
+                      '| 腕 | 両方一致した種の数 | 最後の種 | 11列表 | 本体SHA256 | 状態 |',
+                      '|---|---:|---:|---|---|---|']
+            for arm, entry in materials.get('arms',{}).items():
+                proof=entry.get('comparison',{})
+                lines.append('| '+arm+' | '+str(len(entry.get('matched_seeds',[])))+' | '+str(entry.get('seed','—'))+' | '+str(proof.get('table_match','—'))+' | '+str(proof.get('body_hash_match','—'))+' | '+entry['phase']+' |')
+            wanted=('f_grid/fg_f050_A_L50','f_grid/fg_f050_C_L50','lambda_grid/lg_w2_A_lam0.065')
+            unavailable=[arm for arm in wanted if materials.get('arms',{}).get(arm,{}).get('phase')!='complete']
+            if unavailable:lines += ['', '当初の介入対象で全20種の関門を満たす記憶が無い腕：'+ '、'.join(unavailable)+'。これらの介入とλ間の比較は欠測とする。', '']
+            rwanted=('f_grid/fg_f050_A_L50','chance/ch_w2_A_uabs','n3_lambda/n3l_w2_A_lam0.0187')
+            unavailable=[arm for arm in rwanted if materials.get('arms',{}).get(arm,{}).get('phase')!='complete']
+            if unavailable:lines += ['', '腕Rの指定対象で全20種の関門を満たす記憶が無い腕：'+ '、'.join(unavailable)+'。指定のR表は欠測とする。注意の固定材料をこの別の対象へ置き換えて使わない。', '']
+            if materials.get('error'):lines += ['処理の停止理由：'+materials['error'], '']
+            lines += [copy(ROOT/'memory_rebuild_2026-10-05/status.json','他腕の材料_関門の最終状態.json'), '']
+            memo['material_final']=True
         DOCUMENT.write_text(DOCUMENT.read_text()+'\n'.join(lines)+'\n')
         git('add','--sparse','control/'+NAME+'.md','control/'+NAME+'_証拠')
         git('commit','-m','探索と介入の完了した分類・CSVと材料照合を追記する')
