@@ -88,6 +88,12 @@ def features(input_root,world,seed,out):
                     d[name_]=d.get(name_,0)+n
                 assert table==expected, (trial,'位置の表の予測前の時点')
                 candidates,audit,si=K.enrich(public,table)
+                poisoned=dict(public)
+                poisoned.update(feedback={'f_fired':True,'feedback_content':{'predicate':'__禁止の正解__'}},
+                                shop_type='__禁止の型__',shop_cue='__禁止の日__',
+                                held_out_content={'predicate':'__禁止の伏せた名前__'},truth='__禁止の正解__')
+                # すべての試行で、正解・研究者欄を替えてもm・鍵・bが変わらない。
+                assert K.enrich(poisoned,table)==(candidates,audit,si), (trial,'正解・名札に依存した特徴')
                 for c in candidates:
                     by_slot={r['slot']:r for r in next(x['seats'] for x in public['candidates'] if x['R']==c['R'])}
                     sig_rows={r['relation_id']:r for r in next(x['signature_rows'] for x in public['candidates'] if x['R']==c['R'])}
