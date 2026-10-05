@@ -494,6 +494,10 @@ def worker(task: dict) -> dict:
         if task.get("sme_intern_cache"):
             import smeintern
             smeintern.install()
+        if task.get("sme_evict_trial_cache"):
+            import smeevict
+            smeevict.install(out_root / "evictions" / task["cell"] / f"seed{task['seed']:03d}.keys.jsonl.gz",
+                            tombstone=task.get("sme_evict_tombstone", False))
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -571,6 +575,8 @@ def worker(task: dict) -> dict:
     if task.get("sme2017"):
         rec["sme2017"] = sys.modules["smeshared"].close()
         rec["smereplay"] = sys.modules["smereplay"].close()
+        if task.get("sme_evict_trial_cache"):
+            sys.modules["smeevict"].close()
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
     if task.get("select_n3"):
@@ -767,6 +773,8 @@ def main() -> None:
     ap.add_argument("--sme-reuse", action="store_true", help="同点なしの証拠のある照合を使い回す探索の旗")
     ap.add_argument("--sme-prune", action="store_true", help="N3と門の厳密な上限で負ける候補を省く探索の旗")
     ap.add_argument("--sme-intern-cache", action="store_true", help="型と全ての内容が同じ不変の照合結果の実体を共有する探索の旗")
+    ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
+    ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
@@ -879,7 +887,9 @@ def main() -> None:
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
         for task in tasks:
             task["score_arg_order"] = True
-    if (args.sme_reuse or args.sme_prune or args.sme_intern_cache) and not (args.sme2017 and args.sme_call_seed):
+    if args.sme_evict_tombstone and not args.sme_evict_trial_cache:
+        raise SystemExit("--sme-evict-tombstoneは控えを捨てる旗と一緒に使う")
+    if (args.sme_reuse or args.sme_prune or args.sme_intern_cache or args.sme_evict_trial_cache) and not (args.sme2017 and args.sme_call_seed):
         raise SystemExit("控えの探索の旗は--sme2017 --sme-call-seedと一緒に使う")
     if args.sme_call_seed and not args.sme2017:
         raise SystemExit("--sme-call-seed は --sme2017 と一緒に使う")
@@ -900,7 +910,7 @@ def main() -> None:
             task["use_forget"] = args.use_forget
         if args.sme2017:
             task["sme2017"] = True
-            for opt in ("sme_reuse", "sme_prune", "sme_intern_cache"):
+            for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone"):
                 if getattr(args, opt):
                     task[opt] = True
             if args.sme_call_seed:
@@ -913,7 +923,7 @@ def main() -> None:
             task["select_n3"] = True
         if args.shop_scatter:
             task["shop_scatter"] = True
-    (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache") if getattr(args, opt)},
+    (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
                                                     **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
