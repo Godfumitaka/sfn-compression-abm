@@ -1,0 +1,89 @@
+{
+  "state": "verified",
+  "counts": {
+    "H_rechecked": 49178,
+    "H_zero_history_total": 1030,
+    "H_unique_majority_pull": 0,
+    "H_maximum_tie_to_answer": 0,
+    "training:queries": 13650,
+    "training:answered": 11190,
+    "training:unidentified_silence": 740,
+    "probe:queries": 72000,
+    "probe:answered": 51238,
+    "probe:unidentified_silence": 8260
+  },
+  "all_question_rows": 85650,
+  "initial_to_corrected_category_only_differences": 5,
+  "repair_examples": [
+    {
+      "run": "C_global_s01",
+      "phase": "training",
+      "t": "427",
+      "verb": "V06",
+      "R": "R_dace965cad3c67e4_t223",
+      "abstain_reason": "no_projectable_relation"
+    },
+    {
+      "run": "C_global_s02",
+      "phase": "training",
+      "t": "1686",
+      "verb": "V40",
+      "R": "R_dace965cad3c67e4",
+      "abstain_reason": "no_projectable_relation"
+    },
+    {
+      "run": "C_global_s03",
+      "phase": "training",
+      "t": "3306",
+      "verb": "V35",
+      "R": "R_d2887f265a249521_t2903",
+      "abstain_reason": "no_projectable_relation"
+    },
+    {
+      "run": "C_global_s05",
+      "phase": "training",
+      "t": "1174",
+      "verb": "V36",
+      "R": "R_d2887f265a249521",
+      "abstain_reason": "no_projectable_relation"
+    },
+    {
+      "run": "C_global_s05",
+      "phase": "training",
+      "t": "1180",
+      "verb": "V36",
+      "R": "R_d2887f265a249521",
+      "abstain_reason": "no_projectable_relation"
+    }
+  ],
+  "zero_history_total_uses_existing_p_hat_fallback_examples": [
+    {
+      "run": "A_global_s01",
+      "phase": "training",
+      "t": "785",
+      "verb": "V35",
+      "history": "{\"IRR_3\":0}",
+      "weights": "{\"IRR_3\":0.0038349724747943344}"
+    },
+    {
+      "run": "A_global_s01",
+      "phase": "probe",
+      "t": "800",
+      "verb": "V38",
+      "history": "{\"IRR_6\":0}",
+      "weights": "{\"IRR_6\":0.001759815522786577}"
+    },
+    {
+      "run": "A_global_s01",
+      "phase": "training",
+      "t": "849",
+      "verb": "V33",
+      "history": "{\"IRR_5\":0}",
+      "weights": "{\"IRR_5\":0.0026878645773761867}"
+    }
+  ],
+  "rate_rows_including_zero_query_irregular_cells": 19272,
+  "mismatches": 0,
+  "elapsed_seconds": 3.066708333004499,
+  "peak_rss_bytes": 105381888
+}

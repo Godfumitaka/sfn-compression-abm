@@ -1,0 +1,23 @@
+{
+  "stage2_authorization": "2026-10-05：有回答と対象席が記録された黙りに限定し、未特定は別欄。再走行しない。",
+  "model_original_commit": "9e4bdea37573f2772ee1dcbb1c9d6babbff1787e",
+  "read_environment_work_commit": "7f48b75badd3854616449d9ab6464ccbb5f7b011",
+  "model_reruns": 0,
+  "analysis_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式段2既存記録 --mem 0.4 --disk-path ./h_formula_2026-10-05/stage2 -- /usr/bin/time -l python3.12 ./h_formula_2026-10-05/stage2.py",
+  "corrected_analysis_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式段2区分修正 --mem 0.4 --disk-path ./h_formula_2026-10-05/stage2 -- /usr/bin/time -l python3.12 ./h_formula_2026-10-05/stage2.py",
+  "initial_read_only_pass": {
+    "elapsed_seconds_time": 1150.0,
+    "peak_rss_bytes_time": 178896896,
+    "unidentified_training_initial": 735,
+    "unidentified_training_required": 740,
+    "reason_for_repeat": "学習中のno_projectable_relationを理由名だけで席なしに分けた5件。候補分布が非空の件を未特定へ戻し、30本の記録を再読。模型再走行0。",
+    "initial_script_sha256": "419558de596e5ce555fa95d291c358e644ba7793f3154166b96ac15de8cadfd1"
+  },
+  "report_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式段2報告 --mem 0.4 --disk-path ./h_formula_2026-10-05/stage2 -- python3.12 ./h_formula_2026-10-05/report_stage2.py",
+  "verification_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式段2全件照合 --mem 0.4 --disk-path ./h_formula_2026-10-05/stage2 -- python3.12 ./h_formula_2026-10-05/verify_stage2.py",
+  "publish_command": "python3.12 ~/jobs/jobs.py run --wait --owner Codex-動詞H式段2報告送信 --mem 0.4 --disk-path ./report-results/control/2026-10-05_動詞の世界_Hの式の引っ張り_Codex -- python3.12 ./h_formula_2026-10-05/publish_stage2.py",
+  "working_directory": "codex_verb_2026-10-04",
+  "probe_expected_arguments": "原コードの固定試験の種 probe\\x1f<seed>、試行0、entity:a と entity:b の opaque_id。予測・照合・世界抽選は呼ばず、固定IDだけ照合。",
+  "training_selection_error_or_distinction_loss": "原走行のanalysis/cases.jsonl.gzからtrialでそのまま結合。分類の再計算0。",
+  "probe_selection_error_or_distinction_loss": "元のprobe記録に分類が無い。not_recorded_probeとして保持し推定しない。"
+}
