@@ -140,8 +140,14 @@ def extract(root, frozen, seed, output):
                         st = 'F' if c['alive'] else 'H' if hist is not None else 'U'
                         if st!='U':
                             assert set(history)<=seen and (st!='F' or relation['predicate'] in seen)
-                        assert relation['predicate'] in seen
-                        sigrow = {'relation_id':rid,'predicate':relation['predicate'],'arguments':argmap[rid]}
+                        # H/Uの行は記録上の消去の印を持つ。これは名前ではない。
+                        recorded_name = relation['predicate']
+                        if recorded_name == '⟨消去⟩':
+                            assert st != 'F', (t,candidate['R'],c['slot_index'],st)
+                            recorded_name = None
+                        else:
+                            assert recorded_name in seen, (t,candidate['R'],c['slot_index'],st,recorded_name)
+                        sigrow = {'relation_id':rid,'predicate':recorded_name,'arguments':argmap[rid]}
                         signature_rows.append(sigrow)
                         item = {'relation_id':rid,'arguments':argmap[rid],'slot':c['slot_index'],'state':st}
                         if st=='F':item['predicate']=relation['predicate']
