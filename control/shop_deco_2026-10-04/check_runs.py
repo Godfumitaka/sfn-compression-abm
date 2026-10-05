@@ -22,7 +22,7 @@ def main():
                 label = "off" if level is None else level
                 out = dest / f"{stem}_{label}"
                 rec = registered(command(config_path, out, selection, retention, world, 1, level), out,
-                                 f"Codex-shop-deco-gate-{stem}-{label}")
+                                 f"Codex-shop-deco-gate-{stem}-{label}", mem=0.2)
                 result["resources"].append(rec)
                 result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
             comparison = {"selection": selection, "retention": retention, "world": world,
@@ -31,11 +31,15 @@ def main():
             result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
             assert comparison["passed"], f"旗なし／currentの台帳本体・sideが異なる: {stem}"
             print(f"旗なし／current一致: {stem}", flush=True)
+        # 元の単体走行の既知予算0.2 GBと、全プロセスの実測に余裕を付ける。
+        # 関係数は最大20→31本なので、追加水準の最初の測定には2倍の余裕を置く。
+        small_mem = max(0.3, max(r["peak_descendants_rss_bytes"] for r in result["resources"]) / 1e9 * 2.0)
+        result["added_levels_memory_budget_gb"] = small_mem
         for level, selection, retention, world in itertools.product(("skeleton", "plus4", "plus8"), ("N3", "support"), ("A", "D"), (1, 2)):
             stem = f"{selection}_{retention}_w{world}_{level}"
             out = dest / stem
             result["resources"].append(registered(command(config_path, out, selection, retention, world, 1, level),
-                out, f"Codex-shop-deco-gate-{stem}"))
+                out, f"Codex-shop-deco-gate-{stem}", mem=small_mem))
             result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
             print(f"資源計測済み: {stem}", flush=True)
         result["passed"] = True
