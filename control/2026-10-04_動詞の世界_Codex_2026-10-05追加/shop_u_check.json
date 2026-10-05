@@ -1,0 +1,1903 @@
+{
+  "seed": 1,
+  "world_generation_trials_examined": 2,
+  "description": "固定した甲/乙の小例、完全入力で作る検査用頻度表。甲:乙=1:1、通常:例外=4:1。学習台帳のp_hatではない。",
+  "cases": [
+    {
+      "world": 1,
+      "corpus": "甲と乙",
+      "shop_type": "甲",
+      "cue": "n",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carried",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_e",
+          "count": 2,
+          "prob": 0.00975609756097561
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "甲と乙",
+      "shop_type": "甲",
+      "cue": "e",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carried",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_n",
+          "count": 8,
+          "prob": 0.03902439024390244
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "甲と乙",
+      "shop_type": "乙",
+      "cue": "n",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_e",
+          "count": 2,
+          "prob": 0.00975609756097561
+        },
+        {
+          "predicate": "supported",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "甲と乙",
+      "shop_type": "乙",
+      "cue": "e",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_n",
+          "count": 8,
+          "prob": 0.03902439024390244
+        },
+        {
+          "predicate": "supported",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "甲のみ",
+      "shop_type": "甲",
+      "cue": "n",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "break",
+        "carry",
+        "chain",
+        "cut",
+        "hold",
+        "lift",
+        "near",
+        "press",
+        "push",
+        "turn"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 0,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 0,
+      "pool": [
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "sig_e",
+          "count": 1,
+          "prob": 0.01
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.05
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "甲のみ",
+      "shop_type": "甲",
+      "cue": "e",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "break",
+        "carry",
+        "chain",
+        "cut",
+        "hold",
+        "lift",
+        "near",
+        "press",
+        "push",
+        "turn"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 0,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 0,
+      "pool": [
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "sig_n",
+          "count": 4,
+          "prob": 0.04
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.05
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "乙のみ",
+      "shop_type": "乙",
+      "cue": "n",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "bend",
+        "carry",
+        "cord",
+        "drag",
+        "hold_b",
+        "inside",
+        "lift",
+        "lock",
+        "pull",
+        "push",
+        "under"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 0,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "sig_e",
+          "count": 1,
+          "prob": 0.009523809523809525
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.047619047619047616
+        }
+      ]
+    },
+    {
+      "world": 1,
+      "corpus": "乙のみ",
+      "shop_type": "乙",
+      "cue": "e",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "bend",
+        "carry",
+        "cord",
+        "drag",
+        "hold_b",
+        "inside",
+        "lift",
+        "lock",
+        "pull",
+        "push",
+        "under"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 0,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "sig_n",
+          "count": 4,
+          "prob": 0.0380952380952381
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.047619047619047616
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲と乙",
+      "shop_type": "甲",
+      "cue": "n",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carried",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_e",
+          "count": 2,
+          "prob": 0.00975609756097561
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲と乙",
+      "shop_type": "甲",
+      "cue": "e",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carried",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_n",
+          "count": 8,
+          "prob": 0.03902439024390244
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲と乙",
+      "shop_type": "乙",
+      "cue": "n",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_e",
+          "count": 2,
+          "prob": 0.00975609756097561
+        },
+        {
+          "predicate": "supported",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲と乙",
+      "shop_type": "乙",
+      "cue": "e",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "carry",
+        "lift",
+        "push"
+      ],
+      "max_count": 10,
+      "skeleton_counts": {
+        "push": 10,
+        "carry": 10,
+        "lift": 10,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 5,
+      "hold_b_count": 5,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "carry",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "hold_b",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "lift",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "push",
+          "count": 10,
+          "prob": 0.04878048780487805
+        },
+        {
+          "predicate": "sig_n",
+          "count": 8,
+          "prob": 0.03902439024390244
+        },
+        {
+          "predicate": "supported",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.024390243902439025
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.024390243902439025
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲のみ",
+      "shop_type": "甲",
+      "cue": "n",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "break",
+        "carry",
+        "chain",
+        "cut",
+        "lift",
+        "near",
+        "press",
+        "push",
+        "turn"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 0,
+        "reach": 0
+      },
+      "hold_count": 4,
+      "hold_b_count": 1,
+      "pool": [
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "hold",
+          "count": 4,
+          "prob": 0.04
+        },
+        {
+          "predicate": "hold_b",
+          "count": 1,
+          "prob": 0.01
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "sig_e",
+          "count": 1,
+          "prob": 0.01
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.05
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "甲のみ",
+      "shop_type": "甲",
+      "cue": "e",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "break",
+        "carry",
+        "chain",
+        "cut",
+        "lift",
+        "near",
+        "press",
+        "push",
+        "turn"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 0,
+        "reach": 0
+      },
+      "hold_count": 4,
+      "hold_b_count": 1,
+      "pool": [
+        {
+          "predicate": "break",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "chain",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "cut",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "hold",
+          "count": 4,
+          "prob": 0.04
+        },
+        {
+          "predicate": "hold_b",
+          "count": 1,
+          "prob": 0.01
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "near",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "press",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.05
+        },
+        {
+          "predicate": "sig_n",
+          "count": 4,
+          "prob": 0.04
+        },
+        {
+          "predicate": "turn",
+          "count": 5,
+          "prob": 0.05
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "乙のみ",
+      "shop_type": "乙",
+      "cue": "n",
+      "door_truth": "hold_b",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "bend",
+        "carry",
+        "cord",
+        "drag",
+        "inside",
+        "lift",
+        "lock",
+        "pull",
+        "push",
+        "under"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 1,
+      "hold_b_count": 4,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "hold",
+          "count": 1,
+          "prob": 0.009523809523809525
+        },
+        {
+          "predicate": "hold_b",
+          "count": 4,
+          "prob": 0.0380952380952381
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "sig_e",
+          "count": 1,
+          "prob": 0.009523809523809525
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.047619047619047616
+        }
+      ]
+    },
+    {
+      "world": 2,
+      "corpus": "乙のみ",
+      "shop_type": "乙",
+      "cue": "e",
+      "door_truth": "hold",
+      "door_path": "0.0.0",
+      "signature": [
+        2,
+        [
+          "entity",
+          "entity"
+        ]
+      ],
+      "state": "U",
+      "answer": null,
+      "reason": "同点",
+      "max_names": [
+        "bend",
+        "carry",
+        "cord",
+        "drag",
+        "inside",
+        "lift",
+        "lock",
+        "pull",
+        "push",
+        "under"
+      ],
+      "max_count": 5,
+      "skeleton_counts": {
+        "push": 5,
+        "carry": 5,
+        "lift": 5,
+        "steer": 5,
+        "reach": 0
+      },
+      "hold_count": 1,
+      "hold_b_count": 4,
+      "pool": [
+        {
+          "predicate": "bend",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "carry",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "cord",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "drag",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "hold",
+          "count": 1,
+          "prob": 0.009523809523809525
+        },
+        {
+          "predicate": "hold_b",
+          "count": 4,
+          "prob": 0.0380952380952381
+        },
+        {
+          "predicate": "inside",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lift",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "lock",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "pull",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "push",
+          "count": 5,
+          "prob": 0.047619047619047616
+        },
+        {
+          "predicate": "sig_n",
+          "count": 4,
+          "prob": 0.0380952380952381
+        },
+        {
+          "predicate": "under",
+          "count": 5,
+          "prob": 0.047619047619047616
+        }
+      ]
+    }
+  ]
+}
