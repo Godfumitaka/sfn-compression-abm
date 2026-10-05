@@ -82,7 +82,7 @@ def work(job):
         ck=json.loads(paths['classification_check'].read_text())
         for key in ('予測が本物と違う','一位が本物の選びと違う','一位でやり直した答えが本物と違う'):
             if ck[key]: errors.append({'check':key,'count':ck[key]})
-    out=ROOT/'stage1'/arm; out.mkdir(parents=True,exist_ok=True)
+    out=ROOT/os.environ.get('LOGP_SEAL_STAGE1_FOLDER','stage1')/arm; out.mkdir(parents=True,exist_ok=True)
     counts={day:Counter() for day in ('e','n')}; births=[]; door_rows=[]
     state=None; trials=0; hash_errors=0; cues=[]
     with op(paths['ledger']) as f:
