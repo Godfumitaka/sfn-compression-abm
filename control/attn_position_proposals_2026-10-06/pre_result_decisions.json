@@ -1,0 +1,123 @@
+{
+  "recorded_at": "2026-10-05T18:10:22.084190+09:00",
+  "variants": [
+    {
+      "proposal": 1,
+      "background": null,
+      "eta": 0.1,
+      "fixed_a": null
+    },
+    {
+      "proposal": 1,
+      "background": null,
+      "eta": 0.5,
+      "fixed_a": null
+    },
+    {
+      "proposal": 2,
+      "background": "global",
+      "eta": 0.1,
+      "fixed_a": null
+    },
+    {
+      "proposal": 2,
+      "background": "global",
+      "eta": 0.5,
+      "fixed_a": null
+    },
+    {
+      "proposal": 2,
+      "background": "position",
+      "eta": 0.1,
+      "fixed_a": null
+    },
+    {
+      "proposal": 2,
+      "background": "position",
+      "eta": 0.5,
+      "fixed_a": null
+    },
+    {
+      "proposal": 2,
+      "background": "global",
+      "eta": null,
+      "fixed_a": 1.0
+    },
+    {
+      "proposal": 2,
+      "background": "position",
+      "eta": null,
+      "fixed_a": 1.0
+    }
+  ],
+  "worlds": [
+    1,
+    2
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source_commit": "cb27282a89c5f8aee302577d9b6f90cb747c194c",
+  "position_spec_sha256": "6df7d21e1c672ad84eb102a91eb1428166824248024f16291ab10dc3155f5836",
+  "pending": [],
+  "results_examined": false,
+  "phase3_started": false,
+  "held_out_is_door_assumption": "課題の指示として本人にドアを問うことが伝えられている",
+  "examples": [
+    {
+      "world": 1,
+      "seed": 1,
+      "trial": 0,
+      "source": "保存済みの最初の本人の観察の場面（名前は開示済み）",
+      "root_count": 5,
+      "root_predicates": [
+        "inside",
+        "cord",
+        "under",
+        "attach",
+        "carried"
+      ]
+    },
+    {
+      "world": 2,
+      "seed": 1,
+      "trial": 0,
+      "source": "保存済みの最初の本人の観察の場面（名前は開示済み）",
+      "root_count": 5,
+      "root_predicates": [
+        "inside",
+        "cord",
+        "under",
+        "attach",
+        "carried"
+      ]
+    }
+  ],
+  "resolved_at": "2026-10-05T18:23:38.284324+09:00",
+  "position_spec_commit": "ba620ef1",
+  "key_rule": "木の各上端から自分までの各段の局所の形と引数番号の全道の組＋自分の形。名前・ID無し。衝突・欠落はm=0。頻度表は重複鍵の全関係を一回ずつ数える。",
+  "zero_probability_rule": "L_of（ビット）×ln2。小さい確率を足さない。位置・状態・b・条件ごとにP=0と費用の逆転を数える。",
+  "table_time": "予測前は前試行まで。今の公開の名前と実開示の名前は予測確定後に一回ずつ数える。",
+  "empty_position_table": "位置の表が空なら指定仕様§5どおり全体の基底分布へ戻る。Hの有効な履歴が空なら腕Lどおりその条件のbへ戻る。",
+  "hand_example_rule": "元の136件のシール三分類それぞれで（種,試行）が最初の件を採用し、a=1で両候補の全位置のmとQ_aを手計算する。成績で例を選ばない。",
+  "gradient_gate_rule": "方式binary/global/positionそれぞれについて、開示されたドアで正解候補と非正解候補があり、mが異なる最初の試行を使う。a=.3で中央差分と解析勾配を比べる。"
+}
