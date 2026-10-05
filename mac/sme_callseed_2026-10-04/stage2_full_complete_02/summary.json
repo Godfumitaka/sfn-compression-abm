@@ -1,0 +1,158 @@
+{
+  "at": "2026-10-05T22:33:03.590150+09:00",
+  "status": "complete",
+  "trigger": {
+    "status": "complete"
+  },
+  "variants": [
+    {
+      "mode": "reuse",
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source",
+      "run": {
+        "exit": 0,
+        "wall_seconds": 11088.58187241698,
+        "at": "2026-10-05T02:01:09.523453+09:00",
+        "cprofile": false
+      },
+      "comparison": {
+        "passed": true,
+        "records": [
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+            "rows": 1740,
+            "body_all_equal": true,
+            "judgment_differing_trials": [],
+            "first_difference": null,
+            "baseline_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a",
+            "candidate_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a"
+          }
+        ],
+        "judgment_fields": [
+          "prediction_kind",
+          "predicted_edge",
+          "hit",
+          "R_used",
+          "abstain_reason"
+        ],
+        "scope": "台帳見出し一行だけを除き、本体の全バイトを比較"
+      },
+      "elapsed_sec": 10892.61,
+      "peak_rss_mb": 3405.2,
+      "resources.jsonl_sha256": "2e1ff8f974644f25c09abc39dfc76bb8d4341aaf5b40f6a3130e6757753f2632",
+      "load_conditions.jsonl_sha256": "87638c2cd94d05c288ecf8afc0bbb59e9ccf9ddc1b2bd11375ebb7fe714424c8"
+    },
+    {
+      "mode": "prune",
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source",
+      "run": {
+        "exit": 0,
+        "wall_seconds": 15520.790246833,
+        "at": "2026-10-05T13:02:34.429096+09:00",
+        "cprofile": false
+      },
+      "comparison": {
+        "passed": true,
+        "records": [
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+            "rows": 1740,
+            "body_all_equal": true,
+            "judgment_differing_trials": [],
+            "first_difference": null,
+            "baseline_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a",
+            "candidate_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a"
+          }
+        ],
+        "judgment_fields": [
+          "prediction_kind",
+          "predicted_edge",
+          "hit",
+          "R_used",
+          "abstain_reason"
+        ],
+        "scope": "台帳見出し一行だけを除き、本体の全バイトを比較"
+      },
+      "elapsed_sec": 15297.58,
+      "peak_rss_mb": 4518.0,
+      "resources.jsonl_sha256": "e99d1df4c7277b375f8429ad4c7d7daed721edc413eb52dff498c18cb6cc8b10",
+      "load_conditions.jsonl_sha256": "2480f088e58000684bc119c83a95460f5f30b18d05144dc8f0a454a2eed03580"
+    },
+    {
+      "mode": "key",
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source_key",
+      "run": {
+        "exit": 0,
+        "wall_seconds": 24002.233627874986,
+        "at": "2026-10-05T19:42:42.200618+09:00",
+        "cprofile": false
+      },
+      "comparison": {
+        "passed": true,
+        "records": [
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+            "rows": 1740,
+            "body_all_equal": true,
+            "judgment_differing_trials": [],
+            "first_difference": null,
+            "baseline_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a",
+            "candidate_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a"
+          }
+        ],
+        "judgment_fields": [
+          "prediction_kind",
+          "predicted_edge",
+          "hit",
+          "R_used",
+          "abstain_reason"
+        ],
+        "scope": "台帳見出し一行だけを除き、本体の全バイトを比較"
+      },
+      "elapsed_sec": 23743.54,
+      "peak_rss_mb": 4877.1,
+      "resources.jsonl_sha256": "9f0cb0fc47853417ecb56ee9942176bfc60ab2a596f12fc98cec117e08097e4d",
+      "load_conditions.jsonl_sha256": "9cbee80d50869c4cea60930f5d13622ad13e236958dc7421729ccf4f3f7cc42b"
+    },
+    {
+      "mode": "combined",
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source_key",
+      "run": {
+        "exit": 0,
+        "wall_seconds": 10204.371928000008,
+        "at": "2026-10-05T22:32:51.793605+09:00",
+        "cprofile": false
+      },
+      "comparison": {
+        "passed": true,
+        "records": [
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+            "rows": 1740,
+            "body_all_equal": true,
+            "judgment_differing_trials": [],
+            "first_difference": null,
+            "baseline_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a",
+            "candidate_body_sha256": "de2298ef5dd0564ee75dfde914099dfca29d289b24b4c511a96d986c34c0042a"
+          }
+        ],
+        "judgment_fields": [
+          "prediction_kind",
+          "predicted_edge",
+          "hit",
+          "R_used",
+          "abstain_reason"
+        ],
+        "scope": "台帳見出し一行だけを除き、本体の全バイトを比較"
+      },
+      "elapsed_sec": 10028.57,
+      "peak_rss_mb": 3763.8,
+      "resources.jsonl_sha256": "d184917a4f6e84ff329c17ca7015d30c8a82af0f224d8e7bb97c430c15e1a681",
+      "load_conditions.jsonl_sha256": "ce266d03cd4e204c186479016bc5d2bf415b3fec0c46412c5f1aaf8f5ddea553"
+    }
+  ],
+  "baseline_active_seconds": 15411.004142,
+  "baseline_pause_seconds": 4092.915858,
+  "production_runs": 0,
+  "eight_agent_runs": 0,
+  "profiling_for_speed": false
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "mode": "reuse",
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_01/reuse",
+    "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/full_baseline_01",
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source",
+    "flags_added": [
+      "--sme-reuse"
+    ]
+  },
+  {
+    "mode": "prune",
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_02/prune",
+    "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/full_baseline_01",
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source",
+    "flags_added": [
+      "--sme-prune"
+    ]
+  },
+  {
+    "mode": "key",
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_01/key",
+    "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/full_baseline_01",
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source_key",
+    "flags_added": []
+  },
+  {
+    "mode": "combined",
+    "folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/full_01/combined",
+    "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_callseed_2026-10-04/full_baseline_01",
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_light_2026-10-04/source_key",
+    "flags_added": [
+      "--sme-reuse",
+      "--sme-prune"
+    ]
+  }
+]
