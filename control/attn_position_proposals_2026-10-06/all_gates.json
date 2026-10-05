@@ -1,0 +1,966 @@
+{
+  "passed": true,
+  "gate1_trials": 69600,
+  "gate4_trials": 69600,
+  "world_seed_runs": 40,
+  "gate1_strict_fields": [
+    "prediction_kind",
+    "predicted_edge",
+    "abstain_reason",
+    "R_used",
+    "support_at_adoption"
+  ],
+  "gate2_three_distinct_trials": [
+    {
+      "world": 1,
+      "seed": 1,
+      "trial": 28,
+      "mode": "binary",
+      "a": {
+        "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[]],[2,[\"relation\",\"relation\"]]]": 0.3
+      },
+      "L": 0.13930017721597077,
+      "gradient_comparison": [
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+          "analytic": -0.008156525347230046,
+          "finite_difference": -0.008156525355129673,
+          "abs_difference": 7.899627132990084e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": -0.01759125155313602,
+          "finite_difference": -0.017591251566528854,
+          "abs_difference": 1.3392835451764284e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        }
+      ],
+      "directional_actual": -0.002232692408732362,
+      "directional_expected": -0.002232693824179979,
+      "finite_difference_step": 1e-05
+    },
+    {
+      "world": 1,
+      "seed": 2,
+      "trial": 9,
+      "mode": "global",
+      "a": {
+        "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[]],[2,[\"relation\",\"relation\"]]]": 0.3
+      },
+      "L": 1.59255081108623,
+      "gradient_comparison": [
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+          "analytic": 0.47008558443100257,
+          "finite_difference": 0.47008558442529486,
+          "abs_difference": 5.707712080749161e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.4852185043736015,
+          "finite_difference": 0.48521850436467057,
+          "abs_difference": 8.930911565840916e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.5519205255018846,
+          "finite_difference": 0.551920525515559,
+          "abs_difference": 1.3674394949703128e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.4852185043736015,
+          "finite_difference": 0.485218504386875,
+          "abs_difference": 1.3273548926662215e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": -0.0002107916665079461,
+          "finite_difference": -0.00021079166190318685,
+          "abs_difference": 4.604759255106769e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.5519660458194139,
+          "finite_difference": 0.5519660458142006,
+          "abs_difference": 5.2132742567323476e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.4455957528485661,
+          "finite_difference": 0.4455957528404219,
+          "abs_difference": 8.14420753059153e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.5204630419917619,
+          "finite_difference": 0.5204630419863854,
+          "abs_difference": 5.3764770413522456e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.5204630419917619,
+          "finite_difference": 0.5204630419863854,
+          "abs_difference": 5.3764770413522456e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.5019440875223358,
+          "finite_difference": 0.5019440875386749,
+          "abs_difference": 1.633915225340843e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.5278447822198352,
+          "finite_difference": 0.5278447822054666,
+          "abs_difference": 1.4368617407001238e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.521574523044256,
+          "finite_difference": 0.5215745230491287,
+          "abs_difference": 4.8726578327773495e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.501744187077132,
+          "finite_difference": 0.5017441870758255,
+          "abs_difference": 1.3065104553788842e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.5019440875223358,
+          "finite_difference": 0.5019440875164705,
+          "abs_difference": 5.865308239094702e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.4455957528485661,
+          "finite_difference": 0.44559575286262637,
+          "abs_difference": 1.4060252961911601e-11
+        },
+        {
+          "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.4455957528485661,
+          "finite_difference": 0.44559575286262637,
+          "abs_difference": 1.4060252961911601e-11
+        }
+      ],
+      "directional_actual": -3.7448523480865243,
+      "directional_expected": -3.7448706188010483,
+      "finite_difference_step": 1e-05
+    },
+    {
+      "world": 1,
+      "seed": 3,
+      "trial": 21,
+      "mode": "position",
+      "a": {
+        "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]": 0.3,
+        "[[[]],[2,[\"relation\",\"relation\"]]]": 0.3
+      },
+      "L": 1.558246405988944,
+      "gradient_comparison": [
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+          "analytic": 1.8031986809610636,
+          "finite_difference": 1.8031986809496912,
+          "abs_difference": 1.1372458530445329e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.20758567694935048,
+          "finite_difference": 0.20758567694789673,
+          "abs_difference": 1.4537537840197956e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.19548604572239303,
+          "finite_difference": 0.19548604572872105,
+          "abs_difference": 6.328021440182852e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.18356802247669468,
+          "finite_difference": 0.1835680224937519,
+          "abs_difference": 1.7057216750160364e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.18470294856953073,
+          "finite_difference": 0.18470294855799094,
+          "abs_difference": 1.1539796895831955e-11
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+          "analytic": 0.18356802247669468,
+          "finite_difference": 0.18356802247154744,
+          "abs_difference": 5.147243742342766e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.18356802247669468,
+          "finite_difference": 0.18356802247154744,
+          "abs_difference": 5.147243742342766e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.18356802247669468,
+          "finite_difference": 0.18356802247154744,
+          "abs_difference": 5.147243742342766e-12
+        },
+        {
+          "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        },
+        {
+          "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+          "analytic": 0.0,
+          "finite_difference": 0.0,
+          "abs_difference": 0.0
+        }
+      ],
+      "directional_actual": -3.5017161486017296,
+      "directional_expected": -3.5017361450807134,
+      "finite_difference_step": 1e-05
+    }
+  ],
+  "gate3_check": {
+    "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/hand_gate_checks.json",
+    "sha256": "3baed50b35f0912e003e2b34344d5d513165cd99447fa617859df748d5e9180a"
+  },
+  "gate4_poisoned_oracle_invariance_all_trials": true,
+  "gate4_frequency_events_before_trial_all_trials": true,
+  "seed_range": [
+    1,
+    20
+  ],
+  "checks": [
+    {
+      "world": 1,
+      "seed": 1,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed001.input.check.json",
+        "sha256": "97974c60336a1d7a84f83b629395ccb8036c35f2d3d0d15aa7f3bec18f32fbda"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed001.features.check.json",
+        "sha256": "04a3727ef17a76d662412347b69b39bb5c10ac96ddc2b580d8e7620c3d156d44"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 2,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed002.input.check.json",
+        "sha256": "deeb6f460fd4ce06852538522b03c0c9cf6665c1b8f255cd5dceb6bab5da46d7"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed002.features.check.json",
+        "sha256": "0d18fe7a09cea9e3e67b96b22168dfd1e94bd2785879ec8a7e3e7604d8f82c7c"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 3,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed003.input.check.json",
+        "sha256": "28c1d2e2a6f075eb12fb4de4d320179e44a021c33a876a4cc3946bf1707b04c3"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed003.features.check.json",
+        "sha256": "44142db00b8e70590bbdb2d7aa72db5dbe1922a52c15e6c4d2bec7e1d8b45244"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 4,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed004.input.check.json",
+        "sha256": "37e5f7bd8bf35ab2ddbc99727bff7944288fb052a37a0da16552a9eb6dc286c5"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed004.features.check.json",
+        "sha256": "632fedbd27304683ef6410a67979318947d351af3643170e342a72a3030d2253"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 5,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed005.input.check.json",
+        "sha256": "19404a70dcab32a6205f6f9aa52d96567879f6273a11e00f9136e9ab750fe750"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed005.features.check.json",
+        "sha256": "674b3289f31bac2cc15416a5c7dc5a3af8f1b58517237ad2f0ee84b48b095ec3"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 6,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed006.input.check.json",
+        "sha256": "e6726545ceb4f4de5d2c4c96525057aacc25d0334b919c35dd8973b2a4a00cbe"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed006.features.check.json",
+        "sha256": "08c12e00dc1758f20e2a10d69ccfd3d290db489f4fc321c356ab65a5c05fd403"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 7,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed007.input.check.json",
+        "sha256": "fae0bfe3d95ac82cd4f824298d9b25c30a5c80eaf5d88a679965ef7af941df8e"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed007.features.check.json",
+        "sha256": "6305282b79d9ea1d72633aa7ba97c9bf8786aebfafb19722ac7186f60d1615b5"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 8,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed008.input.check.json",
+        "sha256": "8537fcb659ed6153eadb05a21a2dcffe20998d3cfbd47b2a7d6ebd4e709b42c5"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed008.features.check.json",
+        "sha256": "cc88779faa9bcb3a4d4a548220e842cc276721626c2d72851c5d2542f2ee3b5c"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 9,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed009.input.check.json",
+        "sha256": "5f00f9f2cda223f5e99bc708cdaa03ca9a86039951785d03ca8ca0205a2ee41b"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed009.features.check.json",
+        "sha256": "6bb99f97304d0b71c77d61972c1dc3533f94fe4763d50bac1767656ec887bab1"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 10,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed010.input.check.json",
+        "sha256": "17e3872a0e520c91fdb992e269cb140d4f7fc2aa89c52908a6e174ca01a06ef5"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed010.features.check.json",
+        "sha256": "cbb4e8e09cf991ce431abefaa78bae7f0a5a8a4a598fffeffb8f5f32b69921d7"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 11,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed011.input.check.json",
+        "sha256": "f995bdcfb9f73f3c7752488bab212308f5f7bfe659b59a9cc088010b7af31141"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed011.features.check.json",
+        "sha256": "22f8bbab37ae0e8cd9467a1b654e694f7e15b76bfde9c8e44c8a7f7b1c3429c3"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 12,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed012.input.check.json",
+        "sha256": "fbe2b07d8e524568a1a3b59a683f9918269a9e76b6914780937da17b85a4cb2b"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed012.features.check.json",
+        "sha256": "0693629ac7146c421108b8cef10f752ee542e4bedcfe19afb319560178fa9bf4"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 13,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed013.input.check.json",
+        "sha256": "c805ef950f51b6ea8abe5d75d566b9588d7a51b71a017efb495cbc9418a48a14"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed013.features.check.json",
+        "sha256": "60cba8ee1c8c18c88962d902eafd32ebf2194caa3597700e676110d34cafa357"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 14,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed014.input.check.json",
+        "sha256": "54abb0bb5062780be2b7084c6cd05a47821ae3760eaf34a4f1f91846820817dd"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed014.features.check.json",
+        "sha256": "ebfbaa44147d0dd3f2132dd2f2260d83c31d24bee0189cda7c6ec9f07a49bce1"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 15,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed015.input.check.json",
+        "sha256": "fce7c8c32b31ee9f35882e248d88981ac87a799de403b2b14c989e28d74e4994"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed015.features.check.json",
+        "sha256": "04d8d978f7a2d23742f3941e76e6c7f9e4c26ca3ec2338eab187a3c90eca3006"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 16,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed016.input.check.json",
+        "sha256": "f999339450ff76317f6ffda0977e9efff4c5b1be44821abce7ee52009a80d3a6"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed016.features.check.json",
+        "sha256": "f3f50f0ca72a095434046cbdd70d91f8b3919b46df5789a96daecd0eb03a09bb"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 17,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed017.input.check.json",
+        "sha256": "63c2b7e817493d206ac3b0f0c16c5e257b43cdaa224d715620cc32b0ea21a554"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed017.features.check.json",
+        "sha256": "7709fb0d5dff5b0a12df60953309618e577d4d894736c247ab4b4772b55cb0af"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 18,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed018.input.check.json",
+        "sha256": "48c561d55dfb7e8d0a62ac815c086cd8f80090e29368ede671583ffbce72e8b6"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed018.features.check.json",
+        "sha256": "155b40375b38cc4cabc9e581fa086b0e7a8e9c3e9dc7455e520c728ce4b84333"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 19,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed019.input.check.json",
+        "sha256": "e079bb75785de8c15777e66fa49c84793b3254a5a62e0a0ba4a4744221119072"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed019.features.check.json",
+        "sha256": "9f6da915c97274bba947b6a9123ba489fff2115a7d04c97ffe22eb58b9e92684"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 1,
+      "seed": 20,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w1_A_L50/seed020.input.check.json",
+        "sha256": "0de3dcc454a27253c5eda0d7e1ea189bf0c9faea7c735696eb727b8a48680847"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w1_A_L50/seed020.features.check.json",
+        "sha256": "b62e302cfcdd32ae8d9466d48933e783ace61f0c16bd9efaf157094a8d3a1622"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 1,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed001.input.check.json",
+        "sha256": "272e7a79f3493bd9bd5d434a5c27d19333b0b14a36982af0e5fb38c0ffd019dc"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed001.features.check.json",
+        "sha256": "4ac541e2c1232ec85002160add5218b3c6378531a041daaddbbe81ca20216807"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 2,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed002.input.check.json",
+        "sha256": "e3bf5dcd24e8a349e87a175ca82f56410c86a43c77ce6250aa8495b693c239f0"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed002.features.check.json",
+        "sha256": "b1b9edb56d8ac846864e28389c56f93840a977775a8d50eed8c44609876674ce"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 3,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed003.input.check.json",
+        "sha256": "6385b6ca5fb1c7d518d47bde19e669312aa56674f6719f181e020815369c6707"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed003.features.check.json",
+        "sha256": "3aa5133cd5826037423bcacb69f698c251a00d7116ff439805bbc29d1e72a966"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 4,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed004.input.check.json",
+        "sha256": "b552ce3efbb68ddd41abaa15eef99e6c775a5e21c27e9b39da437f8eb5058c51"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed004.features.check.json",
+        "sha256": "b38b9274a0ddeac60033653e5ca6b6f7b2c337e24ace6e14140983d1d73a6590"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 5,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed005.input.check.json",
+        "sha256": "1f5be8e6b4b0cca2c5f24ffe6158c7caa156c500d929df1aeb1b89c187edd252"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed005.features.check.json",
+        "sha256": "6a9fb7dbeafc4d17834d0d04123fb6f22a435b02a13d165b4ec5b51bd205e4da"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 6,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed006.input.check.json",
+        "sha256": "d02de041800daefcb6d8f58ce0c6b072eac583c4114065a544596b023e178f43"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed006.features.check.json",
+        "sha256": "7d2fd8485ae0d9f70500fb585a0e4cae6860ff2f90ee5be26a743e4e988d5c62"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 7,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed007.input.check.json",
+        "sha256": "7308497c542dbc3648a021e2e40f9442480e2dc0f71aa30a3379ba96de40a187"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed007.features.check.json",
+        "sha256": "d88a820c9704d2fc02d49ff3de92f2285ab796e59c53de6d842b0a3bc7437deb"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 8,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed008.input.check.json",
+        "sha256": "a8696aed23383d00f452a1292165212aaabc6e3d68518133721aa15d82b1aed0"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed008.features.check.json",
+        "sha256": "ef9272de96252201af1206bae4c08998c88dae6223b6bc7a483da5c118ac9d0d"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 9,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed009.input.check.json",
+        "sha256": "d5c6a0eebda547225a77053d884485c94fe0b910a0496b70c91464b35b88001a"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed009.features.check.json",
+        "sha256": "0f1d4440a64b2674f49daf632c7e07c587cedace1da1896d0f7386cd846a7267"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 10,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed010.input.check.json",
+        "sha256": "30923cbc2a0e3d778b0123836d1308e0c935b63a5eb1d4952eb641980551a62a"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed010.features.check.json",
+        "sha256": "93bd8c45c6e4bf041953be92e3758415f0c8186e9e9a6cb3a82f587597fba5f6"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 11,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed011.input.check.json",
+        "sha256": "59b21274ee9bc072ef42a03a1626fbcc05e490dba467b4fadfb545624661297a"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed011.features.check.json",
+        "sha256": "030ba586c7bf2aa99d0a80245df4128de3211c693d9e27f72eb509fbcfabb1f8"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 12,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed012.input.check.json",
+        "sha256": "04a61da1f7597062f1ad10d819a80c8f55823ecd0d700c7c347a34fdeab38681"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed012.features.check.json",
+        "sha256": "cc20ea3bfe53aaba41440c694dc8503e49cab1ebfac573bbb3eff71dd1e249cb"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 13,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed013.input.check.json",
+        "sha256": "f2a671a3e494dc3819e5f12f7d5f5d640ff30e38ebdeb34f7fd63672366c7cec"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed013.features.check.json",
+        "sha256": "217b0e5b5358cd475afbe56fa3740d0051eae9c3a069bfa745eefc3ffc79618b"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 14,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed014.input.check.json",
+        "sha256": "c6097ea6ae12ea4583b7fdef7e7efa8320bcfa2472c68b3c933cce75d0f72516"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed014.features.check.json",
+        "sha256": "256a151d1ed43c4caf3b01c6f48105488091e37790ee5d6f88056564b4f66956"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 15,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed015.input.check.json",
+        "sha256": "1b4553a1e57f5ee4df8dba486bb2901ac66f302c719c47ec134acc8e2bbef369"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed015.features.check.json",
+        "sha256": "a081d20f9dedc425cba6641675f4826858048e56d13927919076ae093f464f67"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 16,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed016.input.check.json",
+        "sha256": "4ccc2817d2fff751db0c2ea5c6bfcc9bd33ea3c01e6ace3851984b1b31e57d7b"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed016.features.check.json",
+        "sha256": "3de3cc0bb1327e08f1969d4fff7c691d15602e895af29ec53fed4a28932aa5cb"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 17,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed017.input.check.json",
+        "sha256": "a0588be0497dcd2e40c15f00fa31b782b245b2a5ea02dc91a1fca8775a28f6d5"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed017.features.check.json",
+        "sha256": "5cec1efc262b3d98c348acaa6b121d78b3b154b0ecf30fb615b2327d5579bac3"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 18,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed018.input.check.json",
+        "sha256": "c9693db2a62313bec84b127ebc91e84ccc659a38e89af668810e0e06b534e817"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed018.features.check.json",
+        "sha256": "0634f50a8a66c2014052717818aa96097764ae6897ee5d757a537a2c21802d48"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 19,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed019.input.check.json",
+        "sha256": "2fc4b08f768dbf7487d387c4a1b4b4f97be58e3e15a86d7b17239713ecb4eb30"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed019.features.check.json",
+        "sha256": "4994be3713ab87f503dff61b89bc422bea0514517fc4d8e15a875093b44c22ef"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    },
+    {
+      "world": 2,
+      "seed": 20,
+      "input_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/input/n3_w2_A_L50/seed020.input.check.json",
+        "sha256": "517a2466287b747f55aec1715913617001502a19ee5f8a296815acbb3a1e75e2"
+      },
+      "feature_check": {
+        "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/position_attention_2026-10-06/features/n3_w2_A_L50/seed020.features.check.json",
+        "sha256": "fa9fc05fe1d88f968d394ee891e1136b7bfeb095fe66d8a9dc0aab1887a2aef0"
+      },
+      "gate1_trials": 1740,
+      "gate4_trials": 1740
+    }
+  ],
+  "performance_started": false
+}
