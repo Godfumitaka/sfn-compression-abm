@@ -1,0 +1,10 @@
+{
+  "logical_entries_deleted": 0,
+  "reason": "cacheはsnapshot/restoreで辞書として保存され、再使用したかもsme_useに記録される。項目の削除は保存と印を変える。古い定義・場面を条件にした削除は、その後の診断・再生・復元で参照しないことを全経路で証明していないため実装しない。",
+  "code_locations": [
+    "source_a/tools/sme2017.py:220",
+    "source_a/tools/smeshared.py:378",
+    "observe_memory_01.py: cache_count / cache_seed_sha256 / saved_matcher"
+  ],
+  "implemented_alternative": "論理的な項目を全て残し、同じ不変の内容の実体だけ共有する。200試行の両条件で全バイト一致、1740は未確認。"
+}
