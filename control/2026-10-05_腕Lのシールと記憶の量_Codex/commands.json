@@ -125,7 +125,7 @@
     "script": "silent_candidates.py",
     "args": [],
     "pid": 54719,
-    "status": "実行中",
+    "status": "完了",
     "program_command": [
       "/opt/homebrew/bin/python3.12",
       "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/silent_candidates.py"
@@ -249,6 +249,140 @@
       "--",
       "/opt/homebrew/bin/python3.12",
       "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/birth_score_conditions.py"
+    ]
+  },
+  {
+    "purpose": "採用された定義の台帳・sideの照合",
+    "script": "selected_seals.py",
+    "mem_gb": 0.3,
+    "owner": "Codex-腕L黙りの選択記録照合1005",
+    "pid": 78068,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L黙りの選択記録照合1005",
+      "--mem",
+      "0.3",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/selected_seals.py"
+    ]
+  },
+  {
+    "purpose": "全表の統合と再現の関門",
+    "script": "aggregate.py",
+    "mem_gb": 0.25,
+    "owner": "Codex-腕L全表統合1005",
+    "pid": 83725,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L全表統合1005",
+      "--mem",
+      "0.25",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/public",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/aggregate.py"
+    ]
+  },
+  {
+    "purpose": "確定報告の追記",
+    "script": "append_complete_report.py",
+    "mem_gb": 0.1,
+    "owner": "Codex-腕L確定報告1005",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L確定報告1005",
+      "--mem",
+      "0.1",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/append_complete_report.py"
+    ]
+  },
+  {
+    "purpose": "出生ラベルだけの修正と由来の照合",
+    "script": "repair_birth_labels.py",
+    "mem_gb": 0.15,
+    "owner": "Codex-腕L出生ラベル照合1005",
+    "pid": 90173,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L出生ラベル照合1005",
+      "--mem",
+      "0.15",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/repair_birth_labels.py"
+    ]
+  },
+  {
+    "purpose": "出生分類修正後の全表統合",
+    "script": "aggregate.py",
+    "mem_gb": 0.25,
+    "owner": "Codex-腕L出生ラベル修正後統合1005",
+    "pid": 91252,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L出生ラベル修正後統合1005",
+      "--mem",
+      "0.25",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/public",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/aggregate.py"
+    ]
+  },
+  {
+    "purpose": "出生分類の修正後の確定報告",
+    "script": "append_complete_report.py",
+    "mem_gb": 0.1,
+    "owner": "Codex-腕L修正後確定報告1005",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L修正後確定報告1005",
+      "--mem",
+      "0.1",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/append_complete_report.py"
     ]
   }
 ]
