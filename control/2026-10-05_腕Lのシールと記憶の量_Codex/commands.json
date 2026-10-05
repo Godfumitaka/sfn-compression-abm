@@ -102,5 +102,153 @@
       "2",
       "--resume"
     ]
+  },
+  {
+    "purpose": "三つの手計算と最終記憶表",
+    "mem_gb": 0.25,
+    "owner": null,
+    "script": "priority.py",
+    "args": [],
+    "pid": 53908,
+    "status": "完了",
+    "program_command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/priority.py"
+    ],
+    "disk_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+    "note": "終了済み受付のPIDと枠を記載。再現時はjobs.py run --waitに担当名とこのmem/disk_pathを渡す。"
+  },
+  {
+    "purpose": "黙りの凍結記憶による既存候補診断",
+    "mem_gb": 1.0,
+    "owner": "Codex-Lシール黙りの候補診断1005",
+    "script": "silent_candidates.py",
+    "args": [],
+    "pid": 54719,
+    "status": "実行中",
+    "program_command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/silent_candidates.py"
+    ],
+    "disk_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-Lシール黙りの候補診断1005",
+      "--mem",
+      "1.0",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/silent_candidates.py"
+    ]
+  },
+  {
+    "purpose": "五条件の記憶時点検算・種1",
+    "mem_gb": 0.3,
+    "owner": null,
+    "script": "stage2.py",
+    "args": [
+      "--pilot",
+      "--workers",
+      "1"
+    ],
+    "pid": 59914,
+    "status": "完了",
+    "program_command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2.py",
+      "--pilot",
+      "--workers",
+      "1"
+    ],
+    "disk_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05",
+    "note": "終了済み受付のPIDと枠を記載。再現時はjobs.py run --waitに担当名とこのmem/disk_pathを渡す。"
+  },
+  {
+    "purpose": "全20種の誕生・例外ドア・記憶時点集計",
+    "mem_gb": 0.3,
+    "owner": "Codex-腕Lシール全種集計1005",
+    "script": "stage2.py",
+    "args": [
+      "--workers",
+      "2"
+    ],
+    "pid": 63853,
+    "status": "完了",
+    "program_command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2.py",
+      "--workers",
+      "2"
+    ],
+    "disk_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕Lシール全種集計1005",
+      "--mem",
+      "0.3",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/stage2.py",
+      "--workers",
+      "2"
+    ]
+  },
+  {
+    "purpose": "誕生と記憶量の先行確定表",
+    "script": "counts14.py",
+    "mem_gb": 0.2,
+    "owner": "Codex-腕L誕生と記憶表先行保存1005",
+    "pid": 73242,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L誕生と記憶表先行保存1005",
+      "--mem",
+      "0.2",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/public",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/counts14.py"
+    ]
+  },
+  {
+    "purpose": "背景の読みのH/U条件の照合",
+    "script": "birth_score_conditions.py",
+    "mem_gb": 0.15,
+    "owner": "Codex-腕L誕生の採点条件1005",
+    "pid": 75290,
+    "status": "完了",
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex-腕L誕生の採点条件1005",
+      "--mem",
+      "0.15",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/public",
+      "--",
+      "/opt/homebrew/bin/python3.12",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_seals_2026-10-05/birth_score_conditions.py"
+    ]
   }
 ]
