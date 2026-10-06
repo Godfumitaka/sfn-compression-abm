@@ -1,0 +1,42 @@
+{
+  "source_commit": "10cd8bdd46416aff55d0015e9072fc2186deed83",
+  "locations": [
+    {
+      "file": "tools/smereplay.py",
+      "line": 95,
+      "end_line": 159,
+      "fact": "毎試行のpre/prediction/post。encodeは辞書の登録順と席・引数の順を保存",
+      "sha256": "8676c28e2b77bf615399b036f4a09ba6f191ab73e857a9408f7edc5ad912cc91"
+    },
+    {
+      "file": "tools/selcands_sme.py",
+      "line": 67,
+      "end_line": 155,
+      "fact": "予測前の乱数から、候補を一つに固定して答え直す。記憶と乱数の復元を検査",
+      "sha256": "17c21c7e70decadb9f4cad363d79dce54e661119c736213a9185a47acb4de3bd"
+    },
+    {
+      "file": "tools/selcands_sme.py",
+      "line": 158,
+      "end_line": 170,
+      "fact": "予測が確定した後、研究者の正解と述語・順つき引数を比較",
+      "sha256": "17c21c7e70decadb9f4cad363d79dce54e661119c736213a9185a47acb4de3bd"
+    },
+    {
+      "file": "tools/smeshared.py",
+      "line": 327,
+      "end_line": 358,
+      "fact": "本番は全候補の対応と自己点を求めるが、返すのは選ばれた対応と門を通る候補の一覧",
+      "sha256": "7ce8460537fef88586de776a6822b27eb37bb9ec69baafd1d1f07d440ef31ce5"
+    }
+  ],
+  "existing_classification_rule": {
+    "file": "codex_logp_main_2026-10-06/summarize_01.py",
+    "line": 73,
+    "sha256": "37f9a34c0fbd13a1e9ff684667c24641c27126652e386ebf99291c7f51ef27ee",
+    "error_with_correct_gate_passed": "選び間違い",
+    "error_without_correct_gate_passed": "区別の喪失"
+  },
+  "observed_only": true,
+  "new_classification_not_implemented": true
+}
