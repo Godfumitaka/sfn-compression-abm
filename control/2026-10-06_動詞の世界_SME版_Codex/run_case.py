@@ -16,15 +16,15 @@ limit = int(subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.physicalcpu']
 assert limit >= 1
 
 def census():
-    data = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,comm=,args='], text=True)
+    data = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
     rows = {}
     for line in data.splitlines():
         p = line.split(None, 5)
         if len(p) != 6:
             continue
-        pid, parent, pgid, rss, name, command = p
+        pid, parent, pgid, rss, state, command = p
         executable = command.split(None, 1)[0].lower()
-        heavy = ('python' in executable or 'pypy' in executable) and 'resource_tracker' not in command and 'jobs.py' not in command and (int(rss) >= 102400 or 'spawn_main' in command)
+        heavy = not state.startswith(('T', 'Z')) and ('python' in executable or 'pypy' in executable) and 'resource_tracker' not in command and 'jobs.py' not in command and (int(rss) >= 102400 or 'spawn_main' in command)
         rows[int(pid)] = {'parent': int(parent), 'pgid': int(pgid), 'rss_bytes': int(rss)*1024, 'heavy': heavy}
     own = {os.getpid()}
     while True:
