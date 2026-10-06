@@ -21,7 +21,7 @@ def write(path, rows):
 
 def study(cases_file, output):
     cases = json.loads(Path(cases_file).read_text());output = Path(output)
-    trial_rows, birth_rows, summary = [], [], []
+    trial_rows, birth_rows, summary, fallback_rows = [], [], [], []
     for case in cases:
         root = Path(case['path']);seed = case['seed']
         if seed not in (1, 2, 3):
@@ -32,6 +32,9 @@ def study(cases_file, output):
         side = next((root/'output/side').rglob(stem+'.jsonl'))
         core = read(ledger);next(core)
         side_rows = {r['trial']: r for r in read(side) if r['kind'] == 'v39'}
+        shop = next((root/'output/side').rglob(stem+'.shop.jsonl'))
+        shop_birth = {(r['trial'], r['R'], r['slot']): r['to'] for r in read(shop)
+                      if r['kind'] == 'shop_seat' and r['from'] == '生まれた' and r['which'] == 'sig'}
         counts = Counter()
         for t, (record, candidates) in enumerate(zip(core, read(cands), strict=True)):
             assert t == candidates['trial']
@@ -62,6 +65,10 @@ def study(cases_file, output):
                             if ev[0] == 'FH':st = 'H'
                             elif ev[0] == 'HU':st = 'U'
                     # 最後のHUで定義全体が退役した場合でも、その席のUを数える。
+                    if reg['R'] in side_rows[t]['retire']:
+                        assert st == 'U'
+                    else:
+                        assert shop_birth[(t, reg['R'], seal['slot_index'])] == st
                     birth_rows.append({'score': case['score'], 'u_position': case['u_position'], 'seed': seed,
                                        'trial': t, 'R': reg['R'], 'slot': seal['slot_index'],
                                        'material_name': seal['predicate'], 'state': st})
@@ -79,9 +86,17 @@ def study(cases_file, output):
         row['final_total_bits'] = side_rows[1739]['bits_after']
         row['final_definition_count'] = side_rows[1739]['defs']
         summary.append(row)
+        if case['u_position']:
+            positions = next((root/'output/side').rglob(stem+'.uposition.jsonl.gz'))
+            total = Counter()
+            for record in read(positions):
+                total.update(record['fallback_calls'])
+            fallback_rows.extend({'score':case['score'], 'seed':seed, 'reason':reason, 'calls':calls}
+                                 for reason,calls in sorted(total.items()))
     write(output/'trials.csv', trial_rows)
     write(output/'birth_seals.csv', birth_rows)
     write(output/'comparison.csv', summary)
+    write(output/'fallback_calls.csv', fallback_rows)
     print(json.dumps({'cases': len(cases), 'trial_rows': len(trial_rows), 'birth_rows': len(birth_rows)}, ensure_ascii=False))
 
 
