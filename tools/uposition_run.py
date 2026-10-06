@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import subprocess
 import sys
 import time
@@ -16,6 +17,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'tools'), str(ROOT)]
 import v3_run
 REAL_WORKER = v3_run.worker
+
+
+def runtime_environment():
+    binary = Path(sys.executable).resolve()
+    return {'executable': sys.executable, 'resolved': str(binary), 'version': sys.version,
+            'build': platform.python_build(), 'compiler': platform.python_compiler(),
+            'architecture': platform.machine(), 'utf8_mode': sys.flags.utf8_mode,
+            'hash_seed': os.environ.get('PYTHONHASHSEED'),
+            'locale_variables': {k:v for k,v in os.environ.items() if k == 'LANG' or k.startswith('LC_')},
+            'binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest()}
 
 
 def cpu_admission():
@@ -39,6 +50,7 @@ def worker(task):
     import sweep
     real_run = sweep.run_one
     root = Path(task['out_root']).parent
+    (root / 'environment_worker.json').write_text(json.dumps(runtime_environment(), ensure_ascii=False, indent=2)+'\n')
     stream = (root / 'tie_state.jsonl').open('x')
     def run_one(task):
         import abm.loop as loop
@@ -96,7 +108,8 @@ def main():
     if args.pin_commit:
         sweep.code_commit = lambda: args.pin_commit
     execution = {'source': str(ROOT), 'implementation_commit': commit, 'metadata_commit': args.pin_commit or commit,
-                 'command': command, 'cpu_admission': admission, 'started_unix': time.time()}
+                 'command': command, 'cpu_admission': admission, 'started_unix': time.time(),
+                 'runtime_environment': runtime_environment()}
     (root / 'execution.json').write_text(json.dumps(execution, ensure_ascii=False, indent=2)+'\n')
     v3_run.worker = worker
     sys.argv = command[1:]
