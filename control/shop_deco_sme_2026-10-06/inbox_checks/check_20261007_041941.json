@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-07T04:19:41.001722+09:00",
+  "heartbeat_scheduled_at": "2026-10-06T22:42:02.896+09:00",
+  "initial_fetched_commit": "63c1951e44b5fde433091991fe01d815fba07c47",
+  "fetched_commit": "f8364aab488c349b79dfc245475af5d1c11758f8",
+  "model_worker_count": 2,
+  "model_workers": [
+    {
+      "pid": 36825,
+      "parent": 36821,
+      "state": "R",
+      "rss_kib": 283824
+    },
+    {
+      "pid": 89571,
+      "parent": 89565,
+      "state": "R",
+      "rss_kib": 226752
+    }
+  ],
+  "other_computing_count": 0,
+  "other_computing": [],
+  "admission_count": 2,
+  "cpu_limit": 8,
+  "inbox_instruction1_admission_limit": 6,
+  "own_live_processes": [],
+  "own_registry_rows": [],
+  "registry_rows_total": 5,
+  "controller_pid_64386": null,
+  "own_pipeline_status": "stopped",
+  "first_model": {
+    "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+    "manifest_unchanged_from_previous": true,
+    "trial_count": 1740,
+    "finished_at": "2026-10-06T10:58:50Z",
+    "exit_code": 0
+  },
+  "inbox": {
+    "unreceived": [],
+    "instruction1": "received_ongoing",
+    "profile25_complete_report": false,
+    "profile25_last_report_at": "2026-10-06T22:27:13.510326+09:00"
+  },
+  "eligible_queue_rows": [],
+  "empty_at": "2026-10-07T04:19:41.001722+09:00",
+  "counting": "停止状態Tを除くPython spawn_main workerを模型過程として数え、RSS100MiB以上かつR状態の他のPython計算を投入判定に加える。jobs.py・resource_tracker・監督役は除く。受付表は読むだけで変更していない。",
+  "fetch_auto_review_timeout_retry_succeeded": true
+}
