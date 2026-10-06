@@ -1,0 +1,44 @@
+{
+  "requested_at": "2026-10-06T18:46:41.496663+09:00",
+  "deadline": "2026-10-06T20:46:41.496663+09:00",
+  "controller_pid": 28317,
+  "controller_waiting_at": "2026-10-06T18:46:41.496663+09:00",
+  "running_comparison_pid": 89318,
+  "running_receipt_pid": 89314,
+  "withdrawn_waiting_receipts": [],
+  "pending_unsubmitted": [
+    "solo0_evict200",
+    "solo1_evict200",
+    "solo2_evict200",
+    "solo3_evict200",
+    "solo4_evict200",
+    "solo5_evict200",
+    "solo6_evict200",
+    "solo7_evict200",
+    "recv_2_plain200",
+    "recv_2_evict200",
+    "recv_2_replay200",
+    "measure4_evict600",
+    "measure8_evict200"
+  ],
+  "reason": "25′のCPU先通し。現在の照合は継続。後続を出す待機中の制御器だけを待機させる。",
+  "started_observed": {
+    "shop": {
+      "kind": "shop",
+      "receipt_pid": 69132,
+      "owner": "SME25 shop_profile1740_02",
+      "mem_gb": "2.5",
+      "receipt_start": "2026-10-06T18:45:04",
+      "observed_at": "2026-10-06T18:48:36.629598+09:00",
+      "workers": [
+        {
+          "pid": 89571,
+          "parent": 89565,
+          "state": "R",
+          "cpu": 98.4,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      ]
+    }
+  }
+}
