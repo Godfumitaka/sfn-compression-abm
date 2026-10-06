@@ -1,0 +1,36 @@
+"""受付を経由して三条件を順に測り、一致しなければ次を始めない。"""
+from pathlib import Path
+import datetime, json, subprocess, time
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-observation-20261006'
+OUT=ROOT/'outputs/sme-observation-20261006'
+PY='/opt/homebrew/opt/python@3.12/bin/python3.12'
+JOBS='/Users/tatsu-admin/jobs/jobs.py'
+def checked(name):
+    result=json.loads((EV/name/'resource.json').read_text())
+    assert result['exitcode']==0 and not result.get('stop') and not result.get('errors') and result['trials']==300
+    return result
+def main():
+    while not (EV/'i_current/resource.json').exists():time.sleep(2)
+    checked('i_current')
+    for name in ('ii_noaudit','iii_noobservations'):
+        status=subprocess.check_output([PY,JOBS,'status','--disk-path',str(OUT)],text=True)
+        (EV/name/'receipt-before.txt').write_text(status)
+        command=[PY,JOBS,'run','--wait','--owner',f'Codex3 集団化観測費用 {name} 4体300',
+            '--mem','8','--disk-path',str(OUT),'--',PY,str(ROOT/'sme_observation_registered_20261006.py'),str(EV/name/'spec.json')]
+        (EV/name/'launch.json').write_text(json.dumps(command,ensure_ascii=False,indent=2)+'\n')
+        print(f'{datetime.datetime.now().astimezone().isoformat()} {name} 受付へ',flush=True)
+        with (EV/name/'receipt-run.txt').open('w') as log:
+            subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,check=True,cwd=ROOT)
+        checked(name)
+        compare=[PY,JOBS,'run','--wait','--owner',f'Codex3 観測費用 全バイト比較 {name}',
+            '--mem','1','--disk-path',str(OUT),'--',PY,str(ROOT/'sme_observation_compare_20261006.py'),name]
+        with (EV/name/'comparison-receipt.txt').open('w') as log:
+            subprocess.run(compare,stdout=log,stderr=subprocess.STDOUT,check=True,cwd=ROOT)
+        print(f'{datetime.datetime.now().astimezone().isoformat()} {name} 完走・全バイト比較通過',flush=True)
+    (EV/'workflow-complete.json').write_text(json.dumps({'finished':datetime.datetime.now().astimezone().isoformat(),'three_runs':True,'comparisons':True})+'\n')
+if __name__=='__main__':
+    try:main()
+    except BaseException as e:
+        (EV/'workflow-failed.json').write_text(json.dumps({'error':repr(e),'time':datetime.datetime.now().astimezone().isoformat()})+'\n')
+        raise

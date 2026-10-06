@@ -1,0 +1,126 @@
+"""確認値・推測・未測定の案を分けた報告と、コンパクトな証拠を作る。"""
+from pathlib import Path
+import gzip, hashlib, json, re, shlex, shutil, subprocess
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-observation-20261006'
+REPORT=ROOT/'report'
+DEST=REPORT/'control/coll_sme_observation_2026-10-06'
+NAME='2026-10-06_集団化_観測の旗の費用_Codex3.md'
+def sha(path):
+    h=hashlib.sha256()
+    with path.open('rb') as f:
+        while chunk:=f.read(2**20):h.update(chunk)
+    return h.hexdigest()
+def minutes(v):return f'{v/60:.2f}'
+def gb(v):return f'{v/1e9:.3f}'
+def hours(v):return f'{v/3600:.2f}'
+def link(p):return f'coll_sme_observation_2026-10-06/{p}'
+def main():
+    data=json.loads((EV/'analysis.json').read_text());cases=data['cases']
+    comparisons=[json.loads((EV/f'compare-{n}.json').read_text()) for n in ('ii_noaudit','iii_noobservations')]
+    assert all(c['all_model_bytes_equal'] for c in comparisons)
+    source=ROOT/'sme-source'
+    provenance={'commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip(),
+        'status':subprocess.check_output(['git','status','--porcelain'],cwd=source,text=True),
+        'protected_diff':subprocess.check_output(['git','diff','858f708','--','abm','tools/v39.py','tools/sme2017.py','tools/smeshared.py'],cwd=source,text=True)}
+    assert provenance['commit']=='29b89dfc12edcbd08582c94459aa9056ad68a16c' and not provenance['status'] and not provenance['protected_diff']
+    (EV/'source-after.json').write_text(json.dumps(provenance,ensure_ascii=False,indent=2)+'\n')
+    assert not DEST.exists();DEST.mkdir()
+    private=[]
+    for p in sorted(EV.rglob('*')):
+        if not p.is_file():continue
+        rel=p.relative_to(EV);q=DEST/rel;q.parent.mkdir(parents=True,exist_ok=True)
+        if p.name.endswith('.final-sme.jsonl.gz'):
+            private.append({'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p),'purpose':'最終SME全控え・値と順の生バイト照合。大容量なので結果枝へ複製しない'})
+        elif p.name.endswith('.rng.jsonl'):
+            with p.open('rb') as src,gzip.open(str(q)+'.gz','wb') as dst:shutil.copyfileobj(src,dst)
+        else:shutil.copyfile(p,q)
+    for p in ROOT.glob('sme_observation_*_20261006.py'):shutil.copyfile(p,DEST/(p.name+'.txt'))
+    src=DEST/'source';src.mkdir()
+    for filename in ('v311c.py','v311c_fingerprint.py','v3_run.py','smeshared.py','sme2017.py','smereplay.py'):
+        shutil.copyfile(source/'tools'/filename,src/(filename+'.txt'))
+    for name in cases:
+        out=Path(json.loads((EV/name/'spec.json').read_text())['output'])
+        for p in out.rglob('*'):
+            if p.is_file():private.append({'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p),'purpose':'未変更のnative出力'})
+    (DEST/'external-files-index.json').write_text(json.dumps(private,ensure_ascii=False,indent=2)+'\n')
+    index=[{'path':str(p.relative_to(DEST)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(DEST.rglob('*')) if p.is_file()]
+    (DEST/'index.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
+    lines=['# 集団化：観測の旗の費用（Codex3）','',
+        '2026-10-06の委任。通信なし4体・世界2・SME＋(a)・直列・集団の種1を、300試行ずつ三条件で完走した。模型のコードと計算の変更は0。三条件の台帳本体・毎試行の全AgentStateと学習乱数・SMEの専用乱数・SME.snapshot対象の最終控えは全バイト一致。研究の成績の良し悪しは判断していない。本番と種21〜40は読まず、走らせていない。',
+        '',(EV/'stage1.md').read_text(),
+        '## 2. 三条件の設定・測定方法','',
+        '全条件はq=0、m=0、受信A、f(agent,t)=0.1,0.1,0.9,0.9、組0,0,1,1、世界の種1,1001,2001,3001。保持A、S1/Gの係数alpha=beta=0、忘却・学習の値段は共に0.01873710622997919。PYTHONHASHSEED=0。CF-valueとprobe-worldなど前回の旗は保った。三条件の差はauditの有無とprobe-everyのみ。probe-shopは三条件とも入り、同じ20問のメタデータを作る。',
+        '', '|条件|毎試行と試験前後のaudit|一致試験|', '|---|---|---|',
+        '|(i) 今の旗|オン|100試行ごと|','|(ii) auditなし|オフ|100試行ごと|',
+        '|(iii) audit・一致試験なし|オフ|probe-every 0|','',
+        '300試行の既定の時間幅は300、名札幅はb_n=8とT=300から計算される。前回600の既定時間幅や1740の名札幅と同じではない。今回三条件同士は同じ。600の先頭300を今回の基準走行として再利用していない。',
+        '',
+        '測定器は模型の外で元の関数を包み、引数・返り値・例外・セマフォの呼び順をそのまま返す。乱数はgetstateで読むだけ。probe全体、前後のlearning_fingerprint、必須の保存と復元、毎試行のstate/SME_rngの指紋をmonotonic時計で測る。trial_auditにはrngのrepr/shaやファイルI/Oなどの僅かな残りを含まないので、残りの区間を模型の計算だけとは呼ばない。通常のSME状態の再生記録は三条件とも残した。',
+        '',
+        'nativeの計算・ファイルを閉じた後、最終SME控えを項目ごとに型と順序を含めて全量保存する。この照合専用の区間は直列のロックを保持したまま行い、開始・終了を別記した。下表の「観測旗を含む実時間」は起動〜終了の実時間からこの四区間の合計を引いた値。RSSは約1秒ごとのプロセス木のpsの同時点合計で、照合保存区間を除く標本の最大。受付器・外側の軽い監視器は予約の余裕へ含める。保存区間を含む受付全体の時間・RSSも併記する。個体別ru_maxrssの最大を足した値を同時点のRSS合計とはしない。',
+        '', f'外部測定器の部品確認：[observer-checks.json]({link("observer-checks.json")})。測定の全記録と外挿式：[analysis.json]({link("analysis.json")})。ソース前後の確認も同じ証拠ディレクトリ。',
+        '', '## 3. 確認値：300試行の時間・RSS','',
+        '|条件|観測旗を含む実時間 分|受付全体 分|照合保存の除外 分|RSS合計最大 GB|保存を含む最大 GB|個体別native最大 MB：0,1,2,3|',
+        '|---|---:|---:|---:|---:|---:|---|']
+    for label,(name,c) in zip(('(i)','(ii)','(iii)'),cases.items()):
+        lines.append(f"|{label}|{minutes(c['measurement_seconds'])}|{minutes(c['resource']['elapsed_seconds'])}|{minutes(c['validation_export_seconds'])}|{gb(c['measurement_rss_peak_bytes'])}|{gb(c['all_job_rss_peak_bytes'])}|{', '.join(f'{v/1e6:.1f}' for v in c['agent_native_peak_bytes'])}|")
+    lines+=['','|条件|試験全体 秒|うち全状態の前後指紋 秒|一致予測＋必須保存復元など 秒|必須保存 秒|必須復元 秒|毎試行の監査指紋 秒|その他 秒|',
+        '|---|---:|---:|---:|---:|---:|---:|---:|']
+    for label,c in zip(('(i)','(ii)','(iii)'),cases.values()):
+        keys=('probe_total_seconds','probe_learning_fingerprint_seconds','agreement_and_mandatory_isolation_seconds','mandatory_snapshot_seconds','mandatory_restore_seconds','trial_audit_seconds','other_seconds')
+        lines.append('|'+label+'|'+'|'.join(f'{c[k]:.3f}' for k in keys)+'|')
+    lines+=['','前後の全状態の指紋の時間にはsmeshared.snapshotのコピーも含む。保存・復元の二列は「一致予測＋必須保存復元など」の内数で、表の列を全部足して全時間にしない。probe内の秒は4個体分を足した値で、直列だが通知・切替の微小な時間を含む実時間の境界とは僅かに異なる。',
+        '', '|条件|100試行まで 分／RSS最大 GB|200試行まで 分／RSS最大 GB|300試行まで 分／RSS最大 GB|100,200,300時点の試験 秒|',
+        '|---|---|---|---|---|']
+    for label,c in zip(('(i)','(ii)','(iii)'),cases.values()):
+        lines.append('|'+label+'|'+'|'.join(f"{minutes(b['elapsed_seconds'])} / {gb(b['rss_peak_bytes'])}" for b in c['blocks'])+'|'+', '.join(f"{b['probe_seconds']:.3f}" for b in c['blocks'])+'|')
+    lines+=['','## 4. 全バイトの照合と記録の違い','',
+        '|比べ|台帳本体4本|毎試行の全状態・学習乱数4本|測りの非時計欄と通常SMEログ|毎試行のSME乱数4本|最終snapshot対象の控え4本|',
+        '|---|---|---|---|---|---|','|(i)–(ii)|全一致|全一致|全一致|全一致|全一致|','|(i)–(iii)|全一致|全一致|全一致|全一致|全一致|',
+        '',
+        'gzipの圧縮ヘッダーではなく展開後の生の行を比較した。台帳はrun_header一行と本体を分け、headerも別に比較し、trial全300行の欄を削らずそのまま比較。SMEの再生記録はpre/prediction/world/received/postの全てを含み、全フィールド・型・辞書と列の順序・予測乱数を保持する。最終のsnapshot対象の控えはENGINEの乱数と設定、cache/self_cache/cache_rng、RESULTS/GRAPHS/CHOICES/STATS/CTXを、項目の順序を保って保存し比較。研究者が選んだ一部の指紋だけの照合ではない。実体のアドレスやOSの状態は模型の状態バイトの対象ではない。Pythonのglobal randomは各独立プロセスの初期値が同じという主張をせず、全個体・全試行で自身の開始値から進まないことを別検査した。模型の学習乱数とSME専用乱数は値の全バイトで照合した。',
+        '',
+        f'全ファイルの照合結果：[compare-ii_noaudit.json]({link("compare-ii_noaudit.json")})、[compare-iii_noobservations.json]({link("compare-iii_noobservations.json")})。通信のprobeとsummaryだけを明示して分け、残りの全事象の生の行も同じ。summaryは各個体のelapsed_sec・finished_at・peak_rss_mbと(iii)のprobe集計およびagents[*].v311c.probes件数以外の全欄を比較した。各個体の台帳はtrial300件全てでf_realizedが割当と一致。配送0、errors空、辞書外は全条件0（正の時だけ出るキーが未出力で、guardと同じget既定0で読む）。world/receivedの監視は各個体600回。辞書外の常時停止検査は外していない。',
+        '',
+        '差がある研究者の記録は、auditなしで生成しないcommの.state.jsonl、(iii)で無くなるkind:probeとsummaryの試験集計、SMEの診断ログ（(iii)には一致試験の照合が入らない）、CF-valueのsec_trial、終了通知.doneのelapsed_sec/finished_at、flag/manifestの観測指定・出力場所・時間・RSS、外部の時計・RSS・保存区間。probe_itemsのメタデータは同じ。(i)と(ii)の診断ログは実際の照合結果で差の有無を掲載し、(iii)の差をモデルの相違に混ぜない。CF-value、probe-worldは保っているので、それらの診断は(iii)にも残る。',
+        '', '## 5. 1740試行の見込み（全て推測）','',
+        '今回は1740試行を走らせていない。各条件の300試行の実時間から試験時間を引き、既存単独A_onの300→1740の累積時間比を掛ける。試験100/200/300の実測はそのまま足し、400〜1700の14回を三点の直線から外挿する。試験0ならこの項は0。最後の試験時間で一定とした別案も並べる。1740は100の倍数でないので終端の試験は無い。RSSは各条件の300試行最大に単独の300→1740比を掛けた値と、100/200/300の最大RSSの直線の大きい方。予約案はそのRSSに20%を足しGBで切り上げる。',
+        '', f"単独の時間比{data['inference_scaling']['single_time1740_over300']:.4f}、メモリ比{data['inference_scaling']['single_memory1740_over300']:.4f}。単独A_onはf=0.5、配置・採点順・時間幅が違い、cf-value/probe-worldが無い。同条件の外挿率ではない。今回300の時間幅・名札幅も1740では変わるため、この見込みは確定値や受付の開始許可にはしない。SMEの別走行の負荷も三条件で完全には固定されていない。",'',
+        '|4体・1740条件|時間：試験直線 時間|時間：最終試験一定 時間|RSS：単独比 GB|RSS：直線 GB|大きい方 GB|予約案 GB|24GBに収まるか|',
+        '|---|---:|---:|---:|---:|---:|---:|---|']
+    for label,c in zip(('(i)','(ii)','(iii)'),cases.values()):
+        x=c['forecast_inference'];lines.append(f"|{label}|{hours(x['time1740_seconds_linear_probe'])}|{hours(x['time1740_seconds_flat_last_probe'])}|{gb(x['rss1740_bytes_single_curve'])}|{gb(x['rss1740_bytes_linear'])}|{gb(x['rss1740_bytes_max_method'])}|{x['reservation_gb']}|{'入るという推測' if x['reservation_gb']<=24 else '入らないという推測'}|")
+    lines+=['','今回の外挿は短い300からで、前回600からの約10時間／約35GBと同じ精度の確認値ではない。600記録から二処理の時間を逆算して新たな確認値にしていない。(iii)の実時間が(ii)より長かったことは確認値として残すが、別の受付走行と負荷が違うため、観測を外すと遅くなるという一般化はしない。通信あり・8体・世界1・他の種、intern・控え破棄の採用後には適用を確認していない。',
+        '', '## 6. 本番での観測の持ち方の案（採用は研究者の判断）','',
+        '- 一致の測りが必要なら、案(ii)：auditを外し、probe-shopとprobe-every 100、試験の必須保存・復元を残す。今回のq=0・4体・300で非干渉を確認した範囲。模型や通信・受信の版を変えた後は、その設定の関門で前後検査と状態照合を通してから判断する。',
+        '- 一致の測りを本番で取らないと決まった場合の案(iii)：auditなし、probe-every 0。今はこの採用を決めていない。probe-shopは問いのメタデータだけ残す現在の指定でよい。',
+        '- 500試行ごとの間引き案：現行入口ではprobe-every 500にすると一致の測りも500間隔になる。auditだけを減らしたい場合は、その前後検査の間隔を独立させる研究者用の入口が将来必要。今回はコード追加・500走行・一致の測りが足りるかの判断をしていない。',
+        '- 関門では全状態の前後監査を維持し、本番で外す場合も辞書外の常時停止検査、f(agent,t)の実値、世界／報告の採点源の分離は保つ。',
+        '', '## 7. 控えの破棄が集団化に効く場所（読むだけ）','',
+        'ユーザー指定のSME報告では、保持A・log Pの1740で控え破棄が全バイト一致に通過。観測なしの単独の確認値はA 527.132秒／350.9MB、log P 480.879秒／349.7MB。今回の集団への実測値ではなく、この削減率を今回の外挿へ掛けていない。今回は未移植。',
+        '',
+        '個体は別プロセスでそれぞれENGINE.cache/self_cache/cache_rngとRESULTSを持つ。呼び出しごとの種の鍵には個体の世界種・試行が入る（smeshared.py:103–111、sme2017.py:230–261）。これらの前試行の控えを次の_agent_input入口で捨てる案は、各個体の常駐と、probe前後の全控え指紋が読む量、保存復元の辞書コピーに効く可能性がある。直列でも待機中の個体の控えは常駐するので、個体全員の控えが対象。GRAPHS、CHOICES、統計、文脈は同じ寿命条件で捨てる対象ではない。',
+        '',
+        '集団では通常更新の後にreceive_oneを処理し、SMEのreceivedの再生記録を書き、固定20問の試験を終えてから次の入力へ進む（v311c.py:672–749）。受信の照合も同じ試行の文脈で作るので、世界処理だけが終わった時点で捨てず、受信と診断も終わった次入力の境目を使う必要がある。試験・CF-value・probe-worldの保存復元が、破棄表とその検査用の墓石を正しく復元するかの関門も必要。単独A/log Pの合格から通信ありの非干渉は自動的には言えない。',
+        '', '## 8. 機械・受付と全引数','',
+        '三条件を順に、jobs.py run --wait --mem 8 --disk-path 実出力先で受付。以前の300区間のRSS最大6.197GBに余裕を置いた。照合は同じ受付の1GBで別に実行した。固定の並列本数ではなく、共有24GBの受付の許可を使い、SMEの受付を変更・停止していない。約1秒の監視で熱／性能の警告、予約超過、空き20GiB未満なら停止する。完走した三条件でその停止は0。',
+        '', '|条件・時点|空きディスク GiB|free GiB|inactive GiB|swap MB|熱・性能|','|---|---:|---:|---:|---:|---|']
+    for label,name in zip(('(i)','(ii)','(iii)'),cases):
+        for phase in ('initial','final'):
+            item=json.loads((EV/name/f'{phase}.json').read_text());page=int(re.search(r'page size of (\d+)',item['memory'])[1])
+            free=int(re.search(r'Pages free:\s+(\d+)',item['memory'])[1])*page/2**30
+            inactive=int(re.search(r'Pages inactive:\s+(\d+)',item['memory'])[1])*page/2**30
+            disk=int(item['disk'].splitlines()[-1].split()[3])*1024/2**30
+            swap=re.search(r'used = ([\d.]+)M',item['swap'])[1]
+            lines.append(f"|{label} {phase} {item['time']}|{disk:.3f}|{free:.3f}|{inactive:.3f}|{swap}|警告なし|")
+    lines+=['',f'受付の記録・初終と毎秒の機械の原記録は [{link("index.json")}]({link("index.json")}) に一覧。native出力と最終控えの大容量の原本はローカルに保持し、[external-files-index.json]({link("external-files-index.json")}) に絶対パス・サイズ・SHA-256を残す。gzipの乱数記録は展開後のバイトを照合した後に公開用の圧縮コピーを作った。',
+        '', '模型の全実引数（各条件ごと）：','']
+    for label,name in zip(('(i)','(ii)','(iii)'),cases):
+        spec=json.loads((EV/name/'spec.json').read_text());launch=json.loads((EV/name/'launch.json').read_text())
+        lines += [f'### {label} {name}','','```text',shlex.join(spec['argv']),'```','',
+            '実際の受付の入口：','','```text',shlex.join(launch),'```','']
+    lines+=['照合の台本は初回、.done四本を台帳に数えて本数の確認で停止した。四本の台帳.jsonl.gzと四本の終了通知を分ける狭い修正をした。次の照合では、CF-valueのsec_trialと通信末尾summaryの時刻/RSSを模型の相違に数えて停止したため、それらの時計欄だけを明示して分けた。模型の台帳本体・状態・乱数・最終控えには相違が無かった。最後の比較では終了集計のagents[*].v311c.probesを模型の欄として扱っていたため、実施回数3／0を検査してから研究者の集計として分けた。台本の修正前と差分（compare-done-fix.diff、compare-clock-fix.diff、compare-probe-count-fix.diff）を保存し、修正後に保存済みの全条件へ当て直した。測定器と模型は変えず、走り直しはしていない。比較台本・時計・監視器・外挿式も証拠へ保存。報告枝は共有results-2026-09-27をfetch/rebaseして通常pushする。衝突は解決しない。本番へは進まない。','']
+    (REPORT/'control'/NAME).write_text('\n'.join(lines))
+    print(REPORT/'control'/NAME)
+if __name__=='__main__':main()

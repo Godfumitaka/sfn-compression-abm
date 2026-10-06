@@ -1,0 +1,93 @@
+"""三条件の外部時計とRSSを集計。1740試行は実行せず条件付きで外挿する。"""
+from pathlib import Path
+import datetime, gzip, json, math
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-observation-20261006'
+OLD=ROOT/'evidence/sme-memory-20261006'
+NAMES=('i_current','ii_noaudit','iii_noobservations')
+def rows(path):
+    handle=gzip.open(path,'rt') if path.suffix=='.gz' else path.open()
+    with handle:return [json.loads(line) for line in handle if line.strip()]
+def regression(points,target):
+    xs,ys=zip(*points);x=sum(xs)/len(xs);y=sum(ys)/len(ys)
+    b=sum((u-x)*(v-y) for u,v in points)/sum((u-x)**2 for u in xs)
+    return max(0,y+b*(target-x))
+def main():
+    cases={}
+    single=json.loads((OLD/'single-blocks.json').read_text())
+    s300=next(r for r in single if r['trials_finished']==300);s1740=single[-1]
+    tf=s1740['cumulative_trial_seconds']/s300['cumulative_trial_seconds']
+    mf=s1740['peak_rss_bytes']/s300['peak_rss_bytes']
+    for name in NAMES:
+        folder=EV/name;resource=json.loads((folder/'resource.json').read_text())
+        assert resource['trials']==300 and resource['exitcode']==0 and not resource.get('errors') and not resource['stop']
+        perf=[rows(folder/f'agent{i}.performance.jsonl') for i in range(4)]
+        assert all(len(r)==300 and [x['trial'] for x in r]==list(range(300)) for r in perf)
+        validation=[]
+        for i in range(4):
+            v=rows(folder/f'agent{i}.validation.jsonl');assert [x['phase'] for x in v]==['begin','end']
+            validation.append(v)
+        vs=sum(v[1]['elapsed_seconds']-v[0]['elapsed_seconds'] for v in validation)
+        intervals=[(v[0]['time'],v[1]['time']) for v in validation]
+        h=rows(folder/'health.jsonl.gz')
+        measurement=[r for r in h if not any(a<=r['time']<=b for a,b in intervals)]
+        rss=max(r['rss_sum_bytes'] for r in measurement)
+        probes=[]
+        for i in range(4):
+            path=folder/f'agent{i}.probe-times.jsonl'
+            probes.extend(rows(path) if path.exists() else [])
+        ps=sum(x['seconds'] for x in probes)
+        fp=sum(x['parts_seconds']['learning_fingerprint'] for x in probes)
+        snap=sum(x['parts_seconds']['snapshot'] for x in probes)
+        restore=sum(x['parts_seconds']['restore'] for x in probes)
+        audit=sum(r[-1]['timer_totals']['trial_audit'] for r in perf)
+        probe_points=[(n,sum(x['seconds'] for x in probes if x['trial']==n-1)) for n in (100,200,300)]
+        elapsed=resource['elapsed_seconds']-vs
+        blocks=[]
+        for n in (100,200,300):
+            ends=[r[n-1] for r in perf];end=max(r['time'] for r in ends)
+            boundary_elapsed=max(r['elapsed_seconds'] for r in ends)
+            prior_export=sum(max(0,min(boundary_elapsed,v[1]['elapsed_seconds'])-v[0]['elapsed_seconds']) for v in validation)
+            blocks.append({'trials':n,'elapsed_seconds':boundary_elapsed-prior_export,
+                'rss_peak_bytes':max(r['rss_sum_bytes'] for r in measurement if r['time']<=end),
+                'agent_peak_bytes':[r['peak_rss_bytes'] for r in ends],
+                'probe_seconds':dict(probe_points)[n]})
+        nonprobe=max(0,elapsed-ps)
+        estimate_time=nonprobe*tf+ps+sum(regression(probe_points,t) for t in range(400,1701,100))
+        estimate_flat=nonprobe*tf+ps+14*probe_points[-1][1]
+        estimate_mem=rss*mf
+        mem_linear=regression([(b['trials'],b['rss_peak_bytes']) for b in blocks],1740)
+        proposed=max(estimate_mem,mem_linear)
+        cases[name]={'resource':resource,'validation_export_seconds':vs,'measurement_seconds':elapsed,
+            'measurement_rss_peak_bytes':rss,'all_job_rss_peak_bytes':resource['rss_sum_peak_bytes'],
+            'agent_native_peak_bytes':[r[-1]['peak_rss_bytes'] for r in perf],
+            'probe_total_seconds':ps,'probe_learning_fingerprint_seconds':fp,
+            'agreement_and_mandatory_isolation_seconds':ps-fp,'mandatory_snapshot_seconds':snap,
+            'mandatory_restore_seconds':restore,'trial_audit_seconds':audit,'other_seconds':elapsed-ps-audit,
+            'blocks':blocks,'forecast_inference':{'time1740_seconds_linear_probe':estimate_time,
+                'time1740_seconds_flat_last_probe':estimate_flat,'rss1740_bytes_single_curve':estimate_mem,
+                'rss1740_bytes_linear':mem_linear,'rss1740_bytes_max_method':proposed,
+                'reservation_gb':math.ceil(proposed*1.2/1e9)}}
+        output=Path(json.loads((folder/'spec.json').read_text())['output'])
+        summary=json.loads((output/'comm/run001.summary.json').read_text())
+        assert not summary['errors'] and summary['sent']==summary['delivered']==0
+        assert len(summary['probe'])==(0 if name=='iii_noobservations' else 3)
+        checks=[]
+        for i,path in enumerate(sorted((output/'ledgers/cells').glob('*/*.jsonl.gz'))):
+            ledger=rows(path);trials=[r for r in ledger if r['record_type']=='trial']
+            assert len(trials)==300 and all(r['f_realized']==[.1,.1,.9,.9][i] for r in trials)
+            checks.append({'file':str(path),'rows':len(trials),'f':[.1,.1,.9,.9][i]})
+        assert len(checks)==4
+        assert all(a['v39'].get('not_in_dictionary',0)==0 and a['v311c']['dictionary_checks']==600 for a in summary['agents'])
+        cases[name]['gate_checks']={'ledgers':checks,'errors':summary['errors'],'delivered':summary['delivered'],
+            'probes':len(summary['probe']),'dictionary_checks':[a['v311c']['dictionary_checks'] for a in summary['agents']],
+            'not_in_dictionary_counter_present':['not_in_dictionary' in a['v39'] for a in summary['agents']]}
+    result={'cases':cases,'inference_scaling':{'single_time1740_over300':tf,'single_memory1740_over300':mf},
+        'limitations':['単独A_onはf・配置・採点順・cf-value/probe-world・時間幅が異なる',
+            '300の既定時間幅と名札幅は1740と違う。三条件同士は同一。',
+            '前回600を今回300の同一模型のprefixと見なさない',
+            'SMEの別の受付走行が並行し、負荷・OSの常駐は同一とは保証しない',
+            '1740の集団化、通信あり、8体、世界1、他の種は未測定']}
+    (EV/'analysis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    for name,c in cases.items():print(name,c['measurement_seconds'],c['measurement_rss_peak_bytes'],c['forecast_inference'])
+if __name__=='__main__':main()

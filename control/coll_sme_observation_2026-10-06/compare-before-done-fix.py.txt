@@ -1,0 +1,68 @@
+"""模型の出力は書き換えず、型・順序を含む保存バイトを流して照合する。"""
+from pathlib import Path
+import gzip, hashlib, itertools, json, sys
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-observation-20261006'
+OUT=ROOT/'outputs/sme-observation-20261006'
+
+def lines(path):
+    handle=gzip.open(path,'rb') if path.suffix=='.gz' else path.open('rb')
+    with handle:
+        yield from handle
+
+def compare(left,right,skip=0):
+    hs=[hashlib.sha256(),hashlib.sha256()]; count=0; mismatch=None
+    for a,b in itertools.zip_longest(itertools.islice(lines(left),skip,None),itertools.islice(lines(right),skip,None)):
+        count+=1
+        if a is not None:hs[0].update(a)
+        if b is not None:hs[1].update(b)
+        if a!=b and mismatch is None:mismatch=count
+    return {'left':str(left),'right':str(right),'lines':count,'skip_header_lines':skip,
+        'equal':mismatch is None,'first_mismatch_line':mismatch,'sha256':[h.hexdigest() for h in hs]}
+
+def main():
+    target=sys.argv[1]; checks=[]; differences=[]
+    # 主ログ・状態・sideを一つも黙って除外しない。診断のみ差を別表にする。
+    native=OUT/'i_current'; other=OUT/target
+    for directory in ('ledgers','side'):
+        a={str(p.relative_to(native)):p for p in (native/directory).rglob('*') if p.is_file()}
+        b={str(p.relative_to(other)):p for p in (other/directory).rglob('*') if p.is_file()}
+        for key in sorted(a.keys()|b.keys()):
+            if key not in a or key not in b:
+                record={'file':key,'left_exists':key in a,'right_exists':key in b,'equal':False}
+            else:record={'file':key,**compare(a[key],b[key],skip=1 if directory=='ledgers' else 0)}
+            (differences if '.sme.diagnostics.' in key else checks).append(record)
+            if directory=='ledgers' and key in a and key in b:
+                ha=next(lines(a[key]));hb=next(lines(b[key]))
+                checks.append({'file':'run_header:'+key,'equal':ha==hb,'sha256':[hashlib.sha256(h).hexdigest() for h in (ha,hb)]})
+    for agent in range(4):
+        for suffix in ('rng.jsonl','final-sme.jsonl.gz'):
+            checks.append({'file':f'agent{agent}.{suffix}',**compare(EV/'i_current'/f'agent{agent}.{suffix}',EV/target/f'agent{agent}.{suffix}')})
+    # audit以外の通信行のうち、probeだけを明示して取り除き、残りは生の行で比較する。
+    def communication(name):
+        for line in lines(OUT/name/'comm/run001.jsonl'):
+            if json.loads(line).get('kind')!='probe':yield line
+    a=list(communication('i_current'));b=list(communication(target))
+    checks.append({'file':'comm excluding kind:probe only','equal':a==b,'lines':[len(a),len(b)],
+        'sha256':[hashlib.sha256(b''.join(x)).hexdigest() for x in (a,b)]})
+    for name in ('i_current',target):
+        for agent in range(4):
+            rng=[json.loads(line) for line in lines(EV/name/f'agent{agent}.rng.jsonl')]
+            if len(rng)!=300 or any(not row['python_global_unchanged'] for row in rng):
+                raise RuntimeError('乱数の研究者の記録が未完走又はglobalの進行あり')
+    ledger=[c for c in checks if c['file'].startswith('ledgers/')]
+    states=[c for c in checks if '.sme.states.' in c['file']]
+    if len(ledger)!=4 or len(states)!=4:raise RuntimeError('台帳又は状態の必要な四本が揃っていない')
+    if any(c['lines']!=300 for c in ledger):raise RuntimeError('台帳の本体が300行でない')
+    if any(c['lines']!=1500 for c in states):raise RuntimeError('pre/prediction/world/received/post全300試行の状態が揃っていない')
+    result={'target':target,'all_model_bytes_equal':all(c['equal'] for c in checks),'checks':checks,
+        'researcher_diagnostic_differences':differences,
+        'ledger_header_policy':'headerも別に全バイト比較する',
+        'explicit_researcher_exceptions':['SME診断ログ（probe予測が増える）',
+        'comm kind:probe（iiiだけ0）','comm .state.jsonl（auditなしでは生成しない）',
+        'summary/manifest/flagの観測設定・試験集計・時間・RSS','外部時計・RSS・最終保存区間']}
+    (EV/f'compare-{target}.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps({'target':target,'checks':len(checks),'all_model_bytes_equal':result['all_model_bytes_equal'],
+        'failed':[c['file'] for c in checks if not c['equal']]},ensure_ascii=False))
+    if not result['all_model_bytes_equal']:raise SystemExit(1)
+if __name__=='__main__':main()

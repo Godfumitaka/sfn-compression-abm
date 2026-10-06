@@ -1,0 +1,64 @@
+--- evidence/sme-observation-20261006/compare-before-clock-fix.py.txt	2026-10-06 12:35:16
++++ sme_observation_compare_20261006.py	2026-10-06 12:35:16
+@@ -20,6 +20,18 @@
+     return {'left':str(left),'right':str(right),'lines':count,'skip_header_lines':skip,
+         'equal':mismatch is None,'first_mismatch_line':mismatch,'sha256':[h.hexdigest() for h in hs]}
+ 
++def compare_fields(left,right,clock_fields):
++    ha=hashlib.sha256();hb=hashlib.sha256();count=0;equal=True
++    for a,b in itertools.zip_longest(lines(left),lines(right)):
++        count+=1
++        if a is None or b is None:equal=False;continue
++        ja,jb=json.loads(a),json.loads(b)
++        if not clock_fields<=ja.keys() or not clock_fields<=jb.keys():raise RuntimeError('明記した時計欄が無い')
++        aa=json.dumps({k:v for k,v in ja.items() if k not in clock_fields},ensure_ascii=False).encode()
++        bb=json.dumps({k:v for k,v in jb.items() if k not in clock_fields},ensure_ascii=False).encode()
++        ha.update(aa);hb.update(bb);equal=equal and aa==bb
++    return {'equal':equal,'lines':count,'explicit_clock_fields':sorted(clock_fields),'retained_bytes_sha256':[ha.hexdigest(),hb.hexdigest()]}
++
+ def main():
+     target=sys.argv[1]; checks=[]; differences=[]; completion=[]
+     # 主ログ・状態・sideを一つも黙って除外しない。診断のみ差を別表にする。
+@@ -30,6 +42,9 @@
+         for key in sorted(a.keys()|b.keys()):
+             if key not in a or key not in b:
+                 record={'file':key,'left_exists':key in a,'right_exists':key in b,'equal':False}
++            elif key.endswith('.cfvalue.jsonl'):
++                record={'file':key,**compare_fields(a[key],b[key],{'sec_trial'})}
++                completion.append({'file':key,**compare(a[key],b[key])})
+             elif key.endswith('.done'):
+                 la=json.loads(a[key].read_text());lb=json.loads(b[key].read_text())
+                 clock_fields={'elapsed_sec','finished_at'}
+@@ -49,10 +64,21 @@
+     # audit以外の通信行のうち、probeだけを明示して取り除き、残りは生の行で比較する。
+     def communication(name):
+         for line in lines(OUT/name/'comm/run001.jsonl'):
+-            if json.loads(line).get('kind')!='probe':yield line
++            if json.loads(line).get('kind') not in ('probe','summary'):yield line
+     a=list(communication('i_current'));b=list(communication(target))
+-    checks.append({'file':'comm excluding kind:probe only','equal':a==b,'lines':[len(a),len(b)],
++    checks.append({'file':'comm events excluding explicit probe/summary rows','equal':a==b,'lines':[len(a),len(b)],
+         'sha256':[hashlib.sha256(b''.join(x)).hexdigest() for x in (a,b)]})
++    def summary_fields(name):
++        value=json.loads((OUT/name/'comm/run001.summary.json').read_text())
++        for agent in value['agents']:
++            for field in ('elapsed_sec','peak_rss_mb','finished_at'):del agent[field]
++        if target=='iii_noobservations':
++            assert len(value['probe'])==(3 if name=='i_current' else 0)
++            del value['probe']
++        return json.dumps(value,ensure_ascii=False).encode()
++    sa,sb=summary_fields('i_current'),summary_fields(target)
++    checks.append({'file':'comm summary retained fields','equal':sa==sb,'explicit_agent_clock_fields':['elapsed_sec','peak_rss_mb','finished_at'],
++        'probe_list_excluded':target=='iii_noobservations','retained_bytes_sha256':[hashlib.sha256(x).hexdigest() for x in (sa,sb)]})
+     for name in ('i_current',target):
+         for agent in range(4):
+             rng=[json.loads(line) for line in lines(EV/name/f'agent{agent}.rng.jsonl')]
+@@ -68,7 +94,7 @@
+         'ledger_header_policy':'headerも別に全バイト比較する',
+         'explicit_researcher_exceptions':['SME診断ログ（probe予測が増える）',
+         'comm kind:probe（iiiだけ0）','comm .state.jsonl（auditなしでは生成しない）',
+-        '.doneのelapsed_sec/finished_at二欄（その他の全欄は比較する）','summary/manifest/flagの観測設定・試験集計・時間・RSS','外部時計・RSS・最終保存区間']}
++        'CF-valueのsec_trial（その他全欄を比較）','.doneのelapsed_sec/finished_at二欄（その他の全欄は比較する）','summary/manifest/flagの観測設定・試験集計・時間・RSS','外部時計・RSS・最終保存区間']}
+     (EV/f'compare-{target}.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+     print(json.dumps({'target':target,'checks':len(checks),'all_model_bytes_equal':result['all_model_bytes_equal'],
+         'failed':[c['file'] for c in checks if not c['equal']]},ensure_ascii=False))

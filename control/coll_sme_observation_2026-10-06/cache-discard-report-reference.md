@@ -1,0 +1,434 @@
+# SMEの控えを捨てる
+
+数と事実だけを記録する。
+
+## receipt：2026-10-06T08:30:37.687669+09:00
+
+委任書を受領。土台は保持Aの374e352とlog Pのca80f61。不変の実体の共有（intern）は、同じ内容の変更されない実体を複数の控えから参照する記録上の共有。全1740試行の一致と観測なしの実測記録を確認。受付表の実行中は0件。既存の処理を停止せず、控えの寿命のコード調査と観測から始める。本番と8体は走らせない。
+
+
+## audit200：2026-10-06T08:39:07.068673+09:00
+
+控えは、計算済みの対応や点を鍵（入力と設定を識別する値）から引く表。成功した `in`・添字・`get` を「参照」とし、保存・復元のための丸写しは別の処理として記録する。MBは10進の百万バイト、GiBは2の30乗バイト。
+
+土台374e352/ca80f61の場所を指す。
+
+|入れ物|鍵|書く所／読む所|書き換え|今回の削除条件と扱い|
+|---|---|---|---|---|
+|Matcher.cache|版・設定・左右の指紋・同点規則・呼び出しの種|sme2017.py:230–249。matchで照合結果を保存、同じ鍵なら238–239で返す|通常は新しい鍵に一度。restore:223–228で表を戻す|呼び出しごとの種の旗が入り、前の試行の全処理が終わった後の項目だけを候補にする|
+|Matcher.self_cache|版・設定・一つの図の指紋・同点規則・呼び出しの種|sme2017.py:252–261。自己照合の一位の点を保存・参照|同じ。点はfloat|同上|
+|Matcher.cache_rng|cacheと同じ鍵|sme2017.py:249で種と規則、smeshared.py:187で読み、照合記録に書く|同じ|cacheと同じ時点で扱う。片方だけを残さない|
+|RESULTS|ENGINE.match_keyと同じ鍵|smeshared.py:181–184で再利用、227で保存|通常は新規だけ。restore:382–386で戻す|同上。利用側の対応と監査欄を含む|
+|GRAPHS|図の指紋だけ|smeshared.py:190で代入、239・253・285・300で選びのために読む|同じ図の鍵へ何度も代入する|試行をまたぐ参照を200試行で確認。今回捨てない|
+|CHOICES|選びの種類・規則・種・候補の名札/登録時点など|smeshared.py:241–246、261–276、287–299、307–324|新しい抽選の鍵に一度。復元あり|今回の主な二入れ物の外。残す|
+|STATS・CTX|集計名・文脈名|smeshared.py:180・182・228、104–105・410、restore:386|累積値・現在の試行を書き換える|控えの項目の寿命ではないので残す|
+|正準形の控え|typed Graph|smeshared.py:92–96のlru_cache(maxsize=4096)|LRUの入れ替え|純粋な関数だが今回の対象外。残す|
+|internのPOOL|版・設定・左右の指紋|smeintern.py。完全一致の不変の実体だけを共有する上限512件の表|LRUの入れ替え|今回の土台の共有をそのまま残す|
+
+呼び出しの種の材料（smeshared.py:103–111）は走行の種・現在の試行・二図の匿名の正準形・本番の呼び出しの種類。loop.py:76–80は試行順に入力を作り、smeshared.py:410はその直前に現在の試行を設定する。同じ試行内の予測・更新・診断・採点・保存が終わり、次の試行の入力に入る境目を削除の場所にする。最終試行の項目は残す。前の試行へ戻る実行、呼び出しごとの種を持たない鍵はこの案の対象にしない。将来の鍵との一致が無いことは、全走行の参照観測と、捨てた完全な鍵を後で引いたら停止する墓石の検査でも確かめる。
+
+同じ入力・設定・局所の種でMatcherを再計算すると、同じ候補・点・選択となり、ENGINEの連続乱数は進まない（sme2017.py:240–246）。self_cacheはその同じ結果の点、cache_rngは種と規則だけ。しかしRESULTSの再計算はSTATSのcomputed/reused、sme_use/sme_resultの記録が変わる。したがって任意の上限やLRUによる追い出しは行わず、「次に引かれない」条件を通った項目だけを対象にする。
+
+Cはcflearn.py:87–91とcfvalue.py:81・150–152で、同じ試行内の答え直しの前後にprobeworldの保存・復元を使う。shared.snapshot/restore（smeshared.py:378–386）も含まれるため、診断の途中で捨てない。Dはuseforget.py:94–97で採用された対応を使う。同じ試行内の診断では使用を積まず、_agent_inputで本物の試行を設定する（104–108）。
+
+保持Aとlog Pの200試行の観測は、台帳本体・全side・保存状態・乱数・保存した全控えが元のinternの記録と一致。四つの対象で試行をまたぐ成功した参照は0。1740試行のAとlog Pの観測を受付表で実行中。CとDのintern自体の200試行も受付表で順に検査中。デスクトップの旗は既存の本番計画に --sme-call-seed と --sme-tie-uniform を足したものと、結果枝の案内・命令で突き合わせた。Aとの条件の差はCの --cf-learn とDの --use-forget 0.4 のみ。
+
+
+## CD_intern200：2026-10-06T08:43:58.131959+09:00
+
+CとDは、デスクトップの本番命令の旗を保ち、試行数だけ200、機械と出力先は自分のマックへ替えて検査した。新たな模型の旗の差はinternだけ。台帳本体・全side・保存状態・照合の全記録・全控え・同点用乱数が、両方とも200試行全件で一致。
+
+|条件|internなし 実時間秒/最大常駐MB|internあり 実時間秒/最大常駐MB|不一致の記録数|
+|---|---:|---:|---:|
+|C|88.555/457.7|92.576/393.6|0|
+|D|30.152/227.9|32.146/206.1|0|
+
+受付はAとlog Pの全長の寿命の観測と並行。時間の値はこの負荷での確認値であり、internの速度倍率には換算しない。
+
+
+## progress_20261006_091407：2026-10-06T09:14:08.395235+09:00
+
+受付済みの処理の記録。控えの軽量化を優先し、本番と8体の新しい走行は0。
+
+{
+  "at": "2026-10-06T09:14:07.597207+09:00",
+  "cases": [
+    {
+      "folder": "observe_full_01/A",
+      "last_recorded_trial": 1427,
+      "run_complete": false,
+      "comparison_passed": null
+    },
+    {
+      "folder": "observe_full_01/L",
+      "last_recorded_trial": 1520,
+      "run_complete": false,
+      "comparison_passed": null
+    },
+    {
+      "folder": "evict200_01/A_evict",
+      "last_recorded_trial": null,
+      "run_complete": false,
+      "comparison_passed": null
+    },
+    {
+      "folder": "evict200_01/A_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_evict",
+      "last_recorded_trial": null,
+      "run_complete": false,
+      "comparison_passed": null
+    },
+    {
+      "folder": "evict200_01/L_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    }
+  ]
+}
+
+
+## stage1：2026-10-06T09:34:32.956839+09:00
+
+保持Aとlog Pの全1740試行の寿命の観測が、元のinternの台帳本体・全side・保存状態・照合の記録・全控え・同点用乱数と全バイト一致。
+
+表のMBは指定した非対象（記憶・最終試行・GRAPHS・CHOICES・internのPOOL）を先に数え、残りの控えを順にsys.getsizeofで重複を除いた量。控えから到達するPython実体の量であり、RSSがそのまま減る量ではない。辞書の容量・観測の表・他の参照元は別。
+
+|条件|表|最終件数|前の試行の対象件数|対象MB|最終参照から100試行以上 件/MB|500試行以上 件/MB|一度も参照されない 件|試行をまたぐ参照 件|
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+|A|cache|148091|148000|3181.449|31905/500.834|24356/377.041|114107|0|
+|A|self_cache|33984|33963|6.555|31905/6.158|24356/4.701|0|0|
+|A|cache_rng|148091|148000|27.232|107170/19.719|81723/15.037|33984|0|
+|A|results|114107|114037|1761.041|12613/259.047|9476/191.902|100628|0|
+|L|cache|124783|124728|2243.694|26957/336.376|21065/248.807|96626|0|
+|L|self_cache|28157|28145|5.432|26957/5.203|21065/4.066|0|0|
+|L|cache_rng|124783|124728|22.950|92326/16.988|71850/13.220|28157|0|
+|L|results|96626|96583|1304.634|9985/169.793|8099/130.680|86224|0|
+
+最後の参照が無い項目は100/500試行の列へ推測で入れず、別列にした。試行番号は台帳の0始まり（終盤1739＝第1740試行）。対象が四表にあるので段2へ進む。捨てる場所は次の入力へ入る境目で、最終試行の項目と呼び出しの種の無い鍵は残す。C/Dのintern自体の200試行の一致は別の節に記録済み。
+
+完全な鍵ごとの最後の参照の試行・作成の試行・読み書きの回数は、自分の出力先のlast_reads.jsonl.gzに全件を残した。パス・大きさ・sha256は段1の証拠のper_key_traceに記録。大きな保存状態は結果枝へ写していない。
+
+
+## evict200：2026-10-06T09:37:16.077530+09:00
+
+保持A・log P・C・Dの200試行で、nativeの台帳本体・全side・保存状態・乱数は全バイト一致。保存した控えと毎試行の控えの印は、基準から捨てた完全な鍵だけを除くと全バイト一致。墓石の検査は4条件とも0件。旗を切った新しい枝も、Aとlog Pで200試行全バイト一致。
+
+
+## progress_20261006_100727：2026-10-06T10:07:28.146457+09:00
+
+受付済みの処理の記録。控えの軽量化を優先し、本番と8体の新しい走行は0。
+
+{
+  "at": "2026-10-06T10:07:27.576839+09:00",
+  "cases": [
+    {
+      "folder": "observe_full_01/A",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "observe_full_01/L",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/C_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/D_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/A_evict",
+      "last_recorded_trial": null,
+      "run_complete": false,
+      "comparison_passed": null
+    }
+  ]
+}
+
+
+## progress_20261006_103732：2026-10-06T10:37:32.953990+09:00
+
+受付済みの処理の記録。控えの軽量化を優先し、本番と8体の新しい走行は0。
+
+{
+  "at": "2026-10-06T10:37:32.032680+09:00",
+  "cases": [
+    {
+      "folder": "observe_full_01/A",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "observe_full_01/L",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/C_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/D_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/A_evict",
+      "last_recorded_trial": null,
+      "run_complete": false,
+      "comparison_passed": null
+    }
+  ]
+}
+
+
+## progress_20261006_110736：2026-10-06T11:07:37.218550+09:00
+
+受付済みの処理の記録。控えの軽量化を優先し、本番と8体の新しい走行は0。
+
+{
+  "at": "2026-10-06T11:07:36.389620+09:00",
+  "cases": [
+    {
+      "folder": "observe_full_01/A",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "observe_full_01/L",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/C_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/D_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/A_evict",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/L_evict",
+      "last_recorded_trial": 1395,
+      "run_complete": false,
+      "comparison_passed": null
+    }
+  ]
+}
+
+
+## evict_full：2026-10-06T11:09:32.728664+09:00
+
+保持Aとlog Pの全1740試行で、nativeの台帳本体・全side・保存状態・乱数は全バイト一致。控えは捨てた完全な鍵だけを除いた基準と一致。両方の墓石の検査は0件。観測なしの実測へ進む。
+
+
+## benchmark：2026-10-06T11:26:27.759562+09:00
+
+cProfile・毎試行の追加観測・最後の控えの追加保存・墓石の集合を外して、捨てた鍵の記録だけを残し、一条件ずつ一本を計測。nativeは全長の関門と再び全バイト一致。
+
+|条件|internのみ 実時間秒/最大常駐MB（以前の確認値）|控え削除 実時間秒|模型の秒|最大常駐MB|処理群の15秒観測 最大MB|19GiB・16コアの本数上限|160本の仮の時間|8個体の単純な和 GiB|
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|A|3258.706/5455.3|527.132|524.42|350.9|379.585|16|1.464|2.828|
+|L|2192.819/3993.4|480.879|478.81|349.7|391.479|16|1.336|2.917|
+
+確認値は同じマックの一本の実時間と常駐。以前の値は別時刻の計測なので、負荷が同じと仮定した速度倍率を確認値にはしない。デスクトップは23GiBから4GiBを残し19GiBを使う、本数上限はmin(16,floor(19GiB/一本の処理群の最大常駐))。160本がそれぞれこの条件・種1と同じ重さ、デスクトップの一本の速度もマックと同じ、多重実行の速度低下が無いという仮定で時間を算出。C/D・世界1・λ=0などの混合160本の実測ではない。集団化は各個体の試行文脈で同じ寿命条件が成り立つ場合、その個体の控えにも効く。8個体の和は一体の値の8倍だけで、通信・受信の控えは未測定。8体は走らせていない。本番への採用はアストラが決める。
+
+
+## progress_20261006_115641：2026-10-06T11:56:42.309782+09:00
+
+受付済みの処理の記録。控えの軽量化を優先し、本番と8体の新しい走行は0。
+
+{
+  "at": "2026-10-06T11:56:41.494467+09:00",
+  "cases": [
+    {
+      "folder": "observe_full_01/A",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "observe_full_01/L",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/A_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/C_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/D_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_evict",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict200_01/L_off",
+      "last_recorded_trial": 199,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/A_evict",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "evict_full_01/L_evict",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "vanilla_01/A",
+      "last_recorded_trial": null,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "vanilla_01/L",
+      "last_recorded_trial": null,
+      "run_complete": true,
+      "comparison_passed": true
+    },
+    {
+      "folder": "CD_full_01/C_evict",
+      "last_recorded_trial": 1409,
+      "run_complete": false,
+      "comparison_passed": null
+    },
+    {
+      "folder": "CD_full_01/C_intern",
+      "last_recorded_trial": 1739,
+      "run_complete": true,
+      "comparison_passed": null
+    }
+  ]
+}
+

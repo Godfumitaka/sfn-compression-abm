@@ -1,0 +1,36 @@
+# 受付表（2026-10-06T11:49:02）  見込みの合計 8.5 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+97625	SME控え C/D追加全長 C intern	8.5	2026-10-06T11:26:34	3.61 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+   PID 58601（親 52419）	13 MB	Python codex_sme_evict_2026-10-06/progress_01.py
+   PID 60354（親 52419）	14 MB	Python codex_sme_evict_2026-10-06/CD_full_01.py
+   PID 60896（親 52419）	12 MB	Python codex_sme_evict_2026-10-06/finalize_01.py
+   PID 82595（親 52419）	16 MB	Python codex_sme_time_2026-10-06/workflow_01.py
+   PID 84006（親 52419）	16 MB	Python codex_sme_time_2026-10-06/progress_01.py
+   PID 97541（親 1）	10 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+ R PID 97625（親 60354）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME控え C/D追加全長 C intern --mem 8.5 --disk-path /Users/
+ R PID 97629（親 97625）	18 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/run_case_01.py /Users/tatsu
+ R PID 97632（親 97629）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/observe_memory_02.py /Use
+ R PID 97635（親 97632）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 97636（親 97632）	3617 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 98683（親 52419）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status --disk-path outputs/sme-observation-20261006
+
+# 空きメモリ
+空きの割合（memory_pressure）：83%
+free：0.4 GB
+inactive：13.0 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/sme-observation-20261006（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs）の空き 323.934 GiB、下限 20 GiB
+
+# スワップ：今 188.0 MB。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
+

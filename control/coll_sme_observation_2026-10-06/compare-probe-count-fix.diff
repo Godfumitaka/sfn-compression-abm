@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -75,6 +75,9 @@
+         if target=='iii_noobservations':
+             assert len(value['probe'])==(3 if name=='i_current' else 0)
+             del value['probe']
++            for agent in value['agents']:
++                assert agent['v311c']['probes']==(3 if name=='i_current' else 0)
++                del agent['v311c']['probes']
+         return json.dumps(value,ensure_ascii=False).encode()
+     sa,sb=summary_fields('i_current'),summary_fields(target)
+     checks.append({'file':'comm summary retained fields','equal':sa==sb,'explicit_agent_clock_fields':['elapsed_sec','peak_rss_mb','finished_at'],

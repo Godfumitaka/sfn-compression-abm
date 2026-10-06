@@ -1,0 +1,123 @@
+{
+  "previous_analysis_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-memory-20261006/analysis.json",
+  "sha256": "060cf2fe8f7be825efd249bf6b575e50f5ac68c73297adce8d300ddab78cd925",
+  "probe_and_audit600_seconds": 3104.38611379097,
+  "last100": {
+    "trials_finished": 600,
+    "before_probe": {
+      "phase": "before_probe",
+      "trial": 599,
+      "time": "2026-10-06T10:34:04.075217+09:00",
+      "elapsed_seconds": 3580.703279334004,
+      "rss_sum_bytes": 7923023872,
+      "agent_rss_bytes": {
+        "3": 1952858112,
+        "2": 1903542272,
+        "0": 1981366272,
+        "1": 2045280256
+      },
+      "coordinator_rss_bytes": 37928960
+    },
+    "after_probe": {
+      "phase": "after_probe",
+      "trial": 599,
+      "time": "2026-10-06T10:50:43.880455+09:00",
+      "elapsed_seconds": 4580.486272834009,
+      "rss_sum_bytes": 8865120256,
+      "agent_rss_bytes": {
+        "3": 3242508288,
+        "2": 1904033792,
+        "0": 1766408192,
+        "1": 1912193024
+      },
+      "coordinator_rss_bytes": 37928960
+    },
+    "block_elapsed_seconds": 1344.0659238339867,
+    "probe_elapsed_seconds": 999.7829935000045,
+    "cumulative_rss_sum_peak_bytes": 11747983360,
+    "agent_peak_rss_before_probe": [
+      4840325120,
+      5064409088,
+      4774182912,
+      4758798336
+    ],
+    "agent_peak_rss_after_probe": [
+      5483610112,
+      5807374336,
+      5666455552,
+      5598396416
+    ],
+    "agent_active_seconds_after_probe": [
+      1087.2609459477244,
+      1231.7819478763267,
+      1134.7381813600077,
+      1126.1266347573255
+    ],
+    "agent_cache_counts_after_probe": [
+      {
+        "matches": 47163,
+        "cache_rng": 47163,
+        "self": 10747,
+        "results": 36416,
+        "graphs": 2544,
+        "choices": 1197
+      },
+      {
+        "matches": 52415,
+        "cache_rng": 52415,
+        "self": 12060,
+        "results": 40355,
+        "graphs": 2580,
+        "choices": 1197
+      },
+      {
+        "matches": 54171,
+        "cache_rng": 54171,
+        "self": 12499,
+        "results": 41672,
+        "graphs": 2862,
+        "choices": 1197
+      },
+      {
+        "matches": 52175,
+        "cache_rng": 52175,
+        "self": 12000,
+        "results": 40175,
+        "graphs": 2878,
+        "choices": 1197
+      }
+    ]
+  },
+  "single_conditions": [
+    "4体と8体ではf・世界種の組合せが違う。",
+    "600と200は既定の時間幅も違う。",
+    "単独A_onは配置・採点の順・時間幅・観測が異なる。",
+    "1740試行・通信あり・intern採用後の集団は今回未測定。",
+    "RSSはOSの常駐量でありPythonの保持領域の総量ではない。"
+  ],
+  "eight200": {
+    "name": "gate2_q0_200",
+    "start": "2026-10-05T18:46:05.521380+09:00",
+    "finished": "2026-10-05T19:54:54.423625+09:00",
+    "elapsed_seconds": 4128.869163458003,
+    "exitcode": 0,
+    "rss_sum_peak_bytes": 4698734592,
+    "rss_sample_interval_seconds": 1,
+    "samples": 3813,
+    "allocation_gb": 5.6,
+    "stop": null,
+    "output_bytes": 519828936,
+    "trials": 200,
+    "errors": [],
+    "agent_peak_rss_mb": [
+      1436.1,
+      1335.0,
+      1462.3,
+      1393.8,
+      1151.2,
+      1193.6,
+      1155.3,
+      1267.0
+    ]
+  }
+}

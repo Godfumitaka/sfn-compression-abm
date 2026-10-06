@@ -1,0 +1,43 @@
+# 受付表（2026-10-06T12:14:24）  見込みの合計 16.5 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+98965	Codex3 集団化観測費用 i 4体300	8.0	2026-10-06T11:53:39	3.33 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-
+8393	SME25 時間の全内訳 A種1	8.5	2026-10-06T12:10:57	0.34 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_2026-
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+   PID 1225（親 52419）	9 MB	Python sme_observation_workflow_20261006.py
+ R PID 8393（親 82595）	12 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME25 時間の全内訳 A種1 --mem 8.5 --disk-path /Users/tatsu-
+ R PID 8397（親 8393）	15 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_2026-10-06/run_case_01.py /Users/tatsu-
+ R PID 8400（親 8397）	13 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_2026-10-06/observe_01.py /Users/tatsu-a
+ R PID 8409（親 8400）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 8410（親 8400）	303 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 9866（親 52419）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status --disk-path outputs/sme-observation-20261006
+   PID 82595（親 52419）	12 MB	Python codex_sme_time_2026-10-06/workflow_01.py
+   PID 84006（親 52419）	12 MB	Python codex_sme_time_2026-10-06/progress_01.py
+   PID 97541（親 1）	9 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+ R PID 98965（親 52419）	10 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3 集団化観測費用 i 4体300 --mem 8 --disk-path /Users/ta
+ R PID 98970（親 98965）	15 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_registered_2026
+ R PID 98979（親 98977）	13 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+ R PID 98986（親 98979）	6 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+*R PID 98987（親 98986）	1446 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+*R PID 98988（親 98986）	1306 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+*R PID 98989（親 98986）	599 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+ R PID 98990（親 98986）	16 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_observation_observe_2026100
+
+# 空きメモリ
+空きの割合（memory_pressure）：80%
+free：7.2 GB
+inactive：9.0 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/sme-observation-20261006（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/sme-observation-20261006）の空き 321.669 GiB、下限 20 GiB
+
+# スワップ：今 188.0 MB。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
+

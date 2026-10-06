@@ -1,0 +1,21 @@
+"""時計欄を区別する修正後のIIの合格を読み、未実行のIIIだけ受付に出す。"""
+from pathlib import Path
+import datetime,json,subprocess
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-observation-20261006'
+OUT=ROOT/'outputs/sme-observation-20261006'
+PY='/opt/homebrew/opt/python@3.12/bin/python3.12'
+JOBS='/Users/tatsu-admin/jobs/jobs.py'
+assert json.loads((EV/'compare-ii_noaudit.json').read_text())['all_model_bytes_equal']
+name='iii_noobservations'
+(EV/name/'receipt-before.txt').write_text(subprocess.check_output([PY,JOBS,'status','--disk-path',str(OUT)],text=True))
+command=[PY,JOBS,'run','--wait','--owner','Codex3 集団化観測費用 iii 4体300','--mem','8','--disk-path',str(OUT),
+    '--',PY,str(ROOT/'sme_observation_registered_20261006.py'),str(EV/name/'spec.json')]
+(EV/name/'launch.json').write_text(json.dumps(command,ensure_ascii=False,indent=2)+'\n')
+with (EV/name/'receipt-run.txt').open('w') as f:subprocess.run(command,stdout=f,stderr=subprocess.STDOUT,cwd=ROOT,check=True)
+command=[PY,JOBS,'run','--wait','--owner','Codex3 観測費用 iii 全バイト比較','--mem','1','--disk-path',str(OUT),
+    '--',PY,str(ROOT/'sme_observation_compare_20261006.py'),name]
+with (EV/name/'comparison-receipt.txt').open('w') as f:subprocess.run(command,stdout=f,stderr=subprocess.STDOUT,cwd=ROOT,check=True)
+(EV/'workflow-complete.json').write_text(json.dumps({'finished':datetime.datetime.now().astimezone().isoformat(),
+    'three_runs':True,'comparisons':True,'initial_controller_failure':'台本の.done/時計欄の区別を修正し保存済みIIへ再適用した'})+'\n')
+print('三条件の完走と全バイト照合が完了',flush=True)
