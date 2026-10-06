@@ -77,6 +77,9 @@ def test_shared_child_all_paths_once_and_renaming_invariance():
     renamed = RelationGraph('renamed', entities=(Entity('x'),), relations=(
         Relation('d', 'changed', ('x',)), Relation('q1', 'changed1', ('d',)), Relation('q2', 'changed2', ('d',))))
     assert up.index_graph(renamed)['keys']['d'] == ix['keys']['c']
+    from dataclasses import replace
+    shortened = replace(g, relations=g.relations[:2])
+    assert not up.retained_paths(ix['keys']['c'], up.index_graph(shortened)['keys']['c'])
 
 
 def test_missing_ancestor_falls_back_and_added_ancestor_has_new_key():
