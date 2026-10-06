@@ -67,6 +67,17 @@ def test_symmetric_roots_fallback_but_all_observations_count():
     assert len(audit['observations']) == 2
 
 
+def test_scene_symmetry_fallback_even_when_definition_has_one_root():
+    configure()
+    g = scene(Relation('a', 'n', ('e',)), Relation('b', 'e_name', ('e',)))
+    d = definition(scene(g.relations[0]))
+    key, _ = up.slot_key(d, d.constituents[0])
+    p = FrequencyTable({'n': 8, 'e_name': 2}, 10, .1, frozenset(('n', 'e_name')))
+    state = SimpleNamespace(position_counts={key: {'n': 1, 'e_name': 3}})
+    b, _, why = up.base_distribution(d, d.constituents[0], g, p, frozenset(), state=state)
+    assert why == 'ambiguous_key_scene' and up.maximum(b) == ('n', False)
+
+
 def test_shared_child_all_paths_once_and_renaming_invariance():
     g = scene(Relation('c', 'n', ('e',)), Relation('r1', 'p', ('c',)), Relation('r2', 'p', ('c',)))
     ix = up.index_graph(g)
@@ -135,6 +146,7 @@ g,d=ns['toy']();row=d.constituents[0];key,_=up.slot_key(d,row)
 from abm.definition import FrequencyTable
 from types import SimpleNamespace
 v310be.CFG['score_logp']=True
+v39._init_rec=v310be.init_rec  # 実ドライバのv310-be取り付けと同じ入口。
 up.install(sys.argv[1])
 s=v39._state_class()();assert smereplay.decode(smereplay.encode(s))==s
 s=__import__('dataclasses').replace(s,p_hat=FrequencyTable({'sig_n':8,'sig_e':2},10,.1,frozenset(('sig_n','sig_e'))),position_counts={key:{'sig_n':1,'sig_e':3}},definitions={d.name:d},slot_history={(d.name,row.slot_index):{'sig_n':9,'sig_e':1}})
@@ -153,6 +165,18 @@ filled=v39.fill_v39(d,hidden_scene,{'e':'e'},{'root':'root','other':'other'}, {}
 assert filled.relations[0].predicate=='sig_e'
 assert rng.getstate()==before
 assert v39.total_bits(s,v39.code_lengths(s.p_hat))>=up.table_bits(s.position_counts)+up.witness_bits(d)
+# 誕生の実関数でもUの費用が位置既定から出る。log P側は開示前の表を使う。
+v39.CFG.update(init='two',decay=(.5,)*16);v39.CTX['births_rec']=[]
+v310be.CFG['score_arg_order']=False
+if hasattr(v310be,'EPSILON'):
+    v310be.CTX['score_state']=s
+    changed=replace(s,position_counts={key:{'sig_n':3,'sig_e':1}})
+    rec=v39._init_rec(d,row,changed,g,g,1,1,c)
+    assert math.isclose(rec.init[2][0],3.) and math.isclose(rec.init[1][0],1.5*-math.log2(.525))
+else:
+    v310be.CFG['score_logp']=False
+    rec=v39._init_rec(d,row,s,g,g,1,1,c)
+    assert rec.init[2][0]==1.5 and rec.init[1][0]==0.
 up.close()
 '''
     subprocess.run([sys.executable, '-c', code, str(tmp_path / 'audit.gz')], check=True,
