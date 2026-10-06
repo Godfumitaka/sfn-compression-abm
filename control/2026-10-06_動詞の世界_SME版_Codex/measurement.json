@@ -1,0 +1,127 @@
+{
+  "supervised_total_wall_seconds_measured": 9562.361136249965,
+  "worker_seconds_through5000_measured": 9557.713696416991,
+  "time_l_reported_real_seconds_rejected": 1427.2,
+  "time_l_real_seconds_used": false,
+  "user_seconds_time_l": 8604.84,
+  "system_seconds_time_l": 17.71,
+  "worker_peak_rss_MB": 637.7,
+  "command_max_process_rss_bytes_time_l": 637730816,
+  "supervised_wall_seconds": 9562.361136249965,
+  "own_paused_seconds": 899.5378770828247,
+  "wall_minus_own_pause_seconds_derived": 8662.82325916714,
+  "output_bytes": 2103897011,
+  "output_GiB": 1.9594067810103297,
+  "checkpoints": [
+    {
+      "completed_trials": 1000,
+      "epoch_seconds": 1791260503.4774,
+      "elapsed_seconds": 1925.5017605830217,
+      "interval_seconds": 1925.5017605830217,
+      "cumulative_max_rss_bytes": 519192576,
+      "user_cpu_seconds": 1446.197013,
+      "system_cpu_seconds": 4.040939,
+      "own_pause_seconds_through_checkpoint": 463.97053694725037,
+      "elapsed_minus_own_pause_seconds": 1461.5312236357713,
+      "cumulative_max_rss_MB": 519.192576
+    },
+    {
+      "completed_trials": 2000,
+      "epoch_seconds": 1791262574.973158,
+      "elapsed_seconds": 3996.9793015420437,
+      "interval_seconds": 2071.477540959022,
+      "cumulative_max_rss_bytes": 519192576,
+      "user_cpu_seconds": 3073.431046,
+      "system_cpu_seconds": 7.009815,
+      "own_pause_seconds_through_checkpoint": 899.5378770828247,
+      "elapsed_minus_own_pause_seconds": 3097.441424459219,
+      "cumulative_max_rss_MB": 519.192576
+    },
+    {
+      "completed_trials": 3000,
+      "epoch_seconds": 1791264534.181612,
+      "elapsed_seconds": 5956.179161750013,
+      "interval_seconds": 1959.1998602079693,
+      "cumulative_max_rss_bytes": 637730816,
+      "user_cpu_seconds": 5020.419973,
+      "system_cpu_seconds": 11.05305,
+      "own_pause_seconds_through_checkpoint": 899.5378770828247,
+      "elapsed_minus_own_pause_seconds": 5056.641284667188,
+      "cumulative_max_rss_MB": 637.730816
+    },
+    {
+      "completed_trials": 4000,
+      "epoch_seconds": 1791266260.004432,
+      "elapsed_seconds": 7681.990266458015,
+      "interval_seconds": 1725.811104708002,
+      "cumulative_max_rss_bytes": 637730816,
+      "user_cpu_seconds": 6735.522039,
+      "system_cpu_seconds": 14.22748,
+      "own_pause_seconds_through_checkpoint": 899.5378770828247,
+      "elapsed_minus_own_pause_seconds": 6782.45238937519,
+      "cumulative_max_rss_MB": 637.730816
+    },
+    {
+      "completed_trials": 5000,
+      "epoch_seconds": 1791268135.740779,
+      "elapsed_seconds": 9557.713696416991,
+      "interval_seconds": 1875.7234299589763,
+      "cumulative_max_rss_bytes": 637730816,
+      "user_cpu_seconds": 8601.758882,
+      "system_cpu_seconds": 17.617952,
+      "own_pause_seconds_through_checkpoint": 899.5378770828247,
+      "elapsed_minus_own_pause_seconds": 8658.175819334167,
+      "cumulative_max_rss_MB": 637.730816
+    }
+  ],
+  "forecast120_A_only_assumption": [
+    {
+      "scenario": "全120本が今回のAの自分の一時停止を差し引いた秒と同じ。追加の受付待機なしという仮定",
+      "parallel": 1,
+      "runs": 120,
+      "A_seconds_wall_measured": 9562.361136249965,
+      "A_seconds_minus_own_pause_derived": 8662.82325916714,
+      "total_hours_estimated": 288.76077530557137,
+      "hours_if_same_pause_and_wall_time_repeats_estimated": 318.7453712083322,
+      "output_GiB_estimated": 235.12881372123957,
+      "C_D_verb_world_measured": false,
+      "other_seeds_measured": false
+    },
+    {
+      "scenario": "全120本が今回のAの自分の一時停止を差し引いた秒と同じ。追加の受付待機なしという仮定",
+      "parallel": 2,
+      "runs": 120,
+      "A_seconds_wall_measured": 9562.361136249965,
+      "A_seconds_minus_own_pause_derived": 8662.82325916714,
+      "total_hours_estimated": 144.38038765278569,
+      "hours_if_same_pause_and_wall_time_repeats_estimated": 159.3726856041661,
+      "output_GiB_estimated": 235.12881372123957,
+      "C_D_verb_world_measured": false,
+      "other_seeds_measured": false
+    },
+    {
+      "scenario": "全120本が今回のAの自分の一時停止を差し引いた秒と同じ。追加の受付待機なしという仮定",
+      "parallel": 4,
+      "runs": 120,
+      "A_seconds_wall_measured": 9562.361136249965,
+      "A_seconds_minus_own_pause_derived": 8662.82325916714,
+      "total_hours_estimated": 72.19019382639284,
+      "hours_if_same_pause_and_wall_time_repeats_estimated": 79.68634280208305,
+      "output_GiB_estimated": 235.12881372123957,
+      "C_D_verb_world_measured": false,
+      "other_seeds_measured": false
+    },
+    {
+      "scenario": "全120本が今回のAの自分の一時停止を差し引いた秒と同じ。追加の受付待機なしという仮定",
+      "parallel": 8,
+      "runs": 120,
+      "A_seconds_wall_measured": 9562.361136249965,
+      "A_seconds_minus_own_pause_derived": 8662.82325916714,
+      "total_hours_estimated": 36.09509691319642,
+      "hours_if_same_pause_and_wall_time_repeats_estimated": 39.84317140104152,
+      "output_GiB_estimated": 235.12881372123957,
+      "C_D_verb_world_measured": false,
+      "other_seeds_measured": false
+    }
+  ]
+}

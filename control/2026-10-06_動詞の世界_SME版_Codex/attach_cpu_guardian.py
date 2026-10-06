@@ -79,7 +79,7 @@ original=(folder/'resources.jsonl').read_text()
 (folder/'resources_original_supervisor.jsonl').write_text(original)
 oldrows=[json.loads(x) for x in original.splitlines()]
 newrows=[json.loads(x) for x in (folder/'resources_guardian.jsonl').read_text().splitlines()]
-merged=[r for r in oldrows if r['epoch_seconds']<=attached]+newrows
+merged=[r for r in oldrows if r.get('epoch_seconds',r.get('finished_epoch',float('inf')))<=attached]+newrows
 start=None;paused_seconds=0
 for row in merged:
     if row['event']=='paused':

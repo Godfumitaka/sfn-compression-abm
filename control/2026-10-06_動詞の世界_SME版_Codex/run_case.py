@@ -51,10 +51,12 @@ for repo, expected in spec.get('sources', {}).items():
 with (folder / 'resources.jsonl').open('x') as samples:
     def record(event, row):
         samples.write(json.dumps({'event': event, 'cpu_limit': limit, **row})+'\n'); samples.flush()
-    # 模型の親が100MBを超えても一つのworkerと合わせて二枠に収める。
+    # 模型の親とworkerは二枠、単一プロセスの読み手は明示した一枠に収める。
+    start_slots=int(spec.get('cpu_start_slots',2))
+    assert 1 <= start_slots <= limit
     while True:
         row = observe()
-        if row['outside_heavy'] + 2 <= limit and row['free_disk_bytes'] >= 20*2**30 and not row['thermal_warning']:
+        if row['outside_heavy'] + start_slots <= limit and row['free_disk_bytes'] >= 20*2**30 and not row['thermal_warning']:
             break
         record('wait_before_start', row)
         time.sleep(10)
