@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-06T20:55:39.960865+09:00",
+  "command": [
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_v310ans_2026-09-30/verify-env/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_attnstage2.py",
+    "tests/test_attnstage2_connection.py",
+    "tests/test_attnstage2_runtime.py",
+    "tests/test_attnsme.py",
+    "tools/test_sme_logp.py"
+  ],
+  "exit_code": 1,
+  "seconds": 5.007533374999184,
+  "stdout": "...............F.....................                                    [100%]\n=================================== FAILURES ===================================\n_______ test_delta_uses_native_freed_bits_and_V_without_new_memory_cost ________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10a683cb0>\n\n    def test_delta_uses_native_freed_bits_and_V_without_new_memory_cost(monkeypatch):\n        import v310be as B\n        monkeypatch.setattr(B,'STATS',{'zero_release':0,'retire_candidate_evals':0})\n        monkeypatch.setattr(B,'CTX',{})\n        state,config,obs,ai=build()\n        lengths=v39.code_lengths(state.p_hat)\n>       before_bits=v39.total_bits(state,lengths)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/test_attnstage2_connection.py:105: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ntools/v39.py:165: in total_bits\n    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))\n      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntools/v39.py:165: in <genexpr>\n    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nd = NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relation_id='anch...rice(ell_frozen=3, c=0, hold_cost=0, m_alloc_at_reg=4), alive=True)), m_alloc=4, registered_at=0, assimilation_count=1)\nslot_history = {('R', 0): {'fold': 1}, ('R', 1): {'sig_n': 1}, ('R', 2): {'hold': 1}, ('R', 3): {'attach': 1}}\nL = {'fold': 2, 'sig_n': 2, 'hold': 2, 'attach': 2}\n\n    def definition_bits(d, slot_history, L) -> int:\n        key = (d.name, d.registered_at, tuple((r.slot_index, r.registered_at) for r in d.constituents))\n>       sb = CTX[\"struct_cache\"].get(key)\n             ^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'struct_cache'\n\ntools/v39.py:156: KeyError\n=========================== short test summary info ============================\nFAILED tests/test_attnstage2_connection.py::test_delta_uses_native_freed_bits_and_V_without_new_memory_cost\n1 failed, 36 passed in 4.78s\n",
+  "stderr": ""
+}

@@ -1,0 +1,39 @@
+...............F.....................                                    [100%]
+=================================== FAILURES ===================================
+_______ test_delta_uses_native_freed_bits_and_V_without_new_memory_cost ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10a683cb0>
+
+    def test_delta_uses_native_freed_bits_and_V_without_new_memory_cost(monkeypatch):
+        import v310be as B
+        monkeypatch.setattr(B,'STATS',{'zero_release':0,'retire_candidate_evals':0})
+        monkeypatch.setattr(B,'CTX',{})
+        state,config,obs,ai=build()
+        lengths=v39.code_lengths(state.p_hat)
+>       before_bits=v39.total_bits(state,lengths)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_attnstage2_connection.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/v39.py:165: in total_bits
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/v39.py:165: in <genexpr>
+    + sum(definition_bits(d, state.slot_history, L) for d in state.definitions.values()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+d = NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relation_id='anch...rice(ell_frozen=3, c=0, hold_cost=0, m_alloc_at_reg=4), alive=True)), m_alloc=4, registered_at=0, assimilation_count=1)
+slot_history = {('R', 0): {'fold': 1}, ('R', 1): {'sig_n': 1}, ('R', 2): {'hold': 1}, ('R', 3): {'attach': 1}}
+L = {'fold': 2, 'sig_n': 2, 'hold': 2, 'attach': 2}
+
+    def definition_bits(d, slot_history, L) -> int:
+        key = (d.name, d.registered_at, tuple((r.slot_index, r.registered_at) for r in d.constituents))
+>       sb = CTX["struct_cache"].get(key)
+             ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'struct_cache'
+
+tools/v39.py:156: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_attnstage2_connection.py::test_delta_uses_native_freed_bits_and_V_without_new_memory_cost
+1 failed, 36 passed in 4.78s
