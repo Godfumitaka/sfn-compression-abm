@@ -1,0 +1,2838 @@
+diff --git a/config/sweep_verb_hide1_s1_2026-10-04.json b/config/sweep_verb_hide1_s1_2026-10-04.json
+new file mode 100644
+index 0000000..30cbe89
+--- /dev/null
++++ b/config/sweep_verb_hide1_s1_2026-10-04.json
+@@ -0,0 +1,51 @@
++{
++ "agent_ids": [
++  "agent"
++ ],
++ "axes": {
++  "f": [
++   0.5
++  ],
++  "fill_selection": [
++   "sample",
++   "most_frequent"
++  ],
++  "repair_scope": [
++   "first_order"
++  ],
++  "theta_prime": [
++   2.1,
++   2.3
++  ]
++ },
++ "fixed": {
++  "abstain_charge": false,
++  "alpha": 0.0,
++  "beta": 0.0,
++  "correction_mode": "none",
++  "holdout_include_second_order": false,
++  "identification_graph": "live",
++  "kappa": 1.0,
++  "lambda_mix": 0.1,
++  "local_lambda": 1.0,
++  "nsim_threshold": 0.95,
++  "pricing_rule": "spec",
++  "refill_rule": "one_per_slot",
++  "self_score_cache": "off",
++  "tau_acc": 0.67,
++  "threshold": 0.0,
++  "w": 0.0
++ },
++ "name": "verb_hide1_s1",
++ "output": {
++  "dir": "../runs/verb",
++  "snapshot_every": 1,
++  "snapshot_mode": "delta"
++ },
++ "seed_file": "tools/verb/U-011_seed_verb.json",
++ "seeds": {
++  "count": 20,
++  "start": 1
++ },
++ "trial_count": 5000
++}
+diff --git a/tests/test_verb_analysis.py b/tests/test_verb_analysis.py
+new file mode 100644
+index 0000000..9d8bb35
+--- /dev/null
++++ b/tests/test_verb_analysis.py
+@@ -0,0 +1,38 @@
++"""研究者側の分母・欠測・時間順序を検査する。模型の誤答方向は検査しない。"""
++from pathlib import Path
++import sys
++
++sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools/verb"))
++from analyze import count_answer, rates, recovery_step
++from collections import Counter
++
++
++def test_denominators_include_only_correct_and_reg():
++    c = Counter()
++    for answer in ("IRR_2", "REG", None, "IRR_3", "REG"):
++        count_answer(c, answer, "IRR_2")
++    r = rates(c)
++    assert r["queries"] == 5
++    assert r["marcus_denominator"] == 3
++    assert r["marcus_rate"] == 2 / 3
++    assert r["REG_all_queries_rate"] == 2 / 5
++
++
++def test_no_observation_is_missing_not_zero():
++    assert rates(Counter())["marcus_rate"] is None
++    assert rates(Counter(abstain=3, queries=3))["marcus_rate"] is None
++
++
++def test_recovery_is_ordered_and_nonoverlapping():
++    state = {}
++    stream = [(0, "REG"), (1, "correct"), (2, "correct"), (3, "other"),
++              (4, "REG"), (5, "REG"), (6, "other"), (7, "correct"), (8, "correct")]
++    events = [e for t, label in stream if (e := recovery_step(state, t, label)) is not None]
++    assert events == [[2, 4, 7]]
++
++
++def test_response_counts_partition_queries():
++    c = Counter()
++    for answer in (None, "REG", "IRR_1", "IRR_7", "push"):
++        count_answer(c, answer, "IRR_1")
++    assert sum(c[k] for k in ("correct", "REG", "abstain", "other")) == c["queries"]
+diff --git a/tests/test_verbworld.py b/tests/test_verbworld.py
+new file mode 100644
+index 0000000..a5733bf
+--- /dev/null
++++ b/tests/test_verbworld.py
+@@ -0,0 +1,190 @@
++"""動詞の世界の構造の検査。模型の誤答方向は合格条件にしない。"""
++import json
++import sys
++from dataclasses import replace
++from math import isclose
++from pathlib import Path
++
++import pytest
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++import verbworld as vw  # noqa: E402
++import probeworld as pw  # noqa: E402
++from abm.seed import load_seed  # noqa: E402
++import abm.world as world  # noqa: E402
++
++
++def base(t=0):
++    return world.generate_trial(1, t, ("agent",), seed=load_seed(ROOT / "tools/verb/U-011_seed_verb.json"))
++
++
++def test_distribution_and_novel_exclusion():
++    items = vw.training_items()
++    assert len(items) == 40
++    assert [v.name for v in items] == list(vw.NAMES[:40])
++    assert isclose(sum(v.probability for v in items if v.verb_class == "irregular"), .70)
++    assert isclose(sum(v.probability for v in items if v.verb_class == "regular"), .30)
++    for t in range(300):
++        assert vw.draw_verb(1, t, items).name not in vw.NOVEL_NAMES
++        assert vw.draw_verb(1, t, items) == vw.draw_verb(1, t, items)
++
++
++@pytest.mark.parametrize("verb", [vw.training_items()[0], vw.training_items()[32], vw.Verb("V41", "novel", "REG", 0)])
++def test_name_link_past_and_other_relations(verb):
++    tr = base()
++    out, info = vw.build(tr, 1, 0, verb=verb)
++    old = {r.relation_id: r for r in tr.G_star.relations}
++    new = {r.relation_id: r for r in out.G_star.relations}
++    assert len(new) == len(old) + 2
++    assert new[info["past_id"]].predicate == verb.past
++    assert new[info["past_id"]].arguments == old[info["past_id"]].arguments
++    assert new[info["name_id"]].predicate == verb.name
++    assert new[info["name_id"]].arguments == (world.opaque_id(1, 0, "entity:a"),)
++    assert new[info["link_id"]].predicate == "attach"
++    assert new[info["link_id"]].arguments == (info["name_id"], info["root_id"])
++    assert out.G_star.relations[-2:] == (new[info["name_id"]], new[info["link_id"]])
++    assert not {"sig_n", "sig_e"} & {r.predicate for r in out.G_star.relations}
++    assert all(new[rid] == row for rid, row in old.items() if rid != info["past_id"])
++    assert out.held_out_edge.relation_id == tr.held_out_edge.relation_id
++    assert out.u_coins == tr.u_coins
++    assert info["name_id"] in {r.relation_id for r in out.target_graph_partial.relations}
++    assert info["link_id"] in {r.relation_id for r in out.target_graph_partial.relations}
++    assert out.held_out_edge.relation_id not in (info["name_id"], info["link_id"])
++
++
++def test_past_holdout_changes_truth_only():
++    tr = base()
++    rid = world.opaque_id(1, 0, "relation:tree:0.0.0")
++    held = next(r for r in tr.G_star.relations if r.relation_id == rid)
++    tr = replace(tr, held_out_edge=held, target_graph_partial=pw._partial(tr.G_star, rid))
++    out, info = vw.build(tr, 1, 0, verb=vw.training_items()[39])
++    assert out.held_out_edge.predicate == "IRR_8"
++    assert info["held_out_is_past"] is True
++    assert rid not in {r.relation_id for r in out.target_graph_partial.relations}
++
++
++@pytest.mark.parametrize("p", [None, 0.0, 0.25, 0.5, 1.0])
++def test_past_probability_reuses_shop_choice_before_name(monkeypatch, p):
++    import shopworld
++    monkeypatch.setattr(vw, "CFG", {"items": vw.training_items(), "door_p": p})
++    monkeypatch.setattr(vw, "INFO", {})
++    monkeypatch.setattr(vw, "IDS", {})
++    monkeypatch.setattr(vw, "STATS", {})
++    monkeypatch.setattr(shopworld, "STATS", {})
++    sd = load_seed(ROOT / "tools/verb/U-011_seed_verb.json")
++    for t in range(40):
++        tr = base(t)
++        expected = tr if p is None else shopworld.rehide(tr, 1, t, p)
++        expected, info = vw.build(expected, 1, t, verb=vw.draw_verb(1, t))
++        actual = vw.verb_trial(world.generate_trial, 1, t, ("agent",), seed=sd)
++        assert actual == expected
++        assert actual.u_coins == tr.u_coins
++        assert info["name_id"] in {r.relation_id for r in actual.target_graph_partial.relations}
++        assert info["link_id"] in {r.relation_id for r in actual.target_graph_partial.relations}
++        if p in (0.0, 1.0):
++            assert info["held_out_is_past"] == bool(p)
++
++
++def test_dictionary_keeps_existing_indices(monkeypatch):
++    import v39
++    monkeypatch.setattr(v39, "CFG", {"dict_index": {"hold": 0, "push": 1, "attach": 2}, "D": 3})
++    vw.extend_dictionary()
++    assert {p: v39.CFG["dict_index"][p] for p in ("hold", "push", "attach")} == {"hold": 0, "push": 1, "attach": 2}
++    assert set(vw.NEW_PREDICATES) <= set(v39.CFG["dict_index"])
++    assert v39.CFG["D"] == len(v39.CFG["dict_index"])
++
++
++def test_probe_inputs_are_past_blind_and_novel(monkeypatch):
++    sd = load_seed(ROOT / "tools/verb/U-011_seed_verb.json")
++    monkeypatch.setattr(vw, "CFG", {"items": vw.training_items()})
++    monkeypatch.setattr(vw, "CTX", {"orig_gen": world.generate_trial})
++    monkeypatch.setattr(pw, "SNAP_MODULES", pw.SNAP_MODULES)
++    monkeypatch.setattr(pw, "SNAP_ATTRS", pw.SNAP_ATTRS)
++    st = {"sd": sd, "probes": []}
++    vw.add_probes(st, run_seed=1, agent_ids=("agent",), holdout_second=False)
++    assert len(st["probes"]) == 48
++    novel = [q for q in st["probes"] if q["extra"]["verb_class"] == "novel"]
++    assert tuple(q["verb_name"] for q in novel) == vw.NOVEL_NAMES
++    assert all(q["truth"] is None and not q["score_truth"] for q in novel)
++    for q in st["probes"]:
++        assert q["hid"] not in {r.relation_id for r in q["partial"].relations}
++        assert q["verb_name"] in {r.predicate for r in q["partial"].relations}
++        assert not ({"REG", *(f"IRR_{k}" for k in range(1, 9))} & {r.predicate for r in q["partial"].relations})
++
++
++def test_schuler_does_not_guess_counts(tmp_path):
++    with pytest.raises(ValueError, match="未確定"):
++        vw.training_items("schuler54")
++    p = tmp_path / "bad.json"
++    p.write_text(json.dumps({"source": "49回の不一致の表", "schuler54": [16, 8, 5, 4, 4, 3, 3, 3, 3]}))
++    with pytest.raises(ValueError, match="REG 比"):
++        vw.training_items("schuler54", p)
++
++
++def test_seen_is_verb_specific_and_requires_disclosure(monkeypatch):
++    tr = base()
++    out, info = vw.build(tr, 1, 0, verb=vw.training_items()[32])
++    monkeypatch.setattr(vw, "INFO", {out.G_star.graph_id: {**info, "held_out_is_past": True}})
++    st = {"trials": {0: out}, "disclosed": {}}
++    assert vw.seen(st, 1, "V33")[0] == {}
++    st["disclosed"][0] = True
++    assert vw.seen(st, 1, "V33")[0] == {"IRR_1": 1}
++    assert vw.seen(st, 1, "V41")[0] == {}
++    assert vw.seen(st, 1, None)[0] == {"IRR_1": 1}
++
++
++def test_probe_setup_restores_researcher_world_registry(monkeypatch, tmp_path):
++    import abm.loop as loop
++    import abm.ledger as ledger
++    import abm.seed as seedmod
++    import sweep
++    for module, name in ((world, "generate_trial"), (loop, "_ledger_record"), (loop, "_update_accounting"),
++                         (loop, "apply_theta"), (ledger.Ledger, "append"), (seedmod, "higher_order_predicates"),
++                         (sweep, "higher_order_predicates")):
++        monkeypatch.setattr(module, name, getattr(module, name))
++    for name in ("INFO", "IDS", "CTX", "CFG", "STATS"):
++        monkeypatch.setattr(vw, name, {})
++    monkeypatch.setattr(pw, "ST", {})
++    monkeypatch.setattr(pw, "SNAP_MODULES", pw.SNAP_MODULES)
++    monkeypatch.setattr(pw, "SNAP_ATTRS", pw.SNAP_ATTRS)
++    vw.install()
++    vw.prepare_probe_snapshot(pw)
++    pw.install(tmp_path / "probe.jsonl", run_seed=1, agent_ids=("agent",),
++               seed_file=ROOT / "tools/verb/U-011_seed_verb.json", horizon=5000, holdout_second=False)
++    assert vw.STATS == {} and vw.INFO == {} and vw.IDS == {}
++    tr = world.generate_trial(1, 0, ("agent",), seed=load_seed(ROOT / "tools/verb/U-011_seed_verb.json"))
++    assert vw.STATS["trials"] == 1
++    assert vw.INFO[tr.G_star.graph_id]["verb_name"] in vw.NAMES[:40]
++    pw.close()
++
++
++def test_native_probe_keeps_state_and_global_statistics(monkeypatch):
++    """学習なしの既存予測器を呼び、問い48個の前後で状態と部品の控えを比べる。"""
++    import io
++    import abm.agent_runtime as ar
++    import v39
++    from abm.domains import AgentConfig, AgentState, CorrectionMode, Prototype, VerbatimTrace
++    sd = load_seed(ROOT / "tools/verb/U-011_seed_verb.json")
++    tr, info = vw.build(base(), 1, 0, verb=vw.training_items()[0])
++    monkeypatch.setattr(vw, "INFO", {tr.G_star.graph_id: info})
++    monkeypatch.setattr(vw, "CFG", {"items": vw.training_items()})
++    monkeypatch.setattr(vw, "CTX", {"orig_gen": world.generate_trial})
++    monkeypatch.setattr(pw, "SNAP_MODULES", pw.SNAP_MODULES)
++    monkeypatch.setattr(pw, "SNAP_ATTRS", pw.SNAP_ATTRS)
++    monkeypatch.setattr(v39, "CFG", {"D": len(vw.NEW_PREDICATES)})
++    st = dict(sd=sd, probes=[], f=io.StringIO(), run_seed=1, trials={0: tr}, disclosed={0: True},
++              predict=ar.predict, checks=0, rows=0)
++    monkeypatch.setattr(pw, "ST", st)
++    vw.add_probes(st, run_seed=1, agent_ids=("agent",), holdout_second=False)
++    state = AgentState(prototype=Prototype((VerbatimTrace(0, tr.target_graph_partial),)))
++    config = AgentConfig(0.0, CorrectionMode.NONE, higher_order_predicates=frozenset())
++    before = pw._fingerprint(state)
++    saved = dict(v39.STATS)
++    pw._probe(state, config, 100)
++    assert pw._fingerprint(state) == before
++    assert dict(v39.STATS) == saved
++    assert st["checks"] == 1 and st["rows"] == 48
++    records = [json.loads(line) for line in st["f"].getvalue().splitlines()]
++    assert len(records) == 48
++    assert all(r["exp_path_n"] == 0 for r in records if r["verb_class"] == "novel")
+diff --git a/tools/probeworld.py b/tools/probeworld.py
+index a333eb8..13f0744 100644
+--- a/tools/probeworld.py
++++ b/tools/probeworld.py
+@@ -210,8 +210,9 @@ def _probe(state, config, t):
+             else:
+                 sts = dict(zip(v39.CTX.get("fill_ids", ()), v39.CTX.get("fill_states", ())))
+                 src = f"{sts.get(rid, '?')}_fill"
+-            rec.update(answer=e.predicate, args=list(e.arguments), source=src, oracle=int((e.predicate, tuple(e.arguments)) in q["facts"]),
+-                       answer_is_truth=int(e.predicate == q["truth"]))
++            rec.update(answer=e.predicate, args=list(e.arguments), source=src,
++                       oracle=int((e.predicate, tuple(e.arguments)) in q["facts"]) if q.get("score_truth", True) else None,
++                       answer_is_truth=int(e.predicate == q["truth"]) if q.get("score_truth", True) else None)
+         else:
+             rec.update(answer=None, abstain=getattr(pred, "reason", None))
+         res = got.get("res")
+@@ -235,16 +236,25 @@ def _probe(state, config, t):
+             rec.update(R=f"{d.name}@{d.registered_at}", R_used=out.trace.get("R_used") is not None,
+                        sel_vis=tri[0], sel_hid=tri[1], sel_none=tri[2], sel_vis_match=tri[3])
+         # 経験：同じ型・同じ経路
+-        names, last = _seen(t, lambda tau, tr: [(paths_of(tau)[1][q["path"]][0], paths_of(tau)[1][q["path"]][2])]
+-                            if paths_of(tau)[0] == q["motif"] and q["path"] in paths_of(tau)[1] else [])
++        if "verb_name" in q:
++            import verbworld
++            names, last = verbworld.seen(ST, t, q["verb_name"])
++        else:
++            names, last = _seen(t, lambda tau, tr: [(paths_of(tau)[1][q["path"]][0], paths_of(tau)[1][q["path"]][2])]
++                                if paths_of(tau)[0] == q["motif"] and q["path"] in paths_of(tau)[1] else [])
+         rec.update(exp_path_n=sum(names.values()), exp_path_names=dict(names), exp_path_last=last)
+         rkey = tuple(tuple(x) for x in q["role"])
+-        names, last = _seen(t, lambda tau, tr: paths_of(tau)[2].get(rkey, []))
++        if "verb_name" in q:
++            names, last = verbworld.seen(ST, t, None)
++        else:
++            names, last = _seen(t, lambda tau, tr: paths_of(tau)[2].get(rkey, []))
+         rec.update(exp_role_n=sum(names.values()), exp_role_names=dict(names), exp_role_last=last)
+         # 逐語の記憶
+         vb = Counter()
+         for tr_ in state.prototype.traces:
+             tau = tr_.written_at
++            if "verb_name" in q and verbworld.INFO.get(tr_.scene.graph_id, {}).get("verb_name") != q["verb_name"]:
++                continue
+             m, info, _roles = paths_of(tau)
+             if m != q["motif"] or q["path"] not in info:
+                 continue
+diff --git a/tools/shopworld.py b/tools/shopworld.py
+index 609e542..b3e0af4 100644
+--- a/tools/shopworld.py
++++ b/tools/shopworld.py
+@@ -36,6 +36,39 @@ STATS: dict = {}
+ CTX: dict = {}
+ 
+ 
++def door_rng(run_seed, trial_index) -> Random:
++    """--shop-door-p の乱数（場面のほかの乱数と別の流れ）。"""
++    return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fshopdoor".encode("utf-8")).digest(), "big"))
++
++
++def rehide(tr, run_seed, trial_index, p):
++    """--shop-door-p p（2026-10-02 朝の委任書「C の格子」の段 1）：伏せ辺を選び直す。確率 p でドアを伏せ、それ以外は
++    ドア以外の伏せる候補から一様に一本。乱数は door_rng（一回目 random() でドアか、ドアでなければ choice で一本）。
++    伏せる候補（元の生成器 abm/world.py generate_trial の holdout_candidates と同じ集合・同じ並び）＝元の場面の一階の関係（引数がすべて物）
++      のうち役割ユナリーを除いたもの：骨組みの一階・つなぎ（mediator）・周縁・のり（glue）。シールと link は元の生成のあとに足すので入らない。
++      ★ 設定 hide1（二階を伏せない）を前提にする（二階を伏せる設定では使えない。install で止める）。
++    並びは元の場面の関係の並び。見えている関係と見える物の作り方は abm/world.py と同じ。"""
++    import abm.world as w
++    from abm.domains import RelationGraph
++    door_id = w.opaque_id(run_seed, trial_index, f"relation:tree:{DOOR_PATH}")
++    ents = {e.entity_id for e in tr.G_star.entities}
++    unary = w.opaque_id(run_seed, trial_index, "relation:role_unary")      # 役割ユナリーは元の生成器でも候補にしない（abm/world.py の B-5）
++    cands = [r.relation_id for r in tr.G_star.relations if r.relation_id != unary and all(a in ents for a in r.arguments)]
++    if door_id not in cands or tr.held_out_edge.relation_id not in cands:
++        raise ValueError("--shop-door-p：ドアか元の伏せ辺が一階の候補に無い")
++    rng = door_rng(run_seed, trial_index)
++    held_id = door_id if rng.random() < p else rng.choice([c for c in cands if c != door_id])
++    relations = tr.G_star.relations
++    held = next(r for r in relations if r.relation_id == held_id)
++    visible = tuple(r for r in relations if r.relation_id != held_id)
++    ids = frozenset(r.relation_id for r in visible)
++    reach = frozenset(a for r in visible for a in r.arguments if a not in ids and a in ents)
++    partial = RelationGraph(graph_id=tr.G_star.graph_id, entities=tuple(e for e in tr.G_star.entities if e.entity_id in reach),
++                            relations=visible)
++    _bump("door_p_door", int(held_id == door_id))
++    return replace(tr, target_graph_partial=partial, held_out_edge=held)
++
++
+ def cue_rng(run_seed, trial_index) -> Random:
+     return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fshopcue".encode("utf-8")).digest(), "big"))
+ 
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 5851a87..1a745b2 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -511,12 +511,21 @@ def worker(task: dict) -> dict:
+         if task.get("shop_scatter"):
+             import shopscatter
+             shopscatter.install()
++    if task.get("verb_world"):
++        if not (task.get("v39") and task.get("v310_be")):
++            raise ValueError("--verb-world は --v39 --v310-be と一緒に使う")
++        import verbworld
++        verbworld.install(variant=task.get("verb_variant", "default"),
++                          frequency_file=task.get("verb_frequencies"), door_p=task.get("shop_door_p"))
++        verbworld.extend_dictionary()
+     if task.get("probe_world"):
+         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
+         if not task.get("v39"):
+             raise ValueError("--probe-world は --v39 と一緒に使う")
+         sys.path.insert(0, str(ROOT / "tools"))
+         import probeworld
++        if task.get("verb_world"):
++            verbworld.prepare_probe_snapshot(probeworld)
+         probeworld.install(side_dir / f"seed{task['seed']:03d}.probe.jsonl", run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
+                            seed_file=str(ROOT / task["cfg"]["seed_file"]), horizon=int(task["cfg"]["trial_count"]),
+                            holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
+@@ -524,6 +533,9 @@ def worker(task: dict) -> dict:
+             # ★ お店の世界の試験（対になった試験・共有部分の試験）を足す：tools/shopworld.py add_probes
+             shopworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
+                                  holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
++        if task.get("verb_world"):
++            verbworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
++                                 holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
+     if task.get("cf_value"):
+         # ★ 反実仮想の保持価値の診断（--cf-value、記録だけ。2026-10-01 午前の返事の段 5）：tools/cfvalue.py。試験の旗のあと、答えごとの記録より前
+         if not (task.get("v39") and task.get("v310_be")):
+@@ -561,6 +573,9 @@ def worker(task: dict) -> dict:
+     if task.get("sme2017"):
+         import smereplay
+         smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
++    if task.get("verb_timing"):
++        import verbtiming
++        verbtiming.install(out_root / "timing" / f"seed{task['seed']:03d}.jsonl")
+     try:
+         rec = sweep.run_one(task)
+     except Exception as e:  # noqa
+@@ -602,6 +617,10 @@ def worker(task: dict) -> dict:
+         sys.modules["routelog"].close()
+     if task.get("probe_world"):
+         rec["probeworld"] = sys.modules["probeworld"].close()
++    if task.get("verb_world"):
++        rec["verbworld"] = dict(sys.modules["verbworld"].STATS)
++    if task.get("verb_timing"):
++        rec["verbtiming"] = sys.modules["verbtiming"].close()
+     if task.get("shop_world"):
+         rec["shopworld"] = sys.modules["shopworld"].close()
+     if task.get("strict_pc"):
+@@ -777,6 +796,11 @@ def main() -> None:
+     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
++    ap.add_argument("--verb-world", action="store_true", help="動詞の世界（世界・課題と研究者の記録だけ）")
++    ap.add_argument("--verb-variant", choices=("default", "schuler54", "schuler36"), default="default")
++    ap.add_argument("--verb-frequencies", default=None, help="出典確認済みのSchulerの項目別出現数")
++    ap.add_argument("--verb-timing", action="store_true", help="動詞の走行の1000試行ごとの時間と最大常駐を別記録へ書く")
++    ap.add_argument("--shop-door-p", type=float, default=None, help="動詞の過去形を問う確率（元のお店と同じ別乱数・hide1）")
+     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
+     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
+@@ -816,6 +840,25 @@ def main() -> None:
+     if args.trial_count is not None:
+         cfg2["trial_count"] = args.trial_count
+         args.no_compare = True
++    if args.verb_world:
++        if args.shop_world is not None or args.world_cue or args.shop_keep_cue or args.shop_scatter:
++            raise SystemExit("--verb-world は他の世界の旗と同時に使わない")
++        if not (args.v39 and args.v310_be) or cfg2["fixed"].get("holdout_include_second_order"):
++            raise SystemExit("--verb-world は --v39 --v310-be とhide1の設定で使う")
++        if args.seeds and any(int(n) not in range(1, 21) for n in args.seeds.split(",")):
++            raise SystemExit("動詞の世界の種は1〜20だけ")
++        import verbworld
++        verbworld.training_items(args.verb_variant, args.verb_frequencies)
++        if args.shop_door_p is not None and not 0 <= args.shop_door_p <= 1:
++            raise SystemExit("--shop-door-p は0〜1")
++        cfg2["seed_file"] = "tools/verb/U-011_seed_verb.json"
++        cfg2["trial_count"] = args.trial_count if args.trial_count is not None else (args.horizon or 5000)
++        if cfg2["trial_count"] <= 0 or (args.horizon is not None and args.horizon != cfg2["trial_count"]):
++            raise SystemExit("動詞の世界の正の試行数とhorizonを一致させる")
++        args.horizon = cfg2["trial_count"]
++        args.no_compare = True
++    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None:
++        raise SystemExit("動詞の追加の旗は --verb-world と一緒に使う")
+     if args.nsim is not None:
+         cfg2["fixed"]["nsim_threshold"] = args.nsim
+     if args.vt is not None:
+@@ -846,7 +889,7 @@ def main() -> None:
+         raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
+     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
+         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
+-    seed = sweep.load_seed(cfg["seed_file"])
++    seed = sweep.load_seed(cfg2["seed_file"] if args.verb_world else cfg["seed_file"])
+     if args.horizon is not None and not args.v39:
+         raise SystemExit("--horizon は --v39 と一緒に使う（時間の幅を差し替える先が v39 の時間の設定のため）")
+     commit = sweep.code_commit()
+@@ -855,7 +898,7 @@ def main() -> None:
+                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
+                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
+                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
+-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
++               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.verb_world and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
+                and args.horizon is None and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
+     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
+     if args.compare_to is not None:
+@@ -882,6 +925,15 @@ def main() -> None:
+               "shop_world": args.shop_world, "shop_exc": args.shop_exc, "shop_keep_cue": args.shop_keep_cue, "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn, "compare": do_compare,
+               **({"horizon": args.horizon} if args.horizon is not None else {})} for r in runs]
+     out_root.mkdir(parents=True, exist_ok=True)
++    if args.verb_world:
++        for task in tasks:
++            if task["seed"] not in range(1, 21):
++                raise SystemExit("動詞の世界の種は1〜20だけ")
++            task.update(verb_world=True, verb_variant=args.verb_variant, verb_frequencies=args.verb_frequencies)
++            if args.verb_timing:
++                task["verb_timing"] = True
++            if args.shop_door_p is not None:
++                task["shop_door_p"] = args.shop_door_p
+     if args.score_arg_order:
+         if not (args.v310_be and args.hist_role and args.score_role):
+             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
+@@ -924,6 +976,11 @@ def main() -> None:
+         if args.shop_scatter:
+             task["shop_scatter"] = True
+     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
++                                                    **({"verb_world": True, "verb_variant": args.verb_variant,
++                                                        "verb_frequencies": args.verb_frequencies,
++                                                        "effective_seed_file": cfg2["seed_file"]} if args.verb_world else {}),
++                                                    **({"verb_timing": True} if args.verb_timing else {}),
++                                                    **({"shop_door_p": args.shop_door_p} if args.shop_door_p is not None else {}),
+                                                     **({"sme2017": True} if args.sme2017 else {}),
+                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
+                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
+diff --git a/tools/verb/U-011_seed_verb.json b/tools/verb/U-011_seed_verb.json
+new file mode 100644
+index 0000000..64d5f28
+--- /dev/null
++++ b/tools/verb/U-011_seed_verb.json
+@@ -0,0 +1,1149 @@
++{
++ "version": "U-011_seed_v3a2+shop（M1・M2 だけ）+verb（M1 だけ）",
++ "generated": "2026-09-13",
++ "assumptions": {
++  "reading": "alpha (p̂ = 場面生成の設計値)",
++  "pool": "global",
++  "Z": 19.10743,
++  "Z_composition": "一階8 + 二階4 + 三階2 + 四階1 + 周縁A + 媒介1 + glue2 + 役割ユナリー1",
++  "K_ROLE": 1.0,
++  "glue_mean": 2.0,
++  "bag_sizes": {
++   "M1": 10,
++   "M2": 10,
++   "M3": 10,
++   "M4": 10
++  },
++  "m": 17,
++  "n_motifs": 4,
++  "P_motif": 0.25
++ },
++ "bags": {
++  "stone": [
++   "M1"
++  ],
++  "water": [
++   "M1"
++  ],
++  "chain": [
++   "M1"
++  ],
++  "rope": [
++   "M1"
++  ],
++  "wood": [
++   "M1"
++  ],
++  "bridge": [
++   "M1"
++  ],
++  "wall": [
++   "M1"
++  ],
++  "gate": [
++   "M1"
++  ],
++  "pipe": [
++   "M1"
++  ],
++  "river": [
++   "M1"
++  ]
++ },
++ "glue": [
++  "near",
++  "above",
++  "below",
++  "beside",
++  "behind",
++  "inside",
++  "outside",
++  "across",
++  "under",
++  "over",
++  "along",
++  "toward"
++ ],
++ "role_unary": {
++  "M1": "supported"
++ },
++ "canon": {
++  "M1": "stone",
++  "M2": "stone",
++  "M3": "stone",
++  "M4": "stone"
++ },
++ "pi_A": {
++  "M1": 0.10743
++ },
++ "one_minus_h": {
++  "M1": 0.909412
++ },
++ "theta_grid": [
++  0.061,
++  0.122,
++  0.122,
++  0.122
++ ],
++ "marginal": {
++  "govern": 0.02616783,
++  "couple": 0.02616783,
++  "anchor": 0.02616783,
++  "cause": 0.02616783,
++  "require": 0.02616783,
++  "enable": 0.02616783,
++  "avert": 0.02616783,
++  "hold": 0.02616783,
++  "push": 0.02616783,
++  "carry": 0.02616783,
++  "lift": 0.02616783,
++  "break": 0.02616783,
++  "cut": 0.02616783,
++  "turn": 0.02616783,
++  "press": 0.02616783,
++  "steer": 0.02616783,
++  "permit": 0.02616783,
++  "hinder": 0.02616783,
++  "pull": 0.02616783,
++  "drag": 0.02616783,
++  "lock": 0.02616783,
++  "bend": 0.02616783,
++  "sustainedby": 0.02616783,
++  "shield": 0.02616783,
++  "sustain": 0.02616783,
++  "trigger": 0.02616783,
++  "wrap": 0.02616783,
++  "fold": 0.02616783,
++  "stack": 0.02616783,
++  "tilt": 0.02616783,
++  "supported": 0.01308392,
++  "carried": 0.01308392,
++  "broken": 0.01308392,
++  "moved": 0.01308392,
++  "near": 0.00872261,
++  "above": 0.00872261,
++  "below": 0.00872261,
++  "beside": 0.00872261,
++  "behind": 0.00872261,
++  "inside": 0.00872261,
++  "outside": 0.00872261,
++  "across": 0.00872261,
++  "under": 0.00872261,
++  "over": 0.00872261,
++  "along": 0.00872261,
++  "toward": 0.00872261,
++  "stone": 0.00523357,
++  "water": 0.00261678,
++  "chain": 0.00261678,
++  "rope": 0.00261678,
++  "wood": 0.00261678,
++  "bridge": 0.00261678,
++  "wall": 0.00261678,
++  "gate": 0.00261678,
++  "pipe": 0.00261678,
++  "river": 0.00261678,
++  "road": 0.00261678,
++  "cable": 0.00261678,
++  "cold": 0.00140561,
++  "wet": 0.00140561,
++  "hard": 0.00140561,
++  "dry": 0.00140561,
++  "wire": 0.00130839,
++  "board": 0.00130839,
++  "beam": 0.00130839,
++  "post": 0.00130839,
++  "cord": 0.00130839,
++  "plank": 0.00130839,
++  "rail": 0.00130839,
++  "strap": 0.00130839,
++  "brick": 0.00130839,
++  "shaft": 0.00130839,
++  "frame": 0.00130839,
++  "panel": 0.00130839,
++  "band": 0.00130839,
++  "hook": 0.00130839
++ },
++ "constituents": [
++  {
++   "motif": "M1",
++   "predicate": "govern",
++   "layer": "四階",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "couple",
++   "layer": "三階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "anchor",
++   "layer": "三階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "cause",
++   "layer": "二階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "require",
++   "layer": "二階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "enable",
++   "layer": "二階3",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "avert",
++   "layer": "二階4",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "hold",
++   "layer": "一階1-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "push",
++   "layer": "一階1-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "carry",
++   "layer": "一階2-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "lift",
++   "layer": "一階2-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "break",
++   "layer": "一階3-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "cut",
++   "layer": "一階3-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "turn",
++   "layer": "一階4-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "press",
++   "layer": "一階4-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M1",
++   "predicate": "stone",
++   "layer": "媒介",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.1,
++   "ell": 7.578,
++   "a": 1.5278,
++   "pi": 0.1,
++   "u": 0.121965
++  },
++  {
++   "motif": "M1",
++   "predicate": "cold",
++   "layer": "周縁A",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.026857,
++   "ell": 9.4746,
++   "a": 1.4222,
++   "pi": 0.10743,
++   "u": 0.121965
++  },
++  {
++   "motif": "M2",
++   "predicate": "govern",
++   "layer": "四階",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "couple",
++   "layer": "三階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "steer",
++   "layer": "三階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "cause",
++   "layer": "二階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "require",
++   "layer": "二階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "permit",
++   "layer": "二階3",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "hinder",
++   "layer": "二階4",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "hold",
++   "layer": "一階1-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "push",
++   "layer": "一階1-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "carry",
++   "layer": "一階2-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "lift",
++   "layer": "一階2-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "pull",
++   "layer": "一階3-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "drag",
++   "layer": "一階3-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "lock",
++   "layer": "一階4-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "bend",
++   "layer": "一階4-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M2",
++   "predicate": "stone",
++   "layer": "媒介",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.1,
++   "ell": 7.578,
++   "a": 1.5278,
++   "pi": 0.1,
++   "u": 0.121965
++  },
++  {
++   "motif": "M2",
++   "predicate": "wet",
++   "layer": "周縁A",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.026857,
++   "ell": 9.4746,
++   "a": 1.4222,
++   "pi": 0.10743,
++   "u": 0.121965
++  },
++  {
++   "motif": "M3",
++   "predicate": "sustainedby",
++   "layer": "四階",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "shield",
++   "layer": "三階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "anchor",
++   "layer": "三階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "sustain",
++   "layer": "二階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "trigger",
++   "layer": "二階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "enable",
++   "layer": "二階3",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "avert",
++   "layer": "二階4",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "wrap",
++   "layer": "一階1-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "fold",
++   "layer": "一階1-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "stack",
++   "layer": "一階2-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "tilt",
++   "layer": "一階2-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "break",
++   "layer": "一階3-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "cut",
++   "layer": "一階3-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "turn",
++   "layer": "一階4-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "press",
++   "layer": "一階4-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M3",
++   "predicate": "stone",
++   "layer": "媒介",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.1,
++   "ell": 7.578,
++   "a": 1.5278,
++   "pi": 0.1,
++   "u": 0.121965
++  },
++  {
++   "motif": "M3",
++   "predicate": "hard",
++   "layer": "周縁A",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.026857,
++   "ell": 9.4746,
++   "a": 1.4222,
++   "pi": 0.10743,
++   "u": 0.121965
++  },
++  {
++   "motif": "M4",
++   "predicate": "sustainedby",
++   "layer": "四階",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "shield",
++   "layer": "三階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "steer",
++   "layer": "三階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "sustain",
++   "layer": "二階1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "trigger",
++   "layer": "二階2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "permit",
++   "layer": "二階3",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "hinder",
++   "layer": "二階4",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "wrap",
++   "layer": "一階1-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "fold",
++   "layer": "一階1-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "stack",
++   "layer": "一階2-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "tilt",
++   "layer": "一階2-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "pull",
++   "layer": "一階3-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "drag",
++   "layer": "一階3-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "lock",
++   "layer": "一階4-1",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "bend",
++   "layer": "一階4-2",
++   "arity": 2,
++   "new_slots": 0,
++   "c": 7,
++   "rate": 0.5,
++   "ell": 5.2561,
++   "a": 2.3318,
++   "pi": 1.0,
++   "u": 1.861429
++  },
++  {
++   "motif": "M4",
++   "predicate": "stone",
++   "layer": "媒介",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.1,
++   "ell": 7.578,
++   "a": 1.5278,
++   "pi": 0.1,
++   "u": 0.121965
++  },
++  {
++   "motif": "M4",
++   "predicate": "dry",
++   "layer": "周縁A",
++   "arity": 2,
++   "new_slots": 1,
++   "c": 4,
++   "rate": 0.026857,
++   "ell": 9.4746,
++   "a": 1.4222,
++   "pi": 0.10743,
++   "u": 0.121965
++  }
++ ],
++ "motif_structure": {
++  "M1": {
++   "third": "govern",
++   "subtrees": [
++    "T1",
++    "T2"
++   ],
++   "peripheral": "cold"
++  }
++ },
++ "subtrees": {
++  "A": {
++   "higher": "cause",
++   "first_order": [
++    "hold",
++    "push"
++   ]
++  },
++  "B": {
++   "higher": "require",
++   "first_order": [
++    "carry",
++    "lift"
++   ]
++  },
++  "C": {
++   "higher": "enable",
++   "first_order": [
++    "break",
++    "cut"
++   ]
++  },
++  "D": {
++   "higher": "avert",
++   "first_order": [
++    "turn",
++    "press"
++   ]
++  },
++  "E": {
++   "higher": "permit",
++   "first_order": [
++    "pull",
++    "drag"
++   ]
++  },
++  "F": {
++   "higher": "hinder",
++   "first_order": [
++    "lock",
++    "bend"
++   ]
++  },
++  "G": {
++   "higher": "sustain",
++   "first_order": [
++    "wrap",
++    "fold"
++   ]
++  },
++  "H": {
++   "higher": "trigger",
++   "first_order": [
++    "stack",
++    "tilt"
++   ]
++  },
++  "T1": {
++   "higher": "couple",
++   "subtrees": [
++    "A",
++    "B"
++   ]
++  },
++  "T2": {
++   "higher": "anchor",
++   "subtrees": [
++    "C",
++    "D"
++   ]
++  },
++  "T3": {
++   "higher": "steer",
++   "subtrees": [
++    "E",
++    "F"
++   ]
++  },
++  "T4": {
++   "higher": "shield",
++   "subtrees": [
++    "G",
++    "H"
++   ]
++  }
++ },
++ "holdout_rate_model": "structural_first_order_v1"
++}
+\ No newline at end of file
+diff --git a/tools/verb/aggregate.py b/tools/verb/aggregate.py
+new file mode 100644
+index 0000000..5a9ab14
+--- /dev/null
++++ b/tools/verb/aggregate.py
+@@ -0,0 +1,123 @@
++"""完走・検査済みの動詞の集計だけをまとめる。比較の学び手は実行しない。"""
++from __future__ import annotations
++
++import csv
++import json
++from collections import Counter, defaultdict
++from pathlib import Path
++
++
++def ratio(n, d):
++    return n / d if d else None
++
++
++def write_csv(path, rows):
++    if not rows:
++        path.write_text("")
++        return
++    keys = list(dict.fromkeys(k for r in rows for k in r))
++    with path.open("w", newline="") as f:
++        w = csv.DictWriter(f, keys)
++        w.writeheader()
++        w.writerows(rows)
++
++
++def fmt(x):
++    return "—" if x is None else f"{x:.4f}"
++
++
++def aggregate(base, plan):
++    base = Path(base)
++    output = base / "aggregate"
++    output.mkdir(exist_ok=True)
++    totals = defaultdict(Counter)
++    novel_totals = defaultdict(Counter)
++    over, novel, events, memories, responses, resources = [], [], [], [], [], []
++    classifications, name_states = defaultdict(Counter), defaultdict(Counter)
++    completed = []
++    for run in plan["runs"]:
++        root = base / run["label"]
++        if not (root / "complete.json").exists():
++            continue
++        r = json.loads((root / "analysis/summary.json").read_text())
++        meta = {"arm": run["arm"], "U": run["U"], "seed": run["seed"]}
++        group = (run["arm"], run["U"])
++        completed.append(run["label"])
++        for row in r["overregularization"]:
++            over.append({**meta, **row})
++            totals[(*group, row["bin"], row["verb"])].update({k: row[k] for k in ("queries", "correct", "REG", "abstain", "other", "exposure")})
++        for row in r["novel"]:
++            novel.append({**meta, **row})
++            novel_totals[(*group, row["verb"])].update({k: v for k, v in row.items() if k not in ("t", "verb")})
++        events += [{**meta, **row} for row in r["recovery"]]
++        # Uの条件名とUの席数を別欄にする。生の記録はそのまま。
++        memories += [{**meta, **{k: v for k, v in row.items() if k != "U"}, "U_seats": row["U"]} for row in r["memory"]]
++        responses += [{**meta, **row} for row in r["answering"]]
++        classifications[group].update(r["classification"])
++        name_states[group].update(r["selected_name_states"])
++        res = json.loads((root / "resources.json").read_text())
++        resources.append({**meta, **{k: res.get(k) for k in ("model_seconds", "analysis_seconds", "supervised_wall_seconds", "process_peak_rss_bytes_time", "max_aggregate_rss_mib_sampled_1s", "output_bytes")}})
++    pooled, bin_totals = [], []
++    for (arm, u, b, v), c in sorted(totals.items()):
++        den = c["correct"] + c["REG"]
++        pooled.append({"arm": arm, "U": u, "bin": b, "verb": v, **dict(c), "marcus_denominator": den,
++                       "marcus_rate": ratio(c["REG"], den), "REG_all_queries_rate": ratio(c["REG"], c["queries"])})
++    by_bin = defaultdict(list)
++    for row in pooled:
++        by_bin[(row["arm"], row["U"], row["bin"])].append(row)
++    for (arm, u, b), rows in sorted(by_bin.items()):
++        valid = [r for r in rows if r["marcus_rate"] is not None]
++        mass = sum(r["exposure"] for r in valid)
++        c = Counter()
++        for r in rows:
++            c.update({k: r[k] for k in ("queries", "correct", "REG", "abstain", "other", "exposure")})
++        bin_totals.append({"arm": arm, "U": u, "start": b * 500, "end": (b + 1) * 500, **dict(c),
++                           "observed_verbs": len(valid), "weight_coverage": ratio(mass, c["exposure"]),
++                           "frequency_weighted_full8": sum(r["exposure"] * r["marcus_rate"] for r in valid) / mass if mass and len(valid) == 8 else None,
++                           "frequency_weighted_observed": sum(r["exposure"] * r["marcus_rate"] for r in valid) / mass if mass else None,
++                           "uniform_full8": sum(r["marcus_rate"] for r in valid) / 8 if len(valid) == 8 else None,
++                           "uniform_observed": sum(r["marcus_rate"] for r in valid) / len(valid) if valid else None,
++                           "pooled_marcus": ratio(c["REG"], c["correct"] + c["REG"]),
++                           "REG_all_queries": ratio(c["REG"], c["queries"])})
++    novel_summary = []
++    for (arm, u, v), c in sorted(novel_totals.items()):
++        n = sum(c[k] for k in ("REG", "IRR", "abstain", "other"))
++        novel_summary.append({"arm": arm, "U": u, "verb": v, "queries": n, **dict(c),
++                              **{k + "_rate": ratio(c[k], n) for k in ("REG", "IRR", "abstain", "other")}})
++    write_csv(output / "overregularization_per_seed.csv", over)
++    write_csv(output / "overregularization_per_verb.csv", pooled)
++    write_csv(output / "overregularization_bins.csv", bin_totals)
++    write_csv(output / "recovery_events.csv", events)
++    write_csv(output / "novel_per_time_seed.csv", novel)
++    write_csv(output / "novel_per_verb.csv", novel_summary)
++    write_csv(output / "memory.csv", memories)
++    write_csv(output / "answering.csv", responses)
++    write_csv(output / "resources.csv", resources)
++    write_csv(output / "classification.csv", [{"arm": a, "U": u, **dict(c)} for (a, u), c in sorted(classifications.items())])
++    write_csv(output / "name_seats.csv", [{"arm": a, "U": u, "state": s, "count": n} for (a, u), c in sorted(name_states.items()) for s, n in sorted(c.items())])
++    status = {"complete": len(completed), "planned": len(plan["runs"]), "completed_runs": completed,
++              "baseline": plan.get("baseline", "design_only"), "seeds": sorted({r["seed"] for r in plan["runs"] if r["label"] in completed})}
++    (output / "status.json").write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n")
++    md = [f"完走・照合済み {len(completed)}/{len(plan['runs'])}本。種は1〜5のみ。区間は試行番号0始まり、右端を含まない。", "",
++          "|保持|U|区間|不規則語のREG／全過去形質問|出現頻度加重（8語）|均等平均（8語）|分母がある語数|", "|---|---|---|---:|---:|---:|---:|"]
++    for r in bin_totals:
++        md.append(f"|{r['arm']}|{r['U']}|{r['start']}–{r['end']}|{fmt(r['REG_all_queries'])}|{fmt(r['frequency_weighted_full8'])}|{fmt(r['uniform_full8'])}|{r['observed_verbs']}|")
++    md += ["", "8語全体の平均は、1語でも分母が0なら欠測（—）。観測できた語だけの平均と重みの被覆率はCSVに別記。頻度加重の重みは当区間の動詞の実際の出現数。", "",
++           "|保持|U|完走数|崩れ→回復の完了数|選び間違い|区別の喪失|全質問の回答／黙り|終点記憶量の平均bits|", "|---|---|---:|---:|---:|---:|---|---:|"]
++    for group in sorted(classifications.keys() | {(r["arm"], r["U"]) for r in resources}):
++        a, u = group
++        rs = [r for r in resources if (r["arm"], r["U"]) == group]
++        ev = [e for e in events if (e["arm"], e["U"]) == group]
++        ans = [r for r in responses if (r["arm"], r["U"]) == group]
++        answered, silent = sum(r.get("answered", 0) for r in ans), sum(r.get("abstain", 0) for r in ans)
++        end = [r["bits"] for r in memories if (r["arm"], r["U"]) == group and r["t"] == 5000 and r["bits"] is not None]
++        md.append(f"|{a}|{u}|{len(rs)}|{len(ev)}|{classifications[group]['selection_error']}|{classifications[group]['distinction_loss']}|{answered}/{silent}|{fmt(sum(end)/len(end) if end else None)}|")
++    md += ["", "|保持|U|新語質問数|REG|IRR名|黙り|その他|", "|---|---|---:|---:|---:|---:|---:|"]
++    for a, u in sorted({(r["arm"], r["U"]) for r in novel_summary}):
++        rows = [r for r in novel_summary if r["arm"] == a and r["U"] == u]
++        n = sum(r["queries"] for r in rows)
++        vals = [fmt(ratio(sum(r.get(k, 0) for r in rows), n)) for k in ("REG", "IRR", "abstain", "other")]
++        md.append(f"|{a}|{u}|{n}|" + "|".join(vals) + "|")
++    md += ["", "語別・種別・時点別の数、IRR_1〜IRR_8の内訳、各回復の三時点、名前の席、記憶のF/H/Uとbits、一本の時間・RSSは同じフォルダのCSV。候補ごとの生記録はローカルの各本 analysis/cases.jsonl.gz に保存。", ""]
++    (output / "tables.md").write_text("\n".join(md))
++    return output
+diff --git a/tools/verb/analyze.py b/tools/verb/analyze.py
+new file mode 100644
+index 0000000..4571d38
+--- /dev/null
++++ b/tools/verb/analyze.py
+@@ -0,0 +1,323 @@
++"""動詞の台帳だけを逐次集計する。候補の答え直しは既存 selcands と同じ手順。
++
++読み直しの状態・世界・予測の一致を検査し、不一致なら集計を確定しない。
++模型の予測や状態へ集計値を戻さない。種は明示された1〜20の一本だけ。
++"""
++from __future__ import annotations
++
++import argparse
++import gzip
++import hashlib
++import json
++import sys
++import tempfile
++from collections import Counter, defaultdict
++from dataclasses import replace
++from pathlib import Path
++from random import Random
++
++REPO = Path(__file__).resolve().parents[2]
++sys.path[:0] = [str(REPO / "tools"), str(REPO), str(Path(__file__).parent)]
++import replay_state as sr
++
++BIN = 500
++
++
++def count_answer(counts, answer, correct):
++    counts["queries"] += 1
++    if answer is None:
++        counts["abstain"] += 1
++    elif answer == correct:
++        counts["correct"] += 1
++    elif answer == "REG":
++        counts["REG"] += 1
++    else:
++        counts["other"] += 1
++
++
++def rates(counts):
++    c = {key: counts.get(key, 0) for key in ("queries", "correct", "REG", "abstain", "other")}
++    den = c["correct"] + c["REG"]
++    return {**c, "marcus_denominator": den,
++            "marcus_rate": c["REG"] / den if den else None,
++            "REG_all_queries_rate": c["REG"] / c["queries"] if c["queries"] else None}
++
++
++def recovery_step(state, t, label):
++    """同じ語の正答/REGの部分列の、重ならない完了エピソード。黙り等は飛ばす。"""
++    if label == "correct":
++        event = [state["correct"], state["REG"], t] if "REG" in state else None
++        state.clear()
++        state["correct"] = t
++        return event
++    if label == "REG" and "correct" in state:
++        state.setdefault("REG", t)
++    return None
++
++
++def make_task(root, cell, seed, scratch):
++    import sweep
++    fl = json.loads((root / "flag.json").read_text())
++    cfg = json.loads((REPO / fl["config"]).read_text())
++    cfg["trial_count"] = int(fl.get("horizon") or cfg["trial_count"])
++    cfg["seed_file"] = fl["effective_seed_file"]
++    cfg["output"]["dir"] = str(scratch / "ledgers")
++    cfg["fixed"]["nsim_threshold"] = fl["nsim"]
++    cfg["axes"]["verbatim_theta"] = [fl["vt"]]
++    runs = [r for r in sweep.enumerate_runs(cfg) if r["seed"] == seed and r["cell"] == cell]
++    if len(runs) != 1:
++        raise RuntimeError("読み直しのセルが一意でない")
++    task = {**fl, **runs[0], "cfg": cfg, "code_commit": fl["commit"], "out_root": str(scratch),
++            "orig_dir": None, "prune": fl["greedy"], "compare": False,
++            "v39_budget": None if fl["v39_budget"] == "inf" else int(fl["v39_budget"])}
++    # 記録だけの包みは外す。C/Dの保持規則はそのまま入れ、更新は実行しない。
++    for key in ("dump_answers", "dump_routing", "probe_world", "select_log", "cf_value", "dump_slot_history", "use_forget_dump_s", "verb_timing"):
++        task[key] = False
++    return task, cfg
++
++
++def answer_with(d, graph, al, support, n, st, ai, config, rng_seed):
++    """selcands.answer_with と同じ、門→F投影→穴埋め→答え選択。"""
++    import abm.agent_runtime as ar
++    import abm.sme as sme
++    import v39
++    from abm.domains import Abstain
++    if support < ar._need(config.tau_acc, n):
++        return Abstain(reason="below_tau"), False
++    f_ids = {r.relation.relation_id for r in d.constituents if r.alive}
++    al = replace(al, candidate_projections=tuple(x for x in al.candidate_projections if x in f_ids))
++    pred = sme.project(al, graph, ai.target_graph_partial, prototype_prior_weight=0.0)
++    filling = v39.fill_v39(d, ai.target_graph_partial, al.entity_mapping, al.relation_mapping, st.slot_history,
++                          st.p_hat, config.fill_selection, Random(rng_seed),
++                          higher_order_predicates=config.higher_order_predicates, local_lambda=config.local_lambda)
++    pred, _ = v39.fill_decision(pred, filling, None)
++    return pred, True
++
++
++def candidate_case(pre, wt, row, argmap, scenes, config, agent):
++    import abm.loop as loop
++    import selectn3
++    import v39
++    import v310be
++    import verbworld
++    from abm.domains import EdgePrediction
++    st, bad = sr.restore_state(pre, argmap, scenes)
++    if bad:
++        raise RuntimeError("候補の引数の順序を戻せない")
++    if sr._strip(json.loads(loop._json_bytes(loop._canonical(st)))) != sr._strip(pre):
++        raise RuntimeError("読み直しの状態が台帳と違う")
++    t = row["prediction_order"]
++    ai = loop._agent_input(wt, st)
++    rng_seed = loop._rng_seed(agent, t)
++    actual, _ = loop.predict(ai, st, config, Random(rng_seed))
++    real = row.get("predicted_edge") or {}
++    e = actual.prediction.edge if isinstance(actual.prediction, EdgePrediction) else None
++    if (actual.trace.get("R_used") != row.get("R_used") or
++            (e.predicate if e else None) != real.get("predicate") or
++            (list(e.arguments) if e else []) != list(real.get("arguments") or [])):
++        raise RuntimeError("読み直しの予測が台帳と違う")
++    info = verbworld.INFO[wt.G_star.graph_id]
++    cands = []
++    shared = sys.modules.get("smeshared")
++    sme_backend = bool(shared and getattr(v39.select_definition, "__module__", "") == "smeshared")
++    xx = shared.self_score(shared.typed_graph(ai.target_graph_partial)) if sme_backend else None
++    for d in st.definitions.values():
++        n = v39.n_FH(d, st.slot_history)
++        if n == 0:
++            continue
++        graph, al = v39.map_v39(d, st.slot_history, ai.target_graph_partial)
++        if al is None:
++            continue
++        support = sum(v39.seat_state(d, r, st.slot_history) != "U" and r.relation.relation_id in al.relation_mapping
++                      for r in d.constituents)
++        if sme_backend:
++            from fractions import Fraction
++            dd = shared.self_score(shared.GRAPHS[al.sme_audit["left"]])
++            q = 2 * Fraction(al.total_score) / (Fraction(dd) + Fraction(xx)) if dd + xx else None
++        else:
++            q = selectn3.n3_value(selectn3.n3_terms(d, st.slot_history, al, ai.target_graph_partial))
++        if q is None:
++            v39.unregister(graph)
++            continue
++        pred, gate = answer_with(d, graph, al, support, n, st, ai, config, rng_seed)
++        e = pred.edge if isinstance(pred, EdgePrediction) else None
++        name_seats = []
++        for r in d.constituents:
++            # 名前の席の同定は誕生時の関係IDの役割。Uで失われた名前も追える。
++            if verbworld.IDS.get(r.relation.relation_id) == "name":
++                cid, _ = v310be.role_target(d, r, al, ai.target_graph_partial)
++                h = v39.hist_counts(st.slot_history.get((d.name, r.slot_index)))
++                name_seats.append({"slot": r.slot_index, "state": v39.seat_state(d, r, st.slot_history),
++                                   "predicate": r.relation.predicate if r.alive else None,
++                                   "history": dict(h), "maps_to_this_verb": al.relation_mapping.get(r.relation.relation_id) == info["name_id"] or cid == info["name_id"]})
++        cands.append({"R": d.name, "born": d.registered_at, "n": n, "support": support,
++                      "N3": float(q), "_q": q, "gate": gate,
++                      "answer": e.predicate if e else None,
++                      "arguments": list(e.arguments) if e else None,
++                      "correct": bool(e) and e.predicate == wt.held_out_edge.predicate and tuple(e.arguments) == tuple(wt.held_out_edge.arguments),
++                      "name_seats": name_seats})
++        v39.unregister(graph)
++    cands.sort(key=lambda c: (-c["_q"], -c["n"], -c["born"], c["R"]))
++    if sme_backend and cands:
++        # 再現したSME予測のR_usedが、N3・席数・新しさの同点集合に入ることを検査する。
++        first = (cands[0]["_q"], cands[0]["n"], cands[0]["born"])
++        picked = next((c for c in cands if c["R"] == row.get("R_used")), None)
++        if picked is None or (picked["_q"], picked["n"], picked["born"]) != first:
++            raise RuntimeError("SMEの選ばれた定義が最多の同点集合に無い")
++        cands.remove(picked)
++        cands.insert(0, picked)
++    good = [c for c in cands if c["correct"] and c["gate"]]
++    selected = next((c for c in cands if c["R"] == row.get("R_used")), None)
++    if selected is None or not cands or cands[0] is not selected or selected["answer"] != real.get("predicate") or selected["arguments"] != list(real.get("arguments") or []):
++        raise RuntimeError("候補の一位・答え直しが台帳と違う")
++    selected_states = [s["state"] for s in selected["name_seats"] if s["maps_to_this_verb"]]
++    # 選ばれた定義だけでなく、当該語をF/Hで持つ定義と、名前の席の全候補も残す。
++    lexical = [{"R": c["R"], "slot": s["slot"], "state": s["state"]} for c in cands for s in c["name_seats"]
++               if s["predicate"] == row["verb_name"] or s["history"].get(row["verb_name"], 0) > 0]
++    for c in cands:
++        c.pop("_q")
++    return {"trial": t, "verb": row["verb_name"], "classification": "selection_error" if good else "distinction_loss",
++            "selected_name_states": selected_states or ["no_definition"], "lexical_definitions": lexical,
++            "correct_candidates": [c["R"] for c in good], "candidates": cands}
++
++
++def analyze_installed(task, cfg, root, cell, seed, output):
++    import abm.loop as loop
++    import abm.world as w
++    import sweep
++    import strictpc
++    import verbworld
++    cfgs = sr.configs_of(cfg, task)
++    agent = cfg["agent_ids"][0]
++    config = cfgs[agent]
++    counts = defaultdict(Counter)
++    exposure = defaultdict(Counter)
++    all_counts = defaultdict(Counter)
++    recovery = defaultdict(dict)
++    events, memory = [], []
++    classes, states = Counter(), Counter()
++    checks = {"ledger_rows": 0, "state_hashes": 0, "world_rows": 0, "candidate_replays": 0}
++    argmap, scenes = {}, {}
++    output.mkdir(parents=True, exist_ok=True)
++    ledger = root / "ledgers" / "cells" / cell / f"seed{seed:03d}.jsonl.gz"
++    with gzip.open(ledger, "rt") as stream, gzip.open(output / "cases.jsonl.gz", "wt") as cases:
++        header = json.loads(next(stream))
++        world = w.generate_world(header["run_seed"], header["trial_count"], [agent], seed=sweep.load_seed(cfg["seed_file"]),
++                                 holdout_include_second_order=bool(header.get("arm_holdout_second_order")))
++        if world.world_hash != header["world_hash"]:
++            raise RuntimeError("世界の指紋が台帳と違う")
++        state = None
++        for t, line in enumerate(stream):
++            row = json.loads(line)
++            if row["prediction_order"] != t or t >= header["trial_count"]:
++                raise RuntimeError("試行の順序か本数が違う")
++            wt = world.trials[t]
++            if wt.held_out_edge.to_dict() != row["held_out_content"] or [r.relation_id for r in wt.target_graph_partial.relations] != row["observable_mask_edges"]:
++                raise RuntimeError("世界の試行が台帳と違う")
++            info = verbworld.INFO[wt.G_star.graph_id]
++            if any(row[k] != info[k] for k in verbworld.EXTRA_KEYS):
++                raise RuntimeError("研究者の四欄が再抽選と違う")
++            pre = state
++            ss = row["state_snapshot"]
++            state = ss["value"] if ss["kind"] == "full" else loop._apply(state, ss["changes"])
++            if hashlib.sha256(loop._json_bytes(state)).hexdigest() != row["agent_state_snapshot_hash"]:
++                raise RuntimeError("台帳の状態の指紋が違う")
++            checks["ledger_rows"] += 1
++            checks["state_hashes"] += 1
++            checks["world_rows"] += 1
++            for r in wt.G_star.relations:
++                argmap[r.relation_id] = tuple(r.arguments)
++            scenes[wt.target_graph_partial.graph_id] = wt.target_graph_partial
++            b = t // BIN
++            exposure[b][row["verb_name"]] += 1
++            pe = row.get("predicted_edge") or {}
++            answer = pe.get("predicate")
++            all_counts[b]["trials"] += 1
++            all_counts[b]["answered" if answer else "abstain"] += 1
++            if row["held_out_is_past"]:
++                all_counts[b]["past_queries"] += 1
++                all_counts[b]["past_answered" if answer else "past_abstain"] += 1
++                if row["verb_class"] == "irregular":
++                    key = (b, row["verb_name"])
++                    count_answer(counts[key], "other_IRR" if answer == row["correct_past"] and tuple(pe.get("arguments") or ()) != tuple(wt.held_out_edge.arguments) else answer, row["correct_past"])
++                    if answer == row["correct_past"] and tuple(pe.get("arguments") or ()) == tuple(wt.held_out_edge.arguments):
++                        label = "correct"
++                    elif answer == "REG":
++                        label = "REG"
++                    else:
++                        label = "other"
++                    evt = recovery_step(recovery[row["verb_name"]], t, label)
++                    if evt:
++                        events.append({"verb": row["verb_name"], "correct_before": evt[0], "REG_start": evt[1], "correct_after": evt[2]})
++                    if label == "REG":
++                        if pre is None:
++                            raise RuntimeError("REG回答に予測前状態が無い")
++                        case = candidate_case(pre, wt, row, argmap, scenes, config, agent)
++                        cases.write(json.dumps(case, ensure_ascii=False) + "\n")
++                        classes[case["classification"]] += 1
++                        states["+".join(case["selected_name_states"])] += 1
++                        checks["candidate_replays"] += 1
++            if (t + 1) % 100 == 0 or t == header["trial_count"] - 1:
++                seat_counts = Counter()
++                hist = state["slot_history"]
++                for d in state["definitions"].values():
++                    for r in d["constituents"]:
++                        seat_counts["F" if r["alive"] else "H" if str((d["name"], r["slot_index"])) in hist else "U"] += 1
++                memory.append({"t": t + 1, "definitions": len(state["definitions"]), "F": seat_counts["F"], "H": seat_counts["H"], "U": seat_counts["U"]})
++            strictpc.record_kinds(wt.target_graph_partial, (wt.held_out_edge,) if row.get("f_fired") else ())
++            sr._clear_caches(loop)
++        if checks["ledger_rows"] != header["trial_count"]:
++            raise RuntimeError("台帳が完走していない")
++    novel = defaultdict(Counter)
++    memory_bits = {}
++    probes = root / "side" / cell / f"seed{seed:03d}.probe.jsonl"
++    with probes.open() as stream:
++        for line in stream:
++            rec = json.loads(line)
++            memory_bits[rec["t"]] = rec["C"]
++            if rec.get("verb_class") != "novel":
++                continue
++            if rec.get("truth") is not None or rec.get("exp_path_n") or rec.get("verbatim_n"):
++                raise RuntimeError("新語の試験に学習か採点の値がある")
++            a = rec.get("answer")
++            k = "abstain" if a is None else "REG" if a == "REG" else "IRR" if a.startswith("IRR_") else "other"
++            novel[(rec["t"], rec["verb_name"])][k] += 1
++            if a and a.startswith("IRR_"):
++                novel[(rec["t"], rec["verb_name"])][a] += 1
++    for m in memory:
++        m["bits"] = memory_bits.get(m["t"])
++    rows = []
++    for b in range((header["trial_count"] + BIN - 1) // BIN):
++        for k in range(33, 41):
++            name = f"V{k:02d}"
++            rows.append({"bin": b, "start": b * BIN, "end": min((b + 1) * BIN, header["trial_count"]),
++                         "verb": name, "exposure": exposure[b][name], **rates(counts[(b, name)])})
++    result = {"seed": seed, "cell": cell, "world_hash": header["world_hash"], "checks": checks,
++              "overregularization": rows, "recovery": events, "classification": dict(classes), "selected_name_states": dict(states),
++              "answering": [{"bin": b, **dict(c)} for b, c in sorted(all_counts.items())], "memory": memory,
++              "novel": [{"t": t, "verb": v, **dict(c)} for (t, v), c in sorted(novel.items())]}
++    (output / "summary.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
++    return {"cell": cell, "seed": seed, "analysis_checks": checks}
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("root", type=Path)
++    ap.add_argument("seed", type=int, choices=range(1, 21))
++    ap.add_argument("output", type=Path)
++    args = ap.parse_args()
++    ledgers = list((args.root / "ledgers" / "cells").glob(f"*/seed{args.seed:03d}.jsonl.gz"))
++    if len(ledgers) != 1:
++        raise SystemExit("一本の台帳を明示すること")
++    cell = ledgers[0].parent.name
++    import sweep
++    import v3_run
++    with tempfile.TemporaryDirectory(prefix="verb_replay_", dir=args.output.parent) as tmp:
++        task, cfg = make_task(args.root, cell, args.seed, Path(tmp))
++        sweep.run_one = lambda tk: analyze_installed(tk, cfg, args.root, cell, args.seed, args.output)
++        rec = v3_run.worker(task)
++        print(json.dumps(rec["analysis_checks"], ensure_ascii=False), flush=True)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/verb/contract.txt b/tools/verb/contract.txt
+new file mode 100644
+index 0000000..f2e64e8
+--- /dev/null
++++ b/tools/verb/contract.txt
+@@ -0,0 +1,45 @@
++委任書 2026-10-04「動詞の世界の初版」段1の実装契約
++
++土台: 3380344add7f85ce2c3608656de5805995dcf971（n3-2026-10-02 の指定点）。
++変更は tools/ と構造検査だけ。abm/ は変えない。説明と結果記録は日本語。
++世界の生成は模型の設定・状態・予測を受け取らない。模型に研究者の四欄を渡さない。
++名前・link・過去形以外は元の M1 のまま。名前・link は伏せる候補に入れない。
++旗オフなら verbworld の差し替えを一切入れない。
++
++--verb-world は M1 一型の種に切り替える。既定は5000試行、horizonも5000。
++--trial-count と --horizon を両方指定するなら同値にする。種は1〜20のみ。
++学習語 V01〜V40。規則32語の合計0.30、例外8語の合計0.70。それぞれ群内1/k。
++独立した sha256(seed, trial, "verb") の乱数の流れで一試行に一語を引く。
++名前 Vxx(a) と attach(name_relation, root_relation) は shopworld のシール・link の位置。
++0.0.0 は REG 又は IRR_1〜IRR_8。シール sig_n・sig_e は追加しない。
++台帳追加欄は verb_name・verb_class・correct_past・held_out_is_past。
++固定辞書に V01〜V48・REG・IRR_1〜IRR_8・attach を後ろから追加する。
++
++--probe-world の動詞試験は学習語の過去形と V41〜V48 の新語を問い、学習しない。
++問いは一つの固定M1場面で名前だけを変え、必ず過去形を伏せる。
++新語の生成用REGは伏せられた仮の値。新語の正誤を採点しない。
++100試行ごとと終了時に、既存probeworldの指紋検査と独立した予測乱数を使う。
++新語への試験は経験・頻度・記憶・採点・学習の乱数を更新しない。
++
++Schuler変種は未確定の項目別頻度を推測で埋めない。
++--verb-variant schuler54/schuler36 は出典確認済みの --verb-frequencies JSONが必要。
++形式: source（出典の文字列）、schuler54又はschuler36（頻度降順9語の正の整数リスト）。
++上位5語又は3語を規則、残りを項目別の例外とする。
++REG合計は0.75又は28/48。比が合わない表は走行前に拒む。
++2016本文: 複数48回、規則75%/58.3%。後年再現研究の表: 複数49回、37/49及び29/49。
++後年表の glim の5回を4回に直すと本文の比に合うが、原資料での確認がないので採用しない。
++
++段1の検査は刺激の構造・抽選・辞書・台帳互換だけを合格条件にする。
++既定Uの入力候補に骨組みの二引数述語も入る事実は、学習結果とは分けて報告する。
++段2の動詞学習試走と段3の本走行・結果の分析は、段1を報告して停止した後。
++
++2026-10-05 アストラ承認「二つの軸の下見」：旧い照合のまま、U=global、N3、
++λ=0.01873710622997919、5000試行、種1〜5。
++Dのτ=0.1/0.25/0.6/1.0（20本）、過去形質問p=0.25/0.5×A/C/D（30本）。
++τ=0.4と従来の質問割合は段3の既存の走行を使う。
++--verb-worldと--shop-door-pを併用できるように入口と世界だけを配線する。
++名前を足す前に既存shopworld.rehideを呼び、候補とshopdoorの乱数を同じにする。
++旗オフの台帳本体は段3と全バイト一致を関門にする。abm/・照合・選択・学習・保持を変えない。
++新語への不規則回答の選択定義は既存記録から読み、予測を再実行しない。
++重い処理は共有jobs.py run --wait、memとdisk-pathを指定。受付が通った処理だけ走る。
++各軸の完了と停止を指定の報告枝へ追記・push。SchulerはSfNまで走らせない。
+diff --git a/tools/verb/exception_learner.py b/tools/verb/exception_learner.py
+new file mode 100644
+index 0000000..526ff70
+--- /dev/null
++++ b/tools/verb/exception_learner.py
+@@ -0,0 +1,48 @@
++"""独立した『例外の辞書＋REG』。模型のライブラリや内部状態を使わない。
++
++predictには語名だけを渡す。観察・開示は、回答確定後にobserveで渡す。
++試験ではpredictだけを使う。出現の抽選・刺激の生成・忘却は行わない。
++"""
++from __future__ import annotations
++
++from dataclasses import dataclass, field
++
++
++@dataclass
++class ExceptionLearner:
++    exceptions: dict[str, str] = field(default_factory=dict)
++
++    def predict(self, verb: str) -> str:
++        return self.exceptions.get(verb, "REG")
++
++    def observe(self, verb: str, observed_past: str | None) -> None:
++        if observed_past is not None and observed_past.startswith("IRR_"):
++            self.exceptions.setdefault(verb, observed_past)
++
++
++def run_sequence(records, probes):
++    """公開された観察欄だけを読み、同じ試行・試験時点を再生する。
++
++records: trial, verb, past_asked, observed_past（非観測ならNone）。
++probes: t（それより前のt試行が終わった時点）, verb。
++正解や動詞のクラスはこの学び手に渡さず、採点は呼び手が行う。
++"""
++    learner = ExceptionLearner()
++    answers, probe_answers, registrations = [], [], []
++    by_t: dict[int, list] = {}
++    for probe in probes:
++        by_t.setdefault(probe["t"], []).append(probe)
++    for t, record in enumerate(records):
++        if record["trial"] != t:
++            raise ValueError("入力の試行が連続していない")
++        answer = learner.predict(record["verb"]) if record["past_asked"] else None
++        answers.append({"trial": t, "verb": record["verb"], "past_asked": record["past_asked"], "answer": answer})
++        was_known = record["verb"] in learner.exceptions
++        learner.observe(record["verb"], record["observed_past"])
++        if not was_known and record["verb"] in learner.exceptions:
++            registrations.append({"trial": t, "verb": record["verb"], "past": learner.exceptions[record["verb"]]})
++        for probe in by_t.get(t + 1, ()):
++            probe_answers.append({"t": t + 1, "verb": probe["verb"], "answer": learner.predict(probe["verb"])})
++    if len(probe_answers) != len(probes):
++        raise ValueError("入力の範囲外に試験の時点がある")
++    return {"answers": answers, "probes": probe_answers, "registrations": registrations, "dictionary": dict(learner.exceptions)}
+diff --git a/tools/verb/gate1.py b/tools/verb/gate1.py
+new file mode 100644
+index 0000000..93bb51a
+--- /dev/null
++++ b/tools/verb/gate1.py
+@@ -0,0 +1,123 @@
++"""段1：抽選・場面・辞書・既定Uの前提だけを調べる。模型の学習走行はしない。"""
++import argparse
++import json
++import sys
++from collections import Counter
++from dataclasses import replace
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path[:0] = [str(ROOT / "tools"), str(ROOT)]
++import verbworld as vw  # noqa: E402
++import probeworld as pw  # noqa: E402
++import abm.world as w  # noqa: E402
++from abm.seed import load_seed, higher_order_predicates  # noqa: E402
++
++
++def inspect_default_u(tr, info, draws):
++    """入力分布から作った検査用の頻度表。模型の学習結果ではない。"""
++    import v39
++    from abm.definition import Constituent, FrequencyTable, FrozenPrice, NamedDefinition
++    from abm.filling import _predicate_has_signature, slot_signature
++    from abm.domains import RelationGraph
++    from abm.abstraction import _structural_relation_ids
++    n = sum(draws.values())
++    # 全入力で変わらない骨組みを n 回、名前と過去形は抽選の出現数だけ。
++    counts = Counter({r.predicate: 0 for r in tr.G_star.relations})
++    for r in tr.G_star.relations:
++        if r.relation_id not in (info["past_id"], info["name_id"]):
++            counts[r.predicate] += n
++    for item in vw.training_items():
++        counts[item.past] += draws[item.name]
++        counts[item.name] += draws[item.name]
++    ph = FrequencyTable(dict(counts), sum(counts.values()), .1, frozenset(p for p, c in counts.items() if c > 0))
++    price = FrozenPrice(1.0, 0, 0.0, 3)
++    structural_ids = _structural_relation_ids(tr.G_star)
++    structural = [r for r in tr.G_star.relations if r.relation_id in structural_ids]
++    rows = tuple(Constituent(i, 0, replace(r, predicate=v39.ERASED) if r.relation_id == info["past_id"] else r,
++                             price, r.relation_id != info["past_id"]) for i, r in enumerate(structural))
++    d = NamedDefinition("R_inspection", rows, len(rows) - 1, 0)
++    row = next(c for c in rows if c.relation.relation_id == info["past_id"])
++    scene = pw._partial(tr.G_star, info["past_id"])
++    dg = RelationGraph("definition", relations=tuple(c.relation for c in rows))
++    hop = higher_order_predicates(load_seed(ROOT / "tools/verb/U-011_seed_verb.json")) | {"attach"}
++    sig = slot_signature(row.relation, dg)
++    pool = v39._order_pool(frozenset(p for p in ph.alive_vocab if _predicate_has_signature(p, sig, scene, dg)), d, row, hop)
++    old = dict(v39.CFG)
++    try:
++        v39.CFG["u_abstain"] = False
++        answer, reason = v39.u_answer(d, row, scene, ph, hop)
++    finally:
++        v39.CFG.clear()
++        v39.CFG.update(old)
++    maximum = max(counts[p] for p in pool)
++    return dict(table="固定場面の完全入力を抽選分布で重ねた検査用。学習はしていない", answer=answer, reason=reason,
++                signature=sig, regular_count=counts["REG"], largest_irregular_count=max(counts[f"IRR_{k}"] for k in range(1, 9)),
++                maxima={p: counts[p] for p in sorted(pool) if counts[p] == maximum},
++                binary_structural_counts={p: counts[p] for p in sorted(pool) if p in ("push", "carry", "lift", "steer", "reach")},
++                REG_is_global_max=counts["REG"] == maximum)
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("output")
++    ap.add_argument("--draws", type=int, default=100000)
++    args = ap.parse_args()
++    out = Path(args.output)
++    out.mkdir(parents=True, exist_ok=True)
++    sd = load_seed(ROOT / "tools/verb/U-011_seed_verb.json")
++    original = load_seed(ROOT / "tools/shop/U-011_seed_shop.json")
++    assert sd.data["motif_structure"]["M1"] == original.data["motif_structure"]["M1"]
++    items = vw.training_items()
++    counts = Counter(vw.draw_verb(1, t, items).name for t in range(args.draws))
++    rows = [dict(verb_name=v.name, verb_class=v.verb_class, correct_past=v.past, expected=v.probability,
++                 count=counts[v.name], observed=counts[v.name] / args.draws,
++                 deviation_pp=100 * (counts[v.name] / args.draws - v.probability)) for v in items]
++    assert all(abs(row["deviation_pp"]) <= .5 for row in rows)
++    irregular = sum(counts[v.name] for v in items if v.verb_class == "irregular") / args.draws
++    assert abs(irregular - .70) <= .005
++    assert not set(counts) & set(vw.NOVEL_NAMES)
++    assert max(v.probability for v in items if v.verb_class == "irregular") < .30
++    base = w.generate_trial(1, 0, ("agent",), seed=sd)
++    samples = []
++    tr = info = None
++    for item in (items[0], items[32], vw.Verb("V41", "novel", "REG", 0)):
++        tr, info = vw.build(base, 1, 0, verb=item)
++        paths, _ = pw._paths(sd.data, 1, 0, "M1")
++        aliases = {r[0]: path for path, r in paths.items()}
++        aliases.update({w.opaque_id(1, 0, "entity:a"): "a", w.opaque_id(1, 0, "entity:b"): "b",
++                        info["name_id"]: "verb_name", info["link_id"]: "verb_link"})
++        sample = dict(verb_name=item.name, verb_class=item.verb_class, nominal_past=item.past,
++                      novel_truth_is_placeholder=item.verb_class == "novel", past_path="0.0.0",
++                      relations=[dict(seat=aliases.get(r.relation_id, r.relation_id), predicate=r.predicate,
++                                      arguments=[aliases.get(a, a) for a in r.arguments]) for r in tr.G_star.relations])
++        samples.append(sample)
++        print(json.dumps(sample, ensure_ascii=False))
++    # 学習なしで、伏せ辺と乱数の保存を種1〜20・各100場面で調べる。
++    past_queries = 0
++    for rs in range(1, 21):
++        for t in range(100):
++            old = w.generate_trial(rs, t, ("agent",), seed=sd)
++            new, ni = vw.build(old, rs, t, verb=vw.draw_verb(rs, t, items))
++            assert old.held_out_edge.relation_id == new.held_out_edge.relation_id
++            assert old.u_coins == new.u_coins
++            assert len(new.G_star.relations) == len(old.G_star.relations) + 2
++            past_queries += ni["held_out_is_past"]
++    regular_tr, regular_info = vw.build(base, 1, 0, verb=items[0])
++    result = dict(seed=1, draws=args.draws, rows=rows, irregular_expected=.70, irregular_observed=irregular,
++                  max_abs_deviation_pp=max(abs(row["deviation_pp"]) for row in rows),
++                  most_frequent_irregular_expected=items[32].probability,
++                  most_frequent_irregular_observed=counts["V33"] / args.draws, regular_expected=.30,
++                  every_irregular_less_than_REG=True, sampled_seeds=list(range(1, 21)),
++                  holdout_checks=2000, held_out_is_past=past_queries,
++                  past_probability_default=w.one_minus_h(sd.data["pi_A"]["M1"], len(w._first_order_paths(sd.data, "M1"))),
++                  default_U_check=inspect_default_u(regular_tr, regular_info, counts))
++    # one_minus_h は「見える率」なので、過去形を問う既定率に戻す。
++    result["past_probability_default"] = 1 - result["past_probability_default"]
++    (out / "draws.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
++    (out / "samples.json").write_text(json.dumps(samples, ensure_ascii=False, indent=2) + "\n")
++    print(json.dumps({key: value for key, value in result.items() if key != "rows"}, ensure_ascii=False, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/verb/make_seed.py b/tools/verb/make_seed.py
+new file mode 100644
+index 0000000..4a67154
+--- /dev/null
++++ b/tools/verb/make_seed.py
+@@ -0,0 +1,28 @@
++"""お店の種から M1 だけを残す。既存の種と abm/ は書き換えない。"""
++import json
++import sys
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT))
++from abm.seed import load_seed, seed_hash  # noqa: E402
++
++
++def main():
++    data = json.loads((ROOT / "tools/shop/U-011_seed_shop.json").read_text(encoding="utf-8"))
++    for key in ("motif_structure", "pi_A", "one_minus_h", "role_unary"):
++        data[key] = {"M1": data[key]["M1"]}
++    data["bags"] = {word: ["M1"] for word, motifs in data["bags"].items() if "M1" in motifs}
++    data["version"] = str(data.get("version", "")) + "+verb（M1 だけ）"
++    if "sha256" in data:
++        data.pop("sha256")
++        data["sha256"] = seed_hash(data)
++    out = ROOT / "tools/verb/U-011_seed_verb.json"
++    out.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
++    seed = load_seed(out)
++    assert tuple(seed.data["motif_structure"]) == ("M1",)
++    print(out)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/verb/replay_state.py b/tools/verb/replay_state.py
+new file mode 100644
+index 0000000..59cb7e2
+--- /dev/null
++++ b/tools/verb/replay_state.py
+@@ -0,0 +1,118 @@
++"""既存 sealrestore の状態復元とキャッシュ解放を使う研究者側の読み手。模型には読み込まれない。"""
++from __future__ import annotations
++import ast
++import sys
++_MV38 = []
++
++def configs_of(cfg, task):
++    """sweep.run_one と同じ AgentConfig。"""
++    from abm.domains import AgentConfig, CorrectionMode, RepairScope
++    from sweep import higher_order_predicates, load_seed
++    fixed = cfg["fixed"]
++    seed = load_seed(cfg["seed_file"])
++    return {a: AgentConfig(
++        fixed["threshold"], CorrectionMode(fixed["correction_mode"]), theta_prime=task["theta_prime"], tau_acc=fixed["tau_acc"],
++        verbatim_theta=task["verbatim_theta"], nsim_threshold=fixed["nsim_threshold"], alpha=fixed["alpha"], beta=fixed["beta"], w=fixed["w"],
++        kappa=fixed["kappa"], lambda_mix=fixed["lambda_mix"], abstain_charge=fixed["abstain_charge"], repair_scope=RepairScope(task["repair_scope"]),
++        pending_claims=fixed.get("pending_claims", False), pending_gamma=fixed.get("pending_gamma", 0.0),
++        pending_hold_cost=fixed.get("pending_hold_cost", 0.0), fill_selection=task["fill_selection"],
++        identification_graph=fixed.get("identification_graph", "live"), self_score_cache=fixed.get("self_score_cache", "off"),
++        pricing_rule=fixed.get("pricing_rule", "legacy"), refill_rule=fixed.get("refill_rule", "legacy"), local_lambda=fixed.get("local_lambda", 0.0),
++        holdout_include_second_order=fixed.get("holdout_include_second_order", False), higher_order_predicates=higher_order_predicates(seed),
++    ) for a in cfg["agent_ids"]}
++
++def _key(k):
++    return ast.literal_eval(k)
++
++def _merit_v38():
++    if not _MV38:
++        from dataclasses import dataclass
++        from abm.definition import MeritAccumulator
++
++        @dataclass(frozen=True, slots=True)
++        class MeritAccumulatorV38(MeritAccumulator):
++            eval_basis: tuple = ()
++        _MV38.append(MeritAccumulatorV38)
++    return _MV38[0]
++
++def restore_state(d, argmap, scenes):
++    """台帳の状態の dict → AgentStateV39。"""
++    import v39
++    import roletarget_recompute as rr
++    from abm.definition import EmbedState, ExceptionAccumulator, FrequencyTable, MeritAccumulator
++    from abm.domains import Entity, Prototype, Relation, RelationGraph, VerbatimTrace
++    defs = {}
++    bad = 0
++    for name, dd in d["definitions"].items():
++        nd, b = rr._restore_def(dd, argmap)
++        defs[name] = nd
++        bad += len(b)
++    MV38 = _merit_v38()
++    merit = {}
++    for k, v in d.get("merit", {}).items():
++        kw = dict(slot_index=v["slot_index"], registered_at=v["registered_at"], basis=tuple(v["basis"]),
++                  opportunity_basis=tuple(v["opportunity_basis"]), use_count=v["use_count"],
++                  ext_use_count=v["ext_use_count"], ext_basis=tuple(v.get("ext_basis") or ()))
++        # ★ --own-evidence（tools/v38.py:57）の型は eval_basis の欄を足したもの。同じ欄の型で戻す（欄の名で正準形が決まる）
++        merit[_key(k)] = MV38(**kw, eval_basis=tuple(v["eval_basis"])) if "eval_basis" in v else MeritAccumulator(**kw)
++    embed = {_key(k): EmbedState(**v) for k, v in d.get("embed", {}).items()}
++    exc = {_key(k): ExceptionAccumulator(basis=tuple(v["basis"]), bits=v["bits"], event_count=v["event_count"]) for k, v in d.get("exceptions", {}).items()}
++    ph = d["p_hat"]
++    p_hat = FrequencyTable(counts=dict(ph["counts"]), total=ph["total"], lambda_mix=ph["lambda_mix"], alive_vocab=frozenset(ph["alive_vocab"]))
++    sh = {}
++    for k, v in d.get("slot_history", {}).items():
++        sh[_key(k)] = dict(v) if isinstance(v, dict) else frozenset(v)
++    # ★ 原型の場面：本人が観察した場面（提示に、開示があれば伏せた関係を足したもの。abm/agent_runtime.py _write_graph）。
++    #   並びは、提示の場面の関係・物の並びのあとに、提示に無いもの（開示の関係）を足す。引数の並びは世界から
++    tl = []
++    for tr in sorted(d.get("prototype", {}).get("traces", []), key=lambda x: x["written_at"]):
++        sc = tr["scene"]
++        g = sc["graph_id"]
++        basep = scenes.get(g)
++        rels = list(basep.relations) if basep is not None else []
++        have = {r.relation_id for r in rels}
++        for rd in sc["relations"]:
++            if rd["relation_id"] not in have:
++                rels.append(Relation(relation_id=rd["relation_id"], predicate=rd["predicate"],
++                                     arguments=tuple(argmap.get(rd["relation_id"], rd["arguments"])), attributes=rd.get("attributes") or {}))
++        ents = list(basep.entities) if basep is not None else []
++        haveE = {e.entity_id for e in ents}
++        for ed in sc["entities"]:
++            if ed["entity_id"] not in haveE:
++                ents.append(Entity(entity_id=ed["entity_id"], label=ed.get("label"), attributes=ed.get("attributes") or {}))
++        tl.append(VerbatimTrace(written_at=tr["written_at"], scene=RelationGraph(g, entities=tuple(ents), relations=tuple(rels))))
++    proto = Prototype(traces=tuple(tl))
++    seats = {}
++    for k, v in d.get("v39_seats", {}).items():
++        seats[_key(k)] = v39.SeatRec(gen=v["gen"], state=v["state"], born=v["born"], t0=v["t0"],
++                                     init=tuple(tuple(c) for c in v["init"]), post=tuple(tuple(c) for c in v["post"]), n_scored=v.get("n_scored", 0))
++    def tup(x):
++        return tuple(tup(y) for y in x) if isinstance(x, list) else x
++    rng = tup(d.get("rng_state"))
++    cls = v39._state_class()
++    kw = dict(prototype=proto, rng_state=rng, definitions=defs, merit=merit, embed=embed, exceptions=exc, p_hat=p_hat,
++              slot_history=sh, v39_seats=seats)
++    return cls(**kw), bad
++
++def _clear_caches(loop):
++    """毎試行の終わりに、物の id で控える記憶を空にする（作り直した状態は試行ごとに新しい物なので、控えが溜まり続けるため。
++    本物の走行では、台帳を書く段で試行ごとに捨てられる：tools/fastledger.py・tools/lowmem.py。v39.REG・ustruct.UREG も id の控え）。
++    記憶は計算の近道なので、空にしても計算の結果は変わらない（確かめ①で予測が本物と同じことを見る）。"""
++    loop._CANONICAL_CACHE.clear(); loop._CANONICAL_KEEP.clear(); loop._REPR_CACHE.clear()
++    for mn in ("fastledger", "lowmem"):
++        m = sys.modules.get(mn)
++        if m is None:
++            continue
++        for an in ("CACHE", "KEEP", "DESC", "REPR", "TOUCHED", "STACK", "KEYM", "KEYT", "FRAGM", "FRAGT", "LKEYS", "LKEYT"):
++            v = getattr(m, an, None)
++            if v is not None and hasattr(v, "clear"):
++                v.clear()
++    for mn, an in (("v39", "REG"), ("ustruct", "UREG")):
++        m = sys.modules.get(mn)
++        if m is not None and hasattr(getattr(m, an, None), "clear"):
++            getattr(m, an).clear()
++
++def _strip(d):
++    d = dict(d)
++    d["v39_seats"] = {k: {kk: vv for kk, vv in v.items() if kk not in ("init", "post")} for k, v in d.get("v39_seats", {}).items()}
++    return d
+diff --git a/tools/verbtiming.py b/tools/verbtiming.py
+new file mode 100644
+index 0000000..0667ece
+--- /dev/null
++++ b/tools/verbtiming.py
+@@ -0,0 +1,43 @@
++"""台帳の追記後に時間を観察する。状態・乱数・台帳の内容は変えない。"""
++from __future__ import annotations
++
++import json
++import resource
++import sys
++import time
++from pathlib import Path
++
++ST = {}
++
++
++def install(path):
++    import abm.ledger as ledger
++    dest = Path(path)
++    dest.parent.mkdir(parents=True, exist_ok=True)
++    start = time.perf_counter()
++    ST.clear()
++    ST.update(stream=dest.open("x"), start=start, previous=start, points=0)
++    real = ledger.Ledger.append
++
++    def append(self, record):
++        result = real(self, record)
++        n = int(record["prediction_order"]) + 1
++        if n % 1000 == 0:
++            now = time.perf_counter()
++            usage = resource.getrusage(resource.RUSAGE_SELF)
++            row = {"completed_trials": n, "epoch_seconds": time.time(),
++                   "elapsed_seconds": now - start, "interval_seconds": now - ST["previous"],
++                   "cumulative_max_rss_bytes": int(usage.ru_maxrss) * (1 if sys.platform == "darwin" else 1024),
++                   "user_cpu_seconds": usage.ru_utime, "system_cpu_seconds": usage.ru_stime}
++            ST["stream"].write(json.dumps(row) + "\n")
++            ST["stream"].flush()
++            ST["previous"] = now
++            ST["points"] += 1
++        return result
++
++    ledger.Ledger.append = append
++
++
++def close():
++    ST["stream"].close()
++    return {"checkpoints": ST["points"], "elapsed_seconds": time.perf_counter() - ST["start"]}
+diff --git a/tools/verbworld.py b/tools/verbworld.py
+new file mode 100644
+index 0000000..da2c370
+--- /dev/null
++++ b/tools/verbworld.py
+@@ -0,0 +1,250 @@
++"""動詞の世界（委任書 2026-10-04、土台 3380344）。
++
++世界と研究者の台帳だけを外側から包む。abm/・模型の選び方・学習は変えない。
++名前と attach は shopworld のシールと link の位置に置く。シールは置かない。
++Schuler の項目別頻度は出典確認済みの表を別ファイルで受け取る。推測では埋めない。
++"""
++from __future__ import annotations
++
++import json
++from dataclasses import dataclass, replace
++from hashlib import sha256
++from math import isclose
++from pathlib import Path
++from random import Random
++
++REG, ATTACH, PAST_PATH = "REG", "attach", "0.0.0"
++NAMES = tuple(f"V{i:02d}" for i in range(1, 49))
++NOVEL_NAMES = NAMES[40:]
++PAST_PREDICATES = (REG, *(f"IRR_{k}" for k in range(1, 9)))
++NEW_PREDICATES = (*NAMES, *PAST_PREDICATES, ATTACH)
++EXTRA_KEYS = ("verb_name", "verb_class", "correct_past", "held_out_is_past")
++INFO: dict = {}
++IDS: dict = {}
++CFG: dict = {}
++CTX: dict = {}
++STATS: dict = {}
++
++
++@dataclass(frozen=True)
++class Verb:
++    name: str
++    verb_class: str
++    past: str
++    probability: float
++
++
++def training_items(variant="default", frequency_file=None) -> tuple[Verb, ...]:
++    """模型の設定・状態を受け取らない、事前固定の刺激分布。"""
++    if variant == "default":
++        h32 = sum(1 / k for k in range(1, 33))
++        h8 = sum(1 / k for k in range(1, 9))
++        return tuple(Verb(f"V{j:02d}", "regular", REG, .30 / (h32 * j)) for j in range(1, 33)) + tuple(
++            Verb(f"V{k + 32:02d}", "irregular", f"IRR_{k}", .70 / (h8 * k)) for k in range(1, 9))
++    if variant not in ("schuler54", "schuler36"):
++        raise ValueError(f"未知の動詞の変種: {variant}")
++    if frequency_file is None:
++        raise ValueError("Schuler の項目別出現数は未確定。出典を確かめた --verb-frequencies の表が必要（2016年本文と後年の表が不一致）")
++    data = json.loads(Path(frequency_file).read_text(encoding="utf-8"))
++    if not isinstance(data.get("source"), str) or not data["source"].strip():
++        raise ValueError("Schuler の頻度表には source が必要")
++    counts = data.get(variant)
++    if not isinstance(counts, list) or len(counts) != 9 or any(type(n) is not int or n <= 0 for n in counts):
++        raise ValueError("Schuler の頻度表は、頻度順位の順に9個の正の整数を指定する")
++    if counts != sorted(counts, reverse=True):
++        raise ValueError("Schuler の頻度表は頻度の降順で指定する")
++    nreg = 5 if variant == "schuler54" else 3
++    target = .75 if nreg == 5 else 28 / 48
++    if not isclose(sum(counts[:nreg]) / sum(counts), target, abs_tol=5e-5):
++        raise ValueError("Schuler の頻度表の REG 比が委任書の75%／58.3%に合わない")
++    total = sum(counts)
++    return tuple(Verb(f"V{j:02d}", "regular" if j <= nreg else "irregular",
++                      REG if j <= nreg else f"IRR_{j - nreg}", n / total)
++                 for j, n in enumerate(counts, 1))
++
++
++def verb_rng(run_seed, trial_index) -> Random:
++    """世界の乱数とは別の流れ。一試行一抽選。"""
++    return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fverb".encode()).digest(), "big"))
++
++
++def draw_verb(run_seed, trial_index, items=None) -> Verb:
++    items = CFG["items"] if items is None else items
++    u = verb_rng(run_seed, trial_index).random()
++    cumulative = 0.0
++    for item in items:
++        cumulative += item.probability
++        if u < cumulative:
++            return item
++    if not isclose(cumulative, 1.0, abs_tol=1e-12):
++        raise ValueError("動詞の確率の合計が1でない")
++    return items[-1]
++
++
++def build(tr, run_seed, trial_index, *, verb: Verb):
++    """元の M1 場面に名前・link・過去形を置く。ほかの関係と乱数は変えない。"""
++    import abm.world as w
++    from abm.domains import Relation, RelationGraph
++    if tr.motif != "M1":
++        raise ValueError("動詞の世界の種は M1 一型だけにする")
++    if verb.name not in NAMES or verb.past not in PAST_PREDICATES:
++        raise ValueError("動詞の名前か過去形が固定辞書にない")
++    past_id = w.opaque_id(run_seed, trial_index, f"relation:tree:{PAST_PATH}")
++    root_id = w.opaque_id(run_seed, trial_index, "relation:tree:root")
++    a_id = w.opaque_id(run_seed, trial_index, "entity:a")
++    by_id = {r.relation_id: r for r in tr.G_star.relations}
++    if past_id not in by_id or by_id[past_id].predicate != "hold" or root_id not in by_id:
++        raise ValueError("過去形（0.0.0 の hold）か根が元の場面にない")
++    # 関係 ID の役割も shopworld と同じ。意味の識別に名前や正解を渡さない。
++    name_id = w.opaque_id(run_seed, trial_index, "relation:shop:sig")
++    link_id = w.opaque_id(run_seed, trial_index, "relation:shop:link")
++    relations = tuple(Relation(r.relation_id, verb.past, r.arguments, r.attributes)
++                      if r.relation_id == past_id else r for r in tr.G_star.relations) + (
++        Relation(name_id, verb.name, (a_id,)), Relation(link_id, ATTACH, (name_id, root_id)))
++    held_id = tr.held_out_edge.relation_id
++    held = next(r for r in relations if r.relation_id == held_id)
++    graph = RelationGraph(tr.G_star.graph_id, tr.G_star.entities, relations)
++    visible = tuple(r for r in relations if r.relation_id != held_id)
++    if tuple(r.relation_id for r in visible[:-2]) != tuple(r.relation_id for r in tr.target_graph_partial.relations):
++        raise ValueError("見えている関係の順序が元の世界と違う")
++    ids = frozenset(r.relation_id for r in visible)
++    entities = {e.entity_id for e in graph.entities}
++    reachable = frozenset(a for r in visible for a in r.arguments if a not in ids and a in entities)
++    partial = RelationGraph(tr.target_graph_partial.graph_id,
++                            tuple(e for e in graph.entities if e.entity_id in reachable), visible)
++    info = dict(verb_name=verb.name, verb_class=verb.verb_class, correct_past=verb.past,
++                held_out_is_past=held_id == past_id, past_id=past_id, name_id=name_id, link_id=link_id, root_id=root_id)
++    return replace(tr, G_star=graph, target_graph_partial=partial, held_out_edge=held), info
++
++
++def verb_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_include_second_order=False):
++    tr = original(run_seed, trial_index, agent_ids, seed=seed, holdout_include_second_order=holdout_include_second_order)
++    if CFG.get("door_p") is not None:
++        # 名前を足す前に、お店と同じ候補・別乱数で伏せ辺を選ぶ。
++        if holdout_include_second_order:
++            raise ValueError("--shop-door-p は二階を伏せない設定（hide1）で使う")
++        import shopworld
++        tr = shopworld.rehide(tr, run_seed, trial_index, CFG["door_p"])
++    out, info = build(tr, run_seed, trial_index, verb=draw_verb(run_seed, trial_index))
++    INFO[out.G_star.graph_id] = info
++    IDS[info["name_id"]] = "name"
++    IDS[info["link_id"]] = "link"
++    STATS["trials"] = STATS.get("trials", 0) + 1
++    STATS["held_out_is_past"] = STATS.get("held_out_is_past", 0) + int(info["held_out_is_past"])
++    return out
++
++
++def install(*, variant="default", frequency_file=None, door_p=None):
++    """v39・選び方の旗の後、probe-world の前に入れる。"""
++    import abm.ledger as ledger
++    import abm.loop as loop
++    import abm.seed as seedmod
++    import abm.world as w
++    INFO.clear()
++    IDS.clear()
++    CTX.clear()
++    STATS.clear()
++    CFG.clear()
++    CFG.update(items=training_items(variant, frequency_file), variant=variant, door_p=door_p)
++    original = w.generate_trial
++    CTX["orig_gen"] = original
++
++    def generate_trial(run_seed, trial_index, agent_ids, *, seed, holdout_include_second_order=False):
++        return verb_trial(original, run_seed, trial_index, agent_ids, seed=seed,
++                          holdout_include_second_order=holdout_include_second_order)
++
++    w.generate_trial = generate_trial
++    real_hop = seedmod.higher_order_predicates
++
++    def higher_order_predicates(seed):
++        return frozenset(real_hop(seed)) | {ATTACH}
++
++    seedmod.higher_order_predicates = higher_order_predicates
++    import sweep
++    if getattr(sweep, "higher_order_predicates", None) is real_hop:
++        sweep.higher_order_predicates = higher_order_predicates
++    real_record = loop._ledger_record
++
++    def _ledger_record(agent_id, trial, *a, **kw):
++        rec, snapshot, fingerprint = real_record(agent_id, trial, *a, **kw)
++        info = INFO[trial.G_star.graph_id]
++        return {**rec, **{key: info[key] for key in EXTRA_KEYS}}, snapshot, fingerprint
++
++    loop._ledger_record = _ledger_record
++    real_append = ledger.Ledger.append
++
++    def append(self, record):
++        extra = {key: record[key] for key in EXTRA_KEYS if key in record}
++        if not extra:
++            return real_append(self, record)
++        base = {key: val for key, val in record.items() if key not in extra}
++        expected = frozenset(ledger.LEDGER_FIELDS)
++        if frozenset(base) != expected or len(extra) != len(EXTRA_KEYS):
++            raise ValueError("動詞の台帳の欄が不一致")
++        if any(base[key] is None for key in ledger.NON_NULL_FIELDS):
++            raise ValueError("動詞の台帳の必須欄が null")
++        self._write_line({"record_type": "trial", **base, **extra})
++
++    ledger.Ledger.append = append
++
++
++def extend_dictionary():
++    """shopworld.extend_dictionary と同じ。既存の辞書番号は保つ。"""
++    import v39
++    if not v39.CFG.get("dict_index"):
++        return
++    idx = dict(v39.CFG["dict_index"])
++    for predicate in NEW_PREDICATES:
++        if predicate not in idx:
++            idx[predicate] = len(idx)
++    v39.CFG["dict_index"] = idx
++    v39.CFG["D"] = len(idx)
++
++
++def prepare_probe_snapshot(pw):
++    """固定試験の場面を最初に生成する前から、動詞の研究者記録も保存・復元する。"""
++    for module in ("verbworld", "selectn3", "useforget"):
++        if module not in pw.SNAP_MODULES:
++            pw.SNAP_MODULES += (module,)
++    if "IDS" not in pw.SNAP_ATTRS:
++        pw.SNAP_ATTRS += ("IDS",)
++
++
++def add_probes(pst, *, run_seed, agent_ids, holdout_second):
++    """同じ固定場面で学習語・新語の過去形を問う。新語の正誤は採点しない。"""
++    import probeworld as pw
++    if tuple(pst["sd"].data["motif_structure"]) != ("M1",):
++        raise ValueError("動詞の試験には M1 一型の種が必要")
++    prs = f"probe\x1f{run_seed}"
++    tr0 = CTX["orig_gen"](prs, 0, agent_ids, seed=pst["sd"], holdout_include_second_order=holdout_second)
++    paths, _ = pw._paths(pst["sd"].data, prs, 0, "M1")
++    role = [(paths[parent][2], position) for parent, position in paths[PAST_PATH][3]]
++    items = (*CFG["items"], *(Verb(name, "novel", REG, 0.0) for name in NOVEL_NAMES))
++    probes = []
++    for item in items:
++        tr, info = build(tr0, prs, 0, verb=item)
++        # 新語の REG は生成用の仮の値。伏せるので入力には現れず、正誤の基準にも使わない。
++        probes.append(dict(motif="M1", path=PAST_PATH, level=1, truth=None if item.verb_class == "novel" else item.past,
++                           role=role, hid=info["past_id"], G=tr.G_star, partial=pw._partial(tr.G_star, info["past_id"]),
++                           facts={(r.predicate, tuple(r.arguments)) for r in tr.G_star.relations}, verb_name=item.name,
++                           score_truth=item.verb_class != "novel",
++                           extra=dict(verb_probe="past", verb_name=item.name, verb_class=item.verb_class)))
++    pst["probes"] = probes
++    prepare_probe_snapshot(pw)
++
++
++def seen(pst, t_limit, verb_name):
++    """研究者の経験表。見えていた、又は問いの後で開示された正しい形だけ。"""
++    from collections import Counter
++    names, last = Counter(), None
++    for t in range(t_limit):
++        tr = pst["trials"].get(t)
++        if tr is None:
++            continue
++        info = INFO[tr.G_star.graph_id]
++        if verb_name is not None and info["verb_name"] != verb_name:
++            continue
++        if not info["held_out_is_past"] or pst["disclosed"].get(t):
++            names[info["correct_past"]] += 1
++            last = info["correct_past"]
++    return names, last
