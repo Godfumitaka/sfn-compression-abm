@@ -1,0 +1,108 @@
+{
+  "at": "2026-10-06T21:18:44.245310+09:00",
+  "automation_id": "sme-25-c",
+  "created_at_jst": "2026-10-06T21:09:13.272000+09:00",
+  "updated_at_jst": "2026-10-06T21:17:01.450000+09:00",
+  "interval_minutes": 30,
+  "ends_at_jst": "2026-10-09T09:00:00+09:00",
+  "received_28prime": true,
+  "remote_commit": "ea961c9b087d0c9d41d7ee35f7a7b87e36eb5169",
+  "unreceived_inbox_instructions": 0,
+  "eligible_queue_rows": 0,
+  "queue_row_count": 16,
+  "cpu": {
+    "at": "2026-10-06T21:18:44.244258+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "80183": {
+        "ppid": 80173,
+        "pgid": 80167,
+        "stat": "R",
+        "cpu": 98.1,
+        "rss": 363970560,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "80227": {
+        "ppid": 80222,
+        "pgid": 80218,
+        "stat": "R",
+        "cpu": 100.0,
+        "rss": 387317760,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "83241": {
+        "ppid": 83228,
+        "pgid": 83217,
+        "stat": "R",
+        "cpu": 96.7,
+        "rss": 377634816,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "83756": {
+        "ppid": 83749,
+        "pgid": 83737,
+        "stat": "S",
+        "cpu": 2.5,
+        "rss": 159662080,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure4_evict600/spec.json"
+      },
+      "83757": {
+        "ppid": 83749,
+        "pgid": 83737,
+        "stat": "S",
+        "cpu": 67.5,
+        "rss": 163135488,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure4_evict600/spec.json"
+      },
+      "83758": {
+        "ppid": 83749,
+        "pgid": 83737,
+        "stat": "R",
+        "cpu": 27.6,
+        "rss": 168165376,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure4_evict600/spec.json"
+      },
+      "83759": {
+        "ppid": 83749,
+        "pgid": 83737,
+        "stat": "S",
+        "cpu": 0.0,
+        "rss": 169558016,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure4_evict600/spec.json"
+      }
+    },
+    "external_count": 7,
+    "own_reserved_slots": 2,
+    "total_reserved_slots": 9,
+    "own_compute_count": 1,
+    "total_compute_count": 8
+  },
+  "resources": {
+    "at": "2026-10-06T21:18:44.245220+09:00",
+    "free_bytes": 266536656896,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 188.0
+  },
+  "cases": {
+    "shop_profile1740_02": {
+      "stage": "profile",
+      "claim_pid": 69132,
+      "completed_trials": 1124,
+      "measured_trials": 1740,
+      "cpu_paused": true,
+      "reported": false
+    },
+    "verb_profile1000_01": {
+      "stage": "profile",
+      "claim_pid": 36341,
+      "completed_trials": 349,
+      "measured_trials": 1000,
+      "cpu_paused": false,
+      "reported": false
+    }
+  },
+  "model_count_method": "psの親子関係から計算するPythonの末端の過程。親の二重計上と停止中の過程は除き、重い読み取りも保守的に含む。",
+  "prompt_sha256": "a9305a556142cccab28469c19f15116101eaebe7d90c64d0298ec040487e9e3d"
+}
