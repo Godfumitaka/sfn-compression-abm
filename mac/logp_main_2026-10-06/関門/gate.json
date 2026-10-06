@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-06T12:38:40.222379+09:00",
+  "passed": true,
+  "records": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "equal": true,
+      "left_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef",
+      "right_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef",
+      "left_bytes": 492882608,
+      "right_bytes": 492882608,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+      "equal": true,
+      "left_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c",
+      "right_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c",
+      "left_bytes": 443892,
+      "right_bytes": 443892,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "equal": true,
+      "left_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+      "right_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+      "left_bytes": 13877627,
+      "right_bytes": 13877627,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+      "equal": true,
+      "left_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8",
+      "right_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8",
+      "left_bytes": 17953721,
+      "right_bytes": 17953721,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+      "equal": true,
+      "left_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d",
+      "right_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d",
+      "left_bytes": 33392,
+      "right_bytes": 33392,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+      "equal": true,
+      "left_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4",
+      "right_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4",
+      "left_bytes": 101323446,
+      "right_bytes": 101323446,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "equal": true,
+      "left_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2",
+      "right_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2",
+      "left_bytes": 582869296,
+      "right_bytes": 582869296,
+      "first_byte_difference": null
+    }
+  ],
+  "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_logp_2026-10-05/runs_01/L_B_s01/output",
+  "case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/vanilla_01/L/output",
+  "trials": 1740,
+  "seed": 1,
+  "excluded": [
+    "台帳の見出し1行",
+    "cflearn/cfvalueの実測sec_trialの数値だけ"
+  ],
+  "added_record_directory": "evictions（捨てた鍵）。nativeの全sideと保存状態は除外しない。",
+  "source_commit": "1838256b3fa9f81737d8b210e6ccb59c9d638a25",
+  "compressed_side_bytes_compared": true
+}

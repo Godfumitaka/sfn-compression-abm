@@ -29,3 +29,20 @@
 
 25番の旧intern計測を自分の処理だけ停止し、途中記録を保持。33番の後、10cd8bdで新しい計測を行う。
 
+
+## 関門：2026-10-06T12:40:39.075659+09:00
+
+w2_A_L50・種1（1838256、完了済みvanilla_01/L）を、旧L_B_s01（da3521bf）と直接比較。全1740試行、台帳本体・全side・保存状態の7ファイルが全バイト一致。控えを捨てた鍵のevictions記録は別の追加記録として保持。台帳の見出し1行と許可済みの実測sec_trialの数値だけを比較から除外する。実際にはこのAの記録にsec_trialの相違は無い。
+
+|ファイル|一致|比較したsha256|
+|---|---|---|
+|ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz|一致|b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv|一致|9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl|一致|5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl|一致|fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl|一致|f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz|一致|a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4|
+|side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz|一致|b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2|
+
+種1の既存のselcands_sme再解析も、入力の台帳・全side・保存状態が一致したため利用し、同じ表を作る。残りの種は1838256で走行し、その保存状態をselcands_sme.pyで再解析する。再生の不一致があれば後続へ進まずに報告。
+
