@@ -483,6 +483,7 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
                 return visible
             distributions.append({"slot_index": constituent.slot_index, "candidates": [[predicate, 1.0]], "席": "F"})
         else:
+            position_distribution = None
             raw_history = slot_history.get((definition.name, constituent.slot_index))
             if st == "H":
                 pool = frozenset(raw_history)
@@ -503,6 +504,12 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
             if pool_before_order and not pool:
                 empty_pool_slots += 1
             distribution = _distribution(pool, p_hat, local_lambda, local_counts)
+            if st == "U" and CFG.get("u_position"):
+                import uposition
+                b, _, why = uposition.base_distribution(definition, constituent, target, p_hat, higher_order_predicates)
+                if why is None:
+                    position_distribution = b
+                    distribution = tuple(sorted(b.items()))
             maximum = max((w for _, w in distribution), default=0.0)
             tied_count = sum(w == maximum for _, w in distribution) if maximum > 0 else 0
             history_size += len(pool)
@@ -513,7 +520,10 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
                 predicate = sample_predicate(distribution, rng)
                 tied = False
             else:
-                predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
+                if position_distribution is not None:
+                    predicate, tied = uposition.maximum(position_distribution)
+                else:
+                    predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
                 ambiguous = ambiguous or tied
             fallback_used = fallback_used or used_fallback
             if predicate is None:
@@ -1078,6 +1088,9 @@ def install(fo, *, seed: int, horizon: int, seed_file: str, budget, init: str, a
             for g in made:
                 unregister(g)
         out = ensure(out)
+        if CFG.get("u_position"):
+            import uposition
+            out = uposition.decorate(out, state, base, reg)
         if reg is not None and not reg["was_extension"]:
             R = reg["R"]
             d = out.definitions[R]

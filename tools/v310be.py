@@ -307,6 +307,9 @@ def hypo_m1(state, base, target, alignment, trial, name, kw):
             v39.unregister(g)
     if reg is None:
         return None
+    if v39.CFG.get("u_position"):
+        import uposition
+        out = uposition.decorate(out, state, base, reg)
     return out, reg["R"]
 
 
