@@ -104,6 +104,8 @@ def base_distribution(d, row, scene, p_hat, hop, *, state=None, count=True):
     state = CTX.get('state') if state is None else state
     pool = candidate_pool(d, row, scene, p_hat, hop)
     key, why = slot_key(d, row)
+    if why is None and index_graph(scene)['counts'].get(key, 0) > 1:
+        why = 'ambiguous_key_scene'
     table = getattr(state, 'position_counts', {})
     if why is None and not table:
         why = 'empty_table'

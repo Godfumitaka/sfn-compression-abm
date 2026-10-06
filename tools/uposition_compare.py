@@ -25,7 +25,7 @@ def compare(reference, current, output):
     reference, current, output = map(Path, (reference, current, output))
     files = ['tie_state.jsonl', 'saved_matcher.jsonl.gz']
     files += [str(p.relative_to(reference)) for folder in ('output/side', 'output/ledgers', 'output/evictions')
-              for p in (reference/folder).rglob('*') if p.is_file()]
+              for p in (reference/folder).rglob('*') if p.is_file() and not p.name.endswith('.done')]
     rows = []
     for rel in sorted(files):
         a, b = reference/rel, current/rel
@@ -36,14 +36,15 @@ def compare(reference, current, output):
         row['expanded_equal'] = row['reference_expanded_sha256'] == row['current_expanded_sha256']
         rows.append(row)
     extras = [str(p.relative_to(current)) for folder in ('output/side', 'output/ledgers', 'output/evictions')
-              for p in (current/folder).rglob('*') if p.is_file() and str(p.relative_to(current)) not in files]
+              for p in (current/folder).rglob('*') if p.is_file() and not p.name.endswith('.done')
+              and str(p.relative_to(current)) not in files]
     state_path = next((current/'output/side').rglob('seed001.sme.states.jsonl.gz'))
     tie_path = current/'tie_state.jsonl'
     counts = {'saved_state_lines': lines(state_path), 'rng_trial_lines': lines(tie_path)}
     result = {'passed': all(r['bytes_equal'] for r in rows) and not extras and counts == {
         'saved_state_lines': 1740*3, 'rng_trial_lines': 1740}, 'reference': str(reference), 'current': str(current),
               'files': rows, 'extra_files': extras, **counts,
-              'metadata_note': '本体のcode_commit欄は土台の値へ共通化。実装の実コミットはexecution.json。'}
+              'metadata_note': '本体のcode_commit欄は土台の値へ共通化。実装の実コミットはexecution.json。壁時計の時刻と時間を含む.doneとmanifestは模型の本体・sideではなく比較対象外。'}
     output.mkdir(parents=True, exist_ok=True)
     (output/'gate1.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
     with (output/'gate1_files.csv').open('w') as f:
