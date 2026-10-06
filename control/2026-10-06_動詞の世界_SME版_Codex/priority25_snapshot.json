@@ -1,0 +1,99 @@
+{
+  "checked_at": "2026-10-06T18:49:32+09:00",
+  "registry_path": "$USER_HOME/jobs/registry.tsv",
+  "registry_sha256": "c0ae6cb06be887ffe67b70e22373bd9b9be6d66017c117a1b148d893339e9f67",
+  "own_registered": [],
+  "own_python_processes": [],
+  "own_completed_records": {
+    "status.json": {
+      "epoch_seconds": 1791268140.071985,
+      "state": "pilot_complete",
+      "trial_count": 5000,
+      "seed": 1
+    },
+    "pilot_A_global_s01/guardian_complete.json": {
+      "completed": true,
+      "paused_seconds": 899.5378770828247,
+      "exit_code": 0,
+      "finalization_repaired": true
+    },
+    "pilot_analysis/reader_status.json": {
+      "exit_code": 0
+    },
+    "final_measurement/reader_status.json": {
+      "exit_code": 0
+    }
+  },
+  "priority25_registered": [
+    {
+      "pid": "69132",
+      "owner": "SME25 shop_profile1740_02",
+      "mem_gb": "2.5",
+      "start": "2026-10-06T18:45:04",
+      "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/codex_sme_time_evict_2026-10-06/run_case_02.py $WORKSPACE/codex_sme_"
+    }
+  ],
+  "priority25_processes": [
+    {
+      "pid": 47214,
+      "ppid": 1,
+      "state": "Ss",
+      "process_started_local": "Tue Oct 6 17:57:27 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/guard_existing_native_01.py"
+    },
+    {
+      "pid": 59654,
+      "ppid": 1,
+      "state": "Ss",
+      "process_started_local": "Tue Oct 6 18:13:27 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/workflow_priority25_03.py"
+    },
+    {
+      "pid": 69132,
+      "ppid": 59654,
+      "state": "Ss",
+      "process_started_local": "Tue Oct 6 18:24:01 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $USER_HOME/jobs/jobs.py run --wait --owner SME25 shop_profile1740_02 --mem 2.5 --disk-path $WORKSPACE/codex_sme_time_evict_2026-10-06/shop_profile1740_02 -- /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/codex_sme_time_evict_2026-10-06/run_case_02.py $WORKSPACE/codex_sme_time_evict_2026-10-06/shop_profile1740_02"
+    },
+    {
+      "pid": 89561,
+      "ppid": 69132,
+      "state": "S",
+      "process_started_local": "Tue Oct 6 18:45:04 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/run_case_02.py $WORKSPACE/codex_sme_time_evict_2026-10-06/shop_profile1740_02"
+    },
+    {
+      "pid": 89565,
+      "ppid": 89561,
+      "state": "Ss",
+      "process_started_local": "Tue Oct 6 18:45:05 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/observe_02.py $WORKSPACE/codex_sme_time_evict_2026-10-06/shop_profile1740_02/native_command.json"
+    },
+    {
+      "pid": 89570,
+      "ppid": 89565,
+      "state": "S",
+      "process_started_local": "Tue Oct 6 18:45:05 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 89571,
+      "ppid": 89565,
+      "state": "R",
+      "process_started_local": "Tue Oct 6 18:45:05 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "withdrawn_commands": [],
+  "restored_commands": [],
+  "new_jobs_submitted": 0,
+  "signals_sent": 0,
+  "registry_release_calls": 0,
+  "confirmation_commands": [
+    "python3 $USER_HOME/jobs/jobs.py status --disk-path $WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06",
+    "ps -axo pid,ppid,stat,lstart,command"
+  ],
+  "new_heavy_submissions_held": true,
+  "resume_condition": "both SME25 measurements have started, or two hours have elapsed",
+  "no_restore_needed": true
+}
