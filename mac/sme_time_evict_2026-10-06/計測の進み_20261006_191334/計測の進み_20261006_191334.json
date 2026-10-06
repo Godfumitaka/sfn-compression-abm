@@ -1,0 +1,34 @@
+{
+  "at": "2026-10-06T19:13:34.120287+09:00",
+  "state": "registered_or_waiting",
+  "case": "shop_profile1740_02",
+  "claim_pid": 69132,
+  "cpu_paused": false,
+  "resources": {
+    "at": "2026-10-06T19:13:34.053341+09:00",
+    "free_bytes": 276132327424,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 188.0
+  },
+  "cpu": {
+    "at": "2026-10-06T19:13:34.088622+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "64557": {
+        "ppid": 64552,
+        "pgid": 64552,
+        "stat": "R",
+        "cpu": 100.0,
+        "rss": 1354350592,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      }
+    },
+    "external_count": 1,
+    "own_reserved_slots": 1,
+    "total_reserved_slots": 2,
+    "own_compute_count": 1,
+    "total_compute_count": 2
+  }
+}
