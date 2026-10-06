@@ -1,0 +1,110 @@
+"""受け箱確認の原記録を保存する。模型の実行・受付・指示の自動判断はしない。"""
+from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import argparse
+import hashlib
+import json
+import os
+import re
+import subprocess
+
+ROOT = Path(__file__).resolve().parent
+REPO = ROOT / 'report'
+FILES = [
+    'control/受け箱/README.md',
+    'control/受け箱/集団化の係_Codex3.md',
+    'control/走行の列_2026-10-08.md',
+    'control/2026-10-06_SMEの一本の時間の内訳_Codex.md',
+    'control/2026-10-07_C星の照合とディリクレ_実装_Codex.md',
+    'control/2026-10-07_注意の第二段_実装_Codex2.md',
+]
+
+
+def run(args, cwd=None):
+    p = subprocess.run(args, cwd=cwd, capture_output=True, text=True)
+    return dict(returncode=p.returncode, stdout=p.stdout, stderr=p.stderr)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--previous', type=Path)
+    args = parser.parse_args()
+    previous = {}
+    if args.previous:
+        old = json.loads(args.previous.read_text())
+        previous = old.get('post_fetch', old)['files']
+    now = datetime.now(ZoneInfo('Asia/Tokyo'))
+    if now >= datetime(2026, 10, 9, 9, tzinfo=ZoneInfo('Asia/Tokyo')):
+        raise SystemExit('確認期限後。新たな読み取りを開始しない。')
+    state = dict(
+        time=now.isoformat(),
+        commit=run(['git', 'rev-parse', 'HEAD'], REPO)['stdout'].strip(),
+        files={},
+        model_source=run(['git', 'status', '--short'], ROOT / 'sme-source'),
+        model_commit=run(['git', 'rev-parse', 'HEAD'], ROOT / 'sme-source')['stdout'].strip(),
+        workflow_last=(ROOT / 'evidence/sme-evict-20261007/workflow.jsonl').read_text().splitlines()[-1],
+        snapshot_helper_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    )
+    changed = []
+    for file in FILES:
+        result = run(['git', 'show', 'HEAD:' + file], REPO)
+        if result['returncode']:
+            raise RuntimeError(result)
+        state['files'][file] = result['stdout']
+        if result['stdout'] != previous.get(file):
+            changed.append(file)
+            print('CHANGED', file)
+            if '受け箱' in file or '走行の列' in file:
+                print(result['stdout'])
+            else:
+                print('\n'.join(result['stdout'].splitlines()[-60:]))
+    raw = run(['/bin/ps', '-axo', 'pid=,ppid=,stat=,pcpu=,rss=,command='])
+    if raw['returncode']:
+        raise RuntimeError(raw)
+    state['ps_raw'] = raw
+    records = []
+    for line in raw['stdout'].splitlines():
+        parts = line.strip().split(None, 5)
+        if len(parts) != 6:
+            continue
+        pid, parent, status, cpu, rss, command = parts
+        executable = Path(command.split()[0]).name
+        if re.fullmatch(r'python(?:3(?:\.\d+)?)?', executable, re.I):
+            records.append(dict(pid=int(pid), parent=int(parent), state=status,
+                                cpu=float(cpu), rss_bytes=int(rss) * 1024, command=command))
+    parents = {p['parent'] for p in records}
+    candidates = [p for p in records
+                  if p['pid'] not in parents and p['pid'] != os.getpid()
+                  and 'resource_tracker' not in p['command']
+                  and '/jobs/jobs.py' not in p['command']
+                  and ('spawn_main' in p['command'] or 'sme_evict_observe' in p['command']
+                       or 'v3_run.py' in p['command'] or p['rss_bytes'] >= 100 * 1024 ** 2)]
+    state['model_running'] = [p for p in candidates if not p['state'].startswith(('T', 'Z'))]
+    state['model_paused'] = [p for p in candidates if p['state'].startswith('T')]
+    state['python_processes'] = records
+    state['count_rule'] = '実行ファイルがPythonの葉。spawn・集団化の子・v3_run・100MiB以上。T/Z除外、重い解析は安全側に含む。全psから手作業でも確認する。'
+    commands = {
+        'thermal': ['/usr/bin/pmset', '-g', 'therm'],
+        'swap': ['/usr/sbin/sysctl', 'vm.swapusage'],
+        'memory': ['/usr/bin/vm_stat'],
+        'disk': ['/bin/df', '-k', str(ROOT / 'outputs')],
+        'jobs': ['/opt/homebrew/opt/python@3.12/bin/python3.12',
+                 '/Users/tatsu-admin/jobs/jobs.py', 'status', '--disk-path', str(ROOT / 'outputs')],
+    }
+    for key, command in commands.items():
+        state[key] = run(command)
+        if state[key]['returncode']:
+            raise RuntimeError(state[key])
+    output = ROOT / 'evidence/new-port-20261007' / ('heartbeat-' + now.strftime('%Y%m%dT%H%M%S') + '.json')
+    output.write_text(json.dumps(state, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps(dict(path=str(output), time=state['time'], commit=state['commit'],
+                         changed_since_previous=changed, running=state['model_running'],
+                         paused=len(state['model_paused']), swap=state['swap']['stdout'],
+                         thermal=state['thermal']['stdout'], source_diff=state['model_source']['stdout'],
+                         workflow=state['workflow_last']), ensure_ascii=False, indent=2))
+    print('\n'.join(state['jobs']['stdout'].splitlines()[-24:]))
+
+
+if __name__ == '__main__':
+    main()
