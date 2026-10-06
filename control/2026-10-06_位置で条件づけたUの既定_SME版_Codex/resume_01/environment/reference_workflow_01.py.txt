@@ -1,0 +1,90 @@
+"""寿命の観測の全長の一致を先に通し、控えの旗の関門を順に実行する。"""
+from pathlib import Path
+from datetime import datetime
+import json
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parent
+OLD = ROOT.parent/'codex_sme_amemory_2026-10-05'
+
+
+def now():
+    return datetime.now().astimezone().isoformat()
+
+
+def registered(command, folder, owner, memory):
+    args = [sys.executable, '/Users/tatsu-admin/jobs/jobs.py', 'run', '--wait',
+            '--owner', owner, '--mem', str(memory), '--disk-path', str(folder), '--', *command]
+    with (folder/'claim.log').open('x') as out:
+        code = subprocess.run(args, stdout=out, stderr=subprocess.STDOUT).returncode
+    assert code == 0, (owner, '走行または読み取り不通')
+
+
+def record_case(arm, n, reference):
+    folder = ROOT/('evict200_01' if n == 200 else 'evict_full_01')/(arm+'_evict')
+    if n != 200:
+        folder.mkdir(parents=True, exist_ok=False)
+        command = json.loads((reference/'native_command.json').read_text())
+        command[3] = str(folder/'output')
+        command[command.index('--trial-count')+1] = str(n)
+        command += ['--sme-evict-trial-cache', '--sme-evict-tombstone']
+        source = ROOT/('source_logp' if arm == 'L' else 'source_a')
+        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip()
+        (folder/'native_command.json').write_text(json.dumps(command, indent=2)+'\n')
+        (folder/'command.json').write_text(json.dumps([sys.executable, str(OLD/'observe_memory_02.py'), str(folder/'native_command.json')], indent=2)+'\n')
+        (folder/'run_spec.json').write_text(json.dumps({'source': str(source), 'commit': commit,
+            'output': str(folder/'output'), 'validation_command': str(folder/'native_command.json'), 'memory_diag': False}, indent=2)+'\n')
+    registered([sys.executable, str(ROOT/'run_case_01.py'), str(folder)], folder,
+               f'SME控えを捨てる {arm} {n}', 1.5 if n == 200 else (8.0 if arm == 'A' else 6.8))
+    comparison_folder = folder/'compare_job'
+    comparison_folder.mkdir()
+    registered([sys.executable, str(ROOT/'compare_filtered.py'), str(reference), str(folder)], comparison_folder,
+               f'SME控えのフィルタ一致 {arm} {n}', 2.5)
+    result = json.loads((folder/'comparison.json').read_text())
+    assert result['passed'], (arm, n, '一件でも全バイト不一致。その案を外して停止')
+    print(arm, n, 'native・残した控え・乱数の全バイト一致、墓石0', flush=True)
+    return {'arm': arm, 'trials': n, 'case': str(folder), 'passed': True,
+            'removed': result['eviction_summary']['removed'], 'tombstone_hits': 0,
+            'run': json.loads((folder/'run_complete.json').read_text())}
+
+
+try:
+    while not all((ROOT/'observe_full_01'/arm/'run_complete.json').exists() for arm in ('A', 'L')):
+        assert not list((ROOT/'observe_full_01').glob('*/resource_stop.json')), '資源の停止。後続を始めない'
+        time.sleep(15)
+    (ROOT/'stage1_compare').mkdir()
+    registered([sys.executable, str(ROOT/'finish_stage1_01.py')], ROOT/'stage1_compare', 'SME寿命の全長の一致', 2.5)
+    subprocess.run([sys.executable, str(ROOT/'report_01.py'), 'stage1'], check=True)
+    rows = []
+    for arm in ('A', 'L'):
+        off = json.loads((ROOT/'evict200_01'/(arm+'_off')/'comparison.json').read_text())
+        assert off['passed'], (arm, '旗なし不通')
+        rows.append(record_case(arm, 200, ROOT/'observe200_01'/arm))
+    # C/Dはデスクトップの本番の旗を使う。intern自体の一致が先に必要。
+    assert json.loads((ROOT/'CD_intern200_complete.json').read_text())['passed']
+    for arm in ('C', 'D'):
+        reference = ROOT/'CD_intern200_01'/(arm+'_intern')
+        # 二条件の200の準備は同じ関数の全長側の準備経路を使い、個別に記録する。
+        folder = ROOT/'evict200_01'/(arm+'_evict')
+        folder.mkdir(parents=True, exist_ok=False)
+        command = json.loads((reference/'native_command.json').read_text()); command[3] = str(folder/'output')
+        command += ['--sme-evict-trial-cache', '--sme-evict-tombstone']
+        source = ROOT/'source_a'; commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip()
+        (folder/'native_command.json').write_text(json.dumps(command, indent=2)+'\n')
+        (folder/'command.json').write_text(json.dumps([sys.executable, str(OLD/'observe_memory_02.py'), str(folder/'native_command.json')], indent=2)+'\n')
+        (folder/'run_spec.json').write_text(json.dumps({'source': str(source), 'commit': commit, 'output': str(folder/'output'), 'validation_command': str(folder/'native_command.json'), 'memory_diag': False}, indent=2)+'\n')
+        rows.append(record_case(arm, 200, reference))
+    (ROOT/'evict200_complete.json').write_text(json.dumps({'passed': True, 'cases': rows, 'at': now()}, ensure_ascii=False, indent=2)+'\n')
+    (ROOT/'evict200.md').write_text('保持A・log P・C・Dの200試行で、nativeの台帳本体・全side・保存状態・乱数は全バイト一致。保存した控えと毎試行の控えの印は、基準から捨てた完全な鍵だけを除くと全バイト一致。墓石の検査は4条件とも0件。旗を切った新しい枝も、Aとlog Pで200試行全バイト一致。\n')
+    (ROOT/'evict200_proofs.json').write_text(json.dumps(['evict200_complete.json', *['evict200_01/'+arm+'_evict/comparison.json' for arm in ('A','L','C','D')]])+'\n')
+    subprocess.run([sys.executable, str(ROOT/'report_01.py'), 'evict200'], check=True)
+    rows = [record_case(arm, 1740, ROOT/'observe_full_01'/arm) for arm in ('A', 'L')]
+    (ROOT/'evict_full_complete.json').write_text(json.dumps({'passed': True, 'cases': rows, 'at': now()}, ensure_ascii=False, indent=2)+'\n')
+    (ROOT/'evict_full.md').write_text('保持Aとlog Pの全1740試行で、nativeの台帳本体・全side・保存状態・乱数は全バイト一致。控えは捨てた完全な鍵だけを除いた基準と一致。両方の墓石の検査は0件。観測なしの実測へ進む。\n')
+    (ROOT/'evict_full_proofs.json').write_text(json.dumps(['evict_full_complete.json', 'evict_full_01/A_evict/comparison.json', 'evict_full_01/L_evict/comparison.json'])+'\n')
+    subprocess.run([sys.executable, str(ROOT/'report_01.py'), 'evict_full'], check=True)
+except Exception as error:
+    (ROOT/'workflow_stop.json').write_text(json.dumps({'at': now(), 'reason': str(error), 'candidate_discarded': True}, ensure_ascii=False, indent=2)+'\n')
+    raise

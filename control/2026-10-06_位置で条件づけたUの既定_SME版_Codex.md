@@ -96,3 +96,18 @@ SME sideは `left_nodes[*].key`（782232箇所）、`right_nodes[*].key`（87780
 実行のコマンド・土台と実コミット・開始終了時刻は [executions](2026-10-06_位置で条件づけたUの既定_SME版_Codex/executions) に保存。CPU待機・再開の記録も同じ場所。直列の受付と不通過時の停止手順は [pipeline.py](2026-10-06_位置で条件づけたUの既定_SME版_Codex/pipeline.py.txt)。使った記録とコードの絶対パス・SHA256は [paths_sha256.csv](2026-10-06_位置で条件づけたUの既定_SME版_Codex/paths_sha256.csv)。大きな台帳本体は作業場所に保持し、報告にはその指紋を載せる。
 
 実装枝：[今の採点](https://github.com/Godfumitaka/sfn-compression-abm/tree/codex/uposition-sme-a-2026-10-06)、[log P](https://github.com/Godfumitaka/sfn-compression-abm/tree/codex/uposition-sme-logp-2026-10-06)。
+
+
+## 環境確認と再関門の受付（2026-10-06T17:54:59+09:00）
+
+利用者の再開指定に従い、基準の `evict_full_01/A_evict`・`L_evict` のcommand・spec・起動PIDから、基準を起動した `run_case_01.py` まで確認した。28〜30行で `PYTHONHASHSEED=0` を設定し、`LANG`・`LC_ALL`・`LC_CTYPE` を外していた。今回も同じPython指定 `/opt/homebrew/opt/python@3.12/bin/python3.12` と、同じ環境設定で旗なしの再関門を受付に通した。模型・照合・分類の規則は変更していない。
+
+基準はその他のLC_*を親から継承するが、当時の値は記録に無い。現在の親にはその他のLC_*は無い。基準時のsys.version文字列も保存されていない。現在の実体はPython 3.12.13、ビルド `main, Mar 3 2026 12:39:30`、Clang 21.0.0、arm64。optリンクと実行ファイル実体のctime・mtimeが基準の開始より前であることを確認した。同じビルドという判断は同じ実行パスとこの日時に基づき、基準にビルド文字列まで記録されていたとは主張しない。
+
+[環境・Python実体のSHA256・基準の記録の絶対パスとSHA256](2026-10-06_位置で条件づけたUの既定_SME版_Codex/resume_01/environment/reference_environment.json)、[基準の起動台本](2026-10-06_位置で条件づけたUの既定_SME版_Codex/resume_01/environment/reference_run_case_01.py.txt)。実際に起動した親とworkerの環境も今回の出力へ保存する。
+
+再判定では、gzipは展開後の中身の全バイト、非gzipはファイル全バイトを比べる。gzip容器の時刻は判定に入れない。ノードの並べ替えやJSONの正規化はしない。比較器の検査を加え、両土台で40件ずつ通過した（[今の採点](2026-10-06_位置で条件づけたUの既定_SME版_Codex/resume_01/unit_a.txt)、[log P](2026-10-06_位置で条件づけたUの既定_SME版_Codex/resume_01/unit_logp.txt)）。
+
+この追記時点では、今の採点・旗なし・種1の再関門は受付済みで、マック全体のCPU枠を待っており模型は未開始。`jobs.py run --wait --mem 1.0 --disk-path <resume_01/gate_off/a/output>` を用い、全体8枠を超えて開始しない。元の記録は変更せず、今回の出力は `codex_uposition_sme_2026-10-06/resume_01/` に保存する。[受付時点のコマンドと状態](2026-10-06_位置で条件づけたUの既定_SME版_Codex/resume_01/受付時点の記録)。
+
+関門1に不一致があれば、並べ替えず、原因を特定せず停止して追記する。一致した場合はlog Pの関門、関門2〜5、種1〜3の小試しへ順に進む。種21〜40は対象にしない。
