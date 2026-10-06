@@ -560,6 +560,9 @@ def worker(task: dict) -> dict:
         import useforget
         useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"),
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
+    if task.get("u_position"):
+        import uposition
+        uposition.install(side_dir / f"seed{task['seed']:03d}.uposition.jsonl.gz")
     if task.get("sme2017"):
         import smereplay
         smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
@@ -579,6 +582,8 @@ def worker(task: dict) -> dict:
         rec["smereplay"] = sys.modules["smereplay"].close()
         if task.get("sme_evict_trial_cache"):
             sys.modules["smeevict"].close()
+    if task.get("u_position"):
+        rec["u_position"] = sys.modules["uposition"].close()
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
     if task.get("select_n3"):
@@ -730,6 +735,7 @@ def main() -> None:
     ap.add_argument("--v39-init", default="two", choices=["two", "zero"], help="v3.9 の生まれたときの初期成績（二場面／0）")
     ap.add_argument("--v39-a", default="0.5", choices=["0.5", "1"], help="v3.9 の a（少量の成績の補正）")
     ap.add_argument("--v39-u", default="global", choices=["global", "abstain"], help="v3.9 の U の答え（全体最頻／棄権）")
+    ap.add_argument("--u-position", action="store_true", help="SME：Uの既定を位置ごとの本人の頻度で出す。空表・鍵の曖昧さは全体既定へ戻す")
     ap.add_argument("--v39-decay", default="uniform", choices=["uniform", "actr"], help="v3.10：点数の記録の平均の重み")
     ap.add_argument("--v39-price", type=float, default=None, help="v3.10：1 ビットの値段 λ（予算無限で V＜λ の変換）")
     ap.add_argument("--v310-be", action="store_true", help="v3.10 B＋E（書き直しの費用で結ぶ統合版、tools/v310be.py）。--v39-decay actr・予算無限・--v39-price λ と一緒に")
@@ -915,6 +921,10 @@ def main() -> None:
     if args.sme_replay is not None and (not args.sme2017 or len(tasks) != 1):
         raise SystemExit("--sme-replayはSMEの走行一本にだけ使う")
     for task in tasks:
+        if args.u_position:
+            if not (args.sme2017 and args.v39 and args.v310_be and args.v39_u == "global"):
+                raise SystemExit("--u-positionは--sme2017 --v39 --v310-beとUの全体既定にだけ併用する")
+            task["u_position"] = True
         if args.use_forget is not None:
             if not (args.v39 and args.v310_be):
                 raise SystemExit("--use-forgetは--v39 --v310-beと一緒に使う")
@@ -934,7 +944,7 @@ def main() -> None:
             task["select_n3"] = True
         if args.shop_scatter:
             task["shop_scatter"] = True
-    (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+    (out_root / "flag.json").write_text(json.dumps({**({"u_position": True} if args.u_position else {}), **{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": 0.5} if args.score_logp else {}),
                                                     **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
