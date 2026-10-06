@@ -1,0 +1,80 @@
+{
+  "user_date": "2026-10-06",
+  "base_ref": "codex/sme-evict-a-2026-10-06",
+  "base_commit": "10cd8bdd46416aff55d0015e9072fc2186deed83",
+  "legacy_source_commit": "567da12cc22b26a7729f61dd0f4cc578bedda8eb",
+  "levels": [
+    "skeleton",
+    "current",
+    "plus4",
+    "plus8"
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "worlds": [
+    1,
+    2
+  ],
+  "planned_selections": [
+    "N3",
+    "support"
+  ],
+  "retentions": [
+    "A",
+    "D"
+  ],
+  "tau": 0.4,
+  "lambda": "0.01873710622997919",
+  "U": "global/default answers",
+  "trials": 1740,
+  "skeleton": "つなぎだけを除く。木・ドア・役割ユナリー・シール・link・仲立ち・周縁は残す",
+  "P-05c": "選び間違いの主因が大きさ（N3 が大きい定義を有利にする）なら、飾りを足しても N3 の選び間違いはほとんど変わらないか、わずかに減る（全定義の点が下がり、大小の差がわずかに縮む）。",
+  "D-04v": "N3 の選び間違いは飾りが増えるほど増え、skeleton でほぼ消える。支持の割合は影響が小さい。D の区別の喪失はあまり依存しない。",
+  "prediction_sources": [
+    "docs/台帳/台帳追記_2026-10-04深夜_10-05昼.md:P-05c",
+    "docs/台帳/台帳追記_2026-10-04夜_深夜.md:D-04v"
+  ],
+  "pending_decision": {
+    "reason": "指定SMEの定義選択はN3固定で支持の割合の旗がない。移植のみを超える追加か、N3だけへの縮小かを確認中。",
+    "example": {
+      "synthetic": true,
+      "A": {
+        "N3": 0.8,
+        "support": 5,
+        "FH": 10,
+        "ratio": 0.5
+      },
+      "B": {
+        "N3": 0.7,
+        "support": 9,
+        "FH": 10,
+        "ratio": 0.9
+      },
+      "N3_choice": "A",
+      "support_choice": "B"
+    },
+    "source": "tools/smeshared.py:select_definition/_definition_choice"
+  },
+  "cpu_policy": {
+    "physical_cores": 10,
+    "logical_cores": 10,
+    "maximum_computing_processes": 8,
+    "scope": "マック全体、ほかの係も数える"
+  },
+  "approved_timing_exception": "cfvalue.jsonlのsec_trial数値だけ（2026-10-05の利用者承認）。元の時間値は保存し、他の欄・空白・順・台帳見出しを全バイト比較する。",
+  "shop_scatter": false,
+  "score_arg_order": false,
+  "reason_for_placement": "旧版と完全な場面を揃えるため、別の配置の旗は足さない。",
+  "sme_flags": [
+    "--sme2017",
+    "--sme-call-seed",
+    "--sme-tie-uniform",
+    "--sme-intern-cache",
+    "--sme-evict-trial-cache"
+  ]
+}

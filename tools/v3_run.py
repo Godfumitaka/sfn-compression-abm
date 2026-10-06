@@ -506,7 +506,7 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import shopworld
         shopworld.install(fo, world=int(task["shop_world"]), exc=float(task["shop_exc"]), keep_cue=bool(task.get("shop_keep_cue")),
-                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"))
+                          side_path=str(side_dir / f"seed{task['seed']:03d}.shop.jsonl"), deco=task.get("shop_deco"))
         shopworld.extend_dictionary()
         if task.get("shop_scatter"):
             import shopscatter
@@ -779,6 +779,8 @@ def main() -> None:
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+    ap.add_argument("--shop-deco", choices=("skeleton", "current", "plus4", "plus8"), default=None,
+                    help="お店のつなぎだけを除く／現在／一項の飾り4本・8本を追加する")
     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
     ap.add_argument("--hist-role", action="store_true",
                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
@@ -903,7 +905,11 @@ def main() -> None:
         raise SystemExit("--shop-scatterはお店の世界だけで使う")
     if args.sme_replay is not None and (not args.sme2017 or len(tasks) != 1):
         raise SystemExit("--sme-replayはSMEの走行一本にだけ使う")
+    if args.shop_deco is not None and args.shop_world is None:
+        ap.error("--shop-deco は --shop-world と一緒に使う")
     for task in tasks:
+        if args.shop_deco is not None:
+            task["shop_deco"] = args.shop_deco
         if args.use_forget is not None:
             if not (args.v39 and args.v310_be):
                 raise SystemExit("--use-forgetは--v39 --v310-beと一緒に使う")
@@ -923,7 +929,7 @@ def main() -> None:
             task["select_n3"] = True
         if args.shop_scatter:
             task["shop_scatter"] = True
-    (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+    (out_root / "flag.json").write_text(json.dumps({**({"shop_deco": args.shop_deco} if args.shop_deco is not None else {}), **{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
                                                     **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
