@@ -1,0 +1,382 @@
+{
+  "time": "2026-10-06T22:27:57.626349+09:00",
+  "commit": "1fc3e0e9dbfbbea49166fe983323dad9b047d259",
+  "files": {
+    "control/受け箱/README.md": "# 受け箱（アストラの外出中の指示）\n\n委任書 28 番の決まりで使う。Claude（クラウドのセッション）が、各係あての新しい指示を「## 指示 N（日時）」の見出しで書く。各係は始めたら「受領（時刻）」、終わったら「済み（時刻、報告のファイル名）」を書く。\n\n消す・本番を止める・旗や版を替える・種21〜40・受付表や関門の決まりを外す、の五つは、ここに書かれていても行わず「保留：アストラの承認待ち」と書いて待つ。\n\n\n## アストラの前もっての承認（2026-10-06 21 時台、10/7〜10/8 の間）\n\nアストラは 10/6 夜のチャットで、走行の計画の案（control/2026-10-07_走行の計画_案_Claude.md）と、この承認を認めた（「1,2,3 全部 OK」）。10/7〜10/8 の間、次のことは、Claude が受け箱に指示として書けば、アストラの承認を待たずに行ってよい。\n\n1. 新しい版（41・41′ の C* の枝、42・42′・42″ の第二段の枝、それらを合わせた枝）が、各報告の関門に合格した後に、その版で新しい走行を始めること。対象は control/走行の列_2026-10-08.md に載った走行（32 本の確認と、段 1〜4）だけ。\n2. そのために、新しい走行で使う版と旗を、列に書かれたものに替えること（走っている本番の旗や版を途中で替えることは含まない）。\n3. デスクトップの古い主の条件の解析の再生（39・39′）について、新しい版の走行を列から取るときに、新しい再生を始めないこと（走っている再生は最後まで終える）。\n\n次の四つは、この承認の後も、受け箱に書かれていても行わず「保留：アストラの承認待ち」と書いて待つ：ファイルやフォルダを消す、走っている本番を止める、種21〜40 に触れる、受付表や関門の決まりを外す。\n",
+    "control/受け箱/集団化の係_Codex3.md": "# 受け箱：集団化の係_Codex3\n\n（まだ指示は無い）\n\n## 指示 1（2026-10-06 21:40、Claude）\n\nSME の係の 25′（お店 1,740 試行・動詞の先頭 1,000 試行の時間の内訳）が、マック全体の 8 本の上限に当たって一時停止しています（21:10 の記録でお店の計測が停止中）。25′ の報告が出るまで、マック全体で 25′ の二本の枠を空けておいてください。\n\n- 走っている処理は止めない。\n- 自分の新しい処理は、マック全体の模型の過程（25′ の二本を含めて数える）が 6 本以下のときだけ受付に入れる。\n- SME の係の報告（control/2026-10-06_SMEの一本の時間の内訳_Codex.md）に 25′ の完了が書かれたら、この指示は終わり。\n\n受領と済みを、この見出しの下に書いて push してください。\n\n受領（2026-10-06T22:00:55.601897+09:00、Codex3）。稼働中の8体測定は継続する。25′完了の報告までは、新規投入時に機械全体の模型の子をCPU使用率によらず数え、6本以下の条件を確認する。待機中の子も別に記録し、一時停止Tの過程は除外する。解析も安全側に数える。\n",
+    "control/走行の列_2026-10-08.md": "# 走行の列（2026-10-08〜）\n\n作った人：Claude。計画は control/2026-10-07_走行の計画_案_Claude.md（アストラ承認、10/6 夜）。\n今は下書き。段 1 の本番（#1〜#7b）は λ の決め方（GPT に相談中）が決まるまで始めない。新しい版が関門に合格したら、Claude が「版・旗・出力先」の欄を埋め、状態を「未着手」に変える。それまでは全部「版の関門待ち」。\n\n## 取り方（各機械・各係）\n\n1. 枠が空いたら、自分の機械の欄に合う行のうち、一番上の「未着手」を取る。状態を「走行中（機械・開始時刻）」に書き換えて push してから始める。\n2. 終わったら「済み（終了時刻、出力先）」。止まったら「止まり（時刻、理由、報告のファイル名）」と書き、自分の報告にも書く。\n3. 自分の機械で取れる行が無くなったら、その時点で自分の報告に「空き（時刻）」と書く。30 分以上の空きを作らない。\n4. 同じ行を二つの機械が取らないよう、取る前に pull し、push が衝突したら取り直す。\n\n## 列（上から順に優先。10/6 22 時、GPT の推薦の採用で組み直した）\n\nλ は GPT の推薦の手続き（全部入りの較正の正の V の分位点、全構成・両世界で共通の価格）で決める。L25_ref・L50_ref・L90_ref の値は、較正の後に Claude が書き込む。E の価格は全部 --e-price 0.0187 のまま。\n\n### 第 1 波（10/9 の朝にそろえたい中心）\n\n| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |\n|---:|---|---|---|---:|---|---|---|\n| 00 | 較正：全部入り・忘却の実行を止める旗 | お店 1・2 | 41〜48 | 16 | どちらでも | （関門の後に記入） | 版の関門待ち |\n| 0 | 仕組みの確認：9 構成（全部入り・注意を外す・C に・C* を外す・log P を外す・基準・名前の忘却なし・D 0.4・D 0.15）、λ は仮に旧 L50 の値 | お店 1・2 | 1〜2 | 36 | どちらでも | | 版の関門待ち |\n| 1 | 全部入り L50_ref | お店 1・2 | 1〜20 | 40 | デスクトップ優先 | | 較正待ち |\n| 2 | 基準 L50_ref | お店 1・2 | 1〜20 | 40 | デスクトップ優先 | | 較正待ち |\n| 3 | 注意を外す L50_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 4 | 第二段を C に L50_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 5 | C* を外す L50_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 6 | log P を外す L50_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 7 | 名前の忘却なし（全部入り、忘却の実行を止める旗） | お店 1・2 | 1〜20 | 40 | どちらでも | | 版の関門待ち |\n\n#00 と #0 は同時に走らせてよい（#0 で不具合が出たら #00 もやり直す）。\n\n### 第 2 波（10/9 の日中）\n\n| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |\n|---:|---|---|---|---:|---|---|---|\n| 8 | 全部入り L25_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 9 | 全部入り L90_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 10 | 基準 L25_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 11 | 基準 L90_ref | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 12 | 保持 D τ＝0.4（他は全部入り） | お店 1・2 | 1〜20 | 40 | どちらでも | | 版の関門待ち |\n| 13 | 保持 D τ＝0.15（他は全部入り） | お店 1・2 | 1〜20 | 40 | どちらでも | | 版の関門待ち |\n| 14 | 例外の頻度 0.1・全部入り L50_ref | お店 2 | 1〜20 | 20 | どちらでも | | 較正待ち |\n| 15 | 例外の頻度 0.3・全部入り L50_ref | お店 2 | 1〜20 | 20 | どちらでも | | 較正待ち |\n| 16 | 例外の頻度 0.1・基準 L50_ref | お店 2 | 1〜20 | 20 | どちらでも | | 較正待ち |\n| 17 | 例外の頻度 0.3・基準 L50_ref | お店 2 | 1〜20 | 20 | どちらでも | | 較正待ち |\n\n### 第 3 波（動詞の世界と集団化。動詞はデスクトップ、集団化はマックで並べる）\n\n| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |\n|---:|---|---|---|---:|---|---|---|\n| 18 | 動詞・全部入り | 動詞 | 1〜20 | 20 | デスクトップ | | 移植の関門待ち |\n| 19 | 集団化・全部入り（4 体・8 体 × f 0.1・0.9） | お店 | 未定 | 未定 | マック | | 移植の関門待ち |\n| 20 | 動詞・注意を外す | 動詞 | 1〜20 | 20 | デスクトップ | | 移植の関門待ち |\n| 21 | 動詞・第二段を C に | 動詞 | 1〜20 | 20 | デスクトップ | | 移植の関門待ち |\n| 22 | 動詞・基準 | 動詞 | 1〜20 | 20 | デスクトップ | | 移植の関門待ち |\n\n### 第 4 波（U の扱い）\n\n| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |\n|---:|---|---|---|---:|---|---|---|\n| 23 | U を黙るに（全部入り） | お店 1・2 | 1〜20 | 40 | どちらでも | | 較正待ち |\n| 24 | U を黙るに（全部入り） | 動詞 | 1〜20 | 20 | デスクトップ | | 移植の関門待ち |\n| 25 | 位置で条件づけた U（38 番の関門の後） | お店 1・2 | 1〜20 | 40 | どちらでも | | 38 番の関門待ち |\n",
+    "control/2026-10-06_SMEの一本の時間の内訳_Codex.md": "# SMEの一本の時間の内訳\n\n数と事実だけを記録する。\n\n## receipt：2026-10-06T10:15:53.250502+09:00\n\n25番を受領。20番・22番を先に進める。20番の全長の関門と観測なしの計測の報告が完了するまで、25番の模型の走行を始めない。指定の374e352・世界2・保持A・λ主・種1の別の一本に外付けのcProfileと入口/出口の観測を付け、100試行ごとの区間と1500〜1599を測る準備をした。模型のコード変更0。整数の小関数1740回の測定器の検査だけを実行し、区間・入れ子・GC・実時間と内訳の合計が一致。指定された既存3本の試行秒は、現時点の命令と出力の所在では見つからず、別の所在を問い合わせ中。記録のない値は推定で補わない。\n\n\n- 2026-10-06T12:39:54.300611+09:00：委任書33により、internのみの旧計測を538試行の途中で自分の処理だけ停止。途中記録はcodex_sme_time_2026-10-06/profile1740_01に保持。25番は主160本の後、控えを捨てる10cd8bdで新しい出力先へ行う。\n\n## 優先変更_20261006_174548：2026-10-06T17:48:08.165854+09:00\n\n25番をlog Pの主の条件の残りより先に行う。主160本がそろうまで待つ旧い待機役だけを終了した。log Pの既存の走行と解析は継続し、新しく始める分は計測の枠を優先して空きに通す。\n\ncProfileは関数ごとの回数と秒を記録する道具。call/return traceは関数の入口と出口を観測する道具。模型の関数の計算は置き換えず、外付けの計測器を使う。秒の内訳はSME・準備・保持・予測・学習しない試験・書き出し・ごみ集め・その他の八区分。試験の中の秒は試験へまとめ、他の区分へ重ねて足さない。\n\n|計測|土台|配置・保持・種|設定した試行数・時間幅|計測する試行数|\n|---|---|---|---:|---:|\n|お店|10cd8bdd46416aff55d0015e9072fc2186deed83|世界2・A・λ=0.01873710622997919・種1|1740・1740|1740|\n|動詞|10cd8bdへ指定のport.patchだけを適用した 430f329ac8918f6c084ec1abe219b880f1d6b107|A・U global・λ=0.01873710622997919・種1|5000・5000|先頭1000|\n\n動詞のCLIは試行数と時間幅が同じ値であることを要求する（v3_run.pyの動詞の設定）。1000へ両方変えると時間幅の条件が変わるため確認し、ユーザーは5000・5000を保って1000試行完了で計測用の処理だけ終える方法を承認した。1001番目の入力を評価する前に終了し、1000試行の台帳・side・保存状態を元の測定の一本の先頭と展開して比較する。元の完全な一本の記録は変更しない。お店は元の完全な一本と比較する。除外は従前の台帳の見出し一行と実測sec_trialだけ。\n\n計測器の境目と排他的な内訳は、模型を使わない1000試行の小例で確認した。計測器の出力はnativeのsideの外に置く。100試行ごとの秒と最大常駐、種類ごとの出力サイズ、台帳・side・状態の比較のsha256を記録する。計測後の二案（書き出しを減らす、予測の時点で研究者だけの候補の正誤を残す）は実装しない。\n\n命令はprofile_plan_02.jsonへ固定。各命令の出力先以外は元と同じ。参照のport.patch・命令・報告と、適用後の16ファイルのsha256を保持した。abm/の差分は0。受付はjobs.py run --wait --mem 2.5 --disk-path 実出力先。メモリの根拠は既存の最大351MB（お店）・638MB（動詞）に、cProfileと観測の余裕を付けた予約。実測値は別に出す。\n\n既存log Pの受付4件を同じ処理のまま引き継いだ。160本の命令一覧のsha256は変更前後で同じ。25番がまだCPUに載っていない間、新しいlog Pの開始より一枠を先に残し、計測が載ったら全体8本の空き枠を使う管理にした。模型の処理と命令の旗は変更していない。\n\n\n## 25prime優先の停止_20261006_175709：2026-10-06T17:57:29.192910+09:00\n\n最新のユーザー指定により、log Pの新しい走行と走行後の再生分類を、再開の指示まで始めない。軽い開始役を終了し、実行中の再生3件（w2_A_L50の種17・18・19）は自分の計算する処理だけ一時停止した。w2_A_L50の種20のnativeは資源の上限の中で完了させる。記録・台帳・受付は残した。何も消していない。\n\n再生は、保存した記憶から予測と更新をもう一度計算する処理。nativeは元の走行の処理。現在の完了は走行19本、分類・再生・集計16本。新しい分類を省く案の実装はまだ行わない。25′の二本の測定と案の報告を先に進める。\n\n起動する管理処理にも停止の指定を読ませ、誤って再起動しても新しい走行・分類を始めないようにした。160本の命令の旗・値・順番・関門・表は変更しない。再開はユーザーの明示の指示を待つ。\n\n\n## 計測準備の確認_20261006_181444：2026-10-06T18:14:58.184190+09:00\n\n25′を優先。log Pの新規走行と再生分類の停止を保つ。すでに始まっている種20の走行だけは、CPUの条件を満たした時点で終えてよい状態で残す。\n\nCPU秒は、その処理がCPUを使った時間。実時間は一時停止・空き待ちを含む時計の時間。計測の内訳はCPU秒にし、一試行の実時間は別の列に残す。cProfileと観測の負荷があるため、計測なしの速度の確認値にはしない。\n\n模型を動かさない小さな検査で、CPUの区分の和、実時間の別記、試験を別の区分に置くことを確認した。動詞の1000試行を模した終了検査では、台帳1000行・保存状態3000行の記録が閉じ、1001試行目の入力を呼ばなかった。本物の台帳・全side・保存状態の一致は、二本の測定の後に確認する。\n\n現在の状態と観測の台本のsha256を添付。模型のコード・式・旗・設定は変更していない。待機中も30分ごとの確認を報告するよう、模型を始めていない待機処理だけを更新した。前の進み具合にある「log Pは空いた枠で継続」は、ユーザーの最新の停止指示により取り消し。\n\n\n## 既存の秒と分類の確認_20261006_181908：2026-10-06T18:20:32.003959+09:00\n\n25番で指定された既存の三本の一試行の秒を確認した。模型の新規走行・再生分類は実行していない。受付表は読み取りの終了で解放された。\n\n|既存の一本|種|試行数|sec_trialが記録されている試行|記録が無い試行|\n|---|---:|---:|---:|---:|\n|intern_A_benchmark|1|1740|0|1740|\n|baseline_s02|2|1740|0|1740|\n|baseline_s03|3|1740|0|1740|\n\nCSVは試行ごとの行を残し、記録が無いsec_trialを空欄、statusをnot_recordedとした。一本の合計から一試行の秒を推測して埋めていない。25′の二本は一試行ごとの秒を新しく外付けで記録する。\n\n現行のselcands_sme.pyは、予測前の記憶・乱数から各候補を固定して答え直し、研究者の正解と述語・順つき引数を比べる。現在の表は門を通って正しく答えられた候補の有無で外れを二分する。走行中に記録する案は、この判定と全件一致を条件にする。コードの場所とsha256を添付。分類の新しい記録はまだ実装していない。\n\n\n## 計測の進み_20261006_184328：2026-10-06T18:43:29.762810+09:00\n\n25′のshop_profile1740_02を計測または受付待機中。log Pの新規走行と再生分類は、再開の指示まで停止。確認した状態を添付。\n\n\n## 計測の進み_20261006_191334：2026-10-06T19:13:35.471204+09:00\n\n25′のshop_profile1740_02を計測または受付待機中。log Pの新規走行と再生分類は、再開の指示まで停止。確認した状態を添付。\n\n\n## 計測の進み_20261006_194340：2026-10-06T19:43:42.018642+09:00\n\n25′のshop_profile1740_02を計測または受付待機中。log Pの新規走行と再生分類は、再開の指示まで停止。確認した状態を添付。\n\n\n## 動詞の並行受付_20261006_201136：2026-10-06T20:12:12.201644+09:00\n\nユーザーの指示により、お店1740試行の終了を待たず、動詞の先頭1000試行を別の受付へ入れた。2026-10-06 20:09 JST、PID36341、見込み2.5GBで受付を通過。`jobs.py run --wait --mem 2.5 --disk-path <動詞の実出力先>`を使用。\n\nお店の受付PID69132、模型のまとめ役PID89565をそのまま継承した。新たなお店の走行は始めていない。旧い逐次の監督だけを終了し、二本を監督する台本へ替えた。CPU枠・熱・スワップ・容量の条件で自分の模型を一時停止／再開する処理は維持する。模型の過程はマック全体で8本まで。現在の受付・試行数とCPUによる一時停止の有無を添付した。\n\n動詞の命令は`--trial-count 5000 --horizon 5000`のまま、先頭1000試行の記録を完了し、1001試行目の入力の前に計測用の処理だけを終える。命令の旗と値は変更していない。元の命令との差は自分の出力先だけ。内訳はCPU秒、実時間と一試行のsec_trialは別の列のまま。\n\n模型のコード・採点・選び・同点・世界・fは変更していない。種1だけを使用。終了後は元の記録との一致を確認し、二本の内訳と段2の案を同じ報告へ追記する。log Pの新規走行と再生分類は、再開の指示まで停止を保つ。\n\n\n## 並行計測の進み_20261006_203958：2026-10-06T20:39:59.964892+09:00\n\nお店1740試行と動詞の先頭1000試行を別の受付で並行計測。内訳はCPU秒、実時間は別の列。現在の試行数と受付を添付。log Pの新規走行と再生分類は再開の指示まで停止。\n\n\n## 並行計測の進み_20261006_211003：2026-10-06T21:10:05.108827+09:00\n\nお店1740試行と動詞の先頭1000試行を別の受付で並行計測。内訳はCPU秒、実時間は別の列。現在の試行数と受付を添付。log Pの新規走行と再生分類は再開の指示まで停止。\n\n\n## 並行計測の進み_20261006_214009：2026-10-06T21:40:10.861297+09:00\n\nお店1740試行と動詞の先頭1000試行を別の受付で並行計測。内訳はCPU秒、実時間は別の列。現在の試行数と受付を添付。log Pの新規走行と再生分類は再開の指示まで停止。\n\n",
+    "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md": "# C星の照合とディリクレの実装\n\n数と事実を記録する。\n\n## 受領・着手待ち：2026-10-06T20:33:56.851104+09:00\n\nC*（場面の名前に合う確率を使って照合の点を平均する方法）の委任を受領。25′のお店1740試行・動詞の先頭1000試行の計測、一致確認、段2の案の報告が終わってから着手する。土台は1838256、新しい枝の指定はcodex/cstar-2026-10-07。枝作成・模型の変更・関門・300試行の測定は未着手。\n\n指定されたGPTの返事の§3〜§5と§9の全関門を、着手時に必ず読む。受領した指示を自分の待機記録に保存した。16本の確認と種1〜20の走行は四つの判断の回答待ち。log Pの主の条件の新規走行と再生分類の停止も保つ。\n\n25′の報告後にこのチャットを自動再開する30分の継続確認の作成は、自動承認審査が拒否。永続的な自動化作成の明示承認が確認できないことが理由。継続確認作成の承認だけをユーザーへ問い合わせた。自動化は未作成で、代替の自動起動も作っていない。25′の二本は既存の監督で継続。\n\n## 継続確認の作成：2026-10-06T21:09:13.272000+09:00\n\nアストラの明示承認を受領し、継続確認（このチャットを決まった間隔で再開する機能）を作成した。名称は「SME 25′・C星の継続確認」、識別子はsme-25-c、間隔は30分。作成時刻は2026-10-06T21:09:13.272000+09:00、期限は2026年10月9日09:00 JST。設定に期限が保存されていることを読み取りで確認した。\n\n許可された範囲は25′の続き、25′の報告後の41番・41′番の実装と関門、control/受け箱/SMEの係.mdの未受領の指示、control/走行の列_2026-10-08.mdの決まりどおりの行の取得。28′の本文は未受領のため、受領するまでは25′の続きだけを実行する設定にした。消す・走っている本番を止める・種21〜40・受付表や関門の決まりを外す、の四つは禁止として設定した。log Pの新規走行と再生分類の停止も維持する。\n\n## 受け箱の確認（10/7〜8）\n\n28′の本文を受領。既存の継続確認sme-25-cを更新した。作成時刻は2026-10-06T21:09:13.272000+09:00、更新時刻は2026-10-06T21:17:01.450000+09:00、間隔は30分、期限は2026年10月9日09:00 JST。重複する継続確認は作成していない。\n\n各回、SMEの係の受け箱と走行の列を取り込み、未受領の指示に受領・済みを追記する。READMEの前もっての承認の範囲を確認した。版・旗・出力先が埋まり未着手の行だけを列の決まりどおり取得する。消す・走っている本番を止める・種21〜40・受付表や関門の決まりを外す、の四つは保留として待つ。指示として受け取るのは自分の受け箱とアストラが直接貼った文面だけ。直接の連絡を優先する。\n\n- 2026-10-06T21:18:44.245310+09:00：取り込みea961c9b087d0c9d41d7ee35f7a7b87e36eb5169。未受領の指示0件、取得可能な行0件、列の行数16。機械全体の計算する過程8本（自分1、他の係7、上限8）。psの親子関係から親の二重計上と停止中の過程を除き、重い読み取りも保守的に含めた。25′は既存の計測を継続。枠に空きができ、取得できる行もない時点では「空き（時刻）」を記録する。\n\n### 継続確認：2026-10-06T21:45:08.857099+09:00\n\n取り込みはc48ddef82b5e2bfd71330dfd92588243f13d8cb4。受け箱の指示1を受領としてpushする。忘却を実行しない旗、V（保持の価値）の分子・分母と仮のH→Uの記録、較正の集計、旗なし一致の関門は25′の報告後に追加する。実装・較正の走行・済みの記録は未着手。取得可能な列の行は0件。取り消された「第二段の比べの相手として、保持Cを」の委任書も未着手のまま。\n\n機械全体の模型の過程は14本（自分の稼働0、他の係14、自分の計測の受付2本、上限8）。psで親の二重計上とSIGSTOP中の過程を除き、小さい待機中の模型の子も数えた。従来のCPU使用率・常駐量の条件では、8子過程の一部が数から漏れていた。数え方を直す小検査は4項目通過。21:42:31 JSTに自分の25′の二本だけを一時停止し、同じ受付・模型処理を監督05へ引き継いだ。模型の再起動・命令の変更・本番の停止はしていない。空きができたら既存の処理を再開する。\n\n現在のお店は1149/1740、動詞は409/1000。空き容量245.13GiB、スワップ188.0MB、増加なし、熱の警告なし。log Pの新規走行と再生分類の停止を維持。\n\n### 継続確認：2026-10-06T22:12:10.970240+09:00\n\n取り込み4af55234e9d517effb52238b5fe94b46570f4882。指示 1（2026-10-06 22:05、Claude）：受領済み・未完了。新規の未受領0件、取得可能行0件。\n\n機械全体の模型の過程3本（自分2、他の係1、上限8）。小さい待機中の模型の子も数え、親の二重計上とSIGSTOP中の過程を除いた。\n\nお店は1170/1740、段はprofile、処理中。受付は69132。\n\n動詞は423/1000、段はprofile、処理中。受付は36341。\n\n追加枠：空き（2026-10-06T22:12:10.970240+09:00）。列に取得できる行なし。25′の既存処理は継続。\n\n空き容量243.34GiB。スワップの直接確認：vm.swapusage: total = 1024.00M  used = 188.00M  free = 836.00M  (encrypted)。熱の直接確認は添付。新しい模型の処理は始めていない。log Pの新規走行と再生分類の停止を維持。25′の報告完了前なので41番・41′番と較正の部品は未着手。\n",
+    "control/2026-10-07_注意の第二段_実装_Codex2.md": "# 注意の第二段：実装と検査\n\n2026-10-06T21:51:56.569931+09:00 現在の中間報告。42′への改訂はローカルコミット `2fe820768b53b8dd40229cd354fa773f1672da42`、枝 `codex/attn-stage2-top1-2026-10-07`。部品・小例・接続の79検査に合格。旧版726aa04eは世界2・種1・全1,740試行で台帳本体・全side・保存状態・乱数の9ファイルの全バイト一致を21:21 JSTに完了した。この全長の証明を改訂版へ流用しない。主の誕生初期値の実走行への接続は未完了で、第二段onは未開始。第一段6腕の稼働中の模型は維持し、新規投入の監督だけを受け箱の指示1に従い保留している。指示2と42⁗・42⁵を受領し、全部入りは第一段と別の版で作る。下記の旧beta・固定対応の節は経過の記録で、現在の主の仕様は末尾の42′以降の追記に従う。\n\n## 旗と損\n\n`--stage2 off|on`（既定off）、`--stage2-loss alpha|beta|arm`（既定arm）を用意した。offでは第二段の接続モジュールを読まず、task・flag.json・既存sideに第二段の欄を追加しない。onの接続は下記二つの決まりの回答待ちで、未確定のまま模型を開始しない入口にしている。\n\nalphaは、全候補を並べ直して採用された候補の回答が実開示yと同じなら0、それ以外（黙りを含む）は既存のyの符号長ℓ。betaはQ>0の候補のsoftmaxで、実開示yを答える候補の確率を足したPの `−log₂ P`。armは0/ℓの土台ならalpha、log Pの土台ならbeta。門を通らない候補の回答も元の門の判定を含む黙りとして確定する。\n\n第一段の選び・学びは `z=ln Q−Σa_j m_j`、`π=softmax(z)` なので、温度係数は暗黙の1。同じ1を使い、新しい温度の旗は加えていない。`--logp-eps` は既定0.5で、log Pの混ぜと案2′の混ぜへ同じ値を渡す。41番へ載せる際はその枝の同名の旗・分布に接続し直す。\n\n## 保持への接続\n\n予測前の全F/H席を対象に、既存と同じF→H・H→Uを一席ずつ行う。採用されなかった定義の席も対象。予測前に作られた全定義の対応（支持の門の外も含む）を固定し、その席の定義の分子・自己点・注意の費用・回答を再計算する。他の候補を変えず、全候補を並べ直してΔrを得る。支持とF+Hの席数を再計算し、門も再判定する。既存の同点の並べ方・呼び出しの種を使う。\n\n開示の実コイン `f_fired` が真の試行だけでyを読み、候補の回答を作るSessionにはyを渡さない。aはその試行の予測に使った値。第一段の次の更新を先取りしない。反実仮想は予測前の乱数の写しと状態を使い、本物の状態・乱数・照合の控え・統計を保存して戻す。局所Aの `score_answers` の加算を置き換え、Aと合算しない。\n\n既存のSeatRecの四列と `rec_add` をそのまま使う。FのΔrは `(RF,RH,RU,E)=(0,Δr,Δr,1)`、HのΔrは `(0,0,Δr,1)` の増分で積む。したがって現在の変換候補の差は、FではRH−RF=累積Δr、HではRU−RH=累積Δr。F→Hの後で古いFの値はRU−RHへ流用されない。既存の16列の減衰、世代の照合、解放ビット、V、予算・値段の入口を変えない。記憶のビット計算の関数と `abm/` は変更していない。\n\n一試行ごとの追加時間、薄くした席の数、並べ直しの回数を第二段専用sideへ記録する。追加時間は元の会計時間を除き、包み全体の時間を別の欄へ残す。実走行の時間・追加記憶の実測はまだ無い。\n\n## 小世界：固定対応と厳密な基準\n\n厳密な基準は一席を薄くした記憶で照合から全候補を作り直す。通常の定義と例外の定義を置いた小世界、通常のシールがFの試行とHの試行、案1・案2′global・案2′position、k1/k2、alpha/beta、各記憶の8席について、計192行を比較した。a=0のこの表は席×試行×方式×位置×損の行で、独立な試行数を192とは数えない。\n\n|固定対応と厳密な基準の対応|行数|損の差が非ゼロの行数|\n|---|---:|---:|\n|対応が同じ|180|0|\n|シールと親linkが厳密側で新しく対になる|12|6|\n|原因を説明できない差|0|0|\n\n[席ごと・試行ごとのCSV](attn_stage2_2026-10-07/seat_trial_comparison.csv)、[件数](attn_stage2_2026-10-07/seat_trial_comparison.json)。12行はH→Uの一例に対する3方式×2位置×2損。6行の損の差はbetaの行。同じ対応の場合のQは全桁一致した。別の一候補の小例では、H→U後に固定対応側は支持の門の下に残り、厳密側ではシールとlinkが対になって回答が変わり、alphaの損の差は3ビットだった。F[sig_n]を直接UにするU-05jの写像の小例も、固定対応で落ちる二つの新しい対を確認した。保持の本体が使う一段はF→H・H→Uのままである。\n\n門を再判定する別の小例では、H→UでF+Hの席数が4から3へ減り、支持の数が同じでも門の判定が変わることを確認した。未採用の候補の点だけが上がる小例も、全候補の並べ直しにより保持のΔrへ入る。\n\n## 第一段の勾配との比較\n\n第一段の損を `L=−ln P`、第二段betaの損を `r=−log₂ P` とすると、\n\n`r=L/ln 2`、`∂r/∂a_j=(1/ln 2)·∂L/∂a_j`。\n\n`∂L/∂a_j = E_{π(·|正解候補)}[m_j] − E_π[m_j]`。温度が1の同じ候補・同じ回答集合で比較した。係数は `1/ln 2=1.4426950408889634`。第一段は自然対数の勾配のままにしており、第二段に合わせた変更はしていない。\n\n三つの数値例・各二位置で、ビット損の解析勾配を中央差分（幅10⁻⁵）と比較し、最大絶対差は `6.734834911981125e−12`。[全六成分の値](attn_stage2_2026-10-07/gradient_units.csv)。これは単位の比較で、どちらの更新を採用するかの決定ではない。\n\n## 全長のoff関門\n\n世界2・A・λ=0.01873710622997919・種1・1,740試行・log P。未変更の土台から新たに比較元を作り、第二段off・損の指定betaで同じ走行を作る。台帳本体（見出し一行を除く）、全side、順つきの保存状態 `tie_state.jsonl`、照合器・乱数の保存状態 `saved_matcher.jsonl.gz` を全バイト比較する。許容差を入れない。比較条件を緩めない。見出しの除外は従来の台帳「本体」の定義による。\n\n監督は `stage2_attention_2026-10-07/run_off_gate.py`。2026-10-06 20:40:46 JSTに比較元の受付が通った。現時点は比較元を実行中で、第二段off側と両側の照合は未完了。[記録時点の状態](attn_stage2_2026-10-07/off_status_snapshot.json)。不一致なら `off_failure.json` を残し後続を止める。既存の第一段の走行を再作成していない。\n\n## 未確定の二点と後続\n\n人間へ二点を確認中。これは関門の不合格ではなく、計算の未定義と初期化の仕様を決めるための確認である。\n\n1. betaで正解候補の確率P=0ならr=∞となる。薄くする前後でP=0だと∞−∞は未定義。薄くした後だけP=0になる場合にもΔrは非有限になる。有限の小値や符号長への置換を独断で足さず、保持更新と記録の扱いの指示を待つ。\n2. 予測後に誕生・覚え直した新しい席には、その試行の予測前のΔrが無い。局所Aの誕生初期値を残すと第二段とAを混ぜるため、初期値ゼロから次の実開示で値付けする案を確認中。まだ採用していない。\n\nこの二点の回答とoff関門の合格を受けて接続を確定し、41番の関門合格を確認してから `codex/cstar-2026-10-07` へ載せて同じ検査をやり直す。41番の合格は現時点で確認していない。300試行の速度測定は必要な関門の後だけにする。16本、種1〜20の本番、種21〜40は未開始。\n\n## 機械と原記録\n\n受付は `~/jobs/jobs.py run --wait --mem 2 --disk-path 実出力先`。模型過程の上限8を実際のpsで監視し、超過時は自分の模型の子だけを一時停止する。開始時20GiB、稼働中18.5GiB、直近10分のスワップ増加なし、熱・性能警告なしの条件を守る。25′の先通しは人間の解除済みであり、新規投入禁止を残していない。\n\n記録時点 2026-10-06T20:52:42.093975+09:00：空き 270,051,422,208バイト（約251.5GiB）、スワップ188.0MB、増加なし、熱・性能警告なし。メモリ・受付の一覧・模型のpsは[機械の控え](attn_stage2_2026-10-07/machine_snapshot.json)。原記録は `/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/machine.jsonl` に開始前と15秒ごとに保存する。\n\n[37検査の記録](attn_stage2_2026-10-07/checks.json)、[pytest出力](attn_stage2_2026-10-07/pytest_stage2.log)。コードの外部pushは未実施。結果の良し悪しは記述していない。\n\n## 既存のV・ビットとの接続の追加確認\n\nΔrを積む前後の総ビット数は同じ。F→H・H→Uのそれぞれで、既存の候補が使うVは累積Δrを既存の解放量で割った値と一致し、解放量は実際に一段薄くした総ビットの差と一致した。案2′のεは0.2・0.5・0.8の三値で候補のPとmへ届くことを確認した。部品と接続の検査は合計37件合格。\n\n追加検査の初回は、小例で既存の `v39.CTX[\"struct_cache\"]` を初期化していなかったため、ビット数を計算する前にKeyErrorで止まった。小例の初期化だけを足して再検査した。模型のビット数の数え方と期待値は変更していない。[初回の記録](attn_stage2_2026-10-07/fixture_missing_struct_cache_checks.json)も保存した。\n\n## 42′と初期値の決定を受領：2026-10-06T21:05:41.241089+09:00\n\n42′（渡す委任書の42′、GPTの返事の§3・§5・§6・§8）と、人間の確率0・誕生初期値の回答を確認した。これ以降の主のlog Pの損はtop1、混合分布の損はmixtureの旗。旧報告の「正解の最頻答えを持つ候補のsoftmax質量」のbetaは使わない。0/ℓはalphaのまま。top1でもmixtureでも確率0は既存のL_ofの退避符号で払い、薄くする前後の差を有限にする。新しい小さい確率は足さず、負のΔrも丸めない。\n\n主の反実仮想は、薄くした定義だけを照合からやり直し、対応・点・答え・門を作り直して全候補を並べ直す。固定した対応は主に使わない。既存のoff検査のコードを変えず、`stage2_top1_source`、枝 `codex/attn-stage2-top1-2026-10-07` で改訂する。41番は報告上未着手で、C*枝の遠隔参照もまだ無かったため、載せ替えは未開始。\n\n## 問われた位置の種類の数え方の案（実装前）\n\n名前・関係ID・物のID・店の型を含めず、既存の構造の位置鍵を種類Kとする。具体的には「その木の上端から自分までの道の各段の（祖先の局所の形、下りる引数番号）の列の組」と「自分の局所の形（引数の数と物／関係の種類）」を組にする。親が複数なら全ての道を組にする。店ごと、答えの名前ごとには分けず、一個体の全経験で共有する。\n\n本人に実際の問いが提示されたときにN(K)を1増やす。開示の有無と答えの正誤によらず一回。出生時にはその時点までに提示された実際の問いを用い、出生を生んだ現在の問いも含める。反実仮想・出生の仮の問いでは増やさない。Nを減衰させず累積した経験頻度で、重みは `w(K)=N(K)/ΣN`。まだ問われたことのない種類の重みは0。\n\n第二材料の本人に見えていた各関係を仮に伏せ、対応する種類のwを付ける。種類が同じ可視関係がn個あるときは各関係へw/nを配る。同じ種類が多い場面だけでその種類の全重みを増やさない。第二材料に無い種類の分は0として残し、ある種類だけに正規化し直さない。問いの記録が全く無い場合だけ、第二材料の可視関係に一様1/M。仮の問いの正解は元々可視だった名前だけ。第一材料は全状態がbで払う共通項なので差の初期値へ加えない。\n\n現在のAgentInputには、祖先が見えない問いの位置や問う関係の局所の形が明示されていない。既存の信頼済みドア指示boolだけから、全ての構造の種類は復元できない。上記の位置鍵だけを「本人へ伝わる課題指示」とする追加の仮定を人間へ確認した。正解名・研究者の型は渡さない。別案は既存のドア／非ドアの二種類だが、構造鍵の主案へ無言で混ぜない。回答までは実走行へ計数の入口を接続しない。\n\n主の誕生初期値は、第一材料までの名前の情報だけを持つ仮の新定義を予測前の記憶へ加え、この仮の問いごとに全候補の最終損のΔrを測り、上の重みで足す。既存Aの出生初期値と同じinit列・16本の減衰へ入れ、Aから値を写さない。初期値0とAの初期値は比較専用の旗にする。実装に先立つ計数案であり、現時点でその仮定と入口は未確定。\n\n## 計数案の訂正と仮の問いの分類案（実装前）：2026-10-06T21:09:45.520147+09:00\n\n人間の回答に従い、上記の構造鍵を課題指示として渡す案は採用しない。本人が観察していない祖先の形・位置を課題から足さない。実際の問いの種類は、承認済みのドア指示boolだけによるドア／非ドアの二つ。N_door・N_otherを一個体で累積し、開示・正誤によらず実際の問い一回につき一つだけ増やす。\n\n仮の問いの分類案：個体ごとに「過去に、ドア課題の答えとして実開示された名前」の集合Dを持つ。第二材料の可視関係の名前がDに含まれればドア、含まれなければ非ドア。名前は分類の可視入力としてだけ使い、頻度の鍵は二種類のまま。同じ名前が両方の課題で開示された場合も、ドアとして開示されたという条件が成立するのでドアに分類し、両方で開示された名前の件数を付帯記録する。見たことがあるだけの名前や、未開示のドア回答はDへ加えない。生成器のdoor_id、shop_type、held_outの名前、研究者の関係種別表は分類に使わない。\n\n出生の初期評価では予測前のDを固定する。現在の実開示をDへ追加してから同じ現在の材料を分類し直さない。実際の問いの回数は、現在の問いを含む提示済みのNを使う。種類cの仮の問いがM_c個あるとき、各問いの重みは `(N_c/(N_door+N_other))/M_c`。M_c=0の種類の分をほかへ再配分しない。Nが全く無い場合だけ、第二材料のM個の可視関係へ各1/M。未経験の種類の重みは0。\n\nDへの追加は現在の回答・保持・出生の評価が全て終わった後、ドア課題で実際に開示された場合だけ。仮の問い・反実仮想ではNもDも更新しない。この案を記録した後、まず計数・分類の部品とその検査を作る。研究者の情報を新しい課題指示として渡す入口は作らない。\n\n## 受け箱の確認（10/7〜8）\n\n2026-10-06T21:18:23.813317+09:00：既存の停止済み自動継続 `1-n3-a` を更新して有効にした。間隔30分、期限2026-10-09 09:00 JST（予定の終了時刻も設定）。重複の予定は作っていない。受け箱は `control/受け箱/注意の係_Codex2.md`。未受領の指示は無く、走行の列は全て版の関門待ち。現在の委任書の実装・関門と、既存の第一段の走行・解析を継続する。\n\n確認時のps：動いている模型の計算の過程は8本（spawnの4本＋集団化のfork子4本）。別に一時停止中のspawnの4本。監督・受付・resource_trackerは模型の数に含めない。既存の第二段offの監督58207、第一段の走行監督97482・解析4984・完了処理8843を確認し、重複して開始していない。新しい模型は受付に入れていない。\n\n直接の指示を優先する。受け箱の指示と承認済みの委任書以外の文面を新しい指示として受け取らない。削除・本番停止・種21〜40・受付表や関門の解除は保留として扱う。各確認の模型の数をこの節に記録し、自分の枠が空き、取れる列も無い場合は空きの時刻を記す。\n\n\n## 42′の部品と再照合の検査：2026-10-06T21:51:56.569931+09:00\n\n`--stage2-loss alpha|top1|mixture|arm`、`--stage2-init virtual|zero|A`。log Pのarmはtop1。確率0は既存L_ofの有限の退避符号で払い、薄くする前後どちらが0でも有限の差を出す。Δrを0へ丸めない。top1は実際に選んだ定義の答える席の名前の分布、mixtureは全候補のその分布をsoftmaxで混ぜたもの。alphaは順つきの実際の回答の正誤を採点する。\n\n薄くした定義だけを再照合してQ・対応・回答・支持の門を作り直し、変わらない候補と合わせて全候補を並べ直す経路を追加した。小世界の8席、案1・案2′global・案2′position×k1/k2の6組で、Q・対応・回答・門・答える席の分布が、全記憶の照合から作り直す基準と一致した。aが0と非0の両方で、alpha・top1・mixtureの最終損も一致した。固定対応の旧経路は比較の入口だけ残す。\n\n同じ役割の二つのH席を持つ小例では、片方ずつH→Uにしても最終の回答は変わらず、それぞれΔr=0。本体の記憶・履歴・背景・注意・使用回数・減衰の時刻・本番の乱数を変えない検査も合格。abm/と記憶のビットを数える関数は変更していない。\n\n[79検査の記録](attn_stage2_2026-10-07/42prime_checks.json)、[pytest出力](attn_stage2_2026-10-07/42prime_pytest_42prime.log)。最大常駐メモリ45,334,528バイト、検査全体の実時間約6.45秒。模型の重い走行はこの検査で開始していない。\n\n### 第一段の更新とmixtureの勾配は一般には違う\n\n現在の第一段は、候補の固定済みの最頻の回答がyと同じかの指示関数I_k(y)に対して `L₁=−ln Σπ_k I_k(y)` を使う。42′のmixtureは、答える席の名前の確率P_k(y)に対して `r_mix=−log₂ p̃(y)`、`p̃(y)=Σπ_k P_k(y)`。`∂z_k/∂a_j=−m_kj`、温度は暗黙の1なので、\n\n`∂r_mix/∂a_j = (1/ln 2) Σ_k (π_k P_k(y)/p̃(y) − π_k) m_kj`。\n\n自然対数なら上式から1/ln 2を外す。係数1.4426950408889634。しかし現在の第一段からの違いは単位だけではなく、正解候補へ配る重みがIからPへ変わる点にもある。PがIと同じ0/1の特別な場合だけ、同じ条件つき重みになる。現在の第一段の学びは変更していない。受け箱の指示2による新しい全部入り版ではmixtureを注意の学び、top1を保持の損とする代理の関係を記録する。\n\n三つの試行の小例、各二位置の計六成分を中央差分と比較し、最大絶対差2.0945134515670816e−11。小さい負勾配方向の一歩で三例ともmixtureの損が下がった。[全成分](attn_stage2_2026-10-07/42prime_mixture_gradient.csv)、[件数と単位](attn_stage2_2026-10-07/42prime_mixture_gradient.json)。\n\n### 誕生と問いの二種類の部品\n\n実際の提示をドア／非ドアへ一回だけ数え、現試行の問いをNに含める。仮の問い・反実仮想ではNを増やさない。非開示で正解を読み出さない。ドア回答として実開示された名前の集合Dは、現試行の誕生・保持・記録を終えた後に更新する。現在の開示を同じ現在の誕生の分類へ戻さない。\n\n第一材料の名前の情報までしか持たない仮の新定義を予測前の記憶へ加える部品、第二材料の可視関係を伏せる部品、二種類の頻度を種類内の仮問いへ等分する部品を検査した。最終損の差を既存のinit列・16列の減衰へ入れる部品も検査した。未経験の種類の重みは0、第二材料に無い種類の分をほかへ再配分しない。問いの記録が全く無い場合だけ一様。zeroとAは明示の比較用で、virtualからAを暗黙に写さない。\n\n実際の誕生評価を作るSessionへの接続は未完了。2fe82076では、初期化関数と分布の規則が未接続ならonを開始前に拒否する。主の初期値を0で代用した走行はしていない。\n\n## 旧版のoff関門の完了（726aa04eのみ）\n\n2026-10-06 21:21:45 JST：世界2・A・λ主・種1・1,740試行で合格。未変更のa66e4570と第二段offの726aa04eを比較した。台帳本体（従来どおり見出し一行を除く）、全sideの6ファイル、順つき保存状態、照合器と乱数の保存状態の計9ファイルが全バイト一致。許容差は無い。損の指定betaはoffで使われない。改訂版と全部入り版は最終の接続後に別途同じ関門を確認する。[9ファイルのsha256](attn_stage2_2026-10-07/all_off_gate.json)、[完了状態](attn_stage2_2026-10-07/off_status.json)、[機械記録](attn_stage2_2026-10-07/old_off_final_machine.json)。\n\n## 受け箱の指示1・2と42⁗・42⁵の受領：2026-10-06T21:51:56.569931+09:00\n\n指示1は25′完了まで新規模型を全体6本以下の時だけ受付に入れる決まり。稼働中の模型にはシグナルを送らず、軽量な投入監督97482・解析の投入4984・完了処理8843だけを保留し、独立の資源監視29892を続ける。6本以下なら元の監督を同じ命令で再開し、それ以外は新規投入だけを保留。旗・値・順番・関門を変えない。25′完了はまだ確認していない。\n\n42⁗は `--stage2-scope all|chosen`（主all）を足し、chosenは実際に選ばれた定義の席だけを薄くする「C（新しい版）」。選び直し・損・門・積み方・減衰・誕生初期値はallと同じ。chosenの各Δrをallの該当席と照合する。実装・関門はこれから。\n\n42⁵は、門を通る定義なし・答える席なし・問いの形と階が不明なら、本人の全体の頻度p̂を形と階で絞らず使う。形と階が分かる場合だけ既存の絞ったb。複数の適格席は分布を一様に混ぜ、一席内の名前同点で黙ればその一席の分布。p̂への復帰・複数席の混合・一席を試行ごとに記録する。これで先の分布と黙り時の席の確認は回答を得た。正解や新しい構造の課題指示で補わない。\n\n指示2の全部入りは別の新しい版で作る。案2′global・k2・ε=0.01、Uの実際の適格範囲と同じ共通基底、`m=ln(b̄/P)/(−ln ε)`、a初期0・範囲0〜10・η0.1、注意はmixture・保持はtop1。Qが全候補0ならsoftmaxせず背景へ戻る。共通項の打消し、Uのm=0、F不一致のm°=1など指定の手例の関門を通す。第一段6腕の実行中の版は変えない。C*への接続は41合格を確認してから。\n\n確認時の模型の過程は12本。spawnだけでなく集団化のforkの模型の子も数えると12本だった。従来のこちらのCPU監督がspawnだけを数えていた点を記録し、稼働中の本番を止めない指示との扱いを人間へ確認中。他の係には介入していない。独立監視はforkの子も数え、新規投入の保留へ用いる。[機械記録](attn_stage2_2026-10-07/inbox_machine_snapshot.json)、[保留状態](attn_stage2_2026-10-07/inbox_dispatch_hold.json)。空き244.29GiB、スワップ188.0MB、熱・性能警告なし。取れる列の行はまだ無い。既存走行があるため、全体の状態を空きとは書かない。\n"
+  },
+  "model_count": 3,
+  "models": [
+    {
+      "pid": 36825,
+      "parent": 36821,
+      "state": "R",
+      "cpu": 99.0,
+      "rss_bytes": 253526016,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 44917,
+      "parent": 44910,
+      "state": "R",
+      "cpu": 99.1,
+      "rss_bytes": 292126720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 89571,
+      "parent": 89565,
+      "state": "R",
+      "cpu": 98.9,
+      "rss_bytes": 268320768,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "paused_models": [
+    {
+      "pid": 20821,
+      "parent": 20817,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 11698176,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 20929,
+      "parent": 20925,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 20119552,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 27538,
+      "parent": 27534,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 11550720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "python_processes": [
+    {
+      "pid": 20806,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 10305536,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種17 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 analysis"
+    },
+    {
+      "pid": 20812,
+      "parent": 20806,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 10764288,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 analysis"
+    },
+    {
+      "pid": 20813,
+      "parent": 20812,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 17039360,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_job"
+    },
+    {
+      "pid": 20817,
+      "parent": 20813,
+      "state": "Ts",
+      "cpu": 0.0,
+      "rss_bytes": 12861440,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 20820,
+      "parent": 20817,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 7536640,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 20821,
+      "parent": 20817,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 11698176,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 20915,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 9388032,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種18 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 analysis"
+    },
+    {
+      "pid": 20921,
+      "parent": 20915,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 10027008,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 analysis"
+    },
+    {
+      "pid": 20922,
+      "parent": 20921,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 17465344,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_job"
+    },
+    {
+      "pid": 20925,
+      "parent": 20922,
+      "state": "Ts",
+      "cpu": 0.0,
+      "rss_bytes": 12386304,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 20928,
+      "parent": 20925,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 7602176,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 20929,
+      "parent": 20925,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 20119552,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 24040,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.1,
+      "rss_bytes": 22315008,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/workflow_parallel25_05.py"
+    },
+    {
+      "pid": 27521,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 10567680,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種19 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+    },
+    {
+      "pid": 27529,
+      "parent": 27521,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 11812864,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+    },
+    {
+      "pid": 27531,
+      "parent": 27529,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 17809408,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_job"
+    },
+    {
+      "pid": 27534,
+      "parent": 27531,
+      "state": "Ts",
+      "cpu": 0.0,
+      "rss_bytes": 12681216,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 27537,
+      "parent": 27534,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 7553024,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 27538,
+      "parent": 27534,
+      "state": "T",
+      "cpu": 0.0,
+      "rss_bytes": 11550720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 36341,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 19595264,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME25 動詞の先頭1000試行 並行計測 --mem 2.5 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/verb_profile1000_01 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/registered_profile_gate_03.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/verb_profile1000_01"
+    },
+    {
+      "pid": 36350,
+      "parent": 36341,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 20299776,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/run_case_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/verb_profile1000_01"
+    },
+    {
+      "pid": 36821,
+      "parent": 36350,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 34160640,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/observe_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/verb_profile1000_01/native_command.json"
+    },
+    {
+      "pid": 36824,
+      "parent": 36821,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 16302080,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 36825,
+      "parent": 36821,
+      "state": "R",
+      "cpu": 99.0,
+      "rss_bytes": 253526016,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 40737,
+      "parent": 52419,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 20070400,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u admission_guard.py"
+    },
+    {
+      "pid": 44900,
+      "parent": 55602,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 19480576,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex 位置U logp_U0_s1 --mem 1.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/output -- /opt/homebrew/opt/python@3.12/bin/python3.12 tools/uposition_cpu.py --cwd /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/source_logp --log /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/output_cpu.jsonl -- /usr/bin/env -u LC_ALL -u LANG -u LC_CTYPE PYTHONHASHSEED=0 /opt/homebrew/opt/python@3.12/bin/python3.12 tools/uposition_run.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/native_command.json --pin-commit 1838256b3fa9f81737d8b210e6ccb59c9d638a25"
+    },
+    {
+      "pid": 44906,
+      "parent": 44900,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 19218432,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/uposition_cpu.py --cwd /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/source_logp --log /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/output_cpu.jsonl -- /usr/bin/env -u LC_ALL -u LANG -u LC_CTYPE PYTHONHASHSEED=0 /opt/homebrew/opt/python@3.12/bin/python3.12 tools/uposition_run.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/native_command.json --pin-commit 1838256b3fa9f81737d8b210e6ccb59c9d638a25"
+    },
+    {
+      "pid": 44910,
+      "parent": 44906,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 28639232,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/uposition_run.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/gate_off/logp/native_command.json --pin-commit 1838256b3fa9f81737d8b210e6ccb59c9d638a25"
+    },
+    {
+      "pid": 44916,
+      "parent": 44910,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 16367616,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 44917,
+      "parent": 44910,
+      "state": "R",
+      "cpu": 99.1,
+      "rss_bytes": 292126720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 46414,
+      "parent": 52419,
+      "state": "Ss",
+      "cpu": 1.3,
+      "rss_bytes": 16416768,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -"
+    },
+    {
+      "pid": 55602,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 13467648,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/pipeline.py"
+    },
+    {
+      "pid": 55730,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 13680640,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/finalize_when_done.py"
+    },
+    {
+      "pid": 69132,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 20135936,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME25 shop_profile1740_02 --mem 2.5 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/shop_profile1740_02 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/run_case_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/shop_profile1740_02"
+    },
+    {
+      "pid": 89561,
+      "parent": 69132,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 20152320,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/run_case_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/shop_profile1740_02"
+    },
+    {
+      "pid": 89565,
+      "parent": 89561,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 19152896,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/observe_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/shop_profile1740_02/native_command.json"
+    },
+    {
+      "pid": 89570,
+      "parent": 89565,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 13942784,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 89571,
+      "parent": 89565,
+      "state": "R",
+      "cpu": 98.9,
+      "rss_bytes": 268320768,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 97541,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 9158656,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+    }
+  ],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "disk": "Filesystem   1024-blocks      Used Available Capacity iused      ifree %iused  Mounted on\n/dev/disk3s5   971298980 689396444 254119504    74% 1455517 2541195040    0%   /System/Volumes/Data\n",
+  "swap": "vm.swapusage: total = 1024.00M  used = 188.00M  free = 836.00M  (encrypted)\n"
+}
