@@ -1,0 +1,21 @@
+{
+  "native_run_completed": true,
+  "trial_count": 1740,
+  "native_finished_at": "2026-10-06T10:58:50Z",
+  "native_elapsed_sec": 5947.11,
+  "model_manifest_peak_rss_mb": 1732.0,
+  "registered_memory_budget_gb": 1.0,
+  "registered_sampler_peak_descendants_rss_bytes": 1412694016,
+  "hold_sampler_peak_descendants_rss_bytes": 1821900800,
+  "resources_sha256": "26510cf57fa283b00df6cdf3bee65936e6eb3861f62458570d95a8471de72a73",
+  "run_log_sha256": "f0cb03dd274d6dbe8e457c173bab30f624d609592159d5a66ce95037427d98e4",
+  "completion_mark_sha256": {
+    "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.done": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba"
+  },
+  "resource_gate_passed": false,
+  "analysis_started": false,
+  "following_runs_started": false,
+  "batch_state_after_resume": "stopped",
+  "stop_reason": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/source/control/shop_deco_sme_2026-10-06/run_n3.py\", line 112, in main\n    registered(command(run, item[\"world\"], item[\"seed\"], item[\"retention\"], item[\"level\"]),\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/source/control/shop_deco_sme_2026-10-06/common.py\", line 84, in registered\n    assert peak <= mem * 1e9, f\"受付の見込みを超えた: {out}\"\n           ^^^^^^^^^^^^^^^^^\nAssertionError: 受付の見込みを超えた: /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/preview_n3/runs/plus8_N3_D_w2_s001\n",
+  "original_model_command_sha256": "3a1603828b335933e631faf19ac38b2e55f6daef42aba3ffb952dcc47b443cb2"
+}

@@ -88,7 +88,7 @@ def publish(status):
     release = json.loads((PROOF / 'release.json').read_text()) if (PROOF / 'release.json').exists() else None
     observed = json.loads((PROOF / 'observed_starts.json').read_text()) if (PROOF / 'observed_starts.json').exists() else {}
     marker = '25prime_shop_deco_' + status + '_' + hold['suspended_at']
-    lines = ['\n## 25′ の先通し', '', '<!-- ' + marker + ' -->', '', f"記録時刻：{now()}。状態：{status}。", '',
+    lines = ['\n## 25′ の先通しの解除' if status == '解除' else '\n## 25′ の先通し', '', '<!-- ' + marker + ' -->', '', f"記録時刻：{now()}。状態：{status}。", '',
         f"{hold['suspended_at']}に、新規投入を止めた。自分の受付待ちから下ろした処理は0本。受付済みの`plus8_N3_D_w2_s001`（受付PID64528）は継続し、次の処理を投入する監督役PID{hold['controller_pid']}だけを待機させた。模型・worker・CPU監視・共有受付には停止の信号を送っていない。未投入は当該一本の解析と残り79本の模型・解析。", '',
         '25′のお店1,740試行と動詞の先頭1,000試行を、受付表の対象担当名と模型開始ログで確認する。先に動いた一本の受付時刻と開始時刻を保存し、両方の開始を確認するまで新しい模型・解析を受付へ渡さない。', '',
         f"2時間の期限：{hold['deadline_at']}。両方の開始がそれまでに確認できなければ期限で元の順番・命令による投入を再開し、その事実を報告する。", '',
@@ -104,7 +104,15 @@ def publish(status):
         lines += ['', '戻した時刻は未確定。確認用の軽い監督処理が、両方の開始または2時間の期限で自動的に監督役を戻す。']
     lines += ['', 'マック全体の模型過程8本の上限、受付表の資源条件、事前予想P-05cとD-04vを変更していない。種21〜40には触れていない。支持の割合の旗はN3の80本の報告が済むまで保留する。', '',
         '監督役が待機する間は、別の軽い記録係がこの受付PIDの子孫のRSSを標本化する。標本と受付表の対象行はcontrolのpriority25資料にも保存する。元の台帳・side・完了印・時間の値を書き換えない。']
-    text = '\n'.join(lines) + '\n'
+    if status == '解除':
+        resource = json.loads((PROOF / 'resource_stop_after_release.json').read_text())
+        lines = ['\n## 25′ の先通しの解除', '', '<!-- ' + marker + ' -->', '',
+            f"戻した時刻：{release['returned_at']}（日本時間）。利用者の40番解除に従い、25′二本の開始を待つ条件と2時間の期限を撤回した。確認係PID92755を終了し、待機させていたN3の監督役PID64386を戻した。", '',
+            '下ろした受付待ちの処理は0本だったため、再登録した待機命令は0本。新規投入を控えていた監督役を復帰した。元の命令のSHA-256は`' + release['original_command_sha256'] + '`で一致する。旗・値・順番・関門を変更していない。マック全体の模型過程8本の上限と共有受付run --wait・--mem・--disk-pathを維持する。種21〜40には触れない。', '',
+            '復帰直後に、既存の資源関門で停止した。最初の`plus8_N3_D_w2_s001`の模型は全1,740試行を完走し、終了コード0、台帳・side・完了印を保存済み。しかし受付の見込み1.0GBに対し、監督役が記録した子孫の最大常駐合計は' + str(resource['registered_sampler_peak_descendants_rss_bytes']) + ' bytes。模型manifestの最大常駐は' + str(resource['model_manifest_peak_rss_mb']) + ' MB。資源関門を外していないため、解析と残り79本の投入は未開始。', '',
+            '模型の記録上の終了は`' + resource['native_finished_at'] + '`（19:58:50 日本時間）。模型の実測時間・受付管理の時間の値を書き換えていない。N3の走行管理の完了件数は、登録関数が資源関門で返らなかったため0になっているが、模型manifestの完走記録は1本である。', '',
+            '解除・戻した時刻は`manual_release.json`、資源関門の停止と出力の指紋は`resource_stop_after_release.json`に保存した。事前予想P-05cとD-04vを変更せず、支持の割合の旗はN3の80本の報告後まで保留する。']
+    text = '\n'.join(lines) + '\n' 
     assert not git('status', '--porcelain'), '報告専用の作業場所に未保存の変更がある'
     for attempt in range(6):
         git('fetch', 'origin', 'refs/heads/results-2026-09-27:refs/remotes/origin/results-2026-09-27')
