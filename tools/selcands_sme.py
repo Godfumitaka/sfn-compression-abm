@@ -80,7 +80,7 @@ def install(path, *, replay=None):
         memory_before = smereplay.encode(state)
         snap = probeworld._snapshot_modules()
         extras = []
-        for name in ("v39", "ustruct", "strictpc", "useforget"):
+        for name in ("v39", "ustruct", "strictpc", "useforget", "uposition"):
             mod = sys.modules.get(name)
             for attr in ("REG", "UREG", "RELPOS", "KINDS", "_POW", "STATS", "CTX"):
                 val = getattr(mod, attr, None)
