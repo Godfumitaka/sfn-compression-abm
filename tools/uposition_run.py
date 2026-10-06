@@ -25,21 +25,14 @@ def cpu_admission():
         raise RuntimeError('温度・性能の制限があるので新しい模型を開始しない')
     if 'No thermal warning level has been recorded' not in thermal or 'No performance warning level has been recorded' not in thermal:
         raise RuntimeError('温度・性能の制限なしを確認できないので開始しない')
-    rows = subprocess.check_output(['/bin/ps', '-axo', 'pid,ppid,command'], text=True)
-    python_rows = []
-    for line in rows.splitlines()[1:]:
-        parts = line.strip().split(None, 2)
-        if len(parts) != 3:
-            continue
-        pid, parent, command = parts
-        if ('/Python ' in command or 'python3' in command or '/python ' in command) and 'jobs.py sampler' not in command and 'resource_tracker' not in command:
-            python_rows.append((int(pid), int(parent), command))
-    parents = {p for _, p, _ in python_rows}
-    leaves = [(pid, parent, cmd) for pid, parent, cmd in python_rows if pid not in parents]
-    # この検査の親を含めて数えるので、実模型の一過程への交代に空きを余分に取らない。
-    if len(leaves) > cores-2:
-        raise RuntimeError(('マック全体の模型過程の上限', len(leaves), cores-2))
-    return {'cores': cores, 'limit': cores-2, 'python_leaves_including_this_driver': leaves, 'thermal': thermal}
+    from uposition_cpu import census, descendants
+    rows = census()
+    own = descendants(rows, os.getpid())
+    outside = sum(heavy for pid, (_, heavy) in rows.items() if pid not in own)
+    # 外側の共有監視も同じ数えで二枠を空けてから開始し、走行中も上限を監視する。
+    if outside + 2 > cores-2:
+        raise RuntimeError(('マック全体の模型過程の上限', outside, cores-2))
+    return {'cores': cores, 'limit': cores-2, 'outside_heavy': outside, 'reserved_own': 2, 'thermal': thermal}
 
 
 def worker(task):
