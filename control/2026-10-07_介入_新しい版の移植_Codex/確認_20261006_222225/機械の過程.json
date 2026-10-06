@@ -1,0 +1,73 @@
+{
+  "at_jst": "2026-10-06T22:22:25+09:00",
+  "active_model_or_heavy_analysis": 3,
+  "paused_model_or_heavy_analysis": 3,
+  "own_active": 1,
+  "own_paused": 0,
+  "model_cpu_cap": 8,
+  "new_admission_limit": 6,
+  "processes": [
+    {
+      "pid": 20821,
+      "parent": 20817,
+      "stat": "T",
+      "rss_kb": 11424,
+      "own": false
+    },
+    {
+      "pid": 20929,
+      "parent": 20925,
+      "stat": "T",
+      "rss_kb": 19648,
+      "own": false
+    },
+    {
+      "pid": 27538,
+      "parent": 27534,
+      "stat": "T",
+      "rss_kb": 11280,
+      "own": false
+    },
+    {
+      "pid": 36825,
+      "parent": 36821,
+      "stat": "R",
+      "rss_kb": 230816,
+      "own": false
+    },
+    {
+      "pid": 38195,
+      "parent": 38187,
+      "stat": "R",
+      "rss_kb": 336512,
+      "own": true
+    },
+    {
+      "pid": 89571,
+      "parent": 89565,
+      "stat": "R",
+      "rss_kb": 219856,
+      "own": false
+    }
+  ],
+  "controllers": [
+    {
+      "pid": 55602,
+      "parent": 1,
+      "stat": "Ss",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/pipeline.py"
+    },
+    {
+      "pid": 55730,
+      "parent": 1,
+      "stat": "Ss",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u /Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/finalize_when_done.py"
+    },
+    {
+      "pid": 40737,
+      "parent": 52419,
+      "stat": "Ss",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -u admission_guard.py"
+    }
+  ]
+}
