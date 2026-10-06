@@ -15,6 +15,17 @@ BASE = json.loads((ROOT/'evidence/sme-port-20261005/gate2_q0_200/spec.json').rea
 def make(name, agents=8, trials=200, *, evict=False, tombstone=False,
          audit=True, q=0, export=True, mem=6.5, solo=None, probe=100, replay=None):
     spec = copy.deepcopy(BASE)
+    if name == 'measure4_evict600':
+        # 呼び手の旧600の18GB案を、今回の実測が得られた後に受付用だけ見直す。
+        # 模型のargv・600試行・観測指定は変えない。
+        measured = json.loads((EV/'q0_8_evict200/resource.json').read_text())
+        assert measured['exitcode'] == 0 and not measured['stop'] and not measured['errors']
+        requested = mem
+        mem = min(requested, max(4, round(measured['rss_sum_peak_bytes']/1e9*3*.5*2+1,1)))
+        spec['memory_reservation_basis'] = {'proposal_gb': requested, 'effective_gb': mem,
+            'measured_eight200_peak_bytes': measured['rss_sum_peak_bytes'],
+            'formula': '8体200実測 × (600/200) × (4/8) × 2 ＋ 1GB。最小4GB、旧予約案18GB以下。audit・墓石・全量保存を外す。未測定の余裕を2倍で持ち、実RSSを監視して超えれば停止。'}
+        (EV/'measurement-reservation-adjustment.json').write_text(json.dumps(spec['memory_reservation_basis'],ensure_ascii=False,indent=2)+'\n')
     spec.update(name=name, evidence=str(EV/name), output=str(OUT/name), commit=COMMIT,
                 mem_gb=mem, export_final=export, solo_agent=solo)
     args = spec['argv']

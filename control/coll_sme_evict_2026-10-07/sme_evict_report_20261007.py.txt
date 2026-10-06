@@ -1,0 +1,137 @@
+"""完走後にだけ使う報告の組立て。模型の実行やgit操作はしない。"""
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import shlex
+import shutil
+
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-evict-20261007'
+OUT=ROOT/'outputs/sme-evict-20261007'
+PUBLIC=ROOT/'report/control/coll_sme_evict_2026-10-07'
+REPORT=ROOT/'report/control/2026-10-07_集団化_控えを捨てる_Codex3.md'
+def read(p):return json.loads(p.read_text())
+def publish(src,dest=None):
+ dest=PUBLIC/(dest or src.relative_to(EV))
+ dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dest)
+def mb(v):return f'{v/1e9:.3f}'
+def machine_summary(name):
+ folder=EV/name
+ samples=0;free=[];swap=[];bad=0
+ with gzip.open(folder/'health.jsonl.gz','rt') as stream:
+  for line in stream:
+   row=json.loads(line);samples+=1
+   disk=row['disk'].splitlines()[-1].split();free.append(int(disk[3])*1024)
+   swap.append(float(re.search(r'used = ([\d.]+)M',row['swap'])[1]))
+   speed=re.search(r'CPU_Speed_Limit\s*=\s*(\d+)',row['thermal'])
+   if ('No thermal warning level has been recorded' not in row['thermal'] or
+       'No performance warning level has been recorded' not in row['thermal'] or
+       (speed is not None and int(speed[1])!=100)):bad+=1
+ assert samples and not bad
+ return dict(run=name,samples=samples,min_free_gib=min(free)/2**30,
+  swap_min_mb=min(swap),swap_max_mb=max(swap),swap_delta_mb=swap[-1]-swap[0],warnings=bad,
+  cpu_pause_seconds=read(folder/'resource.json').get('cpu_pause_seconds'),
+  note='RSSと機械は標本。CPU停止欄なしの初期版では外部監視を別に記録。')
+def main():
+ phases=[json.loads(x) for x in (EV/'workflow.jsonl').read_text().splitlines()]
+ assert phases[-1]['phase']=='complete', '全部の関門と測定の完走前に最終報告を作らない'
+ gates=[read(EV/f'gate-{mode}.json') for mode in ('q0','solo','receive')]
+ assert all(g['passed'] and all(c['passed'] for c in g['checks']) for g in gates)
+ analysis=read(EV/'measurement-analysis.json')
+ replay=read(OUT/'recv_2_replay200/comm/run001.summary.json')
+ assert replay['trials']==200 and not replay['errors']
+ repstats=[a['smereplay'] for a in replay['agents']]
+ assert len(repstats)==2 and all(s['replayed'] and s['predictions']==200 and s['updates']==200 for s in repstats)
+ tombs=list((OUT/'recv_2_replay200/evictions').glob('*/*.summary.json'))
+ assert len(tombs)==2 and all(read(p)['tombstone_hits']==0 for p in tombs)
+ names=['pilot8_evict32','q0_8_plain200','q0_8_evict200']+[f'solo{i}_evict200' for i in range(8)]+['recv_2_plain200','recv_2_evict200','recv_2_replay200','measure4_evict600','measure8_evict200']
+ resources={n:read(EV/n/'resource.json') for n in names}
+ commands=[]
+ for n in names:
+  spec=read(EV/n/'spec.json')
+  receipt_path=EV/n/'receipt-command.json'
+  if n=='pilot8_evict32':
+   assert not receipt_path.exists() and not (EV/n/'receipt.log').exists()
+   receipt=None
+   receipt_note='初測は制御器より前に手動で受付。受付の完全なargv・専用logは未保存。nativeの全argv・環境はcommand.json、予約・機械はinitial/resourceに保存。推測で補わない。'
+  else:
+   receipt=read(receipt_path);receipt_note=None
+  commands.append(dict(name=n,cwd=spec['cwd'],commit=spec['commit'],env=spec['env'],argv=spec['argv'],mem_gb=spec['mem_gb'],export_final=spec['export_final'],receipt=receipt,receipt_note=receipt_note))
+  for f in ['spec.json','resource.json','initial.json','final.json','command.json']:
+   publish(EV/n/f)
+  if n!='pilot8_evict32':
+   for f in ['receipt-command.json','receipt.log']:publish(EV/n/f)
+  publish(EV/n/'health.jsonl.gz')
+  for f in (EV/n).glob('agent*.performance.jsonl'):publish(f)
+  for f in (EV/n).glob('agent*.probe-times.jsonl'):publish(f)
+  for f in (EV/n).glob('*.py.txt'):publish(f)
+ (PUBLIC/'actual-commands.json').write_text(json.dumps(commands,ensure_ascii=False,indent=2)+'\n')
+ for helper in ('sme_evict_compare_20261007.py','sme_evict_measurement_analysis_20261007.py','sme_evict_report_20261007.py','sme_evict_plan_20261007.py','sme_evict_workflow_20261007.py','sme_evict_cpu_20261007.py'):
+  shutil.copyfile(ROOT/helper,PUBLIC/(helper+'.txt'))
+ machines=[machine_summary(n) for n in names]
+ (PUBLIC/'machine-summary-all.json').write_text(json.dumps(machines,ensure_ascii=False,indent=2)+'\n')
+ for f in ['gate-q0.json','gate-solo.json','gate-receive.json','measurement-analysis.json','measurement-reservation-adjustment.json','workflow.jsonl','priority25prime.json','priority25prime-worker-starts.json','cpu-before-final-analysis.json','cpu-before-report-builder.json','final-analysis.log','final-report-missing-pilot-receipt.log']:
+  if (EV/f).exists():publish(EV/f)
+ (PUBLIC/'replay-verification.json').write_text(json.dumps(dict(trials=200,smereplay=repstats,tombstones=[read(p) for p in tombs]),ensure_ascii=False,indent=2)+'\n')
+ text=REPORT.read_text();before,_,priority=text.partition('\n## 25′ の先通し\n')
+ before=before.partition('\n## 9. 再開後の関門（確認値）\n')[0]
+ before=re.sub(r'\*\*進捗報告。.*?\*\*','**最終報告。今回の関門と指定の短い測定が完了。1,740試行は外挿で、本番は実行していない。**',before,count=1)
+ section='\n## 9. 再開後の関門（確認値）\n\n'
+ section+='コードc55b8c1を維持し、世界2・保持A・SME＋(a)・主λ・集団種1・直列で実施。関門は一致試験100間隔、前後の隔離検査、墓石あり。\n\n|関門|結果|証拠|\n|---|---|---|\n'
+ labels=['通信なし8体のON/OFF、追加旗全OFFと移植前','通信なし8体と独立単独8体','受信二体のON/OFF（q=0.2、m=0.3）']
+ for label,g in zip(labels,gates):section+=f'|{label}|{len(g["checks"])}項目すべて一致|gate-{g["gate"]}.json|\n'
+ section+='|二体の再生|各個体200予測・200更新、世界後・受信後も一致、読み残しなし|replay-verification.json|\n\n'
+ section+='ON/OFFはintern＋破棄の追加旗の組を比較した。控えは実際の破棄鍵だけをOFFから除き、残る全値・型・順序・件数を比較した。独立単独との関門は台帳本体を比較し、ON/OFFの関門は台帳本体に加えて模型の記憶・乱数も比較した。時計・RSS・破棄の研究者記録は別に扱う。\n\n'
+ received=read(OUT/'recv_2_evict200/comm/run001.summary.json')
+ counts={key:sum(a['v311c'][key] for a in received['agents']) for key in ('recv_assim','recv_birth','recv_none')}
+ section+=f'受信二体の確認値：配送{received["delivered"]}件、取り込み{counts["recv_assim"]}件、報告からの誕生{counts["recv_birth"]}件、不成立{counts["recv_none"]}件。OFF／ONで全通信事象が一致した。\n\n'
+ tomb_records=[]
+ for n in names:
+  if 'plain' in n or n.startswith('measure'):continue
+  for p in (OUT/n/'evictions').glob('*/*.summary.json'):
+   v=read(p);assert v['tombstone_hits']==0
+   tomb_records.append(dict(run=n,actor=p.name,**v))
+ (PUBLIC/'all-gate-tombstones.json').write_text(json.dumps(tomb_records,ensure_ascii=False,indent=2)+'\n')
+ section+=f'墓石ありの個体走行{len(tomb_records)}件で再参照0。辞書にない名前による停止も0。独立単独と集団の同じ個体の世界種・f・名札幅・会計を揃えた。集団の走行種は1のみ。\n\n'
+ section+='## 10. 指定の短い測定（確認値）\n\n観測は27番(ii)：auditなし、一致試験100間隔、必須の保存・復元あり。intern＋破棄あり、墓石と最終控えの検査用全量保存はなし。cf-value・probe-world、f、値段、会計、模型の計算の旗を保持した。\n\n|走行|実時間（秒／分）|RSS同時合計の標本最大GB|個体別の最大常駐MB|受付予約GB|native出力バイト|\n|---|---:|---:|---|---:|---:|\n'
+ for n in ['measure4_evict600','measure8_evict200']:
+  a=resources[n]
+  section+=f'|{n}|{a["elapsed_seconds"]:.3f}／{a["elapsed_seconds"]/60:.2f}|{mb(a["rss_sum_peak_bytes"])}|{a["agent_peak_rss_mb"]}|{a["allocation_gb"]}|{a["output_bytes"]:,}|\n'
+ section+='\n100試行ごとの確認値（RSSはその時点までの最大、時間は開始から。個体最大を単純に足していない）：\n\n|体数|試行|実時間秒|100区間の秒|RSS合計最大GB|個体最大MB|\n|---:|---:|---:|---:|---:|---|\n'
+ for k,n in [('four600',4),('eight200',8)]:
+  for b in analysis['measured'][k]['boundaries']:
+   section+=f'|{n}|{b["trials"]}|{b["elapsed_seconds"]:.3f}|{b["block_seconds"]:.3f}|{mb(b["rss_sum_peak_bytes"])}|{[round(x/1e6,1) for x in b["actor_peak_rss_bytes"]]}|\n'
+ section+='\nCPUの数えは模型以外の重い監査・集計も安全側に含めた。実時間にはCPU枠の停止も含まれる。停止秒はmonotonicの実記録、100区間への配分はps監視時刻からの近似。通常のCPU競合とI/Oは除いていない。\n\n|走行|実時間秒|CPU枠による停止秒|停止だけを除いた秒|\n|---|---:|---:|---:|\n'
+ for n in ['measure4_evict600','measure8_evict200']:
+  a=resources[n];pause=a.get('cpu_pause_seconds',0)
+  section+=f'|{n}|{a["elapsed_seconds"]:.3f}|{pause:.3f}|{a["elapsed_seconds"]-pause:.3f}|\n'
+ section+='\n旧4体600はauditありで4,608.997秒・11.748GB、旧8体200はauditありで4,128.869秒・4.699GB。今回との差には観測条件の変更とintern＋破棄の双方が含まれ、破棄だけの時間の効果として扱わない。模型の成績の良し悪しは判断しない。\n\n'
+ section+='機械の確認値：[machine-summary-all.json](coll_sme_evict_2026-10-07/machine-summary-all.json)。全16本の標本で熱・性能警告0。\n\n|走行|機械の標本数|最小空きGiB|スワップ最小／最大／増減MB|\n|---|---:|---:|---|\n'
+ for m in machines[-2:]:
+  section+=f'|{m["run"]}|{m["samples"]}|{m["min_free_gib"]:.3f}|{m["swap_min_mb"]}／{m["swap_max_mb"]}／{m["swap_delta_mb"]}|\n'
+ section+='\n開始・終了のvm_stat全文と実行中の圧縮原記録を証拠に保存。受付の全予約24GB・出力先20GiBを模型の外で検査した。CPU監視は模型以外の重い集計を含め、直列の待機個体を実計算と区別していた。21:54の受け箱の確認では、停止Tを除く全模型の子は12本（自分8、他4）で、自分の7本は直列待機だった。受け箱の指示1に従い、以後の新規受付ではCPU使用率にかかわらず全模型の子を数える。既存の走行は停止せず完走した。\n\n'
+ section+='## 11. 1,740試行の外挿（推測）\n\n実行していない1,740試行の確認値ではない。CPU枠による停止だけを除いた時間について、4体600の最後の300試行の区間を直線で延ばす案と、最後の100区間の時間を保つ案を並べた。通常のCPU競合とI/Oは含む。RSSは最後の200試行の標本最大の増分を負にせず延ばした。8体は体数比2と、今回の200試行の実測比の二案。H・個体の種・fの構成・同時機械負荷の違いを制御していない。通信なしについての外挿で、受信あり8体の確認値へ転用しない。受付待ちやCPU枠の停止があれば、実際の完了時刻は延びる。\n\n|外挿|時間：最後の区間一定／直線（分）|RSS合計最大GB|予約案GB|24GB予算内か|\n|---|---:|---:|---:|---|\n'
+ for key,label in [('four','4体'),('eight_by_count','8体：体数比2'),('eight_by_200','8体：200試行の実測比')]:
+  f=analysis['forecast1740'][key]
+  section+=f'|{label}|{f["seconds_flat"]/60:.1f}／{f["seconds_trend"]/60:.1f}|{mb(f["rss_bytes"])}|{f["reservation_gb"]}|{"予約案では入る" if f["reservation_gb"]<=24 else "予約案では入らない"}|\n'
+ section+='\n予約案はRSS推測×1.3＋1GBをGB単位で切り上げた。機械の他の予約との合計が24GB以下であることとCPU8本は別に必要。4体600の当初の予約案18GBは、未提出の測定specを確定する時、今回の8体200の実測を根拠に4.2GBへ見直した。模型のargvを変えていない。元の制御器の記録にある18GBは提案値で、受付へ出した実値はspec／receiptの値。\n\n'
+ section+='初測pilot8_evict32の受付の完全なargv・専用logは未保存。nativeの全引数と環境、受付の予約と機械の記録は保存されている。受付命令を推測で復元して確認値にしない。報告の組立て台本は、この未保存ファイルを必須として初回停止したため、この一本だけ未保存を明示する形へ訂正した。模型・関門・測定のコードと期待値を変えていない。初回の例外記録も保存。\n\n'
+ section+='nativeの全引数・環境変数、初測以外の受付命令：[actual-commands.json](coll_sme_evict_2026-10-07/actual-commands.json)。各開始終了・RSS・出力・機械原記録は同じ証拠の各走行ディレクトリ。コードの計算部分の差分0を維持した。本番160本と種21〜40には触れていない。\n'
+ # 最後の節の追記は、監視の実際の終了結果からだけ行う。
+ p=read(EV/'priority25prime.json');assert p.get('resumed_at')
+ priority+='\n確認後の追記：\n\n'
+ for kind,v in p['started_observed'].items():
+  priority+=f'- {kind}：担当{v["owner"]}、受付PID{v["receipt_pid"]}、受付開始{v["receipt_start"]}、非停止workerの確認{v["observed_at"]}。\n'
+ priority+=f'- 後続の制御器を再開した時刻：{p["resumed_at"]}。理由：{p["reason_resumed"]}。2時間の期限による再開：{p["timeout"]}。取り下ろした受付は0件、待機させた制御器を再開し、元の命令・値・順番を保持した。\n'
+ for row in phases:
+  if row['phase']=='start' and row.get('name')=='solo0_evict200':
+   priority+=f'- 後続最初の受付提出：{row["time"]}。実計算の開始前記録：{resources["solo0_evict200"]["start"]}。\n'
+   break
+ REPORT.write_text(before+section+'\n## 25′ の先通し\n'+priority)
+ index=[dict(path=str(f.relative_to(PUBLIC)),bytes=f.stat().st_size,sha256=hashlib.sha256(f.read_bytes()).hexdigest()) for f in sorted(PUBLIC.rglob('*')) if f.is_file() and f.name!='index.json']
+ (PUBLIC/'index.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
+ print(json.dumps(dict(gates=[(g['gate'],len(g['checks'])) for g in gates],published_files=len(index)),ensure_ascii=False))
+if __name__=='__main__':main()

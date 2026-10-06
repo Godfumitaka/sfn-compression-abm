@@ -1,0 +1,90 @@
+"""完走した短い測定から、確認値と条件付きの外挿を分けて保存する。"""
+from pathlib import Path
+import datetime
+import gzip
+import json
+import math
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-evict-20261007'
+OUT=ROOT/'outputs/sme-evict-20261007'
+def rows(path):
+ with (gzip.open(path,'rt') if path.suffix=='.gz' else path.open()) as f:return [json.loads(s) for s in f]
+def pause_intervals(folder,resource):
+ # 監視の判断時刻から区間を復元。全体の秒数はmonotonicの実記録へ合わせる。
+ intervals=[];begin=None
+ with (folder/'cpu-during.jsonl').open() as stream:
+  for line in stream:
+   row=json.loads(line);when=datetime.datetime.fromisoformat(row['time']).timestamp()
+   if row['count']+1>8 and begin is None:begin=when
+   elif row['count']+1<=8 and begin is not None:
+    intervals.append((begin,when));begin=None
+ if begin is not None:intervals.append((begin,datetime.datetime.fromisoformat(resource['finished']).timestamp()))
+ raw=sum(b-a for a,b in intervals);exact=resource.get('cpu_pause_seconds',0)
+ assert bool(raw)==bool(exact)
+ def before(when):
+  t=datetime.datetime.fromisoformat(when).timestamp()
+  return sum(max(0,min(b,t)-a) for a,b in intervals)*(exact/raw if raw else 0)
+ return before,dict(intervals=len(intervals),raw_timestamp_seconds=raw,monotonic_seconds=exact,
+  method='区間の分配はps監視の時刻からの近似。全体はmonotonicで測った停止秒へ正規化。通常のCPU競合やI/Oは除いていない。')
+def measured(name,n,T):
+ d=EV/name;resource=json.loads((d/'resource.json').read_text());spec=json.loads((d/'spec.json').read_text())
+ assert resource['trials']==T and not resource['errors'] and not resource['stop'] and resource['exitcode']==0
+ assert '--v311c-audit' not in spec['argv'] and '--sme-evict-tombstone' not in spec['argv']
+ assert '--sme-evict-trial-cache' in spec['argv'] and spec['argv'][spec['argv'].index('--v311c-probe-every')+1]=='100'
+ actors=[rows(d/f'agent{i}.performance.jsonl') for i in range(n)]
+ assert all(len(r)==T and [a['trial'] for a in r]==list(range(T)) for r in actors)
+ health=rows(d/'health.jsonl.gz');boundaries=[];prior=0;prior_net=0
+ pause_before,pause_info=pause_intervals(d,resource)
+ for end in range(100,T+1,100):
+  records=[r[end-1] for r in actors];when=max(a['time'] for a in records)
+  elapsed=max(a['elapsed_seconds'] for a in records)
+  paused=pause_before(when);net=elapsed-paused
+  samples=[r['rss_sum_bytes'] for r in health if r['time']<=when]
+  boundaries.append(dict(trials=end,elapsed_seconds=elapsed,block_seconds=elapsed-prior,
+   rss_sum_peak_bytes=max(samples,default=0),actor_peak_rss_bytes=[r['peak_rss_bytes'] for r in records],
+   active_seconds_sum=sum(r['active_seconds'] or 0 for r in records),
+   cpu_pause_seconds_approx=paused,seconds_without_cpu_stop=net,block_seconds_without_cpu_stop=net-prior_net))
+  prior=elapsed
+  prior_net=net
+ native=json.loads((OUT/name/'comm/run001.summary.json').read_text())
+ assert native['delivered']==0 and len(native['probe'])==T//100
+ assert all(a['v311c']['dictionary_checks']==2*T and a['v39'].get('not_in_dictionary',0)==0 for a in native['agents'])
+ assigned=[float(x) for x in spec['argv'][spec['argv'].index('--v311c-f')+1].split(',')]
+ f_counts=[]
+ for i,f in enumerate(assigned):
+  ledger=next((OUT/name/'ledgers/cells').glob(f'*/seed{1+1000*i:03d}.jsonl.gz'))
+  count=0
+  with gzip.open(ledger,'rt') as stream:
+   next(stream) # 実行のヘッダ。試行行は除外しない。
+   for line in stream:
+    row=json.loads(line);assert row['f_realized']==f
+    count+=1
+  assert count==T
+  f_counts.append(count)
+ eviction_summaries=list((OUT/name/'evictions').glob('*/*.summary.json'))
+ assert len(eviction_summaries)==n
+ for path in eviction_summaries:
+  status=json.loads(path.read_text())
+  assert status['tombstone_enabled'] is False and status['last_trial']==T-1 and status['boundaries']==T-1
+ return dict(resource=resource,boundaries=boundaries,spec=spec,f_checked_trial_counts=f_counts,pause_reconstruction=pause_info)
+a=measured('measure4_evict600',4,600);b=measured('measure8_evict200',8,200)
+# 600以後：最後の300試行の100区間を直線で延ばす案と、最後の区間を保つ案。
+y=[r['block_seconds_without_cpu_stop'] for r in a['boundaries'][-3:]]
+slope=(y[2]-y[0])/2;intercept=sum(y)/3-slope
+predict=lambda j:max(y[-1],intercept+slope*(j-4))
+net600=a['resource']['elapsed_seconds']-a['resource'].get('cpu_pause_seconds',0)
+flat=net600+11.4*y[-1]
+trend=net600+sum(predict(j) for j in range(7,18))+.4*predict(18)
+# 受付RSSは実測の瞬間の同時合計。最終3区間の最大の増え方を負にはしない。
+r=a['boundaries'];growth=max(0,(r[-1]['rss_sum_peak_bytes']-r[-3]['rss_sum_peak_bytes'])/200)
+mem4=a['resource']['rss_sum_peak_bytes']+1140*growth
+ratio=(b['resource']['rss_sum_peak_bytes']/a['boundaries'][1]['rss_sum_peak_bytes'])
+# 200の実測による比と単純な体数比2を両方並べる。H/f/世界種の差があるので確証ではない。
+time_ratio=(b['resource']['elapsed_seconds']-b['resource'].get('cpu_pause_seconds',0))/a['boundaries'][1]['seconds_without_cpu_stop']
+forecasts=dict(assumptions='1740は未走行。CPU枠による停止だけを除いた実時間から外挿。通常のCPU競合やI/Oは含む。H=600/200からH=1740への差、f別の個体種の差、同時機械負荷の差は未制御。600以後の単調な増え方を条件付きで延ばす。',
+ four=dict(seconds_flat=flat,seconds_trend=trend,rss_bytes=mem4,reservation_gb=math.ceil(mem4/1e9*1.3+1)),
+ eight_by_count=dict(seconds_flat=flat*2,seconds_trend=trend*2,rss_bytes=mem4*2,reservation_gb=math.ceil(mem4*2/1e9*1.3+1)),
+ eight_by_200=dict(seconds_flat=flat*time_ratio,seconds_trend=trend*time_ratio,rss_bytes=mem4*ratio,reservation_gb=math.ceil(mem4*ratio/1e9*1.3+1),time_ratio=time_ratio,rss_ratio=ratio))
+result=dict(measured={'four600':a,'eight200':b},forecast1740=forecasts)
+(EV/'measurement-analysis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'measured':{k:v['resource'] for k,v in result['measured'].items()},'forecast1740':forecasts},ensure_ascii=False))

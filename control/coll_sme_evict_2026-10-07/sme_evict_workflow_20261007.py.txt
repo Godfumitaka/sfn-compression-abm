@@ -1,0 +1,68 @@
+"""承認された関門だけを順に受付へ出す。失敗時は後続を開始しない。"""
+from pathlib import Path
+import datetime
+import json
+import subprocess
+import time
+from sme_evict_cpu_20261007 import wait as cpu_wait
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/sme-evict-20261007'
+OUT=ROOT/'outputs/sme-evict-20261007'
+PY='/opt/homebrew/opt/python@3.12/bin/python3.12'
+JOBS='/Users/tatsu-admin/jobs/jobs.py'
+def note(phase,**kw):
+ row={'time':datetime.datetime.now().astimezone().isoformat(),'phase':phase,**kw}
+ with (EV/'workflow.jsonl').open('a') as f:f.write(json.dumps(row,ensure_ascii=False)+'\n')
+ print(json.dumps(row,ensure_ascii=False),flush=True)
+def registered(name):
+ spec=EV/name/'spec.json';data=json.loads(spec.read_text())
+ cpu_wait(EV/name/'cpu-before-receipt.jsonl')
+ cmd=[PY,JOBS,'run','--wait','--owner',f'Codex3 集団化 evict {name} CPU直列1','--mem',str(data['mem_gb']),'--disk-path',str(OUT),'--',PY,str(ROOT/'sme_evict_registered_20261007.py'),str(spec)]
+ (EV/name/'receipt-command.json').write_text(json.dumps(cmd,ensure_ascii=False,indent=2)+'\n')
+ note('start',name=name,mem_gb=data['mem_gb'])
+ with (EV/name/'receipt.log').open('w') as f:result=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
+ note('done',name=name,returncode=result.returncode)
+ if result.returncode:raise RuntimeError(f'関門又は機械の検査が停止：{name}')
+def compare(mode):
+ cpu_wait(EV/f'cpu-before-compare-{mode}.jsonl')
+ cmd=[PY,JOBS,'run','--wait','--owner',f'Codex3 控えの全バイト照合 {mode}','--mem','2','--disk-path',str(OUT),'--',PY,str(ROOT/'sme_evict_compare_20261007.py'),mode]
+ with (EV/f'compare-{mode}.log').open('w') as f:r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
+ note('compare',mode=mode,returncode=r.returncode)
+ if r.returncode:raise RuntimeError(f'比較が不通：{mode}')
+try:
+ # 既に受付に出した少試行の結果を待つ。追加の模型を並べない。
+ note('pilot_wait')
+ path=EV/'pilot8_evict32/resource.json'
+ while not path.exists():time.sleep(15)
+ pilot=json.loads(path.read_text())
+ if pilot['exitcode'] or pilot['stop'] or pilot.get('errors'):raise RuntimeError('初測が停止')
+ summaries=list((OUT/'pilot8_evict32/evictions').glob('*/*.summary.json'))
+ assert len(summaries)==8 and all(json.loads(p.read_text())['tombstone_hits']==0 for p in summaries)
+ note('pilot_passed',rss_sum_peak_bytes=pilot['rss_sum_peak_bytes'],elapsed_seconds=pilot['elapsed_seconds'])
+ # 墓石は過去の完全な鍵を持つため、200試行のONは旧200試行の安全側予約を保つ。
+ registered('q0_8_plain200')
+ registered('q0_8_evict200')
+ compare('q0')
+ for i in range(8):registered(f'solo{i}_evict200')
+ compare('solo')
+ registered('recv_2_plain200')
+ registered('recv_2_evict200')
+ compare('receive')
+ registered('recv_2_replay200')
+ replay=json.loads((OUT/'recv_2_replay200/comm/run001.summary.json').read_text())
+ assert replay['trials']==200 and not replay['errors']
+ assert all(json.loads(p.read_text())['tombstone_hits']==0 for p in (OUT/'recv_2_replay200/evictions').glob('*/*.summary.json'))
+ note('gates_passed')
+ # 測定の予約と実引数は、関門の実測を読んで根拠付きで固定してから出す。
+ from sme_evict_plan_20261007 import make
+ on=json.loads((EV/'q0_8_evict200/resource.json').read_text())
+ # audit・全状態の保存・墓石を外す測定。600は未実測なので、旧600の18GB予約を上限根拠に使う。
+ make('measure4_evict600',agents=4,trials=600,evict=True,tombstone=False,audit=False,export=False,mem=18)
+ make('measure8_evict200',agents=8,trials=200,evict=True,tombstone=False,audit=False,export=False,mem=max(2,round(on['rss_sum_peak_bytes']/1e9*1.35+.5,1)))
+ note('measurement_reservations',four600_gb=18,eight200_gb=json.loads((EV/'measure8_evict200/spec.json').read_text())['mem_gb'],basis='4体600は旧実測11.748GBに対する旧予約18GB。8体200は今回のaudit・墓石あり実測×1.35＋0.5GB、最小2GB。')
+ registered('measure4_evict600')
+ registered('measure8_evict200')
+ note('complete')
+except BaseException as e:
+ note('stopped',error=repr(e))
+ raise

@@ -1,0 +1,515 @@
+{
+  "name": "solo2_evict200",
+  "start": "2026-10-06T20:14:12.299446+09:00",
+  "finished": "2026-10-06T20:16:37.605464+09:00",
+  "elapsed_seconds": 145.3042035420076,
+  "exitcode": 0,
+  "cpu_pause_seconds": 10.637397917045746,
+  "cpu_limit": 8,
+  "own_serial_model_concurrency_upper_bound": 1,
+  "rss_sum_peak_bytes": 244203520,
+  "rss_sample_interval_seconds": 1,
+  "samples": 124,
+  "allocation_gb": 1.5,
+  "stop": null,
+  "output_bytes": 52144077,
+  "manifests": [
+    {
+      "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+      "seed": 2001,
+      "f": 0.1,
+      "theta_prime": 2.1,
+      "verbatim_theta": 0.3842,
+      "repair_scope": "first_order",
+      "world_hash": "108026d992895a63312074169b66304f8177ceaa8d90983f94a8b012474cd9d4",
+      "trial_count": 200,
+      "code_commit": "c55b8c1a62b04002413686b0405bc1960fa8d6b9",
+      "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+      "snapshot_mode": "delta",
+      "snapshot_every": 1,
+      "ledger_bytes": 2289099,
+      "elapsed_sec": 144.01,
+      "final_def_count": 16,
+      "final_m_live_total": 16,
+      "finished_at": "2026-10-06T11:16:36Z",
+      "skipped": false,
+      "v39": {
+        "trials": 200,
+        "scored_trials": 11,
+        "scored_seats": 11,
+        "births": 23,
+        "birth_noop": 0,
+        "birth_childless_dropped": 28,
+        "conv_FH": 311,
+        "conv_HU": 298,
+        "retire": 7,
+        "neg_conv": 0,
+        "cap_conv": 0,
+        "ties": 456,
+        "max_usage": 7410,
+        "relearn": 113,
+        "price_conv": 609,
+        "cfg": {
+          "budget": null,
+          "init": "two",
+          "a": 0.5,
+          "u_abstain": false,
+          "D": 76,
+          "T": 200,
+          "rho": 0.5,
+          "argmax": true,
+          "commons": true,
+          "decay_mode": "actr",
+          "price": 0.01873710622997919
+        },
+        "select_calls": 198,
+        "skipped_restatement": 624
+      },
+      "sme2017": {
+        "version": "sme2017-ordered-component-1",
+        "settings": {
+          "same_functor": 0.0005,
+          "same_function": 0.0002,
+          "trickle_down": 8.0,
+          "max_local_score": null,
+          "functor_trickle_down": false,
+          "greedy_cutoff": 0.8,
+          "greedy_max": 3,
+          "block_most_out_of_mapping": true,
+          "allow_out_of_mapping": true,
+          "less_greedy": true,
+          "fold_attributes": true,
+          "entity_supported_inferences": true
+        },
+        "requests": 12568,
+        "computed": 11185,
+        "reused": 1383,
+        "tie_policy": "call-seed-uniform-v1"
+      },
+      "smereplay": {
+        "predictions": 200,
+        "updates": 200,
+        "replayed": false
+      },
+      "v310be": {
+        "commons_lt2": 0,
+        "chose_new": 23,
+        "chose_existing": 176,
+        "ties": 1,
+        "new_excluded_structure": 0,
+        "assim_impossible": 0,
+        "no_candidate": 0,
+        "dC_mismatch": 0,
+        "assim_match0": 0,
+        "assim_hist0": 0,
+        "zero_release": 0,
+        "retire_candidate_evals": 7,
+        "score_other_position": 0,
+        "cfg": {
+          "alpha": 1.0,
+          "lam": 0.01873710622997919,
+          "cancel_code": "D1",
+          "absence": "案1",
+          "score_role": true
+        },
+        "score_role_scored": 11,
+        "score_role_scored_pos_differs": 0,
+        "score_role_other_target": 266,
+        "score_role_old_would_score_other": 92,
+        "score_role_old_would_score_no_target": 0,
+        "score_role_no_target_高階_親が無い": 18
+      },
+      "histrole": {
+        "m1_calls": 199,
+        "m1_registered": 199,
+        "seats_first": 1765,
+        "seats_higher": 1521,
+        "first_no_parent": 25,
+        "first_parent_unmapped": 55,
+        "first_child_unseen": 118,
+        "first_observed": 1567,
+        "first_multi_parent_mapped": 0,
+        "first_multi_child": 0,
+        "obs_old_first": 11759,
+        "obs_new_first": 1567,
+        "obs_new_same_as_old_pred": 162,
+        "births": 23,
+        "birth_rows": 327,
+        "birth_first_rows": 178,
+        "birth_first_parentless": 16,
+        "first_seats_F": 178,
+        "first_obs_F": 162,
+        "first_obs_F_same_pred": 162,
+        "first_seats_H": 1451,
+        "first_obs_H": 1292,
+        "first_obs_H_same_pred": 0,
+        "first_seats_U": 136,
+        "first_obs_U": 113,
+        "first_obs_U_same_pred": 0,
+        "u_higher": 36
+      },
+      "ustruct": {},
+      "relearninit": {
+        "relearn_init": 113,
+        "relearn_init_multi_obs": 0,
+        "relearn_init_rU_gt_rH": 65
+      },
+      "tiestruct": {
+        "tie_groups": 456,
+        "tie_struct_unresolved": 143
+      },
+      "answergap": {
+        "decisions": 191,
+        "D_size_1": 143,
+        "proj_dropped": 1,
+        "fill_dropped": 3,
+        "no_gap_candidate": 1,
+        "spoke": 95,
+        "D_size_0": 48
+      },
+      "answerlog": {
+        "rows": 95,
+        "births": 23
+      },
+      "routelog": {
+        "m1_records": 199,
+        "seats": 3286,
+        "seats_added": 3026,
+        "recompute_inconsistent": 0,
+        "score_records": 19,
+        "score_items": 314
+      },
+      "probeworld": {
+        "rows": 92,
+        "fingerprint_checks": 2,
+        "probes": 46
+      },
+      "shopworld": {
+        "probes_added": 16,
+        "trials": 200,
+        "乙_n": 82,
+        "held_out_is_door": 13,
+        "甲_n": 87,
+        "乙_e": 18,
+        "甲_e": 13
+      },
+      "strictpc": {
+        "calls": 0,
+        "dropped": 0,
+        "u_allowed": 0,
+        "ext_cands": 0,
+        "unobs_base_allowed": 0,
+        "kinds_missing_rows": 0,
+        "struct_calls_changed": 75,
+        "struct_bits_diff": -1055,
+        "alt_ii_calls": 0,
+        "alt_ii_changed": 0,
+        "alt_ii_seat_F": 0,
+        "alt_ii_seat_H": 0,
+        "alt_ii_seat_U": 0,
+        "reasons": {
+          "子の対が採れない（その下で落ちた）": 7558,
+          "子の対が無い：hold_b≠hold": 406,
+          "子の対が無い：steer≠anchor": 349,
+          "子の対が無い：hold≠hold_b": 430,
+          "子の対が無い：anchor≠steer": 302,
+          "子の対が無い：⟨H⟩0≠hold_b": 196,
+          "子の対が無い：⟨H⟩3≠hold": 75,
+          "子の対が無い：⟨H⟩1≠hold_b": 505,
+          "子の対が無い：⟨H⟩13≠steer": 137,
+          "子の対が無い：⟨H⟩4≠hold": 159,
+          "子の対が無い：⟨H⟩0≠anchor": 388,
+          "子の対が無い：⟨H⟩13≠hold": 176,
+          "子の対が無い：⟨H⟩6≠anchor": 184,
+          "子の対が無い：⟨H⟩6≠steer": 173,
+          "子の対が無い：⟨H⟩16≠hold_b": 108,
+          "子の対が無い：⟨H⟩8≠hold": 338,
+          "子の対が無い：sig_n≠sig_e": 160,
+          "子の対が無い：⟨H⟩5≠sig_e": 13,
+          "子の対が無い：⟨H⟩12≠hold": 172,
+          "子の対が無い：⟨H⟩15≠hold": 124,
+          "子の対が無い：⟨H⟩1≠anchor": 270,
+          "子の対が無い：⟨H⟩10≠anchor": 41,
+          "子の対が無い：⟨H⟩4≠sig_e": 96,
+          "子の対が無い：sig_e≠sig_n": 127,
+          "子の対が無い：⟨H⟩8≠sig_n": 104,
+          "子の対が無い：⟨H⟩9≠steer": 181,
+          "子の対が無い：⟨H⟩8≠hold_b": 190,
+          "U の子の下で：子の対が無い：⟨H⟩3≠hold": 135,
+          "子の対が無い：⟨H⟩9≠hold_b": 112,
+          "子の対が無い：⟨H⟩10≠steer": 26,
+          "子の対が無い：⟨H⟩3≠sig_e": 24,
+          "子の対が無い：⟨H⟩10≠hold_b": 163,
+          "子の対が無い：⟨H⟩11≠sig_e": 1,
+          "子の対が無い：⟨H⟩11≠anchor": 151,
+          "子の対が無い：⟨H⟩3≠anchor": 151,
+          "子の対が無い：⟨H⟩15≠hold_b": 113,
+          "子の対が無い：⟨H⟩6≠hold": 129,
+          "子の対が無い：⟨H⟩5≠anchor": 127,
+          "子の対が無い：⟨H⟩0≠sig_e": 89,
+          "子の対が無い：⟨H⟩6≠hold_b": 90,
+          "子の対が無い：⟨H⟩10≠hold": 103,
+          "子の対が無い：⟨H⟩2≠anchor": 103,
+          "子の対が無い：⟨H⟩2≠sig_e": 45,
+          "子の対が無い：⟨H⟩8≠steer": 41,
+          "子の対が無い：⟨H⟩1≠sig_n": 42,
+          "子の対が無い：⟨H⟩0≠sig_n": 60
+        },
+        "use_calls": {
+          "予測の場面の照合（逐語の記憶と提示）": 1372,
+          "E の書き直しの費用（仮の適用）": 3271,
+          "E の書き直しの費用": 3271,
+          "記録の道具（routelog）": 199,
+          "予測の定義の照合": 3178,
+          "試験": 1786
+        },
+        "use_dropped": {
+          "予測の場面の照合（逐語の記憶と提示）": 3087,
+          "E の書き直しの費用（仮の適用）": 3287,
+          "E の書き直しの費用": 2857,
+          "記録の道具（routelog）": 42,
+          "予測の定義の照合": 3287,
+          "試験": 2107
+        }
+      },
+      "cfvalue": {
+        "rows": 106,
+        "trials": 19,
+        "fingerprint_checks": 19
+      },
+      "nocharge2": {
+        "calls": 18,
+        "two_to_three": 3
+      },
+      "v38": {
+        "trials": 200,
+        "received": 19,
+        "confirmed_visible": 15,
+        "confirmed_disclosure": 0,
+        "confirmed_by_prediction": 0,
+        "refuted": 0,
+        "unconfirmed": 3,
+        "undetermined": 0,
+        "seat_obs_added": 11,
+        "seat_obs_skipped": 0,
+        "lazy_init": 16,
+        "seat_reg_mismatch": 0,
+        "active_from": 0
+      },
+      "v32": {
+        "rename_check": false,
+        "rn_calls": 0,
+        "rn_same_ident": 0,
+        "rn_differ_ident": 0,
+        "rn_differ_rev": 0,
+        "rn_differ_hash": 0,
+        "rn_ratio_differ_rev": 0,
+        "rn_ratio_differ_hash": 0,
+        "rn_commons_differ_rev": 0,
+        "rn_commons_differ_hash": 0,
+        "rn_examples": [],
+        "rho": 0.5,
+        "argmax": true,
+        "shadow": false,
+        "commons": true,
+        "fix2": true,
+        "calls": 0,
+        "scored": 0,
+        "reached_calls": 0,
+        "chosen": 0,
+        "tie_at_max": 0,
+        "differ": 0,
+        "argmax_not_first": 0,
+        "commons_lt2": 0,
+        "commons_rows": 0
+      },
+      "fix2": {
+        "registered": 0,
+        "tomb_child_links": 0,
+        "visible_ok": 0,
+        "visible_ng": 0,
+        "hidden": 0,
+        "entity_ng": 0,
+        "select_calls": 0,
+        "select_changed_support": 0,
+        "full": true
+      },
+      "fillnorestate": {
+        "calls": 0,
+        "skipped_restatement": 0,
+        "skipped_with_parent_waiting": 0
+      },
+      "projfirst": {
+        "projections": 0,
+        "fill_ambiguous": 0,
+        "kept_projection": 0
+      },
+      "fixorder2": {
+        "calls": 0,
+        "child_accepted": 0,
+        "tie_groups_with_clash": 0,
+        "tie_dropped": 0,
+        "big_component": 0,
+        "prop_ambiguous": 0,
+        "rebound_modules": 4
+      },
+      "v31": {
+        "ext_calls": 3248,
+        "ext_added": 0,
+        "ext_new_seat": 0,
+        "ext_reused_seat": 0,
+        "ext_returned_dead": 0,
+        "ext_tie_unresolved": 0,
+        "c1_projection": 0,
+        "c1_filling": 0,
+        "c1_other": 0
+      },
+      "fast": {
+        "evictions": 199,
+        "max_cache": 4159
+      },
+      "nohist": true,
+      "v311c": {
+        "speak": 224,
+        "bundles": 224,
+        "bundle_empty": 0,
+        "sent": 0,
+        "new_tags": 23,
+        "birth_world": 23,
+        "birth_report": 0,
+        "assim_report": 0,
+        "recv": 0,
+        "recv_assim": 0,
+        "recv_birth": 0,
+        "recv_none": 0,
+        "recv_memory_empty": 0,
+        "dC_mismatch": 0,
+        "probes": 0,
+        "recv_score_changed": 0,
+        "recv_merit_changed": 0,
+        "cfg": {
+          "run": 1,
+          "agent": 2,
+          "n": 8,
+          "T": 200,
+          "q": 0.0,
+          "m": 0.0,
+          "recv": "A",
+          "groups": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "tags": true,
+          "b": 11
+        },
+        "dictionary_checks": 200,
+        "name_tables_end": {
+          "R_1d441212b94fe7cf": {
+            "born": 91,
+            "tags": {
+              "n88618a806722": 1
+            }
+          },
+          "R_54e7c592cb414d28": {
+            "born": 64,
+            "tags": {
+              "nc39a56bd99b6": 1
+            }
+          },
+          "R_6332bf3339978357": {
+            "born": 59,
+            "tags": {
+              "n8f10cda87d83": 1
+            }
+          },
+          "R_63885766ccd67c1e": {
+            "born": 107,
+            "tags": {
+              "n61767af32e10": 1
+            }
+          },
+          "R_6734a71b4bfa8e9e": {
+            "born": 172,
+            "tags": {
+              "n9d2eb12f0856": 1
+            }
+          },
+          "R_6e911c42fd2a3700_t123": {
+            "born": 123,
+            "tags": {
+              "n8b4c102b6168": 1
+            }
+          },
+          "R_7b6b1008b48c1115_t136": {
+            "born": 136,
+            "tags": {
+              "n95a010630502": 1
+            }
+          },
+          "R_926b391830ae3fa0": {
+            "born": 58,
+            "tags": {
+              "n2c7054604263": 1
+            }
+          },
+          "R_b55b8775abe4ce82": {
+            "born": 2,
+            "tags": {
+              "nb2acad63031b": 1
+            }
+          },
+          "R_c3f35dbe0e2dff7d": {
+            "born": 4,
+            "tags": {
+              "n4a5d9b0e0ae6": 1
+            }
+          },
+          "R_cb63a1ebfc31098d": {
+            "born": 22,
+            "tags": {
+              "ne8700a846d6d": 1
+            }
+          },
+          "R_cb63a1ebfc31098d_t141": {
+            "born": 141,
+            "tags": {
+              "n4d7dc86aad9f": 1
+            }
+          },
+          "R_e039c529848ed3ca": {
+            "born": 5,
+            "tags": {
+              "nedbc9af4e4ae": 1
+            }
+          },
+          "R_e0dee7a6a2a6fbe5": {
+            "born": 1,
+            "tags": {
+              "n6f895bb2a63d": 1
+            }
+          },
+          "R_e7798f9839b72a25": {
+            "born": 3,
+            "tags": {
+              "n286f8c01f7a4": 1
+            }
+          },
+          "R_f61b5e0547e7f41f": {
+            "born": 108,
+            "tags": {
+              "nbea15cad045f": 1
+            }
+          }
+        }
+      },
+      "peak_rss_mb": 244.9,
+      "nohash": true
+    }
+  ]
+}

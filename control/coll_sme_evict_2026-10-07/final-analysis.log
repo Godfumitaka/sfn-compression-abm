@@ -1,0 +1,37 @@
+死んだ PID の行を消した：57138（Codex2 SME注意 w2_s03_binary_k1）
+死んだ PID の行を消した：25575（Codex2 SME注意 w1_s04_global_k1）
+死んだ PID の行を消した：26939（Codex2 SME注意 w1_s04_global_k2）
+死んだ PID の行を消した：27790（Codex2 SME注意 w1_s04_position_k1）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 3 点。sampler を始めたばかりなら 10 分待つ）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 4 点。sampler を始めたばかりなら 10 分待つ）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 5 点。sampler を始めたばかりなら 10 分待つ）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 6 点。sampler を始めたばかりなら 10 分待つ）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 7 点。sampler を始めたばかりなら 10 分待つ）
+拒む：
+  - スワップの記録が直近 10 分ぶん無い（記録 8 点。sampler を始めたばかりなら 10 分待つ）
+受け付けた：PID 39393、担当 Codex3 集団化 控えを捨てる最終解析、見込み 2.0 GB（表の合計 14.0 / 24 GB）。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）
+{"measured": {"four600": {"name": "measure4_evict600", "start": "2026-10-06T21:02:37.533915+09:00", "finished": "2026-10-06T21:38:33.751443+09:00", "elapsed_seconds": 2156.1999271250097, "exitcode": 0, "cpu_pause_seconds": 0.0, "cpu_limit": 8, "own_serial_model_concurrency_upper_bound": 1, "rss_sum_peak_bytes": 915849216, "rss_sample_interval_seconds": 1, "samples": 1898, "allocation_gb": 4.2, "stop": null, "output_bytes": 1080116803, "trials": 600, "errors": [], "agent_peak_rss_mb": [209.1, 276.6, 260.4, 296.8]}, "eight200": {"name": "measure8_evict200", "start": "2026-10-06T21:38:34.189875+09:00", "finished": "2026-10-06T22:00:15.658971+09:00", "elapsed_seconds": 997.3954248749651, "exitcode": 0, "cpu_pause_seconds": 3.421506916056387, "cpu_limit": 8, "own_serial_model_concurrency_upper_bound": 1, "rss_sum_peak_bytes": 1010663424, "rss_sample_interval_seconds": 1, "samples": 874, "allocation_gb": 2, "stop": null, "output_bytes": 534109781, "trials": 200, "errors": [], "agent_peak_rss_mb": [196.0, 133.8, 149.6, 127.4, 120.1, 125.1, 125.6, 127.5]}}, "forecast1740": {"assumptions": "1740は未走行。CPU枠による停止だけを除いた実時間から外挿。通常のCPU競合やI/Oは含む。H=600/200からH=1740への差、f別の個体種の差、同時機械負荷の差は未制御。600以後の単調な増え方を条件付きで延ばす。", "four": {"seconds_flat": 6352.394897749927, "seconds_trend": 6352.394897749927, "rss_bytes": 1083201945.6, "reservation_gb": 3}, "eight_by_count": {"seconds_flat": 12704.789795499853, "seconds_trend": 12704.789795499853, "rss_bytes": 2166403891.2, "reservation_gb": 4}, "eight_by_200": {"seconds_flat": 12150.088184830205, "seconds_trend": 12150.088184830205, "rss_bytes": 1475378021.5125437, "reservation_gb": 3, "time_ratio": 1.9126783489379529, "rss_ratio": 1.362052595553004}}}
+        4.69 real         4.60 user         0.05 sys
+            30638080  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                2588  page reclaims
+                  78  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  45  voluntary context switches
+                2228  involuntary context switches
+         66615058228  instructions retired
+         12546431172  cycles elapsed
+            23642616  peak memory footprint
+消した：PID 39393

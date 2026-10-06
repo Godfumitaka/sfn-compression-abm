@@ -1,0 +1,37 @@
+受け付けた：PID 42970、担当 Codex3 集団化 控えを捨てる最終報告、見込み 1.0 GB（表の合計 13.0 / 24 GB）。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_report_20261007.py", line 127, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_report_20261007.py", line 55, in main
+    commands.append(dict(name=n,cwd=spec['cwd'],commit=spec['commit'],env=spec['env'],argv=spec['argv'],mem_gb=spec['mem_gb'],export_final=spec['export_final'],receipt=read(EV/n/'receipt-command.json')))
+                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_report_20261007.py", line 16, in read
+    def read(p):return json.loads(p.read_text())
+                                  ^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/pilot8_evict32/receipt-command.json'
+        0.04 real         0.02 user         0.00 sys
+            20873216  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                2112  page reclaims
+                  78  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  28  voluntary context switches
+                  24  involuntary context switches
+           318219531  instructions retired
+           109422736  cycles elapsed
+            11780576  peak memory footprint
+消した：PID 42970
