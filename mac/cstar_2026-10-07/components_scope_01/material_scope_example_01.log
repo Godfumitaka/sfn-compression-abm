@@ -1,0 +1,131 @@
+受け付けた：PID 68035、担当 sme-cstar-scope-example-01、見込み 0.2 GB（表の合計 11.8 / 24 GB）。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）
+{
+  "kind": "synthetic_component_only",
+  "world_run": false,
+  "scene": "指定のおもちゃのsig_eの提示",
+  "rows": [
+    {
+      "trace": "逐語A：全構造・sig_n",
+      "old_score": 0.11750000000000001,
+      "cstar_score": 0.5121500000000001,
+      "old_mapping": [
+        [
+          "at",
+          "at"
+        ],
+        [
+          "open",
+          "open"
+        ],
+        [
+          "top",
+          "top"
+        ]
+      ],
+      "cstar_mapping": [
+        [
+          "at",
+          "at"
+        ],
+        [
+          "link",
+          "link"
+        ],
+        [
+          "open",
+          "open"
+        ],
+        [
+          "seal",
+          "seal"
+        ],
+        [
+          "top",
+          "top"
+        ]
+      ],
+      "supplied_q": {
+        "seal": {
+          "sig_e": 0.45,
+          "sig_n": 0.55
+        },
+        "at": {
+          "at": 1.0
+        },
+        "open": {
+          "open": 1.0
+        },
+        "top": {
+          "implies": 1.0
+        },
+        "link": {
+          "attach": 1.0
+        }
+      }
+    },
+    {
+      "trace": "逐語B：linkなし・sig_e",
+      "old_score": 0.12200000000000001,
+      "cstar_score": 0.12177500000000001,
+      "old_mapping": [
+        [
+          "at",
+          "at"
+        ],
+        [
+          "open",
+          "open"
+        ],
+        [
+          "seal",
+          "seal"
+        ],
+        [
+          "top",
+          "top"
+        ]
+      ],
+      "cstar_mapping": [
+        [
+          "at",
+          "at"
+        ],
+        [
+          "open",
+          "open"
+        ],
+        [
+          "seal",
+          "seal"
+        ],
+        [
+          "top",
+          "top"
+        ]
+      ],
+      "supplied_q": {
+        "seal": {
+          "sig_e": 0.95,
+          "sig_n": 0.050000000000000044
+        },
+        "at": {
+          "at": 1.0
+        },
+        "open": {
+          "open": 1.0
+        },
+        "top": {
+          "implies": 1.0
+        }
+      }
+    }
+  ],
+  "old_selected": "逐語B：linkなし・sig_e",
+  "cstar_selected": "逐語A：全構造・sig_n",
+  "scope_question": "予測の逐語の選びを保つか、EがC*で逐語の場面から選び直すか",
+  "choices": [
+    "予測の逐語を保ち、同じ二材料にE側の照合を適用",
+    "E用の逐語を全候補から選び、二材料をE側の選びで決める"
+  ]
+}
+消した：PID 68035

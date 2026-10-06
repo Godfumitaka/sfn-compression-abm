@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-07T05:04:18.107893+09:00",
+  "base": "1838256b3fa9f81737d8b210e6ccb59c9d638a25",
+  "branch": "codex/cstar-2026-10-07",
+  "commit": "886caeddf8583472788b81f1a2934ada235859f8",
+  "component_tests": 16,
+  "fixed_random_graphs": 240,
+  "matcher_random_graphs": 40,
+  "production_connected": false,
+  "runner_flags_added": false,
+  "full_gate_started": false,
+  "calibration_components_connected": false,
+  "waiting_for": "予測とEの逐語の材料の選びの仕様",
+  "instruction_41prime_received": false,
+  "stage2_scope_cancelled_not_started": true,
+  "fetched_commit": "4b0753bdeef39cbb15db396a6d6195b177d2c251",
+  "status": {
+    "at": "2026-10-07T05:04:16.653518+09:00",
+    "state": "parallel_measurements_or_checks",
+    "case": "お店と動詞の並行計測",
+    "claim_pid": null,
+    "cases": {
+      "shop_profile1740_02": {
+        "stage": "complete",
+        "claim_pid": null,
+        "completed_trials": 1740,
+        "measured_trials": 1740,
+        "cpu_paused": false,
+        "reported": true
+      },
+      "verb_profile1000_01": {
+        "stage": "profile",
+        "claim_pid": 36341,
+        "completed_trials": 792,
+        "measured_trials": 1000,
+        "cpu_paused": false,
+        "reported": false
+      }
+    },
+    "cpu": {
+      "at": "2026-10-07T05:04:16.653435+09:00",
+      "cores": 10,
+      "cap": 8,
+      "external_compute_processes": {
+        "69230": {
+          "ppid": 69219,
+          "pgid": 69209,
+          "stat": "R",
+          "cpu": 99.0,
+          "rss": 239681536,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        },
+        "70269": {
+          "ppid": 70261,
+          "pgid": 70261,
+          "stat": "R",
+          "cpu": 100.0,
+          "rss": 107200512,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      },
+      "external_count": 2,
+      "own_reserved_slots": 1,
+      "total_reserved_slots": 3,
+      "own_compute_count": 1,
+      "total_compute_count": 3,
+      "count_includes_small_waiting_model_workers": true
+    },
+    "resources": {
+      "at": "2026-10-07T05:04:16.501091+09:00",
+      "free_bytes": 257041035264,
+      "swap_grew": false,
+      "thermal_warning": null,
+      "swap_mb": 188.0
+    },
+    "logp_new_runs_and_replay_held": true
+  }
+}
