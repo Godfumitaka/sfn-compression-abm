@@ -1,0 +1,875 @@
+{
+  "passed": true,
+  "trials": 1740,
+  "gate": 3,
+  "position": "k1",
+  "mode": "binary",
+  "source": "native予測前入力と実台帳の開示。研究者の正解・型をfeaturesへ渡さない。",
+  "counts": [
+    {
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 2940
+    },
+    {
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 2987
+    },
+    {
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 280
+    },
+    {
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 290
+    },
+    {
+      "state": "H",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 11018
+    },
+    {
+      "state": "H",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1007
+    },
+    {
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 11913
+    },
+    {
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1946
+    },
+    {
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 226107
+    },
+    {
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 10516
+    },
+    {
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 21820
+    },
+    {
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 1057
+    },
+    {
+      "state": "U",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 14736
+    },
+    {
+      "state": "U",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1509
+    },
+    {
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 5813
+    },
+    {
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 477
+    },
+    {
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 166139
+    },
+    {
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 15589
+    },
+    {
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 16747
+    },
+    {
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 1552
+    }
+  ],
+  "F_scored": 0,
+  "F_scored_door_tasks": 0,
+  "F_seal_scored_door_tasks": 0,
+  "position_counts": [
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 10516
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 1057
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 15589
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 1552
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1946
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 19532
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 477
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 4720
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 951
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 7565
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 815
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1862
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 15002
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1723
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 11688
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1164
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 14417
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1445
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1881
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 16500
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1832
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 714
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 6184
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 700
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1498
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13731
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1566
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1032
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 9844
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1043
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12557
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1251
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13548
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1358
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12514
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1250
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13591
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1359
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1947
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 17121
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1921
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 576
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 5213
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 566
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 2056
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 18742
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 2053
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 486
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 4552
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 529
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13137
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1313
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12968
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1296
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1701
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 16871
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1875
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 564
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 5493
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],0]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 594
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 1879
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 17197
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1895
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "queried_hidden_position",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 579
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 5139
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"entity\",\"entity\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 583
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12951
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1294
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13154
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1315
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13753
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1368
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12352
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1],[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1241
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 12611
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1261
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 13494
+    },
+    {
+      "key": "[[[[[2,[\"relation\",\"relation\"]],1]]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1348
+    },
+    {
+      "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 9637
+    },
+    {
+      "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+      "state": "H",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 962
+    },
+    {
+      "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 16468
+    },
+    {
+      "key": "[[[]],[2,[\"relation\",\"relation\"]]]",
+      "state": "U",
+      "reason": "scored",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1647
+    },
+    {
+      "key": null,
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 2940
+    },
+    {
+      "key": null,
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": true,
+      "seats_trials": 2987
+    },
+    {
+      "key": null,
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 280
+    },
+    {
+      "key": null,
+      "state": "F",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": true,
+      "seats_trials": 290
+    },
+    {
+      "key": null,
+      "state": "H",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 11018
+    },
+    {
+      "key": null,
+      "state": "H",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1007
+    },
+    {
+      "key": null,
+      "state": "U",
+      "reason": "missing_ancestor",
+      "door_task": false,
+      "seal": false,
+      "seats_trials": 14736
+    },
+    {
+      "key": null,
+      "state": "U",
+      "reason": "missing_ancestor",
+      "door_task": true,
+      "seal": false,
+      "seats_trials": 1509
+    }
+  ]
+}
