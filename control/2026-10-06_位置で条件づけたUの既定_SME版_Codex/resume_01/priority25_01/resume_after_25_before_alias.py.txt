@@ -21,10 +21,6 @@ STEM = '2026-10-06_位置で条件づけたUの既定_SME版_Codex'
 REPORT = 'control/' + STEM + '.md'
 DEST = 'control/' + STEM + '/resume_01/priority25_01'
 CASES = ('shop_profile1740_02', 'verb_profile1000_01')
-OWNERS = {
-    'shop_profile1740_02': {'SME25 shop_profile1740_02'},
-    'verb_profile1000_01': {'SME25 verb_profile1000_01', 'SME25 動詞の先頭1000試行 並行計測'},
-}
 
 
 def now():
@@ -61,11 +57,11 @@ def descendants(pid, rows):
 def observe(found):
     registry = list(csv.DictReader(REGISTRY.open(), delimiter='\t'))
     rows = processes()
-    selected = [row for row in registry if any(row['owner'] in owners for owners in OWNERS.values())]
+    selected = [row for row in registry if row['owner'] in {'SME25 ' + c for c in CASES}]
     observation = {'observed': now(), 'registry_rows': selected, 'new_starts': []}
     for case in CASES:
         folder = SME / case
-        matches = [row for row in selected if row['owner'] in OWNERS[case]]
+        matches = [row for row in selected if row['owner'] == 'SME25 ' + case]
         assert len(matches) <= 1, matches
         pid_file = folder / 'model_pid.json'
         if case not in found and matches and pid_file.exists():
@@ -132,8 +128,6 @@ def publish(phase, found, withdrawal, restored=None):
                   ('25′の二本が動き出したことを確認したため戻した。\n' if restored['reason'] == 'both_started'
                    else '2時間の期限までに25′の二本の開始を確認できなかったため、それ以上待たず受付へ戻した。\n'),
                   'マック全体で模型の過程8本までの監視は同じものを使う。再受付は新しい模型の即時開始を意味せず、元のCPU枠・資源・関門の条件で待つ。終了時の報告処理も元に戻す。\n']
-        if (HERE / 'observer_alias_update.json').exists():
-            lines += ['動詞の受付名が並行計測への切り替えで `SME25 動詞の先頭1000試行 並行計測` に変わったため、監視する受付名を追加した。同じ `verb_profile1000_01` の模型PIDが受付PIDの子として動いていることを確認した。模型の命令・旗・値・順序・関門は変更していない。\n']
     lines += ['\n| 25′ | 受付表の開始時刻 | 模型の開始時刻／PID記録時刻 | 開始を確認した時刻 |\n',
               '| --- | --- | --- | --- |\n']
     for case in CASES:
@@ -165,10 +159,9 @@ def main():
     withdrawal = json.loads((HERE / 'withdrawal.json').read_text())
     assert withdrawal['already_started'] is False and withdrawal['registry_pid_absent'] is True
     assert not (HERE / 'restored.json').exists(), '再受付済み。重ねて起動しない。'
-    found = observe(json.loads((HERE / 'starts.json').read_text()) if (HERE / 'starts.json').exists() else {})
+    found = observe({})
     save('status.json', {'status': 'held', 'at': now(), 'pid': os.getpid(), 'starts': found})
-    if not (HERE / 'published_held.json').exists():
-        publish('held', found, withdrawal)
+    publish('held', found, withdrawal)
     while len(found) < 2 and time.time() < withdrawal['deadline_unix']:
         time.sleep(min(15, max(.1, withdrawal['deadline_unix'] - time.time())))
         found = observe(found)
