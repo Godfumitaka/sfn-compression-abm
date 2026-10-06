@@ -1,0 +1,263 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "arm": "A",
+      "summary": {
+        "trial": 1739,
+        "rows": [
+          {
+            "table": "cache",
+            "live_entries": 148091,
+            "observed_entries_including_restored_diagnostics": 148091,
+            "eligible_entries": 148000,
+            "last_read_at_least_100_trials_ago": 31905,
+            "last_read_at_least_500_trials_ago": 24356,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "self_cache",
+            "live_entries": 33984,
+            "observed_entries_including_restored_diagnostics": 33984,
+            "eligible_entries": 33963,
+            "last_read_at_least_100_trials_ago": 31905,
+            "last_read_at_least_500_trials_ago": 24356,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "cache_rng",
+            "live_entries": 148091,
+            "observed_entries_including_restored_diagnostics": 148091,
+            "eligible_entries": 148000,
+            "last_read_at_least_100_trials_ago": 107170,
+            "last_read_at_least_500_trials_ago": 81723,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "results",
+            "live_entries": 114107,
+            "observed_entries_including_restored_diagnostics": 114107,
+            "eligible_entries": 114037,
+            "last_read_at_least_100_trials_ago": 12613,
+            "last_read_at_least_500_trials_ago": 9476,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "graphs",
+            "live_entries": 8272,
+            "observed_entries_including_restored_diagnostics": 8272,
+            "eligible_entries": 0,
+            "last_read_at_least_100_trials_ago": 1756,
+            "last_read_at_least_500_trials_ago": 1327,
+            "cross_trial_successful_lookups": 34908
+          },
+          {
+            "table": "choices",
+            "live_entries": 3477,
+            "observed_entries_including_restored_diagnostics": 3477,
+            "eligible_entries": 0,
+            "last_read_at_least_100_trials_ago": 3277,
+            "last_read_at_least_500_trials_ago": 2477,
+            "cross_trial_successful_lookups": 0
+          }
+        ],
+        "memory_rows": [
+          {
+            "table": "cache",
+            "exclusive_bytes": 3181448950,
+            "eligible_bytes": 3181448950,
+            "age100_bytes": 500833550,
+            "age500_bytes": 377041230,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "self_cache",
+            "exclusive_bytes": 6554859,
+            "eligible_bytes": 6554859,
+            "age100_bytes": 6157665,
+            "age500_bytes": 4700708,
+            "dictionary_shallow_bytes": 1310784
+          },
+          {
+            "table": "cache_rng",
+            "exclusive_bytes": 27232000,
+            "eligible_bytes": 27232000,
+            "age100_bytes": 19719280,
+            "age500_bytes": 15037032,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "results",
+            "exclusive_bytes": 1761040833,
+            "eligible_bytes": 1761040833,
+            "age100_bytes": 259047209,
+            "age500_bytes": 191901924,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "graphs",
+            "exclusive_bytes": 0,
+            "eligible_bytes": 0,
+            "age100_bytes": 0,
+            "age500_bytes": 0,
+            "dictionary_shallow_bytes": 207600
+          },
+          {
+            "table": "choices",
+            "exclusive_bytes": 0,
+            "eligible_bytes": 0,
+            "age100_bytes": 0,
+            "age500_bytes": 0,
+            "dictionary_shallow_bytes": 147528
+          }
+        ],
+        "retained_before_eligible_bytes": 91785836,
+        "measurement_seen_bytes": 89195691,
+        "memory_definition": "非対象の記憶・最終試行の項目・internのPOOLを先に数え、その後cache/self_cache/cache_rng/RESULTS/GRAPHS/CHOICES順でsys.getsizeofの重複を除く。辞書の空き領域と観測の表は別。解放見込みの下限でありRSSではない。",
+        "read_definition": "成功したin・添字・get。snapshotの辞書の丸写しと復元、保存・測定の列挙は含めない。",
+        "eligibility": "呼び出しごとの種があり、完了済みの前の試行で作られた4種類の項目。墓石検査で将来の参照を別途確認する。",
+        "never_read_live_entries": {
+          "cache": 114107,
+          "self_cache": 0,
+          "cache_rng": 33984,
+          "results": 100628
+        },
+        "per_key_trace": {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/observe_full_01/A/last_reads.jsonl.gz",
+          "compressed_bytes": 31605168,
+          "sha256": "08a87bfd169a28630f8577667b2a7feaab710d2e028cf9a8e1bbfd47d3acad23"
+        }
+      },
+      "comparison_passed": true
+    },
+    {
+      "arm": "L",
+      "summary": {
+        "trial": 1739,
+        "rows": [
+          {
+            "table": "cache",
+            "live_entries": 124783,
+            "observed_entries_including_restored_diagnostics": 124783,
+            "eligible_entries": 124728,
+            "last_read_at_least_100_trials_ago": 26957,
+            "last_read_at_least_500_trials_ago": 21065,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "self_cache",
+            "live_entries": 28157,
+            "observed_entries_including_restored_diagnostics": 28157,
+            "eligible_entries": 28145,
+            "last_read_at_least_100_trials_ago": 26957,
+            "last_read_at_least_500_trials_ago": 21065,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "cache_rng",
+            "live_entries": 124783,
+            "observed_entries_including_restored_diagnostics": 124783,
+            "eligible_entries": 124728,
+            "last_read_at_least_100_trials_ago": 92326,
+            "last_read_at_least_500_trials_ago": 71850,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "results",
+            "live_entries": 96626,
+            "observed_entries_including_restored_diagnostics": 96626,
+            "eligible_entries": 96583,
+            "last_read_at_least_100_trials_ago": 9985,
+            "last_read_at_least_500_trials_ago": 8099,
+            "cross_trial_successful_lookups": 0
+          },
+          {
+            "table": "graphs",
+            "live_entries": 6726,
+            "observed_entries_including_restored_diagnostics": 6726,
+            "eligible_entries": 0,
+            "last_read_at_least_100_trials_ago": 1311,
+            "last_read_at_least_500_trials_ago": 999,
+            "cross_trial_successful_lookups": 29553
+          },
+          {
+            "table": "choices",
+            "live_entries": 3477,
+            "observed_entries_including_restored_diagnostics": 3477,
+            "eligible_entries": 0,
+            "last_read_at_least_100_trials_ago": 3277,
+            "last_read_at_least_500_trials_ago": 2477,
+            "cross_trial_successful_lookups": 0
+          }
+        ],
+        "memory_rows": [
+          {
+            "table": "cache",
+            "exclusive_bytes": 2243693788,
+            "eligible_bytes": 2243693788,
+            "age100_bytes": 336375830,
+            "age500_bytes": 248807462,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "self_cache",
+            "exclusive_bytes": 5431985,
+            "eligible_bytes": 5431985,
+            "age100_bytes": 5202701,
+            "age500_bytes": 4065545,
+            "dictionary_shallow_bytes": 1310784
+          },
+          {
+            "table": "cache_rng",
+            "exclusive_bytes": 22949952,
+            "eligible_bytes": 22949952,
+            "age100_bytes": 16987984,
+            "age500_bytes": 13220400,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "results",
+            "exclusive_bytes": 1304634068,
+            "eligible_bytes": 1304634068,
+            "age100_bytes": 169793222,
+            "age500_bytes": 130679981,
+            "dictionary_shallow_bytes": 5242944
+          },
+          {
+            "table": "graphs",
+            "exclusive_bytes": 0,
+            "eligible_bytes": 0,
+            "age100_bytes": 0,
+            "age500_bytes": 0,
+            "dictionary_shallow_bytes": 207600
+          },
+          {
+            "table": "choices",
+            "exclusive_bytes": 0,
+            "eligible_bytes": 0,
+            "age100_bytes": 0,
+            "age500_bytes": 0,
+            "dictionary_shallow_bytes": 147528
+          }
+        ],
+        "retained_before_eligible_bytes": 75117472,
+        "measurement_seen_bytes": 64936854,
+        "memory_definition": "非対象の記憶・最終試行の項目・internのPOOLを先に数え、その後cache/self_cache/cache_rng/RESULTS/GRAPHS/CHOICES順でsys.getsizeofの重複を除く。辞書の空き領域と観測の表は別。解放見込みの下限でありRSSではない。",
+        "read_definition": "成功したin・添字・get。snapshotの辞書の丸写しと復元、保存・測定の列挙は含めない。",
+        "eligibility": "呼び出しごとの種があり、完了済みの前の試行で作られた4種類の項目。墓石検査で将来の参照を別途確認する。",
+        "never_read_live_entries": {
+          "cache": 96626,
+          "self_cache": 0,
+          "cache_rng": 28157,
+          "results": 86224
+        },
+        "per_key_trace": {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/observe_full_01/L/last_reads.jsonl.gz",
+          "compressed_bytes": 23718809,
+          "sha256": "0f0a4b1a551049a891ca766bceed112321f46005ae8df27bc59b57ddea0e0be2"
+        }
+      },
+      "comparison_passed": true
+    }
+  ]
+}
