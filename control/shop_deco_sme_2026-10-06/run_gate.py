@@ -1,5 +1,6 @@
 """元のSMEと旗なし移植を、種1・世界1/2・200/1740試行で受付へ順に出す。"""
 from pathlib import Path
+import argparse
 import json
 import subprocess
 import traceback
@@ -21,6 +22,9 @@ def fingerprint(root):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--finish-from-completed", action="store_true")
+    args = parser.parse_args()
     DEST.mkdir(parents=True, exist_ok=True)
     world = json.loads((ROOT / "control/shop_deco_sme_2026-10-06/gates/world_gate.json").read_text())
     assert world["passed"]
@@ -43,11 +47,13 @@ def main():
                     assert protected["baseline"] == fingerprint(BASELINE)
                     assert protected["ported"] == fingerprint(ROOT)
                     out = DEST / "runs" / f"{stem}_{kind}"
-                    print(f"関門走行を受付へ: {stem}_{kind}", flush=True)
+                    if args.finish_from_completed:
+                        assert (out / "resources.json").exists(), "模型の再走行はしない"
+                    print(f"関門走行の完了記録を確認: {stem}_{kind}" if args.finish_from_completed else f"関門走行を受付へ: {stem}_{kind}", flush=True)
                     pair["runs"][kind] = registered(command(out, world, 1, trials=trials), out,
                         f"Codex-shop-deco-sme-gate-{stem}-{kind}", cwd=root, mem=1.0)
                 left, right = (DEST / "runs" / f"{stem}_{kind}" for kind in ("baseline", "ported_off"))
-                cmp_out = DEST / "comparisons" / stem
+                cmp_out = DEST / "comparisons" / ("after_cpu_wait" if args.finish_from_completed else "original") / stem
                 cmp_out.mkdir(parents=True, exist_ok=True)
                 registered([PYTHON, "-B", str(ROOT / "control/shop_deco_sme_2026-10-06/compare.py"),
                     str(left), str(right), str(cmp_out / "validation.json")], cmp_out,

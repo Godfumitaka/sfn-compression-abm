@@ -11,15 +11,16 @@ import time
 def census():
     rows = {}
     # macOSはargsを後ろに置くとcommを短く切る。幅指定と実行ファイル名も使う。
-    text = subprocess.check_output(["/bin/ps", "-axww", "-o", "pid=,ppid=,rss=,comm=,args="], text=True)
+    text = subprocess.check_output(["/bin/ps", "-axww", "-o", "pid=,ppid=,rss=,stat=,comm=,args="], text=True)
     for line in text.splitlines():
-        parts = line.split(None, 4)
-        if len(parts) != 5:continue
-        pid, parent, rss, name, command = parts
+        parts = line.split(None, 5)
+        if len(parts) != 6:continue
+        pid, parent, rss, state, name, command = parts
         executable = command.split(None, 1)[0].lower()
         is_python = any(word in name.lower() or word in executable for word in ("python", "pypy"))
-        heavy = is_python and "resource_tracker" not in command and "jobs.py" not in command and (
-            int(rss) >= 100 * 1024 or "spawn_main" in command)
+        # SIGSTOPで止まった過程は計算しない。互いの待機をCPU占有と数えない。
+        heavy = is_python and not state.startswith("T") and "resource_tracker" not in command and "jobs.py" not in command and (
+            "spawn_main" in command or (state.startswith("R") and int(rss) >= 100 * 1024))
         rows[int(pid)] = (int(parent), heavy)
     return rows
 
@@ -49,8 +50,8 @@ def main():
         while True:
             rows = census();own = descendants(rows, os.getpid())
             outside = sum(heavy for pid, (_parent, heavy) in rows.items() if pid not in own)
-            # 模型の親が100MBを越えたときも、一つのworkerと合わせて二枠を見込む。
-            if outside + 2 <= limit:break
+            # 各指令は一過程／worker一つ。開始後も全体を数え、自分の組だけ待機する。
+            if outside + 1 <= limit:break
             record("wait_before_start", outside_heavy=outside)
             time.sleep(10)
         thermal = subprocess.check_output(["/usr/bin/pmset", "-g", "therm"], text=True)

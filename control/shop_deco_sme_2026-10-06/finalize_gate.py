@@ -72,25 +72,17 @@ def main():
             "snapshot_commit":args.snapshot, "gate_header_commit":BASE,
             "reason":"比較中はHEADを共通土台に固定し、模型の実ファイルのSHA-256も保存した。"},
             ensure_ascii=False, indent=2) + "\n")
-        git(ROOT, "add", f"{RESEARCH}/gates/run_gate.json", f"{RESEARCH}/gates/published_snapshot.json")
+        git(ROOT, "add", RESEARCH)
         git(ROOT, "commit", "-m", "飾りのSME移植の全走行の照合記録を保存")
         source_commit = git(ROOT, "rev-parse", "HEAD")
         git(ROOT, "push", "origin", f"HEAD:refs/heads/{BRANCH}")
         report_dir = REPORT / RESEARCH
         (report_dir / "gates").mkdir(parents=True, exist_ok=True)
-        for relative in ("preregistration.json", "gates/world_gate.json", "gates/run_gate.json", "gates/published_snapshot.json"):
+        for relative in ("preregistration.json", "approval.json", "gates/world_gate.json", "gates/run_gate.json", "gates/published_snapshot.json"):
             shutil.copy2(ROOT / RESEARCH / relative, report_dir / relative)
         report = REPORT / NAME
         text = report.read_text()
-        first_end = text.index("\n## 土台と移植の範囲")
-        title = text.splitlines()[0]
-        if result["passed"]:
-            intro = "段1の移植と二つの関門を通過した。段2の下見はまだ開始していない。指定土台ではSMEの定義選択がN3に固定され、支持の割合へ切り替える旗が無いため、その追加の配線の可否を確認している。"
-        else:
-            intro = "段1の関門で停止した。段2の下見は開始していない。停止の記録を末尾へ保存した。"
-        text = title + "\n\n" + intro + "\n" + text[first_end:]
         marker = "\n## 全走行の関門の終了記録\n"
-        if marker in text:text = text.split(marker)[0]
         text += marker + "\n" + f"記録時刻：{datetime.now().astimezone().isoformat()}。状態：`{result['status']}`。移植の控えは`{args.snapshot}`、関門の記録を足した作業枝のコミットは`{source_commit}`。\n\n"
         text += "| 世界 | 試行数 | 台帳本体・side等 | 比較ファイル数 |\n|---|---:|---|---:|\n"
         for pair in result["pairs"]:
@@ -104,13 +96,15 @@ def main():
         text += "\n受付の見込みは各模型1.0GB、各比較0.2GB。元の台帳・side・実時間・受付ログ・資源記録はローカルの`codex_shop_deco_sme_2026-10-06/gates/`へ保存した。全照合のハッシュと模型の実ファイルのハッシュはこの枝の`control/shop_deco_sme_2026-10-06/gates/run_gate.json`にも保存した。\n"
         if not result["passed"]:
             text += "\n停止の理由（計算や結果を補正していない）：\n\n```text\n" + result.get("stopped_reason", "未完了") + "\n```\n"
-        text += "\n下見の開始0／160本。旧版の出力を変更していない。P-05cとD-04vを変更していない。支持の割合の配線は判断待ちであり、同じN3を支持の割合と名付けた腕は走らせない。\n"
+        text += "\n模型8本は完了していたが、最後の比較がCPU枠待ちのまま外側の制御過程が終了していた。制御終了そのものの理由は記録から特定できない。完了した模型の指紋が開始時と同じことを確認し、模型を再走行せず四つの比較だけを再受付した。待機した過程・監督用の親過程を計算中と誤って数えないようCPU監視を修正した。受付表のRAM・スワップ・熱・ディスクの条件は変更していない。\n"
+        text += "\n2026-10-06に利用者から支持の割合の旗の追加を承認された。旗なしは現在のN3。支持数とF/H数は旧版と同じ定義にする。旗の関門は世界1・2、種1、200試行と全1,740試行で全バイト比較し、旗ありの手計算二例を残す。N3の80本は旗の関門より先に開始してよい。支持の割合の80本は旗の関門通過後に開始する。\n"
+        text += "\nこの追記時点の下見は0／160本。N3の先行80本の準備を進めている。旧版の出力を変更していない。P-05cとD-04vを変更していない。承認は`control/shop_deco_sme_2026-10-06/approval.json`へ別に保存した。\n"
         report.write_text(text)
         git(REPORT, "add", NAME, RESEARCH)
         git(REPORT, "commit", "-m", "飾りのSME移植と関門の終了を報告")
         report_commit = push_report()
         outcome.update(status="reported", gate_status=result["status"], source_commit=source_commit,
-            report_commit=report_commit, preview_started=0, pending="支持の割合の配線の判断")
+            report_commit=report_commit, preview_started=0, next="N3先行80本、支持の割合の旗の関門")
         output.write_text(json.dumps(outcome, ensure_ascii=False, indent=2) + "\n")
         print(json.dumps(outcome, ensure_ascii=False), flush=True)
     except BaseException:
