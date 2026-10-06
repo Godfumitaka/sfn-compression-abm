@@ -1,0 +1,42 @@
+# 受付表（2026-10-06T09:11:48）  見込みの合計 15.3 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+54910	SME控えの寿命 観測1740 A	8.5	2026-10-06T08:35:15	4.45 GB	python3.12 codex_sme_evict_2026-10-06/run_case_01.py codex_sme_evict_2026-10-06/
+55394	SME控えの寿命 観測1740 logP	6.8	2026-10-06T08:36:29	3.56 GB	python3.12 codex_sme_evict_2026-10-06/run_case_01.py codex_sme_evict_2026-10-06/
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+ R PID 54910（親 52419）	8 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME控えの寿命 観測1740 A --mem 8.5 --disk-path /Users/tatsu
+ R PID 54923（親 54910）	16 MB	Python codex_sme_evict_2026-10-06/run_case_01.py codex_sme_evict_2026-10-06/observe_full_01/A
+ R PID 54935（親 54923）	12 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/observe_01.py /Users/tatsu-
+ R PID 54957（親 54935）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 54958（親 54935）	4511 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 54972（親 52419）	15 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex3-coll4-memory600 --mem 18 --disk-path /Users/t
+ R PID 55394（親 52419）	10 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME控えの寿命 観測1740 logP --mem 6.8 --disk-path /Users/ta
+ R PID 55398（親 55394）	16 MB	Python codex_sme_evict_2026-10-06/run_case_01.py codex_sme_evict_2026-10-06/observe_full_01/L
+ R PID 55401（親 55398）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/observe_01.py /Users/tatsu-
+ R PID 55404（親 55401）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 55405（親 55401）	3601 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 58163（親 52419）	12 MB	Python codex_sme_evict_2026-10-06/workflow_01.py
+   PID 58601（親 52419）	11 MB	Python codex_sme_evict_2026-10-06/progress_01.py
+   PID 58872（親 52419）	19 MB	Python codex_sme_evict_2026-10-06/benchmark_01.py
+   PID 60354（親 52419）	16 MB	Python codex_sme_evict_2026-10-06/CD_full_01.py
+   PID 60594（親 52419）	15 MB	Python -
+   PID 60595（親 60594）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/cod
+   PID 97541（親 1）	10 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：81%
+free：0.2 GB
+inactive：12.7 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/sme-memory-20261006/q0_4_600_v2（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/outputs/sme-memory-20261006）の空き 328.224 GiB、下限 20 GiB
+
+# スワップ：今 348.19 MB。スワップは直近 10 分で増えていない（348.2 MB → 今 348.2 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded

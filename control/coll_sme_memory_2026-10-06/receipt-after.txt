@@ -1,0 +1,37 @@
+# 受付表（2026-10-06T10:55:51）  見込みの合計 8.0 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+65710	SME控えを捨てる A 1740	8.0	2026-10-06T10:51:22	0.34 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+   PID 58163（親 52419）	14 MB	Python codex_sme_evict_2026-10-06/workflow_01.py
+   PID 58601（親 52419）	13 MB	Python codex_sme_evict_2026-10-06/progress_01.py
+   PID 58872（親 52419）	13 MB	Python codex_sme_evict_2026-10-06/benchmark_01.py
+   PID 60354（親 52419）	12 MB	Python codex_sme_evict_2026-10-06/CD_full_01.py
+   PID 60896（親 52419）	12 MB	Python codex_sme_evict_2026-10-06/finalize_01.py
+ R PID 65710（親 58163）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME控えを捨てる A 1740 --mem 8.0 --disk-path /Users/tatsu-
+   PID 82595（親 52419）	16 MB	Python codex_sme_time_2026-10-06/workflow_01.py
+   PID 84006（親 52419）	16 MB	Python codex_sme_time_2026-10-06/progress_01.py
+ R PID 96325（親 65710）	18 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/run_case_01.py /Users/tatsu
+ R PID 96328（親 96325）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/observe_memory_02.py /Use
+ R PID 96331（親 96328）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 96332（親 96328）	265 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 96506（親 52419）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+   PID 97541（親 1）	10 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：83%
+free：10.2 GB
+inactive：8.6 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03）の空き 327.102 GiB、下限 20 GiB
+
+# スワップ：今 188.0 MB。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded

@@ -1,0 +1,105 @@
+"""完了した外部測定を集計する。模型の出力は読むだけ。"""
+from pathlib import Path
+import gzip
+import json
+import math
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT / 'evidence/sme-memory-20261006'
+FOLDER = EV / 'q0_4_600_v2'
+
+def readlines(path):
+    return [json.loads(line) for line in path.read_text().splitlines() if line]
+
+def extrapolate(xs, ys, target):
+    ax, ay = sum(xs) / len(xs), sum(ys) / len(ys)
+    slope = sum((x - ax) * (y - ay) for x, y in zip(xs, ys)) / sum((x - ax) ** 2 for x in xs)
+    return max(0.0, ay + slope * (target - ax)), slope
+
+def main():
+    result = json.loads((FOLDER / 'resource.json').read_text())
+    if result['exitcode'] or result.get('stop') or result.get('errors') or result.get('trials') != 600:
+        raise RuntimeError('完走していない測定を600試行の確認値にしない')
+    boundary = readlines(FOLDER / 'boundaries.jsonl')
+    agent_bounds = [readlines(FOLDER / f'agent{i}.boundaries.jsonl') for i in range(4)]
+    agent_perf = [readlines(FOLDER / f'agent{i}.performance.jsonl') for i in range(4)]
+    for rows in agent_perf:
+        assert len(rows) == 600 and [row['trial'] for row in rows] == list(range(600))
+    health = []
+    with gzip.open(FOLDER / 'health.jsonl.gz', 'rt') as stream:
+        for line in stream:
+            row = json.loads(line)
+            health.append({'time': row['time'], 'rss_sum_bytes': row['rss_sum_bytes']})
+    blocks = []
+    previous_elapsed = 0.0
+    for t in range(99, 600, 100):
+        before = next(row for row in boundary if row['trial'] == t and row['phase'] == 'before_probe')
+        after = next(row for row in boundary if row['trial'] == t and row['phase'] == 'after_probe')
+        per_agent_before = [next(row for row in rows if row['trial'] == t and row['phase'] == 'received') for rows in agent_bounds]
+        per_agent_after = [next(row for row in rows if row['trial'] == t and row['phase'] == 'probe') for rows in agent_bounds]
+        blocks.append({'trials_finished': t + 1, 'before_probe': before, 'after_probe': after,
+            'block_elapsed_seconds': after['elapsed_seconds'] - previous_elapsed,
+            'probe_elapsed_seconds': after['elapsed_seconds'] - before['elapsed_seconds'],
+            'cumulative_rss_sum_peak_bytes': max(row['rss_sum_bytes'] for row in health if row['time'] <= after['time']),
+            'agent_peak_rss_before_probe': [row['peak_rss_bytes'] for row in per_agent_before],
+            'agent_peak_rss_after_probe': [row['peak_rss_bytes'] for row in per_agent_after],
+            'agent_active_seconds_after_probe': [row['active_seconds'] for row in per_agent_after],
+            'agent_cache_counts_after_probe': [row['cache_counts'] for row in per_agent_after]})
+        previous_elapsed = after['elapsed_seconds']
+    single = json.loads((EV / 'single-blocks.json').read_text())
+    eight = json.loads((EV / 'references/eight200.resource.json').read_text())
+    single_memory_factor = single[-1]['peak_rss_bytes'] / single[5]['peak_rss_bytes']
+    single_time_factor = single[-1]['cumulative_trial_seconds'] / single[5]['cumulative_trial_seconds']
+    overhead = blocks[-1]['after_probe']['coordinator_rss_bytes']
+    sampled_peak = result['rss_sum_peak_bytes']
+    m_curve = overhead + max(0, sampled_peak - overhead) * single_memory_factor
+    m_linear, slope = extrapolate([row['trials_finished'] for row in blocks[-3:]],
+        [row['cumulative_rss_sum_peak_bytes'] for row in blocks[-3:]], 1740)
+    m4 = max(m_curve, m_linear)
+    m8_double = overhead + 2 * max(0, m4 - overhead)
+    m8_calibrated = eight['rss_sum_peak_bytes'] * m4 / blocks[1]['cumulative_rss_sum_peak_bytes']
+    m8 = max(m8_double, m8_calibrated)
+    probe_measured = sum(row['probe_elapsed_seconds'] for row in blocks)
+    # 100〜600は実測、700〜1700は最後300試行の傾向。1740は100の倍数でない。
+    probe_future = []
+    for t in range(700, 1701, 100):
+        estimate, _slope = extrapolate([row['trials_finished'] for row in blocks[-3:]],
+            [row['probe_elapsed_seconds'] for row in blocks[-3:]], t)
+        probe_future.append({'trials_finished': t, 'predicted_seconds': estimate})
+    world_and_other = max(0, result['elapsed_seconds'] - probe_measured)
+    t4 = world_and_other * single_time_factor + probe_measured + sum(row['predicted_seconds'] for row in probe_future)
+    t4_flat_probe = world_and_other * single_time_factor + probe_measured + 11 * blocks[-1]['probe_elapsed_seconds']
+    time_scale = eight['elapsed_seconds'] / blocks[1]['after_probe']['elapsed_seconds']
+    t8_double, t8_calibrated = 2 * t4, time_scale * t4
+    intern_factor = 6319.3 / 7697.8
+    forecast = {'measured_four600': result, 'blocks': blocks, 'single': single,
+        'inference_only': {'memory_method_single_curve_four_bytes': m_curve,
+            'memory_method_last300_linear_four_bytes': m_linear, 'memory_last300_slope_bytes_per_trial': slope,
+            'single_memory_factor_1740_over_600': single_memory_factor,
+            'single_time_factor_1740_over_600': single_time_factor,
+            'time_non_probe_four600_seconds': world_and_other, 'time_probe_four600_seconds': probe_measured,
+            'probe_future': probe_future, 'time_four1740_seconds': t4,
+            'time_four1740_flat_probe_seconds': t4_flat_probe,
+            'time_eight_scale_from200': time_scale, 'time_eight1740_double_seconds': t8_double,
+            'time_eight1740_calibrated_seconds': t8_calibrated,
+            'rss_four1740_bytes': m4, 'rss_eight1740_double_bytes': m8_double,
+            'rss_eight1740_calibrated_bytes': m8_calibrated, 'rss_eight1740_bytes': m8,
+            'reservation_policy': '大きい方の外挿RSSに20%を足し、GBを切り上げ。保証値ではない。',
+            'reservation_four_gb': math.ceil(m4 * 1.2 / 1e9),
+            'reservation_eight_gb': math.ceil(m8 * 1.2 / 1e9),
+            'intern_policy': '単独の同じ観測条件の6319.3/7697.8を個体側RSSへ当てはめる推測。まとめ役を減らさず、時間短縮を仮定しない。',
+            'intern_factor': intern_factor,
+            'intern_four1740_bytes': overhead + intern_factor * max(0, m4 - overhead),
+            'intern_eight1740_bytes': overhead + intern_factor * max(0, m8 - overhead),
+            'intern_reservation_four_gb': math.ceil((overhead + intern_factor * max(0, m4 - overhead)) * 1.2 / 1e9),
+            'intern_reservation_eight_gb': math.ceil((overhead + intern_factor * max(0, m8 - overhead)) * 1.2 / 1e9)},
+        'limitations': ['4体と8体ではf・世界種の組合せが違う。',
+            '600と200は既定の時間幅も違う。',
+            '単独A_onは配置・採点の順・時間幅・観測が異なる。',
+            '1740試行・通信あり・intern採用後の集団は今回未測定。',
+            'RSSはOSの常駐量でありPythonの保持領域の総量ではない。']}
+    (EV / 'analysis.json').write_text(json.dumps(forecast, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps(forecast['inference_only'], ensure_ascii=False, indent=2))
+
+if __name__ == '__main__':
+    main()

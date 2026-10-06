@@ -1,0 +1,165 @@
+"""研究者用の外部観測。模型・通信の返り値はそのまま返す。"""
+from pathlib import Path
+import datetime
+import json
+import os
+import resource
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parent
+SPEC = json.loads(Path(sys.argv[1]).read_text()) if __name__ == '__main__' else None
+START = time.monotonic()
+FOLDER = None
+
+def now():
+    return datetime.datetime.now().astimezone().isoformat()
+
+def write(path, row):
+    with path.open('a') as stream:
+        stream.write(json.dumps(row, ensure_ascii=False) + '\n')
+
+class TimedLock:
+    """元のセマフォを同じ順で呼び、ロックを持った秒だけ別に数える。"""
+    def __init__(self, real):
+        self.real = real
+        self.begin = None
+        self.seconds = 0.0
+
+    def acquire(self, *args, **kwargs):
+        result = self.real.acquire(*args, **kwargs)
+        if result:
+            self.begin = time.monotonic()
+        return result
+
+    def release(self):
+        result = self.real.release()
+        if self.begin is not None:
+            self.seconds += time.monotonic() - self.begin
+            self.begin = None
+        return result
+
+    def active(self):
+        return self.seconds + (time.monotonic() - self.begin if self.begin is not None else 0.0)
+
+class ConnectionObserver:
+    def __init__(self, real, agent, lock):
+        self.real, self.agent, self.lock = real, agent, lock
+        self.trial = -1
+
+    def send(self, value):
+        kind = value.get('type')
+        if kind in ('trial', 'received'):
+            self.trial = value['t']
+        if kind == 'probe' or kind == 'received' and (self.trial + 1) % 100 == 0:
+            import smeshared
+            row = {'phase': kind, 'trial': self.trial, 'agent': self.agent, 'pid': os.getpid(),
+                   'time': now(), 'elapsed_seconds': time.monotonic() - START,
+                   'peak_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                   'active_seconds': self.lock.active() if self.lock else None,
+                   'cache_counts': {'matches': len(smeshared.ENGINE.cache),
+                       'cache_rng': len(smeshared.ENGINE.cache_rng),
+                       'self': len(smeshared.ENGINE.self_cache), 'results': len(smeshared.RESULTS),
+                       'graphs': len(smeshared.GRAPHS), 'choices': len(smeshared.CHOICES)}}
+            write(FOLDER / f'agent{self.agent}.boundaries.jsonl', row)
+        return self.real.send(value)
+
+    def recv(self):
+        return self.real.recv()
+
+    def __getattr__(self, key):
+        return getattr(self.real, key)
+
+def rss_snapshot():
+    records = {}
+    for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,rss='], text=True).splitlines():
+        pid, parent, kb = map(int, line.split())
+        records[pid] = (parent, kb * 1024)
+    descendants = {os.getpid()}
+    for _ in range(10):
+        descendants.update(pid for pid, (parent, rss) in records.items() if parent in descendants)
+    ids = {int(p.name[5:].split('.')[0]): json.loads(p.read_text())['pid'] for p in FOLDER.glob('agent*.pid.json')}
+    return {'rss_sum_bytes': sum(records.get(pid, (0, 0))[1] for pid in descendants),
+            'agent_rss_bytes': {agent: records.get(pid, (0, 0))[1] for agent, pid in ids.items()},
+            'coordinator_rss_bytes': records.get(os.getpid(), (0, 0))[1]}
+
+class FileObserver:
+    def __init__(self, real, path, n):
+        self.real, self.path, self.n = real, str(path), n
+
+    def write(self, value):
+        result = self.real.write(value)
+        row = json.loads(value)
+        phase = None
+        if self.path.endswith('.state.jsonl') and row.get('agent') == self.n - 1 and (row['t'] + 1) % 100 == 0:
+            phase = 'before_probe'
+        if row.get('kind') == 'probe':
+            phase = 'after_probe'
+        if phase:
+            write(FOLDER / 'boundaries.jsonl', {'phase': phase, 'trial': row['t'],
+                'time': now(), 'elapsed_seconds': time.monotonic() - START, **rss_snapshot()})
+        return result
+
+    def __getattr__(self, key):
+        return getattr(self.real, key)
+
+def main():
+    global FOLDER
+    FOLDER = Path(SPEC['evidence'])
+    source = Path(SPEC['cwd'])
+    sys.path[:0] = [str(source / 'tools'), str(source)]
+    import v3_run
+    import v311c
+    import sweep
+    real_agent = v311c._agent_main
+    real_run = sweep.run_one
+    real_open = open
+    agent_count = len(SPEC['f'])
+    locks = {}
+
+    def agent(conn, task):
+        index = task['v311c']['agent']
+        lock = TimedLock(task['v311c']['serial_lock']) if task['v311c'].get('serial_lock') is not None else None
+        locks[index] = lock
+        task = dict(task, v311c=dict(task['v311c'], serial_lock=lock))
+        (FOLDER / f'agent{index}.pid.json').write_text(json.dumps({'pid': os.getpid(), 'agent': index}))
+        return real_agent(ConnectionObserver(conn, index, lock), task)
+
+    def run(task):
+        import abm.loop as loop
+        import v311c as collective
+        real_input, real_record = loop._agent_input, loop._ledger_record
+        begin = {}
+        index = collective.CFG['agent']
+
+        def agent_input(trial, before):
+            begin['time'] = time.monotonic()
+            return real_input(trial, before)
+
+        def ledger_record(agent, trial, *args, **kwargs):
+            result = real_record(agent, trial, *args, **kwargs)
+            lock = locks.get(index)
+            write(FOLDER / f'agent{index}.performance.jsonl', {
+                'trial': trial.trial, 'pid': os.getpid(),
+                'seconds_including_collective_wait_and_probe': time.monotonic() - begin['time'],
+                'peak_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                'active_seconds': lock.active() if lock else None})
+            return result
+
+        loop._agent_input, loop._ledger_record = agent_input, ledger_record
+        return real_run(task)
+
+    def observed_open(path, *args, **kwargs):
+        handle = real_open(path, *args, **kwargs)
+        return FileObserver(handle, path, agent_count)
+
+    v311c._agent_main = agent
+    v311c.open = observed_open
+    sweep.run_one = run
+    sys.argv = SPEC['argv'][1:]
+    os.chdir(source)
+    v3_run.main()
+
+if __name__ == '__main__':
+    main()
