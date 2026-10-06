@@ -1,0 +1,216 @@
+"""25′の二本の開始を受付表で確認してから、下ろした一回の命令を戻す。"""
+from pathlib import Path
+import csv
+import datetime
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import time
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+TASK = ROOT.parent
+WORKSPACE = TASK.parent
+REPO = TASK / 'report_sparse'
+SME = WORKSPACE / 'codex_sme_time_evict_2026-10-06'
+REGISTRY = Path('/Users/tatsu-admin/jobs/registry.tsv')
+PYTHON = '/opt/homebrew/opt/python@3.12/bin/python3.12'
+STEM = '2026-10-06_位置で条件づけたUの既定_SME版_Codex'
+REPORT = 'control/' + STEM + '.md'
+DEST = 'control/' + STEM + '/resume_01/priority25_01'
+CASES = ('shop_profile1740_02', 'verb_profile1000_01')
+
+
+def now():
+    return datetime.datetime.now().astimezone().isoformat(timespec='seconds')
+
+
+def save(name, value):
+    (HERE / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def processes():
+    text = subprocess.check_output(['/bin/ps', '-axww', '-o', 'pid=,ppid=,stat=,args='], text=True)
+    rows = {}
+    for line in text.splitlines():
+        p = line.split(None, 3)
+        if len(p) == 4:
+            rows[int(p[0])] = {'parent': int(p[1]), 'stat': p[2], 'command': p[3]}
+    return rows
+
+
+def descendants(pid, rows):
+    chosen = {pid}
+    while True:
+        more = {p for p, row in rows.items() if row['parent'] in chosen}
+        if more <= chosen:
+            return chosen
+        chosen |= more
+
+
+def observe(found):
+    registry = list(csv.DictReader(REGISTRY.open(), delimiter='\t'))
+    rows = processes()
+    selected = [row for row in registry if row['owner'] in {'SME25 ' + c for c in CASES}]
+    observation = {'observed': now(), 'registry_rows': selected, 'new_starts': []}
+    for case in CASES:
+        folder = SME / case
+        matches = [row for row in selected if row['owner'] == 'SME25 ' + case]
+        assert len(matches) <= 1, matches
+        pid_file = folder / 'model_pid.json'
+        if case not in found and matches and pid_file.exists():
+            model = json.loads(pid_file.read_text())
+            claim_pid = int(matches[0]['pid'])
+            pid = int(model['pid'])
+            # 受理だけで開始としない。受付PIDの子として実際に模型が起動していることを確認する。
+            if claim_pid in rows and pid in descendants(claim_pid, rows) and pid in rows:
+                expected = str(folder / 'native_command.json')
+                assert expected in model['command'] and 'observe_02.py' in ' '.join(model['command'])
+                found[case] = {'case': case, 'registry_start': matches[0]['start'],
+                               'registry_row': matches[0], 'first_confirmed': now(),
+                               'model_pid': pid, 'model_record_mtime': datetime.datetime.fromtimestamp(
+                                   pid_file.stat().st_mtime).astimezone().isoformat(timespec='microseconds'),
+                               'process': rows[pid]}
+                observation['new_starts'].append(found[case])
+                proofs = HERE / '25_records' / case
+                proofs.mkdir(parents=True, exist_ok=True)
+                for name in ('model_pid.json', 'claim_pid.json', 'resources_start.json'):
+                    p = folder / name
+                    if p.exists():
+                        shutil.copyfile(p, proofs / name)
+        result = folder / 'run_result.json'
+        if case in found and result.exists():
+            record = json.loads(result.read_text())
+            found[case]['actual_started'] = record['started']
+            proofs = HERE / '25_records' / case
+            shutil.copyfile(result, proofs / result.name)
+    with (HERE / 'observations.jsonl').open('a') as f:
+        f.write(json.dumps(observation, ensure_ascii=False) + '\n')
+    save('starts.json', found)
+    return found
+
+
+def git(args, check=True):
+    return subprocess.run(['git', *args], cwd=REPO, check=check)
+
+
+def publish(phase, found, withdrawal, restored=None):
+    # この間に模型の受付は出さない。報告の小さな写しとGit操作だけを行う。
+    if subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO, text=True):
+        raise RuntimeError('報告場所に未保存の変更があるため停止。')
+    git(['fetch', 'origin', 'results-2026-09-27'])
+    git(['merge', '--ff-only', 'origin/results-2026-09-27'])
+    dest = REPO / DEST
+    dest.mkdir(parents=True, exist_ok=True)
+    for p in HERE.rglob('*'):
+        if p.is_file() and p.suffix not in ('.pyc', '.log') and '__pycache__' not in p.parts:
+            target = dest / p.relative_to(HERE)
+            if p.suffix == '.py':
+                target = target.with_name(target.name + '.txt')
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(p, target)
+    lines = []
+    if phase == 'held':
+        lines += ['\n\n## 25′ の先通し\n',
+                  f"{withdrawal['time']} に、未開始の `a_U0_s1`（今の採点・位置Uなし・世界2・A・λ主・種1の再関門）を受付から下ろした。旧受付PIDは {withdrawal['job_pid']}、見込みは1.0GB。CPU待機のguardに模型の子が無いこととexecution未作成を確認し、待機だけを終了した。実行中の模型に停止信号を送っていない。受付表から旧PIDが消えたことも確認した。\n",
+                  '新しい模型・分類・終了報告の受付も保留した。元の命令を全引数で保存し、旗・値・順序・関門を変えずに戻す。これは模型または関門の不通過ではない。\n',
+                  f"二本の開始を累積して確認する（お店が終わってから動詞が始まる場合も含む）。受付表の行だけでは開始とせず、受付PIDの子として実際の模型PIDが起動していることを確かめる。二本が確認できなければ、下ろした時刻から2時間の期限 `{withdrawal['deadline_local']}` に受付へ戻す。\n",
+                  'この追記時点の再受付時刻：未。\n']
+    else:
+        lines += [f"\n### 受付へ戻した記録（{restored['requeue_invoked']}）\n",
+                  f"戻した処理は同じ `a_U0_s1`。受付の命令を起動した時刻は `{restored['requeue_invoked']}`、最初の受付段の記録時刻は `{restored['first_stage_time']}`。元の全引数と再受付の全引数の一致、pipeline・native commandのSHA256の不変を確認した。\n",
+                  ('25′の二本が動き出したことを確認したため戻した。\n' if restored['reason'] == 'both_started'
+                   else '2時間の期限までに25′の二本の開始を確認できなかったため、それ以上待たず受付へ戻した。\n'),
+                  'マック全体で模型の過程8本までの監視は同じものを使う。再受付は新しい模型の即時開始を意味せず、元のCPU枠・資源・関門の条件で待つ。終了時の報告処理も元に戻す。\n']
+    lines += ['\n| 25′ | 受付表の開始時刻 | 模型の開始時刻／PID記録時刻 | 開始を確認した時刻 |\n',
+              '| --- | --- | --- | --- |\n']
+    for case in CASES:
+        row = found.get(case, {})
+        start = row.get('actual_started', row.get('model_record_mtime', '未確認'))
+        if row and 'actual_started' not in row:
+            start += '（model_pid作成時刻）'
+        lines += [f"| {case} | {row.get('registry_start','未確認')} | {start} | {row.get('first_confirmed','未確認')} |\n"]
+    link = STEM + '/resume_01/priority25_01'
+    lines += [f"\n[下ろした全命令と時刻・期限]({link}/withdrawal.json)、[受付表と開始PIDの観察]({link}/observations.jsonl)、[開始の記録]({link}/starts.json)、[先通し後に戻す台本]({link}/resume_after_25.py.txt)。種21〜40の走行・記録解析はしていない。\n"]
+    if restored:
+        lines += [f"[再受付の時刻と命令の一致]({link}/restored.json)。\n"]
+    with (REPO / REPORT).open('a') as f:
+        f.writelines(lines)
+    git(['add', '--', REPORT, DEST])
+    git(['commit', '-m', '25′の先通しで' + ('位置Uの受付を下ろした記録' if phase == 'held' else '位置Uの受付を戻した記録')])
+    for attempt in range(10):
+        if git(['push', 'origin', 'HEAD:results-2026-09-27'], check=False).returncode == 0:
+            commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip()
+            save('published_' + phase + '.json', {'time': now(), 'commit': commit})
+            return
+        git(['fetch', 'origin', 'results-2026-09-27'])
+        git(['rebase', 'origin/results-2026-09-27'])
+        time.sleep(min(2 * (attempt + 1), 20))
+    raise RuntimeError('報告のpushが通らない。強制pushはしない。')
+
+
+def main():
+    withdrawal = json.loads((HERE / 'withdrawal.json').read_text())
+    assert withdrawal['already_started'] is False and withdrawal['registry_pid_absent'] is True
+    assert not (HERE / 'restored.json').exists(), '再受付済み。重ねて起動しない。'
+    found = observe({})
+    save('status.json', {'status': 'held', 'at': now(), 'pid': os.getpid(), 'starts': found})
+    publish('held', found, withdrawal)
+    while len(found) < 2 and time.time() < withdrawal['deadline_unix']:
+        time.sleep(min(15, max(.1, withdrawal['deadline_unix'] - time.time())))
+        found = observe(found)
+        save('status.json', {'status': 'held', 'at': now(), 'pid': os.getpid(), 'starts': found})
+    reason = 'both_started' if len(found) == 2 else 'two_hour_limit'
+    assert digest(ROOT / 'pipeline.py') == withdrawal['pipeline_sha256']
+    assert digest(ROOT / 'finalize_when_done.py') == withdrawal['finalizer_sha256']
+    assert digest(ROOT / 'gate_off/a/native_command.json') == withdrawal['native_command_sha256']
+    assert not (ROOT / 'gate_off/a/execution.json').exists()
+    assert not (ROOT / 'gate_off/a/output').exists()
+    with (HERE / 'pipeline_restored.log').open('x') as log:
+        child = subprocess.Popen(withdrawal['original_pipeline_command'], cwd=WORKSPACE,
+                                 stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
+                                 stdin=subprocess.DEVNULL)
+    invoked = now()
+    save('resubmitted.json', {'time': invoked, 'pid': child.pid, 'reason': reason})
+    # 関門の順序を実際に起動した最初の受付命令でも確認する。
+    first = None
+    for _ in range(50):
+        try:
+            stage = json.loads((ROOT / 'pipeline_status.json').read_text())
+        except json.JSONDecodeError:
+            stage = {}
+        if stage.get('stage') == withdrawal['original_stage']['stage'] and stage.get('status') == 'running':
+            first = stage
+            break
+        if child.poll() is not None:
+            raise RuntimeError('再受付の最初の命令を確認する前にpipelineが終了した。')
+        time.sleep(.1)
+    assert first is not None and first['command'] == withdrawal['original_command']
+    restored = {'reason': reason, 'requeue_invoked': invoked, 'pipeline_pid': child.pid,
+                'first_stage_time': datetime.datetime.fromtimestamp(first['time']).astimezone().isoformat(timespec='microseconds'),
+                'exact_command_equal': True, 'original_command': withdrawal['original_command'],
+                'resubmitted_command': first['command'], 'starts': found}
+    save('restored.json', restored)
+    publish('restored', found, withdrawal, restored)
+    with (ROOT / 'finalizer.log').open('w') as log:
+        finalizer = subprocess.Popen([PYTHON, '-u', str(ROOT / 'finalize_when_done.py')], cwd=ROOT,
+                                    stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
+                                    stdin=subprocess.DEVNULL)
+    save('status.json', {'status': 'restored', 'at': now(), 'pipeline_pid': child.pid,
+                         'finalizer_pid': finalizer.pid, 'reason': reason, 'starts': found})
+    print(json.dumps({'status': 'restored', 'reason': reason, 'time': invoked}, ensure_ascii=False), flush=True)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        save('error.json', {'at': now(), 'reason': repr(error),
+                           'resubmission_record_exists': (HERE / 'resubmitted.json').exists()})
+        raise
