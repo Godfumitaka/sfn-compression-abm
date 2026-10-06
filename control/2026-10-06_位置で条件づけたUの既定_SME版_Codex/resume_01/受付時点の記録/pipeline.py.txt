@@ -1,0 +1,126 @@
+"""関門を順に通した場合だけ種1〜3の小試しと記録診断へ進む。
+
+各重い処理は共通受付で一つずつ実行する。失敗したら後続を起動しない。
+模型の種は1〜3に固定し、他の仕事の過程には触れない。
+"""
+from pathlib import Path
+import json
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parent
+PYTHON = '/opt/homebrew/opt/python@3.12/bin/python3.12'
+JOBS = '/Users/tatsu-admin/jobs/jobs.py'
+TASK = ROOT.parent
+W = TASK.parent
+BASES = {'a': '10cd8bdd46416aff55d0015e9072fc2186deed83',
+         'logp': '1838256b3fa9f81737d8b210e6ccb59c9d638a25'}
+SOURCES = {name: TASK / ('source_'+name) for name in BASES}
+EVENTS = ROOT/'pipeline_events.jsonl'
+
+
+def event(stage, **values):
+    row = {'stage': stage, 'time': time.time(), **values}
+    with EVENTS.open('a') as out:
+        out.write(json.dumps(row, ensure_ascii=False)+'\n')
+    (ROOT/'pipeline_status.json').write_text(json.dumps(row, ensure_ascii=False, indent=2)+'\n')
+    print(json.dumps(row, ensure_ascii=False), flush=True)
+
+
+def run(stage, source, disk, command, *, mem=1., model=False):
+    if EVENTS.exists():
+        history=[json.loads(line) for line in EVENTS.read_text().splitlines()]
+        if any(r['stage']==stage and r.get('status')=='completed' for r in history):
+            print(stage+'：完了記録を再使用',flush=True)
+            return
+    disk.parent.mkdir(parents=True, exist_ok=True)
+    if model:
+        command = ['/usr/bin/env', '-u', 'LC_ALL', '-u', 'LANG', '-u', 'LC_CTYPE', 'PYTHONHASHSEED=0', *command]
+        command = [PYTHON, 'tools/uposition_cpu.py', '--cwd', str(source),
+                   '--log', str(disk.parent/(disk.name+'_cpu.jsonl')), '--', *command]
+    outer = [PYTHON, JOBS, 'run', '--wait', '--owner', 'Codex 位置U '+stage,
+             '--mem', str(mem), '--disk-path', str(disk), '--', *command]
+    event(stage, status='running', cwd=str(source), command=outer)
+    logs=ROOT/'pipeline_logs';logs.mkdir(exist_ok=True)
+    log_path=logs/(stage+'.log')
+    with log_path.open('w') as log:
+        result = subprocess.run(outer, cwd=source, stdout=log, stderr=subprocess.STDOUT)
+    print(log_path.read_text()[-6000:], flush=True)
+    if result.returncode:
+        event(stage, status='stopped', exit_code=result.returncode, log=str(log_path),
+              note='関門又は受付の不通過。後続を起動しない。')
+        raise SystemExit(result.returncode)
+    event(stage, status='completed', log=str(log_path))
+
+
+def command_for(mode, position, seed, case):
+    assert seed in (1, 2, 3)
+    file = case/'native_command.json'
+    if not file.exists():
+        command = json.loads((TASK/'gate_off'/mode/'native_command.json').read_text())
+        command[3] = str(case/'output')
+        command[command.index('--seeds')+1] = str(seed)
+        if position:
+            command.append('--u-position')
+        case.mkdir(parents=True, exist_ok=True)
+        file.write_text(json.dumps(command, ensure_ascii=False, indent=2)+'\n')
+    command = json.loads(file.read_text())
+    assert command[command.index('--seeds')+1] == str(seed)
+    assert ('--u-position' in command) == position
+    return file
+
+
+def model(mode, position, seed, case, *, pin=False):
+    source = SOURCES[mode]
+    command_file = command_for(mode, position, seed, case)
+    command = [PYTHON, 'tools/uposition_run.py', str(command_file)]
+    if pin:
+        command += ['--pin-commit', BASES[mode]]
+    run(f'{mode}_U{int(position)}_s{seed}', source, case/'output', command, model=True)
+
+
+def compare(mode):
+    old = W/'codex_sme_evict_2026-10-06/evict_full_01'/('A_evict' if mode == 'a' else 'L_evict')
+    run('gate1_'+mode, SOURCES[mode], ROOT/'evidence'/('gate1_'+mode),
+        [PYTHON, 'tools/uposition_compare.py', str(old), str(ROOT/'gate_off'/mode),
+         str(ROOT/'evidence'/('gate1_'+mode))], mem=.2)
+
+
+def audit(mode, case):
+    run('gate4_5_'+mode, SOURCES[mode], ROOT/'evidence'/('gate4_5_'+mode),
+        [PYTHON, 'tools/uposition_audit.py', str(case), str(ROOT/'evidence'/('gate4_5_'+mode))], mem=.3)
+
+
+def main():
+    model('a', False, 1, ROOT/'gate_off/a', pin=True)
+    compare('a')
+    model('logp', False, 1, ROOT/'gate_off/logp', pin=True)
+    compare('logp')
+    for mode in BASES:
+        case = ROOT/'gate_on'/mode
+        model(mode, True, 1, case)
+        audit(mode, case)
+    event('gates', status='completed', note='両採点の関門1・材料と会計の全1740試行検査を通過。')
+    cases = []
+    for mode in BASES:
+        for position in (False, True):
+            for seed in (1, 2, 3):
+                case = (ROOT/('gate_on' if position else 'gate_off')/mode if seed == 1
+                        else ROOT/'trial'/f'{mode}_U{int(position)}'/f'seed{seed:03d}')
+                if seed != 1:
+                    model(mode, position, seed, case)
+                cases.append({'score': mode, 'u_position': position, 'seed': seed, 'path': str(case)})
+    (ROOT/'cases.json').write_text(json.dumps(cases, ensure_ascii=False, indent=2)+'\n')
+    for case in cases:
+        path = Path(case['path']);mode=case['score'];seed=case['seed']
+        state = next((path/'output/side').rglob(f'seed{seed:03d}.sme.states.jsonl.gz'))
+        run(f'classify_{mode}_U{int(case["u_position"])}_s{seed}', SOURCES[mode], path/'analysis',
+            [PYTHON, 'tools/selcands_sme.py', str(path/'native_command.json'), str(path/'analysis'), str(state)],
+            mem=1.2, model=True)
+    run('study', SOURCES['a'], ROOT/'evidence/study',
+        [PYTHON, 'tools/uposition_study.py', str(ROOT/'cases.json'), str(ROOT/'evidence/study')], mem=.3)
+    event('pipeline', status='completed')
+
+
+if __name__ == '__main__':
+    main()

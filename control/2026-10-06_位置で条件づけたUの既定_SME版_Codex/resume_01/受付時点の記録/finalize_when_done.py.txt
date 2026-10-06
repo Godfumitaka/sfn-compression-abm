@@ -1,0 +1,89 @@
+"""この一回の受付済み処理の終了を待ち、指定の報告への追記だけを公開する。"""
+from pathlib import Path
+import datetime
+import json
+import os
+import re
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parent
+REPO = ROOT.parent / 'report_sparse'
+STEM = '2026-10-06_位置で条件づけたUの既定_SME版_Codex'
+REPORT = 'control/' + STEM + '.md'
+EVIDENCE = 'control/' + STEM + '/resume_01'
+PYTHON = '/opt/homebrew/opt/python@3.12/bin/python3.12'
+JOBS = '/Users/tatsu-admin/jobs/jobs.py'
+
+
+def status(stage, **values):
+    row = {'time': datetime.datetime.now().astimezone().isoformat(timespec='seconds'),
+           'pid': os.getpid(), 'stage': stage, **values}
+    (ROOT / 'finalizer_status.json').write_text(json.dumps(row, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps(row, ensure_ascii=False), flush=True)
+
+
+def run(args, cwd=REPO):
+    print(json.dumps({'command': args, 'cwd': str(cwd)}, ensure_ascii=False), flush=True)
+    subprocess.run(args, cwd=cwd, check=True)
+
+
+def main():
+    if (ROOT / 'published.json').exists():
+        raise SystemExit('公開済み。追記を重ねない。')
+    status('waiting_for_pipeline')
+    while True:
+        try:
+            state = json.loads((ROOT / 'pipeline_status.json').read_text())
+        except (FileNotFoundError, json.JSONDecodeError):
+            time.sleep(10)
+            continue
+        if state.get('status') == 'stopped' or (state.get('stage') == 'pipeline' and state.get('status') == 'completed'):
+            break
+        time.sleep(10)
+    # 終端の記録が出る段では全ての検査ログが既に閉じられている。
+    time.sleep(5)
+    status('preparing_report', pipeline_status=state)
+    clean = subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO, text=True)
+    if clean:
+        raise RuntimeError('報告場所に未保存の変更があるので、自動的には触れない。')
+    run(['git', 'fetch', 'origin', 'results-2026-09-27'])
+    run(['git', 'merge', '--ff-only', 'origin/results-2026-09-27'])
+    run([PYTHON, JOBS, 'run', '--wait', '--owner', 'Codex 位置U 終了報告', '--mem', '0.3',
+         '--disk-path', str(REPO / EVIDENCE), '--', PYTHON, str(ROOT / 'append_report.py')], cwd=ROOT)
+    dest = REPO / EVIDENCE
+    (dest / 'finalize_when_done.py.txt').write_bytes(Path(__file__).read_bytes())
+    # 模型が開始前の受付で止まった場合も、リンク先に未実行と明記する。
+    if not (dest / 'executions').exists():
+        (dest / 'executions').mkdir()
+        (dest / 'executions' / 'README.md').write_text('今回の模型は開始前に停止したため、executionの記録は無い。\n')
+    report = REPO / REPORT
+    missing = [target for target in re.findall(r'\]\(([^)]+)\)', report.read_text())
+               if not target.startswith('https:') and not (report.parent / target).exists()]
+    if missing:
+        raise RuntimeError(('報告のリンク先が無い', missing))
+    run(['git', 'add', '--', REPORT, EVIDENCE])
+    outcome = '完了' if state.get('status') == 'completed' else '停止'
+    run(['git', 'commit', '-m', f'位置Uの再関門と小試しの{outcome}記録を追記'])
+    for attempt in range(3):
+        status('pushing_report', attempt=attempt + 1, outcome=outcome)
+        result = subprocess.run(['git', 'push', 'origin', 'HEAD:results-2026-09-27'], cwd=REPO)
+        if result.returncode == 0:
+            commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip()
+            proof = {'time': datetime.datetime.now().astimezone().isoformat(), 'commit': commit,
+                     'outcome': outcome, 'pipeline_status': state, 'report': REPORT}
+            (ROOT / 'published.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2) + '\n')
+            status('published', commit=commit, outcome=outcome)
+            return
+        if attempt == 2:
+            raise RuntimeError('報告のpushを三回試したが通らなかった。強制pushはしない。')
+        run(['git', 'fetch', 'origin', 'results-2026-09-27'])
+        run(['git', 'rebase', 'origin/results-2026-09-27'])
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        status('failed', error=repr(error))
+        raise
