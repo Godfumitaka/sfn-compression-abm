@@ -29,10 +29,10 @@ def cpu_admission():
     rows = census()
     own = descendants(rows, os.getpid())
     outside = sum(heavy for pid, (_, heavy) in rows.items() if pid not in own)
-    # 外側の共有監視も同じ数えで二枠を空けてから開始し、走行中も上限を監視する。
-    if outside + 2 > cores-2:
+    # 一つのworkerを開始し、外側の監視が走行中の親も含め上限を保つ。
+    if outside + 1 > cores-2:
         raise RuntimeError(('マック全体の模型過程の上限', outside, cores-2))
-    return {'cores': cores, 'limit': cores-2, 'outside_heavy': outside, 'reserved_own': 2, 'thermal': thermal}
+    return {'cores': cores, 'limit': cores-2, 'outside_heavy': outside, 'reserved_own': 1, 'thermal': thermal}
 
 
 def worker(task):

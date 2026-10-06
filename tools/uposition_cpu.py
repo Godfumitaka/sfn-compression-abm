@@ -49,8 +49,9 @@ def main():
         while True:
             rows = census();own = descendants(rows, os.getpid())
             outside = sum(heavy for pid, (_parent, heavy) in rows.items() if pid not in own)
-            # 模型の親が100MBを越えたときも、一つのworkerと合わせて二枠を見込む。
-            if outside + 2 <= limit:break
+            # この道具の入口は--workers 1を検査する。開始時はworker一枠を取る。
+            # 親も100MBを越えたら、走行中の監視がその過程を追加で数える。
+            if outside + 1 <= limit:break
             record("wait_before_start", outside_heavy=outside)
             time.sleep(10)
         thermal = subprocess.check_output(["/usr/bin/pmset", "-g", "therm"], text=True)
