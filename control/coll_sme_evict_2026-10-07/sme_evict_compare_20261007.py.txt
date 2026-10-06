@@ -1,0 +1,202 @@
+"""台帳と状態は生バイト、控えは実際に捨てた完全な鍵だけを除いて照合する。"""
+from pathlib import Path
+import gzip
+import hashlib
+import itertools
+import json
+import sys
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT/'evidence/sme-evict-20261007'
+OUT = ROOT/'outputs/sme-evict-20261007'
+
+
+def lines(path):
+    with (gzip.open(path, 'rb') if path.suffix == '.gz' else path.open('rb')) as f:
+        yield from f
+
+
+def byte_check(label, left, right):
+    hashes = [hashlib.sha256(), hashlib.sha256()]
+    count = [0, 0]
+    mismatch = None
+    for n, pair in enumerate(itertools.zip_longest(left, right), 1):
+        for i, value in enumerate(pair):
+            if value is not None:
+                hashes[i].update(value)
+                count[i] += 1
+        if pair[0] != pair[1] and mismatch is None:
+            mismatch = n
+    return {'name': label, 'passed': mismatch is None, 'lines': count,
+            'first_difference': mismatch, 'sha256': [h.hexdigest() for h in hashes]}
+
+
+def ledger_body(path):
+    stream = lines(path)
+    header = json.loads(next(stream))
+    assert 'agent_ids' in header and 'trial' not in header
+    yield from stream
+
+
+def json_without_clock(path):
+    for line in lines(path):
+        row = json.loads(line)
+        if path.name.endswith('.cfvalue.jsonl'):
+            assert 'sec_trial' in row
+            del row['sec_trial']
+        elif path.name.endswith('.done'):
+            for field in ('elapsed_sec', 'finished_at'):
+                assert field in row
+                del row[field]
+        yield json.dumps(row, ensure_ascii=False).encode()
+
+
+def compare_native(left, right):
+    a, b = OUT/left, OUT/right
+    checks = []
+    for directory in ('ledgers', 'side'):
+        files_a = {str(p.relative_to(a)): p for p in (a/directory).rglob('*') if p.is_file()}
+        files_b = {str(p.relative_to(b)): p for p in (b/directory).rglob('*') if p.is_file()}
+        assert files_a.keys() == files_b.keys(), (left, right, '出力の種類が違う')
+        for key, path in sorted(files_a.items()):
+            other = files_b[key]
+            if directory == 'ledgers' and path.name.endswith('.jsonl.gz'):
+                x, y = ledger_body(path), ledger_body(other)
+            elif path.name.endswith(('.cfvalue.jsonl', '.done')):
+                x, y = json_without_clock(path), json_without_clock(other)
+            else:
+                x, y = lines(path), lines(other)
+            checks.append(byte_check(key, x, y))
+    def events(path):
+        for line in lines(path):
+            if json.loads(line).get('kind') != 'summary':
+                yield line
+    checks.append(byte_check('通信の全事象（終了時計の集計以外）', events(a/'comm/run001.jsonl'), events(b/'comm/run001.jsonl')))
+    def summary(path):
+        value = json.loads(path.read_text())
+        for agent in value['agents']:
+            for key in ('elapsed_sec', 'finished_at', 'peak_rss_mb'):
+                del agent[key]
+        return [json.dumps(value, ensure_ascii=False).encode()]
+    checks.append(byte_check('終了集計の時計以外の全欄', summary(a/'comm/run001.summary.json'), summary(b/'comm/run001.summary.json')))
+    return checks
+
+
+def cache_checks(left, right, agents):
+    checks = []
+    key_name = {'cache': 'cache', 'self_cache': 'self_cache', 'cache_rng': 'cache_rng', 'results': 'RESULTS'}
+    encode_key = lambda key: json.dumps(key, ensure_ascii=False, separators=(',', ':'))
+    for i in range(agents):
+        seed = 1+1000*i
+        paths = list((OUT/right/'evictions').glob(f'*/seed{seed:03d}.keys.jsonl.gz'))
+        assert len(paths) == 1
+        dead = {name: set() for name in key_name.values()}
+        removed_rows = 0
+        for line in lines(paths[0]):
+            row = json.loads(line)
+            assert row['created_trial'] < row['trial']
+            assert row['trial'] < 200
+            bucket = dead[key_name[row['table']]]
+            key = encode_key(row['key'])
+            assert key not in bucket
+            bucket.add(key)
+            removed_rows += 1
+        status = json.loads(Path(str(paths[0])+'.summary.json').read_text())
+        assert status['tombstone_enabled'] and status['tombstone_hits'] == 0
+        assert status['last_trial'] == 199 and status['boundaries'] == 199
+        assert removed_rows == sum(status['removed'].values())
+        seen = {name: set() for name in dead}
+        lengths = [{}, {}]
+        def filtered():
+            for line in lines(EV/left/f'agent{i}.final-sme.jsonl.gz'):
+                name, value = json.loads(line)
+                if name.endswith('_length'):
+                    lengths[0][name[:-7]] = value
+                    continue
+                if name in dead:
+                    key = encode_key(value['items'][0])
+                    if key in dead[name]:
+                        seen[name].add(key)
+                        continue
+                yield line
+        def kept():
+            for line in lines(EV/right/f'agent{i}.final-sme.jsonl.gz'):
+                name, value = json.loads(line)
+                if name.endswith('_length'):
+                    lengths[1][name[:-7]] = value
+                    continue
+                if name in dead:
+                    assert encode_key(value['items'][0]) not in dead[name]
+                yield line
+        check = byte_check(f'個体{i}：実際に捨てた鍵を除いた控え・全値と順', filtered(), kept())
+        assert seen == dead, '捨てた記録の完全な鍵が比較元の控えにない'
+        assert lengths[0].keys() == lengths[1].keys()
+        for name in lengths[0]:
+            assert lengths[0][name]-len(dead.get(name, ())) == lengths[1][name], (name, '件数が実際の破棄と違う')
+        check['removed_counts'] = {k: len(v) for k, v in dead.items()}
+        check['tombstone_hits'] = status['tombstone_hits']
+        checks.append(check)
+        checks.append(byte_check(f'個体{i}：全試行のSME乱数', lines(EV/left/f'agent{i}.model-rng.jsonl'), lines(EV/right/f'agent{i}.model-rng.jsonl')))
+        for name in (left, right):
+            rng = [json.loads(x) for x in lines(EV/name/f'agent{i}.model-rng.jsonl')]
+            assert len(rng) == 200 and all(x['python_global_unchanged'] for x in rng)
+    return checks
+
+
+def main():
+    mode = sys.argv[1]
+    checks = []
+    if mode in ('q0', 'receive'):
+        prefix, agents = ('q0_8', 8) if mode == 'q0' else ('recv_2', 2)
+        left, right = prefix+'_plain200', prefix+'_evict200'
+        checks += compare_native(left, right)
+        checks += cache_checks(left, right, agents)
+        summaries = [json.loads((OUT/name/'comm/run001.summary.json').read_text()) for name in (left, right)]
+        assert all(s['trials'] == 200 and not s['errors'] for s in summaries)
+        if mode == 'q0':
+            assert all(s['delivered'] == 0 for s in summaries)
+        else:
+            assert summaries[0]['delivered'] == summaries[1]['delivered'] > 0
+        for name in (left, right):
+            paths = list((OUT/name/'ledgers/cells').glob('*/*.jsonl.gz'))
+            assert len(paths) == agents
+            for path in paths:
+                rows = [json.loads(x) for x in ledger_body(path)]
+                i = (int(path.name.split('.')[0][4:])-1)//1000
+                assigned = .1 if i < agents//2 else .9
+                assert len(rows) == 200 and all(x['f_realized'] == assigned for x in rows)
+        assert all(a['v39'].get('not_in_dictionary', 0) == 0 and a['v311c']['dictionary_checks'] == 400
+                   for summary in summaries for a in summary['agents'])
+        if mode == 'q0':
+            # 新旗を全て切った入口を、移植前29b89dfの保存結果にも当てる。
+            old = ROOT/'outputs/sme-port-20261005/gate2_q0_200'
+            for directory in ('ledgers/cells', 'side'):
+                for path in sorted((OUT/left/directory).glob('*/*.jsonl.gz')):
+                    if directory == 'side' and '.sme.states.' not in path.name:
+                        continue
+                    target = old/path.relative_to(OUT/left)
+                    assert target.exists()
+                    x = ledger_body(path) if directory == 'ledgers/cells' else lines(path)
+                    y = ledger_body(target) if directory == 'ledgers/cells' else lines(target)
+                    checks.append(byte_check('追加旗全OFFと移植前：'+str(path.relative_to(OUT/left)), x, y))
+    elif mode == 'solo':
+        population = sorted((OUT/'q0_8_evict200/ledgers/cells').glob('*/*.jsonl.gz'))
+        assert len(population) == 8
+        for i in range(8):
+            solo = list((OUT/f'solo{i}_evict200/ledgers/cells').glob('*/*.jsonl.gz'))
+            assert len(solo) == 1
+            checks.append(byte_check(f'通信なし8体と独立単独：個体{i}', ledger_body(population[i]), ledger_body(solo[0])))
+            summaries = list((OUT/f'solo{i}_evict200/evictions').glob('*/*.summary.json'))
+            assert len(summaries) == 1
+            assert json.loads(summaries[0].read_text())['tombstone_hits'] == 0
+    else:
+        raise ValueError(mode)
+    result = {'gate': mode, 'passed': all(x['passed'] for x in checks), 'checks': checks}
+    (EV/f'gate-{mode}.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
+    print(json.dumps({'gate': mode, 'passed': result['passed'], 'checks': len(checks), 'failed': [x['name'] for x in checks if not x['passed']]}, ensure_ascii=False))
+    if not result['passed']:
+        raise SystemExit(1)
+
+
+if __name__ == '__main__':
+    main()

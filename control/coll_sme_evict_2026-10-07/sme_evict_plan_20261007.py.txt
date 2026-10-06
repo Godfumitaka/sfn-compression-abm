@@ -1,0 +1,62 @@
+"""承認済みの関門・短い測定だけの全引数を固定する。実行はしない。"""
+from pathlib import Path
+import copy
+import json
+import subprocess
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT/'evidence/sme-evict-20261007'
+OUT = ROOT/'outputs/sme-evict-20261007'
+SOURCE = ROOT/'sme-source'
+COMMIT = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip()
+BASE = json.loads((ROOT/'evidence/sme-port-20261005/gate2_q0_200/spec.json').read_text())
+
+
+def make(name, agents=8, trials=200, *, evict=False, tombstone=False,
+         audit=True, q=0, export=True, mem=6.5, solo=None, probe=100, replay=None):
+    spec = copy.deepcopy(BASE)
+    spec.update(name=name, evidence=str(EV/name), output=str(OUT/name), commit=COMMIT,
+                mem_gb=mem, export_final=export, solo_agent=solo)
+    args = spec['argv']
+    args[3] = spec['output']
+    def value(flag, value):
+        args[args.index(flag)+1] = str(value)
+    value('--trial-count', trials)
+    value('--v311c-f', '0.1,0.9' if agents == 2 else ('0.1,0.1,0.9,0.9' if agents == 4 else '0.1,0.1,0.1,0.1,0.9,0.9,0.9,0.9'))
+    value('--v311c-groups', '0,1' if agents == 2 else ('0,0,1,1' if agents == 4 else '0,0,0,0,1,1,1,1'))
+    value('--v311c-q', q)
+    value('--v311c-m', .3 if q else 0)
+    args.extend(['--v311c-probe-every', str(probe)])
+    if not audit:
+        args.remove('--v311c-audit')
+    if evict:
+        args += ['--sme-intern-cache', '--sme-evict-trial-cache']
+    if tombstone:
+        assert evict
+        args += ['--sme-evict-tombstone']
+    if solo is not None:
+        assert q == 0
+        spec['env']['COLL8_SOLO_AGENT'] = str(solo)
+    if replay:
+        args += ['--v311c-sme-replay', str(replay)]
+    folder = EV/name
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder/'spec.json'
+    if path.exists():
+        raise FileExistsError(path)
+    path.write_text(json.dumps(spec, ensure_ascii=False, indent=2)+'\n')
+    return spec
+
+
+if __name__ == '__main__':
+    make('pilot8_evict32', trials=32, evict=True, tombstone=True, mem=1.5, probe=16)
+    make('q0_8_plain200')
+    make('q0_8_evict200', evict=True, tombstone=True)
+    for i in range(8):
+        make(f'solo{i}_evict200', evict=True, tombstone=True, audit=False, mem=1.5, solo=i)
+    make('recv_2_plain200', agents=2, q=.2, mem=4)
+    make('recv_2_evict200', agents=2, q=.2, evict=True, tombstone=True, mem=4)
+    replay = OUT/'recv_2_plain200/side/f0.5000_th2.1000_vt0.3842_first_order'
+    make('recv_2_replay200', agents=2, q=.2, evict=True, tombstone=True, mem=4, replay=replay)
+    # ここは研究者の観測間隔の回答とpilotのRSSを得た後で固定する。
+    print('関門のspecを用意した。測定specは観測の指定と実測予約量を確認してから作る。')

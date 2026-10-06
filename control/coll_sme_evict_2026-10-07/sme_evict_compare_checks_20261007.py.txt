@@ -1,0 +1,53 @@
+"""実際の破棄鍵だけを許す比較器を、保存の小例と故意の改変で検査する。"""
+import gzip
+import json
+import tempfile
+from pathlib import Path
+import sme_evict_compare_20261007 as check
+
+
+def dump(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with (gzip.open(path, 'wt') if path.suffix == '.gz' else path.open('w')) as f:
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False, separators=(',', ':'))+'\n')
+
+
+def key(name):
+    return {'tag': 'tuple', 'items': [name, 'call-seed-v1', 101]}
+
+
+with tempfile.TemporaryDirectory() as tmp:
+    check.EV, check.OUT = Path(tmp)/'ev', Path(tmp)/'out'
+    dead, kept = key('dead'), key('kept')
+    names = {'cache': 'cache', 'self_cache': 'self_cache', 'cache_rng': 'cache_rng', 'results': 'RESULTS'}
+    old, new, deletes = [], [], []
+    for table, name in names.items():
+        old += [[name+'_length', 2], [name, {'tag': 'tuple', 'items': [dead, 6]}],
+                [name, {'tag': 'tuple', 'items': [kept, 7]}]]
+        new += [[name+'_length', 1], [name, {'tag': 'tuple', 'items': [kept, 7]}]]
+        deletes.append({'table': table, 'trial': 1, 'created_trial': 0, 'key': dead})
+    old.append(['settings', ['unchanged']]); new.append(['settings', ['unchanged']])
+    a = check.EV/'old/agent0.final-sme.jsonl.gz'
+    b = check.EV/'new/agent0.final-sme.jsonl.gz'
+    d = check.OUT/'new/evictions/cell/seed001.keys.jsonl.gz'
+    dump(a, old); dump(b, new); dump(d, deletes)
+    Path(str(d)+'.summary.json').write_text(json.dumps({'tombstone_enabled': True, 'tombstone_hits': 0,
+        'last_trial': 199, 'boundaries': 199, 'removed': {k: 1 for k in names}}))
+    for name in ('old', 'new'):
+        dump(check.EV/name/'agent0.model-rng.jsonl', [{'trial': i, 'sme_rng': [1, 2], 'python_global_unchanged': True} for i in range(200)])
+    assert all(x['passed'] for x in check.cache_checks('old', 'new', 1))
+    changed = json.loads(json.dumps(new)); changed[1][1]['items'][1] = 8
+    dump(b, changed)
+    assert not check.cache_checks('old', 'new', 1)[0]['passed']
+    dump(b, new)
+    forged = json.loads(json.dumps(deletes)); forged[0]['key'] = key('forged')
+    dump(d, forged)
+    try:
+        check.cache_checks('old', 'new', 1)
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError('比較元に無い破棄鍵を受け入れた')
+    print(json.dumps({'valid_deletion_passed': True, 'retained_value_change_rejected': True,
+        'forged_deleted_key_rejected': True}, ensure_ascii=False))

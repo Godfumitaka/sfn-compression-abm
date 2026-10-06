@@ -1,0 +1,415 @@
+diff --git a/tools/smeevict.py b/tools/smeevict.py
+new file mode 100644
+index 0000000..447e0ba
+--- /dev/null
++++ b/tools/smeevict.py
+@@ -0,0 +1,142 @@
++"""完了した試行だけの照合の控えを捨てる、配管だけの探索の旗。
++
++名前・採点・対応・同点の種を変えない。試行内の診断では捨てない。
++捨てた完全な鍵は台帳とsideの外へ記録する。検査では再参照を止める。
++"""
++from collections import Counter
++import json
++from pathlib import Path
++
++MANAGER = None
++
++
++class CacheTable(dict):
++    def __init__(self, manager, label, data=()):
++        super().__init__(data)
++        self.manager, self.label = manager, label
++
++    def __contains__(self, key):
++        self.manager.lookup(self.label, key)
++        return super().__contains__(key)
++
++    def __getitem__(self, key):
++        self.manager.lookup(self.label, key)
++        return super().__getitem__(key)
++
++    def get(self, key, default=None):
++        self.manager.lookup(self.label, key)
++        return super().get(key, default)
++
++    def __setitem__(self, key, value):
++        self.manager.epochs[self.label].setdefault(key, self.manager.shared.CTX['trial'])
++        return super().__setitem__(key, value)
++
++
++class Manager:
++    labels = ('cache', 'self_cache', 'cache_rng', 'results')
++
++    def __init__(self, shared, path, tombstone):
++        self.shared, self.path = shared, Path(path)
++        self.path.parent.mkdir(parents=True, exist_ok=True)
++        if self.path.exists():
++            raise FileExistsError('控えを捨てた記録を上書きしない')
++        self.stream = shared._text_gzip(self.path)
++        self.epochs = {label: {} for label in self.labels}
++        self.dead = {label: set() for label in self.labels} if tombstone else None
++        self.removed = Counter()
++        self.last_trial = None
++        self.boundaries = 0
++        self.tombstone_hits = 0
++
++    def tables(self):
++        return {'cache': self.shared.ENGINE.cache,
++                'self_cache': self.shared.ENGINE.self_cache,
++                'cache_rng': self.shared.ENGINE.cache_rng,
++                'results': self.shared.RESULTS}
++
++    def wrap(self):
++        for label, table in self.tables().items():
++            if isinstance(table, CacheTable):
++                continue
++            # 取り付ける前からあった項目は寿命が分からないので残す。
++            for key in table:
++                self.epochs[label].setdefault(key, None)
++            wrapped = CacheTable(self, label, table)
++            if label == 'results':
++                self.shared.RESULTS = wrapped
++            else:
++                setattr(self.shared.ENGINE, label, wrapped)
++
++    def lookup(self, label, key):
++        if self.dead is not None and key in self.dead[label]:
++            from smereplay import encode
++            self.tombstone_hits += 1
++            (self.path.parent/(self.path.name+'.failure.json')).write_text(json.dumps({
++                'table': label, 'trial': self.shared.CTX['trial'], 'key': encode(key),
++                'reason': '捨てた鍵が後で引かれた'}, ensure_ascii=False, indent=2)+'\n')
++            raise RuntimeError(('SME控えの墓石の検査が不通', label, self.shared.CTX['trial']))
++
++    def enter(self, trial):
++        if not isinstance(trial, int):
++            raise TypeError('試行の番号が整数でない')
++        if self.last_trial is not None and trial < self.last_trial:
++            raise RuntimeError('前の試行へ戻る実行では控えを捨てない')
++        if self.last_trial is None or trial == self.last_trial:
++            self.last_trial = trial
++            return
++        if not self.shared.CTX.get('call_seed'):
++            raise RuntimeError('呼び出しごとの種なしでは控えを捨てない')
++        from smereplay import encode
++        for label, table in self.tables().items():
++            ages = self.epochs[label]
++            remove = [key for key in table
++                      if ages.get(key) is not None and ages[key] < trial
++                      and isinstance(key, tuple) and len(key) >= 2
++                      and key[-2] == 'call-seed-v1' and isinstance(key[-1], int)]
++            for key in remove:
++                self.stream.write(json.dumps({'trial': trial, 'table': label,
++                    'created_trial': ages[key], 'key': encode(key)},
++                    ensure_ascii=False, separators=(',', ':'))+'\n')
++                if self.dead is not None:
++                    self.dead[label].add(key)
++                dict.__delitem__(table, key)
++                self.removed[label] += 1
++            # 診断から戻した項目の寿命だけを保持する。値は持たない。
++            self.epochs[label] = {key: ages.get(key) for key in table}
++        self.stream.flush()
++        self.last_trial = trial
++        self.boundaries += 1
++
++    def close(self):
++        self.stream.close()
++        (self.path.parent/(self.path.name+'.summary.json')).write_text(json.dumps({
++            'removed': dict(self.removed), 'boundaries': self.boundaries,
++            'last_trial': self.last_trial, 'tombstone_enabled': self.dead is not None,
++            'tombstone_hits': self.tombstone_hits,
++            'kept_entries': {label: len(table) for label, table in self.tables().items()}},
++            ensure_ascii=False, indent=2)+'\n')
++
++
++def install(path, *, tombstone=False):
++    global MANAGER
++    import abm.loop as loop
++    import smeshared as shared
++    if not shared.CTX.get('call_seed'):
++        raise ValueError('控えの寿命の旗は呼び出しごとの種と一緒に使う')
++    manager = MANAGER = Manager(shared, path, tombstone)
++    manager.wrap()
++    real_restore = shared.ENGINE.restore
++    def restore(snapshot):
++        real_restore(snapshot)
++        manager.wrap()
++    shared.ENGINE.restore = restore
++    real_input = loop._agent_input
++    def agent_input(trial, before):
++        # 本物の次の入力の前。同じ試行の二体目では捨てない。
++        manager.enter(trial.trial)
++        return real_input(trial, before)
++    loop._agent_input = agent_input
++
++
++def close():
++    MANAGER.close()
+diff --git a/tools/smeintern.py b/tools/smeintern.py
+new file mode 100644
+index 0000000..3a52954
+--- /dev/null
++++ b/tools/smeintern.py
+@@ -0,0 +1,65 @@
++"""計算後の不変の部分だけを共有し、全ての論理的な控えと記録を残す。
++
++照合も乱数の呼び出しも省かない。式・対応・順・型・浮動小数のビットを
++変更しない。共有を決める表は模型に渡さない、512組までの作業用の表。
++"""
++from collections import OrderedDict
++from dataclasses import fields, replace
++import struct
++
++import sme2017
++
++POOL = OrderedDict()
++STATS = {}
++LIMIT = 512
++CLASSES = frozenset({sme2017.Hypothesis, sme2017.Candidate, sme2017.Settings})
++
++
++def exact(a, b):
++    """内容が同じでも、型の差と±0とNaNのビットの差を同一視しない。"""
++    if type(a) is not type(b):
++        return False
++    if type(a) is float:
++        return struct.pack('>d', a) == struct.pack('>d', b)
++    if type(a) in (str, int, bool, type(None)):
++        return a == b
++    if type(a) is tuple:
++        return len(a) == len(b) and all(exact(x, y) for x, y in zip(a, b))
++    if type(a) is frozenset:
++        # Candidate.membersは整数だけ。その他の集合は共有しない。
++        return all(type(x) is int for x in a) and all(type(x) is int for x in b) and a == b
++    if type(a) in CLASSES:
++        return all(exact(getattr(a, f.name), getattr(b, f.name)) for f in fields(a))
++    return False
++
++
++def share(result):
++    key = result.version, result.settings, result.left_fingerprint, result.right_fingerprint
++    previous = POOL.pop(key, None)
++    changed = {}
++    if previous is not None:
++        for name in ('hypotheses', 'candidates'):
++            before, now = previous[name], getattr(result, name)
++            if exact(before, now):
++                changed[name] = before
++                STATS[name] = STATS.get(name, 0) + 1
++    if changed:
++        result = replace(result, **changed)
++    POOL[key] = {name: getattr(result, name) for name in ('hypotheses', 'candidates')}
++    if len(POOL) > LIMIT:
++        POOL.popitem(last=False)
++    STATS['calls'] = STATS.get('calls', 0) + 1
++    STATS['pool_peak'] = max(STATS.get('pool_peak', 0), len(POOL))
++    return result
++
++
++def install():
++    POOL.clear()
++    STATS.clear()
++    real = sme2017._Engine.run
++
++    def run(self):
++        # 本来の乱数と照合を全て実行した後に、同一の内容だけ共有する。
++        return share(real(self))
++
++    sme2017._Engine.run = run
+diff --git a/tools/v311c_checks/test_sme_evict.py b/tools/v311c_checks/test_sme_evict.py
+new file mode 100644
+index 0000000..d03f45e
+--- /dev/null
++++ b/tools/v311c_checks/test_sme_evict.py
+@@ -0,0 +1,122 @@
++"""寿命の境目、墓石、集団の試験による保存復元を構造で検査する。"""
++import gzip
++import json
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++from types import SimpleNamespace
++from unittest.mock import patch
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1]), str(Path(__file__).resolve().parents[2])]
++import smeevict
++import smeshared
++import v311c
++from sme2017 import Matcher
++from v311c_fingerprint import canonical_text
++
++
++class EvictTest(unittest.TestCase):
++    def setUp(self):
++        self.old_engine = smeshared.ENGINE
++        self.saved = {k: getattr(smeshared, k) for k in ('RESULTS', 'GRAPHS', 'CHOICES', 'STATS', 'CTX', 'LOG')}
++        self.cfg = dict(v311c.CFG)
++        smeshared.ENGINE = Matcher(tie_seed=1, tie_uniform=True)
++        for k in self.saved:
++            setattr(smeshared, k, {})
++        smeshared.CTX.update(call_seed=True, trial=0)
++        self.temp = tempfile.TemporaryDirectory()
++        self.manager = smeevict.Manager(smeshared, Path(self.temp.name)/'keys.jsonl.gz', True)
++        self.manager.wrap()
++
++    def tearDown(self):
++        self.manager.stream.close()
++        self.temp.cleanup()
++        smeshared.ENGINE = self.old_engine
++        for k, v in self.saved.items():
++            setattr(smeshared, k, v)
++        v311c.CFG.clear()
++        v311c.CFG.update(self.cfg)
++
++    def put(self, key, value=1):
++        for table in self.manager.tables().values():
++            table[key] = value
++
++    def test_only_finished_seeded_keys_are_deleted(self):
++        self.manager.enter(0)
++        old = ('old', 'call-seed-v1', 101)
++        unseeded = ('keep', 'ordinary', 101)
++        self.put(old)
++        self.put(unseeded)
++        smeshared.CTX['trial'] = 1
++        current = ('current', 'call-seed-v1', 102)
++        self.put(current)
++        self.manager.enter(1)
++        for label, table in self.manager.tables().items():
++            self.assertEqual(list(table), [unseeded, current])
++            self.assertEqual(self.manager.dead[label], {old})
++        self.manager.enter(1)
++        self.assertEqual(self.manager.boundaries, 1)
++        self.manager.close()
++        with gzip.open(self.manager.path, 'rt') as f:
++            rows = [json.loads(x) for x in f]
++        self.assertEqual(len(rows), 4)
++        self.assertTrue(all(r['trial'] == 1 and r['created_trial'] == 0 for r in rows))
++
++    def test_all_lookup_forms_stop_on_exact_tombstone(self):
++        key = ('old', 'call-seed-v1', 101)
++        self.manager.enter(0)
++        self.put(key)
++        self.manager.enter(1)
++        for table in self.manager.tables().values():
++            for lookup in (lambda t: key in t, lambda t: t[key], lambda t: t.get(key)):
++                with self.assertRaisesRegex(RuntimeError, '墓石'):
++                    lookup(table)
++        self.assertEqual(self.manager.tombstone_hits, 12)
++
++    def test_unknown_age_is_retained_and_time_cannot_go_back(self):
++        key = ('preinstalled', 'call-seed-v1', 103)
++        dict.__setitem__(smeshared.ENGINE.cache, key, 1)
++        self.manager.wrap()
++        self.manager.enter(0)
++        self.manager.enter(1)
++        self.assertIn(key, smeshared.ENGINE.cache)
++        with self.assertRaisesRegex(RuntimeError, '前の試行'):
++            self.manager.enter(0)
++
++    def test_collective_probe_keeps_dead_keys_and_restores_logical_tables(self):
++        from abm.domains import Abstain
++        import random
++        self.manager.enter(0)
++        self.put(('old', 'call-seed-v1', 101))
++        self.manager.enter(1)
++        smeshared.CTX['trial'] = 1
++        v311c.CFG.update(sme2017=True, audit=True, run=1)
++        before = canonical_text(smeshared.snapshot())
++        dead = {k: set(v) for k, v in self.manager.dead.items()}
++        rng = random.getstate()
++        real_restore = smeshared.ENGINE.restore
++        def restore(snapshot):
++            real_restore(snapshot)
++            self.manager.wrap()
++        def predict(*args):
++            self.put(('diagnostic', 'call-seed-v1', 102))
++            smeshared.ENGINE.rng.random()
++            smeshared.CHOICES['diagnostic'] = 1
++            return SimpleNamespace(prediction=Abstain('probe')), None
++        v311c.CFG['inner_predict'] = predict
++        with patch.object(smeshared.ENGINE, 'restore', restore), patch('v311c._check_dictionary_guard'):
++            self.assertEqual(v311c.probe(('state',), [{'scene': SimpleNamespace(relations=())}], None), [None])
++        self.assertEqual(canonical_text(smeshared.snapshot()), before)
++        self.assertEqual(self.manager.dead, dead)
++        self.assertEqual(self.manager.tombstone_hits, 0)
++        self.assertEqual(self.manager.last_trial, 1)
++        self.assertEqual(random.getstate(), rng)
++        self.assertTrue(all(isinstance(t, smeevict.CacheTable) for t in self.manager.tables().values()))
++        self.manager.enter(2)
++        for ages in self.manager.epochs.values():
++            self.assertNotIn(('diagnostic', 'call-seed-v1', 102), ages)
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index ad13595..67a2fc7 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -495,6 +495,13 @@ def worker(task: dict) -> dict:
+         import smeshared
+         smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]), call_seed=task.get("sme_call_seed", False),
+                           **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}))
++        if task.get("sme_intern_cache"):
++            import smeintern
++            smeintern.install()
++        if task.get("sme_evict_trial_cache"):
++            import smeevict
++            smeevict.install(out_root / "evictions" / task["cell"] / f"seed{task['seed']:03d}.keys.jsonl.gz",
++                            tombstone=task.get("sme_evict_tombstone", False))
+     if task.get("shop_world"):
+         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
+         #   v39 の固定辞書に新しい述語を足す
+@@ -572,6 +579,8 @@ def worker(task: dict) -> dict:
+     if task.get("sme2017"):
+         rec["sme2017"] = sys.modules["smeshared"].close()
+         rec["smereplay"] = sys.modules["smereplay"].close()
++        if task.get("sme_evict_trial_cache"):
++            sys.modules["smeevict"].close()
+     if task.get("use_forget") is not None:
+         rec["useforget"] = sys.modules["useforget"].close()
+     if task.get("select_n3"):
+@@ -824,6 +833,9 @@ def main() -> None:
+                     help="A の採点と初期採点、E の書換費用で対応後の引数の順も比べる（--v310-be --hist-role --score-role と一緒に）")
+     ap.add_argument("--sme2017", action="store_true", help="SME2017の順つき照合と、同じ採点の関数によるN3を使う（--v39と一緒に）")
+     ap.add_argument("--sme-call-seed", action="store_true", help="SMEの同点を走行の種・試行・正準形・種類から呼び出しごとの種で選ぶ（--sme2017と一緒に）")
++    ap.add_argument("--sme-intern-cache", action="store_true", help="型と全ての内容が同じ不変の照合結果の実体を共有する探索の旗")
++    ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
++    ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
+     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
+@@ -959,6 +971,10 @@ def main() -> None:
+             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
+         for task in tasks:
+             task["score_arg_order"] = True
++    if args.sme_evict_tombstone and not args.sme_evict_trial_cache:
++        raise SystemExit("--sme-evict-tombstoneは控えを捨てる旗と一緒に使う")
++    if (args.sme_intern_cache or args.sme_evict_trial_cache) and not (args.sme2017 and args.sme_call_seed):
++        raise SystemExit("控えの探索の旗は--sme2017 --sme-call-seedと一緒に使う")
+     if args.sme_call_seed and not args.sme2017:
+         raise SystemExit("--sme-call-seed は --sme2017 と一緒に使う")
+     if args.sme_tie_uniform and not args.sme_call_seed:
+@@ -978,6 +994,9 @@ def main() -> None:
+             task["use_forget"] = args.use_forget
+         if args.sme2017:
+             task["sme2017"] = True
++            for opt in ("sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone"):
++                if getattr(args, opt):
++                    task[opt] = True
+             if args.sme_call_seed:
+                 task["sme_call_seed"] = True
+             if args.sme_tie_uniform:
+@@ -988,7 +1007,8 @@ def main() -> None:
+             task["select_n3"] = True
+         if args.shop_scatter:
+             task["shop_scatter"] = True
+-    (out_root / "flag.json").write_text(json.dumps({**({"sme2017": True} if args.sme2017 else {}),
++    (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
++                                                    **({"sme2017": True} if args.sme2017 else {}),
+                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
+                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
+                                                     **({"select_n3": True} if args.select_n3 else {}),

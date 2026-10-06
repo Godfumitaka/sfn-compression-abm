@@ -1,0 +1,75 @@
+"""受付から呼ばれる模型走行の測定用の包み。模型の引数はspecに固定する。"""
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import os
+import re
+import signal
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT/'evidence/sme-evict-20261007'
+spec = json.loads(Path(sys.argv[1]).read_text())
+name = spec['name']; folder = EV/name; folder.mkdir(exist_ok=True)
+def save(name,data): (folder/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def now(): return datetime.datetime.now().astimezone().isoformat()
+def proc_tree(pid):
+    records={}
+    for line in subprocess.check_output(['/bin/ps','-axo','pid=,ppid=,rss='],text=True).splitlines():
+        fields=line.split()
+        if len(fields)==3: records[int(fields[0])]=(int(fields[1]),int(fields[2])*1024)
+    descendants={pid}
+    for _ in range(10):descendants.update(p for p,(parent,_) in records.items() if parent in descendants)
+    return sum(records.get(p,(0,0))[1] for p in descendants)
+def health():
+    disk=subprocess.check_output(['/bin/df','-k',str(ROOT/'outputs/sme-evict-20261007')],text=True)
+    swap=subprocess.check_output(['/usr/sbin/sysctl','vm.swapusage'],text=True).strip()
+    therm=subprocess.check_output(['/usr/bin/pmset','-g','therm'],text=True).strip()
+    memory=subprocess.check_output(['/usr/bin/vm_stat'],text=True)
+    return {'time':now(),'disk':disk,'swap':swap,'thermal':therm,'memory':memory}
+source=Path(spec['cwd']); commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
+if commit!=spec['commit']:raise RuntimeError('模型の版がspecと違う')
+if subprocess.check_output(['git','status','--porcelain'],cwd=source):raise RuntimeError('模型の作業差分がある')
+output=Path(spec['output'])
+if output.exists():raise RuntimeError('既存の出力を上書きしない')
+initial=health(); save('initial.json',initial); save('command.json',spec)
+start=time.monotonic();peak=0;count=0;stop=None
+print(json.dumps({'name':name,'started':now(),'commit':commit,'allocation':spec['mem_gb']},ensure_ascii=False),flush=True)
+with (folder/'stdout.log').open('w') as so,(folder/'time.log').open('w') as se:
+    child=subprocess.Popen(['/usr/bin/time','-l',spec['argv'][0],str(ROOT/'sme_evict_observe_20261007.py'),str(Path(sys.argv[1]).resolve())],cwd=source,env={**os.environ,**spec.get('env',{})},stdout=so,stderr=se,start_new_session=True)
+    save('process.json',{'pid':child.pid,'started':now()})
+    try:
+        with gzip.open(folder/'health.jsonl.gz','wt') as log:
+            while child.poll() is None:
+                rss=proc_tree(child.pid); peak=max(peak,rss);count+=1
+                h=health();h['rss_sum_bytes']=rss;log.write(json.dumps(h,ensure_ascii=False)+'\n');log.flush()
+                limits=re.search(r'CPU_Speed_Limit\s*=\s*(\d+)',h['thermal'])
+                if ('No thermal warning level has been recorded' not in h['thermal']
+                    or 'No performance warning level has been recorded' not in h['thermal']
+                    or (limits and int(limits[1])!=100)):
+                    stop='熱又は性能の警告';break
+                if rss>spec['mem_gb']*1e9:
+                    stop='模型の観測RSS合計が受付の予約値を超えた';break
+                if float(subprocess.check_output(['/bin/df','-k',str(ROOT/'outputs/sme-evict-20261007')],text=True).splitlines()[-1].split()[3])*1024<20*2**30:
+                    stop='出力先の空きが20GiB未満';break
+                time.sleep(1)
+    except BaseException:
+        os.killpg(child.pid,signal.SIGTERM);child.wait();raise
+    if stop:
+        os.killpg(child.pid,signal.SIGTERM);child.wait()
+final=health(); save('final.json',final)
+result={'name':name,'start':initial['time'],'finished':now(),'elapsed_seconds':time.monotonic()-start,'exitcode':child.returncode,
+        'rss_sum_peak_bytes':peak,'rss_sample_interval_seconds':1,'samples':count,'allocation_gb':spec['mem_gb'],'stop':stop,
+        'output_bytes':sum(p.stat().st_size for p in output.rglob('*') if p.is_file()) if output.exists() else 0}
+summaries=list((output/'comm').glob('*.summary.json'))
+if summaries:
+    summary=json.loads(summaries[0].read_text());result.update(trials=summary.get('trials'),errors=summary.get('errors'),agent_peak_rss_mb=[a.get('peak_rss_mb') for a in summary.get('agents',[])])
+else:
+    manifests=[json.loads(s) for s in (output/'manifest.jsonl').read_text().splitlines()] if (output/'manifest.jsonl').exists() else []
+    result['manifests']=manifests
+save('resource.json',result);print(json.dumps(result,ensure_ascii=False),flush=True)
+if result['exitcode'] or stop or result.get('errors'):raise SystemExit(1)
