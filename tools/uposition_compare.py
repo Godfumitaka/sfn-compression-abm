@@ -1,4 +1,4 @@
-"""旗なしの全1740試行を、既存SME土台と全バイトで比較する。"""
+"""旗なしの全1740試行を比較。gzipは展開後の全バイトを使う。"""
 from pathlib import Path
 import argparse
 import csv
@@ -34,6 +34,7 @@ def compare(reference, current, output):
                'reference_expanded_sha256': digest(a, True), 'current_expanded_sha256': digest(b, True) if b.exists() else ''}
         row['bytes_equal'] = row['reference_sha256'] == row['current_sha256']
         row['expanded_equal'] = row['reference_expanded_sha256'] == row['current_expanded_sha256']
+        row['gate_equal'] = row['expanded_equal']
         rows.append(row)
     extras = [str(p.relative_to(current)) for folder in ('output/side', 'output/ledgers', 'output/evictions')
               for p in (current/folder).rglob('*') if p.is_file() and not p.name.endswith('.done')
@@ -41,16 +42,17 @@ def compare(reference, current, output):
     state_path = next((current/'output/side').rglob('seed001.sme.states.jsonl.gz'))
     tie_path = current/'tie_state.jsonl'
     counts = {'saved_state_lines': lines(state_path), 'rng_trial_lines': lines(tie_path)}
-    result = {'passed': all(r['bytes_equal'] for r in rows) and not extras and counts == {
+    result = {'passed': all(r['gate_equal'] for r in rows) and not extras and counts == {
         'saved_state_lines': 1740*3, 'rng_trial_lines': 1740}, 'reference': str(reference), 'current': str(current),
               'files': rows, 'extra_files': extras, **counts,
+              'comparison_policy': 'gzipは展開後の全バイト。非gzipはファイル全バイト。行・欄の除外と並べ替えはしない。',
               'metadata_note': '本体のcode_commit欄は土台の値へ共通化。実装の実コミットはexecution.json。壁時計の時刻と時間を含む.doneとmanifestは模型の本体・sideではなく比較対象外。'}
     output.mkdir(parents=True, exist_ok=True)
     (output/'gate1.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
     with (output/'gate1_files.csv').open('w') as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
     if not result['passed']:
-        print(json.dumps({'passed': False, 'mismatch': [r['relative_path'] for r in rows if not r['bytes_equal']], 'extra_files': extras, **counts}, ensure_ascii=False))
+        print(json.dumps({'passed': False, 'mismatch': [r['relative_path'] for r in rows if not r['gate_equal']], 'extra_files': extras, **counts}, ensure_ascii=False))
         raise SystemExit(3)
     print(json.dumps({'passed': True, 'compared_files': len(rows), **counts}, ensure_ascii=False))
 
