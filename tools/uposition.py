@@ -60,8 +60,19 @@ def retained_paths(origin, current):
     paths, shape = json.loads(current)
     if shape != old_shape:
         return False
-    return all(any(len(p) >= len(old) and (not old or p[-len(old):] == old) for p in paths)
-               for old in old_paths)
+    # 同じ形の二つの根からの道も二本と数える。一方が落ちた場合に他方で代用しない。
+    matched = {}
+    def assign(old_index, visited):
+        old = old_paths[old_index]
+        for j, p in enumerate(paths):
+            if j in visited or len(p) < len(old) or (old and p[-len(old):] != old):
+                continue
+            visited.add(j)
+            if j not in matched or assign(matched[j], visited):
+                matched[j] = old_index
+                return True
+        return False
+    return all(assign(i, set()) for i in range(len(old_paths)))
 
 
 def slot_key(d, row):
