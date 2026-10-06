@@ -1,0 +1,1289 @@
+{
+  "at": "2026-10-07T04:34:35.230600+09:00",
+  "status": {
+    "at": "2026-10-07T04:34:23.875811+09:00",
+    "state": "parallel_measurements_or_checks",
+    "case": "お店と動詞の並行計測",
+    "claim_pid": null,
+    "cases": {
+      "shop_profile1740_02": {
+        "stage": "profile",
+        "claim_pid": 69132,
+        "completed_trials": 1586,
+        "measured_trials": 1740,
+        "cpu_paused": false,
+        "reported": false
+      },
+      "verb_profile1000_01": {
+        "stage": "profile",
+        "claim_pid": 36341,
+        "completed_trials": 636,
+        "measured_trials": 1000,
+        "cpu_paused": false,
+        "reported": false
+      }
+    },
+    "cpu": {
+      "at": "2026-10-07T04:34:23.875754+09:00",
+      "cores": 10,
+      "cap": 8,
+      "external_compute_processes": {},
+      "external_count": 0,
+      "own_reserved_slots": 2,
+      "total_reserved_slots": 2,
+      "own_compute_count": 2,
+      "total_compute_count": 2,
+      "count_includes_small_waiting_model_workers": true
+    },
+    "resources": {
+      "at": "2026-10-07T04:34:23.684131+09:00",
+      "free_bytes": 258383503360,
+      "swap_grew": false,
+      "thermal_warning": null,
+      "swap_mb": 188.0
+    },
+    "logp_new_runs_and_replay_held": true
+  },
+  "diagnostics": {
+    "ps": {
+      "exit": 0,
+      "out": "24040     1 Ss     0.0   0:40.96  22112 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/workflow_parallel25_05.py\n36821 36350 Ss     0.0   0:00.22  33344 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/observe_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/verb_profile1000_01/native_command.json\n36825 36821 R    100.0 116:47.23 286000 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n89565 89561 Ss     0.0   0:00.16  18704 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/observe_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/shop_profile1740_02/native_command.json\n89571 89565 R    100.0 188:27.80 228208 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "err": ""
+    },
+    "power": {
+      "exit": 0,
+      "out": "System-wide power settings:\nCurrently in use:\n standby              1\n Sleep On Power Button 1\n hibernatefile        /var/vm/sleepimage\n powernap             1\n networkoversleep     0\n disksleep            10\n sleep                1 (sleep prevented by powerd, ChatGPT)\n hibernatemode        3\n ttyskeepawake        1\n displaysleep         10\n tcpkeepalive         1\n lowpowermode         0\n womp                 1\n",
+      "err": ""
+    },
+    "assertions": {
+      "exit": 0,
+      "out": "2026-10-07 04:34:34 +0900 \nAssertion status system-wide:\n   BackgroundTask                 0\n   ApplePushServiceTask           0\n   UserIsActive                   0\n   PreventUserIdleDisplaySleep    0\n   SoftwareUpdateTask             0\n   PreventSystemSleep             0\n   PreventSystemSleepSecurityIndicator 0\n   ExternalMedia                  0\n   PreventUserIdleSystemSleep     1\n   NetworkClientActive            0\n   InternalPreventSleep           1\nListed by owning process:\n   pid 378(powerd): [0x0005843f000d87c0] 00:00:05 InternalPreventSleep named: \"com.apple.powermanagement.acwakelinger\"  \n\tTimeout will fire in 4 secs Action=TimeoutActionRelease\n   pid 52388(ChatGPT): [0x000582390001852f] 01:38:42 NoIdleSleepAssertion named: \"Electron\"  \nKernel Assertions: 0x100=MAGICWAKE\n   id=561  level=255 0x100=MAGICWAKE creat=2026/10/02 13:17  mod=2026/10/06 22:47 description=en0 owner=IOSkywalkNetworkBSDClient\n",
+      "err": ""
+    },
+    "thermal": {
+      "exit": 0,
+      "out": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "err": ""
+    }
+  },
+  "sleep_event_count": 150,
+  "sleep_events_file": "sleep_events_instruction2_01.txt",
+  "trial_summary": {
+    "shop_profile1740_02": {
+      "rows": 1588,
+      "fields": [
+        "trial",
+        "sec_trial",
+        "process_cpu_seconds",
+        "accounted_seconds",
+        "engine",
+        "preparation",
+        "retention",
+        "prediction",
+        "nonlearning_tests",
+        "writing",
+        "other",
+        "garbage_collection",
+        "trace_callback_seconds",
+        "rss_max_bytes"
+      ],
+      "windows": {
+        "first100": {
+          "trial": {
+            "n": 100,
+            "mean": 49.5,
+            "min": 0.0,
+            "max": 99.0
+          },
+          "sec_trial": {
+            "n": 100,
+            "mean": 5.921250912040705,
+            "min": 0.09896437497809529,
+            "max": 46.477211124962196
+          },
+          "process_cpu_seconds": {
+            "n": 100,
+            "mean": 5.35030524,
+            "min": 0.07465800000000034,
+            "max": 6.879066000000023
+          },
+          "accounted_seconds": {
+            "n": 100,
+            "mean": 3.5276983499989014,
+            "min": 0.048393999999991166,
+            "max": 4.535026999989896
+          },
+          "engine": {
+            "n": 100,
+            "mean": 0.5225876499999769,
+            "min": 0.0,
+            "max": 0.7129640000021027
+          },
+          "preparation": {
+            "n": 100,
+            "mean": 1.3209835599996107,
+            "min": 0.0001639999999980546,
+            "max": 1.7059060000115664
+          },
+          "retention": {
+            "n": 100,
+            "mean": 0.12675924999996643,
+            "min": 0.000664000000000442,
+            "max": 0.4575390000009918
+          },
+          "prediction": {
+            "n": 100,
+            "mean": 0.0633681199997458,
+            "min": 0.0001429999999968956,
+            "max": 0.13814599999977872
+          },
+          "nonlearning_tests": {
+            "n": 100,
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "writing": {
+            "n": 100,
+            "mean": 1.3749505199997263,
+            "min": 0.04635799999999879,
+            "max": 1.8044949999967912
+          },
+          "other": {
+            "n": 100,
+            "mean": 0.051226859999908544,
+            "min": 0.0009479999999966182,
+            "max": 0.06771599999819955
+          },
+          "garbage_collection": {
+            "n": 100,
+            "mean": 0.0678223899999669,
+            "min": 0.00011700000000036681,
+            "max": 0.12323099999969145
+          },
+          "trace_callback_seconds": {
+            "n": 100,
+            "mean": 1.8226068900010988,
+            "min": 0.02626400000000917,
+            "max": 2.3440390000101274
+          },
+          "rss_max_bytes": {
+            "n": 100,
+            "mean": 89044582.4,
+            "min": 72056832.0,
+            "max": 100810752.0
+          }
+        },
+        "last100": {
+          "trial": {
+            "n": 100,
+            "mean": 1537.5,
+            "min": 1488.0,
+            "max": 1587.0
+          },
+          "sec_trial": {
+            "n": 100,
+            "mean": 6.251439087903127,
+            "min": 4.392761958006304,
+            "max": 9.12275708297966
+          },
+          "process_cpu_seconds": {
+            "n": 100,
+            "mean": 6.165178600000145,
+            "min": 4.391297999998642,
+            "max": 9.090679000000819
+          },
+          "accounted_seconds": {
+            "n": 100,
+            "mean": 4.1515520201065375,
+            "min": 2.944461000033698,
+            "max": 6.136442999733845
+          },
+          "engine": {
+            "n": 100,
+            "mean": 0.824056209974151,
+            "min": 0.5596760001026269,
+            "max": 1.2711070003679197
+          },
+          "preparation": {
+            "n": 100,
+            "mean": 1.4317478400083201,
+            "min": 1.0256409997691662,
+            "max": 2.2322879986895714
+          },
+          "retention": {
+            "n": 100,
+            "mean": 0.10900997999529864,
+            "min": 0.06567700008235988,
+            "max": 0.3631150002220238
+          },
+          "prediction": {
+            "n": 100,
+            "mean": 0.05450727000265033,
+            "min": 0.033903000154168694,
+            "max": 0.1087860001152876
+          },
+          "nonlearning_tests": {
+            "n": 100,
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "writing": {
+            "n": 100,
+            "mean": 1.5683912901119947,
+            "min": 1.2001370000925817,
+            "max": 2.131485999399956
+          },
+          "other": {
+            "n": 100,
+            "mean": 0.052328350012630837,
+            "min": 0.035346000051504234,
+            "max": 0.07905400004528929
+          },
+          "garbage_collection": {
+            "n": 100,
+            "mean": 0.11151108000149179,
+            "min": 0.01745700002902595,
+            "max": 0.3866929999931017
+          },
+          "trace_callback_seconds": {
+            "n": 100,
+            "mean": 2.0136265798936073,
+            "min": 1.446836999964944,
+            "max": 2.954236000266974
+          },
+          "rss_max_bytes": {
+            "n": 100,
+            "mean": 293634048.0,
+            "min": 293634048.0,
+            "max": 293634048.0
+          }
+        },
+        "last20": {
+          "trial": {
+            "n": 20,
+            "mean": 1577.5,
+            "min": 1568.0,
+            "max": 1587.0
+          },
+          "sec_trial": {
+            "n": 20,
+            "mean": 5.528939962555887,
+            "min": 5.162867874954827,
+            "max": 5.930894750053994
+          },
+          "process_cpu_seconds": {
+            "n": 20,
+            "mean": 5.437173499999972,
+            "min": 5.161446000000069,
+            "max": 5.858268999998472
+          },
+          "accounted_seconds": {
+            "n": 20,
+            "mean": 3.662577550054175,
+            "min": 3.450213000704025,
+            "max": 3.9618050010012666
+          },
+          "engine": {
+            "n": 20,
+            "mean": 0.7528964000549422,
+            "min": 0.6849639998526982,
+            "max": 0.8273180002524896
+          },
+          "preparation": {
+            "n": 20,
+            "mean": 1.268392099863013,
+            "min": 1.184750999118478,
+            "max": 1.3920229995565023
+          },
+          "retention": {
+            "n": 20,
+            "mean": 0.08052929999048501,
+            "min": 0.07387999997990846,
+            "max": 0.11661499981164525
+          },
+          "prediction": {
+            "n": 20,
+            "mean": 0.04240790002322683,
+            "min": 0.03928099980475963,
+            "max": 0.04856900024969946
+          },
+          "nonlearning_tests": {
+            "n": 20,
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "writing": {
+            "n": 20,
+            "mean": 1.37505385011591,
+            "min": 1.3405090004544036,
+            "max": 1.4190559997441596
+          },
+          "other": {
+            "n": 20,
+            "mean": 0.0461731000114014,
+            "min": 0.04428900005405012,
+            "max": 0.050182999977550935
+          },
+          "garbage_collection": {
+            "n": 20,
+            "mean": 0.09712489999519676,
+            "min": 0.01790999999138876,
+            "max": 0.21011899996665306
+          },
+          "trace_callback_seconds": {
+            "n": 20,
+            "mean": 1.7745959499457968,
+            "min": 1.6675870006129117,
+            "max": 1.8986270011537272
+          },
+          "rss_max_bytes": {
+            "n": 20,
+            "mean": 293634048.0,
+            "min": 293634048.0,
+            "max": 293634048.0
+          }
+        }
+      },
+      "last20": [
+        {
+          "trial": "1568",
+          "sec_trial": "5.2530182499904186",
+          "process_cpu_seconds": "5.251313000000664",
+          "accounted_seconds": "3.511288999743556",
+          "engine": "0.7438539999457134",
+          "preparation": "1.2342610002178844",
+          "retention": "0.07622699998682947",
+          "prediction": "0.04041200004030543",
+          "nonlearning_tests": "0",
+          "writing": "1.3528059994732757",
+          "other": "0.044377000089298235",
+          "garbage_collection": "0.01935199999024917",
+          "trace_callback_seconds": "1.7400240002571081",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1569",
+          "sec_trial": "5.5675886669778265",
+          "process_cpu_seconds": "5.3750790000012785",
+          "accounted_seconds": "3.6548760002769995",
+          "engine": "0.7114099999398604",
+          "preparation": "1.2446220002166228",
+          "retention": "0.07463800001460186",
+          "prediction": "0.04088899999624118",
+          "nonlearning_tests": "0",
+          "writing": "1.3548659999451047",
+          "other": "0.04542600017157383",
+          "garbage_collection": "0.1830249999929947",
+          "trace_callback_seconds": "1.720202999724279",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1570",
+          "sec_trial": "5.3242344169993885",
+          "process_cpu_seconds": "5.3219499999995605",
+          "accounted_seconds": "3.560070000059568",
+          "engine": "0.7490340000822471",
+          "preparation": "1.2375289996853098",
+          "retention": "0.10274200015919632",
+          "prediction": "0.04263699995317438",
+          "nonlearning_tests": "0",
+          "writing": "1.3626440000552975",
+          "other": "0.04472000013993238",
+          "garbage_collection": "0.020763999984410475",
+          "trace_callback_seconds": "1.7618799999399926",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1571",
+          "sec_trial": "5.638883167004678",
+          "process_cpu_seconds": "5.420650000000023",
+          "accounted_seconds": "3.688662001175544",
+          "engine": "0.7313280000307714",
+          "preparation": "1.2411040003025846",
+          "retention": "0.07424800015178334",
+          "prediction": "0.03995100002430263",
+          "nonlearning_tests": "0",
+          "writing": "1.3792930005565722",
+          "other": "0.0471410000918695",
+          "garbage_collection": "0.17559700001766032",
+          "trace_callback_seconds": "1.7319879988244793",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1572",
+          "sec_trial": "5.162867874954827",
+          "process_cpu_seconds": "5.161446000000069",
+          "accounted_seconds": "3.450213000704025",
+          "engine": "0.6998070004701731",
+          "preparation": "1.2313520002226142",
+          "retention": "0.07551299986516824",
+          "prediction": "0.03928099980475963",
+          "nonlearning_tests": "0",
+          "writing": "1.3405090004544036",
+          "other": "0.0458409998955176",
+          "garbage_collection": "0.01790999999138876",
+          "trace_callback_seconds": "1.711232999296044",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1573",
+          "sec_trial": "5.666392250044737",
+          "process_cpu_seconds": "5.464731000000029",
+          "accounted_seconds": "3.7138139998332917",
+          "engine": "0.7464459999464452",
+          "preparation": "1.2309449996973854",
+          "retention": "0.07668299986835336",
+          "prediction": "0.04200600007425237",
+          "nonlearning_tests": "0",
+          "writing": "1.38012100029664",
+          "other": "0.04438699995262141",
+          "garbage_collection": "0.19322599999759404",
+          "trace_callback_seconds": "1.7509170001667371",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1574",
+          "sec_trial": "5.3263975830050185",
+          "process_cpu_seconds": "5.324534000001222",
+          "accounted_seconds": "3.559152999383514",
+          "engine": "0.7655490002871375",
+          "preparation": "1.2571509996723762",
+          "retention": "0.07387999997990846",
+          "prediction": "0.04244599986122921",
+          "nonlearning_tests": "0",
+          "writing": "1.3544449996043113",
+          "other": "0.04528899997785629",
+          "garbage_collection": "0.020393000000694883",
+          "trace_callback_seconds": "1.7653810006177082",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1575",
+          "sec_trial": "5.444133167038672",
+          "process_cpu_seconds": "5.4423509999996895",
+          "accounted_seconds": "3.6389190009249432",
+          "engine": "0.781940999928338",
+          "preparation": "1.2650400005186384",
+          "retention": "0.08415599987529276",
+          "prediction": "0.04639800002951233",
+          "nonlearning_tests": "0",
+          "writing": "1.3972830005750438",
+          "other": "0.04473200001848454",
+          "garbage_collection": "0.019368999979633372",
+          "trace_callback_seconds": "1.8034319990747463",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1576",
+          "sec_trial": "5.71532479202142",
+          "process_cpu_seconds": "5.506172999999762",
+          "accounted_seconds": "3.7419210011885298",
+          "engine": "0.747731000152271",
+          "preparation": "1.255824000119901",
+          "retention": "0.07591599999432219",
+          "prediction": "0.04124900016904576",
+          "nonlearning_tests": "0",
+          "writing": "1.379075000746525",
+          "other": "0.04681299999538169",
+          "garbage_collection": "0.1953130000110832",
+          "trace_callback_seconds": "1.7642519988112326",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1577",
+          "sec_trial": "5.328054666053504",
+          "process_cpu_seconds": "5.326520000000528",
+          "accounted_seconds": "3.5623750007052877",
+          "engine": "0.7340590001585952",
+          "preparation": "1.2779779999436869",
+          "retention": "0.07525800000439631",
+          "prediction": "0.04107799997109396",
+          "nonlearning_tests": "0",
+          "writing": "1.3686680006685492",
+          "other": "0.04639399995357962",
+          "garbage_collection": "0.018940000005386537",
+          "trace_callback_seconds": "1.7641449992952403",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1578",
+          "sec_trial": "5.430822041002102",
+          "process_cpu_seconds": "5.225580999998783",
+          "accounted_seconds": "3.5579939993858716",
+          "engine": "0.6849639998526982",
+          "preparation": "1.184750999118478",
+          "retention": "0.0746380000255158",
+          "prediction": "0.041690000103699276",
+          "nonlearning_tests": "0",
+          "writing": "1.3477130002083868",
+          "other": "0.04428900005405012",
+          "garbage_collection": "0.17994900002304348",
+          "trace_callback_seconds": "1.6675870006129117",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1579",
+          "sec_trial": "5.430127249972429",
+          "process_cpu_seconds": "5.4282770000008895",
+          "accounted_seconds": "3.628783000571275",
+          "engine": "0.769802000526397",
+          "preparation": "1.2790079995829728",
+          "retention": "0.07875200007401872",
+          "prediction": "0.04580400004670082",
+          "nonlearning_tests": "0",
+          "writing": "1.3900070003619476",
+          "other": "0.04591999999320251",
+          "garbage_collection": "0.0194899999860354",
+          "trace_callback_seconds": "1.7994939994296146",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1580",
+          "sec_trial": "5.8625443339697085",
+          "process_cpu_seconds": "5.858268999998472",
+          "accounted_seconds": "3.9618050010012666",
+          "engine": "0.8273180002524896",
+          "preparation": "1.3608740002455306",
+          "retention": "0.08272699985172949",
+          "prediction": "0.04856900024969946",
+          "nonlearning_tests": "0",
+          "writing": "1.4081230004285317",
+          "other": "0.046658000004754285",
+          "garbage_collection": "0.18753599996853154",
+          "trace_callback_seconds": "1.8964639989972056",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1581",
+          "sec_trial": "5.930894750053994",
+          "process_cpu_seconds": "5.740169999999125",
+          "accounted_seconds": "3.841542998845398",
+          "engine": "0.8185619996620517",
+          "preparation": "1.3920229995565023",
+          "retention": "0.09067800000775605",
+          "prediction": "0.047837000025538146",
+          "nonlearning_tests": "0",
+          "writing": "1.4190559997441596",
+          "other": "0.04972099989026901",
+          "garbage_collection": "0.02366599995912111",
+          "trace_callback_seconds": "1.8986270011537272",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1582",
+          "sec_trial": "5.5869307499961",
+          "process_cpu_seconds": "5.584979999999632",
+          "accounted_seconds": "3.7955519984770945",
+          "engine": "0.7591879999599769",
+          "preparation": "1.2855009994254942",
+          "retention": "0.07589200006623287",
+          "prediction": "0.04085800002394535",
+          "nonlearning_tests": "0",
+          "writing": "1.3772539990313817",
+          "other": "0.04722899999615038",
+          "garbage_collection": "0.20962999997391307",
+          "trace_callback_seconds": "1.7894280015225377",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1583",
+          "sec_trial": "5.462166208017152",
+          "process_cpu_seconds": "5.256929000001037",
+          "accounted_seconds": "3.5202870000848634",
+          "engine": "0.7113950002531055",
+          "preparation": "1.252440999420287",
+          "retention": "0.07624300013412721",
+          "prediction": "0.04087700009586115",
+          "nonlearning_tests": "0",
+          "writing": "1.372194000192394",
+          "other": "0.046588999988671276",
+          "garbage_collection": "0.020548000000417233",
+          "trace_callback_seconds": "1.7366419999161735",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1584",
+          "sec_trial": "5.540503958996851",
+          "process_cpu_seconds": "5.538903999999093",
+          "accounted_seconds": "3.7632379994520306",
+          "engine": "0.7517849999294413",
+          "preparation": "1.257846999584217",
+          "retention": "0.07545399997798086",
+          "prediction": "0.04034899997532193",
+          "nonlearning_tests": "0",
+          "writing": "1.3819689999891125",
+          "other": "0.045715000029304065",
+          "garbage_collection": "0.21011899996665306",
+          "trace_callback_seconds": "1.7756660005470621",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1585",
+          "sec_trial": "5.688615833991207",
+          "process_cpu_seconds": "5.4998279999999795",
+          "accounted_seconds": "3.681307000320885",
+          "engine": "0.8099590003566846",
+          "preparation": "1.3113829994963453",
+          "retention": "0.07447600002888066",
+          "prediction": "0.042948000167598366",
+          "nonlearning_tests": "0",
+          "writing": "1.3764680002914247",
+          "other": "0.04515599996375386",
+          "garbage_collection": "0.020917000016197562",
+          "trace_callback_seconds": "1.8185209996790945",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1586",
+          "sec_trial": "5.54094666603487",
+          "process_cpu_seconds": "5.5388980000006995",
+          "accounted_seconds": "3.7589159994349757",
+          "engine": "0.7545299997182155",
+          "preparation": "1.2821159996346978",
+          "retention": "0.07584999993196107",
+          "prediction": "0.04158599993570533",
+          "nonlearning_tests": "0",
+          "writing": "1.373205000141752",
+          "other": "0.04688200004420651",
+          "garbage_collection": "0.18474700002843747",
+          "trace_callback_seconds": "1.7799820005657239",
+          "rss_max_bytes": "293634048"
+        },
+        {
+          "trial": "1587",
+          "sec_trial": "5.67835262499284",
+          "process_cpu_seconds": "5.4768869999988965",
+          "accounted_seconds": "3.6608339995145798",
+          "engine": "0.7592659996462316",
+          "preparation": "1.2860920005987282",
+          "retention": "0.11661499981164525",
+          "prediction": "0.04129299991654989",
+          "nonlearning_tests": "0",
+          "writing": "1.3853779995533841",
+          "other": "0.050182999977550935",
+          "garbage_collection": "0.02200700001048972",
+          "trace_callback_seconds": "1.8160530004843167",
+          "rss_max_bytes": "293634048"
+        }
+      ]
+    },
+    "verb_profile1000_01": {
+      "rows": 637,
+      "fields": [
+        "trial",
+        "sec_trial",
+        "process_cpu_seconds",
+        "accounted_seconds",
+        "engine",
+        "preparation",
+        "retention",
+        "prediction",
+        "nonlearning_tests",
+        "writing",
+        "other",
+        "garbage_collection",
+        "trace_callback_seconds",
+        "rss_max_bytes"
+      ],
+      "windows": {
+        "first100": {
+          "trial": {
+            "n": 100,
+            "mean": 49.5,
+            "min": 0.0,
+            "max": 99.0
+          },
+          "sec_trial": {
+            "n": 100,
+            "mean": 7.9188105095917125,
+            "min": 0.06917945796158165,
+            "max": 111.03194416698534
+          },
+          "process_cpu_seconds": {
+            "n": 100,
+            "mean": 6.942006040000001,
+            "min": 0.06790600000000069,
+            "max": 110.38583900000003
+          },
+          "accounted_seconds": {
+            "n": 100,
+            "mean": 5.172160740000499,
+            "min": 0.04454100000011785,
+            "max": 85.55012900004908
+          },
+          "engine": {
+            "n": 100,
+            "mean": 0.4540394599998098,
+            "min": 0.0,
+            "max": 0.651901000008138
+          },
+          "preparation": {
+            "n": 100,
+            "mean": 2.4919144599996113,
+            "min": 0.00013199999999535805,
+            "max": 3.257860000025971
+          },
+          "retention": {
+            "n": 100,
+            "mean": 0.10468934000049859,
+            "min": 0.0006380000000056896,
+            "max": 0.3933350000010023
+          },
+          "prediction": {
+            "n": 100,
+            "mean": 0.059452779999948684,
+            "min": 0.00011999999999545707,
+            "max": 0.13166899999879433
+          },
+          "nonlearning_tests": {
+            "n": 100,
+            "mean": 0.7921519800004307,
+            "min": 0.0,
+            "max": 79.21519800004307
+          },
+          "writing": {
+            "n": 100,
+            "mean": 1.1500151900000937,
+            "min": 0.04249500000011075,
+            "max": 1.5853599999961716
+          },
+          "other": {
+            "n": 100,
+            "mean": 0.060511810000045047,
+            "min": 0.0009680000000127365,
+            "max": 0.08637300000441428
+          },
+          "garbage_collection": {
+            "n": 100,
+            "mean": 0.05938572000006113,
+            "min": 0.00018799999999785655,
+            "max": 0.7488409999951955
+          },
+          "trace_callback_seconds": {
+            "n": 100,
+            "mean": 1.7698452999995018,
+            "min": 0.02336499999988284,
+            "max": 24.83570999995095
+          },
+          "rss_max_bytes": {
+            "n": 100,
+            "mean": 138239344.64,
+            "min": 138084352.0,
+            "max": 153583616.0
+          }
+        },
+        "last100": {
+          "trial": {
+            "n": 100,
+            "mean": 586.5,
+            "min": 537.0,
+            "max": 636.0
+          },
+          "sec_trial": {
+            "n": 100,
+            "mean": 13.80320157664013,
+            "min": 8.234531791997142,
+            "max": 167.8124351670267
+          },
+          "process_cpu_seconds": {
+            "n": 100,
+            "mean": 13.65997247999996,
+            "min": 8.232084999999643,
+            "max": 165.79692299999988
+          },
+          "accounted_seconds": {
+            "n": 100,
+            "mean": 10.162384790100832,
+            "min": 6.113959000782415,
+            "max": 128.3182349986464
+          },
+          "engine": {
+            "n": 100,
+            "mean": 1.2149236199985172,
+            "min": 0.7802540000338922,
+            "max": 1.7752680002922716
+          },
+          "preparation": {
+            "n": 100,
+            "mean": 4.640079620070164,
+            "min": 3.1086870002436626,
+            "max": 7.320519000500099
+          },
+          "retention": {
+            "n": 100,
+            "mean": 0.17744983000988213,
+            "min": 0.09122199996272684,
+            "max": 0.49014299997452326
+          },
+          "prediction": {
+            "n": 100,
+            "mean": 0.18137513000281616,
+            "min": 0.09907500000281289,
+            "max": 0.3699599999936254
+          },
+          "nonlearning_tests": {
+            "n": 100,
+            "mean": 1.176531229997645,
+            "min": 0.0,
+            "max": 117.65312299976449
+          },
+          "writing": {
+            "n": 100,
+            "mean": 2.5290410800215706,
+            "min": 1.7531770001232871,
+            "max": 3.823522000686353
+          },
+          "other": {
+            "n": 100,
+            "mean": 0.11147744000065359,
+            "min": 0.07257300000401301,
+            "max": 0.1729279998853599
+          },
+          "garbage_collection": {
+            "n": 100,
+            "mean": 0.13150683999958346,
+            "min": 0.02506300000277406,
+            "max": 1.298634000052516
+          },
+          "trace_callback_seconds": {
+            "n": 100,
+            "mean": 3.4975876898991283,
+            "min": 2.118125999217227,
+            "max": 37.478688001353476
+          },
+          "rss_max_bytes": {
+            "n": 100,
+            "mean": 279366533.12,
+            "min": 264355840.0,
+            "max": 301744128.0
+          }
+        },
+        "last20": {
+          "trial": {
+            "n": 20,
+            "mean": 626.5,
+            "min": 617.0,
+            "max": 636.0
+          },
+          "sec_trial": {
+            "n": 20,
+            "mean": 8.694470972943236,
+            "min": 8.234531791997142,
+            "max": 9.169722457998432
+          },
+          "process_cpu_seconds": {
+            "n": 20,
+            "mean": 8.548519399999986,
+            "min": 8.232084999999643,
+            "max": 8.966804000000593
+          },
+          "accounted_seconds": {
+            "n": 20,
+            "mean": 6.321972050113845,
+            "min": 6.113959000782415,
+            "max": 6.595043998904657
+          },
+          "engine": {
+            "n": 20,
+            "mean": 0.8668153000186976,
+            "min": 0.7802540000338922,
+            "max": 0.9588040001553964
+          },
+          "preparation": {
+            "n": 20,
+            "mean": 3.2513273501065667,
+            "min": 3.1086870002436626,
+            "max": 3.503484999556349
+          },
+          "retention": {
+            "n": 20,
+            "mean": 0.11033824999180979,
+            "min": 0.09122199996272684,
+            "max": 0.1939629998323653
+          },
+          "prediction": {
+            "n": 20,
+            "mean": 0.14176635001408613,
+            "min": 0.1006229999829884,
+            "max": 0.17046000019581697
+          },
+          "nonlearning_tests": {
+            "n": 20,
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "writing": {
+            "n": 20,
+            "mean": 1.7788616499823546,
+            "min": 1.7531770001232871,
+            "max": 1.8211740002625447
+          },
+          "other": {
+            "n": 20,
+            "mean": 0.07947515000428211,
+            "min": 0.07257300000401301,
+            "max": 0.08847000000878324
+          },
+          "garbage_collection": {
+            "n": 20,
+            "mean": 0.09338799999604816,
+            "min": 0.02506300000277406,
+            "max": 0.14426500001536624
+          },
+          "trace_callback_seconds": {
+            "n": 20,
+            "mean": 2.226547349886141,
+            "min": 2.118125999217227,
+            "max": 2.3740770000022167
+          },
+          "rss_max_bytes": {
+            "n": 20,
+            "mean": 301744128.0,
+            "min": 301744128.0,
+            "max": 301744128.0
+          }
+        }
+      },
+      "last20": [
+        {
+          "trial": "617",
+          "sec_trial": "8.605327333963942",
+          "process_cpu_seconds": "8.60234600000058",
+          "accounted_seconds": "6.356512000062139",
+          "engine": "0.9095559999595935",
+          "preparation": "3.2234139999573017",
+          "retention": "0.11872700013555004",
+          "prediction": "0.1517580001082024",
+          "nonlearning_tests": "0",
+          "writing": "1.7667669997781559",
+          "other": "0.07738900012100203",
+          "garbage_collection": "0.1089010000023336",
+          "trace_callback_seconds": "2.2458339999384407",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "618",
+          "sec_trial": "9.165275208011735",
+          "process_cpu_seconds": "8.966804000000593",
+          "accounted_seconds": "6.595043998904657",
+          "engine": "0.9588040001553964",
+          "preparation": "3.503484999556349",
+          "retention": "0.09487499991064396",
+          "prediction": "0.13333699998293014",
+          "nonlearning_tests": "0",
+          "writing": "1.7863559993047602",
+          "other": "0.08847000000878324",
+          "garbage_collection": "0.029716999985794246",
+          "trace_callback_seconds": "2.371760001095936",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "619",
+          "sec_trial": "8.603151499992236",
+          "process_cpu_seconds": "8.40278699999999",
+          "accounted_seconds": "6.259361999795146",
+          "engine": "0.8337879995842741",
+          "preparation": "3.194376000506054",
+          "retention": "0.09394899999188056",
+          "prediction": "0.13615899996239023",
+          "nonlearning_tests": "0",
+          "writing": "1.776701999744546",
+          "other": "0.08012299999063544",
+          "garbage_collection": "0.14426500001536624",
+          "trace_callback_seconds": "2.143425000204843",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "620",
+          "sec_trial": "8.405780499975663",
+          "process_cpu_seconds": "8.402723000000151",
+          "accounted_seconds": "6.242031999962819",
+          "engine": "0.832889000213072",
+          "preparation": "3.2011050001192416",
+          "retention": "0.09663000006912625",
+          "prediction": "0.1379279999209757",
+          "nonlearning_tests": "0",
+          "writing": "1.7762269997065232",
+          "other": "0.08062099995095195",
+          "garbage_collection": "0.11663199998292839",
+          "trace_callback_seconds": "2.160691000037332",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "621",
+          "sec_trial": "9.169722457998432",
+          "process_cpu_seconds": "8.944614000000001",
+          "accounted_seconds": "6.570536999997785",
+          "engine": "0.9130040001218731",
+          "preparation": "3.457940000016606",
+          "retention": "0.10327900004358526",
+          "prediction": "0.1406099999385333",
+          "nonlearning_tests": "0",
+          "writing": "1.7686219998668093",
+          "other": "0.07699900000443449",
+          "garbage_collection": "0.11008300000594318",
+          "trace_callback_seconds": "2.3740770000022167",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "622",
+          "sec_trial": "8.97243854199769",
+          "process_cpu_seconds": "8.755220999999437",
+          "accounted_seconds": "6.403858999763543",
+          "engine": "0.8582589999132324",
+          "preparation": "3.340758999935133",
+          "retention": "0.1642089998940719",
+          "prediction": "0.15170499996202125",
+          "nonlearning_tests": "0",
+          "writing": "1.780130000126519",
+          "other": "0.08366699992257054",
+          "garbage_collection": "0.025130000009994546",
+          "trace_callback_seconds": "2.351362000235895",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "623",
+          "sec_trial": "8.710322334023658",
+          "process_cpu_seconds": "8.475905000000239",
+          "accounted_seconds": "6.28875299963056",
+          "engine": "0.8774789999615678",
+          "preparation": "3.2149869999902876",
+          "retention": "0.10626099999626604",
+          "prediction": "0.1321069999903557",
+          "nonlearning_tests": "0",
+          "writing": "1.7701079996913904",
+          "other": "0.07779100000789185",
+          "garbage_collection": "0.11001999999280088",
+          "trace_callback_seconds": "2.1871520003696787",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "624",
+          "sec_trial": "8.4351983339875",
+          "process_cpu_seconds": "8.431443999999829",
+          "accounted_seconds": "6.2555119995558925",
+          "engine": "0.8838769999510987",
+          "preparation": "3.207928999661817",
+          "retention": "0.09219399990342936",
+          "prediction": "0.1006229999829884",
+          "nonlearning_tests": "0",
+          "writing": "1.7869020001180616",
+          "other": "0.07404199994380178",
+          "garbage_collection": "0.10994499999469554",
+          "trace_callback_seconds": "2.175932000443936",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "625",
+          "sec_trial": "8.493752290960401",
+          "process_cpu_seconds": "8.299877999999808",
+          "accounted_seconds": "6.166523999620949",
+          "engine": "0.8101479997976639",
+          "preparation": "3.1629260000108843",
+          "retention": "0.10251299985429796",
+          "prediction": "0.13894200006598112",
+          "nonlearning_tests": "0",
+          "writing": "1.7600229998752184",
+          "other": "0.08260800002881297",
+          "garbage_collection": "0.10936399998809065",
+          "trace_callback_seconds": "2.1333540003788585",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "626",
+          "sec_trial": "8.707615874998737",
+          "process_cpu_seconds": "8.488576000000648",
+          "accounted_seconds": "6.291189000580744",
+          "engine": "0.8537630002474543",
+          "preparation": "3.2323630002920254",
+          "retention": "0.11355699998421187",
+          "prediction": "0.1441019999638229",
+          "nonlearning_tests": "0",
+          "writing": "1.7531770001232871",
+          "other": "0.08268299996780115",
+          "garbage_collection": "0.11154400000214082",
+          "trace_callback_seconds": "2.197386999419905",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "627",
+          "sec_trial": "8.302136874990538",
+          "process_cpu_seconds": "8.299665999999888",
+          "accounted_seconds": "6.119406000218078",
+          "engine": "0.8392420000200218",
+          "preparation": "3.176696000251468",
+          "retention": "0.09566000001905195",
+          "prediction": "0.13796399997772824",
+          "nonlearning_tests": "0",
+          "writing": "1.7642169999335238",
+          "other": "0.08056400001350994",
+          "garbage_collection": "0.02506300000277406",
+          "trace_callback_seconds": "2.1802599997818106",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "628",
+          "sec_trial": "8.666084458003752",
+          "process_cpu_seconds": "8.463486999999986",
+          "accounted_seconds": "6.26358200132654",
+          "engine": "0.834384000278078",
+          "preparation": "3.2194860007348325",
+          "retention": "0.11210899995148793",
+          "prediction": "0.14675800008717488",
+          "nonlearning_tests": "0",
+          "writing": "1.764504000294437",
+          "other": "0.07314499999210966",
+          "garbage_collection": "0.11319599998842023",
+          "trace_callback_seconds": "2.1999049986734462",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "629",
+          "sec_trial": "8.821329790982418",
+          "process_cpu_seconds": "8.610893000000033",
+          "accounted_seconds": "6.367083001179708",
+          "engine": "0.8491170001607315",
+          "preparation": "3.259680999838565",
+          "retention": "0.11821200033682544",
+          "prediction": "0.17046000019581697",
+          "nonlearning_tests": "0",
+          "writing": "1.7767430005997085",
+          "other": "0.07788300002721371",
+          "garbage_collection": "0.11498700002084661",
+          "trace_callback_seconds": "2.243809998820325",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "630",
+          "sec_trial": "8.234531791997142",
+          "process_cpu_seconds": "8.232084999999643",
+          "accounted_seconds": "6.113959000782415",
+          "engine": "0.7802540000338922",
+          "preparation": "3.1086870002436626",
+          "retention": "0.10095700004421815",
+          "prediction": "0.1590030000961633",
+          "nonlearning_tests": "0",
+          "writing": "1.773407000287989",
+          "other": "0.08032000007369788",
+          "garbage_collection": "0.11133100000279228",
+          "trace_callback_seconds": "2.118125999217227",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "631",
+          "sec_trial": "8.773558165994473",
+          "process_cpu_seconds": "8.566525000000183",
+          "accounted_seconds": "6.293304999635438",
+          "engine": "0.8484000001990353",
+          "preparation": "3.2133679999742526",
+          "retention": "0.1939629998323653",
+          "prediction": "0.15686200008804008",
+          "nonlearning_tests": "0",
+          "writing": "1.7814379995415948",
+          "other": "0.07257300000401301",
+          "garbage_collection": "0.026700999996137398",
+          "trace_callback_seconds": "2.273220000364745",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "632",
+          "sec_trial": "8.99451141699683",
+          "process_cpu_seconds": "8.801425000000563",
+          "accounted_seconds": "6.513991000034366",
+          "engine": "0.9330760003394971",
+          "preparation": "3.320944999942185",
+          "retention": "0.1114489999899888",
+          "prediction": "0.14918200003012316",
+          "nonlearning_tests": "0",
+          "writing": "1.8051689998765141",
+          "other": "0.08082299987472652",
+          "garbage_collection": "0.11334699998133146",
+          "trace_callback_seconds": "2.287433999966197",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "633",
+          "sec_trial": "8.538316458987538",
+          "process_cpu_seconds": "8.534659999999349",
+          "accounted_seconds": "6.341866000189839",
+          "engine": "0.8401750004904898",
+          "preparation": "3.2521699996368625",
+          "retention": "0.09281799989912543",
+          "prediction": "0.1374039999627712",
+          "nonlearning_tests": "0",
+          "writing": "1.8211740002625447",
+          "other": "0.08245399993847968",
+          "garbage_collection": "0.11567099999956554",
+          "trace_callback_seconds": "2.19279399980951",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "634",
+          "sec_trial": "8.966139500029385",
+          "process_cpu_seconds": "8.759129999999459",
+          "accounted_seconds": "6.479328000537862",
+          "engine": "0.9475579995505541",
+          "preparation": "3.3144380006669962",
+          "retention": "0.09122199996272684",
+          "prediction": "0.12919199988209584",
+          "nonlearning_tests": "0",
+          "writing": "1.7824300004513134",
+          "other": "0.08184800003073178",
+          "garbage_collection": "0.13263999999344378",
+          "trace_callback_seconds": "2.279801999461597",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "635",
+          "sec_trial": "8.561392707983032",
+          "process_cpu_seconds": "8.371615999999449",
+          "accounted_seconds": "6.180180999904223",
+          "engine": "0.8490889996164697",
+          "preparation": "3.2035560003450883",
+          "retention": "0.10342699999455363",
+          "prediction": "0.13454400000409805",
+          "nonlearning_tests": "0",
+          "writing": "1.7832179998131323",
+          "other": "0.08044500016603706",
+          "garbage_collection": "0.025901999964844435",
+          "trace_callback_seconds": "2.1914350000952254",
+          "rss_max_bytes": "301744128"
+        },
+        {
+          "trial": "636",
+          "sec_trial": "8.76283391698962",
+          "process_cpu_seconds": "8.560602999999901",
+          "accounted_seconds": "6.337416000594203",
+          "engine": "0.8834439997799564",
+          "preparation": "3.218236000451725",
+          "retention": "0.10075400002278911",
+          "prediction": "0.14668700007950974",
+          "nonlearning_tests": "0",
+          "writing": "1.7999190002510659",
+          "other": "0.07505500001843757",
+          "garbage_collection": "0.11332099999071943",
+          "trace_callback_seconds": "2.223186999405698",
+          "rss_max_bytes": "301744128"
+        }
+      ]
+    }
+  },
+  "caffeinate": {
+    "pid": 58020,
+    "command": [
+      "/usr/bin/caffeinate",
+      "-is",
+      "-w",
+      "24040",
+      "-t",
+      "188724"
+    ],
+    "latest_end_jst": "2026-10-09T09:00:00+09:00",
+    "bound_to_own_controller": 24040,
+    "reason": "pmsetログにSleepとDarkWakeの反復あり。受け箱指示2の承認により開始"
+  }
+}

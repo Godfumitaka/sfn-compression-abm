@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-07T04:41:07.089422+09:00",
+  "fetched_commit": "0be75e3310f4db5d1904a71258ba90534d28cb5b",
+  "instruction": 2,
+  "instruction_sha256": "0137e073799d27c62bba91dbeaac264aa38f930abc97b61d4026e9af93d003fb",
+  "implementation_started": "specification_and_clean_branch_preparation",
+  "source_branch": "codex/cstar-2026-10-07",
+  "source_commit": "1838256b3fa9f81737d8b210e6ccb59c9d638a25",
+  "diagnosis_done": true,
+  "instruction_done": false,
+  "instruction_41prime_received": false,
+  "cases": {
+    "shop_profile1740_02": {
+      "stage": "profile",
+      "claim_pid": 69132,
+      "completed_trials": 1658,
+      "measured_trials": 1740,
+      "cpu_paused": false,
+      "reported": false
+    },
+    "verb_profile1000_01": {
+      "stage": "profile",
+      "claim_pid": 36341,
+      "completed_trials": 678,
+      "measured_trials": 1000,
+      "cpu_paused": false,
+      "reported": false
+    }
+  },
+  "cpu": {
+    "at": "2026-10-07T04:41:04.257583+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "61618": {
+        "ppid": 61600,
+        "pgid": 61600,
+        "stat": "R",
+        "cpu": 99.3,
+        "rss": 241254400,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      }
+    },
+    "external_count": 1,
+    "own_reserved_slots": 2,
+    "total_reserved_slots": 3,
+    "own_compute_count": 2,
+    "total_compute_count": 3,
+    "count_includes_small_waiting_model_workers": true
+  },
+  "resources": {
+    "at": "2026-10-07T04:41:04.027872+09:00",
+    "free_bytes": 259163701248,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 188.0
+  },
+  "no_model_restart": true,
+  "logp_new_runs_and_replay_held": true
+}
