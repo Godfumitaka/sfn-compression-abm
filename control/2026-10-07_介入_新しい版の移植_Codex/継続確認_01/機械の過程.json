@@ -1,0 +1,58 @@
+{
+  "at_jst": "2026-10-06T22:18:15+09:00",
+  "active_model_or_heavy_analysis_processes": 3,
+  "paused_model_or_heavy_analysis_processes": 3,
+  "own_active": 1,
+  "own_paused": 0,
+  "count_rule": "親の二重計上とresource_tracker/jobsを除く。spawnと集団化のforkの小さい子を含む。その他の重いPythonは保守的に含む。SIGSTOP中は別記。",
+  "pids": [
+    {
+      "pid": 20821,
+      "parent": 20817,
+      "state": "T",
+      "rss_kb": 11424,
+      "own": false,
+      "collective_child": false
+    },
+    {
+      "pid": 20929,
+      "parent": 20925,
+      "state": "T",
+      "rss_kb": 19648,
+      "own": false,
+      "collective_child": false
+    },
+    {
+      "pid": 27538,
+      "parent": 27534,
+      "state": "T",
+      "rss_kb": 11280,
+      "own": false,
+      "collective_child": false
+    },
+    {
+      "pid": 36825,
+      "parent": 36821,
+      "state": "R",
+      "rss_kb": 231648,
+      "own": false,
+      "collective_child": false
+    },
+    {
+      "pid": 38195,
+      "parent": 38187,
+      "state": "R",
+      "rss_kb": 269936,
+      "own": true,
+      "collective_child": false
+    },
+    {
+      "pid": 89571,
+      "parent": 89565,
+      "state": "R",
+      "rss_kb": 214528,
+      "own": false,
+      "collective_child": false
+    }
+  ]
+}

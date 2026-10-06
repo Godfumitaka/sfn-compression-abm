@@ -1,0 +1,102 @@
+"""受け箱指示1の間、既存監督の後続受付だけを待たせる。
+
+模型の子へ信号を送らず、既に受付済みの処理を終了しない。
+"""
+from pathlib import Path
+import datetime
+import json
+import os
+import signal
+import subprocess
+import time
+from zoneinfo import ZoneInfo
+
+ROOT = Path(__file__).resolve().parent
+POLICY = ROOT / 'admission_policy.json'
+STATUS = ROOT / 'admission_status.json'
+LOG = ROOT / 'admission_events.jsonl'
+
+
+def now():
+    return datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(timespec='seconds')
+
+
+def census():
+    text = subprocess.check_output(['/bin/ps', '-axww', '-o', 'pid=,ppid=,stat=,rss=,args='], text=True)
+    rows = {}
+    for line in text.splitlines():
+        parts = line.split(None, 4)
+        if len(parts) == 5:
+            pid, parent, stat, rss, command = parts
+            rows[int(pid)] = {'parent': int(parent), 'stat': stat, 'rss': int(rss), 'command': command}
+    heavy = {pid for pid, row in rows.items()
+             if 'python' in row['command'].split()[0].lower()
+             and 'resource_tracker' not in row['command'] and 'jobs.py' not in row['command']
+             and (row['rss'] >= 100 * 1024 or 'spawn_main' in row['command']
+                  or 'sme_evict_observe_20261007.py' in row['command'])}
+    leaves = heavy - {rows[pid]['parent'] for pid in heavy}
+    active = {pid for pid in leaves if not rows[pid]['stat'].startswith('T')}
+    paused = leaves - active
+    return rows, active, paused
+
+
+def record(event, **values):
+    row = {'at': now(), 'event': event, 'guard_pid': os.getpid(),
+           'models_signalled': False, **values}
+    with LOG.open('a') as out:
+        out.write(json.dumps(row, ensure_ascii=False) + '\n')
+    STATUS.write_text(json.dumps(row, ensure_ascii=False, indent=2) + '\n')
+
+
+def main():
+    policy = json.loads(POLICY.read_text())
+    pid = int(policy['pipeline_pid'])
+    expected = policy['pipeline_path']
+    previous = json.loads(STATUS.read_text()) if STATUS.exists() else {}
+    rows, _, _ = census()
+    assert previous.get('guard_pid') not in rows, '監督を重複起動しない'
+    paused_by_us = bool(previous.get('controller_waiting')
+                         or previous.get('event') == 'controller_wait')
+    if paused_by_us:
+        assert pid in rows and expected in rows[pid]['command'] and rows[pid]['stat'].startswith('T'), '軽い監督の待機を引き継げない'
+    record('watching', pipeline_pid=pid, policy_active=policy['active'])
+    last = None
+    while True:
+        policy = json.loads(POLICY.read_text())
+        rows, active, paused = census()
+        if pid not in rows:
+            record('finished', pipeline_pid=pid, reason='既存pipelineが終了', policy_active=policy['active'])
+            return
+        assert expected in rows[pid]['command'], 'PIDを別の過程に再利用していたため信号を送らない'
+        if not policy['active']:
+            if paused_by_us:
+                os.kill(pid, signal.SIGCONT)
+            record('finished', pipeline_pid=pid, reason='受け箱指示1の条件を解除', resumed_controller=paused_by_us)
+            return
+        wait = len(active) > int(policy['admission_limit'])
+        if wait and not paused_by_us:
+            assert not rows[pid]['stat'].startswith('T'), '他の理由で停止中の監督は所有しない'
+            os.kill(pid, signal.SIGSTOP)
+            paused_by_us = True
+            record('controller_wait', pipeline_pid=pid, active_compute_count=len(active),
+                   paused_compute_count=len(paused), admission_limit=policy['admission_limit'])
+        elif not wait and paused_by_us:
+            os.kill(pid, signal.SIGCONT)
+            paused_by_us = False
+            record('controller_continue', pipeline_pid=pid, active_compute_count=len(active),
+                   paused_compute_count=len(paused), admission_limit=policy['admission_limit'])
+        current = (len(active), len(paused), paused_by_us)
+        if current != last:
+            record('observed', pipeline_pid=pid, active_compute_count=len(active),
+                   paused_compute_count=len(paused), controller_waiting=paused_by_us,
+                   admission_limit=policy['admission_limit'], policy_active=True)
+            last = current
+        time.sleep(1)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        record('failed', reason=repr(error))
+        raise
