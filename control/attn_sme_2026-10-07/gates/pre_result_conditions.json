@@ -1,0 +1,65 @@
+{
+  "base_A": "10cd8bdd",
+  "base_logP": "1838256b",
+  "retention": "A",
+  "lambda": 0.01873710622997919,
+  "worlds": [
+    1,
+    2
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "arms": [
+    {
+      "mode": "binary",
+      "eta": 0.5,
+      "position": "k1"
+    },
+    {
+      "mode": "binary",
+      "eta": 0.5,
+      "position": "k2"
+    },
+    {
+      "mode": "global",
+      "eta": 0.1,
+      "position": "k1"
+    },
+    {
+      "mode": "global",
+      "eta": 0.1,
+      "position": "k2"
+    },
+    {
+      "mode": "position",
+      "eta": 0.5,
+      "position": "k1"
+    },
+    {
+      "mode": "position",
+      "eta": 0.5,
+      "position": "k2"
+    }
+  ],
+  "baseline": "same-SME-model-fixed-a-zero",
+  "held_out_is_door_assumption": "本人にドア課題の指示が伝わる",
+  "apply_attention": "door_tasks_only_as_in_pilot",
+  "a_min": 0,
+  "a_max": 10,
+  "a_normalization": false,
+  "a_charged": false,
+  "classification": "新しいSME基準腕の予測前の候補で分類。旧固定記憶の136件の数を新しい走行へ当てはめない。保持が変わるため区別の喪失からの正解も集計する。",
+  "memory_bits": "現行v39.total_bits、注意の符号長は別記",
+  "attention_description_bits": "JSON UTF-8表現の実バイト数×8。模型内のMDLの符号化への採用ではない。",
+  "table_semantics": "種・世界・日別の正解/外れ/黙り、基準腕の選び間違いのシールF/H/U区分と移り先、区別の喪失の移り先、通常の日の正解の変化、位置の最終a、記憶総ビットと定義数"
+}
