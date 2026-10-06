@@ -1,0 +1,114 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "equal": true,
+      "left_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef",
+      "right_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef",
+      "left_bytes": 492882608,
+      "right_bytes": 492882608,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+      "equal": true,
+      "left_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c",
+      "right_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c",
+      "left_bytes": 443892,
+      "right_bytes": 443892,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "equal": true,
+      "left_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+      "right_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+      "left_bytes": 13877627,
+      "right_bytes": 13877627,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+      "equal": true,
+      "left_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8",
+      "right_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8",
+      "left_bytes": 17953721,
+      "right_bytes": 17953721,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+      "equal": true,
+      "left_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d",
+      "right_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d",
+      "left_bytes": 33392,
+      "right_bytes": 33392,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+      "equal": true,
+      "left_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4",
+      "right_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4",
+      "left_bytes": 101323446,
+      "right_bytes": 101323446,
+      "first_byte_difference": null
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "equal": true,
+      "left_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2",
+      "right_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2",
+      "left_bytes": 582869296,
+      "right_bytes": 582869296,
+      "first_byte_difference": null
+    },
+    {
+      "file": "saved_matcher.jsonl.gz",
+      "filtered_only": "記録された4表の完全な鍵",
+      "equal": true,
+      "left_sha256": "cf23ea134e0c6a9581ccb09a2ccd451fdcd60bba42216387acc6d2e66e2e8d88",
+      "right_sha256": "cf23ea134e0c6a9581ccb09a2ccd451fdcd60bba42216387acc6d2e66e2e8d88",
+      "left_bytes": 2529902,
+      "right_bytes": 2529902,
+      "first_byte_difference": null
+    },
+    {
+      "file": "tie_state.jsonl",
+      "filtered_only": "捨てた鍵の件数と、残ったcache_rngの順序つきの印",
+      "equal": true,
+      "left_sha256": "e5b39258258fcb1276e65647c602204c6d7246cabc19a71ba43af29382682cb0",
+      "right_sha256": "e5b39258258fcb1276e65647c602204c6d7246cabc19a71ba43af29382682cb0",
+      "left_bytes": 13199136,
+      "right_bytes": 13199136,
+      "first_byte_difference": null
+    }
+  ],
+  "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/observe_full_01/L",
+  "case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_evict_2026-10-06/evict_full_01/L_evict",
+  "eviction_summary": {
+    "removed": {
+      "cache": 124728,
+      "cache_rng": 124728,
+      "results": 96583,
+      "self_cache": 28145
+    },
+    "boundaries": 1739,
+    "last_trial": 1739,
+    "tombstone_enabled": true,
+    "tombstone_hits": 0,
+    "kept_entries": {
+      "cache": 55,
+      "self_cache": 12,
+      "cache_rng": 55,
+      "results": 43
+    }
+  },
+  "excluded": [
+    "台帳の見出し一行",
+    "実測sec_trialの数値だけ"
+  ],
+  "cache_exception": "saved_matcherと毎試行の控えの印だけ、基準から記録済みの完全な鍵を除く。乱数と文脈は除かない。",
+  "compressed_bytes_compared": true
+}
