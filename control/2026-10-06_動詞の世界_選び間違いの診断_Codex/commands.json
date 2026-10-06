@@ -1,0 +1,22 @@
+{
+  "working_directory_relative_to_workspace": "codex_verb_2026-10-04",
+  "commands": [
+    "python3 ~/jobs/jobs.py run --wait --owner Codex-verb-selection-diagnostic --mem 0.4 --disk-path selection_diagnostic_2026-10-06 -- /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 -u selection_diagnostic_2026-10-06/read_records.py --sample",
+    "python3 ~/jobs/jobs.py run --wait --owner Codex-verb-selection-diagnostic --mem 0.4 --disk-path selection_diagnostic_2026-10-06 -- /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 -u selection_diagnostic_2026-10-06/read_records.py",
+    "python3 ~/jobs/jobs.py run --wait --owner Codex-verb-selection-tables --mem 0.1 --disk-path selection_diagnostic_2026-10-06/tables -- /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 -u selection_diagnostic_2026-10-06/tabulate.py",
+    "python3 ~/jobs/jobs.py run --wait --owner Codex-verb-selection-verify --mem 0.1 --disk-path selection_diagnostic_2026-10-06 -- /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 -u selection_diagnostic_2026-10-06/verify.py",
+    "python3 selection_diagnostic_2026-10-06/write_report.py",
+    "python3 ~/jobs/jobs.py run --wait --owner Codex-verb-selection-publish --mem 0.2 --disk-path report-results/control/2026-10-06_動詞の世界_選び間違いの診断_Codex -- python3 selection_diagnostic_2026-10-06/publish.py"
+  ],
+  "stdout_stderr_logs": [
+    "sample.log",
+    "read.log",
+    "tables.log",
+    "verify.log"
+  ],
+  "model_run_commit": "9e4bdea37573f2772ee1dcbb1c9d6babbff1787e",
+  "work_branch": "codex/verb-world-2026-10-04",
+  "work_commit": "7f48b75badd3854616449d9ab6464ccbb5f7b011",
+  "report_branch": "results-2026-09-27",
+  "report_before_commit": "f4b0fed05383c68f28485bf57aa18f1eb5a315ad"
+}
