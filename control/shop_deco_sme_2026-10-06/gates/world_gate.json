@@ -1,0 +1,715 @@
+{
+  "passed": true,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "trial_count": 1740,
+  "counts": {
+    "skeleton": 17400,
+    "current": 17400,
+    "plus4": 17400,
+    "plus8": 17400
+  },
+  "total_compared_scenes": 69600,
+  "full_scene_public_scene_holdout_coins_metadata_raw_bytes_equal": true,
+  "hashes": {
+    "skeleton": {
+      "legacy": "064ab442ebcfe1d4682e4e6163e76655259c76af1b0cd4f661a1247d90f6e13a",
+      "sme": "064ab442ebcfe1d4682e4e6163e76655259c76af1b0cd4f661a1247d90f6e13a"
+    },
+    "current": {
+      "legacy": "059a1e574f5c58e4710bd3d62410e53d185aade6430e829bec6b82a98bd477da",
+      "sme": "059a1e574f5c58e4710bd3d62410e53d185aade6430e829bec6b82a98bd477da"
+    },
+    "plus4": {
+      "legacy": "9c05dd1fb0d0505654e63bcacbd33ff0f72ab35a5161c95d2b65f92b9591363a",
+      "sme": "9c05dd1fb0d0505654e63bcacbd33ff0f72ab35a5161c95d2b65f92b9591363a"
+    },
+    "plus8": {
+      "legacy": "fc06797946840db6bddc6e1889df679ab604bf5fbc19b0bedda9950025589edb",
+      "sme": "fc06797946840db6bddc6e1889df679ab604bf5fbc19b0bedda9950025589edb"
+    }
+  },
+  "public_entity_distributions": {
+    "w1_skeleton": {
+      "3": 7029,
+      "2": 929,
+      "4": 742
+    },
+    "w1_current": {
+      "3": 7679,
+      "4": 882,
+      "2": 139
+    },
+    "w1_plus4": {
+      "3": 7763,
+      "4": 910,
+      "2": 27
+    },
+    "w1_plus8": {
+      "3": 7772,
+      "4": 924,
+      "2": 4
+    },
+    "w2_skeleton": {
+      "3": 7029,
+      "2": 929,
+      "4": 742
+    },
+    "w2_current": {
+      "3": 7679,
+      "4": 882,
+      "2": 139
+    },
+    "w2_plus4": {
+      "3": 7763,
+      "4": 910,
+      "2": 27
+    },
+    "w2_plus8": {
+      "3": 7772,
+      "4": 924,
+      "2": 4
+    }
+  },
+  "examples": [
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "skeleton",
+      "full_relations": 19,
+      "full_entities": 3,
+      "public_entities": 2,
+      "info": {
+        "shop_type": "乙",
+        "shop_cue": "n",
+        "door_pred": "Y",
+        "held_out_is_door": false,
+        "door_id": "12348a70a494dfa1",
+        "sig_id": "bd1df6b917c3c0b3",
+        "link_id": "c1081b05531abf43",
+        "root_id": "d6539b04ac005faf",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 4,
+          "level": "skeleton",
+          "run_seed": 1,
+          "graph_id": "d1913b8082fbcff3",
+          "full_entity_count": 3,
+          "public_entity_count": 2,
+          "added": [],
+          "removed": [
+            {
+              "id": "2f251a8d9395a64a",
+              "predicate": "beside",
+              "arguments": [
+                "98de6bc7b8a6897a",
+                "8e9621d91973aa2b"
+              ]
+            }
+          ],
+          "added_predicates": [],
+          "original_held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "rerouted": false
+        }
+      },
+      "held": {
+        "relation_id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "current",
+      "full_relations": 20,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "乙",
+        "shop_cue": "n",
+        "door_pred": "Y",
+        "held_out_is_door": false,
+        "door_id": "12348a70a494dfa1",
+        "sig_id": "bd1df6b917c3c0b3",
+        "link_id": "c1081b05531abf43",
+        "root_id": "d6539b04ac005faf"
+      },
+      "held": {
+        "relation_id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "plus4",
+      "full_relations": 24,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "乙",
+        "shop_cue": "n",
+        "door_pred": "Y",
+        "held_out_is_door": false,
+        "door_id": "12348a70a494dfa1",
+        "sig_id": "bd1df6b917c3c0b3",
+        "link_id": "c1081b05531abf43",
+        "root_id": "d6539b04ac005faf",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 4,
+          "level": "plus4",
+          "run_seed": 1,
+          "graph_id": "d1913b8082fbcff3",
+          "full_entity_count": 3,
+          "public_entity_count": 3,
+          "added": [
+            {
+              "id": "228fb7e8feedc838",
+              "predicate": "dz_9",
+              "arguments": [
+                "8e9621d91973aa2b"
+              ]
+            },
+            {
+              "id": "2f8efc554144a25e",
+              "predicate": "dz_2",
+              "arguments": [
+                "8e9621d91973aa2b"
+              ]
+            },
+            {
+              "id": "cc2b650733a917b0",
+              "predicate": "dz_7",
+              "arguments": [
+                "98de6bc7b8a6897a"
+              ]
+            },
+            {
+              "id": "ab1915155dc92f76",
+              "predicate": "dz_8",
+              "arguments": [
+                "a42c050c1e4c2e84"
+              ]
+            }
+          ],
+          "removed": [],
+          "added_predicates": [
+            "dz_9",
+            "dz_2",
+            "dz_7",
+            "dz_8"
+          ],
+          "original_held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "rerouted": false
+        }
+      },
+      "held": {
+        "relation_id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 4,
+      "world": 2,
+      "level": "plus8",
+      "full_relations": 28,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "乙",
+        "shop_cue": "n",
+        "door_pred": "Y",
+        "held_out_is_door": false,
+        "door_id": "12348a70a494dfa1",
+        "sig_id": "bd1df6b917c3c0b3",
+        "link_id": "c1081b05531abf43",
+        "root_id": "d6539b04ac005faf",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 4,
+          "level": "plus8",
+          "run_seed": 1,
+          "graph_id": "d1913b8082fbcff3",
+          "full_entity_count": 3,
+          "public_entity_count": 3,
+          "added": [
+            {
+              "id": "228fb7e8feedc838",
+              "predicate": "dz_9",
+              "arguments": [
+                "8e9621d91973aa2b"
+              ]
+            },
+            {
+              "id": "2f8efc554144a25e",
+              "predicate": "dz_2",
+              "arguments": [
+                "8e9621d91973aa2b"
+              ]
+            },
+            {
+              "id": "cc2b650733a917b0",
+              "predicate": "dz_7",
+              "arguments": [
+                "98de6bc7b8a6897a"
+              ]
+            },
+            {
+              "id": "ab1915155dc92f76",
+              "predicate": "dz_8",
+              "arguments": [
+                "a42c050c1e4c2e84"
+              ]
+            },
+            {
+              "id": "da43b19a860203cc",
+              "predicate": "dz_4",
+              "arguments": [
+                "98de6bc7b8a6897a"
+              ]
+            },
+            {
+              "id": "4dd26a283b0430ea",
+              "predicate": "dz_6",
+              "arguments": [
+                "a42c050c1e4c2e84"
+              ]
+            },
+            {
+              "id": "b94f707c7beec30f",
+              "predicate": "dz_3",
+              "arguments": [
+                "a42c050c1e4c2e84"
+              ]
+            },
+            {
+              "id": "e96185035045b34c",
+              "predicate": "dz_5",
+              "arguments": [
+                "a42c050c1e4c2e84"
+              ]
+            }
+          ],
+          "removed": [],
+          "added_predicates": [
+            "dz_9",
+            "dz_2",
+            "dz_7",
+            "dz_8",
+            "dz_4",
+            "dz_6",
+            "dz_3",
+            "dz_5"
+          ],
+          "original_held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "held_out": {
+            "id": "4fbb735809727b25",
+            "predicate": "board",
+            "arguments": [
+              "a42c050c1e4c2e84",
+              "98de6bc7b8a6897a"
+            ]
+          },
+          "rerouted": false
+        }
+      },
+      "held": {
+        "relation_id": "4fbb735809727b25",
+        "predicate": "board",
+        "arguments": [
+          "a42c050c1e4c2e84",
+          "98de6bc7b8a6897a"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "skeleton",
+      "full_relations": 19,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "甲",
+        "shop_cue": "n",
+        "door_pred": "X",
+        "held_out_is_door": false,
+        "door_id": "e14b89702df3e83c",
+        "sig_id": "678d19e3d13afc1c",
+        "link_id": "4cf2633d6dd3a950",
+        "root_id": "01e1c9219a0b7bcb",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 5,
+          "level": "skeleton",
+          "run_seed": 1,
+          "graph_id": "0edd55f194f2f732",
+          "full_entity_count": 3,
+          "public_entity_count": 3,
+          "added": [],
+          "removed": [
+            {
+              "id": "e3ebe4a797dede42",
+              "predicate": "beside",
+              "arguments": [
+                "5da0462fd7b02364",
+                "98ab371fa6e82941"
+              ]
+            },
+            {
+              "id": "99cf1a7b5da39320",
+              "predicate": "inside",
+              "arguments": [
+                "5da0462fd7b02364",
+                "98ab371fa6e82941"
+              ]
+            },
+            {
+              "id": "c94b938f4cf2a315",
+              "predicate": "inside",
+              "arguments": [
+                "5da0462fd7b02364",
+                "98ab371fa6e82941"
+              ]
+            }
+          ],
+          "added_predicates": [],
+          "original_held_out": {
+            "id": "e3ebe4a797dede42",
+            "predicate": "beside",
+            "arguments": [
+              "5da0462fd7b02364",
+              "98ab371fa6e82941"
+            ]
+          },
+          "held_out": {
+            "id": "6877a6ec33a2d094",
+            "predicate": "break",
+            "arguments": [
+              "946f56b6120053d9",
+              "5da0462fd7b02364"
+            ]
+          },
+          "rerouted": true
+        }
+      },
+      "held": {
+        "relation_id": "6877a6ec33a2d094",
+        "predicate": "break",
+        "arguments": [
+          "946f56b6120053d9",
+          "5da0462fd7b02364"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "current",
+      "full_relations": 22,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "甲",
+        "shop_cue": "n",
+        "door_pred": "X",
+        "held_out_is_door": false,
+        "door_id": "e14b89702df3e83c",
+        "sig_id": "678d19e3d13afc1c",
+        "link_id": "4cf2633d6dd3a950",
+        "root_id": "01e1c9219a0b7bcb"
+      },
+      "held": {
+        "relation_id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "plus4",
+      "full_relations": 26,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "甲",
+        "shop_cue": "n",
+        "door_pred": "X",
+        "held_out_is_door": false,
+        "door_id": "e14b89702df3e83c",
+        "sig_id": "678d19e3d13afc1c",
+        "link_id": "4cf2633d6dd3a950",
+        "root_id": "01e1c9219a0b7bcb",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 5,
+          "level": "plus4",
+          "run_seed": 1,
+          "graph_id": "0edd55f194f2f732",
+          "full_entity_count": 3,
+          "public_entity_count": 3,
+          "added": [
+            {
+              "id": "9bb5fcc91b8b9b08",
+              "predicate": "dz_12",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "7bf4ddc47bad0582",
+              "predicate": "dz_9",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "01a5be6c2250713e",
+              "predicate": "dz_8",
+              "arguments": [
+                "946f56b6120053d9"
+              ]
+            },
+            {
+              "id": "04e68866c08bc6e1",
+              "predicate": "dz_6",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            }
+          ],
+          "removed": [],
+          "added_predicates": [
+            "dz_12",
+            "dz_9",
+            "dz_8",
+            "dz_6"
+          ],
+          "original_held_out": {
+            "id": "e3ebe4a797dede42",
+            "predicate": "beside",
+            "arguments": [
+              "5da0462fd7b02364",
+              "98ab371fa6e82941"
+            ]
+          },
+          "held_out": {
+            "id": "e3ebe4a797dede42",
+            "predicate": "beside",
+            "arguments": [
+              "5da0462fd7b02364",
+              "98ab371fa6e82941"
+            ]
+          },
+          "rerouted": false
+        }
+      },
+      "held": {
+        "relation_id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ],
+        "attributes": {}
+      }
+    },
+    {
+      "seed": 1,
+      "trial": 5,
+      "world": 2,
+      "level": "plus8",
+      "full_relations": 30,
+      "full_entities": 3,
+      "public_entities": 3,
+      "info": {
+        "shop_type": "甲",
+        "shop_cue": "n",
+        "door_pred": "X",
+        "held_out_is_door": false,
+        "door_id": "e14b89702df3e83c",
+        "sig_id": "678d19e3d13afc1c",
+        "link_id": "4cf2633d6dd3a950",
+        "root_id": "01e1c9219a0b7bcb",
+        "deco": {
+          "kind": "shop_deco",
+          "trial": 5,
+          "level": "plus8",
+          "run_seed": 1,
+          "graph_id": "0edd55f194f2f732",
+          "full_entity_count": 3,
+          "public_entity_count": 3,
+          "added": [
+            {
+              "id": "9bb5fcc91b8b9b08",
+              "predicate": "dz_12",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "7bf4ddc47bad0582",
+              "predicate": "dz_9",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "01a5be6c2250713e",
+              "predicate": "dz_8",
+              "arguments": [
+                "946f56b6120053d9"
+              ]
+            },
+            {
+              "id": "04e68866c08bc6e1",
+              "predicate": "dz_6",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "8626219d3214d27b",
+              "predicate": "dz_1",
+              "arguments": [
+                "946f56b6120053d9"
+              ]
+            },
+            {
+              "id": "80597914169e7fb8",
+              "predicate": "dz_11",
+              "arguments": [
+                "5da0462fd7b02364"
+              ]
+            },
+            {
+              "id": "ab2f863c4846b6d8",
+              "predicate": "dz_2",
+              "arguments": [
+                "946f56b6120053d9"
+              ]
+            },
+            {
+              "id": "1fc4ae9ab5c36877",
+              "predicate": "dz_7",
+              "arguments": [
+                "946f56b6120053d9"
+              ]
+            }
+          ],
+          "removed": [],
+          "added_predicates": [
+            "dz_12",
+            "dz_9",
+            "dz_8",
+            "dz_6",
+            "dz_1",
+            "dz_11",
+            "dz_2",
+            "dz_7"
+          ],
+          "original_held_out": {
+            "id": "e3ebe4a797dede42",
+            "predicate": "beside",
+            "arguments": [
+              "5da0462fd7b02364",
+              "98ab371fa6e82941"
+            ]
+          },
+          "held_out": {
+            "id": "e3ebe4a797dede42",
+            "predicate": "beside",
+            "arguments": [
+              "5da0462fd7b02364",
+              "98ab371fa6e82941"
+            ]
+          },
+          "rerouted": false
+        }
+      },
+      "held": {
+        "relation_id": "e3ebe4a797dede42",
+        "predicate": "beside",
+        "arguments": [
+          "5da0462fd7b02364",
+          "98ab371fa6e82941"
+        ],
+        "attributes": {}
+      }
+    }
+  ],
+  "elapsed_sec": 11.902220082993153,
+  "peak_rss_bytes": 26361856
+}
