@@ -1,0 +1,63 @@
+{
+  "released_at": "2026-10-06T20:07:00+09:00",
+  "checked_at": "2026-10-06T20:06:31+09:00",
+  "registry_path": "$USER_HOME/jobs/registry.tsv",
+  "registry_sha256": "23bcde9d8490ab1994e8a5fb701186451a3495185e07469817a497841a77ec53",
+  "own_registered": [],
+  "own_python_processes": [],
+  "own_completed_records": {
+    "status.json": {
+      "epoch_seconds": 1791268140.071985,
+      "state": "pilot_complete",
+      "trial_count": 5000,
+      "seed": 1
+    },
+    "pilot_A_global_s01/guardian_complete.json": {
+      "completed": true,
+      "paused_seconds": 899.5378770828247,
+      "exit_code": 0,
+      "finalization_repaired": true
+    },
+    "pilot_analysis/reader_status.json": {
+      "exit_code": 0
+    },
+    "final_measurement/reader_status.json": {
+      "exit_code": 0
+    }
+  },
+  "withdrawn_commands": [],
+  "restored_commands": [],
+  "restore_at": null,
+  "jobs_run_submissions": 0,
+  "signals_sent": 0,
+  "hold_before": {
+    "checked_at": "2026-10-06T18:49:32+09:00",
+    "new_heavy_submissions_held": true,
+    "withdrawn": [],
+    "restored": [],
+    "both_started_confirmed": false,
+    "shop_registered_start": "2026-10-06T18:45:04+09:00",
+    "verb_registered_start": null,
+    "next_submission_requires_priority25_start_check": true
+  },
+  "hold_after": {
+    "checked_at": "2026-10-06T18:49:32+09:00",
+    "new_heavy_submissions_held": false,
+    "withdrawn": [],
+    "restored": [],
+    "both_started_confirmed": false,
+    "shop_registered_start": "2026-10-06T18:45:04+09:00",
+    "verb_registered_start": null,
+    "next_submission_requires_priority25_start_check": false,
+    "released_at": "2026-10-06T20:07:00+09:00",
+    "release_basis": "利用者が40番（25′の先通し）を解除。二本の開始を待つ条件を撤回。",
+    "restore_at": null
+  },
+  "shared_model_process_cap": 8,
+  "model_flags_values_order_gates_changed": false,
+  "seeds_21_to_40_read_or_run": false,
+  "confirmation_commands": [
+    "python3 $USER_HOME/jobs/jobs.py status --disk-path $WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06",
+    "ps -axo pid,ppid,stat,lstart,command"
+  ]
+}
