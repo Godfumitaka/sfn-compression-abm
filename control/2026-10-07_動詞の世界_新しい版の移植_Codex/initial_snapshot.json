@@ -1,0 +1,169 @@
+{
+  "checked_at": "2026-10-06T21:22:43+09:00",
+  "report_commit": "a9e4d73a8aa2f79907da2a7c096d01515def6d1e",
+  "source_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+  "model_process_count": 3,
+  "model_processes": [
+    {
+      "pid": 4005,
+      "ppid": 4001,
+      "state": "R",
+      "rss_bytes": 104529920,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json $WORKSPACE/codex_attn_2026-10-03/sme_attention_2026-10-07/experiments/runs/w2_s03_position_k1/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --shop-world 2 --workers 1 --seeds 3 --trial-count 1740 --no-compare --horizon 1740 --score-arg-order --sme2017 --shop-scatter --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --sme-evict-tombstone --attn-sme position --attn-position k1 --attn-eta 0.5"
+    },
+    {
+      "pid": 4299,
+      "ppid": 4293,
+      "state": "R",
+      "rss_bytes": 105234432,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json $WORKSPACE/codex_attn_2026-10-03/sme_attention_2026-10-07/experiments/runs/w1_s04_binary_k1/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --shop-world 1 --workers 1 --seeds 4 --trial-count 1740 --no-compare --horizon 1740 --score-arg-order --sme2017 --shop-scatter --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --sme-evict-tombstone --attn-sme binary --attn-position k1 --attn-eta 0.5"
+    },
+    {
+      "pid": 80227,
+      "ppid": 80222,
+      "state": "R",
+      "rss_bytes": 396427264,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json $WORKSPACE/codex_attn_2026-10-03/sme_attention_2026-10-07/experiments/runs/w1_s04_baseline/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --shop-world 1 --workers 1 --seeds 4 --trial-count 1740 --no-compare --horizon 1740 --score-arg-order --sme2017 --shop-scatter --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --sme-evict-tombstone --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-fixed-zero"
+    }
+  ],
+  "other_active_spawn_workers": [],
+  "paused_or_zombie_spawn_workers": [
+    {
+      "pid": 20821,
+      "ppid": 20817,
+      "state": "T",
+      "rss_bytes": 11698176,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/command.json $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_output $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 20929,
+      "ppid": 20925,
+      "state": "T",
+      "rss_bytes": 20119552,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/command.json $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_output $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 27538,
+      "ppid": 27534,
+      "state": "T",
+      "rss_bytes": 11550720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/command.json $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_output $WORKSPACE/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 36825,
+      "ppid": 36821,
+      "state": "T",
+      "rss_bytes": 214106112,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/observe_02.py $WORKSPACE/codex_sme_time_evict_2026-10-06/verb_profile1000_01/native_command.json"
+    },
+    {
+      "pid": 89571,
+      "ppid": 89565,
+      "state": "T",
+      "rss_bytes": 215449600,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+      "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_sme_time_evict_2026-10-06/observe_02.py $WORKSPACE/codex_sme_time_evict_2026-10-06/shop_profile1740_02/native_command.json"
+    }
+  ],
+  "own_model_process_count": 0,
+  "eligible_mac_queue_rows": [],
+  "counting_rule": "実際のv3_run/計測観察過程のspawn workerを一個体一回。親の監督とSTAT T/Zは稼働数へ加えない。受付のメモリ予約は変えない。",
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "target_thread_id": "01a10594-2608-70c3-83ae-8033440c080d",
+    "created_at_jst": "2026-10-06T21:18:51.465+09:00",
+    "interval_minutes": 30,
+    "expires_at_jst": "2026-10-09T09:00:00+09:00",
+    "expiry_saved_verified": true
+  },
+  "inputs": [
+    {
+      "path": "control/受け箱/動詞の世界の係.md",
+      "bytes": 65,
+      "sha256": "671b250c6a7f026bb790e14420370666810391d5ea45914c2dcc4364fd6b51b7"
+    },
+    {
+      "path": "control/受け箱/README.md",
+      "bytes": 2027,
+      "sha256": "653324dec2c62a7156763dd7c5c7f5b73ccd017618e51a4e8f78600494e60089"
+    },
+    {
+      "path": "control/走行の列_2026-10-08.md",
+      "bytes": 3185,
+      "sha256": "4b662e6ff1a0773d3ec5089723f22bfd431cc2b0f7801a16d012e57e94b6d675"
+    },
+    {
+      "path": "control/2026-10-06_渡す委任書_Claude.md",
+      "bytes": 112624,
+      "sha256": "6848417595caf507aeb47e9a07a46fe2da0a769260e6be8d5dec962ffea5d947"
+    },
+    {
+      "path": "control/2026-10-06_GPTの返事_照合と分布の統一.md",
+      "bytes": 37999,
+      "sha256": "58d1b13a03bc8c4d24937fa39f5df8fbde374e15008e7811c3f4eae940fe12fe"
+    },
+    {
+      "path": "control/2026-10-06_GPTの返事_四つの判断.md",
+      "bytes": 35758,
+      "sha256": "bf259c46dc2f01fc2c44f79976ccdefab2965211a448f05674ac51abbcad9ab9"
+    },
+    {
+      "path": "control/2026-10-07_走行の計画_案_Claude.md",
+      "bytes": 4301,
+      "sha256": "ded0d75e2ce0edf719cfd2a5d907752f091984f48fb3ef140813d8cc48a7039a"
+    },
+    {
+      "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+      "bytes": 2203,
+      "sha256": "c45595f331cba6119ee93697ecccd0040dc78852a2a3b6baa6673d10c7d62900"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 15693,
+      "sha256": "65ef703bddb1b523b9a6db184b5848710a5c93d1f18176f5cfc53aeab99190ad"
+    },
+    {
+      "path": "control/2026-10-06_動詞の世界_SME版_Codex/port.patch",
+      "bytes": 112372,
+      "sha256": "265d2c27d42100d89df1f03353a30d69ef0a3d782215208a9da368174bdc809e"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/v3_run.py",
+      "bytes": 77105,
+      "sha256": "b1d0d7ead7b4ca6f55d5c4b5d8d0cb3998b42e4a7c181c013848da4bcab641ba"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbworld.py",
+      "bytes": 12296,
+      "sha256": "2b8e3093ee98d646d97739f51d65590ae9ff3886a4e3aaf00c3a15bfe23949fe"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/probeworld.py",
+      "bytes": 14742,
+      "sha256": "380285408614d518c3256eaa19e5705dec82ab5a872e9ca1bd4f1efc233f38bb"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/analyze.py",
+      "bytes": 17262,
+      "sha256": "d6916cb33f01fe2a32d29bbe3813e79324f0e235503dbba0c7c8ad4c80d7680f"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/replay_state.py",
+      "bytes": 7060,
+      "sha256": "635a96df25b07bfa4c38a320ec952b116498a8ba64a485138a79d1807d94f914"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbtiming.py",
+      "bytes": 1459,
+      "sha256": "aef1541da38f74c567e67c017e326aaa6e0f3be21b8d4e9ffb678a456474b5e1"
+    }
+  ]
+}
