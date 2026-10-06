@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "stopped",
   "planned": 80,
   "runs_completed": 0,
   "analyses_completed": 0,
@@ -14,5 +14,7 @@
     "phase": "run"
   },
   "controller_pid": 64386,
-  "updated_at": "2026-10-06T18:19:42.098345+09:00"
+  "updated_at": "2026-10-06T18:19:42.098345+09:00",
+  "stopped_reason": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/source/control/shop_deco_sme_2026-10-06/run_n3.py\", line 112, in main\n    registered(command(run, item[\"world\"], item[\"seed\"], item[\"retention\"], item[\"level\"]),\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/source/control/shop_deco_sme_2026-10-06/common.py\", line 84, in registered\n    assert peak <= mem * 1e9, f\"受付の見込みを超えた: {out}\"\n           ^^^^^^^^^^^^^^^^^\nAssertionError: 受付の見込みを超えた: /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/preview_n3/runs/plus8_N3_D_w2_s001\n",
+  "stopped_at": "2026-10-06T20:06:28.073951+09:00"
 }
