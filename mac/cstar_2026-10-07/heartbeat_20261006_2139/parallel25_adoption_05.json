@@ -1,0 +1,216 @@
+{
+  "at": "2026-10-06T21:42:31.230588+09:00",
+  "state": "parallel_measurements_or_checks",
+  "case": "お店と動詞の並行計測",
+  "claim_pid": null,
+  "cases": {
+    "shop_profile1740_02": {
+      "stage": "profile",
+      "claim_pid": 69132,
+      "completed_trials": 1148,
+      "measured_trials": 1740,
+      "cpu_paused": true,
+      "reported": false
+    },
+    "verb_profile1000_01": {
+      "stage": "profile",
+      "claim_pid": 36341,
+      "completed_trials": 408,
+      "measured_trials": 1000,
+      "cpu_paused": true,
+      "reported": false
+    }
+  },
+  "cpu": {
+    "at": "2026-10-06T21:42:15.079466+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "4005": {
+        "ppid": 4001,
+        "pgid": 79860,
+        "stat": "R",
+        "cpu": 97.9,
+        "rss": 406257664,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "4299": {
+        "ppid": 4293,
+        "pgid": 4287,
+        "stat": "R",
+        "cpu": 98.9,
+        "rss": 349192192,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "5190": {
+        "ppid": 5183,
+        "pgid": 5177,
+        "stat": "R",
+        "cpu": 98.9,
+        "rss": 436060160,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "20232": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "R",
+        "cpu": 44.1,
+        "rss": 73777152,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20239": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 22.0,
+        "rss": 68878336,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20404": {
+        "ppid": 20400,
+        "pgid": 57138,
+        "stat": "R",
+        "cpu": 98.7,
+        "rss": 162299904,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      }
+    },
+    "external_count": 6,
+    "own_reserved_slots": 2,
+    "total_reserved_slots": 8,
+    "own_compute_count": 0,
+    "total_compute_count": 6
+  },
+  "resources": {
+    "at": "2026-10-06T21:42:31.231392+09:00",
+    "free_bytes": 263537401856,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 188.0
+  },
+  "logp_new_runs_and_replay_held": true,
+  "replaced_controller_pid": 36340,
+  "own_paused_model_pgids": [
+    89565,
+    36821
+  ],
+  "cpu_before_strict": {
+    "at": "2026-10-06T21:42:31.068573+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "4005": {
+        "ppid": 4001,
+        "pgid": 79860,
+        "stat": "R",
+        "cpu": 97.6,
+        "rss": 436011008,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "4299": {
+        "ppid": 4293,
+        "pgid": 4287,
+        "stat": "R",
+        "cpu": 99.0,
+        "rss": 352288768,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "5190": {
+        "ppid": 5183,
+        "pgid": 5177,
+        "stat": "R",
+        "cpu": 97.9,
+        "rss": 465682432,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "20232": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 16.3,
+        "rss": 74186752,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20233": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 20.1,
+        "rss": 62849024,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20234": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "R",
+        "cpu": 0.0,
+        "rss": 82706432,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20235": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 0.0,
+        "rss": 74186752,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20236": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 0.1,
+        "rss": 65929216,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20237": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 0.6,
+        "rss": 68517888,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20238": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 4.0,
+        "rss": 60669952,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20239": {
+        "ppid": 20224,
+        "pgid": 20211,
+        "stat": "S",
+        "cpu": 56.1,
+        "rss": 71335936,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/sme_evict_observe_20261007.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/measure8_evict200/spec.json"
+      },
+      "20404": {
+        "ppid": 20400,
+        "pgid": 57138,
+        "stat": "R",
+        "cpu": 97.7,
+        "rss": 188776448,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      },
+      "24022": {
+        "ppid": 52419,
+        "pgid": 24022,
+        "stat": "Ss",
+        "cpu": 17.2,
+        "rss": 21905408,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -"
+      }
+    },
+    "external_count": 13,
+    "own_reserved_slots": 2,
+    "total_reserved_slots": 15,
+    "own_compute_count": 2,
+    "total_compute_count": 15,
+    "count_includes_small_waiting_model_workers": true
+  },
+  "models_not_restarted": true,
+  "model_and_native_command_unchanged": true
+}
