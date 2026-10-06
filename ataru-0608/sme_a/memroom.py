@@ -1,4 +1,4 @@
-"""新しい本（intern 374e352 は最大 5.5GiB、858f708 は 7.7GiB。どちらもマックの全走行の実測。NEWPEAK_GIB で渡す）を始めても、メモリの空きが 4GiB 以上残るかを見積もる。"ok" か "wait" を出す。--show で中身を出す。
+"""新しい本（控えを捨てる版 10cd8bd は最大 1.0GiB＝マックの実測 351MB に余裕、intern 374e352 は最大 5.5GiB、858f708 は 7.7GiB。どちらもマックの全走行の実測。NEWPEAK_GIB で渡す）を始めても、メモリの空きが 4GiB 以上残るかを見積もる。"ok" か "wait" を出す。--show で中身を出す。
 走っている本：引数が tools/v3_run.py で出力先が ~/smeprod/sme/ の過程。その子（multiprocessing の子）の使用も足す。
 版は、走っている本の作業場所（/proc/<pid>/cwd）で分ける：smetie＝6e93e0b（最大 2.5GiB）、それ以外（smefast・sme）は最大 4.3GiB。"""
 import os
@@ -36,11 +36,11 @@ for pid, (args, ppid, rss) in procs.items():
             cwd = os.readlink(f"/proc/{pid}/cwd")
         except Exception:
             cwd = ""
-        peak = 5.5 * GIB if cwd.endswith("smeintern") else (7.7 * GIB if cwd.endswith("smetie") else (2.5 * GIB if cwd.endswith("smerng") else 4.3 * GIB))
+        peak = 1.0 * GIB if cwd.endswith("smeevict") else 5.5 * GIB if cwd.endswith("smeintern") else (7.7 * GIB if cwd.endswith("smetie") else (2.5 * GIB if cwd.endswith("smerng") else 4.3 * GIB))
         need += max(0, peak - tot)
         runs.append((pid, round(tot / GIB, 2), "6e93e0b" if cwd.endswith("smetie") else "4.3GiB の版"))
 avail = meminfo()["MemAvailable"]
-NEW = float(os.environ.get("NEWPEAK_GIB", "7.7")) * GIB   # 始める本の版の最大（intern 5.5、858f708 7.7）
+NEW = float(os.environ.get("NEWPEAK_GIB", "7.7")) * GIB   # 始める本の版の最大（控えを捨てる版 10cd8bd 1.0、intern 5.5、858f708 7.7）
 left = avail - NEW - need
 if "--show" in sys.argv:
     print(f"空き {avail / GIB:.1f}GiB、走っている本のこれからの増え {need / GIB:.1f}GiB、始めたあとに残る見込み {left / GIB:.1f}GiB")
