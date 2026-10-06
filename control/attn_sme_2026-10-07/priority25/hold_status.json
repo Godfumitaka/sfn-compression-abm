@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-06T20:06:45.526232+09:00",
+  "phase": "released_by_human",
+  "guard_pid": 96982,
+  "held_at": "2026-10-06T18:53:51.917049+09:00",
+  "controllers": {
+    "97482": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python run_experiments.py",
+    "4984": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python run_analysis.py",
+    "8843": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python finish_work.py"
+  },
+  "withdrawn_waiters": {},
+  "seen_25": {
+    "shop": {
+      "registry": {
+        "pid": 69132,
+        "owner": "SME25 shop_profile1740_02",
+        "mem_gb": 2.5,
+        "start": "2026-10-06T18:45:04",
+        "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_time_evict_2026-10-06/run_case_02.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_"
+      },
+      "model_processes": [
+        {
+          "pid": 89571,
+          "ppid": 89565,
+          "stat": "R",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      ],
+      "observed_at": "2026-10-06T18:49:22.024119+09:00"
+    }
+  },
+  "global_running_models": 1,
+  "own_cpu_paused": [],
+  "new_jobs_submitted": false,
+  "resume_reason": "human_released_priority_condition",
+  "human_release_record": "human_release.json",
+  "guard_finished": true
+}
