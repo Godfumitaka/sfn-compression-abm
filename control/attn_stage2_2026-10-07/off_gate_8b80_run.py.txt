@@ -1,0 +1,130 @@
+"""8b80dd60のoff検査。基準を再走行せず、既存の原記録と全バイト比較。
+
+受付の開始条件を満たすまで新しい模型を投入しない。第一段の本番や
+他の係へシグナルを送らない。既存の原記録と成果は変更しない。
+"""
+from pathlib import Path
+from datetime import datetime
+import gzip,hashlib,importlib.util,itertools,json,os,shutil,subprocess,time
+
+ROOT=Path(__file__).resolve().parent
+BASE=ROOT.parents[1]
+SOURCE=BASE/'allin_source'
+REFERENCE=ROOT.parent/'off_gate/reference'
+CODE='8b80dd60'
+PY='/opt/homebrew/bin/python3.12'
+JOBS='/Users/tatsu-admin/jobs/jobs.py'
+OBS='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_amemory_2026-10-05/observe_memory_02.py'
+spec=importlib.util.spec_from_file_location('guard_readonly',BASE/'sme_attention_2026-10-07/priority25_reserve6_2026-10-06/hold_dispatchers.py')
+G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
+
+
+def stamp():return datetime.now().astimezone().isoformat()
+def write(name,data):
+    p=ROOT/name;q=Path(str(p)+'.tmp')
+    q.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n');q.replace(p)
+
+
+def machine():
+    ps=G.processes();ms=G.models(ps);reg=G.J.read_reg()
+    warn,_,thermal=G.J.therm();ok,note=G.J.swap_ok()
+    x={'at':stamp(),'disk_free_bytes':shutil.disk_usage(ROOT).free,'memory':G.J.mem_free(),
+       'swap_used_mb':G.J.swap_used_mb(),'swap_ok':ok,'swap_note':note,
+       'thermal_warnings':warn,'thermal':thermal,
+       'global_model_children':len(ms),'unpaused_model_children':sum('T' not in v[1] for v in ms.values()),
+       'unregistered_heavy':[{'pid':pid,'rss_mb':rss} for pid,rss,_ in G.J.unregistered_heavy(reg,G.J.procs())],
+       'registered':[{'pid':r['pid'],'owner':r['owner'],'mem_gb':r['mem_gb']} for r in reg]}
+    with (ROOT/'machine.jsonl').open('a') as f:f.write(json.dumps(x,ensure_ascii=False)+'\n')
+    return x
+
+
+def compare(folder):
+    def files(p):
+        return {q.relative_to(p):q for pattern in ('ledgers/**/*.jsonl.gz','side/**/*')
+                for q in p.glob(pattern) if q.is_file()}
+    left,right=files(REFERENCE/'output'),files(folder/'output')
+    if left.keys()!=right.keys():
+        raise RuntimeError(('offファイル集合の不一致',list(map(str,left.keys()^right.keys()))))
+    records=[]
+    for key in sorted(left):
+        if 'ledgers' in key.parts:
+            with gzip.open(left[key],'rb') as f:a=list(f)[1:]
+            with gzip.open(right[key],'rb') as f:b=list(f)[1:]
+            differences=[i for i,(x,y) in enumerate(itertools.zip_longest(a,b)) if x!=y]
+            aa,bb=b''.join(a),b''.join(b)
+            if len(a)!=1740 or len(b)!=1740:raise RuntimeError('offの試行行数が1740でない')
+        else:
+            aa,bb=left[key].read_bytes(),right[key].read_bytes();differences=None
+        row={'file':str(key),'equal':aa==bb,'left_sha256':hashlib.sha256(aa).hexdigest(),
+             'right_sha256':hashlib.sha256(bb).hexdigest(),'different_rows':differences}
+        records.append(row)
+        if aa!=bb:write('failure.json',row);raise RuntimeError(('off全バイト一致の不合格',row))
+    for name in ('tie_state.jsonl','saved_matcher.jsonl.gz'):
+        aa,bb=(REFERENCE/name).read_bytes(),(folder/name).read_bytes()
+        row={'file':name,'equal':aa==bb,'left_sha256':hashlib.sha256(aa).hexdigest(),
+             'right_sha256':hashlib.sha256(bb).hexdigest()}
+        records.append(row)
+        if aa!=bb:write('failure.json',row);raise RuntimeError(('off保存状態の不一致',name))
+    return records
+
+
+def main():
+    if (ROOT/'supervisor.lock').exists() or (ROOT/'all_off_gate.json').exists():
+        raise RuntimeError('既存の監督・成果を重複しない')
+    (ROOT/'supervisor.lock').write_text(str(os.getpid()))
+    proc=None
+    try:
+        while True:
+            m=machine()
+            if datetime.now().astimezone().isoformat()[:19]>='2026-10-09T09:00:00':
+                write('status.json',{'phase':'deadline_before_start','at':stamp()});return
+            free=m['disk_free_bytes']>=20*2**30 and m['swap_ok'] and not m['thermal_warnings'] and not m['unregistered_heavy']
+            # 25′終了未確認の保守的な6本を維持する。停止中も別に記録。
+            if free and m['global_model_children']<6:break
+            write('status.json',{'phase':'waiting_receipt_and_cpu_before_start','at':stamp(),
+                               'pid':os.getpid(),'machine':m,'model_started':False})
+            time.sleep(30)
+        code=subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()
+        if not code.startswith(CODE):raise RuntimeError(('off検査のコードが変わった',code))
+        if subprocess.check_output(['git','diff','--name-only'],cwd=SOURCE,text=True).strip():
+            raise RuntimeError('off検査のソースに未記録の変更がある')
+        folder=ROOT/'stage2_off';folder.mkdir(exist_ok=False)
+        cmd=json.loads((REFERENCE/'native_command.json').read_text());cmd[3]=str(folder/'output')
+        cmd+=['--stage2','off','--stage2-loss','arm']
+        write('command.json',{'source':str(SOURCE),'code':code,'native_command':cmd})
+        (folder/'native_command.json').write_text(json.dumps(cmd,ensure_ascii=False,indent=2)+'\n')
+        env=dict(os.environ,PYTHONHASHSEED='0',SME_EXACT_SOURCE=str(SOURCE),SME_MEMORY_DIAG='0')
+        for key in ('LANG','LC_ALL','LC_CTYPE'):env.pop(key,None)
+        run=[PY,JOBS,'run','--wait','--owner','Codex2 第二段8b80 off関門','--mem','2','--disk-path',str(folder),
+             '--',PY,str(ROOT/'native_entry.py'),str(folder/'native_command.json')]
+        (folder/'receipt_command.json').write_text(json.dumps(run,ensure_ascii=False,indent=2)+'\n')
+        with (folder/'run.log').open('x') as log:
+            proc=subprocess.Popen(run,cwd=SOURCE,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+            write('status.json',{'phase':'receipt_wait_or_running_off_gate','at':stamp(),
+                    'pid':os.getpid(),'receipt_pid':proc.pid,'code':code,'model_kind':'off_gate_not_production'})
+            warning=None
+            while proc.poll() is None:
+                m=machine()
+                if m['disk_free_bytes']<18.5*2**30 or not m['swap_ok'] or m['thermal_warnings']:
+                    # 本番停止禁止を守り、どの模型にもシグナルを送らない。
+                    # 新規投入を止め、自然終了した後も関門の合格を宣言しない。
+                    warning=warning or m
+                    write('warning.json',warning)
+                    write('status.json',{'phase':'resource_warning_no_new_submission','at':stamp(),
+                           'receipt_pid':proc.pid,'models_not_signaled':True,'machine':m})
+                time.sleep(30)
+        if proc.returncode:raise RuntimeError(('off検査の終了コード',proc.returncode))
+        if warning is not None:raise RuntimeError('資源条件の確認不足。offの合格を宣言せず報告する')
+        rows=compare(folder)
+        write('all_off_gate.json',{'passed':True,'at':stamp(),'code':code,'trials':1740,'records':rows,
+            'reference_reexecuted':False,'reference_code':'a66e4570',
+            'excluded':['台帳の見出し一行。本体の比較条件は変えない。'],
+            'stage2_on_started':False,'loss_mode_when_off':'arm'})
+        write('status.json',{'phase':'off_gate_passed','at':stamp(),'code':code})
+    except BaseException as exc:
+        write('status.json',{'phase':'stopped_supervision','at':stamp(),'error':repr(exc),
+              'existing_models_not_signaled':True,'receipt_pid':None if proc is None else proc.pid})
+        raise
+
+
+if __name__=='__main__':main()

@@ -1,0 +1,211 @@
+"""指示3の残りを、元の版・旗・順番のまま新しい出力先で進める。
+
+第二段のoff関門を先に通す。既存の模型へシグナルを送らない。
+記録不足が再発したら新規投入を停止し、同じ監督を再起動しない。
+"""
+from pathlib import Path
+from datetime import datetime
+import importlib.util
+import json
+import os
+import shutil
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parent
+FIRST = ROOT.parent
+BASE = FIRST.parent
+SOURCE = BASE / 'sme_source'
+PY = '/opt/homebrew/bin/python3.12'
+JOBS = '/Users/tatsu-admin/jobs/jobs.py'
+CODE = '248f16035d5d13a626a104d71d22c76632e5c4ee'
+OFF = BASE / 'stage2_attention_2026-10-07/off_gate_8b80dd60'
+spec = importlib.util.spec_from_file_location(
+    'receipt_readonly', FIRST / 'priority25_reserve6_2026-10-06/hold_dispatchers.py')
+G = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(G)
+
+
+def stamp():
+    return datetime.now().astimezone().isoformat()
+
+
+def write(name, value):
+    p = ROOT / name
+    q = Path(str(p) + '.tmp')
+    q.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    q.replace(p)
+
+
+def expired():
+    return datetime.now().astimezone().isoformat()[:19] >= '2026-10-09T09:00:00'
+
+
+def machine():
+    ps = G.processes()
+    models = G.models(ps)
+    reg = G.J.read_reg()
+    warnings, _, thermal = G.J.therm()
+    ok, note = G.J.swap_ok()
+    x = {'at': stamp(), 'disk_free_bytes': shutil.disk_usage(ROOT).free,
+         'memory': G.J.mem_free(), 'swap_used_mb': G.J.swap_used_mb(),
+         'swap_ok': ok, 'swap_note': note, 'thermal_warnings': warnings,
+         'thermal': thermal, 'global_model_children': len(models),
+         'unpaused_model_children': sum('T' not in v[1] for v in models.values()),
+         'unregistered_heavy': [{'pid': pid, 'rss_mb': rss}
+                               for pid, rss, _ in G.J.unregistered_heavy(reg, G.J.procs())],
+         'registered': [{'pid': r['pid'], 'owner': r['owner'], 'mem_gb': r['mem_gb']}
+                        for r in reg]}
+    with (ROOT / 'machine.jsonl').open('a') as f:
+        f.write(json.dumps(x, ensure_ascii=False) + '\n')
+    return x
+
+
+def start_allowed(m, model):
+    return (m['disk_free_bytes'] >= 20 * 2**30 and m['swap_ok']
+            and not m['thermal_warnings'] and not m['unregistered_heavy']
+            and (not model or m['global_model_children'] < 6))
+
+
+def runtime_problem(m):
+    return (m['disk_free_bytes'] < 18.5 * 2**30 or not m['swap_ok']
+            or bool(m['thermal_warnings']))
+
+
+def manifest(case):
+    folder = Path(case['folder'])
+    rows = [json.loads(s) for s in (folder / 'output/manifest.jsonl').read_text().splitlines()]
+    assert len(rows) == 1
+    row = rows[0]
+    assert row['seed'] == case['seed'] and 1 <= case['seed'] <= 10
+    assert row['trial_count'] == 1740 and row['code_commit'] == CODE
+    assert row['smereplay']['predictions'] == row['smereplay']['updates'] == 1740
+    a = row['attn_sme']
+    assert a['trials'] == 1740 and a['fixed_zero'] == case['baseline']
+    assert (a['mode'], a['position'], a['eta']) == (case['mode'], case['position'], case['eta'])
+    return {'case': case, 'world_hash': row['world_hash'], 'trials': 1740,
+            'source': row['code_commit']}
+
+
+def audited(case):
+    p = Path(case['folder']) / 'public_audit.json'
+    if not p.exists():
+        return False
+    x = json.loads(p.read_text())
+    assert x['passed'] and x['trials'] == 1740
+    return True
+
+
+def source_unchanged():
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip() == CODE
+    assert not subprocess.check_output(['git', 'diff', '--name-only'], cwd=SOURCE, text=True).strip()
+
+
+def wait_start(case, kind):
+    while True:
+        if expired():
+            raise RuntimeError('期限。新しい処理を開始しない')
+        if (ROOT / 'warning.json').exists():
+            raise RuntimeError('同じ記録不足又は資源条件の停止後は再投入しない')
+        if (OFF / 'warning.json').exists() or (OFF / 'failure.json').exists():
+            raise RuntimeError('優先した第二段off関門の警告又は不一致を先に報告する')
+        if (OFF / 'status.json').exists():
+            off = json.loads((OFF / 'status.json').read_text())
+            if off['phase'] == 'stopped_supervision':
+                raise RuntimeError('優先した第二段off関門の監督が停止')
+        m = machine()
+        # 指示3の優先順を守る。旧版の合格は改訂版へ流用しない。
+        if (OFF / 'all_off_gate.json').exists():
+            off = json.loads((OFF / 'all_off_gate.json').read_text())
+            assert off['passed'] and off['code'].startswith('8b80dd60')
+            if start_allowed(m, kind == 'native'):
+                source_unchanged()
+                return
+        write('status.json', {'phase': 'waiting_second_stage_off_or_receipt', 'at': stamp(),
+                              'pid': os.getpid(), 'next': case['name'], 'kind': kind,
+                              'machine': m, 'new_first_stage_model_started': False})
+        time.sleep(30)
+
+
+def run_one(case, kind):
+    wait_start(case, kind)
+    folder = Path(case['folder'])
+    if kind == 'native':
+        folder.mkdir(parents=True, exist_ok=False)
+        cmd = case['command']
+        assert cmd[0] == PY and cmd[3] == str(folder / 'output')
+        assert int(cmd[cmd.index('--seeds') + 1]) == case['seed']
+        (folder / 'native_command.json').write_text(json.dumps(cmd, ensure_ascii=False, indent=2) + '\n')
+    else:
+        assert not (folder / 'public_audit.json').exists()
+        cmd = [PY, str(FIRST / 'audit_experiment.py'), str(folder)]
+    entry = [PY, str(ROOT / 'receipt_entry.py'), kind, case['name']]
+    run = [PY, JOBS, 'run', '--wait', '--owner', 'Codex2 SME注意 再開 ' + kind + ' ' + case['name'],
+           '--mem', '2' if kind == 'native' else '.5', '--disk-path', str(folder), '--', *entry]
+    (folder / (kind + '_receipt_command.json')).write_text(json.dumps(run, ensure_ascii=False, indent=2) + '\n')
+    env = dict(os.environ, PYTHONHASHSEED='0')
+    for key in ('LANG', 'LC_ALL', 'LC_CTYPE'):
+        env.pop(key, None)
+    warning = None
+    with (folder / ('resume_' + kind + '.log')).open('x') as log:
+        p = subprocess.Popen(run, cwd=SOURCE, env=env, stdout=log,
+                             stderr=subprocess.STDOUT, start_new_session=True)
+        while p.poll() is None:
+            m = machine()
+            if runtime_problem(m):
+                warning = warning or m
+                write('warning.json', warning)
+            write('status.json', {'phase': 'resource_stop_no_new_submission' if warning else 'receipt_wait_or_running',
+                                  'at': stamp(), 'pid': os.getpid(), 'receipt_pid': p.pid,
+                                  'case': case['name'], 'kind': kind,
+                                  'existing_models_not_signaled': True, 'machine': m})
+            # 本番停止禁止を守る。新規投入を止め、稼働中は自然終了を待つ。
+            time.sleep(30)
+        if warning:
+            raise RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')
+        if p.returncode:
+            raise RuntimeError((case['name'], kind, p.returncode))
+
+
+def main():
+    if (ROOT / 'supervisor.lock').exists() or (ROOT / 'all_simulations.json').exists():
+        raise RuntimeError('既存監督・出力を重複しない')
+    (ROOT / 'supervisor.lock').write_text(str(os.getpid()))
+    cases = json.loads((ROOT / 'cases.json').read_text())
+    assert len(cases) == 140 and json.loads((FIRST / 'all_gates.json').read_text())['passed']
+    done = {c['name']: manifest(c) for c in cases if c['reuse_completed']}
+    public = {c['name'] for c in cases if c['reuse_completed'] and audited(c)}
+    assert len(done) == len(public) == 44
+    try:
+        for case in cases:
+            if case['name'] not in done:
+                run_one(case, 'native')
+                check = manifest(case)
+                (Path(case['folder']) / 'native_check.json').write_text(json.dumps(check, ensure_ascii=False, indent=2) + '\n')
+                done[case['name']] = check
+            if case['name'] not in public:
+                run_one(case, 'audit')
+                assert audited(case)
+                public.add(case['name'])
+            for item in done.values():
+                c = item['case']
+                baseline = f"w{c['world']}_s{c['seed']:02d}_baseline"
+                if baseline in done:
+                    assert item['world_hash'] == done[baseline]['world_hash'], c['name']
+            write('progress.json', {'at': stamp(), 'completed': list(done), 'audited': sorted(public),
+                                    'remaining': 140 - len(done)})
+        write('all_simulations.json', {'passed': True, 'at': stamp(), 'cases': list(done.values()),
+                                       'total_cases': 140, 'attention_runs': 120, 'baseline_runs': 20,
+                                       'reused_completed': 44, 'trials_per_case': 1740, 'audited': sorted(public)})
+        write('status.json', {'phase': 'complete_models_and_audits_ready_for_analysis',
+                              'at': stamp(), 'completed': 140, 'audited': 140})
+    except BaseException as exc:
+        write('failure.json', {'at': stamp(), 'error': repr(exc), 'completed': list(done),
+                               'audited': sorted(public), 'existing_models_not_signaled': True})
+        write('status.json', {'phase': 'stopped_no_automatic_retry', 'at': stamp(), 'error': repr(exc),
+                              'existing_models_not_signaled': True})
+        raise
+
+
+if __name__ == '__main__':
+    main()

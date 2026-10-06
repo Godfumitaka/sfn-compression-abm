@@ -1,0 +1,18 @@
+"""受付が通った後にも、新しい模型のCPU枠と資源を確認する。"""
+from datetime import datetime
+import os,sys,time
+from run_gate import ROOT,SOURCE,CODE,PY,OBS,machine,write
+import subprocess
+
+while True:
+    m=machine()
+    if datetime.now().astimezone().isoformat()[:19]>='2026-10-09T09:00:00':
+        raise SystemExit('期限後なのでoff模型を開始しない')
+    if m['global_model_children']<6 and m['disk_free_bytes']>=20*2**30 and m['swap_ok'] and not m['thermal_warnings'] and not m['unregistered_heavy']:
+        break
+    write('native_entry_waiting.json',{'at':m['at'],'machine':m,'model_started':False})
+    time.sleep(30)
+code=subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()
+if not code.startswith(CODE):raise SystemExit('関門のコードが変わった')
+write('native_entry_started.json',{'at':m['at'],'code':code,'machine':m})
+os.execv(PY,[PY,OBS,sys.argv[1]])

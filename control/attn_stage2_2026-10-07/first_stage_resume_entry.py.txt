@@ -1,0 +1,34 @@
+"""受付を得た後も、実開始直前に同じ条件を確認する。模型は停止しない。"""
+from pathlib import Path
+import json
+import os
+import sys
+import time
+import run_remaining as R
+
+
+def main():
+    kind, name = sys.argv[1:]
+    cases = json.loads((R.ROOT / 'cases.json').read_text())
+    case = next(c for c in cases if c['name'] == name)
+    assert not case['reuse_completed'] and 1 <= case['seed'] <= 10
+    while True:
+        if R.expired() or (R.ROOT / 'warning.json').exists() or (R.ROOT / 'failure.json').exists():
+            raise RuntimeError('新規投入の停止。模型をまだ始めていない')
+        m = R.machine()
+        if R.start_allowed(m, kind == 'native'):
+            R.source_unchanged()
+            break
+        time.sleep(30)
+    if kind == 'native':
+        cmd = case['command']
+    else:
+        cmd = [R.PY, str(R.FIRST / 'audit_experiment.py'), case['folder']]
+    (Path(case['folder']) / ('resume_' + kind + '_started.json')).write_text(
+        json.dumps({'at': R.stamp(), 'pid': os.getpid(), 'command': cmd,
+                    'source': R.CODE, 'machine': m}, ensure_ascii=False, indent=2) + '\n')
+    os.execv(cmd[0], cmd)
+
+
+if __name__ == '__main__':
+    main()
