@@ -1,0 +1,55 @@
+"""不通過の三記録を読むだけで、相違する欄と最初の値を記録する。"""
+from collections import Counter
+from pathlib import Path
+import gzip
+import itertools
+import json
+
+ROOT=Path(__file__).resolve().parent
+OUT=ROOT/'evidence/gate1_diff';OUT.mkdir(parents=True,exist_ok=True)
+
+
+def differences(a,b,path='$'):
+    if type(a) is not type(b):
+        yield path,a,b
+    elif isinstance(a,dict):
+        for k in sorted(a.keys()|b.keys()):
+            if k not in a or k not in b:yield path+'.'+k,a.get(k,'<missing>'),b.get(k,'<missing>')
+            else:yield from differences(a[k],b[k],path+'.'+k)
+    elif isinstance(a,list):
+        if len(a)!=len(b):yield path+'.length',len(a),len(b)
+        for i,(aa,bb) in enumerate(zip(a,b)):yield from differences(aa,bb,path+f'[{i}]')
+    elif a!=b:
+        yield path,a,b
+
+
+def main():
+    result=json.loads((ROOT/'evidence/gate1_a/gate1.json').read_text())
+    rows=[]
+    for item in result['files']:
+        if item['bytes_equal']:continue
+        a,b=Path(item['reference_path']),Path(item['current_path'])
+        c=Counter();examples=[];byte_lines=semantic_lines=total_a=total_b=0
+        with gzip.open(a,'rt') as aa,gzip.open(b,'rt') as bb:
+            for n,(la,lb) in enumerate(itertools.zip_longest(aa,bb),start=1):
+                total_a+=la is not None;total_b+=lb is not None
+                if la==lb:continue
+                byte_lines+=1
+                av=json.loads(la) if la else '<missing>';bv=json.loads(lb) if lb else '<missing>'
+                diff=list(differences(av,bv))
+                if diff:semantic_lines+=1
+                c.update(p for p,_,_ in diff)
+                if len(examples)<12:
+                    examples.append({'line':n,'differences':[{'field':p,'reference':x,'current':y}
+                                                            for p,x,y in diff[:20]],
+                                     'json_values_equal':not bool(diff)})
+        rows.append({'file':item['relative_path'],'expanded_equal':item['expanded_equal'],
+                     'reference_lines':total_a,'current_lines':total_b,'different_text_lines':byte_lines,
+                     'different_json_value_lines':semantic_lines,'field_counts':dict(c),'first_examples':examples})
+    (OUT/'differences.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+    for row in rows:
+        print(json.dumps({k:row[k] for k in ('file','reference_lines','current_lines','different_text_lines','different_json_value_lines')},ensure_ascii=False))
+        print(json.dumps(row['first_examples'][:1],ensure_ascii=False)[:6000])
+
+
+if __name__=='__main__':main()
