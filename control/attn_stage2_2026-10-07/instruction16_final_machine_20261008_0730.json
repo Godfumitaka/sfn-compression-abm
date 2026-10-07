@@ -1,0 +1,175 @@
+{
+  "at": "2026-10-08T07:30:25.860338+09:00",
+  "machine": {
+    "at": "2026-10-08T07:30:25.821843+09:00",
+    "models": {
+      "69711": {
+        "ppid": 69708,
+        "state": "R",
+        "rss_kb": 10065360
+      },
+      "77324": {
+        "ppid": 77313,
+        "state": "R",
+        "rss_kb": 118464
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 64842,
+        "owner": "SME_structure_reuse_full1740_01",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 77309,
+        "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+        "mem_gb": 11.0
+      }
+    ],
+    "disk_free_bytes": 224980185088,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "source_clean": true,
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "status": {
+    "at": "2026-10-08T07:30:10.013809+09:00",
+    "pid": 77300,
+    "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "phase": "preview_running_or_waiting",
+    "active": {
+      "birth_hu_off": 77309
+    },
+    "pending": [
+      "birth_hu_on"
+    ],
+    "completed": [],
+    "machine": {
+      "at": "2026-10-08T07:30:09.947670+09:00",
+      "models": {
+        "69711": {
+          "ppid": 69708,
+          "state": "R",
+          "rss_kb": 10025264
+        },
+        "77324": {
+          "ppid": 77313,
+          "state": "R",
+          "rss_kb": 115776
+        }
+      },
+      "model_children": 2,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 64842,
+          "owner": "SME_structure_reuse_full1740_01",
+          "mem_gb": 11.0
+        },
+        {
+          "pid": 77309,
+          "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+          "mem_gb": 11.0
+        }
+      ],
+      "disk_free_bytes": 224981848064,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "preview_only": true,
+    "production_started": false,
+    "models_not_signaled": true,
+    "automatic_retry": false
+  },
+  "off_progress": {
+    "at": "2026-10-08T07:30:22.117686+09:00",
+    "trial": 41,
+    "trials_completed": 42,
+    "seconds": 26.468225457996596,
+    "elapsed_seconds": 192.44840337499045,
+    "peak_rss_bytes": 119521280,
+    "definitions": 9,
+    "disclosed": false,
+    "disclosed_trials": 19,
+    "rematch_totals": {
+      "birth": {
+        "calls": 2512,
+        "seconds": 102.30296336201718,
+        "match_calls": 16592,
+        "result_cache_hits": 0,
+        "engine_calls": 16592,
+        "engine_seconds": 17.51627573778387,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      },
+      "disclosure": {
+        "calls": 1218,
+        "seconds": 34.21924871660303,
+        "match_calls": 1218,
+        "result_cache_hits": 0,
+        "engine_calls": 1218,
+        "engine_seconds": 1.0589718502014875,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      }
+    },
+    "v_counts": {
+      "count": 5998,
+      "signs": {
+        "positive": 2095,
+        "zero": 3695,
+        "negative": 208
+      },
+      "by_kind": [
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "negative",
+          "count": 208
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "positive",
+          "count": 2095
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "zero",
+          "count": 696
+        },
+        {
+          "kind": "HU",
+          "reference": true,
+          "sign": "zero",
+          "count": 2999
+        }
+      ]
+    }
+  },
+  "actual_flags": {
+    "no_forget_exec": true,
+    "attn_allin": true,
+    "stage2": "on",
+    "stage2_loss": "top1",
+    "stage2_init": "virtual",
+    "shop_world": 2,
+    "commit": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+  },
+  "supervisor_alive": true,
+  "off_worker_alive": true,
+  "warning_exists": false,
+  "failure_exists": false,
+  "on_started": false
+}
