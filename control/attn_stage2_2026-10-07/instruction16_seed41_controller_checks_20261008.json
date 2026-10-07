@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-08T07:25:14.899428+09:00",
+  "checks": [
+    {
+      "file": "observe_light.py",
+      "syntax": true,
+      "no_signal_or_delete_or_cache_encoding": true,
+      "sha256": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713"
+    },
+    {
+      "file": "preview.py",
+      "syntax": true,
+      "no_signal_or_delete_or_cache_encoding": true,
+      "sha256": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8"
+    }
+  ],
+  "command_pair_only_output_and_birth_hu_differ": [
+    {
+      "index": 3,
+      "off": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off/output",
+      "on": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/output"
+    },
+    {
+      "index": 96,
+      "off": "off",
+      "on": "on"
+    }
+  ],
+  "canonical_command_changes": [
+    "output",
+    "seed1_to41",
+    "trial200_to1740",
+    "birthHU_off_on",
+    "no_forget_exec"
+  ],
+  "fixed_source": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "model_code_changed": false,
+  "model_gate_passed": false,
+  "production_started": false,
+  "heavy_matcher_observer": false,
+  "record_forwarded_once_before_observation": true,
+  "value_row_returned_unchanged": true,
+  "measurement_scope": "100試行はsweep.run_one内。全模型workerの最大常駐は最終close後にも記録",
+  "rematch_origins_separate": true,
+  "calibration_native_and_reference_HU_counts_separate": true,
+  "old_folder": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview",
+  "old_folder_preserved": true,
+  "old_native_task_count": 0,
+  "old_workers_started": 0,
+  "old_entry_and_failure_preserved": true,
+  "correction_authority": "指示10の模型の動作・関門・比較を変えない自分の道具の直し、指示16で指定された種41を実際の設定へ記す",
+  "config_changes_only_seeds": {
+    "old": {
+      "count": 20,
+      "start": 1
+    },
+    "new": {
+      "count": 1,
+      "start": 41
+    }
+  },
+  "selected_native_task_count": 1,
+  "selected_seed": 41,
+  "selected_cell_without_vt": "f0.5000_th2.1000_first_order",
+  "native_worker_and_controller_unchanged": true,
+  "config_sha256": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752"
+}
