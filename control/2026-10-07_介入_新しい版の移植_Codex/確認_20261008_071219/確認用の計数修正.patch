@@ -1,0 +1,41 @@
+--- before_ancestor_census.py
++++ heartbeat_check.py
+@@ -22,6 +22,20 @@
+     except ValueError:return False
+     return subprocess.run(['git','cat-file','-e','HEAD:'+relative],cwd=REPO,
+                           stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
++
++def without_counted_ancestors(rows, active, paused):
++    """低RSSの受付・観測を挟んだ待つ親も、模型の子と二重計上しない。"""
++    candidates=active|paused
++    ancestors=set()
++    for child in candidates:
++        seen={child}
++        parent=rows[child]['parent']
++        while parent in rows and parent not in seen:
++            seen.add(parent)
++            if parent in candidates:ancestors.add(parent)
++            parent=rows[parent]['parent']
++    return active-ancestors, paused-ancestors, ancestors
++
+ 
+ def main():
+     now=datetime.datetime.now(ZoneInfo('Asia/Tokyo'))
+@@ -69,13 +83,16 @@
+             receipt_written=True
+     limit=8 if both_completed else 6
+     rows,active,paused=guard.census()
++    active,paused,waiting_parents=without_counted_ancestors(rows,active,paused)
+     def own(pid):
+         seen=set()
+         while pid in rows and pid not in seen:
+             if pid==55602:return True
+             seen.add(pid);pid=rows[pid]['parent']
+         return False
+-    machine={'at_jst':at,'active':len(active),'paused':len(paused),'own_active':sum(own(p) for p in active),'own_paused':sum(own(p) for p in paused),'model_cap':8,'new_admission_limit':limit,'processes':[{'pid':p,'parent':rows[p]['parent'],'stat':rows[p]['stat'],'rss_kb':rows[p]['rss'],'own':own(p)} for p in sorted(active|paused)],'controllers':[{'pid':p,'stat':rows[p]['stat'],'command':rows[p]['command']} for p in (55602,55730,40737) if p in rows]}
++    machine={'at_jst':at,'active':len(active),'paused':len(paused),'own_active':sum(own(p) for p in active),'own_paused':sum(own(p) for p in paused),'model_cap':8,'new_admission_limit':limit,'processes':[{'pid':p,'parent':rows[p]['parent'],'stat':rows[p]['stat'],'rss_kb':rows[p]['rss'],'own':own(p)} for p in sorted(active|paused)],'controllers':[{'pid':p,'stat':rows[p]['stat'],'command':rows[p]['command']} for p in sorted({55602,55730,40737}|waiting_parents) if p in rows]}
++    machine['excluded_counted_ancestors']=[{'pid':p,'parent':rows[p]['parent'],'stat':rows[p]['stat'],'rss_kb':rows[p]['rss'],'command':rows[p]['command']} for p in sorted(waiting_parents)]
++    machine['paused_non_model_processes']=[{'pid':p,'parent':row['parent'],'stat':row['stat'],'command':row['command']} for p,row in sorted(rows.items()) if row['stat'].startswith('T') and 'python' in row['command'].split()[0].lower() and p not in paused]
+     state=json.loads((RUN/'pipeline_status.json').read_text());events=[json.loads(p) for p in (RUN/'pipeline_events.jsonl').read_text().splitlines()]
+     old=json.loads((RUN/'priority25_01/withdrawal.json').read_text())
+     hashes={k:hashlib.sha256((RUN/p).read_bytes()).hexdigest() for k,p in [('pipeline_sha256','pipeline.py'),('finalizer_sha256','finalize_when_done.py'),('native_command_sha256','gate_off/a/native_command.json')]}

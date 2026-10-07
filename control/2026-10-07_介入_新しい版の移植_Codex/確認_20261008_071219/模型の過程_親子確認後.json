@@ -1,0 +1,60 @@
+{
+  "at_jst": "2026-10-08T07:14:55+09:00",
+  "original_at_jst": "2026-10-08T07:12:19+09:00",
+  "original_record_preserved": true,
+  "original_count": 2,
+  "corrected_model_count_at_original_check": 1,
+  "corrected_own_count": 0,
+  "corrected_paused_count": 0,
+  "excluded_waiting_parent": {
+    "pid": 64846,
+    "observed_state": "S",
+    "rss_kb": 530304,
+    "role": "run_gates_01.py waits for observer and model"
+  },
+  "ancestry": [
+    {
+      "pid": 64842,
+      "parent": 1,
+      "role": "jobs admission"
+    },
+    {
+      "pid": 64846,
+      "parent": 64842,
+      "role": "waiting run_gates controller"
+    },
+    {
+      "pid": 69708,
+      "parent": 64846,
+      "role": "observer"
+    },
+    {
+      "pid": 69711,
+      "parent": 69708,
+      "role": "model spawn"
+    }
+  ],
+  "current_census": {
+    "raw_active": [
+      64846,
+      69711
+    ],
+    "active": [
+      69711
+    ],
+    "paused": [],
+    "excluded_ancestors": [
+      64846
+    ]
+  },
+  "regression_check": {
+    "multi_generation_with_low_rss_wrapper": true,
+    "independent_analysis_preserved": true,
+    "sibling_model_preserved": true,
+    "paused_model_recorded_separately": true
+  },
+  "helper_change_scope": "reporting census removes ancestors across intermediary processes; model cap 8, admission guard, registry, gates, native commands unchanged",
+  "admission_guard_sha256": "046e8e49ca0d3b6fb5cadbe11886fedffbedd931ef74edf80f66bb2b2c45e356",
+  "model_signals_sent": [],
+  "models_started": 0
+}
