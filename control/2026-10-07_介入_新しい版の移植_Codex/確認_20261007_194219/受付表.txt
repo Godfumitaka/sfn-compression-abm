@@ -1,0 +1,59 @@
+# 受付表（2026-10-07T19:42:19）  見込みの合計 22.0 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+20806	SME logP主 w2_A_L50 種17 analysis	2.0	2026-10-06T17:01:23	0.05 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026
+20915	SME logP主 w2_A_L50 種18 analysis	2.0	2026-10-06T17:01:54	0.05 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026
+27521	SME logP主 w2_A_L50 種19 analysis	2.0	2026-10-06T17:32:57	0.05 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026
+41237	SME_Cstar_instruction7_on_own	8.0	2026-10-07T19:10:54	5.79 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-
+41238	SME_Cstar_instruction7_on_keep	8.0	2026-10-07T19:12:54	6.02 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+ R PID 20806（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種17 analysis --mem 2.0 --disk-pat
+ R PID 20812（親 20806）	9 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/t
+ R PID 20813（親 20812）	11 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu
+ R PID 20817（親 20813）	10 MB	Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/
+ R PID 20820（親 20817）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 20821（親 20817）	10 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 20915（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種18 analysis --mem 2.0 --disk-pat
+ R PID 20921（親 20915）	9 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/t
+ R PID 20922（親 20921）	12 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu
+ R PID 20925（親 20922）	10 MB	Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/
+ R PID 20928（親 20925）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 20929（親 20925）	10 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 27521（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種19 analysis --mem 2.0 --disk-pat
+ R PID 27529（親 27521）	9 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/t
+ R PID 27531（親 27529）	13 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu
+ R PID 27534（親 27531）	10 MB	Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/
+ R PID 27537（親 27534）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 27538（親 27534）	10 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 41236（親 52419）	8 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/parallel_instruction7_01.py
+ R PID 41237（親 41236）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME_Cstar_instruction7_on_own --mem 8 --disk-path /U
+ R PID 41238（親 41236）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME_Cstar_instruction7_on_keep --mem 8 --disk-path /
+ R PID 41243（親 41237）	16 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/run_full_case_instruction7_01.p
+ R PID 41247（親 41243）	10 MB	Python tools/v3_run.py config/sweep_shop_hide1_s1_2026-10-01.json /Users/tatsu-admin/Documents/ChatGPT/New pro
+ R PID 41252（親 41247）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 41253（親 41247）	5893 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 42186（親 41238）	16 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/run_full_case_instruction7_01.p
+ R PID 42188（親 42186）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/material_keep_driver_01.py conf
+ R PID 42190（親 42188）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 42191（親 42188）	6123 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 48547（親 52419）	23 MB	Python heartbeat_check.py
+   PID 48572（親 48547）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+   PID 97541（親 1）	4 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：69%
+free：0.1 GB
+inactive：10.8 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07）の空き 220.481 GiB、下限 20 GiB
+
+# スワップ：今 188.0 MB。スワップは直近 10 分で増えていない（188.0 MB → 今 188.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
