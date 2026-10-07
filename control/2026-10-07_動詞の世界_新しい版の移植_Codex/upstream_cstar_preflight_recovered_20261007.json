@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-10-07T18:44:03+09:00",
+  "report_commit": "4bb2938ac5e2060a9009ede03f8856bce6c0e56e",
+  "source_report": "control/2026-10-07_C星の関門_比較の直し_Codex.md",
+  "source_bytes": 7492,
+  "source_sha256": "026cc693e513b40f27169198235ba21656de58eabafc5d114ad0a680571158ae",
+  "upstream_summary_reported_at": "2026-10-07T18:39:39.051793+09:00",
+  "cause_as_reported": "起動台本のPYTHONHASHSEED=0の指定漏れ。物の集合setの並びと同点の記録が別のPython過程で変わった。模型のコードとopaque_idの材料は同じ。",
+  "old_gate_outputs_preserved": true,
+  "new_launcher_env_as_reported": {
+    "PYTHONHASHSEED": "0"
+  },
+  "small_comparisons_as_reported": [
+    {
+      "case": "保持A・1838256対7774b60・全新旗off",
+      "trials": 20,
+      "files": 7,
+      "mismatch_files": 0
+    },
+    {
+      "case": "log P・1838256対7774b60・全新旗off",
+      "trials": 20,
+      "files": 7,
+      "mismatch_files": 0
+    },
+    {
+      "case": "C*予測とEの旗をそろえた①対②",
+      "trials": 20,
+      "files": 7,
+      "mismatch_files": 0
+    }
+  ],
+  "normalizing_byte_gate": false,
+  "full_gate_as_reported": {
+    "trials": 1740,
+    "status": "running, equality undecided",
+    "queue_pid": 31176,
+    "requested_mem_gb": 8,
+    "requested_mem_is_measured_cstar_rss": false,
+    "slots": 1
+  },
+  "Cstar_and_stage2_all_required_gates_passed": false,
+  "verb_port_or_benchmark_started": false,
+  "new_model_or_analysis_runs": 0,
+  "seed21_to40_reads_or_runs": 0
+}
