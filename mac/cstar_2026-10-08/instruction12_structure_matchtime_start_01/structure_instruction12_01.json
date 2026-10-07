@@ -1,0 +1,295 @@
+{
+  "at": "2026-10-07T23:53:23.144099+09:00",
+  "passed": true,
+  "checks": [
+    {
+      "case": "異名でも正の確率なら同じ構造の親が残る",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r0', 'r1'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 1,
+      "expected_parent_exists": true
+    },
+    {
+      "case": "確率0なら同じ構造でも候補に入らない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r0', 'r1'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 1.0
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "引数数2対1は異名の正の確率でも入らない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r0',), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "関係対functionは正の確率でも入らない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='function', names=frozenset({'right_name'}), args=('r0', 'r1'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "物と関係はどちらの向きも対にならない",
+      "passed": true
+    },
+    {
+      "case": "固定した物の対応の下で引数の順を交換しない",
+      "passed": true,
+      "pairs": [
+        [
+          "l0",
+          "r0"
+        ],
+        [
+          "l1",
+          "r1"
+        ],
+        [
+          "lp",
+          "rp"
+        ]
+      ],
+      "rejected": "引数の順の不一致"
+    },
+    {
+      "case": "物の一対一の対応も一緒に交換すれば順つき同型を保つ",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r1', 'r0'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 1,
+      "expected_parent_exists": true,
+      "actual_closure_pairs": [
+        [
+          "l0",
+          "r1"
+        ],
+        [
+          "l1",
+          "r0"
+        ],
+        [
+          "lp",
+          "rp"
+        ]
+      ]
+    },
+    {
+      "case": "共有された左の物を右の異なる二物に割らない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l0'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r0', 'r1'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "異なる左の二物を右の同じ物へ潰さない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='l1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'left_name'}), args=('l0', 'l1'), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='r1', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'right_name'}), args=('r0', 'r0'), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "left_name": 0.75,
+          "right_name": 0.25
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "固定した対応でも一対多を拒む",
+      "passed": true,
+      "pairs": [
+        [
+          "l0",
+          "r0"
+        ],
+        [
+          "l0",
+          "r1"
+        ]
+      ],
+      "rejected": "固定した対応が一対一でない"
+    },
+    {
+      "case": "固定した対応でも多対一を拒む",
+      "passed": true,
+      "pairs": [
+        [
+          "l0",
+          "r0"
+        ],
+        [
+          "l1",
+          "r0"
+        ]
+      ],
+      "rejected": "固定した対応が一対一でない"
+    },
+    {
+      "case": "子の候補が0なら親の正の確率だけで連結を作らない",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lc', kind='relation', names=frozenset({'child_left'}), args=('l0',), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'parent_left'}), args=('lc',), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rc', kind='relation', names=frozenset({'child_right'}), args=('r0',), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'parent_right'}), args=('rc',), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "parent_right": 1.0
+        },
+        "lc": {
+          "child_left": 1.0
+        }
+      },
+      "parent_hypotheses": 0,
+      "expected_parent_exists": false
+    },
+    {
+      "case": "子が正なら親子の並行な連結が成立する",
+      "passed": true,
+      "left_nodes": [
+        "Node(key='l0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='lc', kind='relation', names=frozenset({'child_left'}), args=('l0',), state='F', ubiquitous=False)",
+        "Node(key='lp', kind='relation', names=frozenset({'parent_left'}), args=('lc',), state='F', ubiquitous=False)"
+      ],
+      "right_nodes": [
+        "Node(key='r0', kind='entity', names=frozenset(), args=(), state='F', ubiquitous=False)",
+        "Node(key='rc', kind='relation', names=frozenset({'child_right'}), args=('r0',), state='F', ubiquitous=False)",
+        "Node(key='rp', kind='relation', names=frozenset({'parent_right'}), args=('rc',), state='F', ubiquitous=False)"
+      ],
+      "probabilities": {
+        "lp": {
+          "parent_right": 1.0
+        },
+        "lc": {
+          "child_right": 1.0
+        }
+      },
+      "parent_hypotheses": 1,
+      "expected_parent_exists": true
+    },
+    {
+      "case": "呼び出しの種で控えが増え、snapshotは辞書だけ浅く写す",
+      "passed": true,
+      "seeds": 6,
+      "cache": 6,
+      "cache_rng": 6,
+      "self_cache": 1,
+      "snapshot_values_same_objects": true
+    }
+  ],
+  "model_not_run": true,
+  "source": "7774b60",
+  "source_sha256": {
+    "tools/cstar_matcher.py": "9edc495bff251739265506a9429588508abfe2c119ba9e17ab6e62831d97386e",
+    "tools/cstar_score.py": "f2e26c2ffbff18b2765fe58f20348db8c167488566638b250f9f0aecb3665f4b",
+    "tools/sme2017.py": "8c978194dd7c7a2172f30091fe6605f96315cf430c0559d7fc3d2778674ab923",
+    "tools/smeshared.py": "eb1b432d2a6e5f8830f1cacb59300df97632518a941d9eccce637692257b292f",
+    "tools/cstar_runtime.py": "43f5988f1f5856853b740b977be73a817f4bf429929ac4aa51da790f057274a8",
+    "tools/smeevict.py": "b9ad81b14c16a8687e9a435df46a3d351be1c0a4e30572de06b384b1d5799fcb",
+    "tools/probeworld.py": "2ccbe91fea7b7ded8689700d64f49b1b02bc0827a7511f00d2c5e082423c64f2"
+  },
+  "note": "模型の走行ではない。小さい照合器の部品と固定した対応の検査だけ。名称の確率が正でも型・数・順・一対一・親子連結を保つ。物のIDの付け替えと順の制約を混同しない。キャッシュの小例は大きい実走行のMBの内訳ではない。"
+}
