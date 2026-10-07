@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-08T02:44:36+09:00",
+  "initial_snapshot": "check_20261008_024435.json",
+  "initial_known_model_count": 1,
+  "initial_unclassified_active_spawn_count": 1,
+  "worker_pid": 27377,
+  "parent_pid": 27368,
+  "parent_script": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/observe.py",
+  "parent_script_bytes": 4549,
+  "parent_script_sha256": "877d340d44ff6b9cfa620832e1ccd2e1a7a9287104c53df19e8a9f81ebc8618c",
+  "evidence": [
+    "import v3_run",
+    "REAL_WORKER=v3_run.worker",
+    "v3_run.worker=worker",
+    "v3_run.main()"
+  ],
+  "classification": "模型の個体worker（200試行関門の旗off）",
+  "counter_sha256_before": "95419e3bd134eed3a7b03492fe4d5e576e7e807c413813db71d8bf00fb0b44dd",
+  "counter_sha256_after": "9ab3afcd72409ab948b7ddf21aa6b52827f79cdcee53bcccbcfb42781770ba02",
+  "change": "読み取り監視の既知の起動台本名にobserve.pyを追加。模型コード・上流・旗・受付・過程への操作なし。",
+  "reported_total_at_initial_ps": 2,
+  "own_models_at_initial_ps": 0,
+  "unknown_was_not_reported_as_non_model": true
+}
