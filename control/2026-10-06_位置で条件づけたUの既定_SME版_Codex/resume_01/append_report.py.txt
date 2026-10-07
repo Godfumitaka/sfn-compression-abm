@@ -1,0 +1,158 @@
+"""再開の証拠を別フォルダへ写し、旧報告の末尾へ追記する。"""
+from pathlib import Path
+from collections import Counter
+import csv
+import datetime
+import hashlib
+import json
+import shutil
+import subprocess
+
+ROOT=Path(__file__).resolve().parent
+TASK=ROOT.parent
+STEM='2026-10-06_位置で条件づけたUの既定_SME版_Codex'
+CONTROL=TASK/'report_sparse/control'
+DEST=CONTROL/STEM/'resume_01'
+
+
+def sha(path):
+    h=hashlib.sha256()
+    with path.open('rb') as f:
+        while block:=f.read(1024*1024):h.update(block)
+    return h.hexdigest()
+
+
+def table(rows,cols):
+    return '\n'.join(['| '+' | '.join(label for key,label in cols)+' |',
+                      '| '+' | '.join('---' for _ in cols)+' |']+
+                     ['| '+' | '.join(str(row.get(key,'')) for key,label in cols)+' |' for row in rows])
+
+
+def main():
+    DEST.mkdir(parents=True,exist_ok=True)
+    for path in (ROOT/'evidence').rglob('*'):
+        if path.is_file():
+            dst=DEST/path.relative_to(ROOT/'evidence');dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dst)
+    for name in ['pipeline.py','append_report.py','pipeline_status.json','pipeline_events.jsonl','cases.json']:
+        p=ROOT/name
+        if p.exists():shutil.copyfile(p,DEST/(name+'.txt' if name.endswith('.py') else name))
+    for path in (ROOT/'pipeline_logs').glob('*.log'):
+        dst=DEST/'logs'/path.name;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dst)
+    provenance=[];sources=[]
+    for mode in ('a','logp'):
+        source=TASK/('source_'+mode)
+        commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
+        sources.append({'score':mode,'commit':commit,'source':str(source)})
+        for file in ['tools/uposition.py','tools/uposition_run.py','tools/uposition_compare.py','tools/uposition_audit.py',
+                     'tools/uposition_study.py','tools/selcands_sme.py','tests/test_uposition_compare.py',
+                     'control/uposition_sme_2026-10-06_実装前仕様.md']:
+            p=source/file;dst=DEST/'source'/mode/(p.name+'.txt' if p.suffix=='.py' else p.name)
+            dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dst)
+            provenance.append({'kind':'source','path':str(p),'sha256':sha(p)})
+    (DEST/'sources.json').write_text(json.dumps(sources,ensure_ascii=False,indent=2)+'\n')
+    cases=[]
+    for mode in ('a','logp'):
+        for group in ('gate_off','gate_on'):
+            p=ROOT/group/mode
+            if (p/'execution.json').exists():cases.append(p)
+    if (ROOT/'cases.json').exists():
+        for row in json.loads((ROOT/'cases.json').read_text()):
+            p=Path(row['path'])
+            if p not in cases:cases.append(p)
+    for case in cases:
+        cmd=json.loads((case/'native_command.json').read_text());seed=int(cmd[cmd.index('--seeds')+1]);assert seed in (1,2,3)
+        dest=DEST/'executions'/case.relative_to(ROOT);dest.mkdir(parents=True,exist_ok=True)
+        for name in ['native_command.json','execution.json','environment_worker.json']:
+            p=case/name
+            if p.exists():
+                shutil.copyfile(p,dest/name);provenance.append({'kind':'execution','path':str(p),'sha256':sha(p)})
+        for p in case.glob('*cpu*.jsonl'):shutil.copyfile(p,dest/p.name)
+        for area in ['output/side','output/ledgers','analysis/side']:
+            for p in (case/area).rglob(f'seed{seed:03d}*'):
+                if p.is_file() and not p.name.endswith('.done'):
+                    provenance.append({'kind':'record','path':str(p),'sha256':sha(p)})
+        for name in ['tie_state.jsonl','saved_matcher.jsonl.gz','output/manifest.jsonl','output/flag.json']:
+            p=case/name
+            if p.exists():provenance.append({'kind':'record','path':str(p),'sha256':sha(p)})
+    with (DEST/'paths_sha256.csv').open('w') as f:
+        w=csv.DictWriter(f,fieldnames=['kind','path','sha256']);w.writeheader();w.writerows(provenance)
+    status=json.loads((ROOT/'pipeline_status.json').read_text())
+    done=status['stage']=='pipeline' and status['status']=='completed'
+    stopped=status['status']=='stopped'
+    outcome='完了' if done else '停止' if stopped else '進行中'
+    links=STEM+'/resume_01'
+    rows=[]
+    for mode in ('a','logp'):
+        for name in ('gate1','gate4_5'):
+            path=ROOT/'evidence'/f'{name}_{mode}'/f'{name}.json'
+            row={'score':mode,'gate':name,'status':'未実行','files':'','saved_state_lines':'','rng_trial_lines':''}
+            if path.exists():
+                r=json.loads(path.read_text());row['status']='通過' if r['passed'] else '不通過'
+                row['files']=len(r.get('files',[]));row['saved_state_lines']=r.get('saved_state_lines',r.get('trials',''))
+                row['rng_trial_lines']=r.get('rng_trial_lines','')
+            rows.append(row)
+    env=json.loads((ROOT/'evidence/environment/reference_environment.json').read_text())
+    text=f'''\n\n## 再開の追記：環境を揃えた関門（{datetime.datetime.now().astimezone().isoformat(timespec='seconds')}）
+
+状態：**{outcome}**。前の停止記録を保存したまま、利用者の指定で再開した。模型の位置Uの処理・照合器・分類の決まりは変更していない。今回の出力先は `codex_uposition_sme_2026-10-06/resume_01/`。種1〜3だけを対象とし、種21〜40の走行・記録解析はしていない。結果の良し悪しは書かない。
+
+### 基準の環境と再実行の環境
+
+基準は `codex_sme_evict_2026-10-06/evict_full_01/A_evict` と `L_evict` の `command.json`、`run_spec.json`、`model_pid.json` を読み、起動した台本 `run_case_01.py` まで辿った。台本の28〜30行が `PYTHONHASHSEED=0` を設定し、`LC_ALL`・`LANG`・`LC_CTYPE` を外している。前の位置Uの関門の入口はこの設定をしていなかった。
+
+今回もPythonの起動前に `/usr/bin/env -u LC_ALL -u LANG -u LC_CTYPE PYTHONHASHSEED=0` を付ける。基準の台本はその他のLC_*を親から継承するが、その当時の値は記録に無い。今回の親にその他のLC_*は無い。実際の親と模型のworkerの環境は `execution.json` と `environment_worker.json` に保存した。Python起動時のロケール補正によってLC_CTYPEが設定された場合は、子の実記録にその値を残す。
+
+基準のPython指定は `/opt/homebrew/opt/python@3.12/bin/python3.12`。今回も同じ指定を使い、現在の実体は `{env['python']['resolved']}`。現在の版とビルドは `{env['python']['version']}`、機械は `{env['python']['architecture']}`。optのリンクと実体のctime・mtimeは基準の開始より前であり、同じ実体・ビルドを使うとの判断はこの証拠に基づく。基準時のsys.version文字列そのものは保存されていない。この点を、基準に版の文字列まで記録されていたという主張とは区別する。
+
+[基準の環境・実行ファイルの指紋と日時]({links}/environment/reference_environment.json)、[基準の起動台本]({links}/environment/reference_run_case_01.py.txt)。command・specと起動PIDの記録も同じフォルダへ写した。元の材料は変更していない。
+
+### 関門の再判定
+
+gzipは展開した中身の全バイトで比べる。容器の時刻は判定に入れない。非gzipは元のファイル全バイトで比べる。ノードの並べ替え、JSONの正規化、欄の除外はしない。圧縮前後のSHA256をどちらもCSVに残し、判定用の `gate_equal` を分けた。来歴のcode_commitの共通化、実行管理の.doneとmanifestを対象外にする点は前の関門と同じ。
+
+{table(rows,[('score','採点'),('gate','関門'),('status','状態'),('files','比較ファイル'),('saved_state_lines','保存状態の行／材料検査の試行'),('rng_trial_lines','乱数の試行')])}
+
+空表・非一意の鍵の全体既定への復帰と、三つの手計算の小例を含む検査は両土台で40件通過した。新たに、gzip容器の時刻だけの相違は通り、中身のノードの列順の相違は止まる検査を入れた。[今の採点]({links}/unit_a.txt)、[log P]({links}/unit_logp.txt)、[小例の全数値]({links}/hand_examples.csv)。
+
+材料と会計の関門では、保存入力と実開示から位置表を独立に作り直し、予測前の表、実観察、更新後の表、G_posと元の鍵の控えの費用を全1740試行で比べる。共有表は一回だけ数え、控えも費用に入れる。Hの全体頻度とℓは据え置き、log Pのε＝1/2も据え置き。
+
+'''
+    if stopped:
+        text+=f'停止した段は `{status["stage"]}`（終了値{status["exit_code"]}）。後続を起動していない。同じ起動環境でも不一致が出た場合の指定に従い、ここでは原因を特定しない。\n\n'
+        for mode in ('a','logp'):
+            p=ROOT/'evidence'/f'gate1_{mode}/gate1.json'
+            if p.exists():
+                proof=json.loads(p.read_text())
+                if not proof['passed']:
+                    mismatch=[r['relative_path'] for r in proof['files'] if not r['gate_equal']]
+                    text+='不一致ファイル：'+', '.join('`'+s+'`' for s in mismatch)+'。\n\n'
+    if done:
+        with (ROOT/'evidence/study/comparison.csv').open() as f:summary=list(csv.DictReader(f))
+        text+='### 世界2・A・λ主・種1〜3の小試し\n\n'
+        text+='両採点・位置Uの有無で12本を記録した。種1の関門の記録は同じ条件なので小試しにも使った。分類は既存のSME候補診断で、正しく答えられる候補があれば選び間違い、なければ区別の喪失。誕生のシールは誕生試行の変換後のF/H/Uを数え、既存のshop sideとも突き合わせた。即時退役はU、材料にシールが無い誕生は別欄。\n\n'
+        for mode in ('a','logp'):
+            selected=[r for r in summary if r['score']==mode]
+            text+=f'#### {mode}：例外の日のドアと誕生・記憶量\n\n'+table(selected,[('seed','種'),('u_position','位置U'),
+                ('exception_correct','正解'),('exception_wrong','外れ'),('exception_abstain','黙り'),
+                ('exception_selection_mistake','選び間違い'),('exception_distinction_loss','区別の喪失'),
+                ('birth_F','誕生F'),('birth_H','誕生H'),('birth_U','誕生U'),('birth_without_seal','シールなし'),
+                ('final_total_bits','最終総ビット'),('final_definition_count','最終定義数')])+'\n\n'
+            text+=f'#### {mode}：通常の日のドア\n\n'+table(selected,[('seed','種'),('u_position','位置U'),
+                ('normal_correct','正解'),('normal_wrong','外れ'),('normal_abstain','黙り'),
+                ('normal_selection_mistake','選び間違い'),('normal_distinction_loss','区別の喪失')])+'\n\n'
+        text+=f'[腕別のCSV]({links}/study/comparison.csv)、[件別]({links}/study/trials.csv)、[誕生別]({links}/study/birth_seals.csv)、[位置表の利用と復帰の呼び出し件数]({links}/study/fallback_calls.csv)。\n\n'
+    text+=f'''### 来歴と受付
+
+{table(sources,[('score','採点'),('commit','実装と診断のコミット')])}
+
+実行は共通受付の `jobs.py run --wait --mem --disk-path` とCPU枠の監視を使う。模型一本は1.0GB、SME再生分類は1.2GB、逐次材料検査は0.3GB、指紋比較は0.2GB。すべてworkers＝1。他の処理は止めず、枠の不足では開始を待ち、開始後の枠の超過では自分だけ止めて待つ。
+
+[各関門の指紋と結果]({links})、[実行のコマンドと親・子の環境]({links}/executions)、[受付ログ]({links}/logs)、[使用記録の絶対パスとSHA256]({links}/paths_sha256.csv)、[後続を止める手順]({links}/pipeline.py.txt)。大きな台帳本体は自分の作業場所に保持した。
+'''
+    with (CONTROL/(STEM+'.md')).open('a') as f:f.write(text)
+    (ROOT/'report_appended.json').write_text(json.dumps({'time':datetime.datetime.now().astimezone().isoformat(),
+        'pipeline_status':status,'report':str(CONTROL/(STEM+'.md'))},ensure_ascii=False,indent=2)+'\n')
+    print(outcome,str(CONTROL/(STEM+'.md')))
+
+
+if __name__=='__main__':main()
