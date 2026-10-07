@@ -1,0 +1,124 @@
+{
+  "at_jst": "2026-10-07T15:10:41+09:00",
+  "latest_results_commit": "fea5b711f84d228352628656f45061397f36e464",
+  "public_check_gap_jst": [
+    "2026-10-07T06:56:23+09:00",
+    "2026-10-07T15:07:19+09:00"
+  ],
+  "cause": "同区間にMaintenance SleepとDarkWakeの反復を電源ログで確認。継続確認の空白の全原因は確定しておらず、利用上限・承認待ち・通信障害は未確認。",
+  "inbox_unreceived": [],
+  "inbox_completed": [
+    1
+  ],
+  "new_models_started": 0,
+  "signals_sent": [],
+  "pipeline": {
+    "stage": "logp_U1_s3",
+    "time": 1791351567.278893,
+    "status": "running",
+    "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/source_logp",
+    "command": [
+      "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "/Users/tatsu-admin/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex 位置U logp_U1_s3",
+      "--mem",
+      "1.0",
+      "--disk-path",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/trial/logp_U1/seed003/output",
+      "--",
+      "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "tools/uposition_cpu.py",
+      "--cwd",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/source_logp",
+      "--log",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/trial/logp_U1/seed003/output_cpu.jsonl",
+      "--",
+      "/usr/bin/env",
+      "-u",
+      "LC_ALL",
+      "-u",
+      "LANG",
+      "-u",
+      "LC_CTYPE",
+      "PYTHONHASHSEED=0",
+      "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "tools/uposition_run.py",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_uposition_sme_2026-10-06/resume_01/trial/logp_U1/seed003/native_command.json"
+    ]
+  },
+  "native_completed": [
+    {
+      "stage": "a_U0_s1",
+      "at_jst": "2026-10-06T22:24:13.930099+09:00"
+    },
+    {
+      "stage": "gate1_a",
+      "at_jst": "2026-10-06T22:24:32.124679+09:00"
+    },
+    {
+      "stage": "logp_U0_s1",
+      "at_jst": "2026-10-07T00:22:22.797216+09:00"
+    },
+    {
+      "stage": "gate1_logp",
+      "at_jst": "2026-10-07T04:40:01.804512+09:00"
+    },
+    {
+      "stage": "a_U1_s1",
+      "at_jst": "2026-10-07T04:48:34.680328+09:00"
+    },
+    {
+      "stage": "gate4_5_a",
+      "at_jst": "2026-10-07T04:49:50.295651+09:00"
+    },
+    {
+      "stage": "logp_U1_s1",
+      "at_jst": "2026-10-07T05:02:13.053000+09:00"
+    },
+    {
+      "stage": "gate4_5_logp",
+      "at_jst": "2026-10-07T05:03:51.772658+09:00"
+    },
+    {
+      "stage": "gates",
+      "at_jst": "2026-10-07T05:03:51.772913+09:00"
+    },
+    {
+      "stage": "a_U0_s2",
+      "at_jst": "2026-10-07T05:15:31.337703+09:00"
+    },
+    {
+      "stage": "a_U0_s3",
+      "at_jst": "2026-10-07T05:26:33.774014+09:00"
+    },
+    {
+      "stage": "a_U1_s2",
+      "at_jst": "2026-10-07T05:37:44.447874+09:00"
+    },
+    {
+      "stage": "a_U1_s3",
+      "at_jst": "2026-10-07T05:49:14.647500+09:00"
+    },
+    {
+      "stage": "logp_U0_s2",
+      "at_jst": "2026-10-07T06:48:28.490556+09:00"
+    },
+    {
+      "stage": "logp_U0_s3",
+      "at_jst": "2026-10-07T09:22:01.328574+09:00"
+    },
+    {
+      "stage": "logp_U1_s2",
+      "at_jst": "2026-10-07T14:39:27.277923+09:00"
+    }
+  ],
+  "finalizer": {
+    "time": "2026-10-06T20:32:09+09:00",
+    "pid": 55730,
+    "stage": "waiting_for_pipeline"
+  },
+  "changes_to_model_or_scheduler": false
+}
