@@ -1,0 +1,442 @@
+{
+  "at": "2026-10-08T05:43:39.317524+09:00",
+  "machine": {
+    "at": "2026-10-08T05:43:39.267650+09:00",
+    "models": {
+      "47884": {
+        "ppid": 47881,
+        "state": "R",
+        "rss_kb": 10265536
+      },
+      "55818": {
+        "ppid": 55809,
+        "state": "R",
+        "rss_kb": 288848
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 6700,
+        "owner": "SME_Cstar_matchtime_instruction10_01",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 55801,
+        "owner": "Codex2 指示14 新準備版の旗off関門 all_flags_off_1740",
+        "mem_gb": 2.0
+      }
+    ],
+    "disk_free_bytes": 228061581312,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "first_stage": {
+    "status.json": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning.json": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure.json": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress.json": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "gate": {
+    "supervisor_spawn.json": {
+      "at": "2026-10-08T05:34:45.198723+09:00",
+      "pid": 55794,
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "production_started": false,
+      "sequence": [
+        "all_flags_off_1740",
+        "added_flags_off_200"
+      ],
+      "references_reexecuted": false
+    },
+    "launch.json": {
+      "at": "2026-10-08T05:34:45.226663+09:00",
+      "pid": 55794,
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "sequence": [
+        "all_flags_off_1740",
+        "added_flags_off_200"
+      ],
+      "mem_gb": {
+        "all_flags_off_1740": 2,
+        "added_flags_off_200": 4
+      },
+      "production_started": false
+    },
+    "status.json": {
+      "phase": "receipt_wait_or_running",
+      "kind": "all_flags_off_1740",
+      "at": "2026-10-08T05:34:45.317310+09:00",
+      "pid": 55794,
+      "receipt_pid": 55801,
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "requested_mem_gb": 2
+    },
+    "warning.json": null,
+    "failure.json": null,
+    "all_flags_off_1740_entry_started.json": {
+      "at": "2026-10-08T05:34:45.535117+09:00",
+      "machine": {
+        "at": "2026-10-08T05:34:45.481085+09:00",
+        "models": {
+          "47884": {
+            "ppid": 47881,
+            "state": "R",
+            "rss_kb": 9552816
+          }
+        },
+        "model_children": 1,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 6700,
+            "owner": "SME_Cstar_matchtime_instruction10_01",
+            "mem_gb": 11.0
+          },
+          {
+            "pid": 55801,
+            "owner": "Codex2 指示14 新準備版の旗off関門 all_flags_off_1740",
+            "mem_gb": 2.0
+          }
+        ],
+        "disk_free_bytes": 228788396032,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": []
+      },
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+    },
+    "all_flags_off_1740_completed.json": null,
+    "all_flags_off_1740_required_gate.json": null,
+    "all_flags_off_1740/worker_pid.json": {
+      "pid": 55818,
+      "ppid": 55809
+    },
+    "all_flags_off_1740/measurement.json": null,
+    "added_flags_off_200_entry_started.json": null,
+    "added_flags_off_200_completed.json": null,
+    "added_flags_off_200_required_gate.json": null,
+    "added_flags_off_200/worker_pid.json": null,
+    "added_flags_off_200/measurement.json": null,
+    "supervisor_lock": "55794",
+    "all_flags_off_1740/latest_performance": {
+      "trial": 1216,
+      "seconds": 0.8076706670108251,
+      "peak_rss_bytes": 329334784,
+      "canonical_hits": 197803,
+      "canonical_misses": 4829,
+      "canonical_size": 4096,
+      "match_requests": 111534,
+      "engine_computations": 90926
+    },
+    "all_flags_off_1740/run_log_tail": "受け付けた：PID 55801、担当 Codex2 指示14 新準備版の旗off関門 all_flags_off_1740、見込み 2.0 GB（表の合計 13.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-08 05:34:45 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n",
+    "added_flags_off_200/latest_performance": null
+  },
+  "fixed_sources": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "status": ""
+    }
+  },
+  "old_pids_alive": {
+    "66840": false,
+    "72172": false,
+    "94210": false,
+    "4872": false,
+    "4893": false,
+    "21749": false,
+    "27353": false,
+    "27360": false,
+    "27377": false
+  },
+  "own_gate_processes": {
+    "55794": [
+      1,
+      "Ss",
+      0.0,
+      18576,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/gate.py"
+    ],
+    "55801": [
+      55794,
+      "Ss",
+      0.0,
+      15072,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示14 新準備版の旗off関門 all_flags_off_1740 --mem 2 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/all_flags_off_1740 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/gate.py entry all_flags_off_1740"
+    ],
+    "55809": [
+      55801,
+      "S",
+      0.0,
+      15680,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/observe_off.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/all_flags_off_1740/native_command.json"
+    ]
+  }
+}
