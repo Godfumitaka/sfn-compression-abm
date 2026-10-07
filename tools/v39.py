@@ -920,6 +920,13 @@ def run_conversions(state, trial):
     before = total_bits(state, L)
     total = before
     by_def = {R: _candidates(state, d, trial, L, len(state.definitions)) for R, d in state.definitions.items()}
+    if CFG.get("no_forget_exec"):
+        # 較正：候補と値は同じ関数で計算済み。実際の変換だけを実行しない。
+        import calibration
+        calibration.collect(state, trial, by_def, L)
+        if CFG.get("dump_cands"):
+            CTX["last_cands"] = [c[0] for cs in by_def.values() for c in cs]
+        return state, events, before, before, 0, None
     k = 0
     ties = 0
     phase = "neg"
