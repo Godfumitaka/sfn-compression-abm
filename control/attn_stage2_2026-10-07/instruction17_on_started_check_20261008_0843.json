@@ -1,0 +1,436 @@
+{
+  "at": "2026-10-08T08:43:33.641530+09:00",
+  "machine": {
+    "at": "2026-10-08T08:43:33.682568+09:00",
+    "models": {
+      "77324": {
+        "ppid": 77313,
+        "state": "R",
+        "rss_kb": 1088432
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 93600
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 77309,
+        "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 223187587072,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "ps_relevant": {
+    "77309": [
+      1,
+      "Ss",
+      0.0,
+      7392,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示16 較正の下見 birth_hu_off --mem 11 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/preview.py entry birth_hu_off"
+    ],
+    "77313": [
+      77309,
+      "S",
+      0.0,
+      10000,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off/native_command.json"
+    ],
+    "77323": [
+      77313,
+      "S",
+      0.0,
+      7408,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    ],
+    "77324": [
+      77313,
+      "R",
+      99.0,
+      1088432,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "91021": [
+      1,
+      "Ss",
+      0.0,
+      16976,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+    ],
+    "95408": [
+      91021,
+      "Ss",
+      0.0,
+      18736,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    ],
+    "95412": [
+      95408,
+      "S",
+      0.0,
+      27376,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    ],
+    "95420": [
+      95412,
+      "S",
+      0.0,
+      15856,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    ],
+    "95421": [
+      95412,
+      "R",
+      99.1,
+      93600,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "96589": [
+      52419,
+      "Ss",
+      0.0,
+      16640,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -"
+    ],
+    "97541": [
+      1,
+      "Ss",
+      0.0,
+      8000,
+      "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+    ]
+  },
+  "controller_status": {
+    "at": "2026-10-08T08:43:27.155437+09:00",
+    "pid": 91021,
+    "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "phase": "preview_running_or_waiting",
+    "adopted_off_receipt": 77309,
+    "active_on_receipt": 95408,
+    "on_pending": false,
+    "completed": [],
+    "on_mem_gb": 4,
+    "machine": {
+      "at": "2026-10-08T08:43:27.115569+09:00",
+      "models": {
+        "77324": {
+          "ppid": 77313,
+          "state": "R",
+          "rss_kb": 1088416
+        },
+        "95421": {
+          "ppid": 95412,
+          "state": "R",
+          "rss_kb": 93520
+        }
+      },
+      "model_children": 2,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 77309,
+          "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+          "mem_gb": 11.0
+        },
+        {
+          "pid": 95408,
+          "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+          "mem_gb": 4.0
+        }
+      ],
+      "disk_free_bytes": 223187808256,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "models_not_signaled": true,
+    "automatic_retry": false,
+    "preview_only": true
+  },
+  "cases": {
+    "birth_hu_off": {
+      "worker_pid.json": {
+        "at": "2026-10-08T07:27:09.642473+09:00",
+        "pid": 77324,
+        "ppid": 77313
+      },
+      "progress.json": {
+        "at": "2026-10-08T08:43:33.407977+09:00",
+        "trial": 819,
+        "trials_completed": 820,
+        "seconds": 11.70279470802052,
+        "elapsed_seconds": 4583.704405000026,
+        "peak_rss_bytes": 1114554368,
+        "definitions": 13,
+        "disclosed": true,
+        "disclosed_trials": 414,
+        "rematch_totals": {
+          "birth": {
+            "calls": 3644,
+            "seconds": 163.91239875764586,
+            "match_calls": 25648,
+            "result_cache_hits": 0,
+            "engine_calls": 25648,
+            "engine_seconds": 28.094038639450446,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 72611,
+            "seconds": 3115.071016063972,
+            "match_calls": 72611,
+            "result_cache_hits": 0,
+            "engine_calls": 72611,
+            "engine_seconds": 121.296819010342,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 286954,
+          "signs": {
+            "positive": 79705,
+            "zero": 163537,
+            "negative": 43712
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 43712
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 79705
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 20060
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 143477
+            }
+          ]
+        }
+      },
+      "measurement.json": {
+        "exists": false
+      },
+      "partial_measurement.json": {
+        "exists": false
+      },
+      "worker_finished.json": {
+        "exists": false
+      },
+      "entry_started": {
+        "at": "2026-10-08T07:27:09.511500+09:00",
+        "machine": {
+          "at": "2026-10-08T07:27:09.458855+09:00",
+          "models": {
+            "69711": {
+              "ppid": 69708,
+              "state": "R",
+              "rss_kb": 9557392
+            }
+          },
+          "model_children": 1,
+          "paused": 0,
+          "registered": [
+            {
+              "pid": 64842,
+              "owner": "SME_structure_reuse_full1740_01",
+              "mem_gb": 11.0
+            },
+            {
+              "pid": 77309,
+              "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+              "mem_gb": 11.0
+            }
+          ],
+          "disk_free_bytes": 225044848640,
+          "swap_used_mb": 180.0,
+          "swap_ok": true,
+          "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+          "thermal_warnings": [],
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "unregistered_heavy": []
+        },
+        "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+        "mem_gb": 11,
+        "world": 2,
+        "seed": 41,
+        "trials": 1740,
+        "no_forget_exec": true,
+        "birth_hu": "off",
+        "preview_only": true
+      }
+    },
+    "birth_hu_on": {
+      "worker_pid.json": {
+        "at": "2026-10-08T08:38:26.234102+09:00",
+        "pid": 95421,
+        "ppid": 95412
+      },
+      "progress.json": {
+        "at": "2026-10-08T08:42:11.200828+09:00",
+        "trial": 18,
+        "trials_completed": 19,
+        "seconds": 0.2997588340076618,
+        "elapsed_seconds": 224.93809495901223,
+        "peak_rss_bytes": 90701824,
+        "definitions": 5,
+        "disclosed": false,
+        "disclosed_trials": 11,
+        "rematch_totals": {
+          "birth": {
+            "calls": 2448,
+            "seconds": 70.33961896365508,
+            "match_calls": 12576,
+            "result_cache_hits": 0,
+            "engine_calls": 12576,
+            "engine_seconds": 12.236914504261222,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 561,
+            "seconds": 14.743192821217235,
+            "match_calls": 561,
+            "result_cache_hits": 0,
+            "engine_calls": 561,
+            "engine_seconds": 0.47341296897502616,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 1780,
+          "signs": {
+            "positive": 1389,
+            "zero": 391
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 610
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 280
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 779
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 111
+            }
+          ]
+        }
+      },
+      "measurement.json": {
+        "exists": false
+      },
+      "partial_measurement.json": {
+        "exists": false
+      },
+      "worker_finished.json": {
+        "exists": false
+      },
+      "entry_started": {
+        "at": "2026-10-08T08:38:26.093977+09:00",
+        "machine": {
+          "at": "2026-10-08T08:38:26.043467+09:00",
+          "models": {
+            "77324": {
+              "ppid": 77313,
+              "state": "R",
+              "rss_kb": 1054704
+            }
+          },
+          "model_children": 1,
+          "paused": 0,
+          "registered": [
+            {
+              "pid": 77309,
+              "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+              "mem_gb": 11.0
+            },
+            {
+              "pid": 95408,
+              "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+              "mem_gb": 4.0
+            }
+          ],
+          "disk_free_bytes": 223263645696,
+          "swap_used_mb": 180.0,
+          "swap_ok": true,
+          "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+          "thermal_warnings": [],
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "unregistered_heavy": []
+        },
+        "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+        "mem_gb": 4,
+        "world": 2,
+        "seed": 41,
+        "trials": 1740,
+        "no_forget_exec": true,
+        "birth_hu": "on",
+        "preview_only": true,
+        "instruction17": true
+      }
+    }
+  },
+  "sources": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "status": ""
+    }
+  },
+  "n16_n17_complete": false,
+  "no_duplicate_submission": true
+}
