@@ -1,0 +1,119 @@
+{
+  "at": "2026-10-08T00:48:05.398423+09:00",
+  "model_children": 4,
+  "paused": 3,
+  "own_models": [
+    4893
+  ],
+  "models": {
+    "4893": {
+      "ppid": 4882,
+      "state": "R",
+      "rss_kb": 360768,
+      "kind": "spawn"
+    },
+    "20821": {
+      "ppid": 20817,
+      "state": "T",
+      "rss_kb": 9792,
+      "kind": "spawn"
+    },
+    "20929": {
+      "ppid": 20925,
+      "state": "T",
+      "rss_kb": 9792,
+      "kind": "spawn"
+    },
+    "27538": {
+      "ppid": 27534,
+      "state": "T",
+      "rss_kb": 9792,
+      "kind": "spawn"
+    }
+  },
+  "registered": [
+    {
+      "pid": 20806,
+      "owner": "SME logP主 w2_A_L50 種17 analysis",
+      "mem_gb": 2.0
+    },
+    {
+      "pid": 20915,
+      "owner": "SME logP主 w2_A_L50 種18 analysis",
+      "mem_gb": 2.0
+    },
+    {
+      "pid": 27521,
+      "owner": "SME logP主 w2_A_L50 種19 analysis",
+      "mem_gb": 2.0
+    },
+    {
+      "pid": 4872,
+      "owner": "Codex2 指示8 接続の関門 on_full",
+      "mem_gb": 16.0
+    }
+  ],
+  "registered_mem_gb": 22.0,
+  "swap_used_mb": 180.0,
+  "swap_ok": true,
+  "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+  "thermal_warnings": [],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+  "unregistered_heavy": [],
+  "disk_free_bytes": 231962562560,
+  "memory": {
+    "空きの割合（memory_pressure）": "78%",
+    "free": "2.3 GB",
+    "inactive": "10.9 GB"
+  },
+  "supervisor_94210": {
+    "pid": 94210,
+    "ppid": 1,
+    "state": "Ss",
+    "rss_kb": 24800,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py"
+  },
+  "supervisor_66840_absent": true,
+  "supervisor_72172_absent": true,
+  "resume_status": {
+    "phase": "receipt_wait_or_running",
+    "kind": "on_full",
+    "at": "2026-10-07T23:27:45.663382+09:00",
+    "pid": 94210,
+    "receipt_pid": 4872,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "requested_mem_gb": 16
+  },
+  "resume_warning": null,
+  "resume_failure": null,
+  "on_full_completed": null,
+  "on_full_gate": null,
+  "source": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+  "source_dirty": "",
+  "controller_sha256": "0589288a6a086b6f1d77f46c8ce0b6a7dc7b27754467a9e337fca50cb4be2c93",
+  "unreceived_instructions": [],
+  "eligible_queue_rows": 0,
+  "eligible_queue_ids": [],
+  "last_on_full_performance": {
+    "trial": 422,
+    "seconds": 11.657904000021517,
+    "elapsed_seconds": 4815.616897957982,
+    "peak_rss_bytes": 369328128,
+    "definitions": 1,
+    "candidates": 1,
+    "cstar_cache_count": 4647,
+    "cstar_self_cache_count": 575
+  },
+  "required_off_gate.json": {
+    "passed": true,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "trials": 1740,
+    "sha256": "478a3b581491efb60e396ccdac2e552ad293599fbe7a2f8214c739d11d162926"
+  },
+  "on_preflight_gate.json": {
+    "passed": true,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "trials": 20,
+    "sha256": "afe1cb8bf9869ba87d76f5cc1c797c1b6ce8f50ab733634250ca4e2074cc3ab3"
+  }
+}
