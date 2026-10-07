@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-07T22:27:29.571130+09:00",
+  "source": "7774b60",
+  "model_not_run": true,
+  "implementation_not_changed": true,
+  "file_sha256": {
+    "smeshared.py": "eb1b432d2a6e5f8830f1cacb59300df97632518a941d9eccce637692257b292f",
+    "sme2017.py": "8c978194dd7c7a2172f30091fe6605f96315cf430c0559d7fc3d2778674ab923",
+    "cstar_matcher.py": "9edc495bff251739265506a9429588508abfe2c119ba9e17ab6e62831d97386e",
+    "cstar_runtime.py": "43f5988f1f5856853b740b977be73a817f4bf429929ac4aa51da790f057274a8",
+    "cstar_probability.py": "133ac0343a6ac6d951eda139d6a3421532ca356c5c80f938f283c6f5348acfa0",
+    "smeevict.py": "b9ad81b14c16a8687e9a435df46a3d351be1c0a4e30572de06b384b1d5799fcb"
+  },
+  "facts": [
+    {
+      "place": "smeshared.py:109",
+      "fact": "call_seedの材料に走行の種・試行・正準形二つ・呼び出しの種類が入る。別の試行やpredict/capture/rewriteでは種が同じとは限らない。"
+    },
+    {
+      "place": "cstar_matcher.py:18〜28、sme2017.py:230",
+      "fact": "控えの完全な鍵はC*の版・分布の全項・SMEの設定・左右のfingerprint・同点規則・種を含む。"
+    },
+    {
+      "place": "cstar_runtime.py:36〜54、cstar_probability.py:59",
+      "fact": "分布はその時点のstate.p_hatからのbとstate.slot_historyのHを読む。名前と構造が同じでもこれらが変われば同じ照合ではない。"
+    },
+    {
+      "place": "smeshared.py:193〜199、cstar_matcher.py:34〜36",
+      "fact": "完全な鍵が同じ呼び出しは既にRESULTS又はENGINE.cacheで使い回す。"
+    },
+    {
+      "place": "sme2017.py:301〜312、cstar_matcher.py:126",
+      "fact": "(a)は最終の同点だけでなく高さ等の中間の同点でも順列を抽選しchoicesへ残す。result.tiedだけでは種に依らない証拠にならない。"
+    },
+    {
+      "place": "smeshared.py:207〜216、405、cstar_runtime.py:132、sme2017.py:220",
+      "fact": "旧照合の比較の前後でsnapshot/restoreし、C*の三つの控えもdictで写す。"
+    },
+    {
+      "place": "smeevict.py:51〜55",
+      "fact": "試行を終えた控えを捨てる対象はshared.ENGINEとRESULTSであり、cstar_runtime.ENGINEの控えはこの表には入っていない。"
+    }
+  ],
+  "limits": "実際の時間割合と再利用可能な組の件数はまだ未測定。名前だけ・定義IDだけを鍵にして再利用しない。試行や呼び出しの種類を鍵から外さない。",
+  "exact_candidates": [
+    {
+      "candidate": "完全な鍵が同じ照合",
+      "condition": "現在の版・設定・左右のfingerprint・分布・同点の種が同じ",
+      "status": "既存の控えで実施済み。追加の一致する組の数は未測定。"
+    },
+    {
+      "candidate": "種だけが違う照合の点の部品",
+      "condition": "左右と分布と設定が同じで、全ての中間の抽選を含め種に依らないことを証明し、呼び出しごとの種の記録は元のまま再構成する",
+      "status": "未実装・未検証。tiedの欄だけで代用しない。"
+    },
+    {
+      "candidate": "不変の図・分布・局所の期待点の部品の控え",
+      "condition": "b・履歴・席・見えている場面・設定など依存する全入力が同じで、元と同じ型・値・順・計算順・記録を保つ",
+      "status": "後半のCPU内訳を見て候補を選ぶ。未実装。"
+    },
+    {
+      "candidate": "旧照合の診断の保存と復元の配管",
+      "condition": "旧照合が触る状態と触らない状態を全呼び出しについて証明し、元の記録と乱数と保存状態を保つ",
+      "status": "コピーが重いとの仮説。時間の確認と証明前には変更しない。"
+    }
+  ]
+}

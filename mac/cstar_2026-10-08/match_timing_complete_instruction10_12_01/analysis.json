@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "source": "7774b60",
+  "material_choice": 2,
+  "configured_trials": 1740,
+  "model_bytes_identical": true,
+  "definition_prediction_calls": 40878,
+  "definition_mean_cpu_seconds": 0.016690594598562394,
+  "definition_p90_cpu_seconds": 0.030662000000120315,
+  "definition_heavy_top10_percent_calls": 4088,
+  "definition_heavy_top10_percent_mean_cpu_seconds": 0.041622380381613346,
+  "model_cpu_seconds": 2793.182721999971,
+  "observed_process_cpu_seconds": 2833.4802,
+  "observer_cpu_seconds": 40.297478000028846,
+  "pipeline_cpu_seconds": 2266.9506409999904,
+  "core_cpu_seconds": 523.8907649999534,
+  "outside_matching_pipeline_fraction": 0.1883987312592241,
+  "outside_matcher_core_fraction": 0.8124394938885925,
+  "matching_pipeline_callers": {
+    "v39:predict": {
+      "calls": 12152,
+      "cpu_seconds": 145.14665799999585,
+      "mean_cpu_seconds": 0.011944260862409139,
+      "fraction_of_matching_cpu": 0.06402726877898374,
+      "fraction_of_model_cpu": 0.05196461257502987
+    },
+    "histrole:capture": {
+      "calls": 44356,
+      "cpu_seconds": 704.080638999985,
+      "mean_cpu_seconds": 0.01587340244837192,
+      "fraction_of_matching_cpu": 0.31058490037939385,
+      "fraction_of_model_cpu": 0.25207109919964354
+    },
+    "v310be:rewrite": {
+      "calls": 42617,
+      "cpu_seconds": 660.5484060000059,
+      "mean_cpu_seconds": 0.015499645822089915,
+      "fraction_of_matching_cpu": 0.2913819092720196,
+      "fraction_of_model_cpu": 0.23648592725328077
+    },
+    "routelog:_sources": {
+      "calls": 1739,
+      "cpu_seconds": 14.145712999997182,
+      "mean_cpu_seconds": 0.008134395054627477,
+      "fraction_of_matching_cpu": 0.006239973973918227,
+      "fraction_of_model_cpu": 0.005064370794141454
+    },
+    "v39:map_v39": {
+      "calls": 48694,
+      "cpu_seconds": 743.0292250000066,
+      "mean_cpu_seconds": 0.015259153591818429,
+      "fraction_of_matching_cpu": 0.32776594759568467,
+      "fraction_of_model_cpu": 0.26601525891868033
+    }
+  },
+  "matcher_core_callers": {
+    "v39:predict": {
+      "calls": 12152,
+      "cpu_seconds": 33.88463999999106,
+      "mean_cpu_seconds": 0.002788400263330403,
+      "fraction_of_matching_cpu": 0.06467882670158172,
+      "fraction_of_model_cpu": 0.012131193470840684
+    },
+    "histrole:capture": {
+      "calls": 42615,
+      "cpu_seconds": 197.479831999939,
+      "mean_cpu_seconds": 0.004634045101488654,
+      "fraction_of_matching_cpu": 0.376948488488734,
+      "fraction_of_model_cpu": 0.07070064927887702
+    },
+    "v310be:rewrite": {
+      "calls": 42615,
+      "cpu_seconds": 118.3955150000111,
+      "mean_cpu_seconds": 0.0027782591810398007,
+      "fraction_of_matching_cpu": 0.22599275060712634,
+      "fraction_of_model_cpu": 0.04238731468138171
+    },
+    "v39:map_v39": {
+      "calls": 40878,
+      "cpu_seconds": 174.13077800001219,
+      "mean_cpu_seconds": 0.004259767552228881,
+      "fraction_of_matching_cpu": 0.33237993420255785,
+      "fraction_of_model_cpu": 0.06234134868030807
+    }
+  },
+  "quantile": "一回の観測を等重みとし、p90は昇順のceil(0.9*n)番目。重い10%は大きいceil(0.1*n)件。",
+  "measurement": "time.process_timeのCPU秒とperf_counterの実時間。定義のmap_v39は図の作成・分布・照合・旧照合の記録・書き出しを含む。matching_pipeline_callはsmeshared.map_graphsの入口から戻りまで、CstarMatcher.matchは控えの鍵・控えの検索・照合器を含む。観測の書き出しとengineの追加の記録の負荷は外側のCPU秒から引く。各秒は入れ子なので足さない。",
+  "run": {
+    "at": "2026-10-08T05:48:13.508108+09:00",
+    "exit": 0,
+    "wall_seconds": 2849.3778456249856,
+    "paused_seconds": 0.0,
+    "maximum_observed_model_tree_rss_bytes": 11122589696,
+    "sampling_seconds": 2
+  },
+  "note": "図の作成を含む定義のmap_v39、配管のsmeshared.map_graphs、CstarMatcher.matchは入れ子。秒を足さない。配管には分布・控え・旧照合の診断・照合記録の書き出しを含む。模型のCPU秒から観測の書き出し・付加記録の計測済み負荷を除く。time関数の入口などの微小な観測負荷は残る。速度の倍率の測定とは別。"
+}

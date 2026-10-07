@@ -1,0 +1,312 @@
+{
+  "at": "2026-10-08T06:20:41.591131+09:00",
+  "passed": true,
+  "source": "7774b60",
+  "configured_trials": 1740,
+  "model_runs": 0,
+  "model_bytes_identical": true,
+  "observations": {
+    "prediction_counts": 1740,
+    "cache_after_prediction": 1740,
+    "cstar_matcher_call": 138260,
+    "matching_pipeline_call": 149558,
+    "definition_mapping": 40878,
+    "cache_at_completion": 1
+  },
+  "observation_file_sha256": "1a545f83a2d10d1483f04dcfa51e4f9c5c608fdbc0dc3e7d3945d68cf97fa7cd",
+  "cstar_engine_calls": 138260,
+  "engine_full_key_duplicate_calls_same_trial": 0,
+  "engine_full_key_duplicate_cpu_seconds": 0.0,
+  "engine_seedless_key_duplicate_calls_same_trial": 4380,
+  "engine_seedless_key_duplicate_cpu_seconds": 4.387351999995394,
+  "seedless_first_caller_to_repeated_caller": [
+    {
+      "first": "v39:map_v39",
+      "repeated": "histrole:capture",
+      "calls": 4380
+    }
+  ],
+  "cstar_pipeline_calls_with_observed_keys": 140003,
+  "cstar_pipeline_full_key_duplicate_calls_same_trial": 1743,
+  "cache_tables": {
+    "cstar_cache": {
+      "first_prediction": 0,
+      "last_prediction": 138208,
+      "completion": 138260,
+      "maximum_after_prediction": 138208,
+      "decreases_between_predictions": 0,
+      "container_max_bytes": 5242960,
+      "container_completion_bytes": 5242960
+    },
+    "cstar_cache_rng": {
+      "first_prediction": 0,
+      "last_prediction": 138208,
+      "completion": 138260,
+      "maximum_after_prediction": 138208,
+      "decreases_between_predictions": 0,
+      "container_max_bytes": 5242960,
+      "container_completion_bytes": 5242960
+    },
+    "cstar_self_cache": {
+      "first_prediction": 0,
+      "last_prediction": 3710,
+      "completion": 3710,
+      "maximum_after_prediction": 3710,
+      "decreases_between_predictions": 0,
+      "container_max_bytes": 147544,
+      "container_completion_bytes": 147544
+    },
+    "shared_results": {
+      "first_prediction": 0,
+      "last_prediction": 32,
+      "completion": 89,
+      "maximum_after_prediction": 41,
+      "decreases_between_predictions": 124,
+      "container_max_bytes": 1184,
+      "container_completion_bytes": 4704
+    },
+    "shared_graphs": {
+      "first_prediction": 0,
+      "last_prediction": 14186,
+      "completion": 14190,
+      "maximum_after_prediction": 14186,
+      "decreases_between_predictions": 0,
+      "container_max_bytes": 415152,
+      "container_completion_bytes": 415152
+    },
+    "shared_choices": {
+      "first_prediction": 0,
+      "last_prediction": 3477,
+      "completion": 3477,
+      "maximum_after_prediction": 3477,
+      "decreases_between_predictions": 0,
+      "container_max_bytes": 147544,
+      "container_completion_bytes": 147544
+    }
+  },
+  "cache_checkpoints": {
+    "1": {
+      "kind": "cache_after_prediction",
+      "trial_index": 0,
+      "cstar_cache": 0,
+      "cstar_cache_rng": 0,
+      "cstar_self_cache": 0,
+      "shared_results": 0,
+      "shared_graphs": 0,
+      "shared_choices": 0,
+      "maximum_rss_bytes": 71319552,
+      "cache_container_bytes": {
+        "cstar_cache": 64,
+        "cstar_cache_rng": 64,
+        "cstar_self_cache": 64,
+        "shared_results": 80,
+        "shared_graphs": 64,
+        "shared_choices": 64
+      }
+    },
+    "100": {
+      "kind": "cache_after_prediction",
+      "trial_index": 99,
+      "cstar_cache": 3999,
+      "cstar_cache_rng": 3999,
+      "cstar_self_cache": 224,
+      "shared_results": 24,
+      "shared_graphs": 661,
+      "shared_choices": 197,
+      "maximum_rss_bytes": 306774016,
+      "cache_container_bytes": {
+        "cstar_cache": 147544,
+        "cstar_cache_rng": 147544,
+        "cstar_self_cache": 9304,
+        "shared_results": 1184,
+        "shared_graphs": 13056,
+        "shared_choices": 9304
+      }
+    },
+    "200": {
+      "kind": "cache_after_prediction",
+      "trial_index": 199,
+      "cstar_cache": 10057,
+      "cstar_cache_rng": 10057,
+      "cstar_self_cache": 443,
+      "shared_results": 24,
+      "shared_graphs": 1549,
+      "shared_choices": 397,
+      "maximum_rss_bytes": 841318400,
+      "cache_container_bytes": {
+        "cstar_cache": 294992,
+        "cstar_cache_rng": 294992,
+        "cstar_self_cache": 18512,
+        "shared_results": 1184,
+        "shared_graphs": 51968,
+        "shared_choices": 18512
+      }
+    },
+    "300": {
+      "kind": "cache_after_prediction",
+      "trial_index": 299,
+      "cstar_cache": 17127,
+      "cstar_cache_rng": 17127,
+      "cstar_self_cache": 664,
+      "shared_results": 29,
+      "shared_graphs": 2414,
+      "shared_choices": 597,
+      "maximum_rss_bytes": 1424097280,
+      "cache_container_bytes": {
+        "cstar_cache": 589912,
+        "cstar_cache_rng": 589912,
+        "cstar_self_cache": 18512,
+        "shared_results": 1184,
+        "shared_graphs": 51968,
+        "shared_choices": 18512
+      }
+    },
+    "1000": {
+      "kind": "cache_after_prediction",
+      "trial_index": 999,
+      "cstar_cache": 72371,
+      "cstar_cache_rng": 72371,
+      "cstar_self_cache": 2117,
+      "shared_results": 27,
+      "shared_graphs": 8156,
+      "shared_choices": 1997,
+      "maximum_rss_bytes": 6038093824,
+      "cache_container_bytes": {
+        "cstar_cache": 2621528,
+        "cstar_cache_rng": 2621528,
+        "cstar_self_cache": 73808,
+        "shared_results": 1184,
+        "shared_graphs": 207616,
+        "shared_choices": 73808
+      }
+    },
+    "1400": {
+      "kind": "cache_after_prediction",
+      "trial_index": 1399,
+      "cstar_cache": 104472,
+      "cstar_cache_rng": 104472,
+      "cstar_self_cache": 3002,
+      "shared_results": 34,
+      "shared_graphs": 11506,
+      "shared_choices": 2797,
+      "maximum_rss_bytes": 8674164736,
+      "cache_container_bytes": {
+        "cstar_cache": 5242960,
+        "cstar_cache_rng": 5242960,
+        "cstar_self_cache": 147544,
+        "shared_results": 1184,
+        "shared_graphs": 415152,
+        "shared_choices": 147544
+      }
+    },
+    "1600": {
+      "kind": "cache_after_prediction",
+      "trial_index": 1599,
+      "cstar_cache": 125001,
+      "cstar_cache_rng": 125001,
+      "cstar_self_cache": 3429,
+      "shared_results": 37,
+      "shared_graphs": 13137,
+      "shared_choices": 3197,
+      "maximum_rss_bytes": 10293592064,
+      "cache_container_bytes": {
+        "cstar_cache": 5242960,
+        "cstar_cache_rng": 5242960,
+        "cstar_self_cache": 147544,
+        "shared_results": 1184,
+        "shared_graphs": 415152,
+        "shared_choices": 147544
+      }
+    },
+    "1740": {
+      "kind": "cache_after_prediction",
+      "trial_index": 1739,
+      "cstar_cache": 138208,
+      "cstar_cache_rng": 138208,
+      "cstar_self_cache": 3710,
+      "shared_results": 32,
+      "shared_graphs": 14186,
+      "shared_choices": 3477,
+      "maximum_rss_bytes": 11075354624,
+      "cache_container_bytes": {
+        "cstar_cache": 5242960,
+        "cstar_cache_rng": 5242960,
+        "cstar_self_cache": 147544,
+        "shared_results": 1184,
+        "shared_graphs": 415152,
+        "shared_choices": 147544
+      }
+    }
+  },
+  "cache_at_completion": {
+    "kind": "cache_at_completion",
+    "trial_index": 1739,
+    "cstar_cache": 138260,
+    "cstar_cache_rng": 138260,
+    "cstar_self_cache": 3710,
+    "shared_results": 89,
+    "shared_graphs": 14190,
+    "shared_choices": 3477,
+    "maximum_rss_bytes": 11078385664,
+    "cache_container_bytes": {
+      "cstar_cache": 5242960,
+      "cstar_cache_rng": 5242960,
+      "cstar_self_cache": 147544,
+      "shared_results": 4704,
+      "shared_graphs": 415152,
+      "shared_choices": 147544
+    }
+  },
+  "maximum_container_total_bytes_after_prediction": 11197344,
+  "largest_hypotheses_example": {
+    "kind": "cstar_matcher_call",
+    "trial_index": 1386,
+    "R": "R_e10c53c730c7a91a",
+    "caller": "v39:map_v39",
+    "prediction": true,
+    "cpu_seconds": 0.009218000000146276,
+    "wall_seconds": 0.00923050002893433,
+    "retained_correspondences": 1,
+    "hypothesis_count": 209,
+    "full_match_key_sha256": "44cc88e3b7a263701a5497458aa00a80904989395f11823032344fad5a8596cd",
+    "match_inputs_without_call_seed_sha256": "c6baf5ef2bbffa581a23e486215d604c1a58669897b4a15bb3ff6155ebc51864",
+    "maximum_rss_before_bytes": 8573665280,
+    "maximum_rss_after_bytes": 8573665280
+  },
+  "largest_candidates_example": {
+    "kind": "cstar_matcher_call",
+    "trial_index": 14,
+    "R": "R_3229d75e4a4c2e0b",
+    "caller": "v39:map_v39",
+    "prediction": true,
+    "cpu_seconds": 0.0009460000000001134,
+    "wall_seconds": 0.0009483749745413661,
+    "retained_correspondences": 3,
+    "hypothesis_count": 65,
+    "full_match_key_sha256": "25275152d9e929abc91a2bdae35a7cea57f00a60c6ce896cbc54308f15d3a8fa",
+    "match_inputs_without_call_seed_sha256": "89cce9b0fa4f9efe1b6056c13e43195d512197779085f6da2daeb638c91de958",
+    "maximum_rss_before_bytes": 83673088,
+    "maximum_rss_after_bytes": 83673088
+  },
+  "largest_single_match_highwater_increase": {
+    "increase_bytes": 6914048,
+    "observation": {
+      "kind": "cstar_matcher_call",
+      "trial_index": 1203,
+      "R": "R_cb63a1ebfc31098d_t1114",
+      "caller": "histrole:capture",
+      "prediction": false,
+      "cpu_seconds": 0.012971999999990658,
+      "wall_seconds": 0.012985666980966926,
+      "retained_correspondences": 3,
+      "hypothesis_count": 171,
+      "full_match_key_sha256": "add99240857ec79976e0a0c5e69021888c86bc71ee2b03638a3fc708bd6bfff4",
+      "match_inputs_without_call_seed_sha256": "177e85de8c087048a9b2467c628106a6215f497ae7c7bbc04f7d720f4501c729",
+      "maximum_rss_before_bytes": 7264698368,
+      "maximum_rss_after_bytes": 7271612416
+    }
+  },
+  "measured_memory_limit": "ru_maxrssは過去最大で現在のRSSではない。sys.getsizeofは辞書の入れ物だけで、鍵・図・候補・対応・写しの内側を含まない。保持項目の試行間の増加は観測できるが、10GiBの内訳と一組の一時的な山を全て分離したとはしない。",
+  "reuse_limit": "種を除いた鍵は左右のfingerprint・設定・全確率・同点規則を含むが、call-seedとcallerの違いを無視した件数用。最終の対応・順位・中間の抽選・候補ID・記録の再利用の保証ではない。完全な鍵が同じ結果の既存の使い回しと別に扱う。",
+  "lifetime_source": "C*のcache/cache_rng/self_cacheはsmeevictの対象外。snapshot/restoreの辞書は浅い写しで値を共有する。これらは保存済みsource_review_instruction12_01.jsonのコードの事実。"
+}
