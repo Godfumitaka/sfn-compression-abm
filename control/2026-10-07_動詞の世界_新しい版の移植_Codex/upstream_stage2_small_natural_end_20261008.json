@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-10-08T03:44:40+09:00",
+  "report_commit": "d51efa9bf8088770a6ed33e54a955ed674398ce2",
+  "report_source": {
+    "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+    "bytes": 131083,
+    "sha256": "0167c1c6ca73b9bf06a50640ddfc6df1321f3cb1529fc598054e64535c3e9be2"
+  },
+  "artifacts": [
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction12_off_200_natural_completion_20261008.json",
+      "bytes": 4213,
+      "sha256": "682586ad13d0c7d6f5dc48bc1340d88af8bdbf4df73b942d6d40a545db546ff5"
+    }
+  ],
+  "source_commit": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+  "off_trials": 200,
+  "off_measurement": {
+    "pid": 27377,
+    "trials": 200,
+    "wall_seconds": 2864.7243068749667,
+    "cpu_user_seconds": 2852.716985,
+    "cpu_system_seconds": 5.13611,
+    "cpu_seconds": 2857.853095,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 211025920,
+    "max_candidates": 1,
+    "max_definitions": 1,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "run_log_alldone": true,
+  "supervisor_end": {
+    "phase": "stopped_no_automatic_retry",
+    "at": "2026-10-08T03:09:09.509910+09:00",
+    "pid": 27353,
+    "error": "RuntimeError('資源条件の確認不足。新規投入・合格宣言を止める')"
+  },
+  "records_not_generated": {
+    "reuse_off_200_completed.json": true,
+    "reuse_on_200_entry_started.json": true,
+    "reuse_on_200_completed.json": true,
+    "required_gate.json": true,
+    "cpu_comparison.json": true
+  },
+  "model_signaled": false,
+  "automatic_retry": false,
+  "small_gate_passed": false,
+  "combined_all_required_gates_passed": false,
+  "own_model_started": false,
+  "original_full_model_seen_in_current_ps": 4893,
+  "note": "指定報告と自然終了の小さい証拠を読むだけ。旗offの自然完走を旗off/onの一致、資源警告の解除又は統合版の合格とは扱わない。原記録の未生成欄は補作しない。"
+}
