@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-07T17:18:07.484797+09:00",
+  "method": "read_designated_dependency_gate_report_only",
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/2026-10-07_C星の関門_比較の直し_Codex.md",
+  "source_sha256": "5973e9a417b3d73460703d82ee43c399e06fbcfb1e1f64ad64f97f7c9db939c3",
+  "gate_report_time": "2026-10-07T17:05:51.783423+09:00",
+  "baseline_code": "1838256",
+  "candidate_code": "7774b60",
+  "result": "flag_off_all_side_gate_failed",
+  "first_difference": {
+    "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+    "trial": 1,
+    "decompressed_line": 1,
+    "field": "left_nodes[0].key",
+    "baseline_value": "8861cb487923b34b",
+    "candidate_value": "df4590fa3723f662"
+  },
+  "ledger_body_equal": true,
+  "answers_equal": true,
+  "remaining_saved_state_comparison": "not_yet_evaluated_due_first_failure",
+  "own_models_started": false,
+  "own_model_signals_sent": false,
+  "dependency_code_edited": false,
+  "own_Cstar_connection_started": false,
+  "new_inbox_instructions": 0,
+  "runnable_queue_rows": 0,
+  "report_commit": "c4943e0c4f3274fb17c335dc5ba02391a84b0e68"
+}
