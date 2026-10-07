@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-08T08:38:25.891648+09:00",
+  "command": [
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "Codex2 指示17 較正の下見 birth_hu_on",
+    "--mem",
+    "4",
+    "--disk-path",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+    "--",
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py",
+    "entry"
+  ],
+  "receipt_pid": 95408,
+  "mem_gb": 4,
+  "machine_before": {
+    "at": "2026-10-08T08:38:25.841517+09:00",
+    "models": {
+      "77324": {
+        "ppid": 77313,
+        "state": "R",
+        "rss_kb": 1054704
+      }
+    },
+    "model_children": 1,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 77309,
+        "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+        "mem_gb": 11.0
+      }
+    ],
+    "disk_free_bytes": 223263698944,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "instruction17": true
+}
