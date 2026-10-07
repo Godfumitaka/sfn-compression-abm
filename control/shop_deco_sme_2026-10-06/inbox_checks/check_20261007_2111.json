@@ -1,0 +1,39 @@
+{
+  "time_jst": "2026-10-07T21:11:56.597714+09:00",
+  "scheduled_time_jst": "2026-10-07T21:11:09.592+09:00",
+  "pulled_commit": "97fafb5055eb347981a3c57e25c7cd8162b010c4",
+  "file_sha256": {
+    "control/受け箱/README.md": "653324dec2c62a7156763dd7c5c7f5b73ccd017618e51a4e8f78600494e60089",
+    "control/受け箱/飾りの係.md": "7cde0afba2d78a0260010ee04cc279b536327a4d13949fd20bf592e152754734",
+    "control/走行の列_2026-10-08.md": "3e71e6374dd8bce0c2104bc0bba61db42861a3b1d3b41208c511bcff9247b802"
+  },
+  "changed_files": [],
+  "unreceived": [],
+  "eligible_queue_rows": [],
+  "model_workers": [
+    {
+      "pid": 65068,
+      "ppid": 65065,
+      "rss_kib": 112240,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "model_worker_count": 1,
+  "other_heavy_R": [],
+  "admission_count": 1,
+  "count_rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB",
+  "own_processes": [],
+  "own_registry": [],
+  "controller_64386_alive": false,
+  "preview_status": "stopped",
+  "preview_native_raw_completed": 1,
+  "preview_supervisor_completed": 0,
+  "preview_analyses_completed": 0,
+  "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+  "seed001_done_sha256": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba",
+  "reference_fingerprint_unchanged": true,
+  "inbox_instruction_1": "done",
+  "inbox_instruction_2": "reference step1 completed; actual comparison and production leak audit pending",
+  "queue_zero": "9 configurations, seeds1/2, version gate pending"
+}
