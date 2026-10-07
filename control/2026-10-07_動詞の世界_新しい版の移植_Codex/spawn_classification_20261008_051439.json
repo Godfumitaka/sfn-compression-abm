@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-08T05:24:16+09:00",
+  "initial_snapshot": "check_20261008_051439.json",
+  "initial_known_models": 0,
+  "initial_unknown_active_spawn": 1,
+  "worker": {
+    "pid": 47884,
+    "ppid": 47881,
+    "state": "R",
+    "rss_bytes": 5469519872,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+    "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_cstar_profile_2026-10-08/observe_match_times_01.py $WORKSPACE/codex_cstar_profile_2026-10-08/match_times_instruction10_01/full1740_01/native_command.json",
+    "worker_kind": "spawn"
+  },
+  "parent_script": {
+    "path": "$WORKSPACE/codex_cstar_profile_2026-10-08/observe_match_times_01.py",
+    "bytes": 10071,
+    "sha256": "31e5ab45523ab40245fb3c31f4a1c53ba9d37998d221e66ecbb5f9233632b35c"
+  },
+  "classification": "v3_run.workerをREAL_WORKERへ保存し、観測workerから一度呼ぶ。mainでv3_run.workerを設定してv3_run.mainを起動する。PID47884を模型として数える。初回既知0＋未分類1を全体0とは扱わない。",
+  "counter_before_sha256": "9ab3afcd72409ab948b7ddf21aa6b52827f79cdcee53bcccbcfb42781770ba02",
+  "counter_after_sha256": "773693fec52e384771b222cc38cbf5055d3a9cd762f9119d630708d151b44886",
+  "changes": "自分の監視側MODEL_HOSTSに親の台本名を追加しただけ。模型・上流の台本・旗・受付・過程は変更しない。"
+}
