@@ -6,7 +6,9 @@
   "replay（任意）：replay.py が新しい版の本を tools/selcands_sme.py で再生するための設定。src＝その版のきれいな作業場所、commit＝その HEAD、commands＝一本ずつの命令（command[3] が本の出力先と一致するもの）を探す glob。src に tools/selcands_sme.py が無い、本番の side に sme.states.jsonl.gz が無いときは再生せず NA のまま。",
   "todo: true の群は飛ばす。新しい版の走行が始まったら、走行の列の「版・旗・出力先」から root を書き、todo を外す。arm の名は build_commands.py の q<#>_w<世界>。",
   "absent_basis：正答できる定義の不在の数え方。gate＝門を通って正しく答える定義が無い（既定。選び間違い・区別の喪失と同じ基準）、any＝門を見ず、正しく答える候補が一つも無い。",
-  "memory：記憶のビットの読み方。side の jsonl の kind の記録の fields。新しい版で記録の形が変われば群ごとに memory を書き換える。"
+  "memory：記憶のビットの読み方。side の jsonl の kind の記録の fields。新しい版で記録の形が変われば群ごとに memory を書き換える。",
+  "effort：手間の列の数え方。none＝反実仮想の評価が無い（0）、gate_FH＝開示の試行で門を通った全候補の F・H の席の数（第二段・誤り駆動）、selected_FH＝選ばれた定義（R_used）の F・H の席の数（C）。記録（side の cflearn.jsonl）があればその行の数を使う。未設定（TODO）は NA。",
+  "prob：確率で答えた場合の正答率の設定。status に、計算しない理由を書く（記録に P・π があり、読み方が決まったら計算を足す）。prob_approx: true の構成（D・D＋注意・基準）は表に「近似」と書く。"
  ],
  "absent_basis": "gate",
  "memory": {
@@ -62,43 +64,57 @@
     "w2_A_L50": {
      "config": "A_L50",
      "world": 2,
-     "lambda": "L50"
+     "lambda": "L50",
+     "effort": "none"
     },
     "w2_A_zero": {
      "config": "A_zero",
      "world": 2,
-     "lambda": "0"
+     "lambda": "0",
+     "effort": "none"
     },
     "w2_D_tau04": {
      "config": "D_tau04",
      "world": 2,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     },
     "w2_C_L50": {
      "config": "C_L50",
      "world": 2,
-     "lambda": "L50"
+     "lambda": "L50",
+     "effort": "selected_FH"
     },
     "w1_A_L50": {
      "config": "A_L50",
      "world": 1,
-     "lambda": "L50"
+     "lambda": "L50",
+     "effort": "none"
     },
     "w1_A_zero": {
      "config": "A_zero",
      "world": 1,
-     "lambda": "0"
+     "lambda": "0",
+     "effort": "none"
     },
     "w1_D_tau04": {
      "config": "D_tau04",
      "world": 1,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     },
     "w1_C_L50": {
      "config": "C_L50",
      "world": 1,
-     "lambda": "L50"
+     "lambda": "L50",
+     "effort": "selected_FH"
     }
+   },
+   "prob": {
+    "status": "空欄：記録に P・π が無い。古い版（858f708・10cd8bd）は log P の旗が無い 0/ℓ の採点で、名前の確率 P_d を作らず、定義の選びは N3 の一位で温度 1 の確率 π も作らない。候補の記録（selcands_sme）も候補ごとの点の答え（名前一つ）しか持たない",
+    "short": "空欄：記録に P・π が無い（理由は meta.json）"
    }
   },
   {
@@ -111,13 +127,19 @@
     "q1a_w1": {
      "config": "全部入り_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q1a_w2": {
      "config": "全部入り_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -130,13 +152,19 @@
     "q1b_w1": {
      "config": "全部入り_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q1b_w2": {
      "config": "全部入り_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -149,13 +177,21 @@
     "q2a_w1": {
      "config": "基準_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
     },
     "q2a_w2": {
      "config": "基準_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -168,13 +204,21 @@
     "q2b_w1": {
      "config": "基準_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
     },
     "q2b_w2": {
      "config": "基準_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -187,13 +231,19 @@
     "q3a_w1": {
      "config": "注意を外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q3a_w2": {
      "config": "注意を外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -206,13 +256,19 @@
     "q3b_w1": {
      "config": "注意を外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q3b_w2": {
      "config": "注意を外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -225,13 +281,19 @@
     "q4a_w1": {
      "config": "第二段をCに_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
     },
     "q4a_w2": {
      "config": "第二段をCに_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -244,13 +306,19 @@
     "q4b_w1": {
      "config": "第二段をCに_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
     },
     "q4b_w2": {
      "config": "第二段をCに_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -263,13 +331,19 @@
     "q5a_w1": {
      "config": "C*を外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q5a_w2": {
      "config": "C*を外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -282,13 +356,19 @@
     "q5b_w1": {
      "config": "C*を外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q5b_w2": {
      "config": "C*を外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -301,13 +381,19 @@
     "q6a_w1": {
      "config": "logPを外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q6a_w2": {
      "config": "logPを外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -320,13 +406,19 @@
     "q6b_w1": {
      "config": "logPを外す_L50",
      "world": 1,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     },
     "q6b_w2": {
      "config": "logPを外す_L50",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -339,13 +431,19 @@
     "q7a_w1": {
      "config": "名前の忘却なし",
      "world": 1,
-     "lambda": "なし（忘却の実行を止める旗）"
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
     },
     "q7a_w2": {
      "config": "名前の忘却なし",
      "world": 2,
-     "lambda": "なし（忘却の実行を止める旗）"
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -358,13 +456,19 @@
     "q7b_w1": {
      "config": "名前の忘却なし",
      "world": 1,
-     "lambda": "なし（忘却の実行を止める旗）"
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
     },
     "q7b_w2": {
      "config": "名前の忘却なし",
      "world": 2,
-     "lambda": "なし（忘却の実行を止める旗）"
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -377,13 +481,19 @@
     "q8_w1": {
      "config": "全部入り_L25",
      "world": 1,
-     "lambda": "L25_ref"
+     "lambda": "L25_ref",
+     "effort": "gate_FH"
     },
     "q8_w2": {
      "config": "全部入り_L25",
      "world": 2,
-     "lambda": "L25_ref"
+     "lambda": "L25_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -396,13 +506,19 @@
     "q9_w1": {
      "config": "全部入り_L90",
      "world": 1,
-     "lambda": "L90_ref"
+     "lambda": "L90_ref",
+     "effort": "gate_FH"
     },
     "q9_w2": {
      "config": "全部入り_L90",
      "world": 2,
-     "lambda": "L90_ref"
+     "lambda": "L90_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -415,13 +531,21 @@
     "q10_w1": {
      "config": "D_τ0.4",
      "world": 1,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     },
     "q10_w2": {
      "config": "D_τ0.4",
      "world": 2,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -434,13 +558,21 @@
     "q11_w1": {
      "config": "D_τ0.15",
      "world": 1,
-     "lambda": "なし（τ0.15）"
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
     },
     "q11_w2": {
      "config": "D_τ0.15",
      "world": 2,
-     "lambda": "なし（τ0.15）"
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -453,13 +585,21 @@
     "q12_w1": {
      "config": "D＋注意_τ0.4",
      "world": 1,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     },
     "q12_w2": {
      "config": "D＋注意_τ0.4",
      "world": 2,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -472,13 +612,21 @@
     "q13_w1": {
      "config": "D＋注意_τ0.15",
      "world": 1,
-     "lambda": "なし（τ0.15）"
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
     },
     "q13_w2": {
      "config": "D＋注意_τ0.15",
      "world": 2,
-     "lambda": "なし（τ0.15）"
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -491,13 +639,19 @@
     "q14_w1": {
      "config": "誤り駆動",
      "world": 1,
-     "lambda": "TODO"
+     "lambda": "TODO",
+     "effort": "gate_FH"
     },
     "q14_w2": {
      "config": "誤り駆動",
      "world": 2,
-     "lambda": "TODO"
+     "lambda": "TODO",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -510,8 +664,13 @@
     "q15_w2": {
      "config": "全部入り_L50_例外0.1",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -524,8 +683,13 @@
     "q16_w2": {
      "config": "全部入り_L50_例外0.3",
      "world": 2,
-     "lambda": "L50_ref"
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -538,8 +702,14 @@
     "q17_w2": {
      "config": "D＋注意_τ0.4_例外0.1",
      "world": 2,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   },
   {
@@ -552,8 +722,14 @@
     "q18_w2": {
      "config": "D＋注意_τ0.4_例外0.3",
      "world": 2,
-     "lambda": "なし（τ0.4）"
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
     }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
    }
   }
  ]

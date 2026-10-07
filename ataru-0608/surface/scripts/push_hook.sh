@@ -9,7 +9,7 @@ TRAILER="Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 rebasing() { [ -d "$(git -C $RES rev-parse --git-path rebase-merge)" ] || [ -d "$(git -C $RES rev-parse --git-path rebase-apply)" ]; }
 rebasing && { echo "★ $RES が rebase の途中"; exit 2; }
 mkdir -p $DEST/scripts
-cp -p $S/out/per_run.csv $S/out/pairs.csv $S/out/memory_bits_vs_errors.csv $S/out/seal_states.csv $S/out/meta.json $DEST/
+cp -p $S/out/per_run.csv $S/out/pairs.csv $S/out/memory_bits_vs_errors.csv $S/out/seal_states.csv $S/out/effort.csv $S/out/columns.csv $S/out/meta.json $DEST/
 cp -p $S/surface.py $S/replay.py $S/crosscheck.py $S/configs.json $S/pairs.json $S/watch.sh $S/push_hook.sh $DEST/scripts/
 git -C $RES add -- $REL
 if git -C $RES diff --cached --quiet -- $REL; then echo "$(date '+%F %T') push_hook：変わりなし"; exit 0; fi

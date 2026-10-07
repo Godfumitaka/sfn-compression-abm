@@ -47,7 +47,7 @@ import math
 import random
 import statistics
 
-SCHEMA = 4
+SCHEMA = 5
 BASE = Path(__file__).resolve().parent
 OUT = BASE / "out"
 CACHE = BASE / "cache"
@@ -61,6 +61,60 @@ COUNT_KEYS = ("tasks",) + OUTCOMES + CAND_KEYS
 RATE_KEYS = OUTCOMES + ("selection_error", "distinction_loss", "absent")
 MEM_KEYS = ("mem_bits_mean", "mem_bits_last", "defs_mean", "defs_last", "F_mean", "H_mean", "U_mean", "F_last", "H_last", "U_last")
 NA = "NA"
+
+MEM_DEF = ("全部の構成で同じ定義：一本の全試行（試行 0〜最後）の、試行の後の記憶の総ビット（side の jsonl の kind=v39 の bits_after。"
+           "その試行の学習・忘却の後の値で、tools/v39.py の total_bits の和。v310be の C_end と同じ値）を試行で平均したものが mem_bits_mean。"
+           "構成ごとの値（memory_bits_vs_errors.csv の mem_bits_mean）は、それを種で平均したもの。世界 1・2 は別々に出す。"
+           "mem_bits_last は最後の試行の値（参考）")
+EFFORT_DEF = ("開示のあった試行（台帳の f_fired）あたりの、席を仮に薄くして照合し直した回数（反実仮想の評価の回数）と、一本の実時間"
+              "（manifest.jsonl の elapsed_sec）。回数の記録があればそれを使う（古い版の C＝--cf-learn は side の cflearn.jsonl の行"
+              "＝開示の試行で選ばれた定義の U でない席ごとに一行）。記録が無ければ予測の時点の記憶（候補の記録 selcands_sme の各候補の席の状態）から数える："
+              "第二段・誤り駆動（effort=gate_FH）は門を通った全候補の F・H の席の数、C（selected_FH）は選ばれた定義（台帳の R_used）の F・H の席の数、"
+              "D・D＋注意と、反実仮想の無い構成（古い版の A・A_zero・D_tau04）（none）は 0。"
+              "cf_reruns_per_disclosed は C の、選択から答えまでのやり直しの回数（F の席は H と U の二回、H の席は U の一回）。"
+              "cand_count_per_disclosed は候補の記録から規則で数えた値（記録がある構成では突き合わせ用）")
+PROB_DEF = ("実際の答えは一位のまま、(i) 選ばれた定義の答える席が分布から名前を引いた場合の正答の確率 P_{d*}(y)、"
+            "(ii) 定義も温度 1 の確率 π で引いた場合の Σ_d π_d P_d(y) を課題で平均する欄（p_selected_mean・p_mixture_mean）。"
+            "記録（候補の記録を含む）に P・π が無い構成は空欄にし、prob_status に理由を書く。D・D＋注意・基準は prob_approx に「近似」"
+            "（答えが変われば記憶の数え方も変わるため）")
+COLUMNS = [
+    ("per_run.csv", "config・lambda・world・seed・arm", "構成名・λ の札・世界・種・出力先のディレクトリ名（configs.json）"),
+    ("per_run.csv", "run_commit", "本番の版（flag.json の commit の先頭 7 桁）"),
+    ("per_run.csv", "scope", "全課題、又はドア課題（台帳の held_out_is_door）"),
+    ("per_run.csv", "day", "例外（shop_cue＝e）・通常（n）・全日（両方の和）"),
+    ("per_run.csv", "tasks", "課題の数（率の分母）"),
+    ("per_run.csv", "correct・wrong・silent", "正解（hit）・誤答（答えあり・外れ）・棄権（答えなし）"),
+    ("per_run.csv", "selection_error", "選び間違い：誤答のうち、門を通って正しく答える定義があった件（候補の記録の correct_gate_passed）"),
+    ("per_run.csv", "distinction_loss", "区別の喪失：誤答のうち、そのような定義が無かった件"),
+    ("per_run.csv", "absent", "正答できる定義の不在：課題のうち、門を通って正しく答える定義が無かった件（棄権を含む）＝distinction_loss＋absent_silent"),
+    ("per_run.csv", "absent_silent・silent_capable", "棄権のうち、正答できる定義が無かった件・あった件"),
+    ("per_run.csv", "rate_*", "その範囲・日の tasks を分母にした率"),
+    ("per_run.csv", "mem_bits_mean・mem_bits_last", MEM_DEF),
+    ("per_run.csv", "defs_*・F_*・H_*・U_*", "同じ v39 の記録の定義の数・F/H/U の席の数。_mean は全試行の平均、_last は最後の試行"),
+    ("per_run.csv", "selerr_selected_seal_states・distloss_selected_seal_states",
+     "誤答で選ばれた定義のシールの席の区分（状態[名]、+ でつなぐ）と件数。席が無い定義は「席が無い」"),
+    ("per_run.csv", "p_selected_mean・p_mixture_mean・prob_approx・prob_status", PROB_DEF),
+    ("per_run.csv", "candidates_status・candidates_source", "候補の記録の有無と出どころ。NA なら候補の記録を使う欄は NA"),
+    ("per_run.csv", "memory_status", "記憶の記録が読めたか（ok 以外は記憶の欄が NA）"),
+    ("pairs.csv", "num_config・den_config・world・scope・day・metric", "比べる組（num÷den）・世界・範囲・日・比べる数（rate_* 又は mem_bits_mean）"),
+    ("pairs.csv", "n_seeds・seeds", "両方にある種（同じ種どうしで比べる）"),
+    ("pairs.csv", "num_total・den_total・num_tasks・den_tasks", "種の合計の数と課題の数（mem_bits_mean では種ごとの値の合計）"),
+    ("pairs.csv", "ratio", "合計の比＝(Σnum/Σnum_tasks)÷(Σden/Σden_tasks)"),
+    ("pairs.csv", "seeds_num_more・seeds_num_less・seeds_equal", "種ごとに num の率が多い・少ない・同じ種の数"),
+    ("pairs.csv", "ci95_lo・ci95_hi・ci_contains_1",
+     "種を重複ありで選び直した 4,000 回の比の 2.5%・97.5% の順位の値、その範囲が 1 を含むか"),
+    ("pairs.csv", "boot_resamples・boot_undefined・rng_seed", "選び直しの回数・0/0 で除いた回数・乱数の種"),
+    ("memory_bits_vs_errors.csv", "mem_bits_mean・mem_bits_mean_sd", "一本の mem_bits_mean の、種の平均と標準偏差（横軸）"),
+    ("memory_bits_vs_errors.csv", "rate_selection_error_mean・rate_absent_mean（_sd）", "一本の率の、種の平均（と標準偏差）（縦軸）"),
+    ("memory_bits_vs_errors.csv", "n_seeds_with_candidates", "候補の記録がある種の数（選び間違い・不在の平均はこの種だけ）"),
+    ("effort.csv", "effort_rule", "数え方：none（0）・gate_FH・selected_FH（configs.json の effort）"),
+    ("effort.csv", "disclosed_trials", "開示のあった試行の数（台帳の f_fired）"),
+    ("effort.csv", "cf_evals_total・cf_evals_per_disclosed・cf_evals_source", EFFORT_DEF),
+    ("effort.csv", "cf_reruns_per_disclosed", "C の、選択から答えまでのやり直しの回数（開示の試行あたり）"),
+    ("effort.csv", "cand_count_per_disclosed", "候補の記録から規則で数えた値（記録と突き合わせる）"),
+    ("effort.csv", "elapsed_sec", "一本の実時間（manifest.jsonl の elapsed_sec、秒）。「種の平均」の行は種の平均"),
+    ("seal_states.csv", "error_kind・selected_seal_class・selected_seal_state・trials", "誤答の型ごとの、選ばれた定義のシールの区分と件数"),
+]
 
 
 def expand(p):
@@ -112,6 +166,9 @@ def discover(cfg):
                 runs.append({"group": g.get("name", ""), "arm": arm, "seed": seed, "run_dir": str(d), "done": str(df),
                              "config": spec["config"], "world": spec["world"], "lambda": spec.get("lambda", ""),
                              "family": spec.get("family", g.get("family", "")),
+                             "effort": spec.get("effort", g.get("effort", "TODO")),
+                             "prob": spec.get("prob", g.get("prob")),
+                             "prob_approx": bool(spec.get("prob_approx", False)),
                              "replay_dir": str(expand(g.get("replay_dir", BASE / "replay"))),
                              "memory": {**cfg.get("memory", {}), **g.get("memory", {})}})
     if todo:
@@ -154,7 +211,10 @@ def candidate_file(run):
 def cache_key(run, absent_basis):
     cf, _, rj = candidate_file(run)
     mem = one((run["run_dir"], f"side/*/seed{run['seed']:03d}.jsonl"))
+    cfl = one((run["run_dir"], f"side/*/seed{run['seed']:03d}.cflearn.jsonl"))
+    man = Path(run["run_dir"]) / "manifest.jsonl"
     return {"schema": SCHEMA, "absent_basis": absent_basis, "done": stat_key(run["done"]), "cand": stat_key(cf),
+            "cflearn": stat_key(cfl), "manifest": stat_key(man if man.exists() else None),
             "replay_json": stat_key(rj), "mem": stat_key(mem), "memory_cfg": run["memory"]}
 
 
@@ -234,6 +294,9 @@ def compute(run, absent_basis):
     cands = gzip.open(cf, "rt", encoding="utf-8") if cf is not None else None
     counts = Counter()
     seals = Counter()
+    eff = Counter()            # 開示のあった試行での、候補の記録からの数（手間の列）
+    disclosed = 0
+    no_fired = 0
     n = 0
     for row in ledger_rows(led):
         if row.get("record_type", "trial") != "trial":
@@ -245,6 +308,10 @@ def compute(run, absent_basis):
         outcome = "correct" if hit else "silent" if edge is None else "wrong"
         d = DAY.get(row.get("shop_cue"), "なし")
         door = bool(row.get("held_out_is_door"))
+        ff = row.get("f_fired")
+        if ff is None:
+            no_fired += 1
+        disclosed += bool(ff)
         extra = []
         sel_label = None
         kind = None
@@ -257,6 +324,19 @@ def compute(run, absent_basis):
             if (edge is None) != ("abstain_reason" in cr["prediction"]):
                 checks["候補の記録と台帳の答えの有無が違う"] += 1
             capable = cr["correct_gate_passed"] if absent_basis == "gate" else cr["any_correct"]
+            if ff:
+                for c in cr["candidates"]:
+                    if c["gate_passed"]:
+                        eff["gate_FH"] += sum(x["state"] in ("F", "H") for x in c["slots"])
+                R = row.get("R_used")
+                su = [c for c in cr["candidates"] if c["R"] == R] if R is not None else []
+                if su:
+                    nf = sum(x["state"] == "F" for x in su[0]["slots"])
+                    nh = sum(x["state"] == "H" for x in su[0]["slots"])
+                    eff["selected_FH"] += nf + nh
+                    eff["selected_reruns"] += 2 * nf + nh
+                elif R is not None:
+                    checks["開示の試行の R_used が候補の記録に無い"] += 1
             if outcome == "wrong":
                 kind = "selection_error" if cr["correct_gate_passed"] else "distinction_loss"
                 extra.append(kind)
@@ -297,12 +377,35 @@ def compute(run, absent_basis):
     if cands is not None and next(cands, None) is not None:
         raise RuntimeError(f"候補の記録が台帳より長い：{rd}")
     mem, mem_status = memory_stats(run)
+    # 記録の反実仮想の回数（古い版の C＝--cf-learn の side の cflearn.jsonl：開示の試行で薄くした席ごとに一行）
+    cfl = one((rd, f"side/*/seed{seed:03d}.cflearn.jsonl"))
+    record = None
+    if cfl is not None:
+        record = {"rows": 0, "reruns": 0, "trials": 0}
+        tr = set()
+        for line in open(cfl, encoding="utf-8"):
+            x = json.loads(line)
+            record["rows"] += 1
+            record["reruns"] += 2 if x["state"] == "F" else 1
+            tr.add(x["trial"])
+        record["trials"] = len(tr)
+    elapsed = None
+    man = rd / "manifest.jsonl"
+    if man.exists():
+        for line in open(man, encoding="utf-8"):
+            if line.strip():
+                x = json.loads(line)
+                if x.get("seed") in (None, seed) and x.get("elapsed_sec") is not None:
+                    elapsed = x["elapsed_sec"]
+                    break
+    effort = {"disclosed": disclosed if not no_fired else None, "cand": cands is not None, **dict(eff),
+              "record": record, "elapsed_sec": elapsed, "elapsed_source": "manifest.jsonl の elapsed_sec" if elapsed is not None else "manifest なし"}
     return {"run_dir": str(rd), "seed": seed, "run_commit": str(flag.get("commit", ""))[:7],
             "flag_shop_world": flag.get("shop_world"), "trials": n,
             "candidates_status": "ok" if cf is not None else NA, "candidates_source": csrc,
             "counts": [[*k, v] for k, v in sorted(counts.items())],
             "seals": [[*k, v] for k, v in sorted(seals.items(), key=str)],
-            "memory": mem, "memory_status": mem_status, "checks": dict(checks),
+            "memory": mem, "memory_status": mem_status, "effort": effort, "checks": dict(checks),
             "computed_at": datetime.now().isoformat(timespec="seconds"), "wall_seconds": round(time.monotonic() - t0, 2)}
 
 
@@ -371,6 +474,7 @@ def build_cells(runs, results):
 PER_RUN_FIELDS = (["config", "lambda", "world", "seed", "arm", "run_commit", "scope", "day", *COUNT_KEYS]
                   + [f"rate_{k}" for k in RATE_KEYS] + list(MEM_KEYS)
                   + ["selerr_selected_seal_states", "distloss_selected_seal_states",
+                     "p_selected_mean", "p_mixture_mean", "prob_approx", "prob_status",
                      "candidates_status", "candidates_source", "memory_status", "run_dir"])
 
 
@@ -398,7 +502,76 @@ def per_run_rows(table, order):
                     r["distloss_selected_seal_states"] = compact(t["seals"][(scope, day, "distinction_loss")])
                 else:
                     r["selerr_selected_seal_states"] = r["distloss_selected_seal_states"] = NA
+                # 確率で答えた場合の正答率：記録に P・π があるときだけ。今は計算する記録の形が無いので空欄と理由
+                r["p_selected_mean"] = r["p_mixture_mean"] = ""
+                r["prob_approx"] = "近似" if run["prob_approx"] else ""
+                r["prob_status"] = (run["prob"] or {}).get("short", "空欄：記録に P・π の欄が無い（configs.json の prob が未設定）")
                 rows.append(r)
+    return rows
+
+
+EFFORT_FIELDS = ["config", "lambda", "world", "seed", "run_commit", "effort_rule", "disclosed_trials", "cf_evals_total",
+                 "cf_evals_per_disclosed", "cf_evals_source", "cf_reruns_per_disclosed", "cand_count_per_disclosed",
+                 "elapsed_sec", "elapsed_source"]
+EFFORT_SOURCE = {"none": "反実仮想の評価が無い構成（規則で 0）",
+                 "gate_FH": "候補の記録から：開示の試行で、門を通った全候補の F・H の席の数",
+                 "selected_FH": "候補の記録から：開示の試行で、選ばれた定義（台帳の R_used）の F・H の席の数"}
+
+
+def effort_one(t):
+    """一本の手間の列。規則は configs.json の effort（none・gate_FH・selected_FH）。"""
+    run, res = t["run"], t["res"]
+    e = res.get("effort") or {}
+    rule = run["effort"]
+    r = {"config": run["config"], "lambda": run["lambda"], "world": run["world"], "seed": run["seed"],
+         "run_commit": res["run_commit"], "effort_rule": rule, "elapsed_sec": e.get("elapsed_sec", NA),
+         "elapsed_source": e.get("elapsed_source", "")}
+    dis = e.get("disclosed")
+    r["disclosed_trials"] = NA if dis is None else dis
+    total, src, reruns, cand = NA, "", "", ""
+    if rule == "none":
+        total, src = 0, EFFORT_SOURCE["none"]
+    elif rule in ("gate_FH", "selected_FH"):
+        if e.get("cand"):
+            cand = e.get(rule, 0)
+        rec = e.get("record")
+        if rule == "selected_FH" and rec is not None:
+            total, src = rec["rows"], "記録から：side の cflearn.jsonl の行（開示の試行で薄くした席ごとに一行）"
+            reruns = rec["reruns"]
+        elif e.get("cand"):
+            total, src = cand, EFFORT_SOURCE[rule]
+            if rule == "selected_FH":
+                reruns = e.get("selected_reruns", 0)
+        else:
+            src = "候補の記録が無い（NA）"
+    else:
+        src = "configs.json の effort が未設定（NA）"
+    r["cf_evals_total"] = total
+    r["cf_evals_source"] = src
+    ok = dis not in (None, 0)
+    r["cf_evals_per_disclosed"] = fmt(total / dis) if ok and total != NA else (NA if total == NA or dis is None else 0)
+    r["cf_reruns_per_disclosed"] = fmt(reruns / dis) if ok and reruns != "" else ""
+    r["cand_count_per_disclosed"] = fmt(cand / dis) if ok and cand != "" else ""
+    return r
+
+
+def effort_rows(table, order):
+    rows = []
+    groups = defaultdict(list)
+    for k in sorted(table, key=lambda k: (order.get(k[0], 999), k[0], k[1], k[2])):
+        r = effort_one(table[k])
+        rows.append(r)
+        groups[(k[0], k[1])].append(r)
+    for (cfg, w), rs in groups.items():
+        def mean(key):
+            v = [float(x[key]) for x in rs if x[key] not in (NA, "", None)]
+            return fmt(statistics.fmean(v)) if v and len(v) == len(rs) else NA
+        rows.append({"config": cfg, "lambda": rs[0]["lambda"], "world": w, "seed": "種の平均", "run_commit": "",
+                     "effort_rule": rs[0]["effort_rule"], "disclosed_trials": mean("disclosed_trials"),
+                     "cf_evals_total": mean("cf_evals_total"), "cf_evals_per_disclosed": mean("cf_evals_per_disclosed"),
+                     "cf_evals_source": f"{len(rs)} 本の平均", "cf_reruns_per_disclosed": mean("cf_reruns_per_disclosed") if rs[0]["cf_reruns_per_disclosed"] != "" else "",
+                     "cand_count_per_disclosed": mean("cand_count_per_disclosed") if rs[0]["cand_count_per_disclosed"] != "" else "",
+                     "elapsed_sec": mean("elapsed_sec"), "elapsed_source": ""})
     return rows
 
 
@@ -631,6 +804,15 @@ def main():
     prow, skipped = pair_rows(table, pairs_cfg, pairs_cfg.get("metrics", list(RATE_KEYS)))
     write_csv(OUT / "pairs.csv", prow, PAIR_FIELDS)
     write_csv(OUT / "memory_bits_vs_errors.csv", memory_rows(table, order), MB_FIELDS)
+    erows = effort_rows(table, order)
+    write_csv(OUT / "effort.csv", erows, EFFORT_FIELDS)
+    for r in erows:
+        if r["seed"] != "種の平均" and r["cand_count_per_disclosed"] not in ("", NA) and r["cf_evals_source"].startswith("記録から") \
+                and r["cand_count_per_disclosed"] != r["cf_evals_per_disclosed"]:
+            checks["手間：記録の回数と候補の記録からの数が違う本"] += 1
+        elif r["seed"] != "種の平均" and r["cf_evals_source"].startswith("記録から") and r["cand_count_per_disclosed"] not in ("", NA):
+            checks["手間：記録の回数と候補の記録からの数の突き合わせ（本）"] += 1
+    write_csv(OUT / "columns.csv", [{"table": tb, "column": c, "説明": d} for tb, c, d in COLUMNS], ["table", "column", "説明"])
     per_cfg = Counter((r["config"], r["world"]) for r in runs)
     na_cand = Counter((r["config"], r["world"]) for r, res in zip(runs, results) if res["candidates_status"] != "ok")
     na_mem = Counter((r["config"], r["world"]) for r, res in zip(runs, results) if not res["memory"])
@@ -651,7 +833,7 @@ def main():
                               "absent＝distinction_loss＋absent_silent" if absent_basis == "gate" else
                               "課題のうち、正しく答える候補が一つも無かった件（門を見ない、any_correct）"),
             "silent_capable": "棄権のうち、門を通って正しく答える定義があった件",
-            "記憶のビット": "side の jsonl の kind=v39 の bits_after。mem_bits_mean は全試行の平均、mem_bits_last は最後の試行",
+            "記憶のビット": MEM_DEF,
             "F/H/U・定義の数": "同じ v39 の記録の F・H・U（席の数）・defs。_mean は全試行の平均、_last は最後",
             "選ばれた定義のシール": "誤答で selected の候補の、シールの席（shop.jsonl の which=sig）の 状態[名] を + でつなぐ",
             "率": "その範囲・日の課題の数を分母（全課題を分母とする率は scope=全課題）",
@@ -659,7 +841,12 @@ def main():
                      "seeds_num_more/less は種ごとの率の大小。95% の範囲は種を重複ありで選び直した 4,000 回の比の"
                      "2.5%・97.5% の順位の値（比が 0/0 の回は除いて boot_undefined に数え、分母だけ 0 の回は inf）。"
                      "同じ組・世界では全部の欄に同じ選び直しを使う（Python の random.Random(rng_seed)）"),
+            "手間の列（effort.csv）": EFFORT_DEF,
+            "確率で答えた場合の正答率": PROB_DEF,
         },
+        "表の欄の説明": "columns.csv",
+        "確率で答えた場合の正答率が空欄の理由": {f"{r['config']} 世界{r['world']}": (r["prob"] or {}).get("status", "configs.json の prob が未設定")
+                                       for r in runs},
     }
     (OUT / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"{datetime.now():%F %T} 本 {len(runs)}（読み直し {fresh}）、{meta['時間_秒']} 秒、確かめ {dict(checks)}", flush=True)
