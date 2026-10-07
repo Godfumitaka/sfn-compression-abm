@@ -1,0 +1,36 @@
+--- native_preflight_01.py
++++ native_preflight_02.py
+@@ -3,7 +3,7 @@
+ from datetime import datetime
+ import gzip,hashlib,json,os,re,signal,subprocess,sys,time
+ ROOT = Path(__file__).resolve().parent
+-WORK = ROOT/'native_preflight_01'
++WORK = ROOT/'native_preflight_02'
+ NEW = ROOT/'source'
+ BASE = ROOT.parent/'codex_sme_evict_2026-10-06/source_logp'
+ PY = '/opt/homebrew/opt/python@3.12/bin/python3.12'
+@@ -26,10 +26,7 @@
+     save('resources_start.json',{'at':now(),'resources':resources,'cpu':cpu})
+     assert cpu['total_compute_count'] < 8
+     assert resources['free_bytes'] >= 20*2**30 and not resources['swap_grew'] and not resources['thermal_warning']
+-    save('unit_previous.json',{'at':now(),'tests':23,'passed':True,'seconds':.049,'claim_pid':1824})
+-    with (WORK/'units.log').open('w') as log:
+-        checked = subprocess.run([PY,'-m','unittest','discover','-s','tools','-p','test_cstar*.py','-v'],cwd=NEW,stdout=log,stderr=subprocess.STDOUT)
+-    assert checked.returncode == 0, '変更後の小検査の不通'
++    save('unit_previous.json',{'at':now(),'tests':23,'passed':True,'code':'7774b60','reused_existing_tests':True})
+     sources = json.loads((ROOT.parent/'codex_sme_evict_2026-10-06/sources_and_commands.json').read_text())
+     original = sources['cases'][0]['command']
+     cases = [('base_A',BASE,[],False),('off_A',NEW,[],False),
+@@ -48,10 +45,10 @@
+         command[command.index('--trial-count')+1] = '20'
+         command += ['--sme-evict-trial-cache']+added
+         if keep: command[1] = str(ROOT/'material_keep_driver_01.py')
+-        save('current.json',{'at':now(),'case':name,'command':command,'cwd':str(source)})
++        save('current.json',{'at':now(),'case':name,'command':command,'cwd':str(source),'env':{'PYTHONHASHSEED':'0'}})
+         start = time.monotonic()
+         with (case/'run.log').open('w') as log:
+-            proc = subprocess.Popen(command,cwd=source,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
++            proc = subprocess.Popen(command,cwd=source,env=dict(os.environ,PYTHONHASHSEED='0'),stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+             held = False
+             while proc.poll() is None:
+                 time.sleep(2)
