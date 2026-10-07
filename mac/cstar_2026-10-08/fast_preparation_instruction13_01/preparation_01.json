@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-08T00:17:06.841898+09:00",
+  "source_commit": "d5a836d347e74086b71ce5d8534bf1fed44a64b6",
+  "base_commit": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+  "branch": "codex/cstar-exact-fast-2026-10-08",
+  "flags": {
+    "--sme-gc-threshold": "既定None。世代0だけを100000へ、他の世代は現行のまま。workerのfinallyで元へ戻す。",
+    "--sme-fast-encode": "既定False。組み込みスカラーだけ先に判別し、Enum・派生型・全容器・順・欄は元の扱い。"
+  },
+  "unit_checks": {
+    "at": "2026-10-08T00:14:28.894658+09:00",
+    "passed": true,
+    "encoded_fixtures": 269,
+    "unsupported_type_cases": 3,
+    "comparison": "原版と旗なしと旗ありのJSON全バイト・非対応型の例外を比較",
+    "sha256": "8ebf4e452ebafdb304ee0f9168f5520836806b1a3cb0bc504fca1ff187e6b875",
+    "model_not_run": true,
+    "full_native_gate_done": false,
+    "python": "3.12.13 (main, Mar  3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]"
+  },
+  "models_started": 0,
+  "native_gate_done": false,
+  "cpu_savings_observed": false,
+  "production_flags_changed": false,
+  "diagnostic_review": {
+    "map_v39": "smeshared.select_definitionから呼ばれ、点・支持・選びに用いるので省かない。",
+    "OLD_MAP": "smeshared.map_graphsでsnapshot/restoreの中で旧照合を計算し、比較のauditに3欄を残す。直接の新しい対応・点の計算とは別。",
+    "stored_old_fields": [
+      "old_selected_score",
+      "old_entity_mapping",
+      "old_relation_mapping"
+    ],
+    "state_path": "smereplay.predictがAgentOutputとPendingStateをencodeする。traceのSharedAlignment.sme_auditの旧照合の3欄も保存する。",
+    "known_readers": [
+      "tools/selcands_sme.py:132のold_selected_score",
+      "tools/sme_replay_audit.py:102の.sme.jsonl.gz",
+      "tools/sme_replay_audit.py:121の.sme.states.jsonl.gz"
+    ],
+    "stop_or_change_count": 0,
+    "unspecified_case_count": 1,
+    "pending_question": "OLD_MAPを丸ごと省きauditの3欄を欠くと保存状態も変わる。指示13の保存状態全バイト一致を保つため、この省略旗は未実装。診断以外の保存状態を一致とする等への関門変更はしない。"
+  },
+  "estimate": {
+    "gc": "後半のGC 218.575秒（200試行）は調整の対象の実測値。削減の値ではない。調整後の実測は未開始。",
+    "encode": "後半のencode自己CPU 341.668秒は対象の実測値。新しい実装による減少は模型の全バイト関門と同じ計測後に判定。",
+    "reuse": "確率・b・履歴・callerとcall種の違いを外さない。個別観測の件数が未実測で削減秒は未定。",
+    "combined": "削減後の一本の時間は未推定。区間の実測や入れ子の秒を全1740試行へ単純に掛けない。"
+  },
+  "files_sha256": {
+    "source/tools/v3_run.py": "9713a3837d3e98474bf40476420a094b33a526a4a62a41073623c1d2df38590d",
+    "source/tools/smereplay.py": "4908ef08abe440c16eca56ec9f757456a9226d63c9ff90acc2c6b36d98493934",
+    "check_encode_01.py": "5b9d4f0b59b3903073ba609e4594653e037e713a44edd155158483a52908fc47",
+    "run_gates_01.py": "618fc84348a680d74b79d74544ed14e64c0c95bcac6fcb63abb38e361c18ab6c",
+    "launch_gates_01.py": "66ca0578c7a2e6dc2b93180abe79a9fd08c3579270244f48c92a039b25122d79",
+    "gate_plan_01.json": "651cd42ce7fed1939f29611b1cf472034d4b9fa87c4da315a269c6a5a4fd0620",
+    "observe_cpu_01.py": "46301f1a1b0abddc5aeba528e907702a92062ece6d95b3dca1b3b040a4737140"
+  },
+  "measurement": "全12本で同じ外付けのworker CPU・GC callbackだけを使う。新しいcProfileは使わない。全長の旗なしC*を基準にGCだけ・encodeだけ・両方のCPUを同じ方法で測る。元の500試行のcProfileとは負荷が違うので差や倍率を作らない。"
+}

@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-08T00:15:26.604444+09:00",
+  "source_commit": "d5a836d347e74086b71ce5d8534bf1fed44a64b6",
+  "branch": "codex/cstar-exact-fast-2026-10-08",
+  "cases": [
+    {
+      "name": "preflight20_off_A",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/off_A",
+      "flags": []
+    },
+    {
+      "name": "preflight20_off_L",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/off_L",
+      "flags": []
+    },
+    {
+      "name": "preflight20_off_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": []
+    },
+    {
+      "name": "preflight20_gc_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000"
+      ]
+    },
+    {
+      "name": "preflight20_encode_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": [
+        "--sme-fast-encode"
+      ]
+    },
+    {
+      "name": "preflight20_both_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000",
+        "--sme-fast-encode"
+      ]
+    },
+    {
+      "name": "full1740_off_A",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/off_A",
+      "flags": []
+    },
+    {
+      "name": "full1740_off_L",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/off_L",
+      "flags": []
+    },
+    {
+      "name": "full1740_off_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": []
+    },
+    {
+      "name": "full1740_gc_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000"
+      ]
+    },
+    {
+      "name": "full1740_encode_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": [
+        "--sme-fast-encode"
+      ]
+    },
+    {
+      "name": "full1740_both_C",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000",
+        "--sme-fast-encode"
+      ]
+    }
+  ],
+  "memory_claim_gb": 11,
+  "gc_threshold0": 100000,
+  "gc_other_thresholds_unchanged": true,
+  "note": "前置き6本20試行の後に全長6本を一受付で直列。旗なしA・log P・C*、C*のGCだけ・encodeだけ・両方。数式・値・抽選・時刻・候補のID・記録を原版に照らす。GC閾値は関門前に固定し結果を見て替えない。",
+  "measurement": "全12本で同じ外付けのworker CPU・GC callbackだけを使う。新しいcProfileは使わない。全長の旗なしC*を基準にGCだけ・encodeだけ・両方のCPUを同じ方法で測る。元の500試行のcProfileとは負荷が違うので差や倍率を作らない。"
+}

@@ -1,0 +1,148 @@
+diff --git a/tools/smereplay.py b/tools/smereplay.py
+index 5e73c3b..e0736fb 100644
+--- a/tools/smereplay.py
++++ b/tools/smereplay.py
+@@ -58,6 +58,30 @@ def encode(value):
+     raise TypeError((type(value), "再生の記録で扱わない型"))
+ 
+ 
++_SCALAR_TYPES = (type(None), str, int, float, bool)
++
++
++def _fast_encode(value):
++    """組み込みのスカラーだけを先に返す。同じ型・順・欄を記録する。"""
++    if type(value) in _SCALAR_TYPES:
++        return value
++    # IntEnum・strのEnumはスカラーの派生なので、Enumを先に扱う。
++    if isinstance(value, Enum):
++        return {"tag": "enum", "module": type(value).__module__, "name": type(value).__name__, "value": value.value}
++    if value is None or isinstance(value, (str, int, float, bool)):
++        return value
++    if is_dataclass(value):
++        return {"tag": "dataclass", "module": type(value).__module__, "name": type(value).__name__,
++                "fields": {f.name: _fast_encode(getattr(value, f.name)) for f in fields(value)}}
++    if isinstance(value, Mapping):
++        return {"tag": "mapping", "items": [[_fast_encode(k), _fast_encode(v)] for k, v in value.items()]}
++    if isinstance(value, (tuple, list, frozenset, set)):
++        tag = type(value).__name__
++        values = sorted(value, key=repr) if isinstance(value, (set, frozenset)) else value
++        return {"tag": tag, "items": [_fast_encode(x) for x in values]}
++    raise TypeError((type(value), "再生の記録で扱わない型"))
++
++
+ def decode(value):
+     if not isinstance(value, dict):
+         return value
+@@ -87,10 +111,11 @@ def decode(value):
+     raise ValueError(tag)
+ 
+ 
+-def install(path, *, replay=None):
++def install(path, *, replay=None, fast_encode=False):
+     import gzip
+     import abm.loop as loop
+     import smeshared
++    encoder = _fast_encode if fast_encode else encode
+     ST.clear()
+     ST.update(f=smeshared._text_gzip(path), trial=None, predictions=0, updates=0,
+               replay=gzip.open(replay, "rt", encoding="utf-8") if replay is not None else None)
+@@ -104,8 +129,8 @@ def install(path, *, replay=None):
+     real_predict = loop.predict
+ 
+     def predict(agent_input, state, config, rng):
+-        pre = {"kind": "pre", "trial": ST["trial"], "state": encode(state), "input": encode(agent_input),
+-               "config": encode(config), "rng": encode(rng.getstate())}
++        pre = {"kind": "pre", "trial": ST["trial"], "state": encoder(state), "input": encoder(agent_input),
++               "config": encoder(config), "rng": encoder(rng.getstate())}
+         expected = None
+         if ST["replay"] is not None:
+             saved = json.loads(next(ST["replay"]))
+@@ -116,7 +141,7 @@ def install(path, *, replay=None):
+             expected = json.loads(next(ST["replay"]))
+         ST["f"].write(json.dumps(pre, ensure_ascii=False) + "\n")
+         output, pending = real_predict(agent_input, state, config, rng)
+-        prediction = {"kind": "prediction", "trial": ST["trial"], "output": encode(output), "pending": encode(pending)}
++        prediction = {"kind": "prediction", "trial": ST["trial"], "output": encoder(output), "pending": encoder(pending)}
+         if expected is not None and expected != prediction:
+             raise RuntimeError(f"再生：試行{ST['trial']}の対応・答え・保留状態が違う")
+         ST["f"].write(json.dumps(prediction, ensure_ascii=False) + "\n")
+@@ -127,7 +152,7 @@ def install(path, *, replay=None):
+     real_record = loop._ledger_record
+ 
+     def ledger_record(agent_id, trial, config, output, score, coin, state, *a, **kw):
+-        post = {"kind": "post", "trial": trial.trial, "state": encode(state)}
++        post = {"kind": "post", "trial": trial.trial, "state": encoder(state)}
+         if ST["replay"] is not None:
+             saved = json.loads(next(ST["replay"]))
+             if saved != post:
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 95ab67c..f220638 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -565,7 +565,14 @@ def worker(task: dict) -> dict:
+                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
+     if task.get("sme2017"):
+         import smereplay
+-        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
++        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"),
++                          **({"fast_encode": True} if task.get("sme_fast_encode") else {}))
++    # 指示13の探索旗。世代0の閾値だけを変え、模型・記録・乱数には渡さない。
++    old_gc_threshold = None
++    if task.get("sme_gc_threshold") is not None:
++        import gc
++        old_gc_threshold = gc.get_threshold()
++        gc.set_threshold(task["sme_gc_threshold"], *old_gc_threshold[1:])
+     try:
+         rec = sweep.run_one(task)
+     except Exception as e:  # noqa
+@@ -575,6 +582,9 @@ def worker(task: dict) -> dict:
+             fo.close()
+             return {"cell": task["cell"], "seed": task["seed"], "v39_unfit": str(e), "v39": dict(sys.modules["v39"].STATS)}
+         raise
++    finally:
++        if old_gc_threshold is not None:
++            gc.set_threshold(*old_gc_threshold)
+     if "v39" in sys.modules:
+         rec["v39"] = dict(sys.modules["v39"].STATS)
+     if task.get("sme2017"):
+@@ -783,6 +793,9 @@ def main() -> None:
+     ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
+     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
++    ap.add_argument("--sme-gc-threshold", type=int, default=None,
++                    help="探索用：GCの世代0の閾値だけを変える（世代1・2は現行のまま、既定は無変更）")
++    ap.add_argument("--sme-fast-encode", action="store_true", help="探索用：保存状態のスカラーを先に判別して同じ記録を速く組み立てる")
+     ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
+     ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
+     ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
+@@ -928,6 +941,10 @@ def main() -> None:
+         raise SystemExit("--sme-call-seed は --sme2017 と一緒に使う")
+     if args.sme_tie_uniform and not args.sme_call_seed:
+         raise SystemExit("--sme-tie-uniform は --sme2017 --sme-call-seed と一緒に使う")
++    if args.sme_gc_threshold is not None and (not args.sme2017 or args.sme_gc_threshold <= 0):
++        raise SystemExit("--sme-gc-threshold は --sme2017 と正の整数で使う")
++    if args.sme_fast_encode and not args.sme2017:
++        raise SystemExit("--sme-fast-encode は --sme2017 と一緒に使う")
+     if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
+         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
+     if args.select_n3 and (not args.v39 or args.sme2017):
+@@ -950,6 +967,10 @@ def main() -> None:
+                 task["sme_call_seed"] = True
+             if args.sme_tie_uniform:
+                 task["sme_tie_uniform"] = True
++            if args.sme_gc_threshold is not None:
++                task["sme_gc_threshold"] = args.sme_gc_threshold
++            if args.sme_fast_encode:
++                task["sme_fast_encode"] = True
+             if args.sme_replay is not None:
+                 task["sme_replay"] = args.sme_replay
+         if args.select_n3:
+@@ -957,6 +978,8 @@ def main() -> None:
+         if args.shop_scatter:
+             task["shop_scatter"] = True
+     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
++                                                    **({"sme_gc_threshold": args.sme_gc_threshold} if args.sme_gc_threshold is not None else {}),
++                                                    **({"sme_fast_encode": True} if args.sme_fast_encode else {}),
+                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
+                                                     **cstar_options,
+                                                     **({"sme2017": True} if args.sme2017 else {}),
