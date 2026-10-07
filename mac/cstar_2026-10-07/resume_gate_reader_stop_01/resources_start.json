@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-07T15:26:25.565123+09:00",
+  "resources": {
+    "at": "2026-10-07T15:26:25.537765+09:00",
+    "free_bytes": 246993895424,
+    "swap_grew": false,
+    "thermal_warning": null,
+    "swap_mb": 188.0
+  },
+  "cpu": {
+    "at": "2026-10-07T15:26:25.565075+09:00",
+    "cores": 10,
+    "cap": 8,
+    "external_compute_processes": {
+      "99547": {
+        "ppid": 99543,
+        "pgid": 99543,
+        "stat": "R",
+        "cpu": 99.7,
+        "rss": 455344128,
+        "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      }
+    },
+    "external_count": 1,
+    "own_reserved_slots": 0,
+    "total_reserved_slots": 1,
+    "own_compute_count": 0,
+    "total_compute_count": 1,
+    "count_includes_small_waiting_model_workers": true
+  }
+}
