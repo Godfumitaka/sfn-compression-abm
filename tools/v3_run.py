@@ -565,7 +565,8 @@ def worker(task: dict) -> dict:
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
     if task.get("sme2017"):
         import smereplay
-        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
+        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"),
+                          **({"fast_encode": True} if task.get("sme_fast_encode") else {}))
     # 指示13の探索旗。世代0の閾値だけを変え、模型・記録・乱数には渡さない。
     old_gc_threshold = None
     if task.get("sme_gc_threshold") is not None:
@@ -794,6 +795,7 @@ def main() -> None:
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
     ap.add_argument("--sme-gc-threshold", type=int, default=None,
                     help="探索用：GCの世代0の閾値だけを変える（世代1・2は現行のまま、既定は無変更）")
+    ap.add_argument("--sme-fast-encode", action="store_true", help="探索用：保存状態のスカラーを先に判別して同じ記録を速く組み立てる")
     ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
     ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
     ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
@@ -941,6 +943,8 @@ def main() -> None:
         raise SystemExit("--sme-tie-uniform は --sme2017 --sme-call-seed と一緒に使う")
     if args.sme_gc_threshold is not None and (not args.sme2017 or args.sme_gc_threshold <= 0):
         raise SystemExit("--sme-gc-threshold は --sme2017 と正の整数で使う")
+    if args.sme_fast_encode and not args.sme2017:
+        raise SystemExit("--sme-fast-encode は --sme2017 と一緒に使う")
     if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
     if args.select_n3 and (not args.v39 or args.sme2017):
@@ -965,6 +969,8 @@ def main() -> None:
                 task["sme_tie_uniform"] = True
             if args.sme_gc_threshold is not None:
                 task["sme_gc_threshold"] = args.sme_gc_threshold
+            if args.sme_fast_encode:
+                task["sme_fast_encode"] = True
             if args.sme_replay is not None:
                 task["sme_replay"] = args.sme_replay
         if args.select_n3:
@@ -973,6 +979,7 @@ def main() -> None:
             task["shop_scatter"] = True
     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
                                                     **({"sme_gc_threshold": args.sme_gc_threshold} if args.sme_gc_threshold is not None else {}),
+                                                    **({"sme_fast_encode": True} if args.sme_fast_encode else {}),
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
                                                     **({"sme2017": True} if args.sme2017 else {}),
