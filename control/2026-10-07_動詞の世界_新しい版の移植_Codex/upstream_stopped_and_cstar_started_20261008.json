@@ -1,0 +1,86 @@
+{
+  "checked_at": "2026-10-08T05:29:18+09:00",
+  "report_tree_commit": "38de178d3998add7815c6cb2124ae954c881bef6",
+  "reading_command": "git show <report_tree_commit>:<input.path>（既存の小さい報告とJSONだけ。sparse checkout外も同じ報告枝のGitオブジェクトから読む）",
+  "inputs": [
+    {
+      "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+      "bytes": 114850,
+      "sha256": "467074e2f99ca2159c89e468ec68ef76594fc38ac6929842c7485a4f468274c7"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 138446,
+      "sha256": "081db2b519ded2cae9e10db645473c360c591fc5da893d4470d469d635c9eb95"
+    },
+    {
+      "path": "control/2026-10-08_注意の合わせた版_較正と出生HUの準備_Codex2.md",
+      "bytes": 8588,
+      "sha256": "2d4b2d02d3d1f486c6a222a6e27fb349a1d94c4ad36257d882f9b0d2d0465059"
+    },
+    {
+      "path": "control/2026-10-08_C星の一本の時間の内訳_Codex.md",
+      "bytes": 39710,
+      "sha256": "0e44644217d9d9bf89e5b658585fdab82614e4da741a93d287aec0e890117515"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_on_full_stopped_20261008.json",
+      "bytes": 9849,
+      "sha256": "bed9120f40627384d6e909ce99df0def31bd167a5dbd224d784f22c82909d309"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_on_full_stop_requested_20261008.json",
+      "bytes": 2586,
+      "sha256": "d423288a00bf2ce40705a3d7c2227ae09df575f94dcc3133d7e05253a0f9b807"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/instruction16_components_push_match_start_01/match_started.json",
+      "bytes": 323,
+      "sha256": "bb4a5cd338563ae85d6a51c9ccb2368639f61e09dad086b8a5dc1c286b0b167d"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/instruction16_components_push_match_start_01/full_started.json",
+      "bytes": 2362,
+      "sha256": "4abbb891f4f476d12b797b5d4bd9035bec20e1007b4a866ae0f8973d02661ec6"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/instruction16_components_push_match_start_01/preflight_comparison.json",
+      "bytes": 2991,
+      "sha256": "3e54367acd4f6c2f6bd4462e917936d8008280dd3c929187a3b9373b98c911b4"
+    }
+  ],
+  "stage2_full_stop": {
+    "requested_at": "2026-10-08T05:00:30.885811+09:00",
+    "owner_receipt_commit": "ed8ebdf4",
+    "owner_report_authorized_nonproduction_stop": true,
+    "completed_trials": 1315,
+    "full_completed": false,
+    "gate_passed": false,
+    "reason_in_owner_report": "指示14により非本番の自分のON関門計測を中断。原記録保全、完了補作・自動再試行なし。",
+    "our_signals": []
+  },
+  "stage2_preparation": {
+    "commit": "97a681210d4bf9f90e1cb9e9b86d6fcce0d87d0a",
+    "component_checks": 123,
+    "full_off_gate": "未実施",
+    "calibration_integration": "未完了",
+    "birth_hu_default": "off",
+    "adoption": "未承認・自分は移植も使用もしていない"
+  },
+  "cstar_individual_timing": {
+    "supervisor_started_at": "2026-10-08T05:00:39.875839+09:00",
+    "full_started_at": "2026-10-08T05:00:44.109391+09:00",
+    "runner_pid": 47881,
+    "observer_sha256": "31e5ab45523ab40245fb3c31f4a1c53ba9d37998d221e66ecbb5f9233632b35c",
+    "preflight20_7files_equal": true,
+    "preflight_exclusions": [
+      "台帳の見出し一行",
+      "実測sec_trial"
+    ],
+    "full_completed": "未判定",
+    "full_gate": "未判定"
+  },
+  "our45": "必要な統合版の全関門待ち。移植・off関門・全部入り5000一本は未開始。D＋注意又は本番列の完成を一本測定の追加条件にしない。",
+  "our_new_jobs": [],
+  "other_reports_are_new_delegation": false
+}
