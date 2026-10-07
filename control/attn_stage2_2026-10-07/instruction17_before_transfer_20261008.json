@@ -1,0 +1,144 @@
+{
+  "at": "2026-10-08T08:20:19.592640+09:00",
+  "machine": {
+    "at": "2026-10-08T08:20:19.636916+09:00",
+    "models": {
+      "77324": {
+        "ppid": 77313,
+        "state": "R",
+        "rss_kb": 860256
+      },
+      "80364": {
+        "ppid": 80361,
+        "state": "R",
+        "rss_kb": 8668736
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 64842,
+        "owner": "SME_structure_reuse_full1740_01",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 77309,
+        "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+        "mem_gb": 11.0
+      }
+    ],
+    "disk_free_bytes": 223530463232,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "old_controller": {
+    "pid": 77300,
+    "ps": [
+      1,
+      "Ss",
+      0.0,
+      16336,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/preview.py"
+    ],
+    "pgid": 77300
+  },
+  "off_receipt": {
+    "pid": 77309,
+    "ps": [
+      77300,
+      "Ss",
+      0.0,
+      7856,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示16 較正の下見 birth_hu_off --mem 11 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/preview.py entry birth_hu_off"
+    ],
+    "pgid": 77309
+  },
+  "off_observer": {
+    "pid": 77313,
+    "ps": [
+      77309,
+      "S",
+      0.0,
+      13248,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off/native_command.json"
+    ]
+  },
+  "off_worker": {
+    "pid": 77324,
+    "ps": [
+      77313,
+      "R",
+      100.0,
+      860256,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ]
+  },
+  "original_status": {
+    "at": "2026-10-08T08:19:51.949003+09:00",
+    "pid": 77300,
+    "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "phase": "preview_running_or_waiting",
+    "active": {
+      "birth_hu_off": 77309
+    },
+    "pending": [
+      "birth_hu_on"
+    ],
+    "completed": [],
+    "machine": {
+      "at": "2026-10-08T08:19:51.879071+09:00",
+      "models": {
+        "77324": {
+          "ppid": 77313,
+          "state": "R",
+          "rss_kb": 854208
+        },
+        "80364": {
+          "ppid": 80361,
+          "state": "R",
+          "rss_kb": 8600736
+        }
+      },
+      "model_children": 2,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 64842,
+          "owner": "SME_structure_reuse_full1740_01",
+          "mem_gb": 11.0
+        },
+        {
+          "pid": 77309,
+          "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+          "mem_gb": 11.0
+        }
+      ],
+      "disk_free_bytes": 223549816832,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "preview_only": true,
+    "production_started": false,
+    "models_not_signaled": true,
+    "automatic_retry": false
+  },
+  "pending_on_unstarted": true,
+  "receipt_push": "8db19e92",
+  "preparation_report_push": "6388f211",
+  "original_files_sha256": {
+    "preview.py": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8",
+    "observe_light.py": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713",
+    "seed41_config.json": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752",
+    "birth_hu_off/native_command.json": "5c0c25c62f412cb2864172ef6f3f4504e3fdd98eb239cdb020a66ebdb6f5b48d",
+    "birth_hu_on/native_command.json": "5bd047cd5af23c995e5216070f9b79cb8895db4b66acbd354cde8c4fcf7e67f9"
+  }
+}

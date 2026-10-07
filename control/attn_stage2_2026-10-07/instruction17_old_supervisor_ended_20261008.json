@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-08T08:20:19.802482+09:00",
+  "ended_lightweight_supervisor_pid": 77300,
+  "signal": "SIGTERM",
+  "signals_sent_count": 1,
+  "signals_sent_only_to_own_lightweight_supervisor": true,
+  "off_receipt_77309_alive": true,
+  "off_observer_77313_alive": true,
+  "off_model_77324_alive": true,
+  "models_signaled": false,
+  "original_status_preserved": {
+    "at": "2026-10-08T08:19:51.949003+09:00",
+    "pid": 77300,
+    "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "phase": "preview_running_or_waiting",
+    "active": {
+      "birth_hu_off": 77309
+    },
+    "pending": [
+      "birth_hu_on"
+    ],
+    "completed": [],
+    "machine": {
+      "at": "2026-10-08T08:19:51.879071+09:00",
+      "models": {
+        "77324": {
+          "ppid": 77313,
+          "state": "R",
+          "rss_kb": 854208
+        },
+        "80364": {
+          "ppid": 80361,
+          "state": "R",
+          "rss_kb": 8600736
+        }
+      },
+      "model_children": 2,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 64842,
+          "owner": "SME_structure_reuse_full1740_01",
+          "mem_gb": 11.0
+        },
+        {
+          "pid": 77309,
+          "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+          "mem_gb": 11.0
+        }
+      ],
+      "disk_free_bytes": 223549816832,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "preview_only": true,
+    "production_started": false,
+    "models_not_signaled": true,
+    "automatic_retry": false
+  },
+  "original_lock_preserved": "77300\n",
+  "on_not_submitted": true,
+  "old_supervisor_not_restarted": true
+}
