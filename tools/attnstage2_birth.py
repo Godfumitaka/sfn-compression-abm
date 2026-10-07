@@ -48,17 +48,22 @@ def partial_question(material, relation_id):
                    entities=tuple(e for e in material.entities if e.entity_id in used))
 
 
-def initial_record(rec, value, mass):
+def initial_record(rec, value, mass, *, hu_value=None):
     """第一材料の共通のbの差は0。現在の重みつきΔだけをinitへ入れる。"""
     import v39
     if not math.isfinite(value) or not math.isfinite(mass) or mass<0:
         raise ValueError('誕生の差と問いの重みは有限')
+    if hu_value is not None and not math.isfinite(hu_value):
+        raise ValueError('誕生のH→Uの差は有限')
     values=(0.,value,value,mass) if rec.state=='F' else (0.,0.,value,mass) if rec.state=='H' else (0.,0.,0.,0.)
+    if rec.state=='F' and hu_value is not None:
+        # RH−RFがF→H、RU−RHがH→U。既存の四列・減衰は変えない。
+        values=(0.,value,value+hu_value,mass)
     return replace(rec,init=tuple((float(v),)*16 for v in values),post=v39.ZERO4)
 
 
 def birth_values(before, definition, first_material, second_visible, questions, trial,
-                 *, session_factory, loss_mode, length_of):
+                 *, session_factory, loss_mode, length_of, measure_birth_hu=False):
     """session_factoryに正解は渡さない。仮の問いは頻度・履歴を更新しない。"""
     import v39
     start=time.perf_counter()
@@ -70,6 +75,7 @@ def birth_values(before, definition, first_material, second_visible, questions, 
     weights,counts=questions.virtual_weights(r.predicate for r in second_visible.relations)
     totals={row.slot_index:0. for row in fresh.constituents}
     masses={row.slot_index:0. for row in fresh.constituents}
+    hu_totals={row.slot_index:0. for row in fresh.constituents} if measure_birth_hu else None
     records=[];work={'virtual_questions':len(weights),'evaluated_questions':0,'thinned_seats':0,'rerankings':0}
     for relation,weight in zip(second_visible.relations,weights):
         entry={'relation_id':relation.relation_id,'class':weight['class'],'weight':weight['weight']}
@@ -85,16 +91,38 @@ def birth_values(before, definition, first_material, second_visible, questions, 
                       mode=loss_mode,choose=session.choose,background=session.background,method='rematched')
         for row in rows:
             slot=row['slot'];totals[slot]+=weight['weight']*row['delta'];masses[slot]+=weight['weight']
+        hu_rows=[]
+        if measure_birth_hu:
+            for seat in seats:
+                if seat.state!='F':
+                    continue
+                # この席だけをHにした記憶から、同じ仮の問いを評価し直す。
+                # 他の席や候補を先に薄くせず、正解をSessionへ渡さない。
+                after_fh=session_factory(session.thin(seat),visible,weight['class']=='door')
+                measured_hu,hu_work=T.compare_seats(after_fh.candidates,after_fh.attention,
+                    (replace(seat,state='H'),),after_fh.rematched,None,
+                    correct=correct,ell=length_of(relation.predicate),mode=loss_mode,
+                    choose=after_fh.choose,background=after_fh.background,method='rematched')
+                hu_rows.extend(measured_hu)
+                hu_totals[seat.slot]+=weight['weight']*measured_hu[0]['delta']
+                for key in ('thinned_seats','rerankings'):
+                    work[key]+=hu_work[key]
         work['evaluated_questions']+=1
         for key in ('thinned_seats','rerankings'):work[key]+=measured[key]
-        records.append({**entry,'reason':'evaluated','rows':rows})
-    initial={slot:initial_record(hypothetical.v39_seats[fresh.name,slot],value,masses[slot])
+        record={**entry,'reason':'evaluated','rows':rows}
+        if measure_birth_hu:record['hu_after_fh_rows']=hu_rows
+        records.append(record)
+    initial={slot:initial_record(hypothetical.v39_seats[fresh.name,slot],value,masses[slot],
+                    **({'hu_value':hu_totals[slot]} if measure_birth_hu else {}))
              for slot,value in totals.items()}
-    return initial, {'kind':'stage2_birth_virtual','trial':trial,'R':fresh.name,
+    record={'kind':'stage2_birth_virtual','trial':trial,'R':fresh.name,
           'loss':loss_mode,'question_counts':{'door':questions.door,'other':questions.other},
           'virtual_counts':counts,'records':records,'delta_by_slot':totals,
           'mass_by_slot':masses,'first_material_common_delta':0.,
           'seconds':time.perf_counter()-start,**work}
+    if measure_birth_hu:
+        record.update(measure_birth_hu=True,hu_after_fh_delta_by_slot=hu_totals)
+    return initial,record
 
 
 def choose_initial(rec, *, mode, virtual=None):

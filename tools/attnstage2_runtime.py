@@ -16,7 +16,8 @@ ST = {}
 
 
 def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_policy=None,
-            readout_policy=None,scope='all',feature_policy=None,session_class=None,rematch_reuse=False):
+            readout_policy=None,scope='all',feature_policy=None,session_class=None,rematch_reuse=False,
+            measure_birth_hu=False):
     import abm.loop as loop
     import attnsme
     import smeshared as S
@@ -24,6 +25,8 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
     import v310be as B
     if initial_mode not in ('virtual','zero','A'):
         raise ValueError('誕生の初期値の旗が不正')
+    if measure_birth_hu and (initial_mode!='virtual' or initial_policy is not None):
+        raise ValueError('誕生のH→U測定は既存のvirtual初期値の経路だけで使う')
     session_class=Session if session_class is None else session_class
     diagnostic = bool(getattr(session_class, 'supports_structure_reuse', False))
     if rematch_reuse and not diagnostic:
@@ -50,7 +53,8 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
         from attnstage2_initial import VirtualInitial
         initial_policy=VirtualInitial(loss_mode=mode,mode=attnsme.ST['mode'],
             position=attnsme.ST['position'],epsilon=epsilon,readout_policy=readout_policy,
-            feature_policy=feature_policy,session_class=birth_session)
+            feature_policy=feature_policy,session_class=birth_session,
+            **({'measure_birth_hu':True} if measure_birth_hu else {}))
     Path(path).parent.mkdir(parents=True,exist_ok=True)
     ST.clear();ST.update(stream=S._text_gzip(path),path=str(path),mode=mode,epsilon=epsilon,
                         trials=0,scored_seats=0,seconds=0.,pre=None,initial_mode=initial_mode,

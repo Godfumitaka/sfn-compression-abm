@@ -58,6 +58,30 @@ def encode(value):
     raise TypeError((type(value), "再生の記録で扱わない型"))
 
 
+_SCALAR_TYPES = (type(None), str, int, float, bool)
+
+
+def _fast_encode(value):
+    """組み込みのスカラーだけを先に返す。同じ型・順・欄を記録する。"""
+    if type(value) in _SCALAR_TYPES:
+        return value
+    # IntEnum・strのEnumはスカラーの派生なので、Enumを先に扱う。
+    if isinstance(value, Enum):
+        return {"tag": "enum", "module": type(value).__module__, "name": type(value).__name__, "value": value.value}
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if is_dataclass(value):
+        return {"tag": "dataclass", "module": type(value).__module__, "name": type(value).__name__,
+                "fields": {f.name: _fast_encode(getattr(value, f.name)) for f in fields(value)}}
+    if isinstance(value, Mapping):
+        return {"tag": "mapping", "items": [[_fast_encode(k), _fast_encode(v)] for k, v in value.items()]}
+    if isinstance(value, (tuple, list, frozenset, set)):
+        tag = type(value).__name__
+        values = sorted(value, key=repr) if isinstance(value, (set, frozenset)) else value
+        return {"tag": tag, "items": [_fast_encode(x) for x in values]}
+    raise TypeError((type(value), "再生の記録で扱わない型"))
+
+
 def decode(value):
     if not isinstance(value, dict):
         return value
@@ -87,10 +111,11 @@ def decode(value):
     raise ValueError(tag)
 
 
-def install(path, *, replay=None):
+def install(path, *, replay=None, fast_encode=False):
     import gzip
     import abm.loop as loop
     import smeshared
+    encoder = _fast_encode if fast_encode else encode
     ST.clear()
     ST.update(f=smeshared._text_gzip(path), trial=None, predictions=0, updates=0,
               replay=gzip.open(replay, "rt", encoding="utf-8") if replay is not None else None)
@@ -104,8 +129,8 @@ def install(path, *, replay=None):
     real_predict = loop.predict
 
     def predict(agent_input, state, config, rng):
-        pre = {"kind": "pre", "trial": ST["trial"], "state": encode(state), "input": encode(agent_input),
-               "config": encode(config), "rng": encode(rng.getstate())}
+        pre = {"kind": "pre", "trial": ST["trial"], "state": encoder(state), "input": encoder(agent_input),
+               "config": encoder(config), "rng": encoder(rng.getstate())}
         expected = None
         if ST["replay"] is not None:
             saved = json.loads(next(ST["replay"]))
@@ -116,7 +141,7 @@ def install(path, *, replay=None):
             expected = json.loads(next(ST["replay"]))
         ST["f"].write(json.dumps(pre, ensure_ascii=False) + "\n")
         output, pending = real_predict(agent_input, state, config, rng)
-        prediction = {"kind": "prediction", "trial": ST["trial"], "output": encode(output), "pending": encode(pending)}
+        prediction = {"kind": "prediction", "trial": ST["trial"], "output": encoder(output), "pending": encoder(pending)}
         if expected is not None and expected != prediction:
             raise RuntimeError(f"再生：試行{ST['trial']}の対応・答え・保留状態が違う")
         ST["f"].write(json.dumps(prediction, ensure_ascii=False) + "\n")
@@ -127,7 +152,7 @@ def install(path, *, replay=None):
     real_record = loop._ledger_record
 
     def ledger_record(agent_id, trial, config, output, score, coin, state, *a, **kw):
-        post = {"kind": "post", "trial": trial.trial, "state": encode(state)}
+        post = {"kind": "post", "trial": trial.trial, "state": encoder(state)}
         if ST["replay"] is not None:
             saved = json.loads(next(ST["replay"]))
             if saved != post:

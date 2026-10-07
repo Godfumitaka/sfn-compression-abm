@@ -11,10 +11,11 @@ from attnstage2_sme import Session
 
 class VirtualInitial:
     def __init__(self, *, loss_mode, mode, position, epsilon, readout_policy=None,
-                 feature_policy=None, session_class=Session):
+                 feature_policy=None, session_class=Session,measure_birth_hu=False):
         self.loss_mode,self.mode,self.position,self.epsilon=loss_mode,mode,position,epsilon
         self.readout_policy,self.feature_policy=readout_policy,feature_policy
         self.session_class=session_class
+        self.measure_birth_hu=measure_birth_hu
         self.cache={}
         self.records=[]
 
@@ -53,7 +54,8 @@ class VirtualInitial:
             values,record=B.birth_values(before,definition,context['first_material'],
                 context['second_visible'],context['questions'],trial,
                 session_factory=factory,loss_mode=self.loss_mode,
-                length_of=lambda name:float(v39.L_of(name,lengths)))
+                length_of=lambda name:float(v39.L_of(name,lengths)),
+                **({'measure_birth_hu':True} if self.measure_birth_hu else {}))
             self.cache[key]=values
             record.update(base_age=context['base_age'],
                           first_material_name_limit=True,

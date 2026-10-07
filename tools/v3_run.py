@@ -567,7 +567,8 @@ def worker(task: dict) -> dict:
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
     if task.get("sme2017"):
         import smereplay
-        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
+        smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"),
+                          **({"fast_encode": True} if task.get("sme_fast_encode") else {}))
     connection={}
     if task.get('attn_allin'):
         import attncstar
@@ -588,7 +589,14 @@ def worker(task: dict) -> dict:
                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
                                   rematch_reuse=task.get('stage2_reuse',False),
+                                  **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
+    # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
+    old_gc_threshold = None
+    if task.get("sme_gc_threshold") is not None:
+        import gc
+        old_gc_threshold = gc.get_threshold()
+        gc.set_threshold(task["sme_gc_threshold"], *old_gc_threshold[1:])
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -598,6 +606,9 @@ def worker(task: dict) -> dict:
             fo.close()
             return {"cell": task["cell"], "seed": task["seed"], "v39_unfit": str(e), "v39": dict(sys.modules["v39"].STATS)}
         raise
+    finally:
+        if old_gc_threshold is not None:
+            gc.set_threshold(*old_gc_threshold)
     if "v39" in sys.modules:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("sme2017"):
@@ -819,7 +830,11 @@ def main() -> None:
     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
+    ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+    ap.add_argument("--sme-gc-threshold", type=int, default=None,
+                    help="探索用：GCの世代0の閾値だけを変える（世代1・2は現行のまま、既定は無変更）")
+    ap.add_argument("--sme-fast-encode", action="store_true", help="探索用：保存状態のスカラーを先に判別して同じ記録を速く組み立てる")
     ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
     ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
     ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
@@ -965,6 +980,10 @@ def main() -> None:
         raise SystemExit("--sme-call-seed は --sme2017 と一緒に使う")
     if args.sme_tie_uniform and not args.sme_call_seed:
         raise SystemExit("--sme-tie-uniform は --sme2017 --sme-call-seed と一緒に使う")
+    if args.sme_gc_threshold is not None and (not args.sme2017 or args.sme_gc_threshold <= 0):
+        raise SystemExit("--sme-gc-threshold は --sme2017 と正の整数で使う")
+    if args.sme_fast_encode and not args.sme2017:
+        raise SystemExit("--sme-fast-encode は --sme2017 と一緒に使う")
     if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
     if args.select_n3 and (not args.v39 or args.sme2017):
@@ -986,6 +1005,8 @@ def main() -> None:
         raise SystemExit('第二段をほかの保持の置換と合算しない')
     if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
         raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
+    if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+        raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
         raise SystemExit('--logp-epsは0以上1以下')
     for task in tasks:
@@ -993,6 +1014,7 @@ def main() -> None:
         if args.stage2 == 'on':
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
             if args.stage2_reuse == 'on':task['stage2_reuse']=True
+            if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
         if args.logp_eps != .5:
             task['logp_eps'] = args.logp_eps
         if args.use_forget is not None:
@@ -1008,6 +1030,10 @@ def main() -> None:
                 task["sme_call_seed"] = True
             if args.sme_tie_uniform:
                 task["sme_tie_uniform"] = True
+            if args.sme_gc_threshold is not None:
+                task["sme_gc_threshold"] = args.sme_gc_threshold
+            if args.sme_fast_encode:
+                task["sme_fast_encode"] = True
             if args.sme_replay is not None:
                 task["sme_replay"] = args.sme_replay
         if args.select_n3:
@@ -1018,10 +1044,13 @@ def main() -> None:
             task.update(attn_sme=args.attn_sme, attn_position=args.attn_position,
                         attn_eta=args.attn_eta, attn_fixed_zero=args.attn_fixed_zero)
     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+                                                    **({"sme_gc_threshold": args.sme_gc_threshold} if args.sme_gc_threshold is not None else {}),
+                                                    **({"sme_fast_encode": True} if args.sme_fast_encode else {}),
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
                                                     **({'attn_allin':True} if args.attn_allin else {}),
                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
+                                                    **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
                                                         "attn_eta": args.attn_eta, "attn_fixed_zero": args.attn_fixed_zero} if args.attn_sme else {}),
