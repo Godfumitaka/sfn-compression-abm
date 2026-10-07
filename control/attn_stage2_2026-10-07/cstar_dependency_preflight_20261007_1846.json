@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-07T18:48:46.907540+09:00",
+  "method": "指定報告の読み取りのみ。模型・比較は実行していない。",
+  "source": "control/2026-10-07_C星の関門_比較の直し_Codex.md",
+  "source_sha256": "026cc693e513b40f27169198235ba21656de58eabafc5d114ad0a680571158ae",
+  "source_report_at": "2026-10-07T18:39:39.051793+09:00",
+  "baseline": "1838256",
+  "work_code": "7774b60",
+  "cause_as_reported": "起動台本のPYTHONHASHSEED=0の漏れ。節のID集合は同じでsetの順が異なった。",
+  "model_code_changed": false,
+  "preflight_trials": 20,
+  "preflight_comparisons": [
+    {
+      "comparison": "土台対旗なし保持A",
+      "equal_files": 7,
+      "mismatch_files": 0
+    },
+    {
+      "comparison": "土台対旗なしlog P",
+      "equal_files": 7,
+      "mismatch_files": 0
+    },
+    {
+      "comparison": "C*①対②",
+      "equal_files": 7,
+      "mismatch_files": 0
+    }
+  ],
+  "full_1740_trials": "受付PID31176・一枠で進行中、全長の一致は未判定",
+  "all_cstar_gates_passed": false,
+  "port_started": false,
+  "original_failure_record_preserved": "cstar_dependency_gate_failed_20261007_1716.json"
+}
