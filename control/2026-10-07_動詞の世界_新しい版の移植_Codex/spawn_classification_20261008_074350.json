@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-08T07:47:24+09:00",
+  "initial_snapshot": "check_20261008_074349.json",
+  "initial_known_models": 1,
+  "initial_unknown_active_spawn": 1,
+  "initial_confirmed_total_models": 2,
+  "worker": {
+    "pid": 77324,
+    "ppid": 77313,
+    "state": "R",
+    "rss_bytes": 360660992,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+    "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py $WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off/native_command.json",
+    "worker_kind": "spawn"
+  },
+  "parent_script": {
+    "path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+    "bytes": 7072,
+    "sha256": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713"
+  },
+  "classification": "REAL_WORKER=v3_run.workerを観測workerから一度呼び、v3_run.workerを設定してv3_run.mainを実行。PID77324を模型として数える。初回既知1＋未分類1を全体1とは扱わない。",
+  "counter_before_sha256": "373a64a390fca4e8e543ccf7380d8b0381dd7281cfe895cdcf387cdabcba2ae6",
+  "counter_after_sha256": "9813d34b9584fce77fc4e195737fe5cfcafae75e1795acfec14748c4994f929d",
+  "changes": "自分の監視対象名だけを追加。模型・上流の台本・旗・受付・過程は変更しない。"
+}
