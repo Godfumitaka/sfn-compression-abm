@@ -1,0 +1,56 @@
+{
+  "at_before": "2026-10-08T02:20:26.816967+09:00",
+  "pid": 21749,
+  "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8/gate.py",
+  "phase_before": {
+    "phase": "waiting_before_receipt",
+    "kind": "reuse_off_200",
+    "pid": 21749,
+    "at": "2026-10-08T02:20:00.291980+09:00",
+    "requested_mem_gb": 16,
+    "registered_mem_gb": 16.0,
+    "machine": {
+      "at": "2026-10-08T02:20:00.264064+09:00",
+      "models": {
+        "4893": {
+          "ppid": 4882,
+          "state": "R",
+          "rss_kb": 584544
+        }
+      },
+      "model_children": 1,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 4872,
+          "owner": "Codex2 指示8 接続の関門 on_full",
+          "mem_gb": 16.0
+        }
+      ],
+      "disk_free_bytes": 230995103744,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    }
+  },
+  "direct_children_before": [],
+  "instruction": 12,
+  "receipt_push": "a5bb2939",
+  "reason": "未着手の200試行を4GB受付へ移すため、自分の受付前軽量監督だけ終了",
+  "model_signaled": false,
+  "other_process_signaled": false,
+  "old_files_preserved": true,
+  "at_after": "2026-10-08T02:20:26.873058+09:00",
+  "pid_absent_after": true,
+  "measurement_supervisor_94210_live": true,
+  "measurement_model_4893_live": true,
+  "global_models_after": {
+    "4893": {
+      "ppid": 4882,
+      "state": "R"
+    }
+  }
+}

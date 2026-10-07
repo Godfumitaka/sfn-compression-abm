@@ -1,0 +1,135 @@
+{
+  "at": "2026-10-08T02:21:43.306642+09:00",
+  "machine": {
+    "at": "2026-10-08T02:21:43.228470+09:00",
+    "models": {
+      "4893": {
+        "ppid": 4882,
+        "state": "R",
+        "rss_kb": 589712
+      },
+      "27377": {
+        "ppid": 27368,
+        "state": "R",
+        "rss_kb": 54224
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 4872,
+        "owner": "Codex2 指示8 接続の関門 on_full",
+        "mem_gb": 16.0
+      },
+      {
+        "pid": 27360,
+        "owner": "Codex2 指示12 使い回し関門 reuse_off_200",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 230992408576,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "controllers": {
+    "21749": null,
+    "27353": [
+      1,
+      "Ss",
+      0.0,
+      22176,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/gate.py"
+    ],
+    "94210": [
+      1,
+      "Ss",
+      0.0,
+      24784,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py"
+    ]
+  },
+  "records": {
+    "supervisor.lock": "27353",
+    "launch.json": {
+      "at": "2026-10-08T02:21:00.408886+09:00",
+      "pid": 27353,
+      "code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "sequence": [
+        "reuse_off_200",
+        "reuse_on_200"
+      ],
+      "mem_gb": 4
+    },
+    "status.json": {
+      "phase": "receipt_wait_or_running",
+      "kind": "reuse_off_200",
+      "at": "2026-10-08T02:21:00.498120+09:00",
+      "pid": 27353,
+      "receipt_pid": 27360,
+      "code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "requested_mem_gb": 4
+    },
+    "warning.json": null,
+    "failure.json": null,
+    "reuse_off_200_entry_started.json": {
+      "at": "2026-10-08T02:21:00.714909+09:00",
+      "machine": {
+        "at": "2026-10-08T02:21:00.659816+09:00",
+        "models": {
+          "4893": {
+            "ppid": 4882,
+            "state": "R",
+            "rss_kb": 586496
+          }
+        },
+        "model_children": 1,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 4872,
+            "owner": "Codex2 指示8 接続の関門 on_full",
+            "mem_gb": 16.0
+          },
+          {
+            "pid": 27360,
+            "owner": "Codex2 指示12 使い回し関門 reuse_off_200",
+            "mem_gb": 4.0
+          }
+        ],
+        "disk_free_bytes": 230993780736,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": []
+      },
+      "code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925"
+    },
+    "reuse_on_200_entry_started.json": null,
+    "reuse_off_200_completed.json": null,
+    "reuse_on_200_completed.json": null,
+    "required_gate.json": null,
+    "cpu_comparison.json": null,
+    "reuse_off_200/worker_pid.json": {
+      "pid": 27377,
+      "ppid": 27368
+    },
+    "reuse_off_200/measurement.json": null,
+    "reuse_on_200/measurement.json": null,
+    "reuse_off_200/run.log": [
+      "受け付けた：PID 27360、担当 Codex2 指示12 使い回し関門 reuse_off_200、見込み 4.0 GB（表の合計 20.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "2026-10-08 02:21:00 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False"
+    ],
+    "reuse_off_200/performance.jsonl": [
+      "{\"trial\": 4, \"seconds\": 8.078728042019065, \"elapsed_seconds\": 14.801869167014956, \"peak_rss_bytes\": 52428800, \"candidates\": 0, \"definitions\": 0}",
+      "{\"trial\": 5, \"seconds\": 10.791337999980897, \"elapsed_seconds\": 25.593207166995853, \"peak_rss_bytes\": 54476800, \"candidates\": 0, \"definitions\": 0}",
+      "{\"trial\": 6, \"seconds\": 13.331607749976683, \"elapsed_seconds\": 38.92481491697254, \"peak_rss_bytes\": 55197696, \"candidates\": 0, \"definitions\": 0}"
+    ]
+  }
+}
