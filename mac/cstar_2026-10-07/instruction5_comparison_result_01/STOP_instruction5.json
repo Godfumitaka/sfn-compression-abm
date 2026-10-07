@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-07T17:05:51.783423+09:00",
+  "passed": false,
+  "instruction": 5,
+  "reason": "台帳本体は一致、全sideの比較で不一致",
+  "first_difference": {
+    "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+    "bytes_left": 482140,
+    "bytes_right": 482119,
+    "left_sha256": "be3ad506a0f95297d6d7518984fd0c8b17e5f1b7c936577fa70c0a83e115b324",
+    "right_sha256": "957e1f4942943b59daba99d930f47648aafc3c784d23c89db0bd5325e5a4215d",
+    "equal": false,
+    "first_difference": {
+      "byte_offset": 1236,
+      "left_bytes": 6351339,
+      "right_bytes": 6351339,
+      "line": 1,
+      "field": "/left_nodes/0/key",
+      "left": "'8861cb487923b34b'",
+      "right": "'df4590fa3723f662'",
+      "trial": 1
+    }
+  },
+  "new_model_runs": 0,
+  "continuation_started": false
+}
