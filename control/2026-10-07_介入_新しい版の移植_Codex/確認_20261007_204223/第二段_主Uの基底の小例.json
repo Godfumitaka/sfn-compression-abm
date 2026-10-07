@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-07T20:29:57.819929+09:00",
+  "code": "2ed4063e9cab51c85404700f9e66baaa2a7cad2a",
+  "native_cstar_base": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+  "same_scene": {
+    "graph_id": "visible",
+    "entities": [
+      {
+        "entity_id": "x",
+        "label": null,
+        "attributes": {}
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "v",
+        "predicate": "sig_e",
+        "arguments": [
+          "x"
+        ],
+        "attributes": {}
+      }
+    ]
+  },
+  "same_slot": {
+    "relation_id": "r",
+    "predicate": "sig_n",
+    "arguments": [
+      "a"
+    ],
+    "attributes": {}
+  },
+  "records": [
+    {
+      "candidate": "d0",
+      "U": {
+        "sig_e": 0.3333333333333333,
+        "sig_n": 0.6666666666666666
+      }
+    },
+    {
+      "candidate": "d1",
+      "U": {
+        "other": 0.5714285714285714,
+        "sig_e": 0.14285714285714285,
+        "sig_n": 0.2857142857142857
+      }
+    }
+  ],
+  "equal": false,
+  "observation": "候補d0だけに名前otherの二引数の出現があると、同じ可視の一引数の位置のUの基底からotherが除かれる。d1では除かれない。",
+  "source": "tools/cstar_probability.py:seat_distributions -> tools/v310be.py:probabilities -> abm/filling.py:_predicate_has_signature",
+  "model_state_changed": false
+}
