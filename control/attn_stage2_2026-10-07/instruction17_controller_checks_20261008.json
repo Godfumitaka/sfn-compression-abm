@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-08T08:18:14.043534+09:00",
+  "passed": true,
+  "checks": [
+    "監督本体にシグナル・削除・模型再投入の呼出し無し",
+    "投入経路は未開始on一つだけ、受付4GB",
+    "既存の開始/稼働/期限/資源判定と24GB条件を維持",
+    "模型命令・観測・ソースは元の固定したものだけを使う",
+    "onの受付/開始/成果が存在しない",
+    "予約22GBは待機、11GB/0GBは4GBを追加可能",
+    "200途中を完了としない、1740原完了証拠でも未知の受付終了コード/原completedを補作しない"
+  ],
+  "controller_sha256": "c99bdd796929778f445ccce417a6e3e4eaf18eab05da9daa2fe8cda6e5a19fcb",
+  "unchanged_original_files": {
+    "preview.py": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8",
+    "observe_light.py": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713",
+    "seed41_config.json": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752",
+    "birth_hu_off/native_command.json": "5c0c25c62f412cb2864172ef6f3f4504e3fdd98eb239cdb020a66ebdb6f5b48d",
+    "birth_hu_on/native_command.json": "5bd047cd5af23c995e5216070f9b79cb8895db4b66acbd354cde8c4fcf7e67f9"
+  },
+  "model_code_changed": false,
+  "models_started_by_checks": 0,
+  "old_controller_still_running_expected": true
+}
