@@ -1,0 +1,31 @@
+{
+  "time_jst": "2026-10-07T20:11:45.079945+09:00",
+  "model_workers": [
+    {
+      "pid": 41253,
+      "ppid": 41247,
+      "rss_kib": 4000624,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 42191,
+      "ppid": 42188,
+      "rss_kib": 6203680,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "other_heavy_R": [],
+  "admission_count": 2,
+  "own": [
+    {
+      "pid": 54450,
+      "ppid": 52419,
+      "rss_kib": 16656,
+      "state": "Ss",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -B /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/report_priority25/control/shop_independent_2026-10-07/cpu_guard.py --record /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/inbox_checks/cpu_heartbeat_20261007_2011.json -- /usr/bin/true"
+    }
+  ],
+  "rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB"
+}
