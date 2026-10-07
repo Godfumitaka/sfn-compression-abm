@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-07T21:13:50+09:00",
+  "source_report_commit": "3f8511e749c554972c35ccf98f3a133de0e52ae1",
+  "initial_snapshot": "check_20261007_211350.json",
+  "worker_pid": 65068,
+  "parent_pid": 65065,
+  "parent_script": "$WORKSPACE/codex_cstar_profile_2026-10-08/observe_cstar_01.py",
+  "script_bytes": 14591,
+  "script_sha256": "f3894a9869a806695750b72fbd0e17146539ce94d70b0bbaedb983279861673c",
+  "observed_entry": "v3_run.main()を呼び、spawnしたworker内でREAL_WORKER=v3_run.workerを呼ぶ計測台本。",
+  "classification": "模型の計測worker。親の起動台本自体は二重に数えない。",
+  "changed": "監視のMODEL_HOSTSへ既存の起動台本名だけを追加。模型・上流のコード・旗・受付・既存過程の変更なし。",
+  "fixture": {
+    "active_models": 1,
+    "unknown_active_spawn": 0,
+    "paused_models": 1,
+    "passed": true
+  },
+  "initial_snapshot_interpretation": {
+    "known_active_models": 0,
+    "initially_unclassified_active_spawn": 1,
+    "confirmed_additional_models": 1,
+    "total_active_models": 1
+  }
+}
