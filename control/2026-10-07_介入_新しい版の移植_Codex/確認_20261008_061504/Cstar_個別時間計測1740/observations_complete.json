@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "observer_cpu": 40.297478000028846,
+  "in_prediction": false,
+  "predictions": 1740,
+  "definition_calls": 40878,
+  "engine_calls": 138260,
+  "pipeline_calls": 149558,
+  "configured_trials": 1740,
+  "model_inputs_outputs_unchanged": true,
+  "process_cpu_seconds": 2833.4802,
+  "timing": "time.process_timeのCPU秒とperf_counterの実時間。定義のmap_v39は図の作成・分布・照合・旧照合の記録・書き出しを含む。matching_pipeline_callはsmeshared.map_graphsの入口から戻りまで、CstarMatcher.matchは控えの鍵・控えの検索・照合器を含む。観測の書き出しとengineの追加の記録の負荷は外側のCPU秒から引く。各秒は入れ子なので足さない。",
+  "exactness": "乱数を呼ばず、元の関数を一度呼び、同じ返り値をそのまま返す。実際の全バイトの一致は別の関門で確認する。"
+}
