@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-07T22:34:28.806913+09:00",
+  "source": "7774b60",
+  "model_not_started": true,
+  "current_model_not_restarted": true,
+  "prepared": [
+    "observe_match_times_01.py",
+    "run_match_timing_01.py",
+    "analyze_match_timing_01.py"
+  ],
+  "prerequisites": "現在のprofile1740_01の全長の全バイト一致とCPU内訳の集計が先。最新の受け箱・列・期限・受付11GB・空きと熱・スワップ・8本の条件を確かめる。",
+  "per_call_measurement": "元の関数を一回呼び同じ返り値を返す。smeshared._callerが観測のframeを呼び出し元と誤認しないよう、その観測frameのmodule名だけsmesharedと同じにする。20試行の全バイト一致が通るまで全長に進まない。",
+  "legacy_pause_correction": "旧監督のpaused_secondsは論理上の保留で、補助監督で再開した時間を含みうる一方、最後の未清算の保留は含まない。常に実際の停止秒の上限とする表現は正確でない。T状態の2秒標本と別記する。",
+  "instruction12_material": "control/2026-10-07_GPTの返事_二段の想起_MACFAC.md §2・§6",
+  "instruction12_status": "読了・受領のみ。四項の実装・関門は現在のCPU内訳を測定した後。"
+}
