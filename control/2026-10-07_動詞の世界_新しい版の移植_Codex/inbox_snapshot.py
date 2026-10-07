@@ -9,7 +9,8 @@ import subprocess
 import tomllib
 
 MODEL_HOSTS={'v3_run.py','observe_02.py','observe_memory_02.py','observe_04.py',
-             'sme_evict_observe_20261007.py','uposition_run.py','selcands_sme.py'}
+             'sme_evict_observe_20261007.py','uposition_run.py','selcands_sme.py',
+             'material_keep_driver_01.py'}
 
 def script_name(command):
     # psは空白を含むscriptのパスをquoteしない。split()[1]では判定しない。
@@ -116,7 +117,7 @@ def snapshot(a):
           'paused_or_zombie_model_workers':paused_models,
           'own_model_process_count':sum(str(a.workspace/'codex_verb_2026-10-04') in m['parent_command'] for m in models),
           'eligible_mac_queue_rows':eligible,
-          'counting_rule':'実際のv3_run/計測観察過程とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。',
+          'counting_rule':'実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。',
           'automation':{'id':auto['id'],'status':auto['status'],'target_thread_id':auto['target_thread_id'],
                         'created_at_jst':datetime.fromtimestamp(auto['created_at']/1000).astimezone().isoformat(timespec='milliseconds'),
                         'interval_minutes':30,'expires_at_jst':'2026-10-09T09:00:00+09:00',
