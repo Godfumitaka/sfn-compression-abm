@@ -565,6 +565,17 @@ def worker(task: dict) -> dict:
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
     if task.get("sme2017"):
         import smereplay
+        researcher_dir = out_root / "researcher" / task["cell"]
+        if task.get("sme_online_candidates") or task.get("no_forget_exec"):
+            researcher_dir.mkdir(parents=True, exist_ok=True)
+        if task.get("sme_online_candidates"):
+            import smeonline
+            smeonline.install(researcher_dir / f"seed{task['seed']:03d}.candidates.jsonl.gz",
+                              check=task.get("sme_online_check", False))
+        if task.get("no_forget_exec"):
+            import calibration
+            calibration.install(researcher_dir / f"seed{task['seed']:03d}.calibration.jsonl.gz",
+                                world=task.get("shop_world"), seed=int(task["seed"]))
         smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
     try:
         rec = sweep.run_one(task)
@@ -580,6 +591,10 @@ def worker(task: dict) -> dict:
     if task.get("sme2017"):
         rec["sme2017"] = sys.modules["smeshared"].close()
         rec["smereplay"] = sys.modules["smereplay"].close()
+        if task.get("sme_online_candidates"):
+            sys.modules["smeonline"].close()
+        if task.get("no_forget_exec"):
+            sys.modules["calibration"].close()
         if task.get("sme_evict_trial_cache"):
             sys.modules["smeevict"].close()
     if task.get("use_forget") is not None:
@@ -791,6 +806,9 @@ def main() -> None:
     ap.add_argument("--birth-score", choices=("fit", "seq"), default=None, help="二材料を観察後に当てるfit、一材料ずつ順に当てるseq")
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
+    ap.add_argument("--sme-online-candidates", action="store_true", help="予測の実際の対応から候補の答えと正誤を研究者だけの別記録に残す")
+    ap.add_argument("--sme-online-check", action="store_true", help="候補の記録の逆順・二回の一致を毎試行で検査する")
+    ap.add_argument("--no-forget-exec", action="store_true", help="本番と同じVと参照H→Uを記録し、F→H・H→Uの実行だけを止める較正の旗")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
     ap.add_argument("--hist-role", action="store_true",
@@ -936,7 +954,14 @@ def main() -> None:
         raise SystemExit("--shop-scatterはお店の世界だけで使う")
     if args.sme_replay is not None and (not args.sme2017 or len(tasks) != 1):
         raise SystemExit("--sme-replayはSMEの走行一本にだけ使う")
+    if (args.sme_online_candidates or args.no_forget_exec) and not (args.sme2017 and args.v310_be):
+        raise SystemExit("候補の記録と忘却停止は--sme2017 --v310-beと一緒に使う")
+    if args.sme_online_check and not args.sme_online_candidates:
+        raise SystemExit("--sme-online-checkは--sme-online-candidatesと一緒に使う")
     for task in tasks:
+        for opt in ("sme_online_candidates", "sme_online_check", "no_forget_exec"):
+            if getattr(args, opt):
+                task[opt] = True
         if args.use_forget is not None:
             if not (args.v39 and args.v310_be):
                 raise SystemExit("--use-forgetは--v39 --v310-beと一緒に使う")
@@ -957,6 +982,7 @@ def main() -> None:
         if args.shop_scatter:
             task["shop_scatter"] = True
     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+                                                    **{opt: True for opt in ("sme_online_candidates", "sme_online_check", "no_forget_exec") if getattr(args, opt)},
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
                                                     **({"sme2017": True} if args.sme2017 else {}),
