@@ -568,18 +568,26 @@ def worker(task: dict) -> dict:
     if task.get("sme2017"):
         import smereplay
         smereplay.install(side_dir / f"seed{task['seed']:03d}.sme.states.jsonl.gz", replay=task.get("sme_replay"))
+    connection={}
+    if task.get('attn_allin'):
+        import attncstar
+        from attnstage2_distribution import Readout
+        connection=dict(feature_policy=attncstar.Features(task['logp_eps']),readout_policy=Readout())
     if task.get("attn_sme"):
         # 注意は選びだけを包む。既存sideと状態記録の外へ追加記録を書く。
         import attnsme
         attnsme.install(out_root / "attention" / task["cell"] / f"seed{task['seed']:03d}.jsonl.gz",
                         mode=task["attn_sme"], position=task["attn_position"], eta=task["attn_eta"],
                         fixed_zero=task.get("attn_fixed_zero", False), agent_ids=tuple(task["cfg"]["agent_ids"]),
-                        epsilon=task.get('logp_eps',.5))
+                        epsilon=task.get('logp_eps',.5),**connection,
+                        **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
+                           if task.get('attn_allin') else {}))
     if task.get('stage2') == 'on':
         import attnstage2_runtime
         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
-                                  initial_mode=task['stage2_init'],scope=task['stage2_scope'])
+                                  initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
+                                  **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -803,6 +811,7 @@ def main() -> None:
     ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="ドア課題の定義選びに位置の案1／案2′を用いる")
     ap.add_argument("--attn-position", choices=("k1", "k2"), default="k1", help="祖先の鍵／採用済みSME対応先の鍵")
     ap.add_argument("--attn-eta", type=float, default=0.1, help="位置の注意の更新幅")
+    ap.add_argument('--attn-allin',action='store_true',help='指示8の共通基底・主の分布・mixture学習を接続する別版')
     ap.add_argument("--attn-fixed-zero", action="store_true", help="費用を測るがa=0を保つ全バイト一致の検査")
     ap.add_argument('--stage2',choices=('off','on'),default='off',help='全候補の答えの損の差で保持を値付けする')
     ap.add_argument('--stage2-loss',choices=('alpha','top1','mixture','arm'),default='arm',help='第二段の損：0/ℓ、選んだ席の分布、混合分布、土台の採点に従う')
@@ -966,6 +975,9 @@ def main() -> None:
         raise SystemExit("--attn-smeは--sme2017 --sme-call-seedとお店の世界で使う")
     if args.attn_fixed_zero and not args.attn_sme:
         raise SystemExit("--attn-fixed-zeroは注意の旗と一緒に使う")
+    if args.attn_allin and not (args.attn_sme=='global' and args.attn_position=='k2' and
+                               args.attn_eta==.1 and args.logp_eps==.01):
+        raise SystemExit('--attn-allinはglobal・k2・eta0.1・logp-eps0.01で使う')
     if args.stage2 == 'on' and not (args.attn_sme and args.v310_be):
         raise SystemExit('--stage2 onは--attn-smeと--v310-beと一緒に使う')
     if args.stage2 == 'on' and (args.cf_learn or args.cf_value or args.use_forget is not None):
@@ -973,6 +985,7 @@ def main() -> None:
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
         raise SystemExit('--logp-epsは0以上1以下')
     for task in tasks:
+        if args.attn_allin:task['attn_allin']=True
         if args.stage2 == 'on':
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
         if args.logp_eps != .5:
@@ -1002,6 +1015,7 @@ def main() -> None:
     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
+                                                    **({'attn_allin':True} if args.attn_allin else {}),
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
                                                         "attn_eta": args.attn_eta, "attn_fixed_zero": args.attn_fixed_zero} if args.attn_sme else {}),

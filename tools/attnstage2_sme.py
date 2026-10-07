@@ -6,7 +6,7 @@
 from dataclasses import replace
 from fractions import Fraction
 import math
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from random import Random
 import attnratio as A
 
@@ -113,11 +113,21 @@ class Session:
         self.rng_state,self.observations,self.attention = rng_state,observations,dict(attention)
         self.mode,self.position,self.door_task,self.epsilon = mode,position,door_task,epsilon
         self.readout_policy=readout_policy
-        self.feature_policy=feature_policy
+        self.feature_policy=(feature_policy.for_session(agent_input,state,config)
+                             if hasattr(feature_policy,'for_session') else feature_policy)
         self.background=None if readout_policy is None else readout_policy.background(
                                  agent_input,state,config,door_task)
         self.ranked = self.rank(state) if ranked is None else tuple(ranked)
         self.candidates = self.enrich(self.ranked,state)
+
+    def context(self, state):
+        """旧SMEはそのまま。C*の版は予測前の文脈をここへ接続する。"""
+        return nullcontext()
+
+    def support(self, d, state, alignment):
+        import v39
+        return sum(v39.seat_state(d,row,state.slot_history)!='U' and
+                   row.relation.relation_id in alignment.relation_mapping for row in d.constituents)
 
     def rank(self, state):
         import smeshared as S
@@ -126,7 +136,7 @@ class Session:
         def capture(rows,scene):
             ranked.extend(rows)
             return original(rows,scene)
-        with isolated():
+        with isolated(), self.context(state):
             S._definition_choice = capture
             try:
                 S.select_definition(state,self.ai.target_graph_partial,self.config)
@@ -163,11 +173,12 @@ class Session:
     def typed(self, ranked, state):
         import v39
         import smeshared as S
-        graph = v39.v39_graph(ranked[2],state.slot_history)
-        try:
-            return S.typed_graph(graph)
-        finally:
-            v39.unregister(graph)
+        with isolated():
+            graph = v39.v39_graph(ranked[2],state.slot_history)
+            try:
+                return S.typed_graph(graph)
+            finally:
+                v39.unregister(graph)
 
     def answer(self, ranked, state):
         import attnsme
@@ -177,7 +188,7 @@ class Session:
         al = replace(al,candidate_projections=tuple(i for i in al.candidate_projections if i in fids))
         forced = (support/n,support,d,graph,al,n,False,())
         original = v39.select_definition
-        with isolated():
+        with isolated(), self.context(state):
             v39.select_definition = lambda *a,**kw:forced
             clone = Random();clone.setstate(self.rng_state)
             try:
@@ -200,7 +211,7 @@ class Session:
             rows = [c.payload['ranked'] for c in candidates]
         else:
             rows = [(*c.payload['ranked'][:6],z) for c,z in scored]
-        with isolated():
+        with isolated(), self.context(self.state):
             for c in candidates:
                 graph = c.payload['typed_left']
                 S.GRAPHS[graph.fingerprint()] = graph
@@ -235,15 +246,14 @@ class Session:
         n = v39.n_FH(d,state.slot_history)
         if n == 0:
             return None
-        with isolated():
+        with isolated(), self.context(state):
             graph,al = v39.map_v39(d,state.slot_history,self.ai.target_graph_partial)
             dd = S.self_score(S.GRAPHS[al.sme_audit['left']])
             xx = S.self_score(S.typed_graph(self.ai.target_graph_partial))
             if dd+xx == 0:
                 return None
             q = 2*Fraction(al.total_score)/(Fraction(dd)+Fraction(xx))
-            support = sum(v39.seat_state(d,row,state.slot_history)!='U' and
-                          row.relation.relation_id in al.relation_mapping for row in d.constituents)
+            support = self.support(d,state,al)
             changed = (support/n,support,d,graph,al,n,q)
             return self.enrich((changed,),state)[0]
 

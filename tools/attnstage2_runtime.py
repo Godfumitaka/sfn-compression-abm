@@ -15,7 +15,7 @@ ST = {}
 
 
 def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_policy=None,
-            readout_policy=None,scope='all',feature_policy=None):
+            readout_policy=None,scope='all',feature_policy=None,session_class=None):
     import abm.loop as loop
     import attnsme
     import smeshared as S
@@ -23,6 +23,7 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
     import v310be as B
     if initial_mode not in ('virtual','zero','A'):
         raise ValueError('誕生の初期値の旗が不正')
+    session_class=Session if session_class is None else session_class
     T.measurement_seats((),scope=scope,selected=None)
     mode = T.resolve_loss(loss_mode,score_logp=bool(B.CFG.get('score_logp')))
     if mode in ('top1','mixture') and readout_policy is None:
@@ -34,7 +35,7 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
         from attnstage2_initial import VirtualInitial
         initial_policy=VirtualInitial(loss_mode=mode,mode=attnsme.ST['mode'],
             position=attnsme.ST['position'],epsilon=epsilon,readout_policy=readout_policy,
-            feature_policy=feature_policy)
+            feature_policy=feature_policy,session_class=session_class)
     Path(path).parent.mkdir(parents=True,exist_ok=True)
     ST.clear();ST.update(stream=S._text_gzip(path),path=str(path),mode=mode,epsilon=epsilon,
                         trials=0,scored_seats=0,seconds=0.,pre=None,initial_mode=initial_mode,
@@ -100,7 +101,7 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
         if coin.f_fired:
             ai,before,cfg,rng_before,observations,attention,door_task,ranked,answer = pre
             fingerprint = repr(before)
-            session = Session(ai,before,cfg,rng_before,observations,attention,
+            session = session_class(ai,before,cfg,rng_before,observations,attention,
                         mode=attnsme.ST['mode'],position=attnsme.ST['position'],door_task=door_task,
                         ranked=ranked or None,epsilon=epsilon,readout_policy=readout_policy,
                         feature_policy=feature_policy)

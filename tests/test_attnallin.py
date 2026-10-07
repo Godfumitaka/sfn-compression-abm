@@ -38,12 +38,31 @@ def test_k2_is_role_shared_across_renamed_shop_entities_and_predicates():
     assert all('sig_' not in p['key'] and 'A' not in p['key'] and 'B' not in p['key'] for p in p1)
 
 
-def test_U_and_unmapped_are_zero_and_never_call_distribution_reader():
+def test_U_without_candidate_filter_is_zero_and_unmapped_never_calls_reader():
     positions,_=I.visible_positions(scene(),{'entity'},{'seal':{'sig_e':.2},'link':{'attach':1.}})
     c={'seats':[{'relation_id':'s','slot':0,'state':'U'}],'relation_mapping':{'s':'seal'}}
-    def forbidden(*a):raise AssertionError('Uは主のbと同じ')
-    terms,details=I.candidate_features(positions,c,distribution_reader=forbidden,epsilon=.01,length_of=lambda p:3.)
-    assert set(terms.values())=={0.} and [d['reason'] for d in details]==['U_background','unmapped_background']
+    called=[]
+    def reader(seat,rid,b):called.append((seat['state'],rid));return b
+    terms,details=I.candidate_features(positions,c,distribution_reader=reader,epsilon=.01,length_of=lambda p:3.)
+    assert set(terms.values())=={0.} and called==[('U','seal')]
+    assert details[1]['reason']=='unmapped_background'
+
+
+def test_U_with_candidate_filter_keeps_signed_exact_ratio():
+    positions,_=I.visible_positions(scene(),{'entity'},{'seal':{'sig_e':1/7},'link':{'attach':1.}})
+    c={'seats':[{'relation_id':'s','slot':0,'state':'U'}],'relation_mapping':{'s':'seal'}}
+    terms,details=I.candidate_features(positions,c,distribution_reader=lambda *a:{'sig_e':1/3},
+                                     epsilon=.01,length_of=lambda p:3.)
+    assert details[0]['m']==pytest.approx(math.log(3/7)/(-math.log(.01)),abs=1e-15)
+    assert details[0]['m']<0 and details[0]['P']==1/3
+
+
+def test_zero_common_base_uses_same_escape_length_as_native_log_cost():
+    import v310be
+    value,audit=I.relative_mismatch({'new':.1},{'seen':1.},'new',epsilon=.01,
+                                   length_of=lambda p:v310be.log_cost({},p,{'seen':5}))
+    assert audit['zero_b'] and audit['c_b']==6*math.log(2.)
+    assert value==pytest.approx((-math.log(.1)-6*math.log(2.))/(-math.log(.01)))
 
 
 def test_same_name_at_two_roles_keeps_two_keys_and_common_b_for_all_candidates():

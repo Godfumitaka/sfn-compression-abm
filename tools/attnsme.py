@@ -7,6 +7,7 @@ from dataclasses import replace
 from fractions import Fraction
 from random import Random
 import json
+from contextlib import nullcontext
 import math
 from pathlib import Path
 import sys
@@ -77,7 +78,8 @@ def _restore(snap):
         value.clear();value.update(saved)
 
 
-def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',), epsilon=.5):
+def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',), epsilon=.5,
+            feature_policy=None,readout_policy=None,learning_policy=None,prediction_context=None):
     import abm.loop as loop
     import abm.agent_runtime as ar
     import smeshared as S
@@ -121,8 +123,11 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
                'lambda_mix':state.p_hat.lambda_mix,'alive_vocab':sorted(state.p_hat.alive_vocab)}
         assert set(p_hat['counts'])<=observation.names
         cs=public_candidates(ranked,state,observation)
-        enriched,bases,si=features(ST['scene'],ST['entities'],p_hat,set(config.higher_order_predicates),
-                                 config.local_lambda,observation,cs,position=position,mode=mode,epsilon=epsilon)
+        if feature_policy is None:
+            enriched,bases,si=features(ST['scene'],ST['entities'],p_hat,set(config.higher_order_predicates),
+                                     config.local_lambda,observation,cs,position=position,mode=mode,epsilon=epsilon)
+        else:
+            enriched,bases,si=feature_policy(ST['ai'],state,config,observation,cs)
         attention=ST['individual']['a']
         for c in enriched:
             for key in c['m']:attention.setdefault(key,0.)
@@ -143,7 +148,7 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
     real_predict=loop.predict
 
     def predict(ai,state,config,rng):
-        ST.update(active=True,state=state,config=config,ranked=[],scored=[],selected=None)
+        ST.update(active=True,ai=ai,state=state,config=config,ranked=[],scored=[],selected=None)
         before_rng=rng.getstate()
         try:
             output,pending=real_predict(ai,state,config,rng)
@@ -165,8 +170,14 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
                 fixed=(support/n,support,d,graph,al,n,False,())
                 v39.select_definition=lambda *args,_fixed=fixed,**kw:_fixed
                 clone=Random();clone.setstate(before_rng)
-                result,_=v39.predict(ai,state,config,clone)
-                rows.append({**c,'answer':answer_key(result.prediction),'payload':prediction_data(result),
+                context=nullcontext() if prediction_context is None else prediction_context(ai,state,config)
+                with context:
+                    result,candidate_pending=v39.predict(ai,state,config,clone)
+                    payload=prediction_data(result)
+                    if readout_policy is not None:
+                        payload['readout']=readout_policy.prepare(d,al,state,ai.target_graph_partial,config,
+                                                                 result,candidate_pending,epsilon)
+                rows.append({**c,'answer':answer_key(result.prediction),'payload':payload,
                              'gate_passed':support>=ar._need(config.tau_acc,n)})
                 _restore(snapshot)
                 S.LOG.update(f=None,diagnostic_f=None)
@@ -184,6 +195,9 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
                        'entities':ST['entities'],'candidates':rows,'selected_R':selected,
                        'a_before':dict(ST['individual']['a']),'actual':prediction_data(output),
                        'memory_before_bits':None,'leakage_checked':True}
+        if readout_policy is not None:
+            ST['pending']['background']=readout_policy.background(ai,state,config,ST['door_task'])
+            ST['pending']['lengths']=v39.code_lengths(state.p_hat)
         ST['checks']+=1
         return output,pending
 
@@ -202,11 +216,21 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
             correct=(trial.held_out_edge.predicate,tuple(trial.held_out_edge.arguments))
             candidates=[P.Candidate(c['R'],Fraction(c['q_numerator'],c['q_denominator']),c['n'],c['registered_at'],
                         tuple(sorted(c['m'].items())),c['answer'],c['payload']) for c in row['candidates']]
-            loss,gradient,reason=P.loss_gradient(candidates,attention,correct)
-            if reason is None:
-                before=dict(attention)
-                for key,g in gradient.items():attention[key]=min(10.,max(0.,attention.get(key,0.)-eta*g))
-                updated=before!=attention;reason='updated' if updated else 'zero_or_clipped_step'
+            if learning_policy is None:
+                loss,gradient,reason=P.loss_gradient(candidates,attention,correct)
+                if reason is None:
+                    before=dict(attention)
+                    for key,g in gradient.items():attention[key]=min(10.,max(0.,attention.get(key,0.)-eta*g))
+                    updated=before!=attention;reason='updated' if updated else 'zero_or_clipped_step'
+            else:
+                # 開示前の分布・a・符号表でmixtureを測る。保持のtop1とは区別する。
+                after,learning=learning_policy(candidates,row['a_before'],disclosed=True,door_task=True,
+                    feedback_reader=lambda:(correct,v39.L_of(correct[0],row['lengths'])),
+                    background=row['background'],eta=eta)
+                attention.clear();attention.update(after)
+                loss,gradient,reason,updated=(learning[k] for k in ('L','gradient','reason','updated'))
+                row['learning']=learning
+        row.pop('lengths',None)
         observation=ST['individual']['observations']
         disclosed=trial.held_out_edge.to_dict() if coin.f_fired else None
         observation.after(trial.trial,row.pop('scene'),row.pop('entities'),disclosed)

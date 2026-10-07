@@ -1,8 +1,7 @@
-"""受け箱の指示2：共通のUの基底に対する比とmixtureの学びの部品。
+"""受け箱の指示2・8：候補共通の可視位置の基底とmixtureの学び。
 
-主のUから読んだ予測前の基底と、同じ基底で作った席のPを受け取る。
-候補側の出現から基底を絞り直さない。照合・分布の読み手への接続は
-この数値部品と分け、C*の関門の後で検査する。
+主Uの分布は変更しない。注意の基底だけは可視位置の形と階で絞り、
+候補側の出現を使わない。Uを含む席の実際のPとの比を符号つきで測る。
 """
 from dataclasses import replace
 import math
@@ -54,15 +53,12 @@ def candidate_features(positions, candidate, *, distribution_reader, epsilon, le
         if seat is None:
             value=0.;item.update(state=None,reason='unmapped_background',P=position['b'].get(position['name'],0.),
                                 b=position['b'].get(position['name'],0.))
-        elif seat['state']=='U':
-            value=0.;item.update(state='U',slot=seat['slot'],reason='U_background',
-                                P=position['b'].get(position['name'],0.),b=position['b'].get(position['name'],0.))
         else:
             # 同じ位置のbを全候補で使う。正解・型の名札は渡さない。
             distribution=distribution_reader(seat,position['relation_id'],dict(position['b']))
             value,audit=relative_mismatch(distribution,position['b'],position['name'],
                                           epsilon=epsilon,length_of=length_of)
-            item.update(state=seat['state'],slot=seat['slot'],**audit)
+            item.update(state=seat['state'],slot=seat['slot'],reason='native_distribution',**audit)
         terms[key]=terms.get(key,0.)+value
         details.append({**item,'m':value})
     return terms,details
