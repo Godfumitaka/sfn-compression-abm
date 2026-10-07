@@ -1,0 +1,16 @@
+{
+  "gc_seconds": 3475.5924730852257,
+  "gc_calls": [
+    1095932,
+    99630,
+    280
+  ],
+  "observer_callback_cpu_seconds": 3.760097175388416,
+  "whole_worker_process_cpu_seconds": 8785.934658844999,
+  "callback_adjusted_worker_cpu_seconds": 8782.17456166961,
+  "worker_wall_seconds": 8786.760602986,
+  "configured_trials": 1740,
+  "scope": "workerの初期化から模型・記録のcloseまで。cProfile・関数traceは使用しない。GC区間は入れ子で総CPUへ足さない。callback自体の計測済みCPUを総CPUから除くがtime関数等の微小な負荷は残る。",
+  "source": "/home/tatsu/sfn/audit/_read/cstar_fast",
+  "input_output_rng_unchanged": true
+}
