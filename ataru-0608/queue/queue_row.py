@@ -5,7 +5,7 @@
   queue_row.py claim <#>                  pull → まだ「未着手」なら「走行中（デスクトップ・時刻）」にして push（衝突したら pull して確かめ直す）
   queue_row.py done <#> <出力先>          「済み（時刻、出力先）」にして push
   queue_row.py stop <#> <理由> <報告>     「止まり（時刻、理由、報告）」にして push
-列の行は表の一行（| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |）。"""
+列の行は表の一行（| # | 中身 | 世界 | 種 | 本数 | 機械 | 版・旗・出力先 | 状態 |）。「1a / 1b」の行は前半・後半の二つに分け、種・本数・状態の欄も「／」で分ける（状態が一つなら両方に同じ）。取ると、その半分の状態だけを書き換える。"""
 import datetime
 import subprocess
 import sys
@@ -20,12 +20,23 @@ def git(*a, check=True):
     return subprocess.run(["git", "-C", RES, *a], capture_output=True, text=True, check=check)
 
 
+def _split(cell, k):
+    """「a ／ b」の欄を k 個に分ける。分かれていなければ同じ値を k 個。"""
+    parts = [x.strip() for x in cell.replace("／", "/").split("/")] if ("／" in cell or (k > 1 and "/" in cell)) else [cell]
+    return parts if len(parts) == k else [cell] * k
+
+
 def rows(text):
+    """表の一行を、前半・後半（「1a / 1b」）に分けて返す。part は分けた中の番号（分けていなければ 0、k＝1）。"""
     out = []
     for i, line in enumerate(text.split("\n")):
         c = [x.strip() for x in line.strip().strip("|").split("|")]
-        if line.startswith("|") and len(c) == 8 and c[0] not in ("#", "---:") and not set(c[0]) <= set("-:"):
-            out.append(dict(line=i, num=c[0], what=c[1], world=c[2], seeds=c[3], n=c[4], machine=c[5], spec=c[6], state=c[7]))
+        if not (line.startswith("|") and len(c) == 8) or c[0] in ("#",) or set(c[0]) <= set("-:"):
+            continue
+        nums = [x.strip() for x in c[0].replace("／", "/").split("/")]
+        k = len(nums)
+        for j, (num, seeds, n, state) in enumerate(zip(nums, _split(c[3], k), _split(c[4], k), _split(c[7], k))):
+            out.append(dict(line=i, part=j, k=k, num=num, what=c[1], world=c[2], seeds=seeds, n=n, machine=c[5], spec=c[6], state=state, state_cell=c[7]))
     return out
 
 
@@ -49,7 +60,13 @@ def set_state(num, new, expect=None, msg=""):
             sys.exit(f"★ 行 #{num} の状態が「{r['state']}」（「{expect}」でない）。取らない")
         lines = text.split("\n")
         cells = lines[r["line"]].split("|")
-        cells[-2] = f" {new} "
+        if r["k"] > 1:
+            parts = _split(r["state_cell"], r["k"])
+            parts[r["part"]] = new
+            new_cell = " ／ ".join(parts)
+        else:
+            new_cell = new
+        cells[-2] = f" {new_cell} "
         lines[r["line"]] = "|".join(cells)
         open(f"{RES}/{LIST}", "w", encoding="utf-8").write("\n".join(lines))
         git("add", LIST)
@@ -57,7 +74,9 @@ def set_state(num, new, expect=None, msg=""):
         if git("push", "-q", "origin", "HEAD:results-2026-09-27", check=False).returncode == 0:
             print(f"#{num}：{r['state']} → {new}")
             return r
-        git("reset", "-q", "--hard", "origin/results-2026-09-27", check=False)  # 自分の未 push の一つだけを戻して取り直す
+        git("reset", "-q", "--soft", "HEAD~1", check=False)  # 自分の未 push の一つだけを戻して取り直す（ほかのファイルには触れない）
+        git("restore", "--staged", LIST, check=False)
+        git("checkout", "--", LIST, check=False)
     sys.exit("★ push が 5 回衝突した。取らない")
 
 
