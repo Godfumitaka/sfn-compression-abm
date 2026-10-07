@@ -1,0 +1,117 @@
+{
+  "checked_at": "2026-10-08T06:44:24+09:00",
+  "report_commit": "e1bc1230cbd091e8cdb3f68de8a015e2196ec896",
+  "inputs": [
+    {
+      "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+      "bytes": 125528,
+      "sha256": "c9c3ec69e9bc930f79c5c11434c25fd637bcbfb83f252ccc1ec135d13a071121"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 146119,
+      "sha256": "71452ab93d3e8058fb8f39efbd6ac03aacaef9df71589cebd9925b8043ffc16e"
+    },
+    {
+      "path": "control/2026-10-08_C星の一本の時間の内訳_Codex.md",
+      "bytes": 50236,
+      "sha256": "9113a98caa13671878e88648b509a4dedd24d6830011f5ae842c09cace20ee8d"
+    },
+    {
+      "path": "control/2026-10-08_注意の合わせた版_較正と出生HUの準備_Codex2.md",
+      "bytes": 20455,
+      "sha256": "1d2454a716673e9b0fb5ff265eeab1e29ec89b6b77eed715fe9c19a27390b950"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/match_timing_complete_instruction10_12_01/full_comparison.json",
+      "bytes": 3013,
+      "sha256": "1c31b04b6957345d883dea41e388f913ab0c1720fde79214ab21e1a5fa24f76c"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/match_timing_complete_instruction10_12_01/full_complete.json",
+      "bytes": 153,
+      "sha256": "c20e3374ee1c731730e44e349821c0a821c03523d4366d3221030a699d0d6187"
+    },
+    {
+      "path": "mac/cstar_2026-10-08/match_timing_complete_instruction10_12_01/full_finished.json",
+      "bytes": 204,
+      "sha256": "7c177225a8a08e7d96b515806d56e00fe515dc7f510bd15be0352f82cfc3f7ce"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_added_flags_off_200_readonly_gate_20261008.json",
+      "bytes": 4884,
+      "sha256": "ebad35c9f9449991e55421e890f0190aef3c64538afd31f18a689164848f2c4c"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_15_preparation_completed_20261008.json",
+      "bytes": 3031,
+      "sha256": "fcf990e8df965e866958d50c7c4e7ebcbd809ff2c4fb2d59b5f36a55deeaa95c"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_gate_count_failure_20261008.json",
+      "bytes": 176,
+      "sha256": "30ce166464f907a7083ed7cbcce48bf3dcda5104342cac86bae4aa6098e82234"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_gate_count_status_20261008.json",
+      "bytes": 174,
+      "sha256": "eeaff993f44a945c5d098f4df9954e50d24146095009ce17c70a39672231ea42"
+    }
+  ],
+  "reading_command": "git show <report_commit>:<inputs.path>（既存の小さい報告とJSONのみ）",
+  "cstar_individual_timing_gate": {
+    "passed": true,
+    "complete_at": "2026-10-08T05:48:15.453974+09:00",
+    "trials": 1740,
+    "files": 7,
+    "exclusions": [
+      "台帳の見出し一行",
+      "実測sec_trial"
+    ],
+    "full_finished": {
+      "at": "2026-10-08T05:48:13.508108+09:00",
+      "exit": 0,
+      "wall_seconds": 2849.3778456249856,
+      "paused_seconds": 0.0,
+      "maximum_observed_model_tree_rss_bytes": 11122589696,
+      "sampling_seconds": 2
+    }
+  },
+  "stage2_preparation": {
+    "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "complete_at": "2026-10-08T06:30:30.061805+09:00",
+    "completed_instruction_numbers": [
+      14,
+      15
+    ],
+    "all_flags_off_1740": {
+      "passed": true,
+      "files": 9
+    },
+    "added_flags_off_200": {
+      "gate_at": "2026-10-08T06:25:55.394423+09:00",
+      "passed": true,
+      "required_files": 9,
+      "additional_files": 1,
+      "all_equal": true,
+      "exclusions": [
+        "台帳の見出し一行だけ"
+      ]
+    },
+    "original_controller_count_failure_preserved": true,
+    "model_reexecuted": false,
+    "new_flags_on_model_run": false,
+    "full_combined_cstar_gate_completed": false
+  },
+  "new_cstar_structure_prototype": {
+    "code": "e05f990516bc2d45568854f02e97699be40155db",
+    "flag": "--sme-reuse-structure",
+    "default": "off",
+    "component_checks": 18,
+    "preflight20_conditions": 4,
+    "full1740": "未判定、直列計測中。準備・部品を全長合格と扱わない。"
+  },
+  "our45": "統合版の必要な全関門待ち。移植・off関門・5000一本は未開始。D＋注意と本番列の完成を一本測定の条件へ追加しない。",
+  "our_new_jobs": [],
+  "our_signals": []
+}
