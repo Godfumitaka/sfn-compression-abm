@@ -1,0 +1,32 @@
+# 受付表（2026-10-08T03:42:23）  見込みの合計 16.0 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+4872	Codex2 指示8 接続の関門 on_full	16.0	2026-10-07T23:27:45	0.76 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+ R PID 4872（親 94210）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示8 接続の関門 on_full --mem 16 --disk-path /Users
+ R PID 4882（親 4872）	26 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/inst
+ R PID 4892（親 4882）	15 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 4893（親 4882）	723 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 6700（親 1）	20 MB	Python /Users/tatsu-admin/jobs/jobs.py run --owner SME_Cstar_matchtime_instruction10_01 --wait --mem 11 --disk
+   PID 38625（親 52419）	23 MB	Python heartbeat_check.py
+   PID 38647（親 38625）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+   PID 94210（親 1）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/inst
+   PID 97541（親 1）	9 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：81%
+free：0.2 GB
+inactive：12.6 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07）の空き 214.469 GiB、下限 20 GiB
+
+# スワップ：今 180.0 MB。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
