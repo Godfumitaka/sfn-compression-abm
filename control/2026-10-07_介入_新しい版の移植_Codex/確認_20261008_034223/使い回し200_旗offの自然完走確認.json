@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-08T03:17:44.002854+09:00",
+  "code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+  "natural_completion_only": true,
+  "gate_passed": false,
+  "model_signaled": false,
+  "automatic_retry": false,
+  "full_run_unchanged": true,
+  "on_started": false,
+  "required_gate_generated": false,
+  "cpu_comparison_generated": false,
+  "copied": [
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/status.json",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction12_small_gate_status_20261008_0316.json",
+      "sha256": "bf58e00dd38ac53d82c5b6548e0cd288a1961790879c544517bf5d3f9a194cea",
+      "bytes": 204
+    },
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/failure.json",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction12_small_gate_failure_20261008_0316.json",
+      "sha256": "ecbba00fc9a64fd9b748c913e3574ce216e97bfaaa5bfbabd7ede30fddeeb084",
+      "bytes": 206
+    },
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/reuse_off_200/measurement.json",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction12_off_200_measurement_20261008.json",
+      "sha256": "d9feca611f575cd2656a473856261be920e4bfc3a16964bb0faeb9012fd035cb",
+      "bytes": 336
+    },
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/reuse_off_200/run.log",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction12_off_200_run_20261008.log",
+      "sha256": "e6cf8d8228a9122e7a885ef08d40788a32ea33bd72b366ae97a245c61acb49f9",
+      "bytes": 879
+    },
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/heartbeat_0316_snapshot.json",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/inbox_check_20261008_0316.json",
+      "sha256": "94fca2da172edc5d31154aa55fb43f35fd2b81e7abf42c76cbaf6eb6b1eb4d0b",
+      "bytes": 3989
+    },
+    {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/reuse_off_200/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.done",
+      "report_copy": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction12_off_200_native_done_20261008.json",
+      "sha256": "bb19fc2c681f00cfbf2cba53f6e3cba6c8198fe5c1224e32f1ec8d6c6e28367f",
+      "bytes": 578
+    }
+  ],
+  "records_not_generated": {
+    "reuse_off_200_completed.json": true,
+    "reuse_on_200_entry_started.json": true,
+    "reuse_on_200_completed.json": true,
+    "required_gate.json": true,
+    "cpu_comparison.json": true
+  },
+  "supervisor_end": {
+    "phase": "stopped_no_automatic_retry",
+    "at": "2026-10-08T03:09:09.509910+09:00",
+    "pid": 27353,
+    "error": "RuntimeError('資源条件の確認不足。新規投入・合格宣言を止める')"
+  },
+  "measurement": {
+    "pid": 27377,
+    "trials": 200,
+    "wall_seconds": 2864.7243068749667,
+    "cpu_user_seconds": 2852.716985,
+    "cpu_system_seconds": 5.13611,
+    "cpu_seconds": 2857.853095,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 211025920,
+    "max_candidates": 1,
+    "max_definitions": 1,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "run_log_alldone": true,
+  "reason_missing_completed_record": "one()は受付終了コード0の後、warnedが真ならcompletedの書込みより先に停止する。原記録は変更しない"
+}
