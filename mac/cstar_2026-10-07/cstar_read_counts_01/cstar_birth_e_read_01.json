@@ -1,0 +1,177 @@
+{
+  "at": "2026-10-07T20:50:41.947375+09:00",
+  "model_not_run": true,
+  "passed": true,
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+  "source_sha256": "c1cc4cc33053e8cc89fe3229ad82f99129273e028c972fe45e127ee1f1f7fef4",
+  "counts": {
+    "E_decisions": 1739,
+    "E_top12_recorded_candidates": 20741,
+    "birth_rows": 2615,
+    "first_unobserved": 0,
+    "first_second_names_differ": 0,
+    "actual_F_first_mismatch": 0,
+    "first_cost_state_mismatch": 0,
+    "first_distribution_state_mismatch": 0
+  },
+  "examples": {
+    "same_names": {
+      "trial": 1,
+      "record": {
+        "slot": 0,
+        "birth_score": "seq",
+        "first_observed": "require",
+        "second_observed": "require",
+        "actual_fixed": "require",
+        "b": {
+          "require": 1.0
+        },
+        "P_old": {
+          "F": {
+            "require": 1.0
+          },
+          "H": {
+            "require": 1.0
+          },
+          "U": {
+            "require": 1.0
+          }
+        },
+        "P_current": {
+          "U": {
+            "require": 1.0
+          },
+          "H": {
+            "require": 1.0
+          },
+          "F": {
+            "require": 1.0
+          }
+        },
+        "r_old": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "r_current": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "base_age": 1
+      }
+    },
+    "E_chosen_rewrite": {
+      "trial": 105,
+      "chosen": "R_7b6b1008b48c1115_t47",
+      "r": 35.0,
+      "parts": {
+        "書換": 13.0,
+        "追加": 21.0,
+        "取消": 1,
+        "書換数": 1,
+        "追加数": 1,
+        "写った席": 15,
+        "一致": 14,
+        "取消の未確認": 1
+      },
+      "dC_pred": 41,
+      "dC_real": 41
+    }
+  },
+  "E_by_100_trials": {
+    "0": {
+      "decisions": 99,
+      "chosen_rewrite_bits": 1267.0,
+      "chosen_changed_names": 0
+    },
+    "100": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 712.0,
+      "chosen_changed_names": 1
+    },
+    "200": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 600.0,
+      "chosen_changed_names": 0
+    },
+    "300": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 440.0,
+      "chosen_changed_names": 0
+    },
+    "400": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 930.0,
+      "chosen_changed_names": 1
+    },
+    "500": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 716.0,
+      "chosen_changed_names": 3
+    },
+    "600": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 821.0,
+      "chosen_changed_names": 0
+    },
+    "700": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 508.0,
+      "chosen_changed_names": 1
+    },
+    "800": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 637.0,
+      "chosen_changed_names": 2
+    },
+    "900": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 778.0,
+      "chosen_changed_names": 10
+    },
+    "1000": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 701.0,
+      "chosen_changed_names": 5
+    },
+    "1100": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 923.0,
+      "chosen_changed_names": 2
+    },
+    "1200": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 1181.0,
+      "chosen_changed_names": 12
+    },
+    "1300": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 1350.0,
+      "chosen_changed_names": 1
+    },
+    "1400": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 956.0,
+      "chosen_changed_names": 0
+    },
+    "1500": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 651.0,
+      "chosen_changed_names": 8
+    },
+    "1600": {
+      "decisions": 100,
+      "chosen_rewrite_bits": 640.0,
+      "chosen_changed_names": 17
+    },
+    "1700": {
+      "decisions": 40,
+      "chosen_rewrite_bits": 401.0,
+      "chosen_changed_names": 1
+    }
+  },
+  "limits": "Eのcandsは上位12件の記録。照合result IDとE費用の候補Rを結ぶ同じキーが無く、異名の特定の対応と個々の費用の結びつきはこの読み取りでは不明。期待計算で仮に引いた名前は観察として入れず、実際の第一・第二材料の名前だけをbirths_recから集計した。"
+}
