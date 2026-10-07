@@ -1,7 +1,9 @@
 #!/bin/bash
 # Astra の待機：control/議論/*/状態.md の一行目が「次: Astra」の相談があるときだけ codex を起動する。
 # 見るだけ（git fetch）の間は、模型の使用量はかからない。
-# 使い方：tmux の中で  CODEX_PROFILE=<いつもの Astra のプロファイル名> bash astra_watch.sh
+# 使い方：tmux の中で  bash astra_watch.sh
+#   Codex の CLI（codex exec）を使う。Codex の app と同じアカウント・同じ設定（~/.codex）を読む。
+#   プロファイルを使うなら CODEX_PROFILE=<名前>、模型や考える量を指定するなら CODEX_ARGS='-c model_reasoning_effort="high"' などを前に付ける。
 set -u
 REPO="${REPO:-$HOME/astra_debate/res}"        # results-2026-09-27 の専用の clone
 BRANCH="${BRANCH:-results-2026-09-27}"
@@ -9,6 +11,7 @@ INTERVAL="${INTERVAL:-300}"                    # 秒
 DAILY_MAX="${DAILY_MAX:-12}"                   # 一日に Astra を起こす上限
 MAX_ROUNDS="${MAX_ROUNDS:-4}"                  # 一つの相談での Astra の返事の上限
 CODEX_PROFILE="${CODEX_PROFILE:-}"
+CODEX_ARGS="${CODEX_ARGS:-}"                   # codex exec に足す旗（空なら ~/.codex の既定）
 STATE_DIR="$HOME/astra_debate"
 LOG="$STATE_DIR/watch.log"
 mkdir -p "$STATE_DIR"
@@ -67,9 +70,9 @@ while true; do
       log "$name ${next} 起動"
       prompt="control/議論/Astraへの決まり.md を読み、それに従ってください。議論のフォルダ control/議論/${name}/ の全部のファイルを番号順に読み、次の返事（${next}_Astra.md の中身）だけを書いてください。"
       if [ -n "$CODEX_PROFILE" ]; then
-        codex exec -p "$CODEX_PROFILE" -s read-only -C "$REPO" -o "$out" "$prompt" >>"$LOG" 2>&1
+        codex exec -p "$CODEX_PROFILE" $CODEX_ARGS -s read-only -C "$REPO" -o "$out" "$prompt" >>"$LOG" 2>&1
       else
-        codex exec -s read-only -C "$REPO" -o "$out" "$prompt" >>"$LOG" 2>&1
+        codex exec $CODEX_ARGS -s read-only -C "$REPO" -o "$out" "$prompt" >>"$LOG" 2>&1
       fi
       if [ -s "$out" ]; then
         set_state "$st" "次: Claude"
