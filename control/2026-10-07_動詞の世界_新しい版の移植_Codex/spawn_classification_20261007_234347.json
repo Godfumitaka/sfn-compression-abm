@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-10-07T23:43:47+09:00",
+  "initial_snapshot": "check_20261007_234347.json",
+  "initial_known_active_model_count": 0,
+  "initial_other_active_spawn_count": 1,
+  "worker": {
+    "pid": 4893,
+    "ppid": 4882,
+    "state": "R",
+    "rss_bytes": 161808384,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+    "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_on.py $WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/native_command.json",
+    "worker_kind": "spawn"
+  },
+  "parent_source": {
+    "path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_on.py",
+    "bytes": 2959,
+    "sha256": "0c7acf9e8629dac624c551567c0116ff544f8ecef1dee9ae456b9b46e9156394"
+  },
+  "evidence": [
+    "REAL_WORKER=v3_run.worker",
+    "v3_run.worker=worker",
+    "v3_run.main()"
+  ],
+  "classification": "v3_runのON関門の計測を実行する模型worker",
+  "monitor_only_change": "監視台本MODEL_HOSTSへobserve_on.pyを追加。親台本・模型・旗・受付・過程は変更しない。",
+  "counter_sha256_after": "95419e3bd134eed3a7b03492fe4d5e576e7e807c413813db71d8bf00fb0b44dd",
+  "new_processes_started": 0,
+  "processes_signalled": 0
+}

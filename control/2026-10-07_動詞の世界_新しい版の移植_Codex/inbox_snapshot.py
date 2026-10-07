@@ -10,7 +10,7 @@ import tomllib
 
 MODEL_HOSTS={'v3_run.py','observe_02.py','observe_memory_02.py','observe_04.py',
              'sme_evict_observe_20261007.py','uposition_run.py','selcands_sme.py',
-             'material_keep_driver_01.py','observe_cstar_01.py','observe_off.py'}
+             'material_keep_driver_01.py','observe_cstar_01.py','observe_off.py','observe_on.py'}
 
 def script_name(command):
     # psは空白を含むscriptのパスをquoteしない。split()[1]では判定しない。
