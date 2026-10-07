@@ -1,0 +1,278 @@
+{
+  "at": "2026-10-08T05:05:32.555017+09:00",
+  "instruction": 14,
+  "authorized_stop": true,
+  "signal_requested": {
+    "at": "2026-10-08T05:00:30.885811+09:00",
+    "instruction": 14,
+    "receipt_pushed_commit": "ed8ebdf4",
+    "reason": "指示14: 自分の非本番ON関門計測を停止し既存記録を保全",
+    "signal": "SIGINT",
+    "target_pid": 4893,
+    "parent_chain": [
+      4893,
+      4882,
+      4872,
+      94210
+    ],
+    "ps": " 4872 94210 Ss   /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示8 接続の関門 on_full --mem 16 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/native_entry.py on_full\n 4882  4872 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_on.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/native_command.json\n 4893  4882 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n94210     1 Ss   /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py\n",
+    "last_performance_before_signal": {
+      "trial": 1314,
+      "seconds": 15.553749250015244,
+      "elapsed_seconds": 19959.984431874997,
+      "peak_rss_bytes": 918765568,
+      "definitions": 0,
+      "candidates": 0,
+      "cstar_cache_count": 14634,
+      "cstar_self_cache_count": 1873
+    },
+    "original_resume_status": {
+      "phase": "receipt_wait_or_running",
+      "kind": "on_full",
+      "at": "2026-10-07T23:27:45.663382+09:00",
+      "pid": 94210,
+      "receipt_pid": 4872,
+      "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "requested_mem_gb": 16
+    },
+    "production_processes_signaled": false,
+    "source_edited": false,
+    "outputs_deleted": false,
+    "automatic_retry": false
+  },
+  "ended_pids": {
+    "4893": true,
+    "4882": true,
+    "4872": true,
+    "94210": true
+  },
+  "last_performance": {
+    "trial": 1314,
+    "seconds": 15.553749250015244,
+    "elapsed_seconds": 19959.984431874997,
+    "peak_rss_bytes": 918765568,
+    "definitions": 0,
+    "candidates": 0,
+    "cstar_cache_count": 14634,
+    "cstar_self_cache_count": 1873
+  },
+  "completed_trials": 1315,
+  "full_1740_completed": false,
+  "native_completed": false,
+  "native_gate": false,
+  "measurement": false,
+  "done_files": [],
+  "original_status": {
+    "phase": "stopped_no_automatic_retry",
+    "at": "2026-10-08T05:00:38.668202+09:00",
+    "error": "RuntimeError(('nativeの終了コード', 'on_full', 254))",
+    "models_not_signaled": true,
+    "automatic_retry": false,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed"
+  },
+  "original_failure": {
+    "at": "2026-10-08T05:00:38.668202+09:00",
+    "error": "RuntimeError(('nativeの終了コード', 'on_full', 254))",
+    "models_not_signaled": true,
+    "automatic_retry": false,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed"
+  },
+  "original_warning_exists": false,
+  "files_preserved": {
+    "on_full/run.log": {
+      "bytes": 9070,
+      "mtime_ns": 1791403233273505955
+    },
+    "on_full/performance.jsonl": {
+      "bytes": 271795,
+      "mtime_ns": 1791403226098625447
+    },
+    "on_full/worker_pid.json": {
+      "bytes": 28,
+      "mtime_ns": 1791383265945941733
+    },
+    "on_full/native_command.json": {
+      "bytes": 1693,
+      "mtime_ns": 1791376514262469347
+    },
+    "on_full/receipt_command.json": {
+      "bytes": 537,
+      "mtime_ns": 1791383265662304769
+    },
+    "on_full/output/flag.json": {
+      "bytes": 1848,
+      "mtime_ns": 1791383265894290792
+    },
+    "on_full/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "bytes": 1939949,
+      "mtime_ns": 1791403103630007864
+    },
+    "on_full/output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz": {
+      "bytes": 7274375,
+      "mtime_ns": 1791403232170030737
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz": {
+      "bytes": 25769029,
+      "mtime_ns": 1791403226125404111
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl": {
+      "bytes": 555249,
+      "mtime_ns": 1791403232170104821
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.ambig.csv": {
+      "bytes": 1374,
+      "mtime_ns": 1791403232170852535
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv": {
+      "bytes": 448,
+      "mtime_ns": 1791403232170171238
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl": {
+      "bytes": 7680233,
+      "mtime_ns": 1791403226092364941
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl": {
+      "bytes": 3987336,
+      "mtime_ns": 1791403232248867967
+    },
+    "on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz": {
+      "bytes": 65979757,
+      "mtime_ns": 1791403232170342615
+    },
+    "on_full/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "bytes": 10978424,
+      "mtime_ns": 1791403231283176599
+    },
+    "on_full/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "bytes": 73930,
+      "mtime_ns": 1791401183849806124
+    },
+    "on_full/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz": {
+      "bytes": 6695368,
+      "mtime_ns": 1791403232170463991
+    }
+  },
+  "blocks": [
+    {
+      "completed": 100,
+      "trial": 99,
+      "block_seconds": 956.9166459579719,
+      "cumulative_seconds": 956.9166459579719,
+      "peak_rss_bytes": 161398784
+    },
+    {
+      "completed": 200,
+      "trial": 199,
+      "block_seconds": 1089.7185538340127,
+      "cumulative_seconds": 2046.6351997919846,
+      "peak_rss_bytes": 226770944
+    },
+    {
+      "completed": 300,
+      "trial": 299,
+      "block_seconds": 1171.7891978329862,
+      "cumulative_seconds": 3218.424397624971,
+      "peak_rss_bytes": 291553280
+    },
+    {
+      "completed": 400,
+      "trial": 399,
+      "block_seconds": 1264.8287685419782,
+      "cumulative_seconds": 4483.253166166949,
+      "peak_rss_bytes": 353648640
+    },
+    {
+      "completed": 500,
+      "trial": 499,
+      "block_seconds": 1346.741320458008,
+      "cumulative_seconds": 5829.994486624957,
+      "peak_rss_bytes": 413368320
+    },
+    {
+      "completed": 600,
+      "trial": 599,
+      "block_seconds": 1423.7118408330134,
+      "cumulative_seconds": 7253.7063274579705,
+      "peak_rss_bytes": 476102656
+    },
+    {
+      "completed": 700,
+      "trial": 699,
+      "block_seconds": 1514.2473355419934,
+      "cumulative_seconds": 8767.953662999964,
+      "peak_rss_bytes": 536231936
+    },
+    {
+      "completed": 800,
+      "trial": 799,
+      "block_seconds": 1586.1826245830161,
+      "cumulative_seconds": 10354.13628758298,
+      "peak_rss_bytes": 599113728
+    },
+    {
+      "completed": 900,
+      "trial": 899,
+      "block_seconds": 2154.6847030000063,
+      "cumulative_seconds": 12508.820990582986,
+      "peak_rss_bytes": 659865600
+    },
+    {
+      "completed": 1000,
+      "trial": 999,
+      "block_seconds": 1807.2756956249941,
+      "cumulative_seconds": 14316.09668620798,
+      "peak_rss_bytes": 723550208
+    },
+    {
+      "completed": 1100,
+      "trial": 1099,
+      "block_seconds": 1732.2735014999635,
+      "cumulative_seconds": 16048.370187707944,
+      "peak_rss_bytes": 788267008
+    },
+    {
+      "completed": 1200,
+      "trial": 1199,
+      "block_seconds": 1810.7153806670103,
+      "cumulative_seconds": 17859.085568374954,
+      "peak_rss_bytes": 851083264
+    },
+    {
+      "completed": 1300,
+      "trial": 1299,
+      "block_seconds": 1834.7888851670432,
+      "cumulative_seconds": 19693.874453541997,
+      "peak_rss_bytes": 910245888
+    }
+  ],
+  "machine": {
+    "models": {
+      "47884": {
+        "ppid": 47881,
+        "state": "R",
+        "rss_kb": 2370528
+      }
+    },
+    "model_children": 1,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 6700,
+        "owner": "SME_Cstar_matchtime_instruction10_01",
+        "mem_gb": 11.0,
+        "start": "2026-10-08T05:00:39",
+        "cmd": "/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/run_match_timing_01.py"
+      }
+    ],
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": [],
+    "disk_free_bytes": 229787602944
+  },
+  "model_production_signaled": false,
+  "outputs_deleted": false,
+  "automatic_retry": false
+}
