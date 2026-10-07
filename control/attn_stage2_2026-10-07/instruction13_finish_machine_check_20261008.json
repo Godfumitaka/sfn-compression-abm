@@ -1,0 +1,132 @@
+{
+  "at": "2026-10-08T04:40:25.622720+09:00",
+  "model_children": 1,
+  "active": 1,
+  "paused": 0,
+  "models": {
+    "4893": {
+      "ppid": 4882,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_kb": 860016,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  },
+  "registered": [
+    {
+      "pid": 4872,
+      "owner": "Codex2 指示8 接続の関門 on_full",
+      "mem_gb": 16.0,
+      "start": "2026-10-07T23:27:45",
+      "cmd": "/opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/native_entry.py on_full"
+    }
+  ],
+  "swap_ok": true,
+  "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+  "swap_used_mb": 180.0,
+  "thermal_warnings": [],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+  "unregistered_heavy": [],
+  "disk_free_bytes": 230247043072,
+  "processes": {
+    "94210": {
+      "exists": true,
+      "value": [
+        1,
+        "Ss",
+        0.0,
+        24880,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py"
+      ]
+    },
+    "4872": {
+      "exists": true,
+      "value": [
+        94210,
+        "Ss",
+        0.0,
+        18752,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示8 接続の関門 on_full --mem 16 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/native_entry.py on_full"
+      ]
+    },
+    "4882": {
+      "exists": true,
+      "value": [
+        4872,
+        "S",
+        0.0,
+        27024,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_on.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/native_command.json"
+      ]
+    },
+    "4893": {
+      "exists": true,
+      "value": [
+        4882,
+        "R",
+        100.0,
+        860016,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      ]
+    },
+    "27353": {
+      "exists": false,
+      "value": null
+    },
+    "27360": {
+      "exists": false,
+      "value": null
+    },
+    "27377": {
+      "exists": false,
+      "value": null
+    },
+    "21749": {
+      "exists": false,
+      "value": null
+    },
+    "72172": {
+      "exists": false,
+      "value": null
+    },
+    "66840": {
+      "exists": false,
+      "value": null
+    }
+  },
+  "sources": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    }
+  },
+  "full_latest": {
+    "trial": 1247,
+    "seconds": 18.08919137500925,
+    "elapsed_seconds": 18748.53251416696,
+    "peak_rss_bytes": 880082944,
+    "definitions": 1,
+    "candidates": 1,
+    "cstar_cache_count": 13899,
+    "cstar_self_cache_count": 1786
+  },
+  "full_records": {
+    "resume_status.json": {
+      "phase": "receipt_wait_or_running",
+      "kind": "on_full",
+      "at": "2026-10-07T23:27:45.663382+09:00",
+      "pid": 94210,
+      "receipt_pid": 4872,
+      "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "requested_mem_gb": 16
+    },
+    "resume_warning.json": null,
+    "resume_failure.json": null,
+    "on_full_completed.json": null,
+    "on_full_gate.json": null
+  }
+}

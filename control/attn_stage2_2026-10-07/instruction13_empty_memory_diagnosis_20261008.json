@@ -1,0 +1,2508 @@
+{
+  "at": "2026-10-08T04:37:37.487050+09:00",
+  "fixed_cutoff_note": "ON全長は04:17:51に確認した番号1173まで。模型・原記録へ書かない。",
+  "modes": [
+    {
+      "mode": "on_full",
+      "completed": 1174,
+      "header": {
+        "agent_ids": [
+          "agent"
+        ],
+        "arm_abstain_charge": false,
+        "arm_adaptation_table": null,
+        "arm_alpha": 0.0,
+        "arm_beta": 0.0,
+        "arm_d_shared": null,
+        "arm_f_profile": "uniform:0.500000",
+        "arm_fill_selection": "most_frequent",
+        "arm_holdout_repr": "first_order_binary",
+        "arm_identification_graph": "live",
+        "arm_kappa": 1.0,
+        "arm_lambda_mix": 0.1,
+        "arm_local_lambda": 1.0,
+        "arm_pricing_rule": "spec",
+        "arm_refill_rule": "one_per_slot",
+        "arm_repair_scope": "first_order",
+        "arm_self_score_cache": "off",
+        "arm_temperature": null,
+        "arm_verbatim_theta": 0.3842,
+        "arm_w": 0.0,
+        "code_commit": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+        "f_setting": 0.5,
+        "record_type": "run_header",
+        "run_seed": 1,
+        "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+        "tau_acc": 0.67,
+        "theta_prime": 2.1,
+        "trial_count": 1740,
+        "world_hash": "68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1"
+      },
+      "prices": {
+        "--v39-price": 0.01873710622997919,
+        "--e-price": 0.01873710622997919
+      },
+      "E_lam_recorded": [
+        0.01873710622997919
+      ],
+      "final": {
+        "trial": 1173,
+        "disclosed": false,
+        "births": 1,
+        "assimilation": 0,
+        "removed": 1,
+        "immediate_birth_removed": 0,
+        "removed_reasons": {
+          "all_U:price": 1
+        },
+        "m_alloc": 17,
+        "m_live": 1,
+        "support_gate_failures": 0,
+        "conversions": 34,
+        "F": 1,
+        "H": 0,
+        "U": 16,
+        "defs": 1,
+        "bits_before": 2128,
+        "bits_after": 1697,
+        "birth_noop": false
+      },
+      "zero_definition_trials": 327,
+      "max_definitions": 1,
+      "max_bits": 1697,
+      "births": 1160,
+      "removals": 1159,
+      "immediate_birth_removed": 326,
+      "birth_noop_trials": 0,
+      "assimilation": 13,
+      "removal_reasons": {
+        "all_U:price": 1159
+      },
+      "conversion_reasons": {
+        "FH:price": 15134,
+        "HU:price": 15328
+      },
+      "actual_birth_initial_records": 1160,
+      "virtual_initial_records": 1160,
+      "virtual_records_not_actual_birth": 0,
+      "actual_birth_delta": {
+        "n": 15135,
+        "zero": 4396,
+        "negative": 0,
+        "positive": 10739,
+        "min": 0.0,
+        "median": 0.04069234328008201,
+        "p90": 0.04753052066676263,
+        "max": 0.09012108594062346,
+        "mean": 0.03212255586304011
+      },
+      "all_virtual_initial_delta": {
+        "n": 15135,
+        "zero": 4396,
+        "negative": 0,
+        "positive": 10739,
+        "min": 0.0,
+        "median": 0.04069234328008201,
+        "p90": 0.04753052066676263,
+        "max": 0.09012108594062346,
+        "mean": 0.03212255586304011
+      },
+      "immediate_birth_FH_converted_V": {
+        "n": 14288,
+        "zero": 4396,
+        "negative": 0,
+        "positive": 9892,
+        "min": 0.0,
+        "median": 0.013485131752533236,
+        "p90": 0.015149560129055667,
+        "max": 0.018683107141223634,
+        "mean": 0.009766118866544712
+      },
+      "FH_release_bits": {
+        "n": 14288,
+        "zero": 0,
+        "negative": 0,
+        "positive": 14288,
+        "min": 3,
+        "median": 3,
+        "p90": 6,
+        "max": 9,
+        "mean": 3.357222844344905
+      },
+      "virtual_work": {
+        "virtual_questions": 23273,
+        "evaluated_questions": 23273,
+        "thinned_seats": 303913,
+        "rerankings": 327186
+      },
+      "virtual_class_counts": {
+        "other:questions": 22244,
+        "other:seats": 290386,
+        "other:zero_seats": 280501,
+        "door:questions": 1029,
+        "door:seats": 13527,
+        "door:zero_seats": 12673
+      },
+      "virtual_question_seat_delta": {
+        "n": 303913,
+        "zero": 293174,
+        "negative": 0,
+        "positive": 10739,
+        "min": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "max": 0.9731975696724786,
+        "mean": 0.03143201661695053
+      },
+      "disclosed_trials": 614,
+      "stage2_recorded_trials": 1172,
+      "stage2_recorded_disclosed_trials": 613,
+      "missing_stage2_trials": [
+        1172,
+        1173
+      ],
+      "disclosed_trials_no_stage2_seats": 174,
+      "disclosed_seat_delta": {
+        "n": 439,
+        "zero": 439,
+        "negative": 0,
+        "positive": 0,
+        "min": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "mean": 0.0
+      },
+      "elapsed": 17393.443177749985,
+      "seconds_per_trial": 14.815539333688232,
+      "performance_seconds_sum": 17393.443177749985,
+      "stage2_additional_seconds": 14.405050487723202,
+      "stage2_wrapper_seconds": 26.120494006900117,
+      "all_recorded_birth_seconds": 17182.260146500368,
+      "actual_birth_seconds": 17182.260146500368,
+      "unassigned_elapsed": 196.77798076189356,
+      "max_prediction_candidates": 1,
+      "initial_examples": [
+        {
+          "trial": 1,
+          "R": "R_f35c5fd29759b79e",
+          "delta_by_slot": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "mass_by_slot": {
+            "0": 0.9999999999999996,
+            "1": 0.9999999999999996,
+            "2": 0.9999999999999996,
+            "3": 0.9999999999999996
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 2
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 19,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 0.5574242919683456
+        },
+        {
+          "trial": 2,
+          "R": "R_3229d75e4a4c2e0b",
+          "delta_by_slot": {
+            "0": 0.0,
+            "1": 0.04889220606074482,
+            "2": 0.045331887413835835,
+            "3": 0.0,
+            "4": 0.04889220606074482,
+            "5": 0.04689497292854953,
+            "6": 0.0,
+            "7": 0.0,
+            "8": 0.0,
+            "9": 0.0,
+            "10": 0.0
+          },
+          "mass_by_slot": {
+            "0": 0.9999999999999996,
+            "1": 0.9999999999999996,
+            "2": 0.9999999999999996,
+            "3": 0.9999999999999996,
+            "4": 0.9999999999999996,
+            "5": 0.9999999999999996,
+            "6": 0.9999999999999996,
+            "7": 0.9999999999999996,
+            "8": 0.9999999999999996,
+            "9": 0.9999999999999996,
+            "10": 0.9999999999999996
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 3
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 19,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 2.6450640829862095
+        },
+        {
+          "trial": 3,
+          "R": "R_beb6d0d0aa09b5d2",
+          "delta_by_slot": {
+            "0": 0.043668328073449156,
+            "1": 0.047825792253964376,
+            "2": 0.0,
+            "3": 0.04571647682404418,
+            "4": 0.043668328073449156,
+            "5": 0.03972847853711353,
+            "6": 0.03972847853711353
+          },
+          "mass_by_slot": {
+            "0": 1.0000000000000002,
+            "1": 1.0000000000000002,
+            "2": 1.0000000000000002,
+            "3": 1.0000000000000002,
+            "4": 1.0000000000000002,
+            "5": 1.0000000000000002,
+            "6": 1.0000000000000002
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 4
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 20,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 2.103353457991034
+        }
+      ],
+      "registration_retirement_example": {
+        "trial": 1,
+        "registration": {
+          "R": "R_f35c5fd29759b79e",
+          "alignment_event_id": "5a444739a5beebf2",
+          "base_written_at": 0,
+          "constituents": [
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "relation"
+              ],
+              "arguments": [
+                "3aaedb638d28ec31",
+                "9dd7e98e01d261cf"
+              ],
+              "arity": 2,
+              "predicate": "require",
+              "registered_at": 1,
+              "slot_index": 0,
+              "uid": "R_f35c5fd29759b79e#0#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "71ba85612fdfe1e3",
+                "c8d0862e1fe621ea"
+              ],
+              "arity": 2,
+              "predicate": "push",
+              "registered_at": 1,
+              "slot_index": 1,
+              "uid": "R_f35c5fd29759b79e#1#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity"
+              ],
+              "arguments": [
+                "8861cb487923b34b"
+              ],
+              "arity": 1,
+              "predicate": "sig_n",
+              "registered_at": 1,
+              "slot_index": 2,
+              "uid": "R_f35c5fd29759b79e#2#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "df4590fa3723f662",
+                "c8d0862e1fe621ea"
+              ],
+              "arity": 2,
+              "predicate": "lift",
+              "registered_at": 1,
+              "slot_index": 3,
+              "uid": "R_f35c5fd29759b79e#3#1"
+            }
+          ],
+          "definition_version": 1,
+          "kind": "registration",
+          "m_alloc": 4,
+          "m_live": 4,
+          "name_source": "hash",
+          "trial": 1,
+          "was_extension": false
+        },
+        "deletions": [
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 3,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 0,
+            "tie_n": 4,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 11,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 0,
+            "tie_n": 4,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 6,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 1,
+            "tie_n": 3,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 1,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 1,
+            "tie_n": 3,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 3,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 6,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 2,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 11,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 65,
+            "gen": null,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 2,
+            "tie_n": 1,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "kind": "definition_removed",
+            "registered_at": 1,
+            "trial": 1,
+            "v39": "retire"
+          }
+        ],
+        "m_alloc": 0,
+        "m_live": 0
+      },
+      "blocks": [
+        {
+          "completed": 100,
+          "end_trial": 99,
+          "block_start": 1,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 6,
+          "bits": 1095,
+          "births": 97,
+          "removed": 96,
+          "immediate_birth_removed": 56,
+          "removed_reasons": {
+            "all_U:price": 96
+          },
+          "elapsed": 956.9166459579719,
+          "stage2_seconds": 0.470222462026868,
+          "birth_seconds": 948.166219084058
+        },
+        {
+          "completed": 200,
+          "end_trial": 199,
+          "block_start": 101,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1284,
+          "births": 99,
+          "removed": 99,
+          "immediate_birth_removed": 29,
+          "removed_reasons": {
+            "all_U:price": 99
+          },
+          "elapsed": 2046.6351997919846,
+          "stage2_seconds": 1.0917460729833692,
+          "birth_seconds": 1077.2430927129462
+        },
+        {
+          "completed": 300,
+          "end_trial": 299,
+          "block_start": 201,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 6,
+          "bits": 1295,
+          "births": 99,
+          "removed": 99,
+          "immediate_birth_removed": 19,
+          "removed_reasons": {
+            "all_U:price": 99
+          },
+          "elapsed": 3218.424397624971,
+          "stage2_seconds": 0.9685884561622515,
+          "birth_seconds": 1158.6039702953422
+        },
+        {
+          "completed": 400,
+          "end_trial": 399,
+          "block_start": 301,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1410,
+          "births": 98,
+          "removed": 98,
+          "immediate_birth_removed": 22,
+          "removed_reasons": {
+            "all_U:price": 98
+          },
+          "elapsed": 4483.253166166949,
+          "stage2_seconds": 1.164609618484974,
+          "birth_seconds": 1250.6991422912106
+        },
+        {
+          "completed": 500,
+          "end_trial": 499,
+          "block_start": 401,
+          "definitions": 0,
+          "F": 0,
+          "H": 0,
+          "U": 0,
+          "bits": 1226,
+          "births": 98,
+          "removed": 99,
+          "immediate_birth_removed": 32,
+          "removed_reasons": {
+            "all_U:price": 99
+          },
+          "elapsed": 5829.994486624957,
+          "stage2_seconds": 1.2482934545259923,
+          "birth_seconds": 1331.0445264249574
+        },
+        {
+          "completed": 600,
+          "end_trial": 599,
+          "block_start": 501,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1492,
+          "births": 98,
+          "removed": 97,
+          "immediate_birth_removed": 28,
+          "removed_reasons": {
+            "all_U:price": 97
+          },
+          "elapsed": 7253.7063274579705,
+          "stage2_seconds": 1.2808727881638333,
+          "birth_seconds": 1406.4968139180564
+        },
+        {
+          "completed": 700,
+          "end_trial": 699,
+          "block_start": 601,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1506,
+          "births": 100,
+          "removed": 100,
+          "immediate_birth_removed": 30,
+          "removed_reasons": {
+            "all_U:price": 100
+          },
+          "elapsed": 8767.953662999964,
+          "stage2_seconds": 0.9992892153677531,
+          "birth_seconds": 1495.7529862493393
+        },
+        {
+          "completed": 800,
+          "end_trial": 799,
+          "block_start": 701,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1530,
+          "births": 99,
+          "removed": 99,
+          "immediate_birth_removed": 23,
+          "removed_reasons": {
+            "all_U:price": 99
+          },
+          "elapsed": 10354.13628758298,
+          "stage2_seconds": 1.5261287829489447,
+          "birth_seconds": 1566.4227471183985
+        },
+        {
+          "completed": 900,
+          "end_trial": 899,
+          "block_start": 801,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 16,
+          "bits": 1637,
+          "births": 100,
+          "removed": 100,
+          "immediate_birth_removed": 23,
+          "removed_reasons": {
+            "all_U:price": 100
+          },
+          "elapsed": 12508.820990582986,
+          "stage2_seconds": 1.633780215983279,
+          "birth_seconds": 2129.0283014542074
+        },
+        {
+          "completed": 1000,
+          "end_trial": 999,
+          "block_start": 901,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1546,
+          "births": 98,
+          "removed": 98,
+          "immediate_birth_removed": 25,
+          "removed_reasons": {
+            "all_U:price": 98
+          },
+          "elapsed": 14316.09668620798,
+          "stage2_seconds": 1.3477092540124431,
+          "birth_seconds": 1785.5404790827306
+        },
+        {
+          "completed": 1100,
+          "end_trial": 1099,
+          "block_start": 1001,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 11,
+          "bits": 1602,
+          "births": 100,
+          "removed": 100,
+          "immediate_birth_removed": 28,
+          "removed_reasons": {
+            "all_U:price": 100
+          },
+          "elapsed": 16048.370187707944,
+          "stage2_seconds": 1.0906508290790953,
+          "birth_seconds": 1707.585373458045
+        },
+        {
+          "completed": 1174,
+          "end_trial": 1173,
+          "block_start": 1101,
+          "definitions": 1,
+          "F": 1,
+          "H": 0,
+          "U": 16,
+          "bits": 1697,
+          "births": 74,
+          "removed": 74,
+          "immediate_birth_removed": 11,
+          "removed_reasons": {
+            "all_U:price": 74
+          },
+          "elapsed": 17393.443177749985,
+          "stage2_seconds": 1.583159337984398,
+          "birth_seconds": 1325.6764944110764
+        }
+      ],
+      "unmeasured": [
+        "model_only",
+        "snapshot_encoding",
+        "snapshot_hash",
+        "save",
+        "restore"
+      ]
+    },
+    {
+      "mode": "on_preflight",
+      "completed": 20,
+      "header": {
+        "agent_ids": [
+          "agent"
+        ],
+        "arm_abstain_charge": false,
+        "arm_adaptation_table": null,
+        "arm_alpha": 0.0,
+        "arm_beta": 0.0,
+        "arm_d_shared": null,
+        "arm_f_profile": "uniform:0.500000",
+        "arm_fill_selection": "most_frequent",
+        "arm_holdout_repr": "first_order_binary",
+        "arm_identification_graph": "live",
+        "arm_kappa": 1.0,
+        "arm_lambda_mix": 0.1,
+        "arm_local_lambda": 1.0,
+        "arm_pricing_rule": "spec",
+        "arm_refill_rule": "one_per_slot",
+        "arm_repair_scope": "first_order",
+        "arm_self_score_cache": "off",
+        "arm_temperature": null,
+        "arm_verbatim_theta": 0.3842,
+        "arm_w": 0.0,
+        "code_commit": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+        "f_setting": 0.5,
+        "record_type": "run_header",
+        "run_seed": 1,
+        "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+        "tau_acc": 0.67,
+        "theta_prime": 2.1,
+        "trial_count": 20,
+        "world_hash": "1785c2441d634e83d7fdf4465c345171e6842c8d7821f3124fff8f63ce021d3f"
+      },
+      "prices": {
+        "--v39-price": 0.01873710622997919,
+        "--e-price": 0.01873710622997919
+      },
+      "E_lam_recorded": [
+        0.01873710622997919
+      ],
+      "final": {
+        "trial": 19,
+        "disclosed": true,
+        "births": 1,
+        "assimilation": 0,
+        "removed": 1,
+        "immediate_birth_removed": 1,
+        "removed_reasons": {
+          "all_U:price": 1
+        },
+        "m_alloc": 0,
+        "m_live": 0,
+        "support_gate_failures": 0,
+        "conversions": 34,
+        "F": 0,
+        "H": 0,
+        "U": 0,
+        "defs": 0,
+        "bits_before": 1213,
+        "bits_after": 688,
+        "birth_noop": false
+      },
+      "zero_definition_trials": 20,
+      "max_definitions": 0,
+      "max_bits": 688,
+      "births": 19,
+      "removals": 19,
+      "immediate_birth_removed": 19,
+      "birth_noop_trials": 0,
+      "assimilation": 0,
+      "removal_reasons": {
+        "all_U:price": 19
+      },
+      "conversion_reasons": {
+        "FH:price": 249,
+        "HU:price": 249
+      },
+      "actual_birth_initial_records": 19,
+      "virtual_initial_records": 19,
+      "virtual_records_not_actual_birth": 0,
+      "actual_birth_delta": {
+        "n": 249,
+        "zero": 69,
+        "negative": 0,
+        "positive": 180,
+        "min": 0.0,
+        "median": 0.0399343382259909,
+        "p90": 0.04566371149595776,
+        "max": 0.05082747132084309,
+        "mean": 0.03028174293633802
+      },
+      "all_virtual_initial_delta": {
+        "n": 249,
+        "zero": 69,
+        "negative": 0,
+        "positive": 180,
+        "min": 0.0,
+        "median": 0.0399343382259909,
+        "p90": 0.04566371149595776,
+        "max": 0.05082747132084309,
+        "mean": 0.03028174293633802
+      },
+      "immediate_birth_FH_converted_V": {
+        "n": 249,
+        "zero": 69,
+        "negative": 0,
+        "positive": 180,
+        "min": 0.0,
+        "median": 0.0133114460753303,
+        "p90": 0.015221237165319252,
+        "max": 0.016942490440281028,
+        "mean": 0.010093914312112673
+      },
+      "FH_release_bits": {
+        "n": 249,
+        "zero": 0,
+        "negative": 0,
+        "positive": 249,
+        "min": 3,
+        "median": 3,
+        "p90": 3,
+        "max": 8,
+        "mean": 3.285140562248996
+      },
+      "virtual_work": {
+        "virtual_questions": 383,
+        "evaluated_questions": 383,
+        "thinned_seats": 5048,
+        "rerankings": 5431
+      },
+      "virtual_class_counts": {
+        "other:questions": 383,
+        "other:seats": 5048,
+        "other:zero_seats": 4868
+      },
+      "virtual_question_seat_delta": {
+        "n": 5048,
+        "zero": 4868,
+        "negative": 0,
+        "positive": 180,
+        "min": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "max": 0.9727682545247309,
+        "mean": 0.031509764380206126
+      },
+      "disclosed_trials": 7,
+      "stage2_recorded_trials": 20,
+      "stage2_recorded_disclosed_trials": 7,
+      "missing_stage2_trials": [],
+      "disclosed_trials_no_stage2_seats": 7,
+      "disclosed_seat_delta": {
+        "n": 0
+      },
+      "elapsed": 145.32369629200548,
+      "seconds_per_trial": 7.266184814600274,
+      "performance_seconds_sum": 145.32369629200548,
+      "stage2_additional_seconds": 3.058207221329212e-05,
+      "stage2_wrapper_seconds": 0.01236162695568055,
+      "all_recorded_birth_seconds": 144.45715279108845,
+      "actual_birth_seconds": 144.45715279108845,
+      "unassigned_elapsed": 0.8665129188448191,
+      "max_prediction_candidates": 0,
+      "initial_examples": [
+        {
+          "trial": 1,
+          "R": "R_f35c5fd29759b79e",
+          "delta_by_slot": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "mass_by_slot": {
+            "0": 0.9999999999999996,
+            "1": 0.9999999999999996,
+            "2": 0.9999999999999996,
+            "3": 0.9999999999999996
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 2
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 19,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 0.4393319580121897
+        },
+        {
+          "trial": 2,
+          "R": "R_3229d75e4a4c2e0b",
+          "delta_by_slot": {
+            "0": 0.0,
+            "1": 0.04889220606074482,
+            "2": 0.045331887413835835,
+            "3": 0.0,
+            "4": 0.04889220606074482,
+            "5": 0.04689497292854953,
+            "6": 0.0,
+            "7": 0.0,
+            "8": 0.0,
+            "9": 0.0,
+            "10": 0.0
+          },
+          "mass_by_slot": {
+            "0": 0.9999999999999996,
+            "1": 0.9999999999999996,
+            "2": 0.9999999999999996,
+            "3": 0.9999999999999996,
+            "4": 0.9999999999999996,
+            "5": 0.9999999999999996,
+            "6": 0.9999999999999996,
+            "7": 0.9999999999999996,
+            "8": 0.9999999999999996,
+            "9": 0.9999999999999996,
+            "10": 0.9999999999999996
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 3
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 19,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 2.3534666660125367
+        },
+        {
+          "trial": 3,
+          "R": "R_beb6d0d0aa09b5d2",
+          "delta_by_slot": {
+            "0": 0.043668328073449156,
+            "1": 0.047825792253964376,
+            "2": 0.0,
+            "3": 0.04571647682404418,
+            "4": 0.043668328073449156,
+            "5": 0.03972847853711353,
+            "6": 0.03972847853711353
+          },
+          "mass_by_slot": {
+            "0": 1.0000000000000002,
+            "1": 1.0000000000000002,
+            "2": 1.0000000000000002,
+            "3": 1.0000000000000002,
+            "4": 1.0000000000000002,
+            "5": 1.0000000000000002,
+            "6": 1.0000000000000002
+          },
+          "question_counts": {
+            "door": 0,
+            "other": 4
+          },
+          "virtual_counts": {
+            "door": 0,
+            "other": 20,
+            "overlap": 0,
+            "unassigned_mass": 0.0
+          },
+          "seconds": 1.8661506660282612
+        }
+      ],
+      "registration_retirement_example": {
+        "trial": 1,
+        "registration": {
+          "R": "R_f35c5fd29759b79e",
+          "alignment_event_id": "5a444739a5beebf2",
+          "base_written_at": 0,
+          "constituents": [
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "relation"
+              ],
+              "arguments": [
+                "3aaedb638d28ec31",
+                "9dd7e98e01d261cf"
+              ],
+              "arity": 2,
+              "predicate": "require",
+              "registered_at": 1,
+              "slot_index": 0,
+              "uid": "R_f35c5fd29759b79e#0#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "71ba85612fdfe1e3",
+                "c8d0862e1fe621ea"
+              ],
+              "arity": 2,
+              "predicate": "push",
+              "registered_at": 1,
+              "slot_index": 1,
+              "uid": "R_f35c5fd29759b79e#1#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity"
+              ],
+              "arguments": [
+                "8861cb487923b34b"
+              ],
+              "arity": 1,
+              "predicate": "sig_n",
+              "registered_at": 1,
+              "slot_index": 2,
+              "uid": "R_f35c5fd29759b79e#2#1"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "df4590fa3723f662",
+                "c8d0862e1fe621ea"
+              ],
+              "arity": 2,
+              "predicate": "lift",
+              "registered_at": 1,
+              "slot_index": 3,
+              "uid": "R_f35c5fd29759b79e#3#1"
+            }
+          ],
+          "definition_version": 1,
+          "kind": "registration",
+          "m_alloc": 4,
+          "m_live": 4,
+          "name_source": "hash",
+          "trial": 1,
+          "was_extension": false
+        },
+        "deletions": [
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 3,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 0,
+            "tie_n": 4,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 11,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 0,
+            "tie_n": 4,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 6,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 1,
+            "tie_n": 3,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 1,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 1,
+            "tie_n": 3,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 3,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 6,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 2,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 11,
+            "gen": 0,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 2,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0,
+              0.0,
+              0.9999999999999996
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 65,
+            "gen": null,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 2,
+            "tie_n": 1,
+            "trial": 1,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "kind": "definition_removed",
+            "registered_at": 1,
+            "trial": 1,
+            "v39": "retire"
+          }
+        ],
+        "m_alloc": 0,
+        "m_live": 0
+      },
+      "blocks": [
+        {
+          "completed": 20,
+          "end_trial": 19,
+          "block_start": 1,
+          "definitions": 0,
+          "F": 0,
+          "H": 0,
+          "U": 0,
+          "bits": 688,
+          "births": 19,
+          "removed": 19,
+          "immediate_birth_removed": 19,
+          "removed_reasons": {
+            "all_U:price": 19
+          },
+          "elapsed": 145.32369629200548,
+          "stage2_seconds": 3.058207221329212e-05,
+          "birth_seconds": 144.45715279108845
+        }
+      ],
+      "unmeasured": [
+        "model_only",
+        "snapshot_encoding",
+        "snapshot_hash",
+        "save",
+        "restore"
+      ]
+    },
+    {
+      "mode": "off",
+      "completed": 1740,
+      "header": {
+        "agent_ids": [
+          "agent"
+        ],
+        "arm_abstain_charge": false,
+        "arm_adaptation_table": null,
+        "arm_alpha": 0.0,
+        "arm_beta": 0.0,
+        "arm_d_shared": null,
+        "arm_f_profile": "uniform:0.500000",
+        "arm_fill_selection": "most_frequent",
+        "arm_holdout_repr": "first_order_binary",
+        "arm_identification_graph": "live",
+        "arm_kappa": 1.0,
+        "arm_lambda_mix": 0.1,
+        "arm_local_lambda": 1.0,
+        "arm_pricing_rule": "spec",
+        "arm_refill_rule": "one_per_slot",
+        "arm_repair_scope": "first_order",
+        "arm_self_score_cache": "off",
+        "arm_temperature": null,
+        "arm_verbatim_theta": 0.3842,
+        "arm_w": 0.0,
+        "code_commit": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+        "f_setting": 0.5,
+        "record_type": "run_header",
+        "run_seed": 1,
+        "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+        "tau_acc": 0.67,
+        "theta_prime": 2.1,
+        "trial_count": 1740,
+        "world_hash": "68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1"
+      },
+      "prices": {
+        "--v39-price": 0.01873710622997919,
+        "--e-price": 0.01873710622997919
+      },
+      "E_lam_recorded": [
+        0.01873710622997919
+      ],
+      "final": {
+        "trial": 1739,
+        "disclosed": true,
+        "births": 0,
+        "assimilation": 1,
+        "removed": 0,
+        "immediate_birth_removed": 0,
+        "removed_reasons": {},
+        "m_alloc": 183,
+        "m_live": 114,
+        "support_gate_failures": 0,
+        "conversions": 0,
+        "F": 114,
+        "H": 5,
+        "U": 64,
+        "defs": 11,
+        "bits_before": 6873,
+        "bits_after": 6873,
+        "birth_noop": false
+      },
+      "zero_definition_trials": 1,
+      "max_definitions": 20,
+      "max_bits": 9928,
+      "births": 28,
+      "removals": 17,
+      "immediate_birth_removed": 0,
+      "birth_noop_trials": 0,
+      "assimilation": 1711,
+      "removal_reasons": {
+        "all_U:price": 17
+      },
+      "conversion_reasons": {
+        "FH:price": 304,
+        "HU:price": 419
+      },
+      "actual_birth_initial_records": 0,
+      "virtual_initial_records": 0,
+      "virtual_records_not_actual_birth": 0,
+      "actual_birth_delta": {
+        "n": 0
+      },
+      "all_virtual_initial_delta": {
+        "n": 0
+      },
+      "immediate_birth_FH_converted_V": {
+        "n": 0
+      },
+      "FH_release_bits": {
+        "n": 0
+      },
+      "virtual_work": {},
+      "virtual_class_counts": {},
+      "virtual_question_seat_delta": {
+        "n": 0
+      },
+      "disclosed_trials": 901,
+      "stage2_recorded_trials": 0,
+      "stage2_recorded_disclosed_trials": 0,
+      "missing_stage2_trials": [],
+      "disclosed_trials_no_stage2_seats": 0,
+      "disclosed_seat_delta": {
+        "n": 0
+      },
+      "elapsed": null,
+      "seconds_per_trial": null,
+      "performance_seconds_sum": 488.32545834215125,
+      "stage2_additional_seconds": 0,
+      "stage2_wrapper_seconds": 0,
+      "all_recorded_birth_seconds": 0,
+      "actual_birth_seconds": 0,
+      "unassigned_elapsed": null,
+      "max_prediction_candidates": 0,
+      "initial_examples": [],
+      "registration_retirement_example": {
+        "trial": 639,
+        "registration": {
+          "R": "R_cb63a1ebfc31098d_t559",
+          "alignment_event_id": "9f1eaae27c9ff40c",
+          "base_written_at": 634,
+          "constituents": [
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "78c8d79a8c0cc017",
+                "6749a2fbd6950108"
+              ],
+              "arity": 2,
+              "predicate": "cause",
+              "registered_at": 559,
+              "slot_index": 0,
+              "uid": "R_cb63a1ebfc31098d_t559#0#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "6b3773c2233d0537",
+                "857c892a422d0fa4"
+              ],
+              "arity": 2,
+              "predicate": "permit",
+              "registered_at": 559,
+              "slot_index": 1,
+              "uid": "R_cb63a1ebfc31098d_t559#1#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "4270369bc817586a",
+                "9d9b8f3de1298554"
+              ],
+              "arity": 2,
+              "predicate": "couple",
+              "registered_at": 559,
+              "slot_index": 2,
+              "uid": "R_cb63a1ebfc31098d_t559#2#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "faae35b8ac038f36",
+                "cab008a7deab708f"
+              ],
+              "arity": 2,
+              "predicate": "push",
+              "registered_at": 559,
+              "slot_index": 3,
+              "uid": "R_cb63a1ebfc31098d_t559#3#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "9a5ee024a7f72c58",
+                "eacf49ac1db9cf1a"
+              ],
+              "arity": 2,
+              "predicate": "lock",
+              "registered_at": 559,
+              "slot_index": 4,
+              "uid": "R_cb63a1ebfc31098d_t559#4#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "9a5ee024a7f72c58",
+                "540ed50a4d7070ce"
+              ],
+              "arity": 2,
+              "predicate": "pull",
+              "registered_at": 559,
+              "slot_index": 5,
+              "uid": "R_cb63a1ebfc31098d_t559#5#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "495da6549a022758",
+                "f88117025ad0e9d0"
+              ],
+              "arity": 2,
+              "predicate": "steer",
+              "registered_at": 559,
+              "slot_index": 6,
+              "uid": "R_cb63a1ebfc31098d_t559#6#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "2b82a31b9b295479",
+                "faae35b8ac038f36"
+              ],
+              "arity": 2,
+              "predicate": "hold_b",
+              "registered_at": 559,
+              "slot_index": 7,
+              "uid": "R_cb63a1ebfc31098d_t559#7#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "e5cdf52bb9435989",
+                "ad9fd93032b46765"
+              ],
+              "arity": 2,
+              "predicate": "attach",
+              "registered_at": 559,
+              "slot_index": 8,
+              "uid": "R_cb63a1ebfc31098d_t559#8#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "540ed50a4d7070ce",
+                "72fd3cd80bfe1106"
+              ],
+              "arity": 2,
+              "predicate": "drag",
+              "registered_at": 559,
+              "slot_index": 9,
+              "uid": "R_cb63a1ebfc31098d_t559#9#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "2b82a31b9b295479",
+                "a432d22ad78cf0c2"
+              ],
+              "arity": 2,
+              "predicate": "carry",
+              "registered_at": 559,
+              "slot_index": 10,
+              "uid": "R_cb63a1ebfc31098d_t559#10#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "94240a07069bc75c",
+                "ac9537877587ede7"
+              ],
+              "arity": 2,
+              "predicate": "require",
+              "registered_at": 559,
+              "slot_index": 11,
+              "uid": "R_cb63a1ebfc31098d_t559#11#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "a432d22ad78cf0c2",
+                "cab008a7deab708f"
+              ],
+              "arity": 2,
+              "predicate": "lift",
+              "registered_at": 559,
+              "slot_index": 12,
+              "uid": "R_cb63a1ebfc31098d_t559#12#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "638bc6cc7006e2d7",
+                "6dcf51baf61b41d0"
+              ],
+              "arity": 2,
+              "predicate": "govern",
+              "registered_at": 559,
+              "slot_index": 13,
+              "uid": "R_cb63a1ebfc31098d_t559#13#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity"
+              ],
+              "arguments": [
+                "2b82a31b9b295479"
+              ],
+              "arity": 1,
+              "predicate": "sig_n",
+              "registered_at": 559,
+              "slot_index": 14,
+              "uid": "R_cb63a1ebfc31098d_t559#14#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "relation",
+                "relation"
+              ],
+              "arguments": [
+                "68dac196c302f47f",
+                "fcd680bc3ae7f85f"
+              ],
+              "arity": 2,
+              "predicate": "hinder",
+              "registered_at": 559,
+              "slot_index": 15,
+              "uid": "R_cb63a1ebfc31098d_t559#15#559"
+            },
+            {
+              "alive": true,
+              "arg_kinds": [
+                "entity",
+                "entity"
+              ],
+              "arguments": [
+                "eacf49ac1db9cf1a",
+                "72fd3cd80bfe1106"
+              ],
+              "arity": 2,
+              "predicate": "bend",
+              "registered_at": 559,
+              "slot_index": 16,
+              "uid": "R_cb63a1ebfc31098d_t559#16#559"
+            }
+          ],
+          "definition_version": 38,
+          "kind": "registration",
+          "m_alloc": 17,
+          "m_live": 17,
+          "name_source": "nsim",
+          "trial": 639,
+          "was_extension": true
+        },
+        "deletions": [
+          {
+            "graph_id": "b10a6e07441fb743",
+            "kind": "verbatim_deletion",
+            "sigma": 0.37796447300922725,
+            "trial": 639,
+            "written_at": 632
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.019341175523867635,
+              0.0755112641478718,
+              0.0755112641478718,
+              0.022269985885281528
+            ],
+            "R_bits_init_post": [
+              [
+                0.019341,
+                0.075511,
+                0.075511,
+                0.02227
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.018723362874668057,
+            "dC": 3,
+            "gen": 0,
+            "kind": "deletion",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 1,
+            "trial": 639,
+            "v39": "FH",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "R_bits": [
+              0.0,
+              0.0755112641478718,
+              0.0755112641478718,
+              0.022269985885281528
+            ],
+            "R_bits_init_post": [
+              [
+                0.0,
+                0.075511,
+                0.075511,
+                0.02227
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "V": 0.0,
+            "dC": 73,
+            "gen": null,
+            "kind": "v39_HU",
+            "registered_at": 1,
+            "slot_index": 3,
+            "tie_n": 1,
+            "trial": 639,
+            "v39": "HU",
+            "why": "price"
+          },
+          {
+            "R": "R_f35c5fd29759b79e",
+            "kind": "definition_removed",
+            "registered_at": 1,
+            "trial": 639,
+            "v39": "retire"
+          }
+        ],
+        "m_alloc": 248,
+        "m_live": 183
+      },
+      "blocks": [
+        {
+          "completed": 100,
+          "end_trial": 99,
+          "block_start": 1,
+          "definitions": 11,
+          "F": 139,
+          "H": 0,
+          "U": 1,
+          "bits": 5468,
+          "births": 11,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 200,
+          "end_trial": 199,
+          "block_start": 101,
+          "definitions": 14,
+          "F": 183,
+          "H": 0,
+          "U": 2,
+          "bits": 7091,
+          "births": 3,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 300,
+          "end_trial": 299,
+          "block_start": 201,
+          "definitions": 14,
+          "F": 181,
+          "H": 0,
+          "U": 4,
+          "bits": 7229,
+          "births": 0,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 400,
+          "end_trial": 399,
+          "block_start": 301,
+          "definitions": 14,
+          "F": 176,
+          "H": 0,
+          "U": 9,
+          "bits": 7284,
+          "births": 0,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 500,
+          "end_trial": 499,
+          "block_start": 401,
+          "definitions": 14,
+          "F": 158,
+          "H": 0,
+          "U": 27,
+          "bits": 7094,
+          "births": 0,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 600,
+          "end_trial": 599,
+          "block_start": 501,
+          "definitions": 17,
+          "F": 177,
+          "H": 0,
+          "U": 58,
+          "bits": 8279,
+          "births": 3,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 700,
+          "end_trial": 699,
+          "block_start": 601,
+          "definitions": 18,
+          "F": 185,
+          "H": 3,
+          "U": 76,
+          "bits": 9012,
+          "births": 2,
+          "removed": 1,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 1
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 800,
+          "end_trial": 799,
+          "block_start": 701,
+          "definitions": 18,
+          "F": 176,
+          "H": 1,
+          "U": 87,
+          "bits": 8896,
+          "births": 0,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 900,
+          "end_trial": 899,
+          "block_start": 801,
+          "definitions": 19,
+          "F": 157,
+          "H": 7,
+          "U": 116,
+          "bits": 8887,
+          "births": 1,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1000,
+          "end_trial": 999,
+          "block_start": 901,
+          "definitions": 18,
+          "F": 136,
+          "H": 12,
+          "U": 121,
+          "bits": 8449,
+          "births": 0,
+          "removed": 1,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 1
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1100,
+          "end_trial": 1099,
+          "block_start": 1001,
+          "definitions": 19,
+          "F": 142,
+          "H": 19,
+          "U": 130,
+          "bits": 9023,
+          "births": 2,
+          "removed": 1,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 1
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1200,
+          "end_trial": 1199,
+          "block_start": 1101,
+          "definitions": 20,
+          "F": 165,
+          "H": 19,
+          "U": 137,
+          "bits": 9868,
+          "births": 3,
+          "removed": 2,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 2
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1300,
+          "end_trial": 1299,
+          "block_start": 1201,
+          "definitions": 17,
+          "F": 168,
+          "H": 0,
+          "U": 113,
+          "bits": 9063,
+          "births": 1,
+          "removed": 4,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 4
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1400,
+          "end_trial": 1399,
+          "block_start": 1301,
+          "definitions": 16,
+          "F": 151,
+          "H": 0,
+          "U": 114,
+          "bits": 8605,
+          "births": 0,
+          "removed": 1,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 1
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1500,
+          "end_trial": 1499,
+          "block_start": 1401,
+          "definitions": 12,
+          "F": 136,
+          "H": 0,
+          "U": 63,
+          "bits": 7379,
+          "births": 0,
+          "removed": 4,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 4
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1600,
+          "end_trial": 1599,
+          "block_start": 1501,
+          "definitions": 10,
+          "F": 123,
+          "H": 4,
+          "U": 39,
+          "bits": 6569,
+          "births": 1,
+          "removed": 3,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {
+            "all_U:price": 3
+          },
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1700,
+          "end_trial": 1699,
+          "block_start": 1601,
+          "definitions": 11,
+          "F": 118,
+          "H": 5,
+          "U": 60,
+          "bits": 6903,
+          "births": 1,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        },
+        {
+          "completed": 1740,
+          "end_trial": 1739,
+          "block_start": 1701,
+          "definitions": 11,
+          "F": 114,
+          "H": 5,
+          "U": 64,
+          "bits": 6873,
+          "births": 0,
+          "removed": 0,
+          "immediate_birth_removed": 0,
+          "removed_reasons": {},
+          "elapsed": null,
+          "stage2_seconds": 0,
+          "birth_seconds": 0
+        }
+      ],
+      "unmeasured": [
+        "model_only",
+        "snapshot_encoding",
+        "snapshot_hash",
+        "save",
+        "restore"
+      ]
+    }
+  ],
+  "provenance": [
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "size_at_start": 10349821,
+      "size_at_end": 10349821,
+      "mtime_at_start": 1791401848.3338006,
+      "accepted_lines": 1175,
+      "logical_prefix_sha256": "fc15c337075c42c25f70c98db51d209a8acd80166f83090554082afa62a186fd",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1173
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "size_at_start": 3766131,
+      "size_at_end": 3766131,
+      "mtime_at_start": 1791401848.4018316,
+      "accepted_lines": 4479,
+      "logical_prefix_sha256": "fb5b7e3ab67c16e8332eec5e532c1670b90760341c24a7616ad7b856a0a9cd1d",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1173
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/performance.jsonl",
+      "size_at_start": 255888,
+      "size_at_end": 255888,
+      "mtime_at_start": 1791401848.3329568,
+      "accepted_lines": 1174,
+      "logical_prefix_sha256": "a78b84fc99d4f5bbe85ffa5ccb6106a051df0a6cb9b51d487e9662fb53fe1434",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1173
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "size_at_start": 73930,
+      "size_at_end": 73930,
+      "mtime_at_start": 1791401183.849806,
+      "accepted_lines": 1172,
+      "logical_prefix_sha256": "cadd7946cd527e3da0364585a420ae5699c758e4ffa6197479dac7ca5bffab2e",
+      "incomplete_gzip_tail": true,
+      "cutoff_zero_based": 1173
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz",
+      "size_at_start": 6304049,
+      "size_at_end": 6304049,
+      "mtime_at_start": 1791401848.3328948,
+      "accepted_lines": 1354,
+      "logical_prefix_sha256": "3ef3a1e8c0a32e4d9eb8bac2a0f3a6ab7cd2fbd1614ce92d10697861d582fcae",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1173
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_preflight/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "size_at_start": 130557,
+      "size_at_end": 130557,
+      "mtime_at_start": 1791383260.8360298,
+      "accepted_lines": 21,
+      "logical_prefix_sha256": "fad7adbf78ba9f145e2712105c42837f9b45300eaba874841acc09a386ddae4b",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 19
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_preflight/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "size_at_start": 49916,
+      "size_at_end": 49916,
+      "mtime_at_start": 1791383260.837933,
+      "accepted_lines": 67,
+      "logical_prefix_sha256": "644fc1c594085597906cd2a0e55244140529b42e58144b875740eb1a3f2cec73",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 19
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_preflight/performance.jsonl",
+      "size_at_start": 3990,
+      "size_at_end": 3990,
+      "mtime_at_start": 1791383260.8352542,
+      "accepted_lines": 20,
+      "logical_prefix_sha256": "b4f6985195cfecee3c7af952efc301743da0bb51c95d1e7b4dda1fe8df6e0ec0",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 19
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_preflight/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "size_at_start": 1070,
+      "size_at_end": 1070,
+      "mtime_at_start": 1791383260.8376408,
+      "accepted_lines": 20,
+      "logical_prefix_sha256": "8bd12473ae0cefa07660f64725c5b105bd97ef24b029d83e4b669037e1db4a47",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 19
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_preflight/output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz",
+      "size_at_start": 86999,
+      "size_at_end": 86999,
+      "mtime_at_start": 1791383260.8377736,
+      "accepted_lines": 19,
+      "logical_prefix_sha256": "eac6cb13907fbcb90e60ff78761e30a1c98bb1284feebb7468b8946c1eee0fe4",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 19
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/off/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "size_at_start": 39594155,
+      "size_at_end": 39594155,
+      "mtime_at_start": 1791377240.9966712,
+      "accepted_lines": 1741,
+      "logical_prefix_sha256": "e1439df1b0f63e8a36f3b2885294078b5472225fe9106e9add52c8e6c3d9c2f9",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1739
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/off/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "size_at_start": 13877627,
+      "size_at_end": 13877627,
+      "mtime_at_start": 1791377241.9526477,
+      "accepted_lines": 7076,
+      "logical_prefix_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1739
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/off/performance.jsonl",
+      "size_at_start": 359083,
+      "size_at_end": 359083,
+      "mtime_at_start": 1791377240.9920282,
+      "accepted_lines": 1740,
+      "logical_prefix_sha256": "60c127ddf7d935e7ecd4a9cb46f46c2de1a14d02e1b1b83c5b0159fb353bd228",
+      "incomplete_gzip_tail": false,
+      "cutoff_zero_based": 1739
+    }
+  ],
+  "timing_interpretation": {
+    "stage2_seconds_field": "開示行はcompare_seatsのwork.secondsが上書きする。追加全時間として解釈しない。",
+    "stage2_wrapper_seconds": "元の会計を含む区間。1172行まで読めた。",
+    "birth_seconds": "birth_valuesの区間。再照合、再順位、最終損、隔離の保存復元を含む。純模型と控えの内訳は未測定。",
+    "observed_residual_seconds": 185.06253724271664,
+    "residual_is_not_observer_only": true
+  },
+  "off_same_1174_prefix": {
+    "definitions": 20,
+    "F": 170,
+    "H": 16,
+    "U": 135,
+    "bits": 9917,
+    "births": 25,
+    "removed": 5,
+    "zero_definition_trials": 1
+  },
+  "checks": {
+    "on_birth_minus_retirement_is_final_defs": true,
+    "off_birth_minus_retirement_is_final_defs": true,
+    "on20_birth_minus_retirement_is_final_defs": true,
+    "actual_birth_initial_keys_all_present": true,
+    "logical_prefix_hashes_recorded": 13
+  }
+}
