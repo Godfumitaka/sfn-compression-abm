@@ -37,3 +37,26 @@
 - Astra は読むだけで起動する（`codex exec -s read-only`）。コード・受け箱・走行の列・台帳は書き換えない。返事のファイルは台本が保存する。
 - 一日に Astra を起こすのは 12 回まで（台本の DAILY_MAX）。一つの相談で Astra の返事は 4 回まで（MAX_ROUNDS）。
 - 確認用の種 21〜40 の記録は、どちらも読まない。
+
+## 設置（マック、Codex の CLI。app と同じアカウント・同じ ~/.codex の設定を読む）
+
+```
+# 0. CLI があるか（無ければ npm install -g @openai/codex、最初に一度 codex でサインイン）
+which codex
+# 1. 専用の置き場
+mkdir -p ~/astra_debate && cd ~/astra_debate
+git clone --filter=blob:none --sparse -b results-2026-09-27 https://github.com/Godfumitaka/sfn-compression-abm res
+cd res && git sparse-checkout set control docs
+# 2. 試す（画面の頭に出る model と reasoning effort を確かめる）
+codex exec -c model_reasoning_effort="xhigh" -s read-only -o /tmp/astra_test.md "一言だけ挨拶して"
+cat /tmp/astra_test.md
+# 3. 待機を始める（tmux が無ければ brew install tmux、又は下の nohup の形）
+tmux new -s astra
+CODEX_ARGS='-c model_reasoning_effort="xhigh"' bash ~/astra_debate/res/control/議論/astra_watch.sh
+#   （Ctrl-b の後に d で画面から離れる）
+# tmux を使わない形：
+# nohup env CODEX_ARGS='-c model_reasoning_effort="xhigh"' bash ~/astra_debate/res/control/議論/astra_watch.sh >/dev/null 2>&1 &
+# 様子：tail ~/astra_debate/watch.log
+```
+
+模型を app と同じものに固定したいときは、CODEX_ARGS の頭に `-m <app の模型の選択に出ている名前>` を足す。
