@@ -6,9 +6,11 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from contextlib import contextmanager
 from itertools import product
 import math
 import random
+import time
 
 from sme2017 import Hypothesis, Matcher, _Engine
 from cstar_probability import checked_distribution
@@ -24,6 +26,18 @@ def probability_key(probabilities):
 
 
 class CstarMatcher(Matcher):
+    @contextmanager
+    def stage2_scope(self, store, stats):
+        old = getattr(self, '_stage2_scope', None)
+        self._stage2_scope = store, stats
+        try:
+            yield
+        finally:
+            if old is None:
+                del self._stage2_scope
+            else:
+                self._stage2_scope = old
+
     def match_key(self, left, right, tie_seed=None, *, probabilities):
         # b・履歴を反映したqを鍵に含める。更新後の値を古い控えで返さない。
         return (VERSION, probability_key(probabilities), *super().match_key(left, right, tie_seed))
@@ -32,13 +46,28 @@ class CstarMatcher(Matcher):
         if self.settings.max_local_score is not None:
             raise ValueError("C*は上限なしの点の伝達")
         key = self.match_key(left, right, tie_seed, probabilities=probabilities)
+        scope = getattr(self, '_stage2_scope', None)
+        foundation = None
+        if scope is not None:
+            store, stats = scope
+            stats['match_calls'] += 1
+            if store is not None:
+                # 元の照合が結果の控えにあっても、その入力の構造だけを残す。
+                foundation, built = store.get(left, right)
+                stats['foundation_builds' if built else 'foundation_hits'] += 1
         if use_cache and key in self.cache:
+            if scope is not None:
+                stats['result_cache_hits'] += 1
             return self.cache[key]
         rng = self.rng if tie_seed is None else random.Random(tie_seed)
         before = self._capture_rng_state() if tie_seed is None else {
             "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
+        started = time.perf_counter()
         result = CstarEngine(left, right, self.settings, rng, probabilities,
-                             tie_uniform=getattr(self, "tie_uniform", False)).run()
+                             tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
+        if scope is not None:
+            stats['engine_calls'] += 1
+            stats['engine_seconds'] += time.perf_counter() - started
         if use_cache:
             self.cache[key], self.cache_rng[key] = result, before
         return result
@@ -52,11 +81,12 @@ class CstarMatcher(Matcher):
 
 
 class CstarEngine(_Engine):
-    def __init__(self, left, right, settings, rng, probabilities, *, tie_uniform=False):
+    def __init__(self, left, right, settings, rng, probabilities, *, tie_uniform=False, foundation=None):
         super().__init__(left, right, settings, rng, tie_uniform=tie_uniform)
         self.probabilities = {a: checked_distribution(dist) for a, dist in probabilities.items()}
         self.events = {}
         self.event_cache = {}
+        self.foundation = foundation
         # 提示の見えている名は一つ。記憶のHと観察の未知を同一視しない。
         for n in right.nodes:
             if n.kind not in {"entity", "unknown"} and (n.state != "F" or len(n.names) != 1):
@@ -66,6 +96,8 @@ class CstarEngine(_Engine):
         key = (lk, rk, parent)
         if key in self.memo:
             return self.memo[key]
+        if self.foundation is not None:
+            return self._grow_from_foundation(lk, rk, parent)
         l, r = self.lb[lk], self.rb[rk]
         if l.kind == "entity" or r.kind == "entity":
             out = (self._add(Hypothesis(lk, rk, None, (), "entity", 0.0)),) if l.kind == r.kind else ()
@@ -92,6 +124,35 @@ class CstarEngine(_Engine):
             j = self._add(Hypothesis(lk, rk, None, tuple(group), kind, local))
             self.events[j] = event.union(*(self.events[c] for c in group))
             if self._consistent(self.closures[j]):
+                out.append(j)
+        self.memo[key] = tuple(out)
+        return tuple(out)
+
+    def _grow_from_foundation(self, lk, rk, parent):
+        # 仮説の番号・生成順は元の再帰と同じ。確率0による不採用は毎回判定する。
+        plan = self.foundation.plan(lk, rk, parent)
+        key = lk, rk, parent
+        if plan.kind == 'invalid':
+            self.memo[key] = ()
+            return ()
+        if plan.kind == 'entity':
+            out = (self._add(Hypothesis(lk, rk, None, (), 'entity', 0.0)),)
+            self.memo[key] = out
+            return out
+        if plan.kind == 'hidden':
+            event, local = frozenset(), 0.0
+        else:
+            name = next(iter(self.rb[rk].names))
+            if self.probabilities[lk].get(name, 0.0) <= 0:
+                self.memo[key] = ()
+                return ()
+            event, local = frozenset({(lk, name)}), self.s.same_functor
+        children = [self._grow(a, b, True) for a, b in plan.children]
+        out = []
+        for group in product(*children):
+            j = self._add(Hypothesis(lk, rk, None, tuple(group), plan.kind, local))
+            self.events[j] = event.union(*(self.events[c] for c in group))
+            if plan.consistent:
                 out.append(j)
         self.memo[key] = tuple(out)
         return tuple(out)

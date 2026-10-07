@@ -4,6 +4,7 @@
 """
 from dataclasses import replace
 from pathlib import Path
+from functools import partial
 import json
 import time
 import attnstage2 as T
@@ -15,7 +16,7 @@ ST = {}
 
 
 def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_policy=None,
-            readout_policy=None,scope='all',feature_policy=None,session_class=None):
+            readout_policy=None,scope='all',feature_policy=None,session_class=None,rematch_reuse=False):
     import abm.loop as loop
     import attnsme
     import smeshared as S
@@ -24,6 +25,20 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
     if initial_mode not in ('virtual','zero','A'):
         raise ValueError('誕生の初期値の旗が不正')
     session_class=Session if session_class is None else session_class
+    diagnostic = bool(getattr(session_class, 'supports_structure_reuse', False))
+    if rematch_reuse and not diagnostic:
+        raise ValueError('照合の土台の使い回しはC*のSessionだけで使う')
+    def rematch_record(row):
+        ST['rematch_stream'].write(json.dumps({'trial':ST['rematch_trial'],**row},ensure_ascii=False)+'\n')
+        total = ST['rematch_totals'].setdefault(row['origin'], {})
+        total['calls'] = total.get('calls', 0)+1
+        for key in ('seconds','match_calls','result_cache_hits','engine_calls',
+                    'engine_seconds','foundation_builds','foundation_hits'):
+            total[key] = total.get(key, 0)+row[key]
+    accounting_session = partial(session_class, reuse_structure=rematch_reuse,
+        rematch_record=rematch_record) if diagnostic else session_class
+    birth_session = partial(session_class, reuse_structure=rematch_reuse,
+        rematch_record=rematch_record, rematch_origin='birth') if diagnostic else session_class
     T.measurement_seats((),scope=scope,selected=None)
     mode = T.resolve_loss(loss_mode,score_logp=bool(B.CFG.get('score_logp')))
     if mode in ('top1','mixture') and readout_policy is None:
@@ -35,12 +50,14 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
         from attnstage2_initial import VirtualInitial
         initial_policy=VirtualInitial(loss_mode=mode,mode=attnsme.ST['mode'],
             position=attnsme.ST['position'],epsilon=epsilon,readout_policy=readout_policy,
-            feature_policy=feature_policy,session_class=session_class)
+            feature_policy=feature_policy,session_class=birth_session)
     Path(path).parent.mkdir(parents=True,exist_ok=True)
     ST.clear();ST.update(stream=S._text_gzip(path),path=str(path),mode=mode,epsilon=epsilon,
                         trials=0,scored_seats=0,seconds=0.,pre=None,initial_mode=initial_mode,
                         questions={},question=None,scope=scope)
     ST['initial_stream']=S._text_gzip(str(path)+'.initial.jsonl.gz') if hasattr(initial_policy,'drain_records') else None
+    ST.update(rematch_stream=S._text_gzip(str(path)+'.rematch.jsonl.gz') if diagnostic else None,
+              rematch_totals={},rematch_disclosed=0,rematch_reuse=rematch_reuse)
     original_predict = loop.predict
 
     def predict(ai,state,config,rng):
@@ -96,12 +113,14 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
     def accounting(state,output,scene,config,horizon,score,coin,revealed):
         start = time.perf_counter();rows=[];work={'thinned_seats':0,'rerankings':0};reason='not_disclosed'
         pre = ST.pop('pre')
+        ST['rematch_trial']=coin.t
         # m1の誕生はこの会計の後。予測前の記憶をその時点まで残す。
         ST['current_pre']=pre
         if coin.f_fired:
+            ST['rematch_disclosed']+=1
             ai,before,cfg,rng_before,observations,attention,door_task,ranked,answer = pre
             fingerprint = repr(before)
-            session = session_class(ai,before,cfg,rng_before,observations,attention,
+            session = accounting_session(ai,before,cfg,rng_before,observations,attention,
                         mode=attnsme.ST['mode'],position=attnsme.ST['position'],door_task=door_task,
                         ranked=ranked or None,epsilon=epsilon,readout_policy=readout_policy,
                         feature_policy=feature_policy)
@@ -163,6 +182,15 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
 def close():
     ST['stream'].close()
     if ST['initial_stream'] is not None:ST['initial_stream'].close()
+    if ST['rematch_stream'] is not None:
+        ST['rematch_stream'].close()
+        total=ST['rematch_totals'].get('disclosure',{})
+        Path(ST['path']+'.rematch.summary.json').write_text(json.dumps(dict(
+            reuse=ST['rematch_reuse'],disclosed_trials=ST['rematch_disclosed'],
+            totals=ST['rematch_totals'],
+            calls_per_disclosed_trial=total.get('calls',0)/ST['rematch_disclosed'] if ST['rematch_disclosed'] else None,
+            rematch_fraction_of_stage2_seconds=total.get('seconds',0)/ST['seconds'] if ST['seconds'] else None,
+            timing_is_diagnostic=True),ensure_ascii=False,indent=2)+'\n')
     summary = {k:ST[k] for k in ('trials','scored_seats','seconds','mode','epsilon','initial_mode','scope')}
     summary['questions']={agent:questions.record() for agent,questions in ST['questions'].items()}
     Path(ST['path']+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')

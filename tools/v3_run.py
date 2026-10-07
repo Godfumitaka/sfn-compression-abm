@@ -587,6 +587,7 @@ def worker(task: dict) -> dict:
         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
+                                  rematch_reuse=task.get('stage2_reuse',False),
                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
     try:
         rec = sweep.run_one(task)
@@ -817,6 +818,7 @@ def main() -> None:
     ap.add_argument('--stage2-loss',choices=('alpha','top1','mixture','arm'),default='arm',help='第二段の損：0/ℓ、選んだ席の分布、混合分布、土台の採点に従う')
     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
+    ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
     ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
     ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
@@ -982,12 +984,15 @@ def main() -> None:
         raise SystemExit('--stage2 onは--attn-smeと--v310-beと一緒に使う')
     if args.stage2 == 'on' and (args.cf_learn or args.cf_value or args.use_forget is not None):
         raise SystemExit('第二段をほかの保持の置換と合算しない')
+    if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
+        raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
         raise SystemExit('--logp-epsは0以上1以下')
     for task in tasks:
         if args.attn_allin:task['attn_allin']=True
         if args.stage2 == 'on':
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
+            if args.stage2_reuse == 'on':task['stage2_reuse']=True
         if args.logp_eps != .5:
             task['logp_eps'] = args.logp_eps
         if args.use_forget is not None:
@@ -1016,6 +1021,7 @@ def main() -> None:
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
                                                     **({'attn_allin':True} if args.attn_allin else {}),
+                                                    **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
                                                         "attn_eta": args.attn_eta, "attn_fixed_zero": args.attn_fixed_zero} if args.attn_sme else {}),

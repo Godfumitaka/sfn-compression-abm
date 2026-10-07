@@ -1,6 +1,7 @@
 """指示8の接続：主Uを維持し、注意の基底だけを候補共通にする。"""
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from types import SimpleNamespace
+import time
 import attnallin as I
 from attnstage2_sme import Session as NativeSession
 
@@ -68,8 +69,35 @@ class Features:
 
 class Session(NativeSession):
     """予測・再照合・候補の回答で、本番と同じC*の窓口と門を用いる。"""
+    supports_structure_reuse = True
+    def __init__(self, *args, reuse_structure=False, rematch_record=None,
+                 rematch_origin='disclosure', **kwargs):
+        from cstar_reuse import Store
+        self.reuse_store = Store() if reuse_structure else None
+        self.rematch_record, self.rematch_origin = rematch_record, rematch_origin
+        self.rematch_stats = dict(match_calls=0, result_cache_hits=0, engine_calls=0,
+            engine_seconds=0., foundation_builds=0, foundation_hits=0)
+        super().__init__(*args, **kwargs)
+
+    @contextmanager
     def context(self,state):
-        return prediction_context(self.ai,state,self.config)
+        import cstar_runtime as C
+        scope = C.ENGINE.stage2_scope(self.reuse_store, self.rematch_stats) if C.ENGINE else nullcontext()
+        with scope:
+            with prediction_context(self.ai,state,self.config):
+                yield
+
+    def rematched(self, seat):
+        before = dict(self.rematch_stats)
+        started = time.perf_counter()
+        try:
+            return super().rematched(seat)
+        finally:
+            if self.rematch_record is not None:
+                self.rematch_record(dict(origin=self.rematch_origin, R=seat.definition,
+                    slot=seat.slot, state=seat.state, reuse=self.reuse_store is not None,
+                    seconds=time.perf_counter()-started,
+                    **{k: v-before[k] for k, v in self.rematch_stats.items()}))
 
     def support(self,d,state,alignment):
         import cstar_runtime as C
