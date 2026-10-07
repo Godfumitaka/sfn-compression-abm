@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-10-07T23:14:00+09:00",
+  "report_commit": "0c24c3a29dedaa2f414c99187499d2acdde7d012",
+  "report_source": {
+    "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+    "bytes": 99727,
+    "sha256": "3c77088a3f15dcab832a933f2558f894604bed4ad1034db566cf84cb5610e8d2"
+  },
+  "artifacts": [
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction10_controller_started_20261007.json",
+      "bytes": 404,
+      "sha256": "d9602c1a021a6b7868844d44d3637c573aeff437d5782e51e857cd6d9a4e305f"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction10_resume_launch.json",
+      "bytes": 322,
+      "sha256": "1975fed99bf4e46459eb3e771f88f2766782ede7fd2d15a820f482a836982aca"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction10_resume_status.json",
+      "bytes": 1720,
+      "sha256": "0422a969db185d283bb1e0a6936a50edca83436b63f8385dda5246173bc5a26a"
+    }
+  ],
+  "source_commit": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+  "upstream_instruction10_received_at": "2026-10-07T22:53:08.473760+09:00",
+  "upstream_controller_started_at": "2026-10-07T22:55:10.566695+09:00",
+  "upstream_controller_pid": 94210,
+  "upstream_controller_phase_from_saved_record": "waiting_before_receipt",
+  "upstream_resume_scope": [
+    "on_preflight_20",
+    "on_1740_measurement"
+  ],
+  "upstream_on_requested_mem_gb": 16,
+  "off_1740_required_nine_file_gate_passed": true,
+  "on_gates_passed": false,
+  "own_port_started": false,
+  "own_model_started": false,
+  "note": "上流の指定報告と小さい証拠の読み取り。指示10は上流への委任であり、自分への新しい委任と扱わない。資源待ちは22:56:40の上流保存記録。"
+}
