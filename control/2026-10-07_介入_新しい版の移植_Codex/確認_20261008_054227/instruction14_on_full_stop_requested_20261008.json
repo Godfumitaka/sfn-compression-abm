@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-08T05:00:30.885811+09:00",
+  "instruction": 14,
+  "receipt_pushed_commit": "ed8ebdf4",
+  "reason": "指示14: 自分の非本番ON関門計測を停止し既存記録を保全",
+  "signal": "SIGINT",
+  "target_pid": 4893,
+  "parent_chain": [
+    4893,
+    4882,
+    4872,
+    94210
+  ],
+  "ps": " 4872 94210 Ss   /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示8 接続の関門 on_full --mem 16 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/native_entry.py on_full\n 4882  4872 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_on.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/on_full/native_command.json\n 4893  4882 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n94210     1 Ss   /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py\n",
+  "last_performance_before_signal": {
+    "trial": 1314,
+    "seconds": 15.553749250015244,
+    "elapsed_seconds": 19959.984431874997,
+    "peak_rss_bytes": 918765568,
+    "definitions": 0,
+    "candidates": 0,
+    "cstar_cache_count": 14634,
+    "cstar_self_cache_count": 1873
+  },
+  "original_resume_status": {
+    "phase": "receipt_wait_or_running",
+    "kind": "on_full",
+    "at": "2026-10-07T23:27:45.663382+09:00",
+    "pid": 94210,
+    "receipt_pid": 4872,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "requested_mem_gb": 16
+  },
+  "production_processes_signaled": false,
+  "source_edited": false,
+  "outputs_deleted": false,
+  "automatic_retry": false
+}

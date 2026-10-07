@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-08T05:37:37.122286+09:00",
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "branch": "codex/attn-preparation-2026-10-08",
+  "previous_preparation": "97a681210d4bf9f90e1cb9e9b86d6fcce0d87d0a",
+  "calibration_upstream": "a0d99f791bb82a39429a653e6205fe0dba49a0dd",
+  "fast_upstream": "d5a836d347e74086b71ce5d8534bf1fed44a64b6",
+  "upstream_files": {
+    "tools/calibration.py": {
+      "sha256": "4a5354a0629a2be488ff2e09dcde1c6c3130214a3f2e3e280d1ad4f2ba5714e4",
+      "specified_upstream_bytes_equal": true
+    },
+    "tools/calibration_summary.py": {
+      "sha256": "96c6ee80a80caf3c3fc9699acebebbca378c3bb2359c0cf0a60c5a474046f381",
+      "specified_upstream_bytes_equal": true
+    },
+    "tools/smeonline.py": {
+      "sha256": "50475a450b4d0c5a8692d71ecde0ddb1296db21e82f7c0f556090ccf79c7a26e",
+      "specified_upstream_bytes_equal": true
+    },
+    "tools/v39.py": {
+      "sha256": "00eaf79680622ebfd6c79b753d9c641f50ec726e13f53ed6bf52735824493310",
+      "specified_upstream_bytes_equal": true
+    },
+    "tests/test_sme_observer_calibration.py": {
+      "sha256": "68a78b45b66e11ddab54458dd6d4745fcdba24669efaa7295d06865adf92f69c",
+      "specified_upstream_bytes_equal": true
+    }
+  },
+  "pytest": {
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 3.762,
+    "xml_sha256": "367f9fb557ca26e42767db339f6e37c69b6be2d9fb13597569ae327ce0203773",
+    "receipt_mem_gb": 2
+  },
+  "upstream_unittest": {
+    "tests": 7,
+    "passed": true,
+    "observed_tool_exit_code": 0,
+    "receipt_pid": 55394,
+    "receipt_mem_gb": 2,
+    "run": "python3.12 tests/test_sme_observer_calibration.py",
+    "test_file_unmodified": true
+  },
+  "no_forget_exec_check": {
+    "second_stage_readout_deltas_bits": [
+      1.0,
+      -0.3219280948873623
+    ],
+    "real_native_V": true,
+    "real_state_identity_and_record_unchanged": true,
+    "actual_conversion_events_empty": true,
+    "flag_off_converts_same_state": true
+  },
+  "default_flags": {
+    "no_forget_exec": false,
+    "sme_online_candidates": false,
+    "sme_online_check": false,
+    "sme_fast_encode": false,
+    "sme_gc_threshold": null,
+    "stage2_birth_hu": "off",
+    "stage2_reuse": "off"
+  },
+  "abm_diff_empty": true,
+  "bit_count_diff_empty": true,
+  "native_byte_gates_complete": false,
+  "code_external_push": false,
+  "production_started": false
+}
