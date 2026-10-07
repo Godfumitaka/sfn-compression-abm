@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-07T21:43:57+09:00",
+  "source_report_commit": "4b322cd16b89de961492c9869ef278921a10fe3f",
+  "initial_snapshot": "check_20261007_214357.json",
+  "worker_pid": 72202,
+  "parent_pid": 72191,
+  "parent_script": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/observe_off.py",
+  "script_bytes": 10163,
+  "script_sha256": "68aba5e97bc99d51d47a5e53b02f98ea7c46388c23f88b78932d62c3dea622bd",
+  "observed_entry": "v3_run.main()を呼び、spawnしたworker内でREAL_WORKER=v3_run.workerを呼ぶ計測台本。",
+  "classification": "第二段の新しい版のoff関門の模型worker。親の起動台本自体は二重に数えない。",
+  "changed": "監視のMODEL_HOSTSへ既存起動台本名だけを追加。模型・上流のコード・旗・受付・既存過程の変更なし。",
+  "fixture": {
+    "active_models": 1,
+    "unknown_active_spawn": 0,
+    "paused_models": 1,
+    "passed": true
+  },
+  "initial_snapshot_interpretation": {
+    "known_active_models": 0,
+    "initially_unclassified_active_spawn": 1,
+    "confirmed_additional_models": 1,
+    "total_active_models": 1
+  }
+}
