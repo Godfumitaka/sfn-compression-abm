@@ -1,0 +1,39 @@
+{
+  "checked_at": "2026-10-08T03:14:41+09:00",
+  "report_commit": "28df1746f305a8864d5dfeaed80964dfd0d977a9",
+  "report_source": {
+    "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+    "bytes": 127140,
+    "sha256": "5b32d5348976c54c61cb9729e45f438d35f4c265643c83ed7710c663f54fdada"
+  },
+  "artifacts": [
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction12_small_gate_warning_20261008_0246.json",
+      "bytes": 1138,
+      "sha256": "d4936d35a568a46592b41ec189194619b72d63335ee473752aefafa194593759"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction12_small_gate_status_20261008_0246.json",
+      "bytes": 197,
+      "sha256": "ea37fb62f2ac7fd87068935d5ae88367c3bcc7b236c24cb396f102fc1ca3c210"
+    }
+  ],
+  "warning_at": "2026-10-08T02:40:34.453193+09:00",
+  "warning_kind": "unregistered_heavy_python",
+  "unregistered_pid": 31072,
+  "unregistered_rss_mib": 100.765625,
+  "unregistered_command_owner_or_cause_known": false,
+  "source_commit": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+  "source_record_phase": "no_new_submission_waiting_natural_end",
+  "new_on_submission_allowed_without_new_instruction": false,
+  "small_gate_passed": false,
+  "small_gate_model_mismatch_reported": false,
+  "original_full_source_commit": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+  "original_worker_in_current_ps": 4893,
+  "small_gate_worker_in_current_active_ps": false,
+  "small_gate_completion_in_specified_report_confirmed": false,
+  "combined_all_required_gates_passed": false,
+  "own_process_or_scheduler_action": false,
+  "own_port_or_model_run_started": false,
+  "note": "資源警告と模型の不一致を分ける。psで小関門workerがいないことから完了・関門合格・原因を推定しない。上流の報告と小さい証拠の読み取りだけ。"
+}
