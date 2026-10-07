@@ -1,0 +1,226 @@
+{
+  "at": "2026-10-08T06:20:00.092938+09:00",
+  "instruction": 15,
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "code_correction_required": false,
+  "source_status": "",
+  "checks": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 0.067,
+    "receipt_pid": 63049,
+    "receipt_mem_gb": 2,
+    "total_registered_mem_gb_at_admission": 6,
+    "xml_sha256": "c894206fb47938c2568d007b7abb75a9e6393173785c4e05666154b67d326ec0",
+    "test_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction15_birth_definition/test_birth_definition.py",
+    "test_sha256": "f15eb17092cf7bf405ff791e8ef95d88bd2346843382650f9d2c1a437348f495"
+  },
+  "source_files": {
+    "tools/attnstage2_birth.py": "6baf9380ae5346f5caa10b5ddd8eb1a4194a7fe5445b10d2fa7d500eb653f4b6",
+    "tools/attnstage2_initial.py": "23515a32d2b8b2d735e96014d26df7963fde704b6991b1e50d89c4bf0efa7b5a",
+    "tools/attnstage2_sme.py": "83afc18896e9cb08e667ab60e8aab18a6208302c75ac8e8a1542f6d8e65fc404",
+    "tools/v39.py": "00eaf79680622ebfd6c79b753d9c641f50ec726e13f53ed6bf52735824493310"
+  },
+  "hand_examples": {
+    "hand_1_2_2.json": {
+      "losses_bits": [
+        1.0,
+        2.0,
+        2.0
+      ],
+      "expected_by_slot": {
+        "0": {
+          "delta_fh": 1.0,
+          "delta_hu": 0.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": 1.0,
+          "RU": 1.0,
+          "mass": 1.0
+        },
+        "1": {
+          "delta_fh": 1.0,
+          "delta_hu": 0.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": 1.0,
+          "RU": 1.0,
+          "mass": 1.0
+        }
+      }
+    },
+    "hand_1_4_2.json": {
+      "losses_bits": [
+        1.0,
+        4.0,
+        2.0
+      ],
+      "expected_by_slot": {
+        "0": {
+          "delta_fh": 3.0,
+          "delta_hu": -2.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": 3.0,
+          "RU": 1.0,
+          "mass": 1.0
+        },
+        "1": {
+          "delta_fh": 3.0,
+          "delta_hu": -2.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": 3.0,
+          "RU": 1.0,
+          "mass": 1.0
+        }
+      }
+    },
+    "hand_2_2_1.json": {
+      "losses_bits": [
+        2.0,
+        2.0,
+        1.0
+      ],
+      "expected_by_slot": {
+        "0": {
+          "delta_fh": 0.0,
+          "delta_hu": -1.0,
+          "total_fu": -1.0,
+          "RF": 0.0,
+          "RH": 0.0,
+          "RU": -1.0,
+          "mass": 1.0
+        },
+        "1": {
+          "delta_fh": 0.0,
+          "delta_hu": -1.0,
+          "total_fu": -1.0,
+          "RF": 0.0,
+          "RH": 0.0,
+          "RU": -1.0,
+          "mass": 1.0
+        }
+      }
+    },
+    "hand_3_1_4.json": {
+      "losses_bits": [
+        3.0,
+        1.0,
+        4.0
+      ],
+      "expected_by_slot": {
+        "0": {
+          "delta_fh": -2.0,
+          "delta_hu": 3.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": -2.0,
+          "RU": 1.0,
+          "mass": 1.0
+        },
+        "1": {
+          "delta_fh": -2.0,
+          "delta_hu": 3.0,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": -2.0,
+          "RU": 1.0,
+          "mass": 1.0
+        }
+      }
+    },
+    "hand_two_slots.json": {
+      "losses_bits": {
+        "true": [
+          [
+            1.0,
+            4.0,
+            2.0
+          ],
+          [
+            1.0,
+            0.5,
+            3.0
+          ]
+        ],
+        "false": [
+          [
+            3.0,
+            1.0,
+            4.0
+          ],
+          [
+            3.0,
+            5.0,
+            2.0
+          ]
+        ]
+      },
+      "expected_by_slot": {
+        "0": {
+          "delta_fh": 1.75,
+          "delta_hu": -0.75,
+          "total_fu": 1.0,
+          "RF": 0.0,
+          "RH": 1.75,
+          "RU": 1.0,
+          "mass": 1.0
+        },
+        "1": {
+          "delta_fh": 0.125,
+          "delta_hu": 1.125,
+          "total_fu": 1.25,
+          "RF": 0.0,
+          "RH": 0.12499999999999989,
+          "RU": 1.25,
+          "mass": 1.0
+        }
+      },
+      "question_weights": [
+        0.75,
+        0.25
+      ],
+      "other_slot_fixed": true
+    }
+  },
+  "real_native_states": {
+    "rows": [
+      {
+        "slot": 0,
+        "H_native_equal": true,
+        "U_native_equal": true
+      },
+      {
+        "slot": 1,
+        "H_native_equal": true,
+        "U_native_equal": true
+      },
+      {
+        "slot": 2,
+        "H_native_equal": true,
+        "U_native_equal": true
+      },
+      {
+        "slot": 3,
+        "H_native_equal": true,
+        "U_native_equal": true
+      }
+    ],
+    "prediction_state_observations_attention_rng_unchanged": true
+  },
+  "source_reasoning": {
+    "adjacent_differences": "delta_fh=r_H-r_F, delta_hu=r_U-r_H",
+    "initial_container": "RF=0, RH=delta_fh, RU=delta_fh+delta_hu",
+    "negative_values_preserved": true,
+    "same_questions_weights_pre_information": true,
+    "native_FH_procedure": "Session.thin -> isolated v39._convert(FH)",
+    "other_seats_fixed": true,
+    "decay": "existing native 16 columns",
+    "flag_on_model_runs_started": false
+  },
+  "required_off_gate_1740_passed": true,
+  "added_flags_off_200_gate_pending": true,
+  "instruction15_complete": false
+}

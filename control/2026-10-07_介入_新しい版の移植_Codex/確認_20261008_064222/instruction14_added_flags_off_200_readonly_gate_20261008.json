@@ -1,0 +1,118 @@
+{
+  "at": "2026-10-08T06:25:55.394423+09:00",
+  "passed": true,
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "reference_code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+  "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/reuse_off_200",
+  "reference_reexecuted": false,
+  "model_reexecuted": false,
+  "controller_restarted": false,
+  "trials": 200,
+  "required_file_count": 9,
+  "required_manifest_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/all_flags_off_1740_required_gate.json",
+  "required_manifest_sha256": "d280dc4387290c10f6ae9cf1e7331d09f2a373ae91244b8e35c85ca17459a548",
+  "records": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "equal": true,
+      "bytes": 10878485,
+      "off_sha256": "a163cd85c952489f3b53be43e2e29236f54075e5cd85ac08f22a7ee03db723a3",
+      "on_sha256": "a163cd85c952489f3b53be43e2e29236f54075e5cd85ac08f22a7ee03db723a3"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+      "equal": true,
+      "bytes": 448,
+      "off_sha256": "ddfd8ef7f4145b9a81988a00336c58f434bd84a7b4ce4be696b374c4fc2fbe13",
+      "on_sha256": "ddfd8ef7f4145b9a81988a00336c58f434bd84a7b4ce4be696b374c4fc2fbe13"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "equal": true,
+      "bytes": 591777,
+      "off_sha256": "81de49d300961176642c61da89d2ba2d384ed9b9b41270ede66bd8bb82ee4909",
+      "on_sha256": "81de49d300961176642c61da89d2ba2d384ed9b9b41270ede66bd8bb82ee4909"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+      "equal": true,
+      "bytes": 1148660,
+      "off_sha256": "305d4d1110738933e2296b50712255dae32ba8fe116244ade5f8810cee451dab",
+      "on_sha256": "305d4d1110738933e2296b50712255dae32ba8fe116244ade5f8810cee451dab"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+      "equal": true,
+      "bytes": 63856,
+      "off_sha256": "16d14147311691211acd6ac67edf5faac034d527dcf2fbfed6bc51b66a7befdb",
+      "on_sha256": "16d14147311691211acd6ac67edf5faac034d527dcf2fbfed6bc51b66a7befdb"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+      "equal": true,
+      "bytes": 3513415,
+      "off_sha256": "8ef5b6dac961ab903899797c883044bde5ea7651a1f89be8147297598e6a0218",
+      "on_sha256": "8ef5b6dac961ab903899797c883044bde5ea7651a1f89be8147297598e6a0218"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "equal": true,
+      "bytes": 9461814,
+      "off_sha256": "ff88d9370ba03a0874fd5956225626bf6507085d116747ef1b640dd9186bc2af",
+      "on_sha256": "ff88d9370ba03a0874fd5956225626bf6507085d116747ef1b640dd9186bc2af"
+    },
+    {
+      "file": "tie_state.jsonl",
+      "equal": true,
+      "bytes": 3028790,
+      "off_sha256": "84f8ce2f1ff166c4922549c603c401e57e9c5073df01119175db6445425c98ae",
+      "on_sha256": "84f8ce2f1ff166c4922549c603c401e57e9c5073df01119175db6445425c98ae"
+    },
+    {
+      "file": "saved_matcher.jsonl.gz",
+      "equal": true,
+      "bytes": 5190723,
+      "off_sha256": "0f8a170898162bdcb3dbd0da139f56b83f7f68886d792b9de2aa1c28af252ac0",
+      "on_sha256": "0f8a170898162bdcb3dbd0da139f56b83f7f68886d792b9de2aa1c28af252ac0"
+    }
+  ],
+  "additional_side_records": [
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.ambig.csv",
+      "equal": true,
+      "bytes": 271,
+      "off_sha256": "a5078a58d43c80d29368037710202c75256516f53a213dadb0e553b07a2f6890",
+      "on_sha256": "a5078a58d43c80d29368037710202c75256516f53a213dadb0e553b07a2f6890"
+    }
+  ],
+  "all_discovered_files_compared": 10,
+  "excluded": [
+    "台帳の見出し一行だけ"
+  ],
+  "no_model_rows_or_values_removed": true,
+  "original_status_and_failure_preserved": true,
+  "original_required_gate_not_fabricated": true,
+  "new_flags_disabled": true,
+  "production_started": false,
+  "full_combined_length_gate_complete": false,
+  "flag_metadata_and_timing_separate": true,
+  "summary_checks": {
+    "reference": {
+      "ledger_trials": 200,
+      "attention_trials": 200,
+      "leakage_trials": 200,
+      "stage2_trials": 200,
+      "mode": "top1",
+      "initial_mode": "virtual"
+    },
+    "current": {
+      "ledger_trials": 200,
+      "attention_trials": 200,
+      "leakage_trials": 200,
+      "stage2_trials": 200,
+      "mode": "top1",
+      "initial_mode": "virtual"
+    }
+  },
+  "tool_fix_reason": "sideの追加ambig.csvも比較していたが、最後に件数を9へ固定して停止した。所定9件と追加1件を分け、全10件を同じ比較関数で比較する。"
+}

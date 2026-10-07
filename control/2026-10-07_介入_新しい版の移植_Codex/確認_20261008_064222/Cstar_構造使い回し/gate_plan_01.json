@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-08T06:34:59.124170+09:00",
+  "source_commit": "e05f990516bc2d45568854f02e97699be40155db",
+  "original_commit": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+  "cases": [
+    {
+      "phase": "preflight20_01",
+      "name": "off_A",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/off_A",
+      "flags": []
+    },
+    {
+      "phase": "preflight20_01",
+      "name": "off_L",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/off_L",
+      "flags": []
+    },
+    {
+      "phase": "preflight20_01",
+      "name": "off_Cstar",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": []
+    },
+    {
+      "phase": "preflight20_01",
+      "name": "structure_Cstar",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_preflight_02/on_own",
+      "flags": [
+        "--sme-reuse-structure"
+      ]
+    },
+    {
+      "phase": "full1740_01",
+      "name": "off_A",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/off_A",
+      "flags": []
+    },
+    {
+      "phase": "full1740_01",
+      "name": "off_L",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/off_L",
+      "flags": []
+    },
+    {
+      "phase": "full1740_01",
+      "name": "off_Cstar",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": []
+    },
+    {
+      "phase": "full1740_01",
+      "name": "structure_Cstar",
+      "baseline": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own",
+      "flags": [
+        "--sme-reuse-structure"
+      ]
+    }
+  ],
+  "seed": 1,
+  "world": 2,
+  "PYTHONHASHSEED": "0",
+  "horizon": 1740,
+  "preflight_memory_gb": 1,
+  "full_memory_gb": 11,
+  "comparison": "原版の台帳本体・全side・保存状態・乱数の7ファイル。除外は台帳の見出しとsec_trialだけ。",
+  "preflight_prior_peaks_mb": {
+    "off_A": 57.3,
+    "off_L": 61.1,
+    "on_own": 68.3
+  },
+  "full_prior_model_tree_rss_max_bytes": 11122589696,
+  "full_starts_after_new_inbox_and_preflight_check": true,
+  "measurement": "同じ軽いworker CPUとGC callback。入れ子を足さない。新しいcProfileなし。",
+  "mac_old_gc_encode_gates_not_started": true,
+  "scripts_sha256": {
+    "run_gates_01.py": "dc4680d15b4b428791b236149322332af819bb8d79b632f321190abd972b18ab",
+    "observe_cpu_01.py": "46301f1a1b0abddc5aeba528e907702a92062ece6d95b3dca1b3b040a4737140"
+  }
+}
