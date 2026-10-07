@@ -1,0 +1,634 @@
+{
+  "at": "2026-10-08T06:43:30.615431+09:00",
+  "machine": {
+    "at": "2026-10-08T06:43:30.647606+09:00",
+    "models": {
+      "64855": {
+        "ppid": 64852,
+        "state": "R",
+        "rss_kb": 304864
+      }
+    },
+    "model_children": 1,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 64842,
+        "owner": "SME_structure_reuse_full1740_01",
+        "mem_gb": 11.0
+      }
+    ],
+    "disk_free_bytes": 227201806336,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "first_stage": {
+    "status.json": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning.json": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure.json": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress.json": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "preparation": {
+    "gate_e9ed84ae/status.json": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-08T06:22:54.623753+09:00",
+      "pid": 55794,
+      "error": "RuntimeError(('所定のファイル数でない', 10))"
+    },
+    "gate_e9ed84ae/failure.json": {
+      "at": "2026-10-08T06:22:54.623382+09:00",
+      "error": "RuntimeError(('所定のファイル数でない', 10))",
+      "automatic_retry": false,
+      "models_not_signaled": true
+    },
+    "gate_e9ed84ae/warning.json": {
+      "exists": false
+    },
+    "gate_e9ed84ae/all_flags_off_1740_required_gate.json": {
+      "at": "2026-10-08T05:48:19.671489+09:00",
+      "passed": true,
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "reference_code": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/port_7774b60/reference",
+      "reference_reexecuted": false,
+      "trials": 1740,
+      "records": [
+        {
+          "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "equal": true,
+          "bytes": 492882608,
+          "off_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef",
+          "on_sha256": "b49614183ada8c37565101d5d3c84fd7749e38cfcfc87fac30664702a68a46ef"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+          "equal": true,
+          "bytes": 443892,
+          "off_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c",
+          "on_sha256": "9009b2e7356b28dd241d5c28875b63b561e3cf4aa8bdfe0e612c030d5336f30c"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "equal": true,
+          "bytes": 13877627,
+          "off_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf",
+          "on_sha256": "5a7d45e610d860a884385c73e4d090aaae158a2c429cdef8e7cc134a17740fcf"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+          "equal": true,
+          "bytes": 17953721,
+          "off_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8",
+          "on_sha256": "fe0dc596bef520a62b4f4865b75e146551ae19dd57a92efc2ede9ed138e47cc8"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+          "equal": true,
+          "bytes": 33392,
+          "off_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d",
+          "on_sha256": "f0a56545bffe6cdc0dd757bec073b32d2a385c10ef5925ecd7116d9ac3dfcf0d"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+          "equal": true,
+          "bytes": 101323446,
+          "off_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4",
+          "on_sha256": "a886083b5b9f2e02355b68793ee9ee83a1e099fdd4b2d444a1d415598ad781e4"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "equal": true,
+          "bytes": 582869296,
+          "off_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2",
+          "on_sha256": "b9301bc7a6a7c602fbdd7ef5cf4db89d913fe0c09d4ed9245429e1f524d3bfa2"
+        },
+        {
+          "file": "tie_state.jsonl",
+          "equal": true,
+          "bytes": 13199136,
+          "off_sha256": "e5b39258258fcb1276e65647c602204c6d7246cabc19a71ba43af29382682cb0",
+          "on_sha256": "e5b39258258fcb1276e65647c602204c6d7246cabc19a71ba43af29382682cb0"
+        },
+        {
+          "file": "saved_matcher.jsonl.gz",
+          "equal": true,
+          "bytes": 2529902,
+          "off_sha256": "cf23ea134e0c6a9581ccb09a2ccd451fdcd60bba42216387acc6d2e66e2e8d88",
+          "on_sha256": "cf23ea134e0c6a9581ccb09a2ccd451fdcd60bba42216387acc6d2e66e2e8d88"
+        }
+      ],
+      "excluded": [
+        "台帳の見出し一行だけ"
+      ],
+      "new_flags_disabled": true,
+      "production_started": false,
+      "full_combined_length_gate_complete": false,
+      "flag_metadata_and_timing_separate": true
+    },
+    "gate_e9ed84ae/added_flags_off_200_completed.json": {
+      "at": "2026-10-08T06:22:54.548833+09:00",
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "exit_code": 0
+    },
+    "added_flags_off_200_readonly_required_gate.json": {
+      "at": "2026-10-08T06:25:55.394423+09:00",
+      "passed": true,
+      "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "reference_code": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/reuse_gate_87d32af8_mem4/reuse_off_200",
+      "reference_reexecuted": false,
+      "model_reexecuted": false,
+      "controller_restarted": false,
+      "trials": 200,
+      "required_file_count": 9,
+      "required_manifest_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/gate_e9ed84ae/all_flags_off_1740_required_gate.json",
+      "required_manifest_sha256": "d280dc4387290c10f6ae9cf1e7331d09f2a373ae91244b8e35c85ca17459a548",
+      "records": [
+        {
+          "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "equal": true,
+          "bytes": 10878485,
+          "off_sha256": "a163cd85c952489f3b53be43e2e29236f54075e5cd85ac08f22a7ee03db723a3",
+          "on_sha256": "a163cd85c952489f3b53be43e2e29236f54075e5cd85ac08f22a7ee03db723a3"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+          "equal": true,
+          "bytes": 448,
+          "off_sha256": "ddfd8ef7f4145b9a81988a00336c58f434bd84a7b4ce4be696b374c4fc2fbe13",
+          "on_sha256": "ddfd8ef7f4145b9a81988a00336c58f434bd84a7b4ce4be696b374c4fc2fbe13"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "equal": true,
+          "bytes": 591777,
+          "off_sha256": "81de49d300961176642c61da89d2ba2d384ed9b9b41270ede66bd8bb82ee4909",
+          "on_sha256": "81de49d300961176642c61da89d2ba2d384ed9b9b41270ede66bd8bb82ee4909"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+          "equal": true,
+          "bytes": 1148660,
+          "off_sha256": "305d4d1110738933e2296b50712255dae32ba8fe116244ade5f8810cee451dab",
+          "on_sha256": "305d4d1110738933e2296b50712255dae32ba8fe116244ade5f8810cee451dab"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+          "equal": true,
+          "bytes": 63856,
+          "off_sha256": "16d14147311691211acd6ac67edf5faac034d527dcf2fbfed6bc51b66a7befdb",
+          "on_sha256": "16d14147311691211acd6ac67edf5faac034d527dcf2fbfed6bc51b66a7befdb"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+          "equal": true,
+          "bytes": 3513415,
+          "off_sha256": "8ef5b6dac961ab903899797c883044bde5ea7651a1f89be8147297598e6a0218",
+          "on_sha256": "8ef5b6dac961ab903899797c883044bde5ea7651a1f89be8147297598e6a0218"
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "equal": true,
+          "bytes": 9461814,
+          "off_sha256": "ff88d9370ba03a0874fd5956225626bf6507085d116747ef1b640dd9186bc2af",
+          "on_sha256": "ff88d9370ba03a0874fd5956225626bf6507085d116747ef1b640dd9186bc2af"
+        },
+        {
+          "file": "tie_state.jsonl",
+          "equal": true,
+          "bytes": 3028790,
+          "off_sha256": "84f8ce2f1ff166c4922549c603c401e57e9c5073df01119175db6445425c98ae",
+          "on_sha256": "84f8ce2f1ff166c4922549c603c401e57e9c5073df01119175db6445425c98ae"
+        },
+        {
+          "file": "saved_matcher.jsonl.gz",
+          "equal": true,
+          "bytes": 5190723,
+          "off_sha256": "0f8a170898162bdcb3dbd0da139f56b83f7f68886d792b9de2aa1c28af252ac0",
+          "on_sha256": "0f8a170898162bdcb3dbd0da139f56b83f7f68886d792b9de2aa1c28af252ac0"
+        }
+      ],
+      "additional_side_records": [
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.ambig.csv",
+          "equal": true,
+          "bytes": 271,
+          "off_sha256": "a5078a58d43c80d29368037710202c75256516f53a213dadb0e553b07a2f6890",
+          "on_sha256": "a5078a58d43c80d29368037710202c75256516f53a213dadb0e553b07a2f6890"
+        }
+      ],
+      "all_discovered_files_compared": 10,
+      "excluded": [
+        "台帳の見出し一行だけ"
+      ],
+      "no_model_rows_or_values_removed": true,
+      "original_status_and_failure_preserved": true,
+      "original_required_gate_not_fabricated": true,
+      "new_flags_disabled": true,
+      "production_started": false,
+      "full_combined_length_gate_complete": false,
+      "flag_metadata_and_timing_separate": true,
+      "summary_checks": {
+        "reference": {
+          "ledger_trials": 200,
+          "attention_trials": 200,
+          "leakage_trials": 200,
+          "stage2_trials": 200,
+          "mode": "top1",
+          "initial_mode": "virtual"
+        },
+        "current": {
+          "ledger_trials": 200,
+          "attention_trials": 200,
+          "leakage_trials": 200,
+          "stage2_trials": 200,
+          "mode": "top1",
+          "initial_mode": "virtual"
+        }
+      },
+      "tool_fix_reason": "sideの追加ambig.csvも比較していたが、最後に件数を9へ固定して停止した。所定9件と追加1件を分け、全10件を同じ比較関数で比較する。"
+    }
+  },
+  "fixed_sources": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "status": ""
+    }
+  },
+  "live_known_pids": {
+    "66840": null,
+    "72172": null,
+    "94210": null,
+    "4872": null,
+    "4893": null,
+    "21749": null,
+    "27353": null,
+    "27360": null,
+    "27377": null,
+    "55794": null,
+    "60054": null,
+    "60062": null,
+    "60071": null
+  },
+  "inbox": {
+    "new_unreceived": [],
+    "completed": [
+      1,
+      7,
+      13,
+      14,
+      15
+    ],
+    "unfinished": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "duplicates": []
+  },
+  "eligible_queue_rows": [],
+  "own_model_children": 0,
+  "old_reuse": {
+    "status.json": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-08T03:09:09.509910+09:00",
+      "pid": 27353,
+      "error": "RuntimeError('資源条件の確認不足。新規投入・合格宣言を止める')"
+    },
+    "warning.json": {
+      "kind": "reuse_off_200",
+      "machine": {
+        "at": "2026-10-08T02:40:34.453193+09:00",
+        "models": {
+          "4893": {
+            "ppid": 4882,
+            "state": "R",
+            "rss_kb": 616976
+          },
+          "27377": {
+            "ppid": 27368,
+            "state": "R",
+            "rss_kb": 127648
+          }
+        },
+        "model_children": 2,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 4872,
+            "owner": "Codex2 指示8 接続の関門 on_full",
+            "mem_gb": 16.0
+          },
+          {
+            "pid": 27360,
+            "owner": "Codex2 指示12 使い回し関門 reuse_off_200",
+            "mem_gb": 4.0
+          }
+        ],
+        "disk_free_bytes": 230469980160,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": [
+          {
+            "pid": 31072,
+            "rss_mb": 100.765625
+          }
+        ]
+      },
+      "models_not_signaled": true
+    },
+    "failure.json": {
+      "at": "2026-10-08T03:09:09.509483+09:00",
+      "error": "RuntimeError('資源条件の確認不足。新規投入・合格宣言を止める')",
+      "automatic_retry": false,
+      "models_not_signaled": true
+    },
+    "required_gate.json": {
+      "exists": false
+    },
+    "cpu_comparison.json": {
+      "exists": false
+    },
+    "reuse_on_200_entry_started.json": {
+      "exists": false
+    }
+  },
+  "report_read_revision": "e1bc1230cbd091e8cdb3f68de8a015e2196ec896",
+  "source_snapshot": {
+    "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction14_preparation/heartbeat_check_20261008_0643.json",
+    "sha256": "229802d43fca317db33ecffe1a53f9dc906b535e144abe7c79cecf4b74cf1a5c"
+  }
+}
