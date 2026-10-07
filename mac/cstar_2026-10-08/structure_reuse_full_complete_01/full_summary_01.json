@@ -1,0 +1,203 @@
+{
+  "at": "2026-10-08T08:47:42.280067+09:00",
+  "complete": {
+    "at": "2026-10-08T08:38:03.534444+09:00",
+    "passed": true,
+    "completed": [
+      "off_A",
+      "off_L",
+      "off_Cstar",
+      "structure_Cstar"
+    ],
+    "model_bytes_identical": true
+  },
+  "cases": {
+    "off_A": {
+      "comparison_passed": true,
+      "comparison_file_count": 8,
+      "complete_at": "2026-10-08T06:46:25.932178+09:00",
+      "finished": {
+        "at": "2026-10-08T06:46:24.971888+09:00",
+        "exit": 0,
+        "wall_seconds": 544.3520042920136,
+        "paused_seconds": 0.0,
+        "maximum_observed_model_tree_rss_bytes": 390037504,
+        "sampling_seconds": 2
+      },
+      "whole_cpu": {
+        "gc_seconds": 110.86304899999075,
+        "gc_calls": [
+          482489,
+          43862,
+          1064
+        ],
+        "observer_callback_cpu_seconds": 0.7479139999841009,
+        "whole_worker_process_cpu_seconds": 542.868334,
+        "callback_adjusted_worker_cpu_seconds": 542.1204200000159,
+        "worker_wall_seconds": 543.6241308330209,
+        "configured_trials": 1740,
+        "scope": "workerの初期化から模型・記録のcloseまで。cProfile・関数traceは使用しない。GC区間は入れ子で総CPUへ足さない。callback自体の計測済みCPUを総CPUから除くがtime関数等の微小な負荷は残る。",
+        "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_structure_2026-10-08/source",
+        "input_output_rng_unchanged": true
+      },
+      "flags": [],
+      "resources": {
+        "samples": 264,
+        "external_model_counts": {
+          "0": 264
+        },
+        "held_samples": 0,
+        "swap_growth_samples": 0,
+        "thermal_warning_samples": 0,
+        "maximum_sampled_model_tree_rss_bytes": 390037504,
+        "minimum_disk_free_bytes": 227016228864,
+        "sha256": "15086dbb30d7e518f59620a771e74ea42f5d7d06d04933e7225465654c606b1f"
+      }
+    },
+    "off_L": {
+      "comparison_passed": true,
+      "comparison_file_count": 7,
+      "complete_at": "2026-10-08T06:54:44.060988+09:00",
+      "finished": {
+        "at": "2026-10-08T06:54:41.891575+09:00",
+        "exit": 0,
+        "wall_seconds": 495.90253487502923,
+        "paused_seconds": 0.0,
+        "maximum_observed_model_tree_rss_bytes": 386383872,
+        "sampling_seconds": 2
+      },
+      "whole_cpu": {
+        "gc_seconds": 98.22647800000102,
+        "gc_calls": [
+          418524,
+          38047,
+          1107
+        ],
+        "observer_callback_cpu_seconds": 0.6364480000009689,
+        "whole_worker_process_cpu_seconds": 494.18494,
+        "callback_adjusted_worker_cpu_seconds": 493.548491999999,
+        "worker_wall_seconds": 494.8824597080238,
+        "configured_trials": 1740,
+        "scope": "workerの初期化から模型・記録のcloseまで。cProfile・関数traceは使用しない。GC区間は入れ子で総CPUへ足さない。callback自体の計測済みCPUを総CPUから除くがtime関数等の微小な負荷は残る。",
+        "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_structure_2026-10-08/source",
+        "input_output_rng_unchanged": true
+      },
+      "flags": [],
+      "resources": {
+        "samples": 240,
+        "external_model_counts": {
+          "0": 239,
+          "1": 1
+        },
+        "held_samples": 0,
+        "swap_growth_samples": 0,
+        "thermal_warning_samples": 0,
+        "maximum_sampled_model_tree_rss_bytes": 386383872,
+        "minimum_disk_free_bytes": 226212970496,
+        "sha256": "20ea19700714230fabb4a31d2e09ef4b12bab73af5933af03dc0e06bba5c3f50"
+      }
+    },
+    "off_Cstar": {
+      "comparison_passed": true,
+      "comparison_file_count": 7,
+      "complete_at": "2026-10-08T07:39:39.238703+09:00",
+      "finished": {
+        "at": "2026-10-08T07:39:36.905933+09:00",
+        "exit": 0,
+        "wall_seconds": 2692.760621124995,
+        "paused_seconds": 0.0,
+        "maximum_observed_model_tree_rss_bytes": 11489017856,
+        "sampling_seconds": 2
+      },
+      "whole_cpu": {
+        "gc_seconds": 908.344491000046,
+        "gc_calls": [
+          1095977,
+          99634,
+          280
+        ],
+        "observer_callback_cpu_seconds": 2.5654469999223823,
+        "whole_worker_process_cpu_seconds": 2676.623672,
+        "callback_adjusted_worker_cpu_seconds": 2674.058225000078,
+        "worker_wall_seconds": 2681.2247246659826,
+        "configured_trials": 1740,
+        "scope": "workerの初期化から模型・記録のcloseまで。cProfile・関数traceは使用しない。GC区間は入れ子で総CPUへ足さない。callback自体の計測済みCPUを総CPUから除くがtime関数等の微小な負荷は残る。",
+        "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_structure_2026-10-08/source",
+        "input_output_rng_unchanged": true
+      },
+      "flags": [],
+      "resources": {
+        "samples": 1292,
+        "external_model_counts": {
+          "0": 933,
+          "1": 357,
+          "2": 1,
+          "6": 1
+        },
+        "held_samples": 0,
+        "swap_growth_samples": 0,
+        "thermal_warning_samples": 0,
+        "maximum_sampled_model_tree_rss_bytes": 11489017856,
+        "minimum_disk_free_bytes": 224807620608,
+        "sha256": "1507c4310fd7eedaa69080a9229076f96c5d7e26b7235a8e15fd053e02a7096d"
+      }
+    },
+    "structure_Cstar": {
+      "comparison_passed": true,
+      "comparison_file_count": 7,
+      "complete_at": "2026-10-08T08:38:03.534079+09:00",
+      "finished": {
+        "at": "2026-10-08T08:38:01.171940+09:00",
+        "exit": 0,
+        "wall_seconds": 3501.814153250016,
+        "paused_seconds": 0.0,
+        "maximum_observed_model_tree_rss_bytes": 11130667008,
+        "sampling_seconds": 2
+      },
+      "whole_cpu": {
+        "gc_seconds": 1189.0005780001416,
+        "gc_calls": [
+          1090316,
+          99119,
+          280
+        ],
+        "observer_callback_cpu_seconds": 3.180074999758547,
+        "whole_worker_process_cpu_seconds": 3482.198755,
+        "callback_adjusted_worker_cpu_seconds": 3479.018680000241,
+        "worker_wall_seconds": 3489.1998018329614,
+        "configured_trials": 1740,
+        "scope": "workerの初期化から模型・記録のcloseまで。cProfile・関数traceは使用しない。GC区間は入れ子で総CPUへ足さない。callback自体の計測済みCPUを総CPUから除くがtime関数等の微小な負荷は残る。",
+        "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_structure_2026-10-08/source",
+        "input_output_rng_unchanged": true
+      },
+      "flags": [
+        "--sme-reuse-structure"
+      ],
+      "resources": {
+        "samples": 1673,
+        "external_model_counts": {
+          "1": 1668,
+          "2": 2,
+          "7": 3
+        },
+        "held_samples": 0,
+        "swap_growth_samples": 0,
+        "thermal_warning_samples": 0,
+        "maximum_sampled_model_tree_rss_bytes": 11130667008,
+        "minimum_disk_free_bytes": 223263559680,
+        "sha256": "ceac5b43fbbeb789fc87206e829e7dc95f421ee005d788bd4a4ff5c5610220b0"
+      }
+    }
+  },
+  "source_commit": "e05f990516bc2d45568854f02e97699be40155db",
+  "original_commit": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+  "measurement": "同じ軽いworker CPUとGC callback。cProfileなし。GCの秒は総CPUに含まれ足さない。",
+  "scope": "お店世界2・種1・C*②・1740試行・horizon1740・PYTHONHASHSEED=0の一回ずつ。ほかの種・世界へ一般化しない。",
+  "Cstar_cpu_comparison": {
+    "off_seconds": 2674.058225000078,
+    "structure_seconds": 3479.018680000241,
+    "difference_seconds": 804.9604550001632,
+    "increase_percent": 30.10257770285236,
+    "cpu_reduction_observed": false
+  }
+}
