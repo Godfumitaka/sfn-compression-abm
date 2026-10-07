@@ -44,6 +44,25 @@ push_repo() {
   return 1
 }
 
+update_code() {  # 読む枝.txt の枝のコードを、$REPO/.astra_code/wt/<枝名> に置く（Astra が読めるように）
+  local list="$REPO/control/議論/読む枝.txt" base="$REPO/.astra_code" br name
+  [ -f "$list" ] || return 0
+  grep -qx '.astra_code/' "$REPO/.git/info/exclude" 2>/dev/null || echo '.astra_code/' >> "$REPO/.git/info/exclude"
+  if [ ! -d "$base/.git" ]; then
+    git clone -q --filter=blob:none --no-checkout "$(git -C "$REPO" remote get-url origin)" "$base" >>"$LOG" 2>&1 || { log "コードの置き場を作れない"; return 1; }
+  fi
+  while IFS= read -r br; do
+    case "$br" in ''|\#*) continue;; esac
+    name=$(printf '%s' "$br" | tr '/' '_')
+    if ! git -C "$base" fetch -q origin "$br" >>"$LOG" 2>&1; then log "枝 $br を取れない（まだ GitHub に無い？）"; continue; fi
+    if [ -d "$base/wt/$name" ]; then
+      git -C "$base/wt/$name" checkout -q --detach FETCH_HEAD >>"$LOG" 2>&1 || log "枝 $br の更新に失敗"
+    else
+      git -C "$base" worktree add -q --detach "$base/wt/$name" FETCH_HEAD >>"$LOG" 2>&1 || log "枝 $br の置き場を作れない"
+    fi
+  done < "$list"
+}
+
 today_count() { grep -c "^$(date +%F) .* 起動$" "$LOG" 2>/dev/null; }
 
 log "待機を始めた（間隔 ${INTERVAL} 秒、一日 ${DAILY_MAX} 回まで）"
@@ -67,8 +86,9 @@ while true; do
       n=$(ls "$dir" | grep -c '^[0-9][0-9]_.*\.md$')
       next=$(printf '%02d' $((n + 1)))
       out="$dir/${next}_Astra.md"
+      update_code
       log "$name ${next} 起動"
-      prompt="control/議論/Astraへの決まり.md を読み、それに従ってください。議論のフォルダ control/議論/${name}/ の全部のファイルを番号順に読み、次の返事（${next}_Astra.md の中身）だけを書いてください。"
+      prompt="control/議論/Astraへの決まり.md を読み、それに従ってください。議論のフォルダ control/議論/${name}/ の全部のファイルを番号順に読み、次の返事（${next}_Astra.md の中身）だけを書いてください。模型のコードは .astra_code/wt/ の下にあります（control/議論/読む枝.txt の枝。枝名の / は _ に置き換え）。"
       if [ -n "$CODEX_PROFILE" ]; then
         codex exec -p "$CODEX_PROFILE" $CODEX_ARGS -s read-only -C "$REPO" -o "$out" "$prompt" >>"$LOG" 2>&1
       else
