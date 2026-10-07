@@ -19,8 +19,21 @@
   "source_or_process_changes": false,
   "alternate_destination_or_transport_used": false,
   "records_preserved": true,
-  "next_action": "ローカルの記録と全コミットを保全する。次の継続確認で同じ承認済みoriginをfetch・mergeし、送信検査後に通常pushを再試行する。別の宛先・経路を使わない。",
+  "next_action": "再送と送信確認の追記が成功し、前回未送信の3コミットがoriginの祖先に含まれることを確認。30分の継続確認と上流関門待ちを維持する。",
   "last_retry_report_commit": "3aef1864fe986186d565ba235bc00a74f069a4fc",
   "second_round_failed": true,
-  "last_failure_at_jst": "2026-10-08T00:16:25+09:00"
+  "last_failure_at_jst": "2026-10-08T00:16:25+09:00",
+  "recovery": {
+    "verified_at_jst": "2026-10-08T00:45:28+09:00",
+    "normal_push_commit": "c9cb66c33e4716b4be71f6800a178330bdcf9a84",
+    "confirmation_commit": "2f8e2e669ac04a8c02af7f189ac62136acec6fe6",
+    "pending_commits_verified_on_origin": [
+      "8fa943b93d1cdba387e4084b965f36c1b0bab4fd",
+      "3aef1864fe986186d565ba235bc00a74f069a4fc",
+      "3c9b01805b44ddf46e62215fb521dfc3d2e6a0a0"
+    ],
+    "same_destination_and_transport": true,
+    "force_push_used": false,
+    "rebase_used": false
+  }
 }
