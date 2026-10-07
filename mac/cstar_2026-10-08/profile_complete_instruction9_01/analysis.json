@@ -1,0 +1,3479 @@
+{
+  "passed": true,
+  "source": "7774b60",
+  "material_choice": 2,
+  "configured_trials": 1740,
+  "measured_trials": 500,
+  "method": "cProfile + call/return trace。内訳はtime.process_timeのCPU秒、sec_trialはperf_counterの実時間。line/opcodeのtraceなし。外付けの_agent_inputの境目の包みは元の関数を一回呼び、入力を変えずに返す。模型の式・選択・乱数は変更なし。",
+  "boundary": "_agent_inputの入口から次の入口。選ばれた区間だけtraceとcProfileを有効にし、区間の外では無効。最後はworkerの終了。観測CSV/prof書き出しは区間外。",
+  "all_selected": {
+    "first_trial": 0,
+    "last_trial": 1599,
+    "trials": 500,
+    "seconds": {
+      "cstar_generation": 149.6726580009598,
+      "cstar_expectation": 242.50779700564027,
+      "birth_scoring": 1.8027350006228877,
+      "engine": 252.9440629967902,
+      "preparation": 1770.8839289984585,
+      "retention": 39.786942999618574,
+      "prediction": 15.265158999952558,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 731.0050849963993,
+      "garbage_collection": 243.40546599974357,
+      "other": 45.956995999959766
+    },
+    "fraction": {
+      "cstar_generation": 0.042846483740152035,
+      "cstar_expectation": 0.0694222079038352,
+      "birth_scoring": 0.0005160652381244956,
+      "engine": 0.07240977628853536,
+      "preparation": 0.5069472974084714,
+      "retention": 0.011389726280484583,
+      "prediction": 0.004369925647195418,
+      "reference_match": 0.0,
+      "nonlearning_tests": 0.0,
+      "writing": 0.20926332108076698,
+      "garbage_collection": 0.06967918175913775,
+      "other": 0.013156014653296803
+    },
+    "accounted_seconds": 3493.2308309981454,
+    "sec_trial_sum": 6307.702139365778,
+    "process_cpu_seconds": 5267.588574000002,
+    "trace_callback_seconds": 1774.3577450018565,
+    "max_rss_bytes": 10447257600,
+    "root_calls": {
+      "cstar_generation": 23379632,
+      "cstar_expectation": 22024519,
+      "birth_scoring": 832,
+      "engine": 215382,
+      "preparation": 248396634,
+      "retention": 4470026,
+      "prediction": 249285,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 162545452,
+      "garbage_collection": 0,
+      "other": 27150
+    }
+  },
+  "early_300": {
+    "first_trial": 0,
+    "last_trial": 299,
+    "trials": 300,
+    "seconds": {
+      "cstar_generation": 63.52637200030483,
+      "cstar_expectation": 98.14353900011002,
+      "birth_scoring": 1.1432610000530437,
+      "engine": 103.95651399891983,
+      "preparation": 734.3574479982117,
+      "retention": 20.71632400034882,
+      "prediction": 6.814303999804718,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 322.14467699919925,
+      "garbage_collection": 24.830635999960457,
+      "other": 9.356738999967895
+    },
+    "fraction": {
+      "cstar_generation": 0.045867753941797526,
+      "cstar_expectation": 0.07086228216861895,
+      "birth_scoring": 0.0008254652767111389,
+      "engine": 0.0750594068983918,
+      "preparation": 0.5302258836683875,
+      "retention": 0.014957744664247387,
+      "prediction": 0.004920111275143332,
+      "reference_match": 0.0,
+      "nonlearning_tests": 0.0,
+      "writing": 0.23259714529562947,
+      "garbage_collection": 0.017928388894285677,
+      "other": 0.006755817916787199
+    },
+    "accounted_seconds": 1384.9898139968805,
+    "sec_trial_sum": 3202.749180702027,
+    "process_cpu_seconds": 2164.7093400000017,
+    "trace_callback_seconds": 779.7195270031211,
+    "max_rss_bytes": 1322844160,
+    "root_calls": {
+      "cstar_generation": 10281632,
+      "cstar_expectation": 9416688,
+      "birth_scoring": 538,
+      "engine": 96064,
+      "preparation": 108456760,
+      "retention": 2410377,
+      "prediction": 110843,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 72229368,
+      "garbage_collection": 0,
+      "other": 12660
+    }
+  },
+  "late_200": {
+    "first_trial": 1400,
+    "last_trial": 1599,
+    "trials": 200,
+    "seconds": {
+      "cstar_generation": 86.14628600065498,
+      "cstar_expectation": 144.36425800553025,
+      "birth_scoring": 0.6594740005698441,
+      "engine": 148.98754899787036,
+      "preparation": 1036.5264810002468,
+      "retention": 19.070618999269755,
+      "prediction": 8.45085500014784,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 408.8604079972001,
+      "garbage_collection": 218.5748299997831,
+      "other": 36.60025699999187
+    },
+    "fraction": {
+      "cstar_generation": 0.040861687684640706,
+      "cstar_expectation": 0.06847616417731599,
+      "birth_scoring": 0.0003128076890885424,
+      "engine": 0.07066912549201246,
+      "preparation": 0.4916546413059494,
+      "retention": 0.009045748965834826,
+      "prediction": 0.004008486189196825,
+      "reference_match": 0.0,
+      "nonlearning_tests": 0.0,
+      "writing": 0.1939343769047611,
+      "garbage_collection": 0.10367639574277952,
+      "other": 0.017360565848420693
+    },
+    "accounted_seconds": 2108.241017001265,
+    "sec_trial_sum": 3104.952958663751,
+    "process_cpu_seconds": 3102.879234,
+    "trace_callback_seconds": 994.6382179987354,
+    "max_rss_bytes": 10447257600,
+    "root_calls": {
+      "cstar_generation": 13098000,
+      "cstar_expectation": 12607831,
+      "birth_scoring": 294,
+      "engine": 119318,
+      "preparation": 139939874,
+      "retention": 2059649,
+      "prediction": 138442,
+      "reference_match": 0,
+      "nonlearning_tests": 0,
+      "writing": 90316084,
+      "garbage_collection": 0,
+      "other": 14490
+    }
+  },
+  "bins": [
+    {
+      "first_trial": 0,
+      "last_trial": 99,
+      "trials": 100,
+      "seconds": {
+        "cstar_generation": 11.280151000012607,
+        "cstar_expectation": 16.559075999980102,
+        "birth_scoring": 0.5143890000054077,
+        "engine": 15.72739299999865,
+        "preparation": 152.69429399998785,
+        "retention": 5.642501000009231,
+        "prediction": 1.7083979999953658,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 65.08071400001216,
+        "garbage_collection": 3.542506000000736,
+        "other": 2.0019699999998655
+      },
+      "fraction": {
+        "cstar_generation": 0.041055846588804644,
+        "cstar_expectation": 0.060269307024948524,
+        "birth_scoring": 0.00187219797599935,
+        "engine": 0.057242268676107516,
+        "preparation": 0.5557543963234471,
+        "retention": 0.02053675127516439,
+        "prediction": 0.006217977596253102,
+        "reference_match": 0.0,
+        "nonlearning_tests": 0.0,
+        "writing": 0.23687128034645846,
+        "garbage_collection": 0.01289349609555649,
+        "other": 0.007286478097260564
+      },
+      "accounted_seconds": 274.75139200000194,
+      "sec_trial_sum": 430.8273566219723,
+      "process_cpu_seconds": 430.51050500000025,
+      "trace_callback_seconds": 155.75911299999825,
+      "max_rss_bytes": 300433408,
+      "root_calls": {
+        "cstar_generation": 1966621,
+        "cstar_expectation": 1772788,
+        "birth_scoring": 256,
+        "engine": 22215,
+        "preparation": 21447034,
+        "retention": 724184,
+        "prediction": 21472,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 14279378,
+        "garbage_collection": 0,
+        "other": 3100
+      }
+    },
+    {
+      "first_trial": 100,
+      "last_trial": 199,
+      "trials": 100,
+      "seconds": {
+        "cstar_generation": 23.04369000026321,
+        "cstar_expectation": 35.73470500008142,
+        "birth_scoring": 0.22814299998651677,
+        "engine": 38.05303899996579,
+        "preparation": 262.08025099970024,
+        "retention": 7.015701999997816,
+        "prediction": 2.310251999984416,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 115.05151899994587,
+        "garbage_collection": 8.48043700001864,
+        "other": 3.2197569999898974
+      },
+      "fraction": {
+        "cstar_generation": 0.046532463479034177,
+        "cstar_expectation": 0.07215961746280025,
+        "birth_scoring": 0.0004606925286162341,
+        "engine": 0.07684106354112323,
+        "preparation": 0.5292225207022124,
+        "retention": 0.014166910641956932,
+        "prediction": 0.004665125976586762,
+        "reference_match": 0.0,
+        "nonlearning_tests": 0.0,
+        "writing": 0.23232523115921266,
+        "garbage_collection": 0.017124671655672774,
+        "other": 0.0065017028527845685
+      },
+      "accounted_seconds": 495.2174949999338,
+      "sec_trial_sum": 777.4740012062248,
+      "process_cpu_seconds": 774.9010860000006,
+      "trace_callback_seconds": 279.6835910000668,
+      "max_rss_bytes": 772816896,
+      "root_calls": {
+        "cstar_generation": 3704673,
+        "cstar_expectation": 3360356,
+        "birth_scoring": 101,
+        "engine": 33998,
+        "preparation": 39293172,
+        "retention": 784902,
+        "prediction": 39713,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 25883326,
+        "garbage_collection": 0,
+        "other": 4440
+      }
+    },
+    {
+      "first_trial": 200,
+      "last_trial": 299,
+      "trials": 100,
+      "seconds": {
+        "cstar_generation": 29.202531000029012,
+        "cstar_expectation": 45.849758000048496,
+        "birth_scoring": 0.4007290000611192,
+        "engine": 50.1760819989554,
+        "preparation": 319.58290299852365,
+        "retention": 8.058121000341771,
+        "prediction": 2.7956539998249355,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 142.0124439992412,
+        "garbage_collection": 12.807692999941082,
+        "other": 4.135011999978133
+      },
+      "fraction": {
+        "cstar_generation": 0.047482174537735816,
+        "cstar_expectation": 0.07454991527512081,
+        "birth_scoring": 0.0006515696986406934,
+        "engine": 0.08158434907891297,
+        "preparation": 0.5196293149877016,
+        "retention": 0.013102189936346346,
+        "prediction": 0.004545624184652863,
+        "reference_match": 0.0,
+        "nonlearning_tests": 0.0,
+        "writing": 0.23090668587923785,
+        "garbage_collection": 0.020824808454045836,
+        "other": 0.006723367967605229
+      },
+      "accounted_seconds": 615.0209269969448,
+      "sec_trial_sum": 1994.4478228738299,
+      "process_cpu_seconds": 959.2977490000005,
+      "trace_callback_seconds": 344.27682300305605,
+      "max_rss_bytes": 1322844160,
+      "root_calls": {
+        "cstar_generation": 4610338,
+        "cstar_expectation": 4283544,
+        "birth_scoring": 181,
+        "engine": 39851,
+        "preparation": 47716554,
+        "retention": 901291,
+        "prediction": 49658,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 32066664,
+        "garbage_collection": 0,
+        "other": 5120
+      }
+    },
+    {
+      "first_trial": 1400,
+      "last_trial": 1499,
+      "trials": 100,
+      "seconds": {
+        "cstar_generation": 40.8643929991249,
+        "cstar_expectation": 68.25785300183907,
+        "birth_scoring": 0.4315730003322642,
+        "engine": 69.18629699839403,
+        "preparation": 493.74579899520495,
+        "retention": 10.106955000118433,
+        "prediction": 4.099694000134605,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 196.0680209991333,
+        "garbage_collection": 99.36256199987838,
+        "other": 16.87405700038562
+      },
+      "fraction": {
+        "cstar_generation": 0.04090541278366583,
+        "cstar_expectation": 0.06832637041315658,
+        "birth_scoring": 0.0004320062144384346,
+        "engine": 0.0692557463842229,
+        "preparation": 0.4942414223192368,
+        "retention": 0.010117100387974275,
+        "prediction": 0.0041038092836914375,
+        "reference_match": 0.0,
+        "nonlearning_tests": 0.0,
+        "writing": 0.1962648345912726,
+        "garbage_collection": 0.09946230239941782,
+        "other": 0.016890995222923318
+      },
+      "accounted_seconds": 998.9972039945455,
+      "sec_trial_sum": 1475.0585526221548,
+      "process_cpu_seconds": 1474.0709429999988,
+      "trace_callback_seconds": 475.07373900545326,
+      "max_rss_bytes": 9512910848,
+      "root_calls": {
+        "cstar_generation": 6205168,
+        "cstar_expectation": 5990488,
+        "birth_scoring": 193,
+        "engine": 57218,
+        "preparation": 66857055,
+        "retention": 1099473,
+        "prediction": 66168,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 43161837,
+        "garbage_collection": 0,
+        "other": 7020
+      }
+    },
+    {
+      "first_trial": 1500,
+      "last_trial": 1599,
+      "trials": 100,
+      "seconds": {
+        "cstar_generation": 45.28189300153008,
+        "cstar_expectation": 76.10640500369118,
+        "birth_scoring": 0.22790100023757986,
+        "engine": 79.80125199947634,
+        "preparation": 542.7806820050419,
+        "retention": 8.963663999151322,
+        "prediction": 4.351161000013235,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 212.79238699806683,
+        "garbage_collection": 119.21226799990473,
+        "other": 19.72619999960625
+      },
+      "fraction": {
+        "cstar_generation": 0.04082230837852397,
+        "cstar_expectation": 0.06861107009233339,
+        "birth_scoring": 0.0002054561833613755,
+        "engine": 0.07194203029464445,
+        "preparation": 0.4893249578140797,
+        "retention": 0.008080878066702386,
+        "prediction": 0.003922637159651101,
+        "reference_match": 0.0,
+        "nonlearning_tests": 0.0,
+        "writing": 0.19183554102616196,
+        "garbage_collection": 0.10747165465522644,
+        "other": 0.017783466329315246
+      },
+      "accounted_seconds": 1109.2438130067194,
+      "sec_trial_sum": 1629.894406041596,
+      "process_cpu_seconds": 1628.8082910000012,
+      "trace_callback_seconds": 519.5644789932821,
+      "max_rss_bytes": 10447257600,
+      "root_calls": {
+        "cstar_generation": 6892832,
+        "cstar_expectation": 6617343,
+        "birth_scoring": 101,
+        "engine": 62100,
+        "preparation": 73082819,
+        "retention": 960176,
+        "prediction": 72274,
+        "reference_match": 0,
+        "nonlearning_tests": 0,
+        "writing": 47154247,
+        "garbage_collection": 0,
+        "other": 7470
+      }
+    }
+  ],
+  "selected_profile": {
+    "self_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 48549,
+        "calls": 162331948,
+        "self_seconds": 612.730331994,
+        "cumulative_seconds": 955.0133410540001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 25862883,
+        "calls": 25862883,
+        "self_seconds": 295.84312238300004,
+        "cumulative_seconds": 881.640259783
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 15,
+        "function": "<genexpr>",
+        "primitive_calls": 166667782,
+        "calls": 166667782,
+        "self_seconds": 238.99245875,
+        "cumulative_seconds": 279.434888885
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "primitive_calls": 624338940,
+        "calls": 625317204,
+        "self_seconds": 210.970037238,
+        "cumulative_seconds": 272.712203575
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 216120,
+        "calls": 47707554,
+        "self_seconds": 169.52154215800005,
+        "cumulative_seconds": 337.32480703500005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 41458477,
+        "calls": 42559327,
+        "self_seconds": 146.350922368,
+        "cumulative_seconds": 268.48605743
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 36,
+        "function": "<genexpr>",
+        "primitive_calls": 44813540,
+        "calls": 44813540,
+        "self_seconds": 124.58399791600002,
+        "cumulative_seconds": 124.77424787
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 39671303,
+        "calls": 39671303,
+        "self_seconds": 118.00641784700001,
+        "cumulative_seconds": 451.297542169
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 32,
+        "function": "slot_signature",
+        "primitive_calls": 15385484,
+        "calls": 15385484,
+        "self_seconds": 115.91774937400001,
+        "cumulative_seconds": 244.75521705100002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 52,
+        "function": "<genexpr>",
+        "primitive_calls": 3293357,
+        "calls": 45158406,
+        "self_seconds": 99.425853349,
+        "cumulative_seconds": 230.14307134700002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 65,
+        "function": "_grow",
+        "primitive_calls": 10826033,
+        "calls": 18366421,
+        "self_seconds": 98.26236390000001,
+        "cumulative_seconds": 244.627142183
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 32766525,
+        "calls": 32766525,
+        "self_seconds": 94.485519569,
+        "cumulative_seconds": 539.8482626800001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 644627,
+        "calls": 644627,
+        "self_seconds": 92.91081821600001,
+        "cumulative_seconds": 1044.215657055
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.fsum>",
+        "primitive_calls": 20487170,
+        "calls": 20487170,
+        "self_seconds": 90.648825247,
+        "cumulative_seconds": 241.370885371
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/probeworld.py",
+        "line": 37,
+        "function": "_snapshot_modules",
+        "primitive_calls": 40190,
+        "calls": 40190,
+        "self_seconds": 85.37927032800002,
+        "cumulative_seconds": 111.749229042
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 223,
+        "function": "restore",
+        "primitive_calls": 80380,
+        "calls": 80380,
+        "self_seconds": 74.68715809199999,
+        "cumulative_seconds": 75.12011405
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 360,
+        "function": "<genexpr>",
+        "primitive_calls": 23586253,
+        "calls": 23586253,
+        "self_seconds": 73.337978573,
+        "cumulative_seconds": 111.190009342
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "primitive_calls": 226941597,
+        "calls": 226941597,
+        "self_seconds": 63.325041009,
+        "cumulative_seconds": 63.410787983999995
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 334,
+        "function": "_consistent",
+        "primitive_calls": 28759061,
+        "calls": 28759061,
+        "self_seconds": 63.11266804100001,
+        "cumulative_seconds": 63.11266804100001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 133,
+        "function": "<genexpr>",
+        "primitive_calls": 28979408,
+        "calls": 28979408,
+        "self_seconds": 62.715373535,
+        "cumulative_seconds": 107.559320444
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 361,
+        "function": "<genexpr>",
+        "primitive_calls": 27902904,
+        "calls": 27902904,
+        "self_seconds": 60.878762741,
+        "cumulative_seconds": 298.702702826
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1278,
+        "function": "fields",
+        "primitive_calls": 5000181,
+        "calls": 5000181,
+        "self_seconds": 58.511581805000006,
+        "cumulative_seconds": 100.42956833000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sum>",
+        "primitive_calls": 5118484,
+        "calls": 5918363,
+        "self_seconds": 57.863923396000004,
+        "cumulative_seconds": 140.64995906000001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 4784984,
+        "calls": 4845961,
+        "self_seconds": 57.637619933,
+        "cumulative_seconds": 299.199125991
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 350,
+        "function": "_add",
+        "primitive_calls": 5313571,
+        "calls": 5313571,
+        "self_seconds": 53.76408638900001,
+        "cumulative_seconds": 93.52217211200002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 445,
+        "function": "_cream",
+        "primitive_calls": 137080,
+        "calls": 137080,
+        "self_seconds": 50.707827640000005,
+        "cumulative_seconds": 210.09739597200002
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1301,
+        "function": "is_dataclass",
+        "primitive_calls": 27733574,
+        "calls": 27733574,
+        "self_seconds": 49.824072466,
+        "cumulative_seconds": 64.53637616
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 154698,
+        "calls": 154698,
+        "self_seconds": 46.422920231,
+        "cumulative_seconds": 390.3065868620001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'compress' of 'zlib.Compress' objects>",
+        "primitive_calls": 64168,
+        "calls": 64168,
+        "self_seconds": 45.712104987000004,
+        "cumulative_seconds": 45.712104987000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 40190,
+        "calls": 40190,
+        "self_seconds": 45.700823939,
+        "cumulative_seconds": 1039.401472009
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 220,
+        "function": "snapshot",
+        "primitive_calls": 80380,
+        "calls": 80380,
+        "self_seconds": 44.987309980999996,
+        "cumulative_seconds": 46.313828994000005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/definition.py",
+        "line": 104,
+        "function": "prob",
+        "primitive_calls": 21428307,
+        "calls": 21428307,
+        "self_seconds": 44.112699021000005,
+        "cumulative_seconds": 62.152740377
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 2129204,
+        "calls": 16863984,
+        "self_seconds": 43.03218690400001,
+        "cumulative_seconds": 333.73296004400004
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+        "line": 205,
+        "function": "iterencode",
+        "primitive_calls": 3909745,
+        "calls": 3909745,
+        "self_seconds": 42.203933023000005,
+        "cumulative_seconds": 42.206700015
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.isfinite>",
+        "primitive_calls": 162186059,
+        "calls": 162186059,
+        "self_seconds": 40.611256087,
+        "cumulative_seconds": 40.611256087
+      },
+      {
+        "file": "<frozen abc>",
+        "line": 117,
+        "function": "__instancecheck__",
+        "primitive_calls": 26565667,
+        "calls": 26565667,
+        "self_seconds": 40.161418526000006,
+        "cumulative_seconds": 57.40528247300001
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1293,
+        "function": "<genexpr>",
+        "primitive_calls": 30878685,
+        "calls": 30878685,
+        "self_seconds": 39.08714091900001,
+        "cumulative_seconds": 39.108747899
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 356,
+        "function": "_order_pool",
+        "primitive_calls": 1942190,
+        "calls": 1942190,
+        "self_seconds": 38.873863453000006,
+        "cumulative_seconds": 167.284252564
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 336,
+        "function": "_same_order",
+        "primitive_calls": 33172480,
+        "calls": 33172480,
+        "self_seconds": 37.919148782,
+        "cumulative_seconds": 37.919148782
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 83,
+        "function": "_distribution",
+        "primitive_calls": 1291332,
+        "calls": 1291332,
+        "self_seconds": 35.171288088,
+        "cumulative_seconds": 213.55469346300004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 446,
+        "function": "<genexpr>",
+        "primitive_calls": 29807185,
+        "calls": 29807185,
+        "self_seconds": 35.035175125,
+        "cumulative_seconds": 35.037455124000005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 471,
+        "function": "_roots",
+        "primitive_calls": 1435240,
+        "calls": 1435240,
+        "self_seconds": 33.240971902000005,
+        "cumulative_seconds": 60.76812477000001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 40,
+        "function": "_weights",
+        "primitive_calls": 1299977,
+        "calls": 1299977,
+        "self_seconds": 32.211426501000005,
+        "cumulative_seconds": 95.82905993899999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 22,
+        "function": "<lambda>",
+        "primitive_calls": 23159039,
+        "calls": 23159039,
+        "self_seconds": 30.572190882,
+        "cumulative_seconds": 30.572190882
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 645459,
+        "calls": 645459,
+        "self_seconds": 29.859082841000003,
+        "cumulative_seconds": 396.69296726100004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 21,
+        "function": "<genexpr>",
+        "primitive_calls": 24259889,
+        "calls": 24259889,
+        "self_seconds": 29.707959137000003,
+        "cumulative_seconds": 29.708870138
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 25281411,
+        "calls": 25281411,
+        "self_seconds": 28.270207385999996,
+        "cumulative_seconds": 47.305911342
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 105,
+        "function": "_probability",
+        "primitive_calls": 19584402,
+        "calls": 19584402,
+        "self_seconds": 27.693184788000003,
+        "cumulative_seconds": 46.320096169
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "primitive_calls": 2399005,
+        "calls": 4915341,
+        "self_seconds": 27.471053831000003,
+        "cumulative_seconds": 116.24935814
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 101243599,
+        "calls": 101243599,
+        "self_seconds": 26.547717350000003,
+        "cumulative_seconds": 26.547717350000003
+      }
+    ],
+    "cumulative_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 176,
+        "function": "map_graphs",
+        "primitive_calls": 40691,
+        "calls": 40691,
+        "self_seconds": 5.196886348,
+        "cumulative_seconds": 3750.306005933
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/routelog.py",
+        "line": 85,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.08010299400000001,
+        "cumulative_seconds": 2582.737791005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 144,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.008826994000000001,
+        "cumulative_seconds": 2566.0568319940003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 183,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.008739997,
+        "cumulative_seconds": 2566.0444160020006
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/argorder.py",
+        "line": 60,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.006778994000000001,
+        "cumulative_seconds": 2565.355694005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/relearninit.py",
+        "line": 32,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.002611008,
+        "cumulative_seconds": 2565.348915011
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 579,
+        "function": "m1",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.014975997000000001,
+        "cumulative_seconds": 2565.346304003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 443,
+        "function": "choose_and_register",
+        "primitive_calls": 499,
+        "calls": 499,
+        "self_seconds": 0.35363307800000005,
+        "cumulative_seconds": 2565.3284779960004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 106,
+        "function": "predict",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.06985097600000001,
+        "cumulative_seconds": 1966.1466609980002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 32,
+        "function": "distributions",
+        "primitive_calls": 644627,
+        "calls": 644627,
+        "self_seconds": 2.208519929,
+        "cumulative_seconds": 1640.257277021
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 60,
+        "function": "seat_distributions",
+        "primitive_calls": 644627,
+        "calls": 644627,
+        "self_seconds": 5.2623466290000005,
+        "cumulative_seconds": 1637.842698963
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 168,
+        "function": "predict",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.005539009000000001,
+        "cumulative_seconds": 1471.605084002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 165,
+        "function": "predict",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.006899997,
+        "cumulative_seconds": 1471.598970001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 550,
+        "function": "predict_logp",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.002962999,
+        "cumulative_seconds": 1471.5590180010001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 1118,
+        "function": "predict_wrapped",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.015123001000000002,
+        "cumulative_seconds": 1471.556055002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 593,
+        "function": "predict",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 2.6747100360000005,
+        "cumulative_seconds": 1471.5409320009999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 37,
+        "function": "probabilities_for_graph",
+        "primitive_calls": 38209,
+        "calls": 38209,
+        "self_seconds": 2.779807667,
+        "cumulative_seconds": 1413.421863988
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 177,
+        "function": "rewrite",
+        "primitive_calls": 11579,
+        "calls": 11579,
+        "self_seconds": 0.156961964,
+        "cumulative_seconds": 1279.916970019
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 378,
+        "function": "rewrite",
+        "primitive_calls": 11579,
+        "calls": 11579,
+        "self_seconds": 13.524358092,
+        "cumulative_seconds": 1279.4883750160002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 31,
+        "function": "match",
+        "primitive_calls": 37708,
+        "calls": 37708,
+        "self_seconds": 1.165455896,
+        "cumulative_seconds": 1263.4033859750002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 50,
+        "function": "m1",
+        "primitive_calls": 12078,
+        "calls": 12078,
+        "self_seconds": 2.108498987,
+        "cumulative_seconds": 1260.694205985
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/abstraction.py",
+        "line": 58,
+        "function": "m1",
+        "primitive_calls": 12078,
+        "calls": 12078,
+        "self_seconds": 1.5654940240000002,
+        "cumulative_seconds": 1253.718876997
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 54,
+        "function": "capture",
+        "primitive_calls": 12078,
+        "calls": 12078,
+        "self_seconds": 12.641838948000002,
+        "cumulative_seconds": 1241.294856978
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 327,
+        "function": "hypo_m1",
+        "primitive_calls": 11579,
+        "calls": 11579,
+        "self_seconds": 0.17287502100000002,
+        "cumulative_seconds": 1239.876218998
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/strictpc.py",
+        "line": 368,
+        "function": "map_v39",
+        "primitive_calls": 13063,
+        "calls": 13063,
+        "self_seconds": 0.055406010000000006,
+        "cumulative_seconds": 1163.7751379860001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 345,
+        "function": "map_v39",
+        "primitive_calls": 13063,
+        "calls": 13063,
+        "self_seconds": 14.033953978000001,
+        "cumulative_seconds": 1163.719731976
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeintern.py",
+        "line": 61,
+        "function": "run",
+        "primitive_calls": 40190,
+        "calls": 40190,
+        "self_seconds": 0.38831002700000006,
+        "cumulative_seconds": 1142.520929983
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 154,
+        "function": "run",
+        "primitive_calls": 37708,
+        "calls": 37708,
+        "self_seconds": 3.592725807,
+        "cumulative_seconds": 1119.7841440720001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 94,
+        "function": "select_definition",
+        "primitive_calls": 498,
+        "calls": 498,
+        "self_seconds": 0.360134077,
+        "cumulative_seconds": 1116.902007996
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 345,
+        "function": "select_definition",
+        "primitive_calls": 498,
+        "calls": 498,
+        "self_seconds": 0.380736049,
+        "cumulative_seconds": 1115.0152440010002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 98,
+        "function": "map_v39",
+        "primitive_calls": 11080,
+        "calls": 11080,
+        "self_seconds": 0.043768982000000005,
+        "cumulative_seconds": 1095.894621971
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 644627,
+        "calls": 644627,
+        "self_seconds": 92.91081821600001,
+        "cumulative_seconds": 1044.215657055
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 40190,
+        "calls": 40190,
+        "self_seconds": 45.700823939,
+        "cumulative_seconds": 1039.401472009
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 48549,
+        "calls": 162331948,
+        "self_seconds": 612.730331994,
+        "cumulative_seconds": 955.0133410540001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 25862883,
+        "calls": 25862883,
+        "self_seconds": 295.84312238300004,
+        "cumulative_seconds": 881.640259783
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 32766525,
+        "calls": 32766525,
+        "self_seconds": 94.485519569,
+        "cumulative_seconds": 539.8482626800001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 13,
+        "function": "checked_distribution",
+        "primitive_calls": 5146637,
+        "calls": 5146637,
+        "self_seconds": 15.469219537000003,
+        "cumulative_seconds": 538.402392122
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 39671303,
+        "calls": 39671303,
+        "self_seconds": 118.00641784700001,
+        "cumulative_seconds": 451.297542169
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 645459,
+        "calls": 645459,
+        "self_seconds": 29.859082841000003,
+        "cumulative_seconds": 396.69296726100004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 154698,
+        "calls": 154698,
+        "self_seconds": 46.422920231,
+        "cumulative_seconds": 390.3065868620001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 66,
+        "function": "__post_init__",
+        "primitive_calls": 43224,
+        "calls": 43224,
+        "self_seconds": 0.598361011,
+        "cumulative_seconds": 338.41792501900005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 216120,
+        "calls": 47707554,
+        "self_seconds": 169.52154215800005,
+        "cumulative_seconds": 337.32480703500005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 2129204,
+        "calls": 16863984,
+        "self_seconds": 43.03218690400001,
+        "cumulative_seconds": 333.73296004400004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 4784984,
+        "calls": 4845961,
+        "self_seconds": 57.637619933,
+        "cumulative_seconds": 299.199125991
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 361,
+        "function": "<genexpr>",
+        "primitive_calls": 27902904,
+        "calls": 27902904,
+        "self_seconds": 60.878762741,
+        "cumulative_seconds": 298.702702826
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 129,
+        "function": "ledger_record",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.033756984000000004,
+        "cumulative_seconds": 295.073824992
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 15,
+        "function": "<genexpr>",
+        "primitive_calls": 166667782,
+        "calls": 166667782,
+        "self_seconds": 238.99245875,
+        "cumulative_seconds": 279.434888885
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 134,
+        "function": "agent_input",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 0.29632200100000006,
+        "cumulative_seconds": 274.649998004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 79,
+        "function": "enter",
+        "primitive_calls": 500,
+        "calls": 500,
+        "self_seconds": 1.639747039,
+        "cumulative_seconds": 274.317158005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 99,
+        "function": "agent_input",
+        "primitive_calls": 498,
+        "calls": 498,
+        "self_seconds": 0.0028580009999999998,
+        "cumulative_seconds": 273.955758005
+      }
+    ],
+    "total_self_seconds": 5227.304111493001,
+    "matching_pipeline_callers": [
+      {
+        "caller": "histrole:capture",
+        "calls": 12078,
+        "cumulative_cpu_seconds": 1228.635233015,
+        "fraction_of_profiled_pipeline": 0.32760932869778997
+      },
+      {
+        "caller": "v39:map_v39",
+        "calls": 13063,
+        "cumulative_cpu_seconds": 1145.5235109609998,
+        "fraction_of_profiled_pipeline": 0.30544801121529197
+      },
+      {
+        "caller": "v39:predict",
+        "calls": 3472,
+        "cumulative_cpu_seconds": 305.110562999,
+        "fraction_of_profiled_pipeline": 0.08135617800689166
+      },
+      {
+        "caller": "v310be:rewrite",
+        "calls": 11579,
+        "cumulative_cpu_seconds": 1055.46784195,
+        "fraction_of_profiled_pipeline": 0.28143512563514694
+      },
+      {
+        "caller": "routelog:_sources",
+        "calls": 499,
+        "cumulative_cpu_seconds": 15.568857008000002,
+        "fraction_of_profiled_pipeline": 0.004151356444879432
+      }
+    ],
+    "note": "自身の秒は重ならない。累積秒は入れ子で重なる。cProfileの累積秒には同時に動くtraceの負荷も含まれるため、callbackを除いた区分別CPU秒とは混ぜない。呼び出し元の割合はsmeshared.map_graphs内だけを分母にする。"
+  },
+  "early_profile": {
+    "self_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 23344,
+        "calls": 72119472,
+        "self_seconds": 271.061849068,
+        "cumulative_seconds": 420.751965993
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 12220108,
+        "calls": 12220108,
+        "self_seconds": 134.15945107800002,
+        "cumulative_seconds": 368.310760096
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 15,
+        "function": "<genexpr>",
+        "primitive_calls": 75000343,
+        "calls": 75000343,
+        "self_seconds": 107.527399016,
+        "cumulative_seconds": 125.68814910900001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "primitive_calls": 274780499,
+        "calls": 275257001,
+        "self_seconds": 92.06796159500001,
+        "cumulative_seconds": 119.01693166300001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 101425,
+        "calls": 19674414,
+        "self_seconds": 69.37729444600001,
+        "cumulative_seconds": 137.97024607400002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 17952109,
+        "calls": 18473003,
+        "self_seconds": 60.67392495600001,
+        "cumulative_seconds": 108.717505478
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 18518638,
+        "calls": 18518638,
+        "self_seconds": 55.778056615,
+        "cumulative_seconds": 177.68960475900002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 32,
+        "function": "slot_signature",
+        "primitive_calls": 7589743,
+        "calls": 7589743,
+        "self_seconds": 48.467411602000006,
+        "cumulative_seconds": 79.23595311700001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 15199876,
+        "calls": 15199876,
+        "self_seconds": 43.912632177000006,
+        "cumulative_seconds": 218.311989884
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 301445,
+        "calls": 301445,
+        "self_seconds": 43.06908060400001,
+        "cumulative_seconds": 450.27140597100004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 65,
+        "function": "_grow",
+        "primitive_calls": 5121891,
+        "calls": 8236482,
+        "self_seconds": 41.876783428,
+        "cumulative_seconds": 97.49194286
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 52,
+        "function": "<genexpr>",
+        "primitive_calls": 1422020,
+        "calls": 18527703,
+        "self_seconds": 40.30633112,
+        "cumulative_seconds": 93.300846651
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.fsum>",
+        "primitive_calls": 8481988,
+        "calls": 8481988,
+        "self_seconds": 36.573632715,
+        "cumulative_seconds": 97.16410112700001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 360,
+        "function": "<genexpr>",
+        "primitive_calls": 10816401,
+        "calls": 10816401,
+        "self_seconds": 33.997859447,
+        "cumulative_seconds": 51.652430214000006
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 361,
+        "function": "<genexpr>",
+        "primitive_calls": 13638059,
+        "calls": 13638059,
+        "self_seconds": 29.382001892,
+        "cumulative_seconds": 105.41084390400002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "primitive_calls": 103931082,
+        "calls": 103931082,
+        "self_seconds": 28.827082073,
+        "cumulative_seconds": 28.867637072
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 36,
+        "function": "<genexpr>",
+        "primitive_calls": 22099596,
+        "calls": 22099596,
+        "self_seconds": 28.705857322000004,
+        "cumulative_seconds": 28.775047301
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sum>",
+        "primitive_calls": 2448998,
+        "calls": 2852377,
+        "self_seconds": 27.400976288000003,
+        "cumulative_seconds": 67.015258957
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/probeworld.py",
+        "line": 37,
+        "function": "_snapshot_modules",
+        "primitive_calls": 18562,
+        "calls": 18562,
+        "self_seconds": 25.714877397000002,
+        "cumulative_seconds": 37.827294034000005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 334,
+        "function": "_consistent",
+        "primitive_calls": 11407954,
+        "calls": 11407954,
+        "self_seconds": 25.470544460000003,
+        "cumulative_seconds": 25.470544460000003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 133,
+        "function": "<genexpr>",
+        "primitive_calls": 11746525,
+        "calls": 11746525,
+        "self_seconds": 25.089637167000003,
+        "cumulative_seconds": 42.430750707
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1278,
+        "function": "fields",
+        "primitive_calls": 2215100,
+        "calls": 2215100,
+        "self_seconds": 24.813380989000002,
+        "cumulative_seconds": 42.635264924000005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 1977030,
+        "calls": 2002349,
+        "self_seconds": 22.599349733000004,
+        "cumulative_seconds": 117.39167017900002
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1301,
+        "function": "is_dataclass",
+        "primitive_calls": 12117719,
+        "calls": 12117719,
+        "self_seconds": 21.959556879000004,
+        "cumulative_seconds": 28.393900418
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'compress' of 'zlib.Compress' objects>",
+        "primitive_calls": 27082,
+        "calls": 27082,
+        "self_seconds": 20.619238962,
+        "cumulative_seconds": 20.619238962
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/definition.py",
+        "line": 104,
+        "function": "prob",
+        "primitive_calls": 9803626,
+        "calls": 9803626,
+        "self_seconds": 20.142662396000002,
+        "cumulative_seconds": 28.277501812
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 18562,
+        "calls": 18562,
+        "self_seconds": 19.956621165,
+        "cumulative_seconds": 410.597085976
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 445,
+        "function": "_cream",
+        "primitive_calls": 57798,
+        "calls": 57798,
+        "self_seconds": 19.848693111,
+        "cumulative_seconds": 82.328107007
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 350,
+        "function": "_add",
+        "primitive_calls": 2203141,
+        "calls": 2203141,
+        "self_seconds": 18.580831283000002,
+        "cumulative_seconds": 33.587988815
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.isfinite>",
+        "primitive_calls": 72908397,
+        "calls": 72908397,
+        "self_seconds": 18.240519076,
+        "cumulative_seconds": 18.240519076
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+        "line": 205,
+        "function": "iterencode",
+        "primitive_calls": 1575261,
+        "calls": 1575261,
+        "self_seconds": 18.154964138,
+        "cumulative_seconds": 18.155895134
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 356,
+        "function": "_order_pool",
+        "primitive_calls": 909313,
+        "calls": 909313,
+        "self_seconds": 17.906182652,
+        "cumulative_seconds": 77.59663175
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 993487,
+        "calls": 7076745,
+        "self_seconds": 17.862568735,
+        "cumulative_seconds": 136.302339846
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 336,
+        "function": "_same_order",
+        "primitive_calls": 15462948,
+        "calls": 15462948,
+        "self_seconds": 17.690066745,
+        "cumulative_seconds": 17.690066745
+      },
+      {
+        "file": "<frozen abc>",
+        "line": 117,
+        "function": "__instancecheck__",
+        "primitive_calls": 11651863,
+        "calls": 11651863,
+        "self_seconds": 17.419754154000003,
+        "cumulative_seconds": 24.801652134
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1293,
+        "function": "<genexpr>",
+        "primitive_calls": 13512798,
+        "calls": 13512798,
+        "self_seconds": 16.561915904000003,
+        "cumulative_seconds": 16.577685879
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 65033,
+        "calls": 65033,
+        "self_seconds": 16.095040371000003,
+        "cumulative_seconds": 152.422247937
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 83,
+        "function": "_distribution",
+        "primitive_calls": 603944,
+        "calls": 603944,
+        "self_seconds": 16.051045267,
+        "cumulative_seconds": 97.386966591
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 40,
+        "function": "_weights",
+        "primitive_calls": 609006,
+        "calls": 609006,
+        "self_seconds": 14.752217069,
+        "cumulative_seconds": 43.80403401
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 446,
+        "function": "<genexpr>",
+        "primitive_calls": 11835472,
+        "calls": 11835472,
+        "self_seconds": 13.907237855,
+        "cumulative_seconds": 13.908169856
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 301983,
+        "calls": 301983,
+        "self_seconds": 13.624912346000002,
+        "cumulative_seconds": 180.698742192
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 46944604,
+        "calls": 46944604,
+        "self_seconds": 12.283521879,
+        "cumulative_seconds": 12.283521879
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 94,
+        "function": "<genexpr>",
+        "primitive_calls": 10249727,
+        "calls": 10249727,
+        "self_seconds": 11.880942084,
+        "cumulative_seconds": 11.880942084
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 97,
+        "function": "<genexpr>",
+        "primitive_calls": 10098064,
+        "calls": 10098064,
+        "self_seconds": 11.734603298,
+        "cumulative_seconds": 11.734603298
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 11092789,
+        "calls": 11092789,
+        "self_seconds": 11.701120719,
+        "cumulative_seconds": 19.386930109
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 21,
+        "function": "<genexpr>",
+        "primitive_calls": 9649874,
+        "calls": 9649874,
+        "self_seconds": 11.531444852,
+        "cumulative_seconds": 11.531856856000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.max>",
+        "primitive_calls": 14405884,
+        "calls": 14753023,
+        "self_seconds": 11.371735802,
+        "cumulative_seconds": 25.856598616
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 105,
+        "function": "_probability",
+        "primitive_calls": 8000544,
+        "calls": 8000544,
+        "self_seconds": 10.973850381,
+        "cumulative_seconds": 17.94372869
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "primitive_calls": 1045452,
+        "calls": 1992432,
+        "self_seconds": 10.80273936,
+        "cumulative_seconds": 44.14645826
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 22,
+        "function": "<lambda>",
+        "primitive_calls": 9128980,
+        "calls": 9128980,
+        "self_seconds": 10.704048735,
+        "cumulative_seconds": 10.704048735
+      }
+    ],
+    "cumulative_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 176,
+        "function": "map_graphs",
+        "primitive_calls": 18863,
+        "calls": 18863,
+        "self_seconds": 1.7437330610000004,
+        "cumulative_seconds": 1504.152286939
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/routelog.py",
+        "line": 85,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.047156013000000004,
+        "cumulative_seconds": 995.1106940040002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 144,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.005354993000000001,
+        "cumulative_seconds": 987.7127829940001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 183,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.005114004,
+        "cumulative_seconds": 987.705421001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/argorder.py",
+        "line": 60,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.003923994,
+        "cumulative_seconds": 987.295520002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/relearninit.py",
+        "line": 32,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.0015080040000000003,
+        "cumulative_seconds": 987.2915960079999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 579,
+        "function": "m1",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.007198007000000001,
+        "cumulative_seconds": 987.2900880040002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 443,
+        "function": "choose_and_register",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.129363056,
+        "cumulative_seconds": 987.2811749950001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 106,
+        "function": "predict",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.033750986000000004,
+        "cumulative_seconds": 851.840333998
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 32,
+        "function": "distributions",
+        "primitive_calls": 301445,
+        "calls": 301445,
+        "self_seconds": 1.016942132,
+        "cumulative_seconds": 722.111273058
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 60,
+        "function": "seat_distributions",
+        "primitive_calls": 301445,
+        "calls": 301445,
+        "self_seconds": 2.408213787,
+        "cumulative_seconds": 720.9988798900001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 37,
+        "function": "probabilities_for_graph",
+        "primitive_calls": 17474,
+        "calls": 17474,
+        "self_seconds": 1.2772039080000002,
+        "cumulative_seconds": 626.973259031
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 168,
+        "function": "predict",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.003060001,
+        "cumulative_seconds": 624.107938999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 165,
+        "function": "predict",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.004047999,
+        "cumulative_seconds": 624.10455
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 550,
+        "function": "predict_logp",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.001736003,
+        "cumulative_seconds": 624.0812390030001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 1118,
+        "function": "predict_wrapped",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.008838996000000002,
+        "cumulative_seconds": 624.079503
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 593,
+        "function": "predict",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.12360003700000001,
+        "cumulative_seconds": 624.070664004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 31,
+        "function": "match",
+        "primitive_calls": 17173,
+        "calls": 17173,
+        "self_seconds": 0.468738986,
+        "cumulative_seconds": 494.130161997
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 50,
+        "function": "m1",
+        "primitive_calls": 5433,
+        "calls": 5433,
+        "self_seconds": 0.9333650980000001,
+        "cumulative_seconds": 488.688956007
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/abstraction.py",
+        "line": 58,
+        "function": "m1",
+        "primitive_calls": 5433,
+        "calls": 5433,
+        "self_seconds": 0.660226034,
+        "cumulative_seconds": 485.580571
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 177,
+        "function": "rewrite",
+        "primitive_calls": 5134,
+        "calls": 5134,
+        "self_seconds": 0.06296399,
+        "cumulative_seconds": 485.56843201000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 378,
+        "function": "rewrite",
+        "primitive_calls": 5134,
+        "calls": 5134,
+        "self_seconds": 0.817779947,
+        "cumulative_seconds": 485.391776003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 54,
+        "function": "capture",
+        "primitive_calls": 5433,
+        "calls": 5433,
+        "self_seconds": 0.342891987,
+        "cumulative_seconds": 480.23599399200003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 327,
+        "function": "hypo_m1",
+        "primitive_calls": 5134,
+        "calls": 5134,
+        "self_seconds": 0.068553995,
+        "cumulative_seconds": 476.91129599900006
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 301445,
+        "calls": 301445,
+        "self_seconds": 43.06908060400001,
+        "cumulative_seconds": 450.27140597100004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeintern.py",
+        "line": 61,
+        "function": "run",
+        "primitive_calls": 18562,
+        "calls": 18562,
+        "self_seconds": 0.16069401800000002,
+        "cumulative_seconds": 449.0452329980001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/strictpc.py",
+        "line": 368,
+        "function": "map_v39",
+        "primitive_calls": 5925,
+        "calls": 5925,
+        "self_seconds": 0.021522999,
+        "cumulative_seconds": 444.966917984
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 345,
+        "function": "map_v39",
+        "primitive_calls": 5925,
+        "calls": 5925,
+        "self_seconds": 0.421716991,
+        "cumulative_seconds": 444.945394985
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 154,
+        "function": "run",
+        "primitive_calls": 17173,
+        "calls": 17173,
+        "self_seconds": 1.4487920280000002,
+        "cumulative_seconds": 436.36456501600003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 94,
+        "function": "select_definition",
+        "primitive_calls": 298,
+        "calls": 298,
+        "self_seconds": 0.164381053,
+        "cumulative_seconds": 424.695768996
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 345,
+        "function": "select_definition",
+        "primitive_calls": 298,
+        "calls": 298,
+        "self_seconds": 0.154378058,
+        "cumulative_seconds": 423.81714000200003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 23344,
+        "calls": 72119472,
+        "self_seconds": 271.061849068,
+        "cumulative_seconds": 420.751965993
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 98,
+        "function": "map_v39",
+        "primitive_calls": 4835,
+        "calls": 4835,
+        "self_seconds": 0.016487005,
+        "cumulative_seconds": 413.97189898600004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 18562,
+        "calls": 18562,
+        "self_seconds": 19.956621165,
+        "cumulative_seconds": 410.597085976
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 12220108,
+        "calls": 12220108,
+        "self_seconds": 134.15945107800002,
+        "cumulative_seconds": 368.310760096
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 13,
+        "function": "checked_distribution",
+        "primitive_calls": 2405600,
+        "calls": 2405600,
+        "self_seconds": 7.171837850000001,
+        "cumulative_seconds": 242.516506213
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 15199876,
+        "calls": 15199876,
+        "self_seconds": 43.912632177000006,
+        "cumulative_seconds": 218.311989884
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 301983,
+        "calls": 301983,
+        "self_seconds": 13.624912346000002,
+        "cumulative_seconds": 180.698742192
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 18518638,
+        "calls": 18518638,
+        "self_seconds": 55.778056615,
+        "cumulative_seconds": 177.68960475900002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 65033,
+        "calls": 65033,
+        "self_seconds": 16.095040371000003,
+        "cumulative_seconds": 152.422247937
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 66,
+        "function": "__post_init__",
+        "primitive_calls": 20285,
+        "calls": 20285,
+        "self_seconds": 0.272994968,
+        "cumulative_seconds": 138.46689999800003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 101425,
+        "calls": 19674414,
+        "self_seconds": 69.37729444600001,
+        "cumulative_seconds": 137.97024607400002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 129,
+        "function": "ledger_record",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.014949995,
+        "cumulative_seconds": 136.601936996
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 993487,
+        "calls": 7076745,
+        "self_seconds": 17.862568735,
+        "cumulative_seconds": 136.302339846
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 15,
+        "function": "<genexpr>",
+        "primitive_calls": 75000343,
+        "calls": 75000343,
+        "self_seconds": 107.527399016,
+        "cumulative_seconds": 125.68814910900001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "primitive_calls": 274780499,
+        "calls": 275257001,
+        "self_seconds": 92.06796159500001,
+        "cumulative_seconds": 119.01693166300001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 1977030,
+        "calls": 2002349,
+        "self_seconds": 22.599349733000004,
+        "cumulative_seconds": 117.39167017900002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 99,
+        "function": "agent_input",
+        "primitive_calls": 299,
+        "calls": 299,
+        "self_seconds": 0.0016749980000000002,
+        "cumulative_seconds": 109.33169900000001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 134,
+        "function": "agent_input",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.115281002,
+        "cumulative_seconds": 109.33013900200001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 79,
+        "function": "enter",
+        "primitive_calls": 300,
+        "calls": 300,
+        "self_seconds": 0.691683143,
+        "cumulative_seconds": 109.193113004
+      }
+    ],
+    "total_self_seconds": 2147.5749787160003,
+    "matching_pipeline_callers": [
+      {
+        "caller": "histrole:capture",
+        "calls": 5433,
+        "cumulative_cpu_seconds": 479.88875501200005,
+        "fraction_of_profiled_pipeline": 0.3190426655459133
+      },
+      {
+        "caller": "v39:map_v39",
+        "calls": 5925,
+        "cumulative_cpu_seconds": 442.694911972,
+        "fraction_of_profiled_pipeline": 0.29431522048402353
+      },
+      {
+        "caller": "v39:predict",
+        "calls": 2072,
+        "cumulative_cpu_seconds": 171.844357996,
+        "fraction_of_profiled_pipeline": 0.114246648752374
+      },
+      {
+        "caller": "v310be:rewrite",
+        "calls": 5134,
+        "cumulative_cpu_seconds": 402.76780795900004,
+        "fraction_of_profiled_pipeline": 0.2677706316417242
+      },
+      {
+        "caller": "routelog:_sources",
+        "calls": 299,
+        "cumulative_cpu_seconds": 6.956454000000001,
+        "fraction_of_profiled_pipeline": 0.0046248335759649815
+      }
+    ],
+    "note": "自身の秒は重ならない。累積秒は入れ子で重なる。cProfileの累積秒には同時に動くtraceの負荷も含まれるため、callbackを除いた区分別CPU秒とは混ぜない。呼び出し元の割合はsmeshared.map_graphs内だけを分母にする。"
+  },
+  "late_profile": {
+    "self_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 25205,
+        "calls": 90212476,
+        "self_seconds": 341.668482926,
+        "cumulative_seconds": 534.2613750610001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 13642775,
+        "calls": 13642775,
+        "self_seconds": 161.68367130500002,
+        "cumulative_seconds": 513.3294996870001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 15,
+        "function": "<genexpr>",
+        "primitive_calls": 91667439,
+        "calls": 91667439,
+        "self_seconds": 131.46505973400002,
+        "cumulative_seconds": 153.74673977600003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "primitive_calls": 349558441,
+        "calls": 350060203,
+        "self_seconds": 118.90207564300002,
+        "cumulative_seconds": 153.695271912
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 114695,
+        "calls": 28033140,
+        "self_seconds": 100.14424771200001,
+        "cumulative_seconds": 199.354560961
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 36,
+        "function": "<genexpr>",
+        "primitive_calls": 22713944,
+        "calls": 22713944,
+        "self_seconds": 95.878140594,
+        "cumulative_seconds": 95.99920056900001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 23506368,
+        "calls": 24086324,
+        "self_seconds": 85.676997412,
+        "cumulative_seconds": 159.768551952
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 223,
+        "function": "restore",
+        "primitive_calls": 43256,
+        "calls": 43256,
+        "self_seconds": 72.956895993,
+        "cumulative_seconds": 73.21791398600001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 32,
+        "function": "slot_signature",
+        "primitive_calls": 7795741,
+        "calls": 7795741,
+        "self_seconds": 67.45033777200001,
+        "cumulative_seconds": 165.519263934
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 21152665,
+        "calls": 21152665,
+        "self_seconds": 62.228361232,
+        "cumulative_seconds": 273.60793741000003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/probeworld.py",
+        "line": 37,
+        "function": "_snapshot_modules",
+        "primitive_calls": 21628,
+        "calls": 21628,
+        "self_seconds": 59.66439293100001,
+        "cumulative_seconds": 73.92193500799999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 52,
+        "function": "<genexpr>",
+        "primitive_calls": 1871337,
+        "calls": 26630703,
+        "self_seconds": 59.119522229000005,
+        "cumulative_seconds": 136.84222469600002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 65,
+        "function": "_grow",
+        "primitive_calls": 5704142,
+        "calls": 10129939,
+        "self_seconds": 56.385580472,
+        "cumulative_seconds": 147.135199323
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.fsum>",
+        "primitive_calls": 12005182,
+        "calls": 12005182,
+        "self_seconds": 54.075192532,
+        "cumulative_seconds": 144.206784244
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 17566649,
+        "calls": 17566649,
+        "self_seconds": 50.572887392000005,
+        "cumulative_seconds": 321.53627279600005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 343182,
+        "calls": 343182,
+        "self_seconds": 49.841737612,
+        "cumulative_seconds": 593.9442510840001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 220,
+        "function": "snapshot",
+        "primitive_calls": 43256,
+        "calls": 43256,
+        "self_seconds": 43.533022984,
+        "cumulative_seconds": 44.331851972
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 360,
+        "function": "<genexpr>",
+        "primitive_calls": 12769852,
+        "calls": 12769852,
+        "self_seconds": 39.340119126000005,
+        "cumulative_seconds": 59.537579128000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 334,
+        "function": "_consistent",
+        "primitive_calls": 17351107,
+        "calls": 17351107,
+        "self_seconds": 37.64212358100001,
+        "cumulative_seconds": 37.64212358100001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 133,
+        "function": "<genexpr>",
+        "primitive_calls": 17232883,
+        "calls": 17232883,
+        "self_seconds": 37.625736368000005,
+        "cumulative_seconds": 65.128569737
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 350,
+        "function": "_add",
+        "primitive_calls": 3110430,
+        "calls": 3110430,
+        "self_seconds": 35.183255106000004,
+        "cumulative_seconds": 59.934183297000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 2807954,
+        "calls": 2843612,
+        "self_seconds": 35.0382702,
+        "cumulative_seconds": 181.807455812
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "primitive_calls": 123010515,
+        "calls": 123010515,
+        "self_seconds": 34.497958936,
+        "cumulative_seconds": 34.543150912
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1278,
+        "function": "fields",
+        "primitive_calls": 2785081,
+        "calls": 2785081,
+        "self_seconds": 33.698200816,
+        "cumulative_seconds": 57.794303406000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 361,
+        "function": "<genexpr>",
+        "primitive_calls": 14264845,
+        "calls": 14264845,
+        "self_seconds": 31.496760849,
+        "cumulative_seconds": 193.29185892200002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 445,
+        "function": "_cream",
+        "primitive_calls": 79282,
+        "calls": 79282,
+        "self_seconds": 30.859134529000002,
+        "cumulative_seconds": 127.769288965
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sum>",
+        "primitive_calls": 2669486,
+        "calls": 3065986,
+        "self_seconds": 30.462947108,
+        "cumulative_seconds": 73.634700103
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 89665,
+        "calls": 89665,
+        "self_seconds": 30.327879860000003,
+        "cumulative_seconds": 237.884338925
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1301,
+        "function": "is_dataclass",
+        "primitive_calls": 15615855,
+        "calls": 15615855,
+        "self_seconds": 27.864515587,
+        "cumulative_seconds": 36.142475742
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 21628,
+        "calls": 21628,
+        "self_seconds": 25.744202774,
+        "cumulative_seconds": 628.804386033
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 1135717,
+        "calls": 9787239,
+        "self_seconds": 25.169618169000003,
+        "cumulative_seconds": 197.430620198
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'compress' of 'zlib.Compress' objects>",
+        "primitive_calls": 37086,
+        "calls": 37086,
+        "self_seconds": 25.092866025000003,
+        "cumulative_seconds": 25.092866025000003
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py",
+        "line": 205,
+        "function": "iterencode",
+        "primitive_calls": 2334484,
+        "calls": 2334484,
+        "self_seconds": 24.048968885,
+        "cumulative_seconds": 24.050804881000005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/definition.py",
+        "line": 104,
+        "function": "prob",
+        "primitive_calls": 11624681,
+        "calls": 11624681,
+        "self_seconds": 23.970036625000002,
+        "cumulative_seconds": 33.875238565000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 471,
+        "function": "_roots",
+        "primitive_calls": 881563,
+        "calls": 881563,
+        "self_seconds": 23.954209755,
+        "cumulative_seconds": 41.402422200000004
+      },
+      {
+        "file": "<frozen abc>",
+        "line": 117,
+        "function": "__instancecheck__",
+        "primitive_calls": 14913804,
+        "calls": 14913804,
+        "self_seconds": 22.741664372000002,
+        "cumulative_seconds": 32.603630339000006
+      },
+      {
+        "file": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/dataclasses.py",
+        "line": 1293,
+        "function": "<genexpr>",
+        "primitive_calls": 17365887,
+        "calls": 17365887,
+        "self_seconds": 22.525225015,
+        "cumulative_seconds": 22.53106202
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method math.isfinite>",
+        "primitive_calls": 89277662,
+        "calls": 89277662,
+        "self_seconds": 22.370737011000003,
+        "cumulative_seconds": 22.370737011000003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 446,
+        "function": "<genexpr>",
+        "primitive_calls": 17971713,
+        "calls": 17971713,
+        "self_seconds": 21.12793727,
+        "cumulative_seconds": 21.129285268
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 356,
+        "function": "_order_pool",
+        "primitive_calls": 1032877,
+        "calls": 1032877,
+        "self_seconds": 20.967680801,
+        "cumulative_seconds": 89.68762081400001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 336,
+        "function": "_same_order",
+        "primitive_calls": 17709532,
+        "calls": 17709532,
+        "self_seconds": 20.229082037,
+        "cumulative_seconds": 20.229082037
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 22,
+        "function": "<lambda>",
+        "primitive_calls": 14030059,
+        "calls": 14030059,
+        "self_seconds": 19.868142147,
+        "cumulative_seconds": 19.868142147
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 83,
+        "function": "_distribution",
+        "primitive_calls": 687388,
+        "calls": 687388,
+        "self_seconds": 19.120242821,
+        "cumulative_seconds": 116.167726872
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 21,
+        "function": "<genexpr>",
+        "primitive_calls": 14610015,
+        "calls": 14610015,
+        "self_seconds": 18.176514285000003,
+        "cumulative_seconds": 18.177013282
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 40,
+        "function": "_weights",
+        "primitive_calls": 690971,
+        "calls": 690971,
+        "self_seconds": 17.459209432,
+        "cumulative_seconds": 52.025025929
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 105,
+        "function": "_probability",
+        "primitive_calls": 11583858,
+        "calls": 11583858,
+        "self_seconds": 16.719334407,
+        "cumulative_seconds": 28.376367479000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "primitive_calls": 1353553,
+        "calls": 2922909,
+        "self_seconds": 16.668314471000002,
+        "cumulative_seconds": 72.10289988
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 14188622,
+        "calls": 14188622,
+        "self_seconds": 16.569086667,
+        "cumulative_seconds": 27.918981233000004
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 343476,
+        "calls": 343476,
+        "self_seconds": 16.234170495,
+        "cumulative_seconds": 215.994225069
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeintern.py",
+        "line": 32,
+        "function": "<genexpr>",
+        "primitive_calls": 5293918,
+        "calls": 5293918,
+        "self_seconds": 15.435841547,
+        "cumulative_seconds": 34.631423185
+      }
+    ],
+    "cumulative_top50": [
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 176,
+        "function": "map_graphs",
+        "primitive_calls": 21828,
+        "calls": 21828,
+        "self_seconds": 3.453153287,
+        "cumulative_seconds": 2246.153718994
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/routelog.py",
+        "line": 85,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.032946981,
+        "cumulative_seconds": 1587.627097001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 144,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.003472001,
+        "cumulative_seconds": 1578.344049
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 183,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.003625993,
+        "cumulative_seconds": 1578.338995001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/argorder.py",
+        "line": 60,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.002855,
+        "cumulative_seconds": 1578.0601740030002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/relearninit.py",
+        "line": 32,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0011030039999999999,
+        "cumulative_seconds": 1578.057319003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 579,
+        "function": "m1",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.00777799,
+        "cumulative_seconds": 1578.0562159990002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 443,
+        "function": "choose_and_register",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.224270022,
+        "cumulative_seconds": 1578.0473030010003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 106,
+        "function": "predict",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.03609999,
+        "cumulative_seconds": 1114.3063270000002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 32,
+        "function": "distributions",
+        "primitive_calls": 343182,
+        "calls": 343182,
+        "self_seconds": 1.191577797,
+        "cumulative_seconds": 918.1460039630001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 60,
+        "function": "seat_distributions",
+        "primitive_calls": 343182,
+        "calls": 343182,
+        "self_seconds": 2.8541328420000003,
+        "cumulative_seconds": 916.8438190730001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 168,
+        "function": "predict",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0024790080000000004,
+        "cumulative_seconds": 847.497145003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 165,
+        "function": "predict",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.002851998,
+        "cumulative_seconds": 847.4944200010001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 550,
+        "function": "predict_logp",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0012269960000000002,
+        "cumulative_seconds": 847.4777789980001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 1118,
+        "function": "predict_wrapped",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0062840050000000005,
+        "cumulative_seconds": 847.4765520020001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 593,
+        "function": "predict",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 2.5511099990000004,
+        "cumulative_seconds": 847.4702679970001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 177,
+        "function": "rewrite",
+        "primitive_calls": 6445,
+        "calls": 6445,
+        "self_seconds": 0.09399797400000001,
+        "cumulative_seconds": 794.3485380090001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 378,
+        "function": "rewrite",
+        "primitive_calls": 6445,
+        "calls": 6445,
+        "self_seconds": 12.706578145000002,
+        "cumulative_seconds": 794.0965990130001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_runtime.py",
+        "line": 37,
+        "function": "probabilities_for_graph",
+        "primitive_calls": 20735,
+        "calls": 20735,
+        "self_seconds": 1.502603759,
+        "cumulative_seconds": 786.448604957
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 50,
+        "function": "m1",
+        "primitive_calls": 6645,
+        "calls": 6645,
+        "self_seconds": 1.175133889,
+        "cumulative_seconds": 772.005249978
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 31,
+        "function": "match",
+        "primitive_calls": 20535,
+        "calls": 20535,
+        "self_seconds": 0.6967169100000001,
+        "cumulative_seconds": 769.273223978
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/abstraction.py",
+        "line": 58,
+        "function": "m1",
+        "primitive_calls": 6645,
+        "calls": 6645,
+        "self_seconds": 0.90526799,
+        "cumulative_seconds": 768.1383059970001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 327,
+        "function": "hypo_m1",
+        "primitive_calls": 6445,
+        "calls": 6445,
+        "self_seconds": 0.10432102600000001,
+        "cumulative_seconds": 762.964922999
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/histrole.py",
+        "line": 54,
+        "function": "capture",
+        "primitive_calls": 6645,
+        "calls": 6645,
+        "self_seconds": 12.298946961000002,
+        "cumulative_seconds": 761.0588629860001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/strictpc.py",
+        "line": 368,
+        "function": "map_v39",
+        "primitive_calls": 7138,
+        "calls": 7138,
+        "self_seconds": 0.033883011000000005,
+        "cumulative_seconds": 718.8082200020001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v39.py",
+        "line": 345,
+        "function": "map_v39",
+        "primitive_calls": 7138,
+        "calls": 7138,
+        "self_seconds": 13.612236987000001,
+        "cumulative_seconds": 718.774336991
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeintern.py",
+        "line": 61,
+        "function": "run",
+        "primitive_calls": 21628,
+        "calls": 21628,
+        "self_seconds": 0.227616009,
+        "cumulative_seconds": 693.475696985
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 94,
+        "function": "select_definition",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.195753024,
+        "cumulative_seconds": 692.2062390000001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 345,
+        "function": "select_definition",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.22635799100000004,
+        "cumulative_seconds": 691.1981039990001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 154,
+        "function": "run",
+        "primitive_calls": 20535,
+        "calls": 20535,
+        "self_seconds": 2.143933779,
+        "cumulative_seconds": 683.4195790560001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/answerlog.py",
+        "line": 98,
+        "function": "map_v39",
+        "primitive_calls": 6245,
+        "calls": 6245,
+        "self_seconds": 0.027281977000000002,
+        "cumulative_seconds": 681.9227229850001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 516,
+        "function": "run",
+        "primitive_calls": 21628,
+        "calls": 21628,
+        "self_seconds": 25.744202774,
+        "cumulative_seconds": 628.804386033
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 49,
+        "function": "probabilities",
+        "primitive_calls": 343182,
+        "calls": 343182,
+        "self_seconds": 49.841737612,
+        "cumulative_seconds": 593.9442510840001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 44,
+        "function": "encode",
+        "primitive_calls": 25205,
+        "calls": 90212476,
+        "self_seconds": 341.668482926,
+        "cumulative_seconds": 534.2613750610001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.any>",
+        "primitive_calls": 13642775,
+        "calls": 13642775,
+        "self_seconds": 161.68367130500002,
+        "cumulative_seconds": 513.3294996870001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/v310be.py",
+        "line": 57,
+        "function": "<genexpr>",
+        "primitive_calls": 17566649,
+        "calls": 17566649,
+        "self_seconds": 50.572887392000005,
+        "cumulative_seconds": 321.53627279600005
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 13,
+        "function": "checked_distribution",
+        "primitive_calls": 2741037,
+        "calls": 2741037,
+        "self_seconds": 8.297381687000001,
+        "cumulative_seconds": 295.88588590899997
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 351,
+        "function": "_predicate_has_signature",
+        "primitive_calls": 21152665,
+        "calls": 21152665,
+        "self_seconds": 62.228361232,
+        "cumulative_seconds": 273.60793741000003
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_matcher.py",
+        "line": 118,
+        "function": "_scores",
+        "primitive_calls": 89665,
+        "calls": 89665,
+        "self_seconds": 30.327879860000003,
+        "cumulative_seconds": 237.884338925
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/cstar_probability.py",
+        "line": 36,
+        "function": "value_distributions",
+        "primitive_calls": 343476,
+        "calls": 343476,
+        "self_seconds": 16.234170495,
+        "cumulative_seconds": 215.994225069
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 66,
+        "function": "__post_init__",
+        "primitive_calls": 22939,
+        "calls": 22939,
+        "self_seconds": 0.32536604300000005,
+        "cumulative_seconds": 199.95102502100002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 48,
+        "function": "freeze",
+        "primitive_calls": 114695,
+        "calls": 28033140,
+        "self_seconds": 100.14424771200001,
+        "cumulative_seconds": 199.354560961
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeshared.py",
+        "line": 50,
+        "function": "<genexpr>",
+        "primitive_calls": 1135717,
+        "calls": 9787239,
+        "self_seconds": 25.169618169000003,
+        "cumulative_seconds": 197.430620198
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 361,
+        "function": "<genexpr>",
+        "primitive_calls": 14264845,
+        "calls": 14264845,
+        "self_seconds": 31.496760849,
+        "cumulative_seconds": 193.29185892200002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/sme2017.py",
+        "line": 301,
+        "function": "_ordered",
+        "primitive_calls": 2807954,
+        "calls": 2843612,
+        "self_seconds": 35.0382702,
+        "cumulative_seconds": 181.807455812
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/abm/filling.py",
+        "line": 32,
+        "function": "slot_signature",
+        "primitive_calls": 7795741,
+        "calls": 7795741,
+        "self_seconds": 67.45033777200001,
+        "cumulative_seconds": 165.519263934
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 134,
+        "function": "agent_input",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.18104099900000004,
+        "cumulative_seconds": 165.319859002
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smeevict.py",
+        "line": 79,
+        "function": "enter",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.9480638960000001,
+        "cumulative_seconds": 165.124045001
+      },
+      {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source/tools/smereplay.py",
+        "line": 99,
+        "function": "agent_input",
+        "primitive_calls": 199,
+        "calls": 199,
+        "self_seconds": 0.0011830030000000002,
+        "cumulative_seconds": 164.624059005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 23506368,
+        "calls": 24086324,
+        "self_seconds": 85.676997412,
+        "cumulative_seconds": 159.768551952
+      }
+    ],
+    "total_self_seconds": 3079.729132777001,
+    "matching_pipeline_callers": [
+      {
+        "caller": "histrole:capture",
+        "calls": 6645,
+        "cumulative_cpu_seconds": 748.746478003,
+        "fraction_of_profiled_pipeline": 0.33334605359883657
+      },
+      {
+        "caller": "v39:map_v39",
+        "calls": 7138,
+        "cumulative_cpu_seconds": 702.828598989,
+        "fraction_of_profiled_pipeline": 0.3129031610996689
+      },
+      {
+        "caller": "v39:predict",
+        "calls": 1400,
+        "cumulative_cpu_seconds": 133.266205003,
+        "fraction_of_profiled_pipeline": 0.05933084805196986
+      },
+      {
+        "caller": "v310be:rewrite",
+        "calls": 6445,
+        "cumulative_cpu_seconds": 652.700033991,
+        "fraction_of_profiled_pipeline": 0.290585648022046
+      },
+      {
+        "caller": "routelog:_sources",
+        "calls": 200,
+        "cumulative_cpu_seconds": 8.612403008000001,
+        "fraction_of_profiled_pipeline": 0.0038342892274787392
+      }
+    ],
+    "note": "自身の秒は重ならない。累積秒は入れ子で重なる。cProfileの累積秒には同時に動くtraceの負荷も含まれるため、callbackを除いた区分別CPU秒とは混ぜない。呼び出し元の割合はsmeshared.map_graphs内だけを分母にする。"
+  },
+  "run": {
+    "at": "2026-10-07T23:24:54.188715+09:00",
+    "exit": 0,
+    "wall_seconds": 8109.903809958021,
+    "paused_seconds": 1036.6914857099764,
+    "maximum_observed_model_tree_rss_bytes": 11615846400,
+    "sampling_seconds": 2
+  },
+  "comparison": {
+    "passed": true,
+    "left": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own/output",
+    "right": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/profile1740_01/output",
+    "exclusions": [
+      "台帳の見出し一行",
+      "実測sec_trial"
+    ],
+    "completion_markers_present_both": [
+      "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.done"
+    ],
+    "completion_marker_contents_compared": false,
+    "files": [
+      {
+        "path": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+        "bytes_left": 313573536,
+        "bytes_right": 313573536,
+        "left_sha256": "a7ee1a16eaed748d686528ba56305cc3120e0755918a370b0107195c8d5285b2",
+        "right_sha256": "a7ee1a16eaed748d686528ba56305cc3120e0755918a370b0107195c8d5285b2",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+        "bytes_left": 370373,
+        "bytes_right": 370373,
+        "left_sha256": "53437c0183f231015c7db001452b7304a0cff3acfbb42497c7b63e8907a4d16f",
+        "right_sha256": "53437c0183f231015c7db001452b7304a0cff3acfbb42497c7b63e8907a4d16f",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+        "bytes_left": 30014353,
+        "bytes_right": 30014353,
+        "left_sha256": "c1cc4cc33053e8cc89fe3229ad82f99129273e028c972fe45e127ee1f1f7fef4",
+        "right_sha256": "c1cc4cc33053e8cc89fe3229ad82f99129273e028c972fe45e127ee1f1f7fef4",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+        "bytes_left": 17222523,
+        "bytes_right": 17222523,
+        "left_sha256": "55b56d67b69e340bdb2294ce68e29efc448880e8768d251d0269596e299d3510",
+        "right_sha256": "55b56d67b69e340bdb2294ce68e29efc448880e8768d251d0269596e299d3510",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl",
+        "bytes_left": 279661,
+        "bytes_right": 279661,
+        "left_sha256": "780f0096501f72d9bda5796e775a465834ecaa57761e177a6623ec24aa9ca0b5",
+        "right_sha256": "780f0096501f72d9bda5796e775a465834ecaa57761e177a6623ec24aa9ca0b5",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+        "bytes_left": 384746251,
+        "bytes_right": 384746251,
+        "left_sha256": "1f0fffadac611fc80643537c895fe0fcb49ac22839afbb9a7c32248f10f4aa67",
+        "right_sha256": "1f0fffadac611fc80643537c895fe0fcb49ac22839afbb9a7c32248f10f4aa67",
+        "equal": true
+      },
+      {
+        "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+        "bytes_left": 648773728,
+        "bytes_right": 648773728,
+        "left_sha256": "f2f286fa13beacf5d69aaee1bacf16b5b588505edc619c9f9cbd5f938f216b95",
+        "right_sha256": "f2f286fa13beacf5d69aaee1bacf16b5b588505edc619c9f9cbd5f938f216b95",
+        "equal": true
+      }
+    ]
+  },
+  "instruction11_guard": {
+    "at": "2026-10-07T23:24:53.155870+09:00",
+    "runner_pid": 65065,
+    "model_not_restarted": true,
+    "samples": 2121,
+    "events": 0,
+    "sampled_stopped_seconds": 0.0,
+    "sampling_seconds": 2,
+    "note": "起動後の実際のT状態の標本。旧監督のpaused_secondsは別記の上限値"
+  },
+  "last_legacy_controller_held": false,
+  "legacy_pause_note": "旧監督のpaused_secondsは論理上の保留で、補助監督の再開中を含みうる。最後の未清算の保留は含まないため、実際の停止秒の上限と断定しない。実際のT状態の2秒標本を別記。",
+  "external_model_count_range": [
+    0,
+    1
+  ],
+  "output_sizes": {
+    "捨てた鍵": {
+      "files": 2,
+      "bytes": 152360071
+    },
+    "管理ファイル": {
+      "files": 2,
+      "bytes": 17407
+    },
+    "台帳の完了印": {
+      "files": 1,
+      "bytes": 583
+    },
+    "台帳 gzip": {
+      "files": 1,
+      "bytes": 30253790
+    },
+    "side 答え csv": {
+      "files": 1,
+      "bytes": 370373
+    },
+    "side その他 jsonl": {
+      "files": 1,
+      "bytes": 30014353
+    },
+    "side 届け先 jsonl": {
+      "files": 1,
+      "bytes": 17222523
+    },
+    "side お店 jsonl": {
+      "files": 1,
+      "bytes": 279661
+    },
+    "side 照合 gzip": {
+      "files": 1,
+      "bytes": 384746251
+    },
+    "side 保存状態 gzip": {
+      "files": 1,
+      "bytes": 648773728
+    }
+  },
+  "output_total_bytes": 1264038740,
+  "native_reference": {
+    "at": "2026-10-07T20:13:18.245562+09:00",
+    "exit": 0,
+    "wall_seconds": 3744.0660636250395,
+    "paused_seconds": 0.0,
+    "command": [
+      "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "tools/v3_run.py",
+      "config/sweep_shop_hide1_s1_2026-10-01.json",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/native_full_01/on_own/output",
+      "--nohash",
+      "--vt",
+      "0.3842",
+      "--extend-rule",
+      "none",
+      "--charge1",
+      "d32",
+      "--fast",
+      "--no-public-history",
+      "--dump-slot-history",
+      "--fix2-full",
+      "--fix-order2",
+      "--proj-first",
+      "--fill-norestate",
+      "--no-charge2",
+      "--own-evidence",
+      "--v39",
+      "--v39-budget",
+      "inf",
+      "--v39-decay",
+      "actr",
+      "--v310-be",
+      "--hist-role",
+      "--score-role",
+      "--u-struct",
+      "--relearn-init",
+      "--tie-struct",
+      "--amb-local",
+      "--nsim",
+      "0.7",
+      "--ident-rho",
+      "0.5",
+      "--ident-argmax",
+      "--ident-commons",
+      "--cells",
+      "f0.5000_th2.1000_first_order",
+      "--dump-answers",
+      "--dump-routing",
+      "--answer-gap",
+      "--strict-pc",
+      "--e-price",
+      "0.01873710622997919",
+      "--v39-price",
+      "0.01873710622997919",
+      "--shop-world",
+      "2",
+      "--workers",
+      "1",
+      "--seeds",
+      "1",
+      "--trial-count",
+      "1740",
+      "--no-compare",
+      "--horizon",
+      "1740",
+      "--score-arg-order",
+      "--sme2017",
+      "--shop-scatter",
+      "--sme-call-seed",
+      "--sme-tie-uniform",
+      "--sme-intern-cache",
+      "--sme-evict-trial-cache",
+      "--score-logp",
+      "--match-cstar",
+      "--match-cstar-e",
+      "--match-eps",
+      "0",
+      "--h-dirichlet",
+      "1",
+      "--birth-score",
+      "seq",
+      "--logp-eps",
+      "0.01"
+    ],
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_2026-10-07/source",
+    "env": {
+      "PYTHONHASHSEED": "0"
+    },
+    "maximum_observed_model_tree_rss_bytes": 10375888896,
+    "rss_sampling_seconds": 2,
+    "parallel_gate_time_not_used_for_instruction4": true
+  },
+  "category_note": "旧版の照合の比較記録は今回のコードではfixorder2.map_graphsを経由し、準備の区分に含む。reference_matchの区分はabm.sme.map_graphsだけを別計上するため0になりうる。旧照合が無いという意味ではない。直接の累積秒は上位関数とprofで確認する。",
+  "note": "CPU内訳は500試行だけ。途中の1100試行と末尾140試行は計測外。CPU秒からtrace callbackを除くがcProfileの負荷は含む。全長の実時間は別の列で、速度倍率に使わない。分類は排他的。誕生の採点と学習しない試験の内側は、その区分を保つ。"
+}
