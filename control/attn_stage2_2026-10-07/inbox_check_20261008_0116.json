@@ -1,0 +1,154 @@
+{
+  "at": "2026-10-08T01:16:54.293297+09:00",
+  "model_children": 1,
+  "paused": 0,
+  "own_models": [
+    4893
+  ],
+  "models": {
+    "4893": {
+      "ppid": 4882,
+      "state": "R",
+      "rss_kb": 435376,
+      "kind": "spawn"
+    }
+  },
+  "registered": [
+    {
+      "pid": 4872,
+      "owner": "Codex2 指示8 接続の関門 on_full",
+      "mem_gb": 16
+    }
+  ],
+  "registered_mem_gb": 16,
+  "swap_used_mb": 180,
+  "swap_ok": true,
+  "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+  "thermal_warnings": [],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+  "unregistered_heavy": [],
+  "disk_free_bytes": 231361306624,
+  "memory": {
+    "空きの割合（memory_pressure）": "79%",
+    "free": "1.4 GB",
+    "inactive": "11.7 GB"
+  },
+  "supervisor_94210": {
+    "pid": 94210,
+    "ppid": 1,
+    "state": "Ss",
+    "rss_kb": 24800,
+    "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/run_after_off_proposal.py"
+  },
+  "supervisor_66840_absent": true,
+  "supervisor_72172_absent": true,
+  "resume_supervisor_lock": "94210",
+  "resume_launch": {
+    "at": "2026-10-07T22:55:10.611306+09:00",
+    "pid": 94210,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "off_proof": "2026-10-07T21:47:35.490598+09:00",
+    "off_reexecuted": false,
+    "scope": [
+      "on_preflight_20",
+      "on_1740_measurement"
+    ],
+    "requested_on_mem_gb": 16,
+    "production_started": false
+  },
+  "resume_status": {
+    "phase": "receipt_wait_or_running",
+    "kind": "on_full",
+    "at": "2026-10-07T23:27:45.663382+09:00",
+    "pid": 94210,
+    "receipt_pid": 4872,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "requested_mem_gb": 16
+  },
+  "resume_warning": null,
+  "resume_failure": null,
+  "on_full_completed": null,
+  "on_full_gate": null,
+  "on_full_measurement": null,
+  "source": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+  "source_dirty": "",
+  "controller_sha256": "0589288a6a086b6f1d77f46c8ce0b6a7dc7b27754467a9e337fca50cb4be2c93",
+  "last_on_full_performance": {
+    "trial": 549,
+    "seconds": 10.339097334013786,
+    "elapsed_seconds": 6533.250392291986,
+    "peak_rss_bytes": 445825024,
+    "definitions": 0,
+    "candidates": 1,
+    "cstar_cache_count": 6048,
+    "cstar_self_cache_count": 745
+  },
+  "on_full_log_tail": "受け付けた：PID 4872、担当 Codex2 指示8 接続の関門 on_full、見込み 16.0 GB（表の合計 22.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-07 23:27:45 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n",
+  "first_stage_records": {
+    "status.json": {
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "phase": "stopped_no_automatic_retry",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed_count": 0,
+      "audited_count": 0,
+      "remaining": null,
+      "swap_ok": null,
+      "swap_note": null,
+      "sha256": "db40bbb543f01967fbb4278da902a3844e1980e2dc31ed599c8cd30758f50cf6"
+    },
+    "warning.json": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "phase": null,
+      "error": null,
+      "completed_count": 0,
+      "audited_count": 0,
+      "remaining": null,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "sha256": "75393fef498fe4f294b3779cf095047ca7db8be5a5a1e73dae269b947f161a5d"
+    },
+    "failure.json": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "phase": null,
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed_count": 47,
+      "audited_count": 47,
+      "remaining": null,
+      "swap_ok": null,
+      "swap_note": null,
+      "sha256": "ebc4e9c87cdf7358f18e22af8bf6fcd2721aec55cabf1899cdcc42319679b0b1"
+    },
+    "progress.json": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "phase": null,
+      "error": null,
+      "completed_count": 47,
+      "audited_count": 47,
+      "remaining": 93,
+      "swap_ok": null,
+      "swap_note": null,
+      "sha256": "871c578cab5c7b6e3833954d1563ce9a8fc2e1628b14a3f093c636e188c0813c"
+    }
+  },
+  "required_off_gate.json": {
+    "passed": true,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "trials": 1740,
+    "sha256": "478a3b581491efb60e396ccdac2e552ad293599fbe7a2f8214c739d11d162926"
+  },
+  "on_preflight_gate.json": {
+    "passed": true,
+    "code": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+    "trials": 20,
+    "sha256": "afe1cb8bf9869ba87d76f5cc1c797c1b6ce8f50ab733634250ca4e2074cc3ab3"
+  },
+  "unreceived_instructions": [
+    11
+  ],
+  "eligible_queue_rows": 0,
+  "control_sha256": {
+    "inbox": "76edbc5bea67b9caa4ed3d81e799602bf3b7e247d91e6014b7a74dff8aa49f28",
+    "queue": "3e71e6374dd8bce0c2104bc0bba61db42861a3b1d3b41208c511bcff9247b802",
+    "readme": "653324dec2c62a7156763dd7c5c7f5b73ccd017618e51a4e8f78600494e60089"
+  }
+}
