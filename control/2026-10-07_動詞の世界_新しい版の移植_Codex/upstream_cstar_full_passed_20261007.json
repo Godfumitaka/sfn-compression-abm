@@ -1,0 +1,46 @@
+{
+  "read_at": "2026-10-07T20:43:49+09:00",
+  "source_report_commit": "173b9a821dd56e3b9fabc65ef6495fd1bcc1bf2e",
+  "inputs": [
+    {
+      "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+      "bytes": 46003,
+      "sha256": "98970b8992384ef7139e90d0ccb3a8af747c6a6052b9cc150345a03f98392af2"
+    },
+    {
+      "path": "control/2026-10-07_C星の関門_比較の直し_Codex.md",
+      "bytes": 14646,
+      "sha256": "ccdcb0b57c85a05ef8f959048275fc3ee0e77286960f4c28cdf7b657151b7653"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 77549,
+      "sha256": "5bbda2a7f710bd0b77c7f59cd7fbcd1be5acce355ae76d53cf5389c7336f6805"
+    }
+  ],
+  "cstar_model_commit": "7774b60",
+  "cstar_full_gate": {
+    "reported_at": "2026-10-07T20:24:21.472627+09:00",
+    "world": 2,
+    "seed": 1,
+    "trials": 1740,
+    "comparison": "材料① on_keep 対 材料② on_own",
+    "ledger_and_side_and_state_files": 7,
+    "mismatching_files": 0,
+    "predicted_states_each": 1740,
+    "updated_states_each": 1740,
+    "excluded_fields": "台帳の見出し一行とsec_trialのみ。完了印は両側の存在を確認。"
+  },
+  "stage2_port_commit": "2ed4063e9cab51c85404700f9e66baaa2a7cad2a",
+  "stage2_parts_checks": 103,
+  "stage2_port_full_off_gate": "実行中・未判定",
+  "stage2_cstar_combined_gate": "未合格。主Uの実分布の基底と候補共通の基底の接続の指定待ち。",
+  "stage2_U_base_example_as_reported": {
+    "same_visible_position": "b(sig_e)",
+    "candidate_a": "1/3",
+    "candidate_b": "1/7"
+  },
+  "observer_calibration_code_commit": "7aaacc95437fd0d6b180bac6b5856a376bc815bb",
+  "observer_calibration_full_gate": "部品の20試行の一致まで。全長の比較・分類の関門は実行中・未完了。",
+  "own_action": "指定報告の読み取り・依存関門の記録のみ。上流のコードと受付と出力を変更せず、動詞の移植・off関門・5000試行測定は未着手。"
+}
