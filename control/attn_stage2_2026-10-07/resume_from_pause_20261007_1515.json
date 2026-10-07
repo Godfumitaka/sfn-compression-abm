@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-07T15:14:05.752223+09:00",
+  "report_base": "cfadbf219d7f2abe36b6761972f3689195c098c2",
+  "inbox_sha256": "f16e4bd2d94f65ac4f82863f8eabb5a08165d1ae19c8f4b9177ee775516ce68b",
+  "unreceived_instructions": [],
+  "instruction1_done": true,
+  "instruction2_3_incomplete": true,
+  "own_supervision_status": {
+    "phase": "stopped_no_automatic_retry",
+    "at": "2026-10-07T06:51:01.809811+09:00",
+    "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+    "existing_models_not_signaled": true
+  },
+  "model_counts": {
+    "native_manifests": 48,
+    "public_audits": 47
+  },
+  "last_native_manifest_sha256_unchanged": "0fefda9d672dc04af98b610db982d2d7c57e9b8222cd81492940e879eae275cc",
+  "automation": {
+    "id": "1-n3-a",
+    "status": "ACTIVE",
+    "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=30;UNTIL=20261009T000000Z",
+    "same_prompt_sha256": "9d5c9f670d92b5579495bce12845882ebec4304c51b67aaf03ded040a432c2a3",
+    "refreshed_same_id": true,
+    "no_duplicate_created": true
+  },
+  "continuation_incomplete_period_JST": [
+    "2026-10-07T06:57:23+09:00",
+    "2026-10-07T15:09:53+09:00"
+  ],
+  "known_model_stop_cause": "直近10分のスワップ記録不足が再発、指示3により再開を繰り返さない",
+  "attention2_wait": "C*の全本番関門の完了待ち",
+  "long_sampling_gaps_cause": "未確認。上限・眠り・ネットワークのどれかとは断定しない",
+  "session_error_records_in_period": [],
+  "session_tool_activity_in_period": [
+    {
+      "timestamp_UTC": "2026-10-06T21:57:23.468Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-06T23:55:10.523Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-06T23:55:10.624Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-06T23:55:13.929Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-06T23:55:13.997Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T01:35:53.008Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T01:35:53.092Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:32:34.872Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:39:17.113Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:54:42.206Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:54:42.355Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:54:45.955Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:55:16.967Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:55:21.654Z",
+      "event": "function_call",
+      "tool": "wait"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:55:21.763Z",
+      "event": "function_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:55:31.602Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T05:55:35.311Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    },
+    {
+      "timestamp_UTC": "2026-10-07T06:09:42.704Z",
+      "event": "custom_tool_call",
+      "tool": "exec"
+    },
+    {
+      "timestamp_UTC": "2026-10-07T06:09:42.832Z",
+      "event": "custom_tool_call_output",
+      "tool": null
+    }
+  ],
+  "confirmed_git_push_non_fast_forward": true,
+  "new_model_processes_started": 0
+}
