@@ -1,0 +1,155 @@
+diff --git a/tools/sme2017.py b/tools/sme2017.py
+index 03dfbad..18612a2 100644
+--- a/tools/sme2017.py
++++ b/tools/sme2017.py
+@@ -15,6 +15,7 @@ import math
+ import random
+ 
+ VERSION = "sme2017-ordered-component-1"
++GRAPH_TABLES = None
+ 
+ 
+ @dataclass(frozen=True)
+@@ -89,6 +90,9 @@ class Graph:
+         return hashlib.sha256(json.dumps(data, separators=(",", ":")).encode()).hexdigest()
+ 
+     def heights(self):
++        if GRAPH_TABLES is not None:
++            # 公開の返り値は従来どおり呼び出しごとの辞書。
++            return dict(GRAPH_TABLES(self.nodes)[1])
+         by = self.by_id
+         memo, active = {}, set()
+ 
+@@ -265,8 +269,13 @@ class _Engine:
+     def __init__(self, left, right, settings, rng, *, tie_uniform=False):
+         self.left, self.right, self.s, self.rng = left, right, settings, rng
+         self.tie_uniform = tie_uniform
+-        self.lb, self.rb = left.by_id, right.by_id
+-        self.lh, self.rh = left.heights(), right.heights()
++        if GRAPH_TABLES is None:
++            self.lb, self.rb = left.by_id, right.by_id
++            self.lh, self.rh = left.heights(), right.heights()
++        else:
++            # 点・確率・乱数・候補を含まない不変な索引と高さだけを共有する。
++            self.lb, self.lh = GRAPH_TABLES(left.nodes)
++            self.rb, self.rh = GRAPH_TABLES(right.nodes)
+         self.mhs, self.index, self.memo, self.closures = [], {}, {}, {}
+         self.choices = []
+         self.key_cache = {}
+diff --git a/tools/smereuse_structure.py b/tools/smereuse_structure.py
+new file mode 100644
+index 0000000..99cf6be
+--- /dev/null
++++ b/tools/smereuse_structure.py
+@@ -0,0 +1,54 @@
++"""同じ不変な図の索引と高さだけを共有する探索の旗。"""
++from functools import lru_cache
++from types import MappingProxyType
++
++MAX_GRAPHS = 256
++
++
++def _make_tables(nodes):
++    # 鍵は全Nodeの元の順。型・引数の順・F/H/U・許容名を落とさない。
++    # qや種が違っても、この二つの純粋な部品は同じ。照合は再計算する。
++    by = {n.key: n for n in nodes}
++    memo, active = {}, set()
++
++    def visit(k):
++        if k in active:
++            raise ValueError("循環した式")
++        if k not in memo:
++            active.add(k)
++            n = by[k]
++            memo[k] = 0 if n.kind == "entity" else 1 + max((visit(a) for a in n.args or ()), default=0)
++            active.remove(k)
++        return memo[k]
++
++    for k in by:
++        visit(k)
++    # 照合器は索引と高さを読むだけ。共有した辞書を書き換えられなくする。
++    return MappingProxyType(by), MappingProxyType(memo)
++
++
++@lru_cache(maxsize=MAX_GRAPHS)
++def _cached_tables(nodes, name_order):
++    # 等しいfrozensetでも列挙順が違えば、元のNodeを別の控えにする。
++    return _make_tables(nodes)
++
++
++def tables(nodes):
++    name_order = tuple(tuple(n.names) for n in nodes)
++    try:
++        hash((nodes, name_order))
++    except TypeError:
++        return _make_tables(nodes)
++    return _cached_tables(nodes, name_order)
++
++
++def install():
++    import sme2017
++    _cached_tables.cache_clear()
++    sme2017.GRAPH_TABLES = tables
++
++
++def close():
++    import sme2017
++    sme2017.GRAPH_TABLES = None
++    _cached_tables.cache_clear()
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index f220638..9a448e3 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -496,6 +496,9 @@ def worker(task: dict) -> dict:
+         if task.get("sme_intern_cache"):
+             import smeintern
+             smeintern.install()
++        if task.get("sme_reuse_structure"):
++            import smereuse_structure
++            smereuse_structure.install()
+         if task.get("sme_evict_trial_cache"):
+             import smeevict
+             smeevict.install(out_root / "evictions" / task["cell"] / f"seed{task['seed']:03d}.keys.jsonl.gz",
+@@ -585,6 +588,8 @@ def worker(task: dict) -> dict:
+     finally:
+         if old_gc_threshold is not None:
+             gc.set_threshold(*old_gc_threshold)
++        if task.get("sme_reuse_structure"):
++            smereuse_structure.close()
+     if "v39" in sys.modules:
+         rec["v39"] = dict(sys.modules["v39"].STATS)
+     if task.get("sme2017"):
+@@ -796,6 +801,7 @@ def main() -> None:
+     ap.add_argument("--sme-gc-threshold", type=int, default=None,
+                     help="探索用：GCの世代0の閾値だけを変える（世代1・2は現行のまま、既定は無変更）")
+     ap.add_argument("--sme-fast-encode", action="store_true", help="探索用：保存状態のスカラーを先に判別して同じ記録を速く組み立てる")
++    ap.add_argument("--sme-reuse-structure", action="store_true", help="探索用：同じ不変な図の索引と高さだけを共有し、点・候補・抽選は再計算する")
+     ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
+     ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
+     ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
+@@ -945,6 +951,8 @@ def main() -> None:
+         raise SystemExit("--sme-gc-threshold は --sme2017 と正の整数で使う")
+     if args.sme_fast_encode and not args.sme2017:
+         raise SystemExit("--sme-fast-encode は --sme2017 と一緒に使う")
++    if args.sme_reuse_structure and not args.sme2017:
++        raise SystemExit("--sme-reuse-structure は --sme2017 と一緒に使う")
+     if args.sme2017 and not (args.v39 and args.u_struct and args.strict_pc):
+         raise SystemExit("--sme2017は--v39 --u-struct --strict-pcと一緒に使う（保持したUの引数と型の控えを使うため）")
+     if args.select_n3 and (not args.v39 or args.sme2017):
+@@ -971,6 +979,8 @@ def main() -> None:
+                 task["sme_gc_threshold"] = args.sme_gc_threshold
+             if args.sme_fast_encode:
+                 task["sme_fast_encode"] = True
++            if args.sme_reuse_structure:
++                task["sme_reuse_structure"] = True
+             if args.sme_replay is not None:
+                 task["sme_replay"] = args.sme_replay
+         if args.select_n3:
+@@ -980,6 +990,7 @@ def main() -> None:
+     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+                                                     **({"sme_gc_threshold": args.sme_gc_threshold} if args.sme_gc_threshold is not None else {}),
+                                                     **({"sme_fast_encode": True} if args.sme_fast_encode else {}),
++                                                    **({"sme_reuse_structure": True} if args.sme_reuse_structure else {}),
+                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
+                                                     **cstar_options,
+                                                     **({"sme2017": True} if args.sme2017 else {}),
