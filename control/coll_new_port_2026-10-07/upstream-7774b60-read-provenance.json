@@ -1,0 +1,16 @@
+{
+  "time": "2026-10-07T15:42:35.898966+09:00",
+  "results_commit": "ba3be8f8c490fafe775c7c69224da779b9e252b5",
+  "upstream_path": "mac/cstar_2026-10-07/resume_gate_reader_stop_01/source_1838256_to_7774b60.patch",
+  "upstream_base": "1838256",
+  "upstream_provisional_commit": "7774b60",
+  "local_collective_commit": "c55b8c1a62b04002413686b0405bc1960fa8d6b9",
+  "patch_bytes": 70650,
+  "patch_sha256": "d6316db716a4812cad6d9c0278208206be7951e4f2c58909b0a69a9533312984",
+  "purpose": "委任43の準備のための読み取り。差分を適用・実行していない。上流全関門未完了。",
+  "checks": {
+    "manager_key_rule": "末尾のcall-seed-v1と整数を確認する。Cstar鍵の先頭への確率追加はこの条件を変えない。",
+    "new_engine_tables": "Cstar ENGINEはshared ENGINEと別。既存Manager.tablesとrestore包装の対象外。",
+    "gate_status": "41は比較台本のgzip読取りエラーで停止、一致／不一致未判定。42の全部入り等未完了。"
+  }
+}

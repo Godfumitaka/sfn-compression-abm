@@ -1,0 +1,1352 @@
+diff --git a/tools/cstar_matcher.py b/tools/cstar_matcher.py
+new file mode 100644
+index 0000000..0f02310
+--- /dev/null
++++ b/tools/cstar_matcher.py
+@@ -0,0 +1,183 @@
++"""SMEの候補生成・結合・順位の各段をC*の期待点で計算する部品。
++
++最終的な固定Mの点は独立の全列挙と照合する。候補探索は原典と同じ
++貪欲な近似であり、全てのMを列挙した最適解とはしない。
++"""
++from __future__ import annotations
++
++from dataclasses import replace
++from itertools import product
++import math
++import random
++
++from sme2017 import Hypothesis, Matcher, _Engine
++from cstar_probability import checked_distribution
++from cstar_score import _checked_mapping, structural_self_score
++
++VERSION = "sme-cstar-expectation-1"
++
++
++def probability_key(probabilities):
++    return tuple(sorted((seat, tuple(sorted(((name, float(p)) for name, p in dist.items()),
++                                           key=lambda x: (x[0] is None, x[0] or ""))))
++                        for seat, dist in probabilities.items()))
++
++
++class CstarMatcher(Matcher):
++    def match_key(self, left, right, tie_seed=None, *, probabilities):
++        # b・履歴を反映したqを鍵に含める。更新後の値を古い控えで返さない。
++        return (VERSION, probability_key(probabilities), *super().match_key(left, right, tie_seed))
++
++    def match(self, left, right, *, probabilities, use_cache=True, tie_seed=None):
++        if self.settings.max_local_score is not None:
++            raise ValueError("C*は上限なしの点の伝達")
++        key = self.match_key(left, right, tie_seed, probabilities=probabilities)
++        if use_cache and key in self.cache:
++            return self.cache[key]
++        rng = self.rng if tie_seed is None else random.Random(tie_seed)
++        before = self._capture_rng_state() if tie_seed is None else {
++            "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
++        result = CstarEngine(left, right, self.settings, rng, probabilities,
++                             tie_uniform=getattr(self, "tie_uniform", False)).run()
++        if use_cache:
++            self.cache[key], self.cache_rng[key] = result, before
++        return result
++
++    def self_score(self, graph, *, tie_seed=None):
++        # 自己の点は貪欲な照合で作らず、完全な自己対応を明示的に採点する。
++        key = (VERSION, "structural-self", self.settings, graph.fingerprint())
++        if key not in self.self_cache:
++            self.self_cache[key] = structural_self_score(graph, self.settings).total
++        return self.self_cache[key]
++
++
++class CstarEngine(_Engine):
++    def __init__(self, left, right, settings, rng, probabilities, *, tie_uniform=False):
++        super().__init__(left, right, settings, rng, tie_uniform=tie_uniform)
++        self.probabilities = {a: checked_distribution(dist) for a, dist in probabilities.items()}
++        self.events = {}
++        self.event_cache = {}
++        # 提示の見えている名は一つ。記憶のHと観察の未知を同一視しない。
++        for n in right.nodes:
++            if n.kind not in {"entity", "unknown"} and (n.state != "F" or len(n.names) != 1):
++                raise ValueError("C*の提示に、観察名が一意でない行がある")
++
++    def _grow(self, lk, rk, parent=False):
++        key = (lk, rk, parent)
++        if key in self.memo:
++            return self.memo[key]
++        l, r = self.lb[lk], self.rb[rk]
++        if l.kind == "entity" or r.kind == "entity":
++            out = (self._add(Hypothesis(lk, rk, None, (), "entity", 0.0)),) if l.kind == r.kind else ()
++            self.memo[key] = out
++            return out
++        unknown = "unknown" in {l.kind, r.kind}
++        if not unknown and (l.kind != r.kind or len(l.args) != len(r.args)):
++            self.memo[key] = ()
++            return ()
++        if unknown:
++            event, local, kind = frozenset(), 0.0, "hidden"
++        else:
++            name = next(iter(r.names))
++            if self.probabilities[lk].get(name, 0.0) <= 0:
++                self.memo[key] = ()
++                return ()
++            if not parent and (l.ubiquitous or r.ubiquitous):
++                self.memo[key] = ()
++                return ()
++            event, local, kind = frozenset({(lk, name)}), self.s.same_functor, "probability"
++        children = [] if unknown else [self._grow(a, b, True) for a, b in zip(l.args, r.args, strict=True)]
++        out = []
++        for group in product(*children):
++            j = self._add(Hypothesis(lk, rk, None, tuple(group), kind, local))
++            self.events[j] = event.union(*(self.events[c] for c in group))
++            if self._consistent(self.closures[j]):
++                out.append(j)
++        self.memo[key] = tuple(out)
++        return tuple(out)
++
++    def _add(self, h):
++        i = super()._add(h)
++        if h.kind == "entity":
++            self.events[i] = frozenset()
++        return i
++
++    def _probability(self, events):
++        if events not in self.event_cache:
++            names = {}
++            for seat, name in events:
++                if seat in names and names[seat] != name:
++                    self.event_cache[events] = 0.0
++                    return 0.0
++                names[seat] = name
++            # 同じ席は一回。番号の付け替えで積の丸め順を変えない。
++            self.event_cache[events] = math.prod(sorted(self.probabilities[a].get(name, 0.0)
++                                                       for a, name in names.items()))
++        return self.event_cache[events]
++
++    def _scores(self, members, global_):
++        terms = {i: [(self.mhs[i].local, self.events[i])] if self.mhs[i].local else [] for i in members}
++        parents = {i: [] for i in members}
++        for i in members:
++            for child in self.mhs[i].children:
++                if child in members:
++                    parents[child].append(i)
++        heights = {i: max(self.lh[self.mhs[i].left], self.rh[self.mhs[i].right]) for i in members}
++        if self.tie_uniform:
++            queue = [next(iter(v)) for v in self._ordered([frozenset({i}) for i in members],
++                      lambda v: heights[next(iter(v))], "score-height")]
++        else:
++            queue = sorted(members, key=lambda i: (-heights[i], self._key(frozenset({i}))))
++
++        def point(i):
++            return math.fsum(coefficient * self._probability(events) for coefficient, events in terms[i])
++
++        for child in queue:
++            got = parents[child]
++            if not global_ and self.s.block_most_out_of_mapping:
++                ordered = self._ordered([frozenset({p}) for p in got],
++                                        lambda p: point(next(iter(p))), "trickle-down")
++                lb, rb, selected = set(), set(), []
++                for p in ordered:
++                    p = next(iter(p))
++                    h = self.mhs[p]
++                    if h.left not in lb and h.right not in rb:
++                        selected.append(p)
++                        lb.add(h.left)
++                        rb.add(h.right)
++                got = selected
++            for parent in got:
++                terms[child].extend((coefficient * self.s.trickle_down, events | self.events[child])
++                                    for coefficient, events in terms[parent])
++        return {i: point(i) for i in members}
++
++    def run(self):
++        result = super().run()
++        candidates = []
++        for candidate in result.candidates:
++            local = {(h.left, h.right): h.local * self._probability(self.events[i])
++                     for i in candidate.members for h in (self.mhs[i],)}
++            breakdown = tuple((a, b, local[a, b], old_local + passed - local[a, b])
++                              for a, b, old_local, passed in candidate.breakdown)
++            candidates.append(replace(candidate, breakdown=breakdown))
++        return replace(result, version=VERSION, candidates=tuple(candidates))
++
++
++def validate(left, right, result):
++    """候補の作り方と別の一対一・引数・点の検査。"""
++    assert result.version == VERSION
++    assert result.left_fingerprint == left.fingerprint()
++    assert result.right_fingerprint == right.fingerprint()
++    for candidate in result.candidates:
++        pairs = candidate.relation_mapping + candidate.entity_mapping
++        _checked_mapping(left, right, pairs)
++        assert len(candidate.breakdown) == len(pairs)
++        assert math.isclose(math.fsum(local + passed for _, _, local, passed in candidate.breakdown),
++                            candidate.score, abs_tol=1e-12, rel_tol=1e-12)
++        mapping = dict(pairs)
++        lb, rb = left.by_id, right.by_id
++        for a, b in pairs:
++            x, y = lb[a], rb[b]
++            if x.kind != "entity" and "unknown" not in {x.kind, y.kind}:
++                assert tuple(mapping[arg] for arg in x.args) == y.args
++    return True
+diff --git a/tools/cstar_probability.py b/tools/cstar_probability.py
+new file mode 100644
+index 0000000..35d9505
+--- /dev/null
++++ b/tools/cstar_probability.py
+@@ -0,0 +1,108 @@
++"""C*・Hのディリクレ型・誕生の採点に共通の分布の部品。
++
++背景bの候補と重みは既存のv310beと同じ。α・εの混ぜはここで一回行う。
++この段階では既存の予測・採点の入口には差し込まない。
++"""
++from __future__ import annotations
++
++import math
++
++BACKGROUND_SOURCE = None
++
++
++def checked_distribution(distribution):
++    values = dict(distribution)
++    if not values or any(not math.isfinite(p) or p < 0 for p in values.values()):
++        raise ValueError("分布の確率が不正")
++    if not math.isclose(math.fsum(values.values()), 1.0, abs_tol=1e-12, rel_tol=1e-12):
++        raise ValueError("分布の総和が1でない")
++    return values
++
++
++def dirichlet_history(background, counts, alpha=1):
++    """n=0でb。名前と回数を保存し直さず、その時点の履歴から計算する。"""
++    if alpha != 1:
++        raise ValueError("委任書のαは1だけ")
++    b = checked_distribution(background)
++    counts = dict(counts)
++    if any(not isinstance(n, int) or n < 0 for n in counts.values()):
++        raise ValueError("履歴の回数が非負の整数でない")
++    n = sum(counts.values())
++    names = tuple(sorted((set(b) | set(counts)) - {None})) + ((None,) if None in b else ())
++    q = {x: (counts.get(x, 0) + alpha * b.get(x, 0.0)) / (n + alpha) for x in names}
++    return checked_distribution(q)
++
++
++def value_distributions(background, history, fixed, epsilon=.5):
++    """P_F=(1−ε)δ＋εb、P_H=(1−ε)q_H＋εb、P_U=b。"""
++    if not math.isfinite(epsilon) or not 0 <= epsilon <= 1:
++        raise ValueError("εが0〜1でない")
++    b, q = checked_distribution(background), checked_distribution(history)
++    names = tuple(sorted((set(b) | set(q) | {fixed}) - {None}))
++    if None in b or None in q or fixed is None:
++        names += (None,)
++    out = {"U": b,
++           "H": {x: (1 - epsilon) * q.get(x, 0.0) + epsilon * b.get(x, 0.0) for x in names},
++           "F": {x: (1 - epsilon) * (x == fixed) + epsilon * b.get(x, 0.0) for x in names}}
++    for distribution in out.values():
++        checked_distribution(distribution)
++    return out
++
++
++def most_probable(distribution):
++    """点予測は同じqの最頻名。同点と名の無い分布は棄権する。"""
++    dist = checked_distribution(distribution)
++    maximum = max(dist.values())
++    winners = [name for name, p in dist.items() if p == maximum]
++    return (winners[0], None) if len(winners) == 1 and winners[0] is not None else (None, "同点" if len(winners) > 1 else "候補名なし")
++
++
++def seat_distributions(d, row, state, scene, config, *, alpha=None, epsilon=.5):
++    """既存と同じ署名・階のb、履歴のHを作り、qとPを分けて返す。"""
++    import v310be
++    import v39
++    # 既存の部品のUはεにもq_Hにも依存しない。bの定義を複製しない。
++    source = BACKGROUND_SOURCE or v310be.probabilities
++    b = source(d, row, state, scene, config)["U"]
++    h = state.slot_history.get((d.name, row.slot_index))
++    q = history_distribution(d,row,state,h,b,config,alpha=alpha)
++    belief = {"F": {row.relation.predicate: 1.0}, "H": q, "U": b}
++    return {"b": b, "q": belief,
++            "P": value_distributions(b, q, row.relation.predicate, epsilon)}
++
++
++def history_distribution(d,row,state,history,background,config,*,alpha=None):
++    """答え・値付け・照合・仮の誕生で同じ履歴の分布を作る。"""
++    from collections.abc import Mapping
++    from abm.filling import _distribution
++    import v39
++    hp = v39._order_pool(frozenset(history or ()),d,row,config.higher_order_predicates)
++    if alpha is None:
++        q = dict(_distribution(hp,state.p_hat,config.local_lambda,history if isinstance(history,Mapping) else None))
++        if not q or sum(q.values()) == 0:
++            q = background.copy()
++    else:
++        counts = v39.hist_counts(history)
++        counts = {name: counts[name] for name in hp}
++        q = dirichlet_history(background,counts,alpha)
++    return q
++
++
++def birth_distributions(background, first_name, second_name, *, mode, alpha=1, epsilon=.5):
++    """誕生二材料の手計算用の基準。正解を知らない先頭の予測はbだけ。"""
++    b = checked_distribution(background)
++    if mode == 'fit' and first_name != second_name:
++        # この場合のFの固定名を決め直さない。呼ぶ側が件数と材料を報告する。
++        raise ValueError("誕生のFの名前が二材料で一意でない")
++    if mode == "fit":
++        q = dirichlet_history(b, {first_name: 2}, alpha)
++        after = value_distributions(b, q, first_name, epsilon)
++        return after, after
++    if mode == "seq":
++        before = {s: b.copy() for s in ("F", "H", "U")}
++        if first_name is None:
++            return before, {s: b.copy() for s in ("F", "H", "U")}
++        q = dirichlet_history(b, {first_name: 1}, alpha)
++        after_first = value_distributions(b, q, first_name, epsilon)
++        return before, after_first
++    raise ValueError("誕生の採点はfitまたはseq")
+diff --git a/tools/cstar_runtime.py b/tools/cstar_runtime.py
+new file mode 100644
+index 0000000..759eb06
+--- /dev/null
++++ b/tools/cstar_runtime.py
+@@ -0,0 +1,215 @@
++"""C*と共通分布の本番の接続。研究者の正解はこの入口へ渡さない。"""
++from __future__ import annotations
++
++from contextlib import contextmanager
++from dataclasses import replace
++from types import SimpleNamespace
++
++from cstar_matcher import CstarMatcher, VERSION, validate
++from cstar_probability import seat_distributions, birth_distributions, most_probable
++
++CFG = {}
++CTX = {}
++STATS = {}
++ENGINE = None
++
++
++def active():
++    return bool(CTX.get('enabled'))
++
++
++@contextmanager
++def phase(state, config, scene, enabled):
++    saved = dict(CTX)
++    CTX.update(state=state, config=config, scene=scene, enabled=enabled)
++    try:
++        yield
++    finally:
++        CTX.clear()
++        CTX.update(saved)
++
++
++def distributions(d, row, state, scene, config):
++    return seat_distributions(d, row, state, scene, config,
++                              alpha=CFG.get('h_dirichlet'), epsilon=CFG['logp_eps'])
++
++
++def probabilities_for_graph(raw, graph, scene):
++    """記憶の定義か、本人が見た逐語だけから左の分布を作る。"""
++    state, config = CTX['state'], CTX['config']
++    name = raw.graph_id.removeprefix('definition:') if raw.graph_id.startswith('definition:') else None
++    d = state.definitions.get(name)
++    if d is None:
++        rows = tuple(SimpleNamespace(relation=r, slot_index=i) for i, r in enumerate(raw.relations))
++        d = SimpleNamespace(name='cstar-visible-trace', constituents=rows)
++    rows = {r.relation.relation_id:r for r in d.constituents}
++    import v39
++    out = {}
++    for node in graph.nodes:
++        if node.kind in ('entity', 'unknown'):
++            continue
++        row = rows[node.key]
++        values = distributions(d, row, state, scene, config)
++        st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
++        out[node.key] = values['P' if CFG['match_eps'] == 'shared' else 'q'][st]
++    return out
++
++
++def support(d, row, history, alignment, scene):
++    """確率が正な組を、名前の一致として門へ入れない。伏せた位置は従前どおり。"""
++    import v39
++    sid = row.relation.relation_id
++    cid = alignment.relation_mapping.get(sid)
++    st = v39.seat_state(d, row, history)
++    if st == 'U' or cid is None:
++        return False
++    observed = next((r for r in scene.relations if r.relation_id == cid), None)
++    if observed is None:
++        return True
++    return (observed.predicate == row.relation.predicate if st == 'F'
++            else observed.predicate in v39.hist_counts(history.get((d.name,row.slot_index))))
++
++
++def h_distribution(d, row, history, p_hat, scene, hop):
++    state = SimpleNamespace(slot_history=history, p_hat=p_hat)
++    config = SimpleNamespace(higher_order_predicates=hop, local_lambda=0.0)
++    return distributions(d,row,state,scene,config)['q']['H']
++
++
++def initialize(d, row, state, base, target, trial, base_age, config):
++    """一つ目を知らない仮のFはb。実際のFの名と違えば修正せず停止する。"""
++    import argorder
++    import v310be
++    import v39
++    if v39.CFG['init'] == 'zero':
++        return v39.SeatRec(0,'F',trial,trial,v39.ZERO4,v39.ZERO4)
++    old, current = argorder.birth_observations(row, base, target)
++    first, old_pos = old
++    second, cur_pos = current
++    score_state = v310be.CTX.get('score_state', CTX.get('prediction_state', state))
++    values = distributions(d,row,score_state,base,config)
++    b = values['b']
++    first_name = first.predicate if first is not None else None
++    if CFG['birth_score'] == 'seq' and first_name is not None and first_name != row.relation.predicate:
++        STATS['birth_fixed_name_mismatch'] = STATS.get('birth_fixed_name_mismatch',0)+1
++        CTX['birth_stop'] = dict(trial=trial,slot=row.slot_index,actual=row.relation.predicate,first=first_name,second=second.predicate)
++        raise RuntimeError('誕生seqの仮のFと実際の固定名が異なる：'+repr(CTX['birth_stop']))
++    if CFG['birth_score'] == 'fit':
++        from cstar_probability import history_distribution, value_distributions
++        from collections import Counter
++        names = [o.predicate for o in (first,second) if o is not None]
++        q = history_distribution(d,row,score_state,Counter(names),b,config,alpha=CFG.get('h_dirichlet'))
++        fit = value_distributions(b,q,row.relation.predicate,CFG['logp_eps'])
++        before, after = fit, fit
++        point_before = point_after = {'F':{row.relation.predicate:1.},'H':q,'U':b}
++    else:
++        from cstar_probability import history_distribution, value_distributions
++        before = {s:b for s in ('F','H','U')}
++        point_before = {s:b for s in ('F','H','U')}
++        if first_name is None:
++            after,point_after = before,point_before
++        else:
++            q = history_distribution(d,row,score_state,{first_name:1},b,config,alpha=CFG.get('h_dirichlet'))
++            after = value_distributions(b,q,first_name,CFG['logp_eps'])
++            point_after = {'F':{first_name:1.},'H':q,'U':b}
++    L = v39.code_lengths(score_state.p_hat)
++    def costs(P, point, observed, position):
++        if observed is None:
++            return (0.,0.,0.,0.)
++        if v310be.CFG.get('score_logp'):
++            return tuple(v310be.log_cost(P[s],observed.predicate,L) for s in ('F','H','U'))+(1.,)
++        return tuple(0. if argorder.correct(most_probable(point[s])[0],position,observed)
++                     else v310be._ell(observed.predicate,L) for s in ('F','H','U'))+(1.,)
++    r_old,r_cur = costs(before,point_before,first,old_pos),costs(after,point_after,second,cur_pos)
++    weights = tuple(f ** max(base_age,0) for f in v39.CFG['decay'])
++    initial = tuple(tuple(w*o+c for w in weights) for o,c in zip(r_old,r_cur))
++    v39.CTX['births_rec'].append(dict(slot=row.slot_index,birth_score=CFG['birth_score'],
++        first_observed=first_name,second_observed=second.predicate,actual_fixed=row.relation.predicate,
++        b=b,P_old=before,P_current=after,r_old=r_old,r_current=r_cur,base_age=base_age))
++    return v39.SeatRec(0,'F',trial,trial,initial,v39.ZERO4)
++
++
++def snapshot():
++    return ENGINE.snapshot(),dict(CTX),dict(STATS)
++
++
++def restore(saved):
++    engine,context,stats = saved
++    ENGINE.restore(engine)
++    CTX.clear(); CTX.update(context)
++    STATS.clear(); STATS.update(stats)
++
++
++def install(**options):
++    global ENGINE
++    import abm.loop as loop
++    import smeshared
++    import probeworld
++    import v39
++    import v310be
++    import cstar_probability
++    CFG.clear(); CFG.update(options)
++    CTX.clear(); STATS.clear()
++    ENGINE = CstarMatcher(smeshared.ENGINE.settings,tie_seed=0,tie_uniform=smeshared.CTX.get('tie_uniform',False))
++    cstar_probability.BACKGROUND_SOURCE = v310be.probabilities
++    if v310be.CFG.get('score_logp'):
++        v310be.STATS['cfg']['epsilon'] = options['logp_eps']
++    if options.get('h_dirichlet') or options['logp_eps'] != .5:
++        def probabilities(d,row,state,scene,config):
++            return distributions(d,row,state,scene,config)['P']
++        v310be.probabilities = probabilities
++    v39.CFG.update(cstar=True,h_dirichlet=options.get('h_dirichlet'))
++    if 'cstar_runtime' not in probeworld.SNAP_MODULES:
++        probeworld.SNAP_MODULES += ('cstar_runtime',)
++    original_predict = loop.predict
++    def predict(agent_input,state,config,rng):
++        with phase(state,config,agent_input.target_graph_partial,options['match_cstar']):
++            CTX['prediction_state'] = state
++            output,pending = original_predict(agent_input,state,config,rng)
++            ranked = CTX.get('trace_ranked')
++        # 復元した外側へ、本人が見た提示と不変の候補だけを渡す。
++        CTX.update(last_partial=agent_input.target_graph_partial,prediction_state=state,trace_ranked=ranked)
++        return output,pending
++    loop.predict = predict
++    if options.get('birth_score'):
++        v39._init_rec = initialize
++    original_rewrite = v310be.rewrite
++    def rewrite(state,R,scene,L,config,considered):
++        # Eの仮の取り込み後の記憶を、元の記憶と取り違えない。
++        with phase(state,config,scene,options['match_cstar_e']):
++            return original_rewrite(state,R,scene,L,config,considered)
++    v310be.rewrite = rewrite
++    original_m1 = loop.m1
++    def m1(state,base,target,alignment,trial,**kw):
++        config = v39.CTX['config']
++        prediction_output = v39.CTX['output']
++        same = options['match_cstar'] == options['match_cstar_e']
++        if same and not options.get('material_keep',False):
++            # 両方同じ照合なら、予測前に作った不変の候補をEでも順位づけする。
++            # 既に記録した同じ抽選を二度書かず、CHOICESの同じ選択を使う。
++            log = smeshared._log
++            smeshared._log = lambda record: None
++            try:
++                mapping,chosen = smeshared.choose_trace(CTX['trace_ranked'],CTX['last_partial'])
++            finally:
++                smeshared._log = log
++            base,alignment = chosen.scene,mapping.alignment
++            kw['base_written_at'] = chosen.written_at
++        if not same:
++            # 混ぜた旗は診断用。Eの照合で逐語の候補を選び直す。
++            from abm.sme import map_graphs
++            partial = CTX['last_partial']
++            pre = CTX['prediction_state']
++            with phase(pre,config,partial,options['match_cstar_e']):
++                ranked = [(map_graphs(tr.scene,partial),tr) for tr in pre.prototype.traces]
++                mapping,chosen = smeshared.choose_trace(ranked,partial)
++                base,alignment = chosen.scene,mapping.alignment
++                kw['base_written_at'] = chosen.written_at
++                v39.CTX['output'] = replace(v39.CTX['output'],trace={**v39.CTX['output'].trace,
++                    'selected_scene':base,'selected_scene_written_at':chosen.written_at,'alignment':alignment})
++        try:
++            with phase(state,config,target,options['match_cstar_e']):
++                return original_m1(state,base,target,alignment,trial,**kw)
++        finally:
++            v39.CTX['output'] = prediction_output
++    loop.m1 = m1
+diff --git a/tools/cstar_score.py b/tools/cstar_score.py
+new file mode 100644
+index 0000000..ad5f5d5
+--- /dev/null
++++ b/tools/cstar_score.py
+@@ -0,0 +1,181 @@
++"""固定した対応のC*の期待点。候補の選び直しと世界の正解は使わない。
++
++速い計算は、各局所点の寄与に成立に必要な席の集合を付ける。
++検査用の全列挙は別の手続きで対応を取り除いてから点を渡す。
++本番への接続前の部品。既存のSMEの入口にはまだ差し込まない。
++"""
++from __future__ import annotations
++
++from dataclasses import dataclass
++from itertools import product
++import math
++
++from sme2017 import Graph, Settings
++
++VERSION = "cstar-fixed-mapping-1"
++
++
++@dataclass(frozen=True)
++class ExpectedScore:
++    total: float
++    # 左・右の番号、期待局所点、期待伝達点。
++    breakdown: tuple[tuple[str, str, float, float], ...]
++    # 空集合は物か未知の名前。Noneは引数の対応が足りない。
++    dependencies: tuple[tuple[str, frozenset[str] | None], ...]
++    # 各位置の局所点の寄与と、その成立に必要な異なる席。
++    contributions: tuple[tuple[str, tuple[tuple[float, frozenset[str]], ...]], ...]
++
++
++def _checked_mapping(left, right, pairs):
++    """独立の一対一・順つき引数の検査。隠れた引数は作らない。"""
++    pairs = tuple(pairs)
++    mapping = dict(pairs)
++    if len(mapping) != len(pairs) or len(set(mapping.values())) != len(mapping):
++        raise ValueError("固定した対応が一対一でない")
++    lb, rb = left.by_id, right.by_id
++    for a, b in pairs:
++        x, y = lb[a], rb[b]
++        if x.kind == "entity" or y.kind == "entity":
++            if x.kind != y.kind:
++                raise ValueError("物と関係の対応")
++            continue
++        if "unknown" in {x.kind, y.kind}:
++            continue
++        if x.kind != y.kind or len(x.args) != len(y.args):
++            raise ValueError("関係の種類・引数の数の不一致")
++        for u, v in zip(x.args, y.args, strict=True):
++            if u in mapping and mapping[u] != v:
++                raise ValueError("引数の順の不一致")
++    return mapping
++
++
++def _checked_q(left, right, mapping, probabilities):
++    lb, rb = left.by_id, right.by_id
++    q = {}
++    for a, b in mapping.items():
++        x, y = lb[a], rb[b]
++        if x.kind == "entity" or "unknown" in {x.kind, y.kind}:
++            continue
++        value = float(probabilities[a])
++        if not math.isfinite(value) or not 0 <= value <= 1:
++            raise ValueError((a, "名前の一致の確率が範囲外", value))
++        q[a] = value
++    return q
++
++
++def expected_score(left: Graph, right: Graph, pairs, probabilities, settings=Settings()):
++    """固定Mでの線形の期待点。共有された子の確率は集合の和で一度だけ掛ける。"""
++    if settings.max_local_score is not None:
++        raise ValueError("C*の速い計算は上限なしの点の伝達だけ")
++    mapping = _checked_mapping(left, right, pairs)
++    q = _checked_q(left, right, mapping, probabilities)
++    lb, rb = left.by_id, right.by_id
++    dependencies = {}
++    children = {}
++
++    def needs(a):
++        if a in dependencies:
++            return dependencies[a]
++        x, y = lb[a], rb[mapping[a]]
++        if x.kind == "entity" or "unknown" in {x.kind, y.kind}:
++            dependencies[a] = frozenset()
++            children[a] = ()
++            return dependencies[a]
++        actual = []
++        required = {a}
++        for u, v in zip(x.args, y.args, strict=True):
++            if mapping.get(u) != v:
++                dependencies[a] = None
++                children[a] = ()
++                return None
++            child_needs = needs(u)
++            if child_needs is None:
++                dependencies[a] = None
++                children[a] = ()
++                return None
++            actual.append(u)
++            required.update(child_needs)
++        children[a] = tuple(actual)
++        dependencies[a] = frozenset(required)
++        return dependencies[a]
++
++    for a in mapping:
++        needs(a)
++    terms = {a: [] for a in mapping}
++    local = {}
++
++    def weight(required):
++        # 同じ確率の並びを使い、番号の付け替えで積の丸め順を変えない。
++        return math.prod(sorted(q[i] for i in required))
++
++    for a in mapping:
++        required = dependencies[a]
++        coefficient = settings.same_functor if required else 0.0
++        if required is not None and coefficient:
++            terms[a].append((coefficient, required))
++        local[a] = 0.0 if required is None else coefficient * weight(required)
++    heights = left.heights()
++    # 親から子へだけ渡す。同じ高さの位置は互いに点を渡さない。
++    for a in sorted(mapping, key=lambda k: -heights[k]):
++        for child in children[a]:
++            needed = dependencies[child]
++            if needed is not None:
++                terms[child].extend((coefficient * settings.trickle_down, required | needed)
++                                    for coefficient, required in terms[a])
++    scores = {a: math.fsum(c * weight(required) for c, required in terms[a]) for a in mapping}
++    return ExpectedScore(math.fsum(scores.values()),
++                         tuple(sorted((a, b, local[a], scores[a] - local[a]) for a, b in mapping.items())),
++                         tuple(sorted(dependencies.items())),
++                         tuple(sorted((a, tuple(terms[a])) for a in mapping)))
++
++
++def exhaustive_score(left: Graph, right: Graph, pairs, probabilities, settings=Settings()):
++    """検査用。名前の一致・不一致を全列挙し、対応の除去と伝達を毎回行う。
++
++    期待点の依存集合・寄与を使わない。各席の名前は一回だけ引き、
++    現在の固定Mの相手の名前に合うかを二場合にまとめる。
++    """
++    if settings.max_local_score is not None:
++        raise ValueError("検査の範囲は上限なしの点の伝達")
++    mapping = _checked_mapping(left, right, pairs)
++    q = _checked_q(left, right, mapping, probabilities)
++    lb, rb = left.by_id, right.by_id
++    seats = tuple(q)
++    heights = left.heights()
++    outcomes = []
++    for flags in product((False, True), repeat=len(seats)):
++        allowed = dict(zip(seats, flags, strict=True))
++        mass = math.prod(q[a] if allowed[a] else 1 - q[a] for a in seats)
++        if not mass:
++            continue
++        remaining = {a for a in mapping if a not in allowed or allowed[a]}
++        while True:
++            remove = set()
++            for a in remaining:
++                x, y = lb[a], rb[mapping[a]]
++                if x.kind == "entity" or "unknown" in {x.kind, y.kind}:
++                    continue
++                if any(u not in remaining or mapping.get(u) != v for u, v in zip(x.args, y.args, strict=True)):
++                    remove.add(a)
++            if not remove:
++                break
++            remaining.difference_update(remove)
++        values = {a: settings.same_functor if a in allowed else 0.0 for a in remaining}
++        parents = {a: [] for a in remaining}
++        for a in remaining:
++            x, y = lb[a], rb[mapping[a]]
++            if "unknown" in {x.kind, y.kind}:
++                continue
++            for child in x.args or ():
++                if child in remaining:
++                    parents[child].append(a)
++        for child in sorted(remaining, key=lambda k: -heights[k]):
++            values[child] += settings.trickle_down * math.fsum(values[p] for p in parents[child])
++        outcomes.append(mass * math.fsum(values.values()))
++    return math.fsum(outcomes)
++
++
++def structural_self_score(graph: Graph, settings=Settings()):
++    """名前が全部合う完全な自己対応を明示的に採点する。F/H/Uは点を変えない。"""
++    q = {n.key: 1.0 for n in graph.nodes if n.kind not in {"entity", "unknown"}}
++    return expected_score(graph, graph, ((n.key, n.key) for n in graph.nodes), q, settings)
+diff --git a/tools/smeshared.py b/tools/smeshared.py
+index a57086d..0de2e68 100644
+--- a/tools/smeshared.py
++++ b/tools/smeshared.py
+@@ -29,6 +29,11 @@ LOG: dict = {}
+ CTX: dict = {}
+ 
+ 
++def active_version():
++    cstar = sys.modules.get('cstar_runtime')
++    return cstar.VERSION if cstar is not None and cstar.active() else VERSION
++
++
+ class FrozenDict(dict):
+     """JSONにそのまま書け、利用側で内容を書き替えられない辞書。"""
+     def _blocked(self, *a, **k):
+@@ -176,16 +181,23 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+     lf, rf = left.fingerprint(), right.fingerprint()
+     use = _caller()
+     seed = _match_seed(left, right, use)
+-    key = ENGINE.match_key(left, right, seed)
++    cstar = sys.modules.get('cstar_runtime')
++    expected = cstar is not None and cstar.active()
++    engine = cstar.ENGINE if expected else ENGINE
++    version = cstar.VERSION if expected else VERSION
++    probability = cstar.probabilities_for_graph(base_graph,left,target_graph_partial) if expected else None
++    key = (engine.match_key(left,right,seed,probabilities=probability) if expected
++           else engine.match_key(left,right,seed))
+     STATS["requests"] = STATS.get("requests", 0) + 1
+     if key in RESULTS:
+         STATS["reused"] = STATS.get("reused", 0) + 1
+         out = RESULTS[key]
+-        _log({"kind": "sme_use", "caller": use, "version": VERSION, "result": out.alignment.sme_result_id, "reused": True})
++        _log({"kind": "sme_use", "caller": use, "version": version, "result": out.alignment.sme_result_id, "reused": True})
+         return out
+-    result = ENGINE.match(left, right, tie_seed=seed)
+-    rng_before = ENGINE.cache_rng[key]
+-    validate(left, right, result)
++    result = (engine.match(left,right,tie_seed=seed,probabilities=probability) if expected
++              else engine.match(left,right,tie_seed=seed))
++    rng_before = engine.cache_rng[key]
++    (cstar.validate if expected else validate)(left, right, result)
+     GRAPHS[lf], GRAPHS[rf] = left, right
+     best = result.best
+     em = {} if best is None else dict(best.entity_mapping)
+@@ -205,13 +217,19 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+     identifier = sha256(repr(key).encode()).hexdigest()
+     kinds = () if best is None else best.match_kinds
+     visible_names = sum(k == "name" and b in {r.relation_id for r in target_graph_partial.relations} for a, b, k in kinds)
+-    audit = {"version": VERSION, "settings": asdict(ENGINE.settings), "left": lf, "right": rf,
++    if expected:
++        visible_names = sum(bool(left.by_id[a].names & right.by_id[b].names)
++                            for a,b in rm.items() if right.by_id[b].kind != 'unknown')
++    audit = {"version": version, "settings": asdict(engine.settings), "left": lf, "right": rf,
+              "selected": result.selected, "tied": result.tied, "choices": result.choices,
+              "kinds": kinds, "points": () if best is None else best.breakdown,
+              "visible_name_matches": visible_names, "old_on_new": _old_on_new(left, right, best, params),
+              "old_selected_score": old.total_score, "old_entity_mapping": dict(old.entity_mapping),
+              "old_relation_mapping": dict(old.relation_mapping),
+              "new_entity_mapping": em, "new_relation_mapping": rm}
++    if expected:
++        audit.update(cstar_probabilities=probability,match_eps=cstar.CFG['match_eps'],
++                     candidates=len(result.candidates),hypotheses=result.hypothesis_count if hasattr(result,'hypothesis_count') else None)
+     if seed is not None:
+         audit.update(tie_policy="call-seed-uniform-v1" if CTX.get("tie_uniform") else "call-seed-v1",
+                      tie_seed=seed, trial=CTX["trial"], call_kind=use)
+@@ -245,7 +263,7 @@ def _definition_choice(candidates, scene):
+             CHOICES[token] = (tied[pick][2].name, tied[pick][2].registered_at)
+         selected = CHOICES[token]
+         chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
+-        _log({"kind": "sme_definition_tie", "version": VERSION,
++        _log({"kind": "sme_definition_tie", "version": active_version(),
+               "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
+               "tie_policy": "call-seed-uniform-v1", "tie_seed": seed, "trial": CTX["trial"],
+               "canonical_multiset": forms})
+@@ -272,7 +290,7 @@ def _definition_choice(candidates, scene):
+             CHOICES[token] = (options[pick][2].name, options[pick][2].registered_at)
+     selected = CHOICES[token]
+     chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
+-    _log({"kind": "sme_definition_tie", "version": VERSION,
++    _log({"kind": "sme_definition_tie", "version": active_version(),
+           "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
+           **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
+               "canonical_multiset": forms} if CTX.get("call_seed") else {})})
+@@ -292,7 +310,7 @@ def choose_trace(ranked, scene):
+             pick = random.Random(seed).randrange(len(tied)) if len(tied) > 1 else 0
+             CHOICES[token] = (tied[pick][0].alignment.sme_audit["left"], tied[pick][1].scene.graph_id)
+         selected = CHOICES[token]
+-        _log({"kind": "sme_trace_tie", "version": VERSION,
++        _log({"kind": "sme_trace_tie", "version": active_version(),
+               "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
+               "selected": selected, "tie_policy": "call-seed-uniform-v1", "tie_seed": seed,
+               "trial": CTX["trial"], "canonical_multiset": forms})
+@@ -317,7 +335,7 @@ def choose_trace(ranked, scene):
+             pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
+             CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
+     selected = CHOICES[token]
+-    _log({"kind": "sme_trace_tie", "version": VERSION, "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
++    _log({"kind": "sme_trace_tie", "version": active_version(), "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
+           "selected": selected,
+           **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
+               "canonical_multiset": forms} if CTX.get("call_seed") else {})})
+@@ -342,10 +360,13 @@ def select_definition(state, scene, config):
+             continue
+         # 浮動小数の丸めを足さず、出たSESの比を分数として比較する。
+         n3 = 2 * Fraction(al.total_score) / (Fraction(dd) + Fraction(xx))
+-        support = sum(v39.seat_state(d, r, state.slot_history) != "U" and r.relation.relation_id in al.relation_mapping
+-                      for r in d.constituents)
++        cstar = sys.modules.get('cstar_runtime')
++        support = (sum(cstar.support(d,r,state.slot_history,al,scene) for r in d.constituents)
++                   if cstar is not None and cstar.active() else
++                   sum(v39.seat_state(d,r,state.slot_history) != 'U' and r.relation.relation_id in al.relation_mapping
++                       for r in d.constituents))
+         ranked.append((support / n, support, d, g, al, n, n3))
+-        _log({"kind": "sme_n3", "R": d.name, "version": VERSION, "result": al.sme_result_id,
++        _log({"kind": "sme_n3", "R": d.name, "version": active_version(), "result": al.sme_result_id,
+               "S_dx": al.total_score, "S_dd": dd, "S_xx": xx, "N3": float(n3), "support": support, "m_live": n})
+     if not ranked:
+         return None
+@@ -360,6 +381,12 @@ def select_definition(state, scene, config):
+ 
+ def self_score(graph):
+     """自己の点も通常の照合の第一位から。旧い行ごとの自己点は使わない。"""
++    cstar = sys.modules.get('cstar_runtime')
++    if cstar is not None and cstar.active():
++        value = cstar.ENGINE.self_score(graph)
++        _log(dict(kind='sme_self',version=cstar.VERSION,input=graph.fingerprint(),score=value,
++                  self_policy='full-identity-all-names-match',settings=asdict(cstar.ENGINE.settings)))
++        return value
+     seed = _match_seed(graph, graph, "自己照合")
+     result = ENGINE.match(graph, graph, tie_seed=seed)
+     validate(graph, graph, result)
+@@ -376,11 +403,15 @@ def self_score(graph):
+ 
+ 
+ def snapshot():
+-    return ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS), dict(CTX)
++    saved = ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS), dict(CTX)
++    cstar = sys.modules.get('cstar_runtime')
++    return saved + (cstar.snapshot(),) if cstar is not None and cstar.ENGINE is not None else saved
+ 
+ 
+ def restore(snap):
+-    engine, results, graphs, choices, stats, context = snap
++    engine, results, graphs, choices, stats, context = snap[:6]
++    if len(snap) == 7:
++        sys.modules['cstar_runtime'].restore(snap[6])
+     ENGINE.restore(engine)
+     for current, saved in ((RESULTS, results), (GRAPHS, graphs), (CHOICES, choices), (STATS, stats), (CTX, context)):
+         current.clear()
+diff --git a/tools/test_cstar_fixed.py b/tools/test_cstar_fixed.py
+new file mode 100644
+index 0000000..1b79167
+--- /dev/null
++++ b/tools/test_cstar_fixed.py
+@@ -0,0 +1,105 @@
++"""固定Mの全列挙を独立の基準にした、C*の部品の関門。"""
++from dataclasses import replace
++from pathlib import Path
++import json
++import random
++import sys
++import unittest
++
++sys.path[:0] = [str(Path(__file__).resolve().parent), str(Path(__file__).resolve().parents[1])]
++from sme2017 import Graph, Node, Settings
++from cstar_score import expected_score, exhaustive_score, structural_self_score
++
++
++def toy():
++    return Graph((Node("d", "entity"), Node("s", "entity"),
++                  Node("seal", "relation", frozenset({"sig_e"}), ("d",)),
++                  Node("at", "relation", frozenset({"at"}), ("d", "s")),
++                  Node("open", "relation", frozenset({"open"}), ("d",)),
++                  Node("top", "relation", frozenset({"implies"}), ("at", "open")),
++                  Node("link", "relation", frozenset({"attach"}), ("seal", "top"))))
++
++
++class FixedGates(unittest.TestCase):
++    def test_five_toy_values(self):
++        g = toy()
++        pairs = tuple((n.key, n.key) for n in g.nodes)
++        for p, wanted in [(0, .1175), (.1, .2052), (.5, .556), (.9, .9068), (1, .9945)]:
++            q = {n.key: 1.0 for n in g.nodes if n.kind == "relation"}
++            q["seal"] = p
++            self.assertAlmostEqual(expected_score(g, g, pairs, q).total, wanted, places=13)
++            self.assertAlmostEqual(exhaustive_score(g, g, pairs, q), wanted, places=13)
++
++    def test_shared_child_and_independent_children(self):
++        # 親rootは、pとqに共有された一席childだけに名前の不確かさがある。
++        g = Graph((Node("e", "entity"),
++                   Node("child", "relation", frozenset({"x"}), ("e",)),
++                   Node("p", "relation", frozenset({"p"}), ("child",)),
++                   Node("q", "relation", frozenset({"q"}), ("child",)),
++                   Node("root", "relation", frozenset({"r"}), ("p", "q"))))
++        pairs = tuple((n.key, n.key) for n in g.nodes)
++        q = {n.key: 1.0 for n in g.nodes if n.kind == "relation"}
++        q["child"] = .4
++        got = expected_score(g, g, pairs, q)
++        self.assertEqual(dict(got.dependencies)["root"], frozenset({"root", "p", "q", "child"}))
++        self.assertAlmostEqual(got.total, .4 * structural_self_score(g).total, places=13)
++        self.assertAlmostEqual(got.total, exhaustive_score(g, g, pairs, q), places=13)
++        separate = Graph((Node("e", "entity"),
++                          Node("a", "relation", frozenset({"a"}), ("e",)),
++                          Node("b", "relation", frozenset({"b"}), ("e",)),
++                          Node("root", "relation", frozenset({"r"}), ("a", "b"))))
++        q2 = {"a": .2, "b": .3, "root": 1.0}
++        result = expected_score(separate, separate, tuple((n.key, n.key) for n in separate.nodes), q2)
++        self.assertAlmostEqual(dict((a, local) for a, _, local, _ in result.breakdown)["root"],
++                               Settings().same_functor * .2 * .3)
++
++    def test_independent_branch_survives(self):
++        g = toy()
++        q = {n.key: 1.0 for n in g.nodes if n.kind == "relation"}
++        q["seal"] = 0
++        result = expected_score(g, g, tuple((n.key, n.key) for n in g.nodes), q)
++        local = {a: l for a, _, l, _ in result.breakdown}
++        self.assertEqual(local["link"], 0)
++        self.assertEqual(local["top"], Settings().same_functor)
++
++    def test_random_fixed_mappings_240(self):
++        rng = random.Random(4107)
++        for _ in range(240):
++            nodes = [Node("e0", "entity"), Node("e1", "entity")]
++            q = {}
++            for i in range(rng.randint(1, 7)):
++                key = "r" + str(i)
++                args = tuple(rng.choice(nodes).key for _ in range(rng.randint(1, 3)))
++                nodes.append(Node(key, "relation", frozenset({"p" + str(i)}), args))
++                q[key] = rng.choice((0, .1, .2, .4, .6, .8, .9, 1))
++            g = Graph(tuple(nodes))
++            pairs = tuple((n.key, n.key) for n in nodes)
++            self.assertAlmostEqual(expected_score(g, g, pairs, q).total,
++                                   exhaustive_score(g, g, pairs, q), delta=1e-11)
++
++    def test_self_tags_and_unknown_invariance(self):
++        g = toy()
++        full = structural_self_score(g).total
++        for state in ("F", "H", "U"):
++            changed = Graph(tuple(replace(n, state=state, names=frozenset() if state == "U" else n.names)
++                                  if n.kind == "relation" else n for n in g.nodes))
++            self.assertEqual(structural_self_score(changed).total, full)
++        hidden = Graph(tuple(Node(n.key, "unknown", args=None) if n.key == "seal" else n for n in g.nodes))
++        q = {n.key: 1.0 for n in hidden.nodes if n.kind == "relation"}
++        pairs = tuple((n.key, n.key) for n in hidden.nodes)
++        self.assertAlmostEqual(expected_score(hidden, hidden, pairs, q).total,
++                               exhaustive_score(hidden, hidden, pairs, q), places=13)
++
++    def test_invalid_order_and_double_mapping_are_rejected(self):
++        g = toy()
++        pairs = tuple((n.key, n.key) for n in g.nodes)
++        q = {n.key: 1.0 for n in g.nodes if n.kind == "relation"}
++        reverse = Graph(tuple(replace(n, args=tuple(reversed(n.args))) if n.key == "at" else n for n in g.nodes))
++        with self.assertRaises(ValueError):
++            expected_score(g, reverse, pairs, q)
++        with self.assertRaises(ValueError):
++            expected_score(g, g, pairs + (("d", "s"),), q)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/test_cstar_matcher.py b/tools/test_cstar_matcher.py
+new file mode 100644
+index 0000000..3ae6791
+--- /dev/null
++++ b/tools/test_cstar_matcher.py
+@@ -0,0 +1,84 @@
++"""各段が期待点を使う候補探索と、最終の固定Mの点の関門。"""
++from pathlib import Path
++from dataclasses import replace
++import random
++import sys
++import unittest
++sys.path[:0] = [str(Path(__file__).resolve().parent), str(Path(__file__).resolve().parents[1])]
++from sme2017 import Graph, Node, Settings
++from cstar_matcher import CstarMatcher, validate
++from cstar_score import exhaustive_score
++from test_cstar_fixed import toy
++
++
++class MatcherGates(unittest.TestCase):
++    def test_toy_candidates_and_points(self):
++        scene = toy()
++        memory = Graph(tuple(replace(n, state="U", names=frozenset()) if n.key == "seal" else n for n in scene.nodes))
++        matcher = CstarMatcher(Settings(), tie_uniform=True)
++        for p, wanted in [(0, .1175), (.1, .2052), (.5, .556), (.9, .9068), (1, .9945)]:
++            dist = {n.key: {next(iter(n.names)): 1.0} for n in scene.nodes if n.kind == "relation"}
++            dist["seal"] = {"sig_e": p, "other": 1-p}
++            result = matcher.match(memory, scene, probabilities=dist, tie_seed=4107)
++            self.assertTrue(validate(memory, scene, result))
++            self.assertAlmostEqual(result.best.score, wanted, places=12)
++            for candidate in result.candidates:
++                mapping = dict(candidate.relation_mapping + candidate.entity_mapping)
++                q = {a: dist[a].get(next(iter(scene.by_id[b].names)), 0.0)
++                     for a, b in mapping.items() if scene.by_id[b].kind == "relation"}
++                self.assertAlmostEqual(candidate.score, exhaustive_score(memory, scene, mapping.items(), q), delta=1e-12)
++
++    def test_positive_probability_is_not_thresholded(self):
++        scene = toy()
++        dist = {n.key: {next(iter(n.names)): 1.0} for n in scene.nodes if n.kind == "relation"}
++        dist["seal"] = {"sig_e": 1e-9, "other": 1-1e-9}
++        result = CstarMatcher(tie_uniform=True).match(scene, scene, probabilities=dist, tie_seed=4107)
++        self.assertTrue(any(h.left == "seal" and h.right == "seal" for h in result.hypotheses))
++        self.assertTrue(any(h.left == "link" and h.right == "link" for h in result.hypotheses))
++
++    def test_probability_key_changes_with_history_or_background(self):
++        g = toy()
++        dist = {n.key: {next(iter(n.names)): 1.0} for n in g.nodes if n.kind == "relation"}
++        m = CstarMatcher(tie_uniform=True)
++        old = m.match_key(g, g, 1, probabilities=dist)
++        changed = {**dist, "seal": {"sig_e": .9, "other": .1}}
++        self.assertNotEqual(old, m.match_key(g, g, 1, probabilities=changed))
++        first = m.match(g, g, probabilities=dist, tie_seed=1)
++        second = m.match(g, g, probabilities=changed, tie_seed=1)
++        self.assertNotEqual(first.best.score, second.best.score)
++        self.assertEqual(first, m.match(g, g, probabilities=dist, tie_seed=1))
++
++    def test_unknown_name_marginalized_and_no_hidden_arguments(self):
++        memory = toy()
++        scene = Graph(tuple(Node(n.key, "unknown", args=None) if n.key == "seal" else n for n in memory.nodes))
++        dist = {n.key: {next(iter(n.names)): 1.0} for n in memory.nodes if n.kind == "relation"}
++        matcher = CstarMatcher(tie_uniform=True)
++        a = matcher.match(memory, scene, probabilities=dist, tie_seed=2)
++        b = matcher.match(memory, scene, probabilities={**dist, "seal": {"hidden_a": .2, "hidden_b": .8}}, tie_seed=2)
++        self.assertEqual(a.best.score, b.best.score)
++        hidden = [h for h in a.hypotheses if h.right == "seal"]
++        self.assertTrue(hidden)
++        self.assertTrue(all(not h.children and h.local == 0 for h in hidden))
++
++    def test_random_candidates_are_consistent_and_exhaustive_scores_match(self):
++        rng = random.Random(4108)
++        for case in range(40):
++            nodes = [Node("e", "entity")]
++            dist = {}
++            for i in range(rng.randint(1, 6)):
++                key = "r" + str(i)
++                args = tuple(rng.choice(nodes).key for _ in range(rng.randint(1, 2)))
++                nodes.append(Node(key, "relation", frozenset({"p" + str(i)}), args))
++                p = rng.choice((.1, .3, .5, .7, .9, 1))
++                dist[key] = {"p" + str(i): p, "other": 1-p}
++            g = Graph(tuple(nodes))
++            result = CstarMatcher(tie_uniform=True).match(g, g, probabilities=dist, tie_seed=case)
++            self.assertTrue(validate(g, g, result))
++            for candidate in result.candidates:
++                mapping = dict(candidate.relation_mapping + candidate.entity_mapping)
++                q = {a: dist[a][next(iter(g.by_id[b].names))] for a, b in mapping.items() if g.by_id[b].kind == "relation"}
++                self.assertAlmostEqual(candidate.score, exhaustive_score(g, g, mapping.items(), q), delta=1e-11)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/test_cstar_probability.py b/tools/test_cstar_probability.py
+new file mode 100644
+index 0000000..41240bf
+--- /dev/null
++++ b/tools/test_cstar_probability.py
+@@ -0,0 +1,72 @@
++"""分布と誕生の手計算。予測前の入力だけを使う部品の検査。"""
++from pathlib import Path
++import math
++import sys
++import unittest
++sys.path[:0] = [str(Path(__file__).resolve().parent), str(Path(__file__).resolve().parents[1])]
++from cstar_probability import dirichlet_history, value_distributions, birth_distributions, most_probable
++
++
++class ProbabilityGates(unittest.TestCase):
++    def test_dirichlet_empty_and_limit(self):
++        b = {"sig_n": .11, "sig_e": .89}
++        self.assertEqual(dirichlet_history(b, {}), b)
++        for n in (1, 2, 100, 10000):
++            q = dirichlet_history(b, {"sig_n": n})
++            self.assertAlmostEqual(q["sig_n"], (n + .11)/(n + 1))
++            self.assertAlmostEqual(sum(q.values()), 1)
++        self.assertGreater(dirichlet_history(b, {"sig_n": 10000})["sig_n"], .9999)
++
++    def test_same_distribution_same_cost(self):
++        b = {"a": .8, "b": .2}
++        p = value_distributions(b, {"a": 1}, "a")
++        self.assertEqual(p["F"], p["H"])
++        self.assertEqual(-math.log2(p["F"]["a"]), -math.log2(p["H"]["a"]))
++
++    def test_fit_and_seq_hand_values_four_epsilons(self):
++        b = {"sig_n": .11, "sig_e": .89}
++        for eps in (.005, .01, .02, .5):
++            old, current = birth_distributions(b, "sig_n", "sig_n", mode="fit", epsilon=eps)
++            wanted_fit = {"F": (1 - eps) + eps * .11,
++                          "H": (1 - eps) * (2 + .11)/3 + eps * .11,
++                          "U": .11}
++            for seat, probability in wanted_fit.items():
++                self.assertAlmostEqual(old[seat]["sig_n"], probability)
++                self.assertEqual(old[seat], current[seat])
++            before, after_first = birth_distributions(b, "sig_n", "sig_n", mode="seq", epsilon=eps)
++            for seat in ("F", "H", "U"):
++                self.assertEqual(before[seat], b)
++            self.assertAlmostEqual(after_first["F"]["sig_n"], (1 - eps) + eps * .11)
++            self.assertAlmostEqual(after_first["H"]["sig_n"], (1 - eps) * (1 + .11)/2 + eps * .11)
++            self.assertEqual(after_first["U"], b)
++        fit, _ = birth_distributions(b, "sig_n", "sig_n", mode="fit")
++        before, sequential = birth_distributions(b, "sig_n", "sig_n", mode="seq")
++        for seat, rounded in {"F": .849, "H": 1.298, "U": 3.184}.items():
++            self.assertAlmostEqual(-math.log2(fit[seat]["sig_n"]), rounded, delta=.0005)
++        self.assertAlmostEqual(-math.log2(sequential["H"]["sig_n"]), 1.589, delta=.0005)
++        self.assertAlmostEqual(-math.log2(before["F"]["sig_n"]), 3.184, delta=.0005)
++
++    def test_no_names_and_argmax_tie(self):
++        self.assertEqual(most_probable({None: 1}), (None, "候補名なし"))
++        self.assertEqual(most_probable({"a": .5, "b": .5}), (None, "同点"))
++        self.assertEqual(most_probable({"a": .6, "b": .4}), ("a", None))
++
++    def test_fit_nonunique_does_not_choose_name(self):
++        with self.assertRaisesRegex(ValueError, "一意でない"):
++            birth_distributions({"a": .5, "b": .5}, "a", "b", mode="fit")
++
++    def test_seq_does_not_read_second_name(self):
++        b = {'a':.11,'b':.89}
++        for eps in (.005,.01,.02,.5):
++            self.assertEqual(birth_distributions(b,'a','a',mode='seq',epsilon=eps),
++                             birth_distributions(b,'a','b',mode='seq',epsilon=eps))
++            first,second = birth_distributions(b,None,'a',mode='seq',epsilon=eps)
++            self.assertEqual(first,{s:b for s in ('F','H','U')})
++            self.assertEqual(second,first)
++            # 一つ目の損は同じbであり、状態の差では消える。
++            p,_ = birth_distributions(b,'a','b',mode='seq',epsilon=eps)
++            self.assertEqual(-math.log2(p['F']['a'])+math.log2(p['H']['a']),0)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/test_cstar_runtime.py b/tools/test_cstar_runtime.py
+new file mode 100644
+index 0000000..8cb7cfd
+--- /dev/null
++++ b/tools/test_cstar_runtime.py
+@@ -0,0 +1,90 @@
++"""41′の門・背景の凍結・誕生の情報の境界の小さな検査。"""
++from pathlib import Path
++from types import SimpleNamespace as NS
++from dataclasses import replace
++from unittest.mock import patch
++from random import Random
++import math,sys,unittest
++sys.path[:0] = [str(Path(__file__).resolve().parent),str(Path(__file__).resolve().parents[1])]
++from abm.definition import Constituent,FrequencyTable
++from abm.domains import Relation,RelationGraph
++import cstar_runtime as runtime
++import cstar_probability as probability
++import v39,v310be,argorder
++
++
++class RuntimeGates(unittest.TestCase):
++    def setUp(self):
++        self.saved = [(d,dict(d)) for d in (runtime.CFG,runtime.CTX,runtime.STATS,v39.CFG,v39.CTX,v310be.CFG,v310be.CTX)]
++        self.background = probability.BACKGROUND_SOURCE
++        probability.BACKGROUND_SOURCE = None
++        for d,_ in self.saved:
++            d.clear()
++        runtime.CFG.update(h_dirichlet=1,logp_eps=.5,birth_score='seq',match_eps='0')
++        v39.CFG.update(init='two',u_abstain=False,decay=(1.,)*16)
++        v39.CTX['births_rec'] = []
++        self.row = Constituent(0,0,Relation('s','a',('x','y')),True)
++        self.d = NS(name='D',constituents=(self.row,))
++        self.state = NS(slot_history={('D',0):{'a':9,'b':4}},p_hat=FrequencyTable({'a':8,'b':2},10,.1,frozenset({'a','b'})))
++        self.scene = RelationGraph('scene',relations=(Relation('t','b',('u','v')),))
++        self.config = NS(local_lambda=1.,higher_order_predicates=frozenset())
++
++    def tearDown(self):
++        probability.BACKGROUND_SOURCE = self.background
++        for d,saved in self.saved:
++            d.clear(); d.update(saved)
++
++    def test_positive_probability_does_not_pass_name_gate(self):
++        alignment = NS(relation_mapping={'s':'t'})
++        self.assertFalse(runtime.support(self.d,self.row,self.state.slot_history,alignment,self.scene))
++        h = replace(self.row,alive=False)
++        self.assertTrue(runtime.support(self.d,h,self.state.slot_history,alignment,self.scene))
++        self.assertFalse(runtime.support(self.d,h,{},alignment,self.scene))
++        self.assertTrue(runtime.support(self.d,self.row,{},alignment,RelationGraph('hidden')))
++        self.assertFalse(runtime.support(self.d,h,{},alignment,RelationGraph('hidden')))
++
++    def test_dirichlet_same_source_for_answer_value_match(self):
++        out = runtime.distributions(self.d,self.row,self.state,self.scene,self.config)
++        self.assertEqual(out['b'],v310be.probabilities(self.d,self.row,self.state,self.scene,self.config)['U'])
++        q = runtime.h_distribution(self.d,self.row,self.state.slot_history,self.state.p_hat,self.scene,frozenset())
++        self.assertEqual(q,out['q']['H'])
++        self.assertAlmostEqual(q['a'],(9+out['b']['a'])/14)
++        self.assertAlmostEqual(out['P']['H']['a'],.5*q['a']+.5*out['b']['a'])
++
++    def test_expected_distribution_does_not_change_memory_or_rng(self):
++        rnd = Random(1)
++        before = repr(self.state),rnd.getstate()
++        with runtime.phase(self.state,self.config,self.scene,True):
++            runtime.distributions(self.d,self.row,self.state,self.scene,self.config)
++            runtime.distributions(self.d,self.row,self.state,self.scene,self.config)
++        self.assertEqual((repr(self.state),rnd.getstate()),before)
++        self.assertFalse(runtime.active())
++
++    def test_zero_probability_keeps_escape_cost(self):
++        self.assertEqual(v310be.log_cost({'a':1.},'new',{'a':5}),6)
++
++    def test_seq_freezes_b_and_first_material_name(self):
++        v310be.CFG['score_logp'] = True
++        v310be.CTX['score_state'] = self.state
++        changed = NS(slot_history={},p_hat=FrequencyTable({'a':10000,'b':2},10002,.1,frozenset({'a','b'})))
++        observation = ((self.row.relation,('x','y')),(Relation('t','b',('u','v')),('u','v')))
++        with patch.object(argorder,'birth_observations',return_value=observation):
++            rec = runtime.initialize(self.d,self.row,changed,self.scene,self.scene,2,1,self.config)
++        record = v39.CTX['births_rec'][-1]
++        b = record['b']
++        self.assertAlmostEqual(b['a'],.8)
++        self.assertAlmostEqual(record['P_current']['F']['a'],.9)
++        self.assertEqual(record['P_old']['F'],record['P_old']['H'])
++        self.assertEqual(record['P_old']['H'],record['P_old']['U'])
++        self.assertAlmostEqual(rec.init[0][0],-math.log2(.8)-math.log2(.1))
++
++    def test_seq_actual_F_name_mismatch_stops(self):
++        observation = ((Relation('s','b',('x','y')),('x','y')),(self.row.relation,('x','y')))
++        with patch.object(argorder,'birth_observations',return_value=observation):
++            with self.assertRaisesRegex(RuntimeError,'固定名が異なる'):
++                runtime.initialize(self.d,self.row,self.state,self.scene,self.scene,2,1,self.config)
++        self.assertEqual(runtime.STATS['birth_fixed_name_mismatch'],1)
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/tools/v39.py b/tools/v39.py
+index b4d6037..3b4ecc7 100644
+--- a/tools/v39.py
++++ b/tools/v39.py
+@@ -361,6 +361,11 @@ def _order_pool(pool, d, row, hop):
+ 
+ 
+ def h_answer(d, row, slot_history, p_hat, lam, hop):
++    if CFG.get('h_dirichlet'):
++        import cstar_runtime
++        from cstar_probability import most_probable
++        scene = cstar_runtime.CTX.get('scene') or cstar_runtime.CTX.get('last_partial')
++        return most_probable(cstar_runtime.h_distribution(d,row,slot_history,p_hat,scene,hop))
+     from abm.filling import most_frequent
+     h = slot_history.get((d.name, row.slot_index))
+     if not h:
+@@ -503,6 +508,11 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
+             if pool_before_order and not pool:
+                 empty_pool_slots += 1
+             distribution = _distribution(pool, p_hat, local_lambda, local_counts)
++            if st == 'H' and CFG.get('h_dirichlet'):
++                import cstar_runtime
++                distribution = tuple(cstar_runtime.h_distribution(definition,constituent,slot_history,p_hat,
++                                                                  target,higher_order_predicates).items())
++                pool = frozenset(p for p,w in distribution if p is not None and w > 0)
+             maximum = max((w for _, w in distribution), default=0.0)
+             tied_count = sum(w == maximum for _, w in distribution) if maximum > 0 else 0
+             history_size += len(pool)
+@@ -513,7 +523,12 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
+                 predicate = sample_predicate(distribution, rng)
+                 tied = False
+             else:
+-                predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
++                if st == 'H' and CFG.get('h_dirichlet'):
++                    from cstar_probability import most_probable
++                    predicate, reason = most_probable(dict(distribution))
++                    tied = reason == '同点'
++                else:
++                    predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
+                 ambiguous = ambiguous or tied
+             fallback_used = fallback_used or used_fallback
+             if predicate is None:
+@@ -585,6 +600,9 @@ def predict(agent_input, state, config, rng):
+         CTX["output"] = output
+         return output, ar.PendingState(state, output, agent_input, ar._snapshot_rng_state(rng, state.rng_state))
+     ranked = [(map_graphs(trace.scene, agent_input.target_graph_partial), trace) for trace in state.prototype.traces]
++    if CFG.get('cstar'):
++        import cstar_runtime
++        cstar_runtime.CTX['trace_ranked'] = ranked
+     if CFG.get("sme2017"):
+         import smeshared
+         mapping, selected_trace = smeshared.choose_trace(ranked, agent_input.target_graph_partial)
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 0b1ea40..95ab67c 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -500,6 +500,9 @@ def worker(task: dict) -> dict:
+             import smeevict
+             smeevict.install(out_root / "evictions" / task["cell"] / f"seed{task['seed']:03d}.keys.jsonl.gz",
+                             tombstone=task.get("sme_evict_tombstone", False))
++        if task.get("cstar_options"):
++            import cstar_runtime
++            cstar_runtime.install(**task["cstar_options"])
+     if task.get("shop_world"):
+         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
+         #   v39 の固定辞書に新しい述語を足す
+@@ -780,6 +783,12 @@ def main() -> None:
+     ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
+     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
++    ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
++    ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
++    ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
++    ap.add_argument("--match-eps", choices=("0", "shared"), default="0", help="C*のqに背景bへの混ぜを入れない0、値付けのPとそろえるshared")
++    ap.add_argument("--logp-eps", type=float, default=0.5, help="背景分布bに戻る混合率ε（既定0.5）")
++    ap.add_argument("--birth-score", choices=("fit", "seq"), default=None, help="二材料を観察後に当てるfit、一材料ずつ順に当てるseq")
+     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
+     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
+     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+@@ -840,6 +849,16 @@ def main() -> None:
+         raise SystemExit("--score-logp は --v310-be と一緒に使う")
+     if args.score_logp_e and not args.score_logp:
+         raise SystemExit("--score-logp-e は --score-logp と一緒に使う")
++    cstar_options = {}
++    if (args.match_cstar or args.match_cstar_e or args.h_dirichlet is not None
++            or args.birth_score is not None or args.logp_eps != .5):
++        if not (args.sme2017 and args.v310_be and args.score_arg_order):
++            raise SystemExit("C*と共通分布の旗は--sme2017 --v310-be --score-arg-orderと一緒に使う")
++        if not 0 <= args.logp_eps <= 1:
++            raise SystemExit("--logp-epsは0以上1以下")
++        cstar_options = dict(match_cstar=args.match_cstar,match_cstar_e=args.match_cstar_e,
++                             h_dirichlet=args.h_dirichlet,match_eps=args.match_eps,
++                             logp_eps=args.logp_eps,birth_score=args.birth_score)
+     if args.score_role and not args.v310_be:
+         raise SystemExit("--score-role は --v310-be と一緒に使う")
+     if args.u_struct and (not args.v39 or not args.hist_role):
+@@ -893,6 +912,9 @@ def main() -> None:
+     if args.score_logp:
+         for task in tasks:
+             task.update(score_logp=True, score_logp_e=args.score_logp_e)
++    if cstar_options:
++        for task in tasks:
++            task["cstar_options"] = cstar_options
+     if args.score_arg_order:
+         if not (args.v310_be and args.hist_role and args.score_role):
+             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
+@@ -935,7 +957,8 @@ def main() -> None:
+         if args.shop_scatter:
+             task["shop_scatter"] = True
+     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
+-                                                    **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": 0.5} if args.score_logp else {}),
++                                                    **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
++                                                    **cstar_options,
+                                                     **({"sme2017": True} if args.sme2017 else {}),
+                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
+                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
