@@ -1,0 +1,85 @@
+{
+  "completed_at": "2026-10-07T16:17:19+09:00",
+  "instruction": 2,
+  "receipt_commit": "2f18f40dce7a999f2a6996950f524d45d44d8329",
+  "receipt_confirmation_commit": "ebbd2527241cf0a637ae3b8a718a6d10a7cad17c",
+  "report_commit_before_plan": "ebbd2527241cf0a637ae3b8a718a6d10a7cad17c",
+  "verb_source_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+  "arms": [
+    {
+      "queue_row": "19",
+      "arm": "全部入り",
+      "machine": "デスクトップ",
+      "seeds": "1〜10"
+    },
+    {
+      "queue_row": "21",
+      "arm": "D＋注意",
+      "tau": 0.4,
+      "planned_flags": [
+        "--use-forget 0.4",
+        "--use-forget-attn"
+      ],
+      "machine": "デスクトップ",
+      "seeds": "1〜10"
+    },
+    {
+      "queue_row": "22",
+      "arm": "基準",
+      "machine": "デスクトップ",
+      "seeds": "1〜10"
+    }
+  ],
+  "task_cue": "本人に提示された過去形の課題／それ以外の二種類。研究者のheld_out_is_past・真値・経路・IDを本人への課題指示に代用しない。",
+  "D_attention_weight": "w=(1+a_key)/(1+mean_a_all_keys)",
+  "retention_owner": "注意の係の共通実装と合格報告を待つ。動詞専用の再実装は作らない。",
+  "unresolved": [
+    "合格した統合コミットと全旗",
+    "本人へ提示する課題指示の具体的な入口",
+    "注意の主旗・位置・eta",
+    "D＋注意と第二段を切り替える上流の正式な旗の組合せ",
+    "L50_refと列の実出力先"
+  ],
+  "gates": [
+    "41・41primeと42群の全関門合格",
+    "動詞の追加旗全offで旧動詞SME版の種1全5000試行との全バイト一致",
+    "D＋注意の旗offと注意全部0が上流の無重みq使用Dに全バイト一致",
+    "注意の平均を保つ変更の手例",
+    "試験・反実仮想でD使用・注意・乱数・記憶を更新しない"
+  ],
+  "new_model_or_analysis_runs": 0,
+  "other_checkout_changed": false,
+  "seed21_to40_reads_or_runs": 0,
+  "inputs": [
+    {
+      "path": "control/受け箱/動詞の世界の係.md",
+      "bytes": 2449,
+      "sha256": "7879c38daabcd992e5a00e77c355e83ea6bada7c0e62e162c7ab3d3fddc67727"
+    },
+    {
+      "path": "control/走行の列_2026-10-08.md",
+      "bytes": 6753,
+      "sha256": "561d43db5a0cf62a53ad3917bc9a760518593f2853fc08725690f50b4590782d"
+    },
+    {
+      "path": "control/2026-10-07_走行の計画_案_Claude.md",
+      "bytes": 5352,
+      "sha256": "5e55d6fc9bc1089e712485f263a017495d3fc1e06c048a94ce0f999a53b535fe"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 55982,
+      "sha256": "9f1dba29bab5b8d05fbb91fbf8af1d91d2680ca6267876d5f88b61f1dba7c227"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/useforget.py",
+      "bytes": 14624,
+      "sha256": "24fd6464b39cd9489098aac06aecedd6989745518eff841952d25d894b693865"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/v3_run.py",
+      "bytes": 77105,
+      "sha256": "b1d0d7ead7b4ca6f55d5c4b5d8d0cb3998b42e4a7c181c013848da4bcab641ba"
+    }
+  ]
+}
