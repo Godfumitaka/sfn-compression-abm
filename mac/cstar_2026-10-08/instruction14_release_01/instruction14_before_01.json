@@ -1,0 +1,460 @@
+{
+  "at": "2026-10-08T01:09:26.656903+09:00",
+  "instruction": 14,
+  "registry_before": "pid\towner\tmem_gb\tstart\tcmd\n20806\tSME logP主 w2_A_L50 種17 analysis\t2.0\t2026-10-06T17:01:23\t/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_\n20915\tSME logP主 w2_A_L50 種18 analysis\t2.0\t2026-10-06T17:01:54\t/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_\n27521\tSME logP主 w2_A_L50 種19 analysis\t2.0\t2026-10-06T17:32:57\t/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_\n4872\tCodex2 指示8 接続の関門 on_full\t16.0\t2026-10-07T23:27:45\t/opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-07/instruction8_3368df41_20261007/native_entry.py on_full\n17743\tSME_instruction14_progress_read\t1.0\t2026-10-08T01:09:25\t/opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_pending_2026-10-06/capture_instruction14_01.py\n",
+  "registry_before_sha256": "cae2f63a788b4e6e24ca307dd485553079fc7bc84f59391b6836c696aa0568cb",
+  "records": [
+    {
+      "seed": 17,
+      "claim_pid": 20806,
+      "replay_pid": 20817,
+      "process_tree": [
+        {
+          "pid": 20806,
+          "ppid": 1,
+          "stat": "Ss",
+          "rss_kib": 7232,
+          "start": "Tue Oct 6 17:01:23 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種17 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 analysis"
+        },
+        {
+          "pid": 20812,
+          "ppid": 20806,
+          "stat": "S",
+          "rss_kib": 9056,
+          "start": "Tue Oct 6 17:01:23 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017 analysis"
+        },
+        {
+          "pid": 20813,
+          "ppid": 20812,
+          "stat": "S",
+          "rss_kib": 15408,
+          "start": "Tue Oct 6 17:01:23 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_job"
+        },
+        {
+          "pid": 20817,
+          "ppid": 20813,
+          "stat": "Ts",
+          "rss_kib": 9632,
+          "start": "Tue Oct 6 17:01:23 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.states.jsonl.gz"
+        },
+        {
+          "pid": 20820,
+          "ppid": 20817,
+          "stat": "T",
+          "rss_kib": 7168,
+          "start": "Tue Oct 6 17:01:24 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+        },
+        {
+          "pid": 20821,
+          "ppid": 20817,
+          "stat": "T",
+          "rss_kib": 9792,
+          "start": "Tue Oct 6 17:01:24 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      ],
+      "candidate_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed017/analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.candidates.jsonl.gz",
+      "complete_written_candidate_rows": 1289,
+      "first_trial": 0,
+      "last_complete_written_trial": 1288,
+      "maximum_complete_written_trial": 1288,
+      "read_error": "EOFError: Compressed file ended before the end-of-stream marker was reached",
+      "progress_is_lower_bound": true,
+      "buffered_or_in_progress_trial_unknown": true,
+      "files": [
+        {
+          "path": "analysis_output/flag.json",
+          "bytes": 1502,
+          "mtime_ns": 1791273684058114280
+        },
+        {
+          "path": "analysis_job/run.log",
+          "bytes": 462,
+          "mtime_ns": 1791273684058248115
+        },
+        {
+          "path": "analysis_job/model_pid.json",
+          "bytes": 627,
+          "mtime_ns": 1791273683926892081
+        },
+        {
+          "path": "analysis_job/command.json",
+          "bytes": 496,
+          "mtime_ns": 1791273683834754719
+        },
+        {
+          "path": "analysis_job/resources.jsonl",
+          "bytes": 5244724,
+          "mtime_ns": 1791389352180559163
+        },
+        {
+          "path": "analysis_job/resources_start.json",
+          "bytes": 148,
+          "mtime_ns": 1791273683924352395
+        },
+        {
+          "path": "analysis_job/run_spec.json",
+          "bytes": 429,
+          "mtime_ns": 1791273683835012512
+        },
+        {
+          "path": "analysis_output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed017.keys.jsonl.gz",
+          "bytes": 15452579,
+          "mtime_ns": 1791275680437850744
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.answers.csv",
+          "bytes": 327418,
+          "mtime_ns": 1791275675866157206
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.diagnostics.jsonl.gz",
+          "bytes": 33347931,
+          "mtime_ns": 1791275678619203238
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.candidates.jsonl.gz",
+          "bytes": 8514863,
+          "mtime_ns": 1791275678827263385
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.shop.jsonl",
+          "bytes": 24820,
+          "mtime_ns": 1791275672518290244
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.jsonl",
+          "bytes": 10292677,
+          "mtime_ns": 1791275678823717150
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.routing.jsonl",
+          "bytes": 13192065,
+          "mtime_ns": 1791275678821703885
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.states.jsonl.gz",
+          "bytes": 416447205,
+          "mtime_ns": 1791275680709755664
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed017.sme.jsonl.gz",
+          "bytes": 76139096,
+          "mtime_ns": 1791275680124810099
+        },
+        {
+          "path": "analysis_output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed017.jsonl.gz",
+          "bytes": 30285393,
+          "mtime_ns": 1791275680431975409
+        }
+      ]
+    },
+    {
+      "seed": 18,
+      "claim_pid": 20915,
+      "replay_pid": 20925,
+      "process_tree": [
+        {
+          "pid": 20915,
+          "ppid": 1,
+          "stat": "Ss",
+          "rss_kib": 7232,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種18 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 analysis"
+        },
+        {
+          "pid": 20921,
+          "ppid": 20915,
+          "stat": "S",
+          "rss_kib": 9056,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018 analysis"
+        },
+        {
+          "pid": 20922,
+          "ppid": 20921,
+          "stat": "S",
+          "rss_kib": 16032,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_job"
+        },
+        {
+          "pid": 20925,
+          "ppid": 20922,
+          "stat": "Ts",
+          "rss_kib": 9632,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.states.jsonl.gz"
+        },
+        {
+          "pid": 20928,
+          "ppid": 20925,
+          "stat": "T",
+          "rss_kib": 7168,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+        },
+        {
+          "pid": 20929,
+          "ppid": 20925,
+          "stat": "T",
+          "rss_kib": 9792,
+          "start": "Tue Oct 6 17:01:54 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      ],
+      "candidate_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed018/analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.candidates.jsonl.gz",
+      "complete_written_candidate_rows": 1106,
+      "first_trial": 0,
+      "last_complete_written_trial": 1105,
+      "maximum_complete_written_trial": 1105,
+      "read_error": "EOFError: Compressed file ended before the end-of-stream marker was reached",
+      "progress_is_lower_bound": true,
+      "buffered_or_in_progress_trial_unknown": true,
+      "files": [
+        {
+          "path": "analysis_output/flag.json",
+          "bytes": 1502,
+          "mtime_ns": 1791273714674929008
+        },
+        {
+          "path": "analysis_job/run.log",
+          "bytes": 462,
+          "mtime_ns": 1791273714675076634
+        },
+        {
+          "path": "analysis_job/model_pid.json",
+          "bytes": 627,
+          "mtime_ns": 1791273714524898708
+        },
+        {
+          "path": "analysis_job/command.json",
+          "bytes": 496,
+          "mtime_ns": 1791273714429661614
+        },
+        {
+          "path": "analysis_job/resources.jsonl",
+          "bytes": 5242064,
+          "mtime_ns": 1791389351493003466
+        },
+        {
+          "path": "analysis_job/resources_start.json",
+          "bytes": 148,
+          "mtime_ns": 1791273714522128646
+        },
+        {
+          "path": "analysis_job/run_spec.json",
+          "bytes": 429,
+          "mtime_ns": 1791273714429921491
+        },
+        {
+          "path": "analysis_output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed018.keys.jsonl.gz",
+          "bytes": 12170231,
+          "mtime_ns": 1791275961527417359
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.candidates.jsonl.gz",
+          "bytes": 6455653,
+          "mtime_ns": 1791275960996788081
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.jsonl.gz",
+          "bytes": 59798600,
+          "mtime_ns": 1791275960955461146
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.answers.csv",
+          "bytes": 284937,
+          "mtime_ns": 1791275933990351020
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.shop.jsonl",
+          "bytes": 16753,
+          "mtime_ns": 1791275874481074432
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.diagnostics.jsonl.gz",
+          "bytes": 25699817,
+          "mtime_ns": 1791275960649140761
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.jsonl",
+          "bytes": 8829745,
+          "mtime_ns": 1791275960992088171
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.routing.jsonl",
+          "bytes": 11327151,
+          "mtime_ns": 1791275960809164255
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed018.sme.states.jsonl.gz",
+          "bytes": 326257184,
+          "mtime_ns": 1791275961382339686
+        },
+        {
+          "path": "analysis_output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed018.jsonl.gz",
+          "bytes": 24332717,
+          "mtime_ns": 1791275961519096755
+        }
+      ]
+    },
+    {
+      "seed": 19,
+      "claim_pid": 27521,
+      "replay_pid": 27534,
+      "process_tree": [
+        {
+          "pid": 27521,
+          "ppid": 1,
+          "stat": "Ss",
+          "rss_kib": 7232,
+          "start": "Tue Oct 6 17:32:57 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種19 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+        },
+        {
+          "pid": 27529,
+          "ppid": 27521,
+          "stat": "S",
+          "rss_kib": 9056,
+          "start": "Tue Oct 6 17:32:57 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+        },
+        {
+          "pid": 27531,
+          "ppid": 27529,
+          "stat": "S",
+          "rss_kib": 15120,
+          "start": "Tue Oct 6 17:32:57 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_job"
+        },
+        {
+          "pid": 27534,
+          "ppid": 27531,
+          "stat": "Ts",
+          "rss_kib": 9632,
+          "start": "Tue Oct 6 17:32:58 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.states.jsonl.gz"
+        },
+        {
+          "pid": 27537,
+          "ppid": 27534,
+          "stat": "T",
+          "rss_kib": 7168,
+          "start": "Tue Oct 6 17:32:58 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+        },
+        {
+          "pid": 27538,
+          "ppid": 27534,
+          "stat": "T",
+          "rss_kib": 9792,
+          "start": "Tue Oct 6 17:32:58 2026",
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        }
+      ],
+      "candidate_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.candidates.jsonl.gz",
+      "complete_written_candidate_rows": 209,
+      "first_trial": 0,
+      "last_complete_written_trial": 208,
+      "maximum_complete_written_trial": 208,
+      "read_error": "EOFError: Compressed file ended before the end-of-stream marker was reached",
+      "progress_is_lower_bound": true,
+      "buffered_or_in_progress_trial_unknown": true,
+      "files": [
+        {
+          "path": "analysis_output/flag.json",
+          "bytes": 1502,
+          "mtime_ns": 1791275578219102515
+        },
+        {
+          "path": "analysis_job/run.log",
+          "bytes": 462,
+          "mtime_ns": 1791275578219247724
+        },
+        {
+          "path": "analysis_job/model_pid.json",
+          "bytes": 627,
+          "mtime_ns": 1791275578080709933
+        },
+        {
+          "path": "analysis_job/command.json",
+          "bytes": 496,
+          "mtime_ns": 1791275577984199415
+        },
+        {
+          "path": "analysis_job/resources.jsonl",
+          "bytes": 5089451,
+          "mtime_ns": 1791389361327624472
+        },
+        {
+          "path": "analysis_job/resources_start.json",
+          "bytes": 148,
+          "mtime_ns": 1791275578078057829
+        },
+        {
+          "path": "analysis_job/run_spec.json",
+          "bytes": 429,
+          "mtime_ns": 1791275577984556376
+        },
+        {
+          "path": "analysis_output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed019.keys.jsonl.gz",
+          "bytes": 1699716,
+          "mtime_ns": 1791275991966832708
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.routing.jsonl",
+          "bytes": 2127485,
+          "mtime_ns": 1791275990591753789
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.jsonl.gz",
+          "bytes": 9590529,
+          "mtime_ns": 1791275992341720568
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.candidates.jsonl.gz",
+          "bytes": 1079992,
+          "mtime_ns": 1791275991752883350
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.jsonl",
+          "bytes": 1711640,
+          "mtime_ns": 1791275991748750110
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.shop.jsonl",
+          "bytes": 0,
+          "mtime_ns": 1791275578361036998
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.diagnostics.jsonl.gz",
+          "bytes": 4194893,
+          "mtime_ns": 1791275992660677674
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.answers.csv",
+          "bytes": 33365,
+          "mtime_ns": 1791275804628194250
+        },
+        {
+          "path": "analysis_output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.states.jsonl.gz",
+          "bytes": 46265523,
+          "mtime_ns": 1791275992495879102
+        },
+        {
+          "path": "analysis_output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed019.jsonl.gz",
+          "bytes": 3830589,
+          "mtime_ns": 1791275991961189166
+        }
+      ]
+    }
+  ],
+  "production_stopped": false,
+  "files_deleted": false
+}

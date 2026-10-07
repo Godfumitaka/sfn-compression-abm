@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-08T01:12:09.044731+09:00",
+  "instruction": 14,
+  "signal": "SIGKILL",
+  "reason": "指示14の再開しない停止中の自分の解析。SIGCONTで解析を進めず終了する。",
+  "targets": [
+    {
+      "pid": 27521,
+      "ppid": 1,
+      "stat": "Ss",
+      "rss_kib": 7232,
+      "start": "Tue Oct 6 17:32:57 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME logP主 w2_A_L50 種19 analysis --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+    },
+    {
+      "pid": 27529,
+      "ppid": 27521,
+      "stat": "S",
+      "rss_kib": 9056,
+      "start": "Tue Oct 6 17:32:57 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/process_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019 analysis"
+    },
+    {
+      "pid": 27531,
+      "ppid": 27529,
+      "stat": "S",
+      "rss_kib": 15120,
+      "start": "Tue Oct 6 17:32:57 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/run_case_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_job"
+    },
+    {
+      "pid": 27534,
+      "ppid": 27531,
+      "stat": "Ts",
+      "rss_kib": 9632,
+      "start": "Tue Oct 6 17:32:58 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/selcands_sme.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/command.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/analysis_output /Users/tatsu-admin/Documents/ChatGPT/New project/codex_logp_main_2026-10-06/runs/w2_A_L50/seed019/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed019.sme.states.jsonl.gz"
+    },
+    {
+      "pid": 27537,
+      "ppid": 27534,
+      "stat": "T",
+      "rss_kib": 7168,
+      "start": "Tue Oct 6 17:32:58 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 27538,
+      "ppid": 27534,
+      "stat": "T",
+      "rss_kib": 9792,
+      "start": "Tue Oct 6 17:32:58 2026",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ]
+}
