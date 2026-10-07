@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-08T07:21:23.490241+09:00",
+  "checks": [
+    {
+      "file": "observe_light.py",
+      "syntax": true,
+      "no_signal_or_delete_or_cache_encoding": true,
+      "sha256": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713"
+    },
+    {
+      "file": "preview.py",
+      "syntax": true,
+      "no_signal_or_delete_or_cache_encoding": true,
+      "sha256": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8"
+    }
+  ],
+  "command_pair_only_output_and_birth_hu_differ": [
+    {
+      "index": 3,
+      "off": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview/birth_hu_off/output",
+      "on": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview/birth_hu_on/output"
+    },
+    {
+      "index": 96,
+      "off": "off",
+      "on": "on"
+    }
+  ],
+  "canonical_command_changes": [
+    "output",
+    "seed1_to41",
+    "trial200_to1740",
+    "birthHU_off_on",
+    "no_forget_exec"
+  ],
+  "fixed_source": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "model_code_changed": false,
+  "model_gate_passed": false,
+  "production_started": false,
+  "heavy_matcher_observer": false,
+  "record_forwarded_once_before_observation": true,
+  "value_row_returned_unchanged": true,
+  "measurement_scope": "100試行はsweep.run_one内。全模型workerの最大常駐は最終close後にも記録",
+  "rematch_origins_separate": true,
+  "calibration_native_and_reference_HU_counts_separate": true
+}
