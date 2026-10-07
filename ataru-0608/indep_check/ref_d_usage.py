@@ -70,8 +70,11 @@ def add_use(rec: Strength | None, t: int, inc: float, decay) -> Strength:
 
 # ---------------------------------------------------------------- 一試行の使用の量
 def attn_weight(key, a: Mapping) -> float:
-    """w＝(1＋a_鍵)／(1＋ā)。ā は a の表の全部の鍵の平均（表が空なら 0）。表に無い鍵は a＝0（初期値）。
-    spec_notes の (D)-曖昧 3・4。"""
+    """w＝(1＋a_鍵)／(1＋ā)。ā は a の表の全部の鍵の単純平均（表が空なら 0）。
+    鍵が決まらない席（key が None）は w＝1。鍵が決まるが a の表に無い席は a＝0（初期値）として w＝1/(1＋ā)。
+    確定（台帳 D-07h、受け箱 注意の係 指示 5 の A）。spec_notes の (D)-3・4。"""
+    if key is None:
+        return 1.0
     abar = (math.fsum(a.values()) / len(a)) if a else 0.0
     return (1.0 + a.get(key, 0.0)) / (1.0 + abar)
 

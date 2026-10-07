@@ -124,3 +124,16 @@ def test_uses_from_prediction_selected_before_gate():
     R, u = uses_from_prediction(pred, [defB()], NORMAL, mode="old")
     assert R == "B" and pred["used"] is None
     assert u == {"seal": 0.0, "at": 1.0, "lit": 1.0, "warm": 1.0, "open": 0.0}
+
+
+def test_attn_weight_confirmed_rules():
+    """確定（D-07h、指示 5 の A）：鍵が決まらない席は w＝1、鍵が決まるが表に無い席は a＝0 として 1/(1＋ā)。
+    答えの使用は既定で重みを掛けない（1）。"""
+    a = {"x": 3.0, "y": 1.0}                    # ā＝2
+    assert attn_weight(None, a) == 1.0
+    assert abs(attn_weight("zz", a) - 1 / 3) < 1e-15
+    assert abs(attn_weight("x", a) - 4 / 3) < 1e-15
+    assert attn_weight("x", {}) == 1.0
+    key = lambda sc, j: None                     # 鍵が決まらない位置
+    u = trial_uses(D, M, SC, mode="old", answer_seat="open", a=a, key_of=key)
+    assert u == trial_uses(D, M, SC, mode="old", answer_seat="open")
