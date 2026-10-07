@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-08T02:29:23.710505+09:00",
+  "instruction": 15,
+  "repo": "https://github.com/Godfumitaka/sfn-compression-abm.git",
+  "branch": "codex/cstar-exact-fast-2026-10-08",
+  "original_commit": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+  "fast_commit": "d5a836d347e74086b71ce5d8534bf1fed44a64b6",
+  "native_arguments": [
+    "tools/v3_run.py",
+    "config/sweep_shop_hide1_s1_2026-10-01.json",
+    "<出力先>/output",
+    "--nohash",
+    "--vt",
+    "0.3842",
+    "--extend-rule",
+    "none",
+    "--charge1",
+    "d32",
+    "--fast",
+    "--no-public-history",
+    "--dump-slot-history",
+    "--fix2-full",
+    "--fix-order2",
+    "--proj-first",
+    "--fill-norestate",
+    "--no-charge2",
+    "--own-evidence",
+    "--v39",
+    "--v39-budget",
+    "inf",
+    "--v39-decay",
+    "actr",
+    "--v310-be",
+    "--hist-role",
+    "--score-role",
+    "--u-struct",
+    "--relearn-init",
+    "--tie-struct",
+    "--amb-local",
+    "--nsim",
+    "0.7",
+    "--ident-rho",
+    "0.5",
+    "--ident-argmax",
+    "--ident-commons",
+    "--cells",
+    "f0.5000_th2.1000_first_order",
+    "--dump-answers",
+    "--dump-routing",
+    "--answer-gap",
+    "--strict-pc",
+    "--e-price",
+    "0.01873710622997919",
+    "--v39-price",
+    "0.01873710622997919",
+    "--shop-world",
+    "2",
+    "--workers",
+    "1",
+    "--seeds",
+    "1",
+    "--trial-count",
+    "1740",
+    "--no-compare",
+    "--horizon",
+    "1740",
+    "--score-arg-order",
+    "--sme2017",
+    "--shop-scatter",
+    "--sme-call-seed",
+    "--sme-tie-uniform",
+    "--sme-intern-cache",
+    "--sme-evict-trial-cache",
+    "--score-logp",
+    "--match-cstar",
+    "--match-cstar-e",
+    "--match-eps",
+    "0",
+    "--h-dirichlet",
+    "1",
+    "--birth-score",
+    "seq",
+    "--logp-eps",
+    "0.01"
+  ],
+  "helpers_sha256": {
+    "observe_cpu_01.py": "46301f1a1b0abddc5aeba528e907702a92062ece6d95b3dca1b3b040a4737140",
+    "compare_gate_01.py": "4011a0652ffb239b88f2f48cbac95e0462fe787d138827c73be5648b3cd12f68",
+    "compare_cli_instruction15_01.py": "e56356c6f5f59f091ce6edf86ea4f6c43a70d05e759f369eb27e166bfb099372"
+  },
+  "cases": [
+    {
+      "name": "original_C",
+      "flags": []
+    },
+    {
+      "name": "off_C",
+      "flags": []
+    },
+    {
+      "name": "gc_C",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000"
+      ]
+    },
+    {
+      "name": "encode_C",
+      "flags": [
+        "--sme-fast-encode"
+      ]
+    },
+    {
+      "name": "both_C",
+      "flags": [
+        "--sme-gc-threshold",
+        "100000",
+        "--sme-fast-encode"
+      ]
+    }
+  ],
+  "memory_claim_gb": 11,
+  "trial_count": 1740,
+  "horizon": 1740,
+  "world": 2,
+  "seed": 1,
+  "material_choice": 2,
+  "python": "同じネイティブPython3.12を全5条件で使用",
+  "full1740_gate_not_completed": true,
+  "diagnostic_omission_held": true
+}
