@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-08T06:13:56+09:00",
+  "report_commit": "dadaf7d635c45f45152972d5803dee971781e7a1",
+  "inputs": [
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 142386,
+      "sha256": "b1f36135c0d7b9b176f42108d48169f7be15fadff7aff238c49fefb9d9e19cfd"
+    },
+    {
+      "path": "control/2026-10-08_注意の合わせた版_較正と出生HUの準備_Codex2.md",
+      "bytes": 13963,
+      "sha256": "7e20e26c57742e6556c6af144d0c4950aad80fc24755b2da73b0dba08d924bdb"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_all_flags_off_1740_gate_20261008.json",
+      "bytes": 3341,
+      "sha256": "d280dc4387290c10f6ae9cf1e7331d09f2a373ae91244b8e35c85ca17459a548"
+    },
+    {
+      "path": "control/attn_stage2_2026-10-07/instruction14_first_off_passed_check_20261008_0549.json",
+      "bytes": 13157,
+      "sha256": "4e7cb776fce2a020a3a4443b35a42c41ca622c90caac8c5ed061bf37787fc942"
+    }
+  ],
+  "reading_command": "git show <report_commit>:<inputs.path>（既存の小さい報告とJSONのみ）",
+  "upstream_code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "all_flags_off_1740": {
+    "gate_at": "2026-10-08T05:48:19.671489+09:00",
+    "passed": true,
+    "reference_code": "7774b60709656446a352f3b43e25b67f4b6fc2fa",
+    "record_count": 9,
+    "all_equal": true,
+    "exclusions": "台帳の見出し一行のみ",
+    "reference_reexecuted": false,
+    "scope": "注意・第二段off。C*入り全長・統合版全関門とは別。"
+  },
+  "added_flags_off_200": {
+    "start_at": "2026-10-08T05:48:19.928550+09:00",
+    "status_kind": "added_flags_off_200",
+    "requested_mem_gb": 4,
+    "completed_at_upstream_record": null,
+    "gate_at_upstream_record": null,
+    "current_worker_pid": 60071
+  },
+  "cstar_individual_timing": "今回のpsに47884は無い。指定報告では全長完了・一致未判定。psの不在から完了・中断・合格を推定しない。",
+  "our45": "必要な統合版の全関門合格待ち。自分の移植・off関門・5000一本は未開始。",
+  "our_new_jobs": [],
+  "our_signals": []
+}
