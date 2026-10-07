@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import math
 
+BACKGROUND_SOURCE = None
+
 
 def checked_distribution(distribution):
     values = dict(distribution)
@@ -59,29 +61,37 @@ def seat_distributions(d, row, state, scene, config, *, alpha=None, epsilon=.5):
     """既存と同じ署名・階のb、履歴のHを作り、qとPを分けて返す。"""
     import v310be
     import v39
-    from collections.abc import Mapping
-    from abm.filling import _distribution
     # 既存の部品のUはεにもq_Hにも依存しない。bの定義を複製しない。
-    b = v310be.probabilities(d, row, state, scene, config)["U"]
+    source = BACKGROUND_SOURCE or v310be.probabilities
+    b = source(d, row, state, scene, config)["U"]
     h = state.slot_history.get((d.name, row.slot_index))
-    hp = v39._order_pool(frozenset(h or ()), d, row, config.higher_order_predicates)
-    if alpha is None:
-        q = dict(_distribution(hp, state.p_hat, config.local_lambda, h if isinstance(h, Mapping) else None))
-        if not q or sum(q.values()) == 0:
-            q = b.copy()
-    else:
-        counts = v39.hist_counts(h)
-        counts = {name: counts[name] for name in hp}
-        q = dirichlet_history(b, counts, alpha)
+    q = history_distribution(d,row,state,h,b,config,alpha=alpha)
     belief = {"F": {row.relation.predicate: 1.0}, "H": q, "U": b}
     return {"b": b, "q": belief,
             "P": value_distributions(b, q, row.relation.predicate, epsilon)}
 
 
+def history_distribution(d,row,state,history,background,config,*,alpha=None):
+    """答え・値付け・照合・仮の誕生で同じ履歴の分布を作る。"""
+    from collections.abc import Mapping
+    from abm.filling import _distribution
+    import v39
+    hp = v39._order_pool(frozenset(history or ()),d,row,config.higher_order_predicates)
+    if alpha is None:
+        q = dict(_distribution(hp,state.p_hat,config.local_lambda,history if isinstance(history,Mapping) else None))
+        if not q or sum(q.values()) == 0:
+            q = background.copy()
+    else:
+        counts = v39.hist_counts(history)
+        counts = {name: counts[name] for name in hp}
+        q = dirichlet_history(background,counts,alpha)
+    return q
+
+
 def birth_distributions(background, first_name, second_name, *, mode, alpha=1, epsilon=.5):
     """誕生二材料の手計算用の基準。正解を知らない先頭の予測はbだけ。"""
     b = checked_distribution(background)
-    if first_name != second_name:
+    if mode == 'fit' and first_name != second_name:
         # この場合のFの固定名を決め直さない。呼ぶ側が件数と材料を報告する。
         raise ValueError("誕生のFの名前が二材料で一意でない")
     if mode == "fit":
@@ -90,6 +100,8 @@ def birth_distributions(background, first_name, second_name, *, mode, alpha=1, e
         return after, after
     if mode == "seq":
         before = {s: b.copy() for s in ("F", "H", "U")}
+        if first_name is None:
+            return before, {s: b.copy() for s in ("F", "H", "U")}
         q = dirichlet_history(b, {first_name: 1}, alpha)
         after_first = value_distributions(b, q, first_name, epsilon)
         return before, after_first

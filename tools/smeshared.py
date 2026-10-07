@@ -29,6 +29,11 @@ LOG: dict = {}
 CTX: dict = {}
 
 
+def active_version():
+    cstar = sys.modules.get('cstar_runtime')
+    return cstar.VERSION if cstar is not None and cstar.active() else VERSION
+
+
 class FrozenDict(dict):
     """JSONにそのまま書け、利用側で内容を書き替えられない辞書。"""
     def _blocked(self, *a, **k):
@@ -176,16 +181,23 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     lf, rf = left.fingerprint(), right.fingerprint()
     use = _caller()
     seed = _match_seed(left, right, use)
-    key = ENGINE.match_key(left, right, seed)
+    cstar = sys.modules.get('cstar_runtime')
+    expected = cstar is not None and cstar.active()
+    engine = cstar.ENGINE if expected else ENGINE
+    version = cstar.VERSION if expected else VERSION
+    probability = cstar.probabilities_for_graph(base_graph,left,target_graph_partial) if expected else None
+    key = (engine.match_key(left,right,seed,probabilities=probability) if expected
+           else engine.match_key(left,right,seed))
     STATS["requests"] = STATS.get("requests", 0) + 1
     if key in RESULTS:
         STATS["reused"] = STATS.get("reused", 0) + 1
         out = RESULTS[key]
-        _log({"kind": "sme_use", "caller": use, "version": VERSION, "result": out.alignment.sme_result_id, "reused": True})
+        _log({"kind": "sme_use", "caller": use, "version": version, "result": out.alignment.sme_result_id, "reused": True})
         return out
-    result = ENGINE.match(left, right, tie_seed=seed)
-    rng_before = ENGINE.cache_rng[key]
-    validate(left, right, result)
+    result = (engine.match(left,right,tie_seed=seed,probabilities=probability) if expected
+              else engine.match(left,right,tie_seed=seed))
+    rng_before = engine.cache_rng[key]
+    (cstar.validate if expected else validate)(left, right, result)
     GRAPHS[lf], GRAPHS[rf] = left, right
     best = result.best
     em = {} if best is None else dict(best.entity_mapping)
@@ -205,13 +217,19 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     identifier = sha256(repr(key).encode()).hexdigest()
     kinds = () if best is None else best.match_kinds
     visible_names = sum(k == "name" and b in {r.relation_id for r in target_graph_partial.relations} for a, b, k in kinds)
-    audit = {"version": VERSION, "settings": asdict(ENGINE.settings), "left": lf, "right": rf,
+    if expected:
+        visible_names = sum(bool(left.by_id[a].names & right.by_id[b].names)
+                            for a,b in rm.items() if right.by_id[b].kind != 'unknown')
+    audit = {"version": version, "settings": asdict(engine.settings), "left": lf, "right": rf,
              "selected": result.selected, "tied": result.tied, "choices": result.choices,
              "kinds": kinds, "points": () if best is None else best.breakdown,
              "visible_name_matches": visible_names, "old_on_new": _old_on_new(left, right, best, params),
              "old_selected_score": old.total_score, "old_entity_mapping": dict(old.entity_mapping),
              "old_relation_mapping": dict(old.relation_mapping),
              "new_entity_mapping": em, "new_relation_mapping": rm}
+    if expected:
+        audit.update(cstar_probabilities=probability,match_eps=cstar.CFG['match_eps'],
+                     candidates=len(result.candidates),hypotheses=result.hypothesis_count if hasattr(result,'hypothesis_count') else None)
     if seed is not None:
         audit.update(tie_policy="call-seed-uniform-v1" if CTX.get("tie_uniform") else "call-seed-v1",
                      tie_seed=seed, trial=CTX["trial"], call_kind=use)
@@ -245,7 +263,7 @@ def _definition_choice(candidates, scene):
             CHOICES[token] = (tied[pick][2].name, tied[pick][2].registered_at)
         selected = CHOICES[token]
         chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
-        _log({"kind": "sme_definition_tie", "version": VERSION,
+        _log({"kind": "sme_definition_tie", "version": active_version(),
               "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
               "tie_policy": "call-seed-uniform-v1", "tie_seed": seed, "trial": CTX["trial"],
               "canonical_multiset": forms})
@@ -272,7 +290,7 @@ def _definition_choice(candidates, scene):
             CHOICES[token] = (options[pick][2].name, options[pick][2].registered_at)
     selected = CHOICES[token]
     chosen = next(r for r in tied if (r[2].name, r[2].registered_at) == selected)
-    _log({"kind": "sme_definition_tie", "version": VERSION,
+    _log({"kind": "sme_definition_tie", "version": active_version(),
           "set": [(r[2].name, r[2].registered_at) for r in tied], "selected": selected,
           **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
               "canonical_multiset": forms} if CTX.get("call_seed") else {})})
@@ -292,7 +310,7 @@ def choose_trace(ranked, scene):
             pick = random.Random(seed).randrange(len(tied)) if len(tied) > 1 else 0
             CHOICES[token] = (tied[pick][0].alignment.sme_audit["left"], tied[pick][1].scene.graph_id)
         selected = CHOICES[token]
-        _log({"kind": "sme_trace_tie", "version": VERSION,
+        _log({"kind": "sme_trace_tie", "version": active_version(),
               "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
               "selected": selected, "tie_policy": "call-seed-uniform-v1", "tie_seed": seed,
               "trial": CTX["trial"], "canonical_multiset": forms})
@@ -317,7 +335,7 @@ def choose_trace(ranked, scene):
             pick = ENGINE.rng.randrange(len(options)) if len(options) > 1 else 0
             CHOICES[token] = (options[pick][0].alignment.sme_audit["left"], options[pick][1].scene.graph_id)
     selected = CHOICES[token]
-    _log({"kind": "sme_trace_tie", "version": VERSION, "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
+    _log({"kind": "sme_trace_tie", "version": active_version(), "set": [(m.alignment.sme_audit["left"], tr.scene.graph_id) for m, tr in tied],
           "selected": selected,
           **({"tie_policy": "call-seed-v1", "tie_seed": seed, "trial": CTX["trial"],
               "canonical_multiset": forms} if CTX.get("call_seed") else {})})
@@ -342,10 +360,13 @@ def select_definition(state, scene, config):
             continue
         # 浮動小数の丸めを足さず、出たSESの比を分数として比較する。
         n3 = 2 * Fraction(al.total_score) / (Fraction(dd) + Fraction(xx))
-        support = sum(v39.seat_state(d, r, state.slot_history) != "U" and r.relation.relation_id in al.relation_mapping
-                      for r in d.constituents)
+        cstar = sys.modules.get('cstar_runtime')
+        support = (sum(cstar.support(d,r,state.slot_history,al,scene) for r in d.constituents)
+                   if cstar is not None and cstar.active() else
+                   sum(v39.seat_state(d,r,state.slot_history) != 'U' and r.relation.relation_id in al.relation_mapping
+                       for r in d.constituents))
         ranked.append((support / n, support, d, g, al, n, n3))
-        _log({"kind": "sme_n3", "R": d.name, "version": VERSION, "result": al.sme_result_id,
+        _log({"kind": "sme_n3", "R": d.name, "version": active_version(), "result": al.sme_result_id,
               "S_dx": al.total_score, "S_dd": dd, "S_xx": xx, "N3": float(n3), "support": support, "m_live": n})
     if not ranked:
         return None
@@ -360,6 +381,12 @@ def select_definition(state, scene, config):
 
 def self_score(graph):
     """自己の点も通常の照合の第一位から。旧い行ごとの自己点は使わない。"""
+    cstar = sys.modules.get('cstar_runtime')
+    if cstar is not None and cstar.active():
+        value = cstar.ENGINE.self_score(graph)
+        _log(dict(kind='sme_self',version=cstar.VERSION,input=graph.fingerprint(),score=value,
+                  self_policy='full-identity-all-names-match',settings=asdict(cstar.ENGINE.settings)))
+        return value
     seed = _match_seed(graph, graph, "自己照合")
     result = ENGINE.match(graph, graph, tie_seed=seed)
     validate(graph, graph, result)
@@ -376,11 +403,15 @@ def self_score(graph):
 
 
 def snapshot():
-    return ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS), dict(CTX)
+    saved = ENGINE.snapshot(), dict(RESULTS), dict(GRAPHS), dict(CHOICES), dict(STATS), dict(CTX)
+    cstar = sys.modules.get('cstar_runtime')
+    return saved + (cstar.snapshot(),) if cstar is not None and cstar.ENGINE is not None else saved
 
 
 def restore(snap):
-    engine, results, graphs, choices, stats, context = snap
+    engine, results, graphs, choices, stats, context = snap[:6]
+    if len(snap) == 7:
+        sys.modules['cstar_runtime'].restore(snap[6])
     ENGINE.restore(engine)
     for current, saved in ((RESULTS, results), (GRAPHS, graphs), (CHOICES, choices), (STATS, stats), (CTX, context)):
         current.clear()

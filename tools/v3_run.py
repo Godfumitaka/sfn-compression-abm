@@ -500,6 +500,9 @@ def worker(task: dict) -> dict:
             import smeevict
             smeevict.install(out_root / "evictions" / task["cell"] / f"seed{task['seed']:03d}.keys.jsonl.gz",
                             tombstone=task.get("sme_evict_tombstone", False))
+        if task.get("cstar_options"):
+            import cstar_runtime
+            cstar_runtime.install(**task["cstar_options"])
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -780,6 +783,12 @@ def main() -> None:
     ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+    ap.add_argument("--match-cstar", action="store_true", help="予測の照合とN3に固定対応の期待点C*を使う")
+    ap.add_argument("--match-cstar-e", action="store_true", help="Eの逐語の材料選びと同化の照合にC*を使う")
+    ap.add_argument("--h-dirichlet", type=int, choices=(1,), default=None, help="Hの分布を履歴の回数と背景bのディリクレ型（α=1）にする")
+    ap.add_argument("--match-eps", choices=("0", "shared"), default="0", help="C*のqに背景bへの混ぜを入れない0、値付けのPとそろえるshared")
+    ap.add_argument("--logp-eps", type=float, default=0.5, help="背景分布bに戻る混合率ε（既定0.5）")
+    ap.add_argument("--birth-score", choices=("fit", "seq"), default=None, help="二材料を観察後に当てるfit、一材料ずつ順に当てるseq")
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
@@ -840,6 +849,16 @@ def main() -> None:
         raise SystemExit("--score-logp は --v310-be と一緒に使う")
     if args.score_logp_e and not args.score_logp:
         raise SystemExit("--score-logp-e は --score-logp と一緒に使う")
+    cstar_options = {}
+    if (args.match_cstar or args.match_cstar_e or args.h_dirichlet is not None
+            or args.birth_score is not None or args.logp_eps != .5):
+        if not (args.sme2017 and args.v310_be and args.score_arg_order):
+            raise SystemExit("C*と共通分布の旗は--sme2017 --v310-be --score-arg-orderと一緒に使う")
+        if not 0 <= args.logp_eps <= 1:
+            raise SystemExit("--logp-epsは0以上1以下")
+        cstar_options = dict(match_cstar=args.match_cstar,match_cstar_e=args.match_cstar_e,
+                             h_dirichlet=args.h_dirichlet,match_eps=args.match_eps,
+                             logp_eps=args.logp_eps,birth_score=args.birth_score)
     if args.score_role and not args.v310_be:
         raise SystemExit("--score-role は --v310-be と一緒に使う")
     if args.u_struct and (not args.v39 or not args.hist_role):
@@ -893,6 +912,9 @@ def main() -> None:
     if args.score_logp:
         for task in tasks:
             task.update(score_logp=True, score_logp_e=args.score_logp_e)
+    if cstar_options:
+        for task in tasks:
+            task["cstar_options"] = cstar_options
     if args.score_arg_order:
         if not (args.v310_be and args.hist_role and args.score_role):
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
@@ -935,7 +957,8 @@ def main() -> None:
         if args.shop_scatter:
             task["shop_scatter"] = True
     (out_root / "flag.json").write_text(json.dumps({**{opt: True for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone") if getattr(args, opt)},
-                                                    **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": 0.5} if args.score_logp else {}),
+                                                    **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
+                                                    **cstar_options,
                                                     **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),

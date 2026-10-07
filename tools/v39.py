@@ -361,6 +361,11 @@ def _order_pool(pool, d, row, hop):
 
 
 def h_answer(d, row, slot_history, p_hat, lam, hop):
+    if CFG.get('h_dirichlet'):
+        import cstar_runtime
+        from cstar_probability import most_probable
+        scene = cstar_runtime.CTX.get('scene') or cstar_runtime.CTX.get('last_partial')
+        return most_probable(cstar_runtime.h_distribution(d,row,slot_history,p_hat,scene,hop))
     from abm.filling import most_frequent
     h = slot_history.get((d.name, row.slot_index))
     if not h:
@@ -503,6 +508,11 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
             if pool_before_order and not pool:
                 empty_pool_slots += 1
             distribution = _distribution(pool, p_hat, local_lambda, local_counts)
+            if st == 'H' and CFG.get('h_dirichlet'):
+                import cstar_runtime
+                distribution = tuple(cstar_runtime.h_distribution(definition,constituent,slot_history,p_hat,
+                                                                  target,higher_order_predicates).items())
+                pool = frozenset(p for p,w in distribution if p is not None and w > 0)
             maximum = max((w for _, w in distribution), default=0.0)
             tied_count = sum(w == maximum for _, w in distribution) if maximum > 0 else 0
             history_size += len(pool)
@@ -513,7 +523,12 @@ def fill_v39(definition, target, entity_mapping, relation_mapping, slot_history,
                 predicate = sample_predicate(distribution, rng)
                 tied = False
             else:
-                predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
+                if st == 'H' and CFG.get('h_dirichlet'):
+                    from cstar_probability import most_probable
+                    predicate, reason = most_probable(dict(distribution))
+                    tied = reason == '同点'
+                else:
+                    predicate, tied = most_frequent(pool, p_hat, local_lambda, local_counts)
                 ambiguous = ambiguous or tied
             fallback_used = fallback_used or used_fallback
             if predicate is None:
@@ -585,6 +600,9 @@ def predict(agent_input, state, config, rng):
         CTX["output"] = output
         return output, ar.PendingState(state, output, agent_input, ar._snapshot_rng_state(rng, state.rng_state))
     ranked = [(map_graphs(trace.scene, agent_input.target_graph_partial), trace) for trace in state.prototype.traces]
+    if CFG.get('cstar'):
+        import cstar_runtime
+        cstar_runtime.CTX['trace_ranked'] = ranked
     if CFG.get("sme2017"):
         import smeshared
         mapping, selected_trace = smeshared.choose_trace(ranked, agent_input.target_graph_partial)
