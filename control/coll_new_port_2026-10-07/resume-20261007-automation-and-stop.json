@@ -1,0 +1,354 @@
+{
+  "checked_at_utc": "2026-10-07T06:08:07.052706+00:00",
+  "automation": {
+    "id": "codex3-10-7-8",
+    "name": "集団化 Codex3・受け箱の確認（10/7〜8）",
+    "status": "ACTIVE",
+    "kind": "heartbeat",
+    "created_at": 1791289417948,
+    "updated_at": 1791289417948
+  },
+  "interval_30_minutes": true,
+  "expires_20261009_0900_jst": true,
+  "rollout_bytes": 50088846,
+  "time_range_utc": [
+    "2026-10-07T00:15",
+    "2026-10-07T06:10"
+  ],
+  "counts": {
+    "event_msg": 45,
+    "response_item": 39,
+    "token_usage_record": 12,
+    "turn_context": 1
+  },
+  "boundaries": [
+    {
+      "time": "2026-10-07T06:05:33.869Z",
+      "type": "task_complete",
+      "payload": {
+        "type": "task_complete",
+        "turn_id": "01a11350-6507-7a73-854b-38c939d75a8d",
+        "last_agent_message": "9:22の確認記録を push しました（`0f1171b4`）。新しい指示・取得可能な走行はありません。稼働模型は0本、集団化は41・42の全関門待ちを続けます。",
+        "started_at": 1791325398,
+        "completed_at": 1791353133,
+        "duration_ms": 1371086,
+        "time_to_first_token_ms": 329495
+      }
+    },
+    {
+      "time": "2026-10-07T06:05:38.123Z",
+      "type": "task_started",
+      "payload": {
+        "type": "task_started",
+        "turn_id": "01a114f7-abc1-7100-a872-7a264c0ec2db",
+        "root_turn_id": "01a114f7-abc1-7100-a872-7a264c0ec2db",
+        "started_at": 1791353138,
+        "model_context_window": 258400,
+        "collaboration_mode_kind": "default"
+      }
+    }
+  ],
+  "rate_limits_first": [
+    {
+      "time": "2026-10-07T00:22:00.498Z",
+      "rate_limits": {
+        "limit_id": "codex",
+        "limit_name": null,
+        "primary": {
+          "used_percent": 23.0,
+          "window_minutes": 10080,
+          "resets_at": 1791875181
+        },
+        "secondary": null,
+        "credits": {
+          "has_credits": false,
+          "unlimited": false,
+          "balance": "0"
+        },
+        "individual_limit": null,
+        "spend_control_reached": null,
+        "plan_type": "prolite",
+        "rate_limit_reached_type": null
+      }
+    },
+    {
+      "time": "2026-10-07T00:22:34.993Z",
+      "rate_limits": {
+        "limit_id": "codex",
+        "limit_name": null,
+        "primary": {
+          "used_percent": 23.0,
+          "window_minutes": 10080,
+          "resets_at": 1791875181
+        },
+        "secondary": null,
+        "credits": {
+          "has_credits": false,
+          "unlimited": false,
+          "balance": "0"
+        },
+        "individual_limit": null,
+        "spend_control_reached": null,
+        "plan_type": "prolite",
+        "rate_limit_reached_type": null
+      }
+    }
+  ],
+  "rate_limits_last": [
+    {
+      "time": "2026-10-07T06:06:15.274Z",
+      "rate_limits": {
+        "limit_id": "codex",
+        "limit_name": null,
+        "primary": {
+          "used_percent": 0.0,
+          "window_minutes": 10080,
+          "resets_at": 1791950148
+        },
+        "secondary": null,
+        "credits": {
+          "has_credits": false,
+          "unlimited": false,
+          "balance": "0"
+        },
+        "individual_limit": null,
+        "spend_control_reached": null,
+        "plan_type": "prolite",
+        "rate_limit_reached_type": null
+      }
+    },
+    {
+      "time": "2026-10-07T06:06:47.653Z",
+      "rate_limits": {
+        "limit_id": "codex",
+        "limit_name": null,
+        "primary": {
+          "used_percent": 0.0,
+          "window_minutes": 10080,
+          "resets_at": 1791950148
+        },
+        "secondary": null,
+        "credits": {
+          "has_credits": false,
+          "unlimited": false,
+          "balance": "0"
+        },
+        "individual_limit": null,
+        "spend_control_reached": null,
+        "plan_type": "prolite",
+        "rate_limit_reached_type": null
+      }
+    },
+    {
+      "time": "2026-10-07T06:07:19.978Z",
+      "rate_limits": {
+        "limit_id": "codex",
+        "limit_name": null,
+        "primary": {
+          "used_percent": 0.0,
+          "window_minutes": 10080,
+          "resets_at": 1791950148
+        },
+        "secondary": null,
+        "credits": {
+          "has_credits": false,
+          "unlimited": false,
+          "balance": "0"
+        },
+        "individual_limit": null,
+        "spend_control_reached": null,
+        "plan_type": "prolite",
+        "rate_limit_reached_type": null
+      }
+    }
+  ],
+  "specific_error_outputs": [],
+  "late_morning_timeline": [
+    {
+      "time": "2026-10-07T00:22:00.498Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T00:22:08.989Z",
+      "kind": "message",
+      "name": null,
+      "role": "assistant"
+    },
+    {
+      "time": "2026-10-07T00:22:10.755Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T00:22:34.992Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 24.2 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"current_time\":\"2026-10-07 00:22:10 UTC\"}'}, {'type': 'inpu"
+    },
+    {
+      "time": "2026-10-07T00:22:34.993Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T00:22:37.378Z",
+      "kind": "reasoning",
+      "name": null,
+      "role": null
+    },
+    {
+      "time": "2026-10-07T00:22:37.687Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T00:22:37.819Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 0.0 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"chunk_id\":\"0f8049\",\"wall_time_seconds\":0.000012125,\"exit_co"
+    },
+    {
+      "time": "2026-10-07T00:22:37.819Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T00:22:41.698Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T00:22:45.676Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 4.0 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"chunk_id\":\"82930f\",\"wall_time_seconds\":1.00287625,\"session_"
+    },
+    {
+      "time": "2026-10-07T00:22:45.676Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T00:22:48.069Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T00:22:48.123Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 0.0 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"chunk_id\":\"9abb30\",\"wall_time_seconds\":0.000014166,\"exit_co"
+    },
+    {
+      "time": "2026-10-07T00:22:48.124Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T02:03:24.283Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T02:03:44.544Z",
+      "kind": "reasoning",
+      "name": null,
+      "role": null
+    },
+    {
+      "time": "2026-10-07T02:04:00.568Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T02:29:39.941Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 26.1 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"chunk_id\":\"72b8b4\",\"wall_time_seconds\":0.237661417,\"exit_c"
+    },
+    {
+      "time": "2026-10-07T02:29:39.941Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T04:23:01.489Z",
+      "kind": "token_count",
+      "used_percent": 23.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T06:05:20.483Z",
+      "kind": "token_count",
+      "used_percent": 0.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T06:05:28.797Z",
+      "kind": "reasoning",
+      "name": null,
+      "role": null
+    },
+    {
+      "time": "2026-10-07T06:05:30.264Z",
+      "kind": "message",
+      "name": null,
+      "role": "assistant"
+    },
+    {
+      "time": "2026-10-07T06:05:30.841Z",
+      "kind": "custom_tool_call",
+      "name": "exec",
+      "role": null
+    },
+    {
+      "time": "2026-10-07T06:05:30.914Z",
+      "kind": "custom_tool_call_output",
+      "name": null,
+      "role": null,
+      "output_prefix": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 0.0 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"chunk_id\":\"8856e1\",\"wall_time_seconds\":0.000005667,\"exit_co"
+    },
+    {
+      "time": "2026-10-07T06:05:30.915Z",
+      "kind": "token_count",
+      "used_percent": 0.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T06:05:33.735Z",
+      "kind": "message",
+      "name": null,
+      "role": "assistant"
+    },
+    {
+      "time": "2026-10-07T06:05:33.862Z",
+      "kind": "token_count",
+      "used_percent": 0.0,
+      "reached_type": null
+    },
+    {
+      "time": "2026-10-07T06:05:38.225Z",
+      "kind": "message",
+      "name": null,
+      "role": "user"
+    }
+  ]
+}
