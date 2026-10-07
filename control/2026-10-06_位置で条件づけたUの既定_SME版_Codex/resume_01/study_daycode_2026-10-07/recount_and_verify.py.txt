@@ -1,0 +1,125 @@
+"""日の符号だけを読み直す。模型・照合・分類・元の記録を更新しない。"""
+from pathlib import Path
+from collections import Counter
+from zoneinfo import ZoneInfo
+import csv, datetime, gzip, hashlib, importlib.util, json, resource, time
+
+ROOT = Path(__file__).resolve().parent
+RUN = ROOT.parent
+
+def sha(path):
+    h = hashlib.sha256()
+    with path.open('rb') as f:
+        for block in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def records(path):
+    with (gzip.open if path.suffix == '.gz' else open)(path, 'rt') as f:
+        for line in f:
+            yield json.loads(line)
+
+def csvrows(path):
+    with path.open(newline='') as f:
+        return list(csv.DictReader(f))
+
+def main():
+    start = time.perf_counter()
+    at = datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+    cases = json.loads((RUN / 'cases.json').read_text())
+    assert len(cases) == 12
+    inputs = {RUN / 'cases.json'}
+    ledgers = []
+    for case in cases:
+        assert case['seed'] in (1, 2, 3)
+        path = Path(case['path'])
+        stem = f"seed{case['seed']:03d}"
+        ledger = next((path / 'output/ledgers').rglob(stem + '.jsonl.gz'))
+        ledgers.append(ledger)
+        inputs.add(ledger)
+        for directory, suffix in [('analysis/side', '.sme.candidates.jsonl.gz'),
+                                  ('output/side', '.jsonl'),
+                                  ('output/side', '.shop.jsonl')]:
+            inputs.add(next((path / directory).rglob(stem + suffix)))
+        if case['u_position']:
+            inputs.add(next((path / 'output/side').rglob(stem + '.uposition.jsonl.gz')))
+    for p in (RUN / 'evidence/study').iterdir():
+        if p.is_file():
+            inputs.add(p)
+    for mode in ('a', 'logp'):
+        for gate in ('gate1', 'gate4_5'):
+            p = RUN / f'evidence/{gate}_{mode}/{gate}.json'
+            assert json.loads(p.read_text())['passed']
+            inputs.add(p)
+    inputs.update(RUN / p for p in ('pipeline.py', 'finalize_when_done.py',
+                                  'gate_off/a/native_command.json'))
+    before = {str(p): sha(p) for p in sorted(inputs)}
+    (ROOT / 'inputs_before.json').write_text(json.dumps(before, ensure_ascii=False, indent=2) + '\n')
+    spec = importlib.util.spec_from_file_location('daycode_study', ROOT / 'uposition_study_daycode.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.study(RUN / 'cases.json', ROOT / 'study')
+    old_trials = csvrows(RUN / 'evidence/study/trials.csv')
+    new_trials = csvrows(ROOT / 'study/trials.csv')
+    old_summary = csvrows(RUN / 'evidence/study/comparison.csv')
+    new_summary = csvrows(ROOT / 'study/comparison.csv')
+    assert len(old_trials) == len(new_trials) == 20880
+    assert len(old_summary) == len(new_summary) == 12
+    audits = []
+    changed = 0
+    for index, (case, ledger, original, corrected) in enumerate(zip(cases, ledgers, old_summary, new_summary, strict=True)):
+        counts, cues = Counter(), Counter()
+        stream = records(ledger)
+        next(stream)
+        before_rows = old_trials[index * 1740:(index + 1) * 1740]
+        after_rows = new_trials[index * 1740:(index + 1) * 1740]
+        for trial, (record, old, new) in enumerate(zip(stream, before_rows, after_rows, strict=True)):
+            assert int(new['trial']) == trial
+            assert new['score'] == case['score'] and int(new['seed']) == case['seed']
+            assert new['u_position'] == str(case['u_position'])
+            cue = record['shop_cue']
+            assert cue in ('n', 'e')
+            day = {'n': 'normal', 'e': 'exception'}[cue]
+            assert new['day'] == day
+            assert all(old[k] == new[k] for k in old if k != 'day')
+            changed += old['day'] != new['day']
+            cues[cue] += 1
+            outcome = 'correct' if record['hit'] else 'abstain' if record['predicted_edge'] is None else 'wrong'
+            assert new['outcome'] == outcome
+            assert new['is_door'] == str(record['held_out_is_door'])
+            if record['held_out_is_door']:
+                counts[day + '_' + outcome] += 1
+                if outcome == 'wrong':
+                    category = 'selection_mistake' if old['any_correct_definition'] == 'True' else 'distinction_loss'
+                    assert new['error_category'] == category
+                    counts[day + '_' + category] += 1
+        assert trial + 1 == 1740
+        for k in original:
+            if k.startswith(('exception_', 'normal_')):
+                assert int(corrected[k]) == counts[k]
+            else:
+                assert original[k] == corrected[k]
+        for day in ('normal', 'exception'):
+            assert counts[day + '_wrong'] == counts[day + '_selection_mistake'] + counts[day + '_distinction_loss']
+        audits.append({**case, 'cue_counts': dict(cues), 'door_counts': dict(counts)})
+    for filename in ('birth_seals.csv', 'fallback_calls.csv'):
+        assert (ROOT / 'study' / filename).read_bytes() == (RUN / 'evidence/study' / filename).read_bytes()
+    after = {str(p): sha(p) for p in sorted(inputs)}
+    assert before == after, '入力・旧結果・関門の指紋が変わったので停止'
+    finished = datetime.datetime.now(ZoneInfo('Asia/Tokyo')).isoformat()
+    result = {'passed': True, 'started_at_jst': at, 'finished_at_jst': finished,
+              'analysis_seconds': time.perf_counter() - start,
+              'peak_rss_bytes_macos': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+              'cases': 12, 'trial_rows': 20880, 'day_rows_changed': changed,
+              'only_day_changed_in_trials': True, 'other_summary_columns_unchanged': True,
+              'birth_and_fallback_raw_bytes_unchanged': True,
+              'all_input_raw_bytes_unchanged': True, 'input_files': len(inputs),
+              'model_reruns': 0, 'model_functions_called': 0,
+              'audits': audits, 'original_error': "shop_cue n/eをsig_eと比較していた",
+              'corrected_study_sha256': sha(ROOT / 'uposition_study_daycode.py'),
+              'original_study_sha256': sha(ROOT / 'original_uposition_study.py.txt')}
+    (ROOT / 'verification.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps({k: v for k, v in result.items() if k != 'audits'}, ensure_ascii=False))
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,12 @@
+--- original_uposition_study.py
++++ uposition_study_daycode.py
+@@ -41,7 +41,8 @@
+             assert bool(record['hit']) == candidates['original_hit']
+             pred = record['predicted_edge']
+             outcome = 'correct' if record['hit'] else 'abstain' if pred is None else 'wrong'
+-            day = 'exception' if record['shop_cue'] == 'sig_e' else 'normal'
++            assert record['shop_cue'] in ('n', 'e'), '未知の日の符号では停止'
++            day = 'exception' if record['shop_cue'] == 'e' else 'normal'
+             category = (('selection_mistake' if candidates['any_correct'] else 'distinction_loss')
+                         if outcome == 'wrong' else '')
+             row = {'score': case['score'], 'u_position': case['u_position'], 'seed': seed, 'trial': t,
