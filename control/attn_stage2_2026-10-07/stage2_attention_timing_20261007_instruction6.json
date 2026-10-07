@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-07T16:49:24.284215+09:00",
+  "code_commit": "8b80dd60f923b89054c3316fc79e62176b078d11",
+  "method": "static_source_read_only",
+  "attention_used": "pre_learning_copy_taken_after_prediction_before_ledger_learning",
+  "copy_is_dict": true,
+  "stage2_compare_before_attention_learning": true,
+  "native_update_order": "loop.update runs before accounting; accounting evaluates counterfactuals using the stored pre-prediction state",
+  "whole_on_path_gate_passed": false,
+  "combined_Cstar_version_confirmed": false,
+  "new_model_or_attention_calculation_run": false,
+  "sources": [
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/allin_source/tools/attnstage2_runtime.py",
+      "sha256": "b5a988f47c3ac88bcf4629d6dd7b4713a57f624bc9e481eacf95fc3930850646",
+      "evidence_lines": [
+        53,
+        54,
+        101,
+        103,
+        119
+      ]
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/allin_source/tools/attnsme.py",
+      "sha256": "b36b91d7603fa542370a8882dced7b6b68e44f668ace740c051d943a2cdf8e51",
+      "evidence_lines": [
+        193,
+        205,
+        208
+      ]
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/allin_source/abm/loop.py",
+      "sha256": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f",
+      "evidence_lines": [
+        81,
+        90,
+        91,
+        129
+      ]
+    },
+    {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/allin_source/tools/v3_run.py",
+      "sha256": "ac1bc1e3e9159b35fea03340202dab3065724e9a91725adf0b3887f03ea3b408",
+      "evidence_lines": [
+        571,
+        577
+      ]
+    }
+  ]
+}
