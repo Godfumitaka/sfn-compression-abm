@@ -1,0 +1,33 @@
+{
+  "at_jst": "2026-10-08T00:14:17+09:00",
+  "previous_failure": "GitHub remote Internal Server Error; 4 normal pushes rejected at 2026-10-08 00:12:27–00:12:33 JST",
+  "forced_push": false,
+  "model_operations": false,
+  "steps": [
+    {
+      "argv": [
+        "git",
+        "pull",
+        "--quiet",
+        "--rebase"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:results-2026-09-27"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "remote: Internal Server Error        \nremote: Request ID 287F:732EB:14FEC1:1CEBED:6AC661CA        \nremote: Time 2026-10-07T15:14:18Z\nTo https://github.com/Godfumitaka/sfn-compression-abm.git\n ! [remote rejected] HEAD -> results-2026-09-27 (Internal Server Error)\nerror: failed to push some refs to 'https://github.com/Godfumitaka/sfn-compression-abm.git'\n"
+    }
+  ],
+  "published": false,
+  "head": "449ac176925792bd9484f863823a33bd5f77f8cf",
+  "finished_at_jst": "2026-10-08T00:14:19+09:00"
+}
