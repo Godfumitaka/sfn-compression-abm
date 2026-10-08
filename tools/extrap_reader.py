@@ -55,10 +55,26 @@ def iter_run(arm_root, cell, seed, *, check_hash=True, check_world=True):
     answers = _answers_by_trial(os.path.join(root, "side", cell, f"{sd}.answers.csv"))
     with gzip.open(led, "rt", encoding="utf-8") as f:
         header = json.loads(next(f))
-        world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
-                               holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+        if fl.get("shop_world"):
+            # 指示4：旧い走行と同じ旗で、お店の世界の分岐を作り直す。
+            import abm.world as w
+            import shopworld as sw
+            sw.CFG.update(world=int(fl["shop_world"]), exc=float(fl.get("shop_exc") or 0.2), door_p=fl.get("shop_door_p"))
+            if "shop_keep_cue" in fl:
+                sw.CFG["keep_cue"] = bool(fl["shop_keep_cue"])
+            orig = w.generate_trial
+            w.generate_trial = lambda rs, i, a, *, seed, holdout_include_second_order=False: sw.shop_trial(
+                orig, rs, i, a, seed=seed, holdout_include_second_order=holdout_include_second_order)
+            try:
+                world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
+                                       holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
+            finally:
+                w.generate_trial = orig
+        else:
+            world = generate_world(header["run_seed"], header["trial_count"], ["agent"], seed=load_seed(seedf),
+                                   holdout_include_second_order=bool(header.get("arm_holdout_second_order") or False))
         if check_world and world.world_hash != header["world_hash"]:
-            raise RuntimeError(f"世界の指紋が合わない {led}")
+            raise RuntimeError(f"世界の指紋が合わない {led} 台帳={header['world_hash']} 生成={world.world_hash}")
         state = None
         for line, wt in zip(f, world.trials):
             row = json.loads(line)
