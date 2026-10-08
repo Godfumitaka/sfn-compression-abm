@@ -8,7 +8,9 @@
   "absent_basis：正答できる定義の不在の数え方。gate＝門を通って正しく答える定義が無い（既定。選び間違い・区別の喪失と同じ基準）、any＝門を見ず、正しく答える候補が一つも無い。",
   "memory：記憶のビットの読み方。side の jsonl の kind の記録の fields。新しい版で記録の形が変われば群ごとに memory を書き換える。",
   "effort：手間の列の数え方。none＝反実仮想の評価が無い（0）、gate_FH＝開示の試行で門を通った全候補の F・H の席の数（第二段・誤り駆動）、selected_FH＝選ばれた定義（R_used）の F・H の席の数（C）。記録（side の cflearn.jsonl）があればその行の数を使う。未設定（TODO）は NA。",
-  "prob：確率で答えた場合の正答率の設定。status に、計算しない理由を書く（記録に P・π があり、読み方が決まったら計算を足す）。prob_approx: true の構成（D・D＋注意・基準）は表に「近似」と書く。"
+  "prob：確率で答えた場合の正答率の設定。status に、計算しない理由を書く（記録に P・π があり、読み方が決まったら計算を足す）。prob_approx: true の構成（D・D＋注意・基準）は表に「近似」と書く。",
+  "results_hold: true の群は、成績の表（per_run・pairs・memory_bits_vs_errors・seal_states・effort）に出さず、仕組みの表（mechanism.py の mechanism_<構成>.csv）だけを出す。Claude が仕組みの表を確かめたら外す（受け箱の指示 11）。",
+  "time_log：/usr/bin/time -v の記録の場所（{run_dir}・{seed} が使える）。あれば仕組みの表の最大常駐（M5）に使う。無ければ manifest.jsonl の peak_rss_mb を使う。"
  ],
  "absent_basis": "gate",
  "memory": {
@@ -140,7 +142,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #1b",
@@ -165,7 +169,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #2a",
@@ -192,7 +198,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #2b",
@@ -219,7 +227,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #3a",
@@ -244,7 +254,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #3b",
@@ -269,7 +281,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #4a",
@@ -294,7 +308,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #4b",
@@ -319,7 +335,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #5a",
@@ -344,7 +362,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #5b",
@@ -369,7 +389,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #6a",
@@ -394,7 +416,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #6b",
@@ -419,7 +443,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #7a",
@@ -444,7 +470,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #7b",
@@ -469,7 +497,9 @@
    "prob": {
     "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
     "short": "空欄：TODO（理由は meta.json）"
-   }
+   },
+   "results_hold": true,
+   "time_log": null
   },
   {
    "name": "新しい版 #8",

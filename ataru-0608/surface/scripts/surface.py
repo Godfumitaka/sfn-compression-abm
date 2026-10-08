@@ -114,6 +114,20 @@ COLUMNS = [
     ("effort.csv", "cand_count_per_disclosed", "候補の記録から規則で数えた値（記録と突き合わせる）"),
     ("effort.csv", "elapsed_sec", "一本の実時間（manifest.jsonl の elapsed_sec、秒）。「種の平均」の行は種の平均"),
     ("seal_states.csv", "error_kind・selected_seal_class・selected_seal_state・trials", "誤答の型ごとの、選ばれた定義のシールの区分と件数"),
+    ("mechanism_<構成>.csv", "complete・trials_read・results_hold", "完了の印があるか・読めた試行の数・成績の表を保留した群か（mechanism.py。数え方は mechanism_meta.json）"),
+    ("mechanism_<構成>.csv", "m1_defs_le1_frac_from200（_trials・m1_defs0_trials_from200・m1_trials_from200）・m1_defs_last",
+     "M1：side の kind=v39 の defs（試行の後の定義の数）。試行番号 200 以降（0 始まり）で 1 以下の試行の割合と数、0 の試行の数、最後の試行の値"),
+    ("mechanism_<構成>.csv", "m2_*", "M2：stage2 の本流の開示の試行（f_fired）の rows の各席の delta（照合し直した Δr）が 0・負・正の数と割合（分母は測った席）。"
+     "m2_disclosed_no_seats は測る席が無かった開示の試行の数"),
+    ("mechanism_<構成>.csv", "m3_births・m3_assim・m3_retire・m3_check_…", "M3：side の kind=birth の数（誕生）、kind=assim の数（同化）、kind=v39 の retire の数（退役）。誕生−退役＝最後の定義の数か"),
+    ("mechanism_<構成>.csv", "m4_cases・m4_seats_in_cases", "M4：kind=v39 の conv（実行された F→H・H→U）を (試行, 定義) でまとめ、違う席が二つ以上の組の数とその席の数"),
+    ("mechanism_<構成>.csv", "m5_elapsed_sec・m5_peak_rss_gib（_source）", "M5：manifest.jsonl の elapsed_sec。最大常駐は time -v の記録、無ければ manifest の peak_rss_mb（KiB÷1e6 の値を GiB に直した）"),
+    ("mechanism_<構成>.csv", "m6_*", "M6：researcher の calibration の candidates の V（第二段の価値）の符号。m6_pos_frac は本番の候補（reference が偽の FH・HU）の正の割合。"
+     "m6_ref_HU_pos_frac は参照の H→U。記録が無い本は NA"),
+    ("mechanism_<構成>.csv", "birth_init_*", "参考：stage2 の .initial.jsonl.gz（出生の仮の問い）の delta_by_slot（席ごとの出生の初期値）の符号の数"),
+    ("mechanism_trajectory_<構成>.csv", "block_first_trial・block_last_trial・defs_after・F・H・U・bits_after",
+     "M1 の推移：100 試行ごとの区間の最後の試行の後の定義の数・席の数・記憶のビット（side の kind=v39）"),
+    ("mechanism_trajectory_<構成>.csv", "births_in_block・assim_in_block・retire_in_block", "M3 の区間ごとの数"),
 ]
 
 
@@ -145,9 +159,9 @@ def done_file(run_dir, seed):
     return p[0] if len(p) == 1 else None
 
 
-def discover(cfg):
-    """configs.json から、完了した本の一覧を返す。"""
-    runs, notes, todo = [], [], []
+def discover(cfg, include_held=False):
+    """configs.json から、完了した本の一覧を返す。results_hold の群（成績の表を保留）は include_held のときだけ入れる。"""
+    runs, notes, todo, held = [], [], [], 0
     for g in cfg["groups"]:
         if g.get("todo"):
             todo.append(g.get("name", ""))
@@ -163,16 +177,23 @@ def discover(cfg):
                 df = done_file(d, seed)
                 if df is None:
                     continue
+                if g.get("results_hold") and not include_held:
+                    held += 1
+                    continue
                 runs.append({"group": g.get("name", ""), "arm": arm, "seed": seed, "run_dir": str(d), "done": str(df),
                              "config": spec["config"], "world": spec["world"], "lambda": spec.get("lambda", ""),
                              "family": spec.get("family", g.get("family", "")),
                              "effort": spec.get("effort", g.get("effort", "TODO")),
                              "prob": spec.get("prob", g.get("prob")),
                              "prob_approx": bool(spec.get("prob_approx", False)),
+                             "results_hold": bool(g.get("results_hold", False)),
+                             "time_log": g.get("time_log"),
                              "replay_dir": str(expand(g.get("replay_dir", BASE / "replay"))),
                              "memory": {**cfg.get("memory", {}), **g.get("memory", {})}})
     if todo:
         notes.append(f"TODO（雛形）の群 {len(todo)} を飛ばした：" + "・".join(todo))
+    if held:
+        notes.append(f"成績の表を保留した群（results_hold）の本 {held} を成績の表から外した（仕組みの表 mechanism.py には出す）")
     return runs, notes
 
 
