@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-09T03:36:02.272644+09:00",
+  "original_gate_at": "2026-10-09T03:29:04.826455+09:00",
+  "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+  "trials": 200,
+  "original_receipt_end": {
+    "at": "2026-10-09T03:29:07.444222+09:00",
+    "pid": 49259,
+    "exit_code": 0
+  },
+  "actual_ps_at": "2026-10-09T03:29:38.313819+09:00",
+  "ended_pids": [
+    15246,
+    15260,
+    15268,
+    15282,
+    49259,
+    49838,
+    49849,
+    49859
+  ],
+  "model_records": 17,
+  "strictpc": {
+    "passed": true,
+    "bytes": 6435,
+    "sha256": "9e76ab175382d9fd6c2bacdfd8453e2038ae8d0bc9365c17e618fdaa85fac347"
+  },
+  "cache_observation": {
+    "reference_observation_files_exist": true,
+    "order_preserved": true,
+    "transformation": {
+      "passed": true,
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200",
+      "trials": 200,
+      "last_trial": 199,
+      "original_cache_rows": {
+        "cstar_cache": 2886,
+        "cstar_cache_rng": 2886
+      },
+      "kept_saved_rows": 2215,
+      "removed_saved_rows": 5748,
+      "original_rng_digest_reconstructed": true,
+      "order_preserved": true,
+      "model_files_changed": false,
+      "P10_body_imported": false
+    },
+    "records": [
+      {
+        "file": "tie_state.jsonl",
+        "passed": true,
+        "compared_bytes": 3030099,
+        "sha256": "2339c7b80943b8df14740ec591856149f6f85a1c63035c3cbb6c9255d69a2456",
+        "time_value_keys": [],
+        "ledger_header_excluded": false
+      },
+      {
+        "file": "saved_matcher.jsonl.gz",
+        "passed": true,
+        "compared_bytes": 8986127,
+        "sha256": "48072bb7aa510ad140fc3eaa73d168857093f44cf0b4f5bd642ff8a1796d8990",
+        "time_value_keys": [],
+        "ledger_header_excluded": false
+      }
+    ]
+  },
+  "guard": {
+    "enabled": true,
+    "trial": 199,
+    "boundaries": 200,
+    "requests": {
+      "mapping": 1678466,
+      "engine": 1668900
+    },
+    "removed": {
+      "cache": 2874,
+      "cache_rng": 2874
+    },
+    "forbidden_reads": 0,
+    "remembered_seed_origins": 115121,
+    "native_loop_returned": true
+  },
+  "native_log_tail": "受け付けた：PID 15260、担当 Codex2 指示29 P10 忘却あり ON200、見込み 1.0 GB（表の合計 12.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-09 01:26:40 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-09 03:27:57 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=7276.92 最大メモリMB=194.5 定義末=0 一致=None err=None\n2026-10-09 03:27:58 ALLDONE shop_hide1_s1\n消した：PID 15260\n",
+  "models_reference_postprocessing_comparison_not_rerun": true,
+  "model_receipt_observer_signals": 0,
+  "world1_gate_complete": false,
+  "full_first_bundle_complete": false,
+  "adoption_decided": false
+}
