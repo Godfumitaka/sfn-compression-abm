@@ -1,0 +1,146 @@
+{
+  "at": "2026-10-08T18:00:39+09:00",
+  "reason": "17:27の既存監督の二度目の未分類worker警告",
+  "recognized_active_models": 4,
+  "recognized_own_active_models": 0,
+  "unclassified_active_spawn_count": 1,
+  "recognized_paused_or_zombie_models": 3,
+  "models": [
+    {
+      "pid": 9096,
+      "ppid": 9081,
+      "pgid": 9073,
+      "rss_bytes": 2120417280,
+      "state": "R",
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 47193,
+      "ppid": 47184,
+      "pgid": 47180,
+      "rss_bytes": 1524465664,
+      "state": "R",
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 47223,
+      "ppid": 47214,
+      "pgid": 47210,
+      "rss_bytes": 1649016832,
+      "state": "R",
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 52340,
+      "ppid": 52330,
+      "pgid": 52320,
+      "rss_bytes": 257376256,
+      "state": "R",
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/observe.py",
+      "own_measurement": false
+    }
+  ],
+  "unknown": [
+    {
+      "pid": 58117,
+      "ppid": 58110,
+      "pgid": 62396,
+      "rss_bytes": 101154816,
+      "state": "R",
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "intervention46_record_run.py",
+      "parent_script_path": "$WORKSPACE/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_run.py",
+      "own_measurement": false
+    }
+  ],
+  "paused_models": [
+    {
+      "pid": 3532,
+      "ppid": 3528,
+      "pgid": 3526,
+      "rss_bytes": 203341824,
+      "state": "T",
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "measurement_driver.py",
+      "parent_script_path": "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_driver.py",
+      "own_measurement": true
+    },
+    {
+      "pid": 49468,
+      "ppid": 49459,
+      "pgid": 49451,
+      "rss_bytes": 10354688,
+      "state": "T",
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 59619,
+      "ppid": 59604,
+      "pgid": 59598,
+      "rss_bytes": 10354688,
+      "state": "T",
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe.py",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/observe.py",
+      "own_measurement": false
+    }
+  ],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+  "swap_usage": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)",
+  "free_disk_bytes": 215531405312,
+  "physical_cpu": 10,
+  "memory_bytes": 34359738368,
+  "counting_rule": "psの実際の個体workerを親scriptとspawn/forkから一回だけ数える。親・監督・time・resource_tracker・STAT T/Zを稼働数へ足さず、未分類spawnと停止模型を別欄にする。受付や停止条件を変更しない。",
+  "own_supervisor_present": true,
+  "own_worker_state": "T",
+  "verified_unknown_model_evidence": [
+    {
+      "pid": 58117,
+      "path": "$WORKSPACE/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_run.py",
+      "sha256": "05053fd61eaf318c1d3de4b1b7ec4455c144c237cce702c47428c757319d1275",
+      "model_call_excerpts": [
+        {
+          "line": 15,
+          "text": "return _native_worker(task)"
+        },
+        {
+          "line": 34,
+          "text": "return _native_worker(task)"
+        },
+        {
+          "line": 55,
+          "text": "native.main()"
+        }
+      ],
+      "verified_model": true
+    }
+  ],
+  "verified_active_model_count": 5,
+  "eligible_mac_queue_rows": [],
+  "report_commit": "bfefb21bf40b99fddb90f904cb1b2c74e42276f2",
+  "verified_own_active_model_count": 0,
+  "classification_changed_in_existing_guard": false,
+  "manual_process_actions": []
+}
