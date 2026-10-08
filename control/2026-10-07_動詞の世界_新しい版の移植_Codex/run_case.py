@@ -1,5 +1,6 @@
 """受付の内側で自分の一走行だけを監督する。CPU枠と熱・容量を記録する。"""
 from pathlib import Path
+from datetime import datetime, timezone
 import json
 import os
 import re
@@ -58,6 +59,11 @@ with (folder / 'resources.jsonl').open('x') as samples:
     start_slots=int(spec.get('cpu_start_slots',2))
     assert 1 <= start_slots <= limit
     while True:
+        # 期限後の新しい模型は始めない。開始済みの子の監督には期限を使わない。
+        deadline = spec.get("start_deadline_jst", "2026-10-09T09:00:00+09:00")
+        if datetime.now(timezone.utc) >= datetime.fromisoformat(deadline):
+            record("deadline_before_start", {"epoch_seconds": time.time(), "model_started": False})
+            raise SystemExit("期限後なので新しい模型の開始をしない")
         row = observe()
         if row['models']+1 <= 8 and row['unknown_active_spawn']==0 and row['outside_heavy'] + start_slots <= limit and row['free_disk_bytes'] >= 20*2**30 and not row['thermal_warning']:
             break
