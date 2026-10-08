@@ -1,0 +1,338 @@
+commit 75858e0b4bbff608b57391c075cf5b72c678e636
+Author:     clove <tatsu-admin@tatsu-adminnoMacBook-Air.local>
+AuthorDate: Thu Oct 8 16:05:56 2026 +0900
+Commit:     clove <tatsu-admin@tatsu-adminnoMacBook-Air.local>
+CommitDate: Thu Oct 8 16:05:56 2026 +0900
+
+    開示の反実仮想で保存控えの重複を探索旗で省く
+
+diff --git a/tests/test_attnstage2_isolation.py b/tests/test_attnstage2_isolation.py
+new file mode 100644
+index 00000000..f90601ba
+--- /dev/null
++++ b/tests/test_attnstage2_isolation.py
+@@ -0,0 +1,95 @@
++"""指示24の控えの重複除去：値・順・外部参照・例外時の復元を検査する。"""
++from dataclasses import replace
++from pathlib import Path
++from random import Random
++from types import SimpleNamespace
++import sys
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1] / 'tools'),
++                str(Path(__file__).resolve().parents[1])]
++import pytest
++import attncstar as C
++import attnsme
++import attnstage2 as T
++import attnstage2_isolation as F
++import attnstage2_sme as N
++import probeworld
++import smeevict
++import smeshared as S
++import v39
++from test_attncstar import cstar
++from test_attnstage2_connection import build, retained_U_structure
++from test_sme2017_connection import separate
++from attnstage2_distribution import Readout
++
++
++@pytest.mark.parametrize('exception', [False, True])
++def test_nested_snapshot_restores_contents_old_cache_aliases_and_rng(separate, monkeypatch, exception):
++    manager = SimpleNamespace(epochs={'old': {'a': 1}})
++    monkeypatch.setattr(smeevict, 'MANAGER', manager)
++    S.LOG.update(diagnostic=False, f=None, diagnostic_f=None)
++    for isolated in (N.isolated, F.isolated):
++        aliases = (S.STATS, S.CTX, S.RESULTS, S.GRAPHS, S.CHOICES,
++                   S.ENGINE.cache, S.ENGINE.self_cache, S.ENGINE.cache_rng)
++        contents = [dict(d) for d in aliases]
++        before, log, rng = S.snapshot(), dict(S.LOG), S.ENGINE.rng.getstate()
++        try:
++            with isolated():
++                for d in aliases:
++                    d['temporary'] = 3
++                manager.epochs['old']['a'] = 2
++                S.ENGINE.rng.random()
++                outer = S.snapshot()
++                with isolated():
++                    S.CTX['temporary'] = 4
++                    S.ENGINE.rng.random()
++                    S.LOG['temporary'] = True
++                assert S.snapshot() == outer
++                if exception:
++                    raise ValueError('意図した例外')
++        except ValueError:
++            assert exception
++        assert [dict(d) for d in aliases] == contents
++        assert S.snapshot() == before
++        assert S.LOG == log
++        assert S.ENGINE.rng.getstate() == rng
++        assert manager.epochs == {'old': {'a': 1}}
++
++
++def test_snapshot_without_original_sme_hook_is_rejected(separate, monkeypatch):
++    monkeypatch.setattr(probeworld, '_snapshot_modules', lambda: [])
++    with pytest.raises(RuntimeError, match='保存窓口'):
++        with F.isolated():
++            raise AssertionError('未接続の保存を共有した')
++
++
++@pytest.mark.parametrize('loss_mode', ['alpha', 'top1', 'mixture'])
++@pytest.mark.parametrize('thinned', [False, True])
++def test_all_seats_native_Cstar_rows_and_permutation_are_identical(cstar, retained_U_structure,
++                                                                  loss_mode, thinned):
++    state, config, obs, ai = build()
++    if thinned:
++        state = v39._convert(state, 'FH', 'R', 1, 1)[0]
++    before = repr(state), repr(obs.__dict__), S.snapshot(), dict(S.LOG)
++    args = (ai, state, config, Random(1).getstate(), obs, {'independent-key': .5})
++    kwargs = dict(mode='global', position='k2', door_task=True, epsilon=.01,
++                  readout_policy=Readout(), feature_policy=C.Features())
++    original, fast = C.Session(*args, **kwargs), F.Session(*args, **kwargs)
++    assert original.candidates == fast.candidates
++    seats = tuple(T.Seat(d.name, r.slot_index, v39.seat_state(d, r, state.slot_history),
++                         state.v39_seats[d.name, r.slot_index].gen)
++                  for d in state.definitions.values() for r in d.constituents
++                  if v39.seat_state(d, r, state.slot_history) != 'U')
++    results = []
++    for session in (original, fast):
++        rows, work = T.compare_seats(session.candidates, args[-1], seats, session.rematched, None,
++                                    correct=('hold', ('x',)), ell=3, mode=loss_mode,
++                                    choose=session.choose, background=session.background,
++                                    method='rematched')
++        results.append((rows, {k: v for k, v in work.items() if k != 'seconds'}))
++    assert results[0] == results[1]
++    reversed_rows, _ = T.compare_seats(fast.candidates, args[-1], reversed(seats), fast.rematched, None,
++                                     correct=('hold', ('x',)), ell=3, mode=loss_mode,
++                                     choose=fast.choose, background=fast.background, method='rematched')
++    assert reversed_rows == list(reversed(results[0][0]))
++    assert (repr(state), repr(obs.__dict__), S.snapshot(), dict(S.LOG)) == before
+diff --git a/tools/attnstage2_isolation.py b/tools/attnstage2_isolation.py
+new file mode 100644
+index 00000000..b08a1442
+--- /dev/null
++++ b/tools/attnstage2_isolation.py
+@@ -0,0 +1,55 @@
++"""指示24の開示だけの旗。保存済みの同じ控えを二重に作らない。"""
++from contextlib import contextmanager
++
++from attncstar import Session as OriginalSession
++
++
++@contextmanager
++def isolated():
++    """元と同じ復元順・古い辞書の参照も保ち、保存の複製だけ省く。
++
++    smeshared.installが接続した保存窓口は、SMEの全控えと乱数を既に
++    含む。外側の追加控えへ同じ保存値を渡す。入れ子の各保存は残す。
++    """
++    import attnsme
++    import probeworld
++    import smeshared as S
++    import smeevict
++    for function, name in ((probeworld._snapshot_modules, 'snapshot_modules'),
++                           (probeworld._restore_modules, 'restore_modules')):
++        if function.__module__ != S.__name__ or function.__name__ != name:
++            raise RuntimeError('開示の保存控えの共有には元のSME保存窓口が必要')
++    # snapshot_modulesはLOGのdiagnosticを変えるので、その前に控える。
++    log = dict(S.LOG)
++    dictionaries = (S.STATS, S.CTX, S.RESULTS, S.GRAPHS, S.CHOICES,
++                    S.ENGINE.cache, S.ENGINE.self_cache, S.ENGINE.cache_rng)
++    manager = smeevict.MANAGER
++    epochs = None if manager is None else {k: dict(v) for k, v in manager.epochs.items()}
++    snap = attnsme._snapshot()
++    saved = None
++    rng = None
++    try:
++        ordinary, own, phase = snap[0]
++        engine, results, graphs, choices, stats, context = own[:6]
++        rng, cache, self_cache, cache_rng = engine
++        saved = (stats, context, results, graphs, choices, cache, self_cache, cache_rng)
++        S.LOG.update(f=None, diagnostic_f=None)
++        yield
++    finally:
++        attnsme._restore(snap)
++        # ENGINE.restoreは新しい辞書を作る。以前の参照の中身も元どおり戻す。
++        for current, backup in zip(dictionaries, saved or ()):
++            current.clear()
++            current.update(backup)
++        S.LOG.clear()
++        S.LOG.update(log)
++        if rng is not None:
++            S.ENGINE.rng.setstate(rng)
++        if manager is not None:
++            manager.epochs = epochs
++
++
++class Session(OriginalSession):
++    """開示のSessionだけ。点・対応・再照合・回答・入れ子の隔離は同じ。"""
++    def isolated(self):
++        return isolated()
+diff --git a/tools/attnstage2_runtime.py b/tools/attnstage2_runtime.py
+index 8cc9652f..5256fc20 100644
+--- a/tools/attnstage2_runtime.py
++++ b/tools/attnstage2_runtime.py
+@@ -17,7 +17,7 @@ ST = {}
+ 
+ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_policy=None,
+             readout_policy=None,scope='all',feature_policy=None,session_class=None,rematch_reuse=False,
+-            measure_birth_hu=False):
++            measure_birth_hu=False, isolation_reuse=False):
+     import abm.loop as loop
+     import attnsme
+     import smeshared as S
+@@ -29,6 +29,13 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
+         raise ValueError('誕生のH→U測定は既存のvirtual初期値の経路だけで使う')
+     session_class=Session if session_class is None else session_class
+     diagnostic = bool(getattr(session_class, 'supports_structure_reuse', False))
++    accounting_class = session_class
++    if isolation_reuse:
++        from attncstar import Session as CstarSession
++        from attnstage2_isolation import Session as SharedSnapshotSession
++        if session_class is not CstarSession:
++            raise ValueError('開示の保存控えの共有はC*の全部入りSessionだけで使う')
++        accounting_class = SharedSnapshotSession
+     if rematch_reuse and not diagnostic:
+         raise ValueError('照合の土台の使い回しはC*のSessionだけで使う')
+     def rematch_record(row):
+@@ -38,8 +45,8 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
+         for key in ('seconds','match_calls','result_cache_hits','engine_calls',
+                     'engine_seconds','foundation_builds','foundation_hits'):
+             total[key] = total.get(key, 0)+row[key]
+-    accounting_session = partial(session_class, reuse_structure=rematch_reuse,
+-        rematch_record=rematch_record) if diagnostic else session_class
++    accounting_session = partial(accounting_class, reuse_structure=rematch_reuse,
++        rematch_record=rematch_record) if diagnostic else accounting_class
+     birth_session = partial(session_class, reuse_structure=rematch_reuse,
+         rematch_record=rematch_record, rematch_origin='birth') if diagnostic else session_class
+     T.measurement_seats((),scope=scope,selected=None)
+diff --git a/tools/attnstage2_sme.py b/tools/attnstage2_sme.py
+index c819df2d..6e520fc8 100644
+--- a/tools/attnstage2_sme.py
++++ b/tools/attnstage2_sme.py
+@@ -106,6 +106,10 @@ def isolated():
+ 
+ class Session:
+     """開示を受け取らない。三つの計算の窓口を分ける。"""
++    def isolated(self):
++        """既定の保存・復元。別版の開示Sessionだけが控えの重複を省ける。"""
++        return isolated()
++
+     def __init__(self, agent_input, state, config, rng_state, observations, attention,
+                  *, mode, position, door_task, ranked=None, epsilon=.5,readout_policy=None,
+                  feature_policy=None):
+@@ -136,7 +140,7 @@ class Session:
+         def capture(rows,scene):
+             ranked.extend(rows)
+             return original(rows,scene)
+-        with isolated(), self.context(state):
++        with self.isolated(), self.context(state):
+             S._definition_choice = capture
+             try:
+                 S.select_definition(state,self.ai.target_graph_partial,self.config)
+@@ -173,7 +177,7 @@ class Session:
+     def typed(self, ranked, state):
+         import v39
+         import smeshared as S
+-        with isolated():
++        with self.isolated():
+             graph = v39.v39_graph(ranked[2],state.slot_history)
+             try:
+                 return S.typed_graph(graph)
+@@ -188,7 +192,7 @@ class Session:
+         al = replace(al,candidate_projections=tuple(i for i in al.candidate_projections if i in fids))
+         forced = (support/n,support,d,graph,al,n,False,())
+         original = v39.select_definition
+-        with isolated(), self.context(state):
++        with self.isolated(), self.context(state):
+             v39.select_definition = lambda *a,**kw:forced
+             clone = Random();clone.setstate(self.rng_state)
+             try:
+@@ -211,7 +215,7 @@ class Session:
+             rows = [c.payload['ranked'] for c in candidates]
+         else:
+             rows = [(*c.payload['ranked'][:6],z) for c,z in scored]
+-        with isolated(), self.context(self.state):
++        with self.isolated(), self.context(self.state):
+             for c in candidates:
+                 graph = c.payload['typed_left']
+                 S.GRAPHS[graph.fingerprint()] = graph
+@@ -220,7 +224,7 @@ class Session:
+ 
+     def thin(self, seat):
+         import v39
+-        with isolated():
++        with self.isolated():
+             return v39._convert(self.state,'FH' if seat.state=='F' else 'HU',
+                                 seat.definition,seat.slot,0)[0]
+ 
+@@ -230,7 +234,7 @@ class Session:
+             return None
+         r = next(r for r in self.ranked if r[2].name == seat.definition)
+         d = state.definitions[seat.definition]
+-        with isolated():
++        with self.isolated():
+             graph,al,support,n,q = frozen_alignment(d,state,self.ai.target_graph_partial,r[4])
+             changed = (support/n,support,d,graph,al,n,q)
+             return self.enrich((changed,),state)[0]
+@@ -246,7 +250,7 @@ class Session:
+         n = v39.n_FH(d,state.slot_history)
+         if n == 0:
+             return None
+-        with isolated(), self.context(state):
++        with self.isolated(), self.context(state):
+             graph,al = v39.map_v39(d,state.slot_history,self.ai.target_graph_partial)
+             dd = S.self_score(S.GRAPHS[al.sme_audit['left']])
+             xx = S.self_score(S.typed_graph(self.ai.target_graph_partial))
+@@ -259,5 +263,5 @@ class Session:
+ 
+     def exact(self, seat):
+         state = self.thin(seat)
+-        with isolated():
++        with self.isolated():
+             return self.enrich(self.rank(state),state)
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 9aad4eb7..dbcbc670 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -601,6 +601,7 @@ def worker(task: dict) -> dict:
+                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
+                                   rematch_reuse=task.get('stage2_reuse',False),
+                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
++                                  **({'isolation_reuse':True} if task.get('stage2_isolation') else {}),
+                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
+     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
+     old_gc_threshold = None
+@@ -845,6 +846,7 @@ def main() -> None:
+     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
+     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
+     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
++    ap.add_argument('--stage2-isolation',choices=('off','on'),default='off',help='開示の反実仮想だけで同じSME保存控えの重複作成を省く')
+     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+     ap.add_argument("--sme-gc-threshold", type=int, default=None,
+@@ -1027,6 +1029,8 @@ def main() -> None:
+         raise SystemExit('第二段をほかの保持の置換と合算しない')
+     if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
+         raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
++    if args.stage2_isolation == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
++        raise SystemExit('--stage2-isolation onはC*・全部入り・第二段onと一緒に使う')
+     if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+         raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
+     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
+@@ -1039,6 +1043,7 @@ def main() -> None:
+         if args.stage2 == 'on':
+             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
+             if args.stage2_reuse == 'on':task['stage2_reuse']=True
++            if args.stage2_isolation == 'on':task['stage2_isolation']=True
+             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
+         if args.logp_eps != .5:
+             task['logp_eps'] = args.logp_eps
+@@ -1076,6 +1081,7 @@ def main() -> None:
+                                                     **cstar_options,
+                                                     **({'attn_allin':True} if args.attn_allin else {}),
+                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
++                                                    **({'stage2_isolation':True} if args.stage2_isolation=='on' else {}),
+                                                     **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
+                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
+                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
