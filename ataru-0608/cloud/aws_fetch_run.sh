@@ -3,10 +3,10 @@
 # 機械に S3 の権限（IAM の役割）を付けられないため（鍵に IAM の権限が無い）、S3 にはデスクトップが上げる。C: は使わない（D: に置く）。
 # 引数：機械の公開 IP、機械の上の一本のフォルダ（例 /home/ubuntu/cloud_runs/calib/w1_seed041）、名前（例 calib_w1_seed041）
 set -euo pipefail; source $(dirname "$0")/aws_env.sh
-IP=$1; RD=$2; NAME=$3; SSH="ssh -i $KEY_FILE -o ConnectTimeout=15 ubuntu@$IP"; LOCAL=/mnt/d/sfn_runs/cloud/$NAME; B=$(bucket)
+IP=$1; RD=$2; NAME=$3; SSH="ssh -i $KEY_FILE -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=4 ubuntu@$IP"; LOCAL=/mnt/d/sfn_runs/cloud/$NAME; B=$(bucket)
 $SSH "grep -q '^rc=0' $RD/run.log" || { echo "★ $NAME はまだ終わっていないか、失敗した"; exit 2; }
 $SSH "bash ~/cloud/push_small.sh $RD $NAME -"
-mkdir -p $LOCAL && scp -q -r -i $KEY_FILE ubuntu@$IP:$RD/output ubuntu@$IP:$RD/small ubuntu@$IP:$RD/native_command.json ubuntu@$IP:$RD/time.log $LOCAL/
+mkdir -p $LOCAL && scp -q -r -o ServerAliveInterval=30 -o ServerAliveCountMax=4 -i $KEY_FILE ubuntu@$IP:$RD/output ubuntu@$IP:$RD/small ubuntu@$IP:$RD/native_command.json ubuntu@$IP:$RD/time.log $LOCAL/
 # 持ってきたものが機械の上と同じことを、ファイルごとの sha256 で確かめる
 (cd $LOCAL/output && find . -type f -printf "%P\n" | sort | while read -r p; do echo -e "$p\t$(stat -c %s "$p")\t$(sha256sum "$p" | cut -d' ' -f1)"; done) > $LOCAL/fetched_sha256.tsv
 diff <(cut -f1,3 $LOCAL/small/files_sha256.tsv) <(cut -f1,3 $LOCAL/fetched_sha256.tsv) > /dev/null || { echo "★ 持ってきた出力が機械の上と違う"; exit 3; }
