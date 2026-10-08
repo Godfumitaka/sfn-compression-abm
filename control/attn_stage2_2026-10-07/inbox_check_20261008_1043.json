@@ -1,0 +1,1566 @@
+{
+  "at": "2026-10-08T10:44:11.494987+09:00",
+  "machine": {
+    "at": "2026-10-08T10:44:11.442907+09:00",
+    "models": {
+      "7399": {
+        "ppid": 7396,
+        "state": "R",
+        "rss_kb": 8424560
+      },
+      "9086": {
+        "ppid": 9067,
+        "state": "R",
+        "rss_kb": 274800
+      },
+      "9096": {
+        "ppid": 9081,
+        "state": "R",
+        "rss_kb": 278560
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 1204832
+      }
+    },
+    "model_children": 4,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 98780,
+        "owner": "SME_deep_memory_instruction12_full1740_01",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 9052,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_200",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 9073,
+        "owner": "Codex2 指示18 較正 世界2 種42",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 220764041216,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "first_stage": {
+    "status.json": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning.json": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure.json": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress.json": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "controllers": {
+    "instruction18_calibration": {
+      "pid": 9047,
+      "ps": [
+        1,
+        "Ss",
+        0.3,
+        21312,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py"
+      ],
+      "files": {
+        "supervisor.lock": "9047",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T09:55:31.321189+09:00",
+          "pid": 9047,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py"
+          ],
+          "source": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "automatic_retry": false
+        },
+        "launch.json": {
+          "at": "2026-10-08T09:55:31.394013+09:00",
+          "pid": 9047,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "world": 2,
+          "seeds": [
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "adopted_seed41_receipt": 95408,
+          "new_seeds": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "mem_gb": 4,
+          "seed41_not_restarted": true,
+          "model_signals": false,
+          "deletes": false,
+          "automatic_retry": false
+        },
+        "status.json": {
+          "at": "2026-10-08T10:44:10.630960+09:00",
+          "pid": 9047,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "phase": "calibration_running_or_waiting",
+          "adopted_seed41_receipt": 95408,
+          "active": {
+            "42": 9073
+          },
+          "pending": [
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "completed": [],
+          "machine": {
+            "at": "2026-10-08T10:44:10.506099+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 8422096
+              },
+              "9086": {
+                "ppid": 9067,
+                "state": "R",
+                "rss_kb": 274800
+              },
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 276880
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1204832
+              }
+            },
+            "model_children": 4,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              },
+              {
+                "pid": 9052,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_200",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 220764815360,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "mem_gb": 4,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "preparation_manifest.json": {
+          "at": "2026-10-08T09:50:30.433339+09:00",
+          "instruction": 18,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "receipt_commit": "e18ec90f",
+          "adopted_seed41": {
+            "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+            "receipt_pid": 95408,
+            "worker_pid": 95421,
+            "restarted": false
+          },
+          "new_cases": [
+            {
+              "world": 2,
+              "seed": 42,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 43,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 44,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 45,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 46,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 47,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047/config.json",
+              "selected_model_tasks": 1
+            },
+            {
+              "world": 2,
+              "seed": 48,
+              "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048",
+              "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048/native_command.json",
+              "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048/config.json",
+              "selected_model_tasks": 1
+            }
+          ],
+          "immutable_sha256": {
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/config.json": "5dea15cb64c8b183b72cbea1f1de642e6ce785a00833d74230938fa0655ae959",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json": "399ac6141ad11394ac8243f3a48dc38d75675d446b4fee22bdef5a4da996b15f",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043/config.json": "633e4f90e252bf452deb5050e66d819064b4f260e0cebba0817bf27906e2b96a",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043/native_command.json": "212ee8a8ea085f1cda3437a3659c8042378833457fc26d9d5a8bb95766916bbb",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044/config.json": "07df574798cf7e4a182dd7100d33c26f353b10dfb4a7acfa8508989b76ff1204",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044/native_command.json": "6919028e1197c1a688f9adf3a1472b8dc64e080ed08712c654543e7daa3ff198",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045/config.json": "99f8ddec7ab63fb4ea8f04f9f30bf5734f391cb4fa1c24e3ad431d8433e2598a",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045/native_command.json": "befcbd7cc9e49661daf68efa234526a17b5ed346d07bdf661efe0c136f6037ec",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046/config.json": "f285024a3509a6a3f28d42879e327d681ade05baba1d41811cda6a1530bb0edf",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046/native_command.json": "a7257af86c6ad7474e0dcae62c73adaf24ee16bcba3b846df7c6818a737a1626",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047/config.json": "73f0ac86acba1832632fec4f35bfff9b6d4abbfe7589c330e224efe5918f53d1",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047/native_command.json": "b4bf55199376d9e3d9d2fce67c1ff1319c47e716a83570544f1ed5a2ca7d7c02",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048/config.json": "46abe57092f45402b14d469129ae227500772885711503e28251f8789221bd6e",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048/native_command.json": "bd69c89d1b8f8a7e432c0eaac8a6da6316c8ad44b0189a1f94a3274a9b4c8a9a",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/preview.py": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json": "5bd047cd5af23c995e5216070f9b79cb8895db4b66acbd354cde8c4fcf7e67f9",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py": "a050a6956ba4d109276ab5b31e3f14610574ad99d854a020d5573771f3e1a2c2"
+          },
+          "changes": "種と設定/出力の場所だけ。模型・旗・元観測は不変。",
+          "mem_gb": 4,
+          "formal_prices_computed": false,
+          "instruction19_priority": "生存する高速化関門の登録前/切替中にも4GBを残す",
+          "instruction19_flag_selection": "200関門の実合格後に新しく開始する種だけ高速化三旗を入れる"
+        },
+        "controller_checks.json": {
+          "at": "2026-10-08T09:50:30.433339+09:00",
+          "syntax": true,
+          "selected_tasks_each_seed": 1,
+          "new_seeds": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "native_flags_unchanged": true,
+          "config_only_seed_start_changed": true,
+          "immutable_observer_reused": true,
+          "no_model_signals_or_deletes": true,
+          "budget_includes_unregistered_receipts": true,
+          "adopted_receipt_exit_code_not_fabricated": true,
+          "models_started_in_checks": 0,
+          "full1740_not_claimed": true,
+          "controller_sha256": "a050a6956ba4d109276ab5b31e3f14610574ad99d854a020d5573771f3e1a2c2",
+          "instruction19_gate_slot_reserved": true,
+          "new_speed_flags_require_actual_small_gate": true,
+          "existing_seed41_or_started_cases_not_changed": true
+        },
+        "required_gate_200.json": null,
+        "cpu_comparison_200.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "on_receipt_submitted.json": null,
+        "on_receipt_ended.json": null,
+        "on_completed.json": null,
+        "off_observed_completed.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {
+        "w2_seed042_receipt_submitted.json": {
+          "at": "2026-10-08T09:55:31.621432+09:00",
+          "seed": 42,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/jobs/jobs.py",
+            "run",
+            "--wait",
+            "--owner",
+            "Codex2 指示18 較正 世界2 種42",
+            "--mem",
+            "4",
+            "--disk-path",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042",
+            "--",
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py",
+            "entry",
+            "42"
+          ],
+          "receipt_pid": 9073,
+          "mem_gb": 4,
+          "machine_before": {
+            "at": "2026-10-08T09:55:31.500944+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 2810144
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 889616
+              }
+            },
+            "model_children": 2,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              }
+            ],
+            "disk_free_bytes": 222404546560,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          }
+        },
+        "w2_seed042_entry_started.json": {
+          "at": "2026-10-08T09:55:31.927521+09:00",
+          "machine": {
+            "at": "2026-10-08T09:55:31.882267+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 2813568
+              },
+              "9086": {
+                "ppid": 9067,
+                "state": "R",
+                "rss_kb": 11008
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 889632
+              }
+            },
+            "model_children": 3,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              },
+              {
+                "pid": 9052,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_200",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 222403440640,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "world": 2,
+          "seed": 42,
+          "trials": 1740,
+          "mem_gb": 4,
+          "no_forget_exec": true,
+          "birth_hu": "on",
+          "calibration": true,
+          "heavy_matcher_observer": false,
+          "speed_flags_enabled": false,
+          "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json",
+          "small_speed_gate": null
+        }
+      }
+    },
+    "instruction19_speed_gate": {
+      "pid": 9042,
+      "ps": [
+        1,
+        "Ss",
+        0.0,
+        19968,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+      ],
+      "files": {
+        "supervisor.lock": "9042",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T09:55:31.215729+09:00",
+          "pid": 9042,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+          ],
+          "source": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "automatic_retry": false
+        },
+        "launch.json": {
+          "at": "2026-10-08T09:55:31.251202+09:00",
+          "pid": 9042,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "sequence": [
+            "reuse_off_200",
+            "reuse_on_200"
+          ],
+          "mem_gb": 4
+        },
+        "status.json": {
+          "phase": "receipt_wait_or_running",
+          "kind": "reuse_off_200",
+          "at": "2026-10-08T09:55:31.375970+09:00",
+          "pid": 9042,
+          "receipt_pid": 9052,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "requested_mem_gb": 4
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "preparation_manifest.json": null,
+        "controller_checks.json": {
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "syntax": true,
+          "observer_identical_to_previous": true,
+          "comparison_function_ast_unchanged": true,
+          "one_mib_boundary_and_suffix_detection": true,
+          "required_manifest_count": 9,
+          "additional_side_files_also_compared": true,
+          "trials_sequence": [
+            200,
+            1740
+          ],
+          "gc_threshold_fixed_before_gate": 100000,
+          "gc_threshold_source": "指定の準備版に取り込んだ高速化の、SME指定報告で事前固定済みの値",
+          "models_started": 0,
+          "gate_passed": false,
+          "full_length_automatic_only_after_small_gate": true
+        },
+        "required_gate_200.json": null,
+        "cpu_comparison_200.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "on_receipt_submitted.json": null,
+        "on_receipt_ended.json": null,
+        "on_completed.json": null,
+        "off_observed_completed.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {
+        "reuse_off_200_entry_started.json": {
+          "at": "2026-10-08T09:55:31.698526+09:00",
+          "machine": {
+            "at": "2026-10-08T09:55:31.621943+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 2810176
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 889632
+              }
+            },
+            "model_children": 2,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              },
+              {
+                "pid": 9052,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_200",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 222404521984,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+        }
+      }
+    },
+    "instruction17_on_mem4_controller": {
+      "pid": 91021,
+      "ps": [
+        1,
+        "Ss",
+        0.0,
+        18240,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+      ],
+      "files": {
+        "supervisor.lock": "91021",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T08:20:19.808022+09:00",
+          "pid": 91021,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+          ],
+          "old_supervisor_77300_ended": true,
+          "adopted_off_receipt": 77309,
+          "adopted_off_worker": 77324,
+          "off_model_not_restarted": true,
+          "on_mem_gb": 4,
+          "receipt_push": "8db19e92",
+          "preparation_report_push": "6388f211",
+          "models_signaled": false
+        },
+        "launch.json": {
+          "at": "2026-10-08T08:20:19.908877+09:00",
+          "pid": 91021,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "adopted_off_receipt_pid": 77309,
+          "off_model_not_restarted": true,
+          "on_mem_gb": 4,
+          "native_command_unchanged": true,
+          "original_helpers_unchanged": true,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "status.json": {
+          "at": "2026-10-08T10:43:49.890079+09:00",
+          "pid": 91021,
+          "phase": "no_new_submission_waiting_natural_end",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": {
+          "at": "2026-10-08T09:47:43.052271+09:00",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "new_submission_stopped": true,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "preparation_manifest.json": null,
+        "controller_checks.json": {
+          "at": "2026-10-08T08:18:14.043534+09:00",
+          "passed": true,
+          "checks": [
+            "監督本体にシグナル・削除・模型再投入の呼出し無し",
+            "投入経路は未開始on一つだけ、受付4GB",
+            "既存の開始/稼働/期限/資源判定と24GB条件を維持",
+            "模型命令・観測・ソースは元の固定したものだけを使う",
+            "onの受付/開始/成果が存在しない",
+            "予約22GBは待機、11GB/0GBは4GBを追加可能",
+            "200途中を完了としない、1740原完了証拠でも未知の受付終了コード/原completedを補作しない"
+          ],
+          "controller_sha256": "c99bdd796929778f445ccce417a6e3e4eaf18eab05da9daa2fe8cda6e5a19fcb",
+          "unchanged_original_files": {
+            "preview.py": "74aff80f55420c90c9602116915df2d27f1891a646c0452f3d6dcbaabf90ecb8",
+            "observe_light.py": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713",
+            "seed41_config.json": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752",
+            "birth_hu_off/native_command.json": "5c0c25c62f412cb2864172ef6f3f4504e3fdd98eb239cdb020a66ebdb6f5b48d",
+            "birth_hu_on/native_command.json": "5bd047cd5af23c995e5216070f9b79cb8895db4b66acbd354cde8c4fcf7e67f9"
+          },
+          "model_code_changed": false,
+          "models_started_by_checks": 0,
+          "old_controller_still_running_expected": true
+        },
+        "required_gate_200.json": null,
+        "cpu_comparison_200.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "on_receipt_submitted.json": {
+          "at": "2026-10-08T08:38:25.891648+09:00",
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/jobs/jobs.py",
+            "run",
+            "--wait",
+            "--owner",
+            "Codex2 指示17 較正の下見 birth_hu_on",
+            "--mem",
+            "4",
+            "--disk-path",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+            "--",
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py",
+            "entry"
+          ],
+          "receipt_pid": 95408,
+          "mem_gb": 4,
+          "machine_before": {
+            "at": "2026-10-08T08:38:25.841517+09:00",
+            "models": {
+              "77324": {
+                "ppid": 77313,
+                "state": "R",
+                "rss_kb": 1054704
+              }
+            },
+            "model_children": 1,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 77309,
+                "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+                "mem_gb": 11.0
+              }
+            ],
+            "disk_free_bytes": 223263698944,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "instruction17": true
+        },
+        "on_receipt_ended.json": null,
+        "on_completed.json": null,
+        "off_observed_completed.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {}
+    }
+  },
+  "cases": {
+    "w2_seed041": {
+      "worker_pid.json": {
+        "at": "2026-10-08T08:38:26.234102+09:00",
+        "pid": 95421,
+        "ppid": 95412
+      },
+      "progress.json": {
+        "at": "2026-10-08T10:43:56.459730+09:00",
+        "trial": 925,
+        "trials_completed": 926,
+        "seconds": 16.1060395410168,
+        "elapsed_seconds": 7530.137642249989,
+        "peak_rss_bytes": 1265680384,
+        "definitions": 13,
+        "disclosed": true,
+        "disclosed_trials": 471,
+        "rematch_totals": {
+          "birth": {
+            "calls": 7288,
+            "seconds": 319.44634182489244,
+            "match_calls": 51296,
+            "result_cache_hits": 0,
+            "engine_calls": 51296,
+            "engine_seconds": 54.563326406117994,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 83042,
+            "seconds": 4297.215414310747,
+            "match_calls": 83042,
+            "result_cache_hits": 0,
+            "engine_calls": 83042,
+            "engine_seconds": 177.11111106310273,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 325750,
+          "signs": {
+            "positive": 210114,
+            "zero": 59758,
+            "negative": 55878
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 50496
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 89881
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 22498
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 5382
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 120233
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 37260
+            }
+          ]
+        }
+      },
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": [
+        95412,
+        "R",
+        100.0,
+        1204832,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      ],
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+      "performance.jsonl_tail": [
+        "{\"at\": \"2026-10-08T10:43:22.924352+09:00\", \"trial\": 923, \"trials_completed\": 924, \"seconds\": 16.975885583029594, \"elapsed_seconds\": 7496.602531542012, \"peak_rss_bytes\": 1265680384, \"definitions\": 13, \"disclosed\": true, \"disclosed_trials\": 469, \"rematch_totals\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 82676, \"seconds\": 4270.943285767338, \"match_calls\": 82676, \"result_cache_hits\": 0, \"engine_calls\": 82676, \"engine_seconds\": 175.99599351803772, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 325018, \"signs\": {\"positive\": 209652, \"zero\": 59628, \"negative\": 55738}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 50368}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 89689}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 22452}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 5370}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 119963}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 37176}]}}",
+        "{\"at\": \"2026-10-08T10:43:40.353563+09:00\", \"trial\": 924, \"trials_completed\": 925, \"seconds\": 17.429071166960057, \"elapsed_seconds\": 7514.031602708972, \"peak_rss_bytes\": 1265680384, \"definitions\": 13, \"disclosed\": true, \"disclosed_trials\": 470, \"rematch_totals\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 82859, \"seconds\": 4284.381817434449, \"match_calls\": 82859, \"result_cache_hits\": 0, \"engine_calls\": 82859, \"engine_seconds\": 176.68634814908728, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 325384, \"signs\": {\"positive\": 209883, \"zero\": 59693, \"negative\": 55808}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 50432}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 89785}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 22475}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 5376}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 120098}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 37218}]}}",
+        "{\"at\": \"2026-10-08T10:43:56.459730+09:00\", \"trial\": 925, \"trials_completed\": 926, \"seconds\": 16.1060395410168, \"elapsed_seconds\": 7530.137642249989, \"peak_rss_bytes\": 1265680384, \"definitions\": 13, \"disclosed\": true, \"disclosed_trials\": 471, \"rematch_totals\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 83042, \"seconds\": 4297.215414310747, \"match_calls\": 83042, \"result_cache_hits\": 0, \"engine_calls\": 83042, \"engine_seconds\": 177.11111106310273, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 325750, \"signs\": {\"positive\": 210114, \"zero\": 59758, \"negative\": 55878}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 50496}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 89881}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 22498}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 5382}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 120233}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 37260}]}}"
+      ],
+      "blocks_100.jsonl_tail": [
+        "{\"at\": \"2026-10-08T10:04:49.003140+09:00\", \"first_completed\": 601, \"last_completed\": 700, \"last_trial\": 699, \"block_seconds\": 761.5638824159978, \"elapsed_seconds\": 5182.699847749958, \"peak_rss_bytes\": 979632128, \"definitions_at_end\": 13, \"max_definitions\": 13, \"disclosed_trials_cumulative\": 362, \"rematch_calls_in_block\": {\"birth\": 0, \"disclosure\": 9150}, \"rematch_totals_cumulative\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 63095, \"seconds\": 2604.897898364812, \"match_calls\": 63095, \"result_cache_hits\": 0, \"engine_calls\": 63095, \"engine_seconds\": 95.20848547434434, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts_cumulative\": {\"count\": 243034, \"signs\": {\"positive\": 157908, \"zero\": 45068, \"negative\": 40058}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 36032}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 68185}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 17300}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 4026}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 89723}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 27768}]}}",
+        "{\"at\": \"2026-10-08T10:17:45.869099+09:00\", \"first_completed\": 701, \"last_completed\": 800, \"last_trial\": 799, \"block_seconds\": 776.8594233750482, \"elapsed_seconds\": 5959.5592711250065, \"peak_rss_bytes\": 1157939200, \"definitions_at_end\": 13, \"max_definitions\": 13, \"disclosed_trials_cumulative\": 402, \"rematch_calls_in_block\": {\"birth\": 0, \"disclosure\": 7320}, \"rematch_totals_cumulative\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 70415, \"seconds\": 3142.8939658130985, \"match_calls\": 70415, \"result_cache_hits\": 0, \"engine_calls\": 70415, \"engine_seconds\": 119.64798378350679, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts_cumulative\": {\"count\": 279634, \"signs\": {\"positive\": 181008, \"zero\": 51568, \"negative\": 47058}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 42432}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 77785}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 19600}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 4626}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 103223}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 31968}]}}",
+        "{\"at\": \"2026-10-08T10:38:19.718514+09:00\", \"first_completed\": 801, \"last_completed\": 900, \"last_trial\": 899, \"block_seconds\": 1233.839637166995, \"elapsed_seconds\": 7193.398908292002, \"peak_rss_bytes\": 1265680384, \"definitions_at_end\": 13, \"max_definitions\": 13, \"disclosed_trials_cumulative\": 455, \"rematch_calls_in_block\": {\"birth\": 0, \"disclosure\": 9699}, \"rematch_totals_cumulative\": {\"birth\": {\"calls\": 7288, \"seconds\": 319.44634182489244, \"match_calls\": 51296, \"result_cache_hits\": 0, \"engine_calls\": 51296, \"engine_seconds\": 54.563326406117994, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 80114, \"seconds\": 4046.5673189330264, \"match_calls\": 80114, \"result_cache_hits\": 0, \"engine_calls\": 80114, \"engine_seconds\": 165.02781586447963, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts_cumulative\": {\"count\": 316234, \"signs\": {\"positive\": 204108, \"zero\": 58068, \"negative\": 54058}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 48832}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 87385}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 21900}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 5226}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 116723}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 36168}]}}"
+      ],
+      "run.log_tail": [
+        "受け付けた：PID 95408、担当 Codex2 指示17 較正の下見 birth_hu_on、見込み 4.0 GB（表の合計 15.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "2026-10-08 08:38:26 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False"
+      ]
+    },
+    "w2_seed042": {
+      "worker_pid.json": {
+        "at": "2026-10-08T09:55:32.134620+09:00",
+        "pid": 9096,
+        "ppid": 9081
+      },
+      "progress.json": {
+        "at": "2026-10-08T10:44:10.573595+09:00",
+        "trial": 161,
+        "trials_completed": 162,
+        "seconds": 9.460525417001918,
+        "elapsed_seconds": 2918.3900978330057,
+        "peak_rss_bytes": 284098560,
+        "definitions": 13,
+        "disclosed": true,
+        "disclosed_trials": 75,
+        "rematch_totals": {
+          "birth": {
+            "calls": 6982,
+            "seconds": 411.96168194472557,
+            "match_calls": 47026,
+            "result_cache_hits": 0,
+            "engine_calls": 47026,
+            "engine_seconds": 74.79910838243086,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 10985,
+            "seconds": 553.1351157941972,
+            "match_calls": 10985,
+            "result_cache_hits": 0,
+            "engine_calls": 10985,
+            "engine_seconds": 16.73177427815972,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 46860,
+          "signs": {
+            "positive": 37061,
+            "zero": 7968,
+            "negative": 1831
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 208
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 19164
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 4058
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 1623
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 17897
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 3910
+            }
+          ]
+        }
+      },
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": [
+        9081,
+        "R",
+        99.3,
+        278560,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      ],
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042",
+      "performance.jsonl_tail": [
+        "{\"at\": \"2026-10-08T10:43:51.642796+09:00\", \"trial\": 159, \"trials_completed\": 160, \"seconds\": 1.0116911670193076, \"elapsed_seconds\": 2899.4594463329995, \"peak_rss_bytes\": 283459584, \"definitions\": 13, \"disclosed\": false, \"disclosed_trials\": 73, \"rematch_totals\": {\"birth\": {\"calls\": 6982, \"seconds\": 411.96168194472557, \"match_calls\": 47026, \"result_cache_hits\": 0, \"engine_calls\": 47026, \"engine_seconds\": 74.79910838243086, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 10643, \"seconds\": 538.1772800023318, \"match_calls\": 10643, \"result_cache_hits\": 0, \"engine_calls\": 10643, \"engine_seconds\": 16.286159942683298, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 46176, \"signs\": {\"positive\": 36559, \"zero\": 7854, \"negative\": 1763}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 174}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 18910}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 4004}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 1589}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 17649}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 3850}]}}",
+        "{\"at\": \"2026-10-08T10:44:01.112998+09:00\", \"trial\": 160, \"trials_completed\": 161, \"seconds\": 9.470126083004288, \"elapsed_seconds\": 2908.929572416004, \"peak_rss_bytes\": 283508736, \"definitions\": 13, \"disclosed\": true, \"disclosed_trials\": 74, \"rematch_totals\": {\"birth\": {\"calls\": 6982, \"seconds\": 411.96168194472557, \"match_calls\": 47026, \"result_cache_hits\": 0, \"engine_calls\": 47026, \"engine_seconds\": 74.79910838243086, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 10814, \"seconds\": 545.5226722437656, \"match_calls\": 10814, \"result_cache_hits\": 0, \"engine_calls\": 10814, \"engine_seconds\": 16.49579177686246, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 46518, \"signs\": {\"positive\": 36811, \"zero\": 7911, \"negative\": 1796}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 190}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 19038}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 4031}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 1606}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 17773}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 3880}]}}",
+        "{\"at\": \"2026-10-08T10:44:10.573595+09:00\", \"trial\": 161, \"trials_completed\": 162, \"seconds\": 9.460525417001918, \"elapsed_seconds\": 2918.3900978330057, \"peak_rss_bytes\": 284098560, \"definitions\": 13, \"disclosed\": true, \"disclosed_trials\": 75, \"rematch_totals\": {\"birth\": {\"calls\": 6982, \"seconds\": 411.96168194472557, \"match_calls\": 47026, \"result_cache_hits\": 0, \"engine_calls\": 47026, \"engine_seconds\": 74.79910838243086, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 10985, \"seconds\": 553.1351157941972, \"match_calls\": 10985, \"result_cache_hits\": 0, \"engine_calls\": 10985, \"engine_seconds\": 16.73177427815972, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts\": {\"count\": 46860, \"signs\": {\"positive\": 37061, \"zero\": 7968, \"negative\": 1831}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 208}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 19164}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 4058}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 1623}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 17897}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 3910}]}}"
+      ],
+      "blocks_100.jsonl_tail": [
+        "{\"at\": \"2026-10-08T10:31:21.237604+09:00\", \"first_completed\": 1, \"last_completed\": 100, \"last_trial\": 99, \"block_seconds\": 2149.06007745798, \"elapsed_seconds\": 2149.06007745798, \"peak_rss_bytes\": 213041152, \"definitions_at_end\": 12, \"max_definitions\": 12, \"disclosed_trials_cumulative\": 46, \"rematch_calls_in_block\": {\"birth\": 6342, \"disclosure\": 6458}, \"rematch_totals_cumulative\": {\"birth\": {\"calls\": 6342, \"seconds\": 354.34291964251315, \"match_calls\": 41906, \"result_cache_hits\": 0, \"engine_calls\": 41906, \"engine_seconds\": 64.75472586700926, \"foundation_builds\": 0, \"foundation_hits\": 0}, \"disclosure\": {\"calls\": 6458, \"seconds\": 302.7566129807383, \"match_calls\": 6458, \"result_cache_hits\": 0, \"engine_calls\": 6458, \"engine_seconds\": 8.580113258969504, \"foundation_builds\": 0, \"foundation_hits\": 0}}, \"v_counts_cumulative\": {\"count\": 27512, \"signs\": {\"positive\": 21787, \"zero\": 4724, \"negative\": 1001}, \"by_kind\": [{\"kind\": \"FH\", \"reference\": false, \"sign\": \"negative\", \"count\": 84}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"positive\", \"count\": 11288}, {\"kind\": \"FH\", \"reference\": false, \"sign\": \"zero\", \"count\": 2384}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"negative\", \"count\": 917}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"positive\", \"count\": 10499}, {\"kind\": \"HU\", \"reference\": true, \"sign\": \"zero\", \"count\": 2340}]}}"
+      ],
+      "run.log_tail": [
+        "受け付けた：PID 9073、担当 Codex2 指示18 較正 世界2 種42、見込み 4.0 GB（表の合計 23.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "2026-10-08 09:55:32 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False"
+      ]
+    },
+    "w2_seed043": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed043",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "w2_seed044": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed044",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "w2_seed045": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed045",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "w2_seed046": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed046",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "w2_seed047": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed047",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "w2_seed048": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed048",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "reuse_off_200": {
+      "worker_pid.json": {
+        "pid": 9086,
+        "ppid": 9067
+      },
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": [
+        9067,
+        "R",
+        99.6,
+        274800,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+      ],
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200",
+      "performance.jsonl_tail": [
+        "{\"trial\": 160, \"seconds\": 10.096274250012357, \"elapsed_seconds\": 2888.886326082982, \"peak_rss_bytes\": 310165504, \"candidates\": 13, \"definitions\": 13}",
+        "{\"trial\": 161, \"seconds\": 10.435797750018537, \"elapsed_seconds\": 2899.3221238330007, \"peak_rss_bytes\": 310165504, \"candidates\": 13, \"definitions\": 13}",
+        "{\"trial\": 162, \"seconds\": 9.910988791962154, \"elapsed_seconds\": 2909.233112624963, \"peak_rss_bytes\": 310165504, \"candidates\": 13, \"definitions\": 13}"
+      ],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": [
+        "受け付けた：PID 9052、担当 Codex2 指示19 高速化関門 reuse_off_200、見込み 4.0 GB（表の合計 19.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "2026-10-08 09:55:31 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False"
+      ]
+    },
+    "reuse_on_200": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "reuse_off_1740": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    },
+    "reuse_on_1740": {
+      "worker_pid.json": null,
+      "progress.json": null,
+      "measurement.json": null,
+      "partial_measurement.json": null,
+      "worker_finished.json": null,
+      "worker_ps": null,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_1740",
+      "performance.jsonl_tail": [],
+      "blocks_100.jsonl_tail": [],
+      "run.log_tail": []
+    }
+  },
+  "sources": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "dirty": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "dirty": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "dirty": ""
+    }
+  },
+  "own_model_pids": [
+    95421,
+    9096,
+    9086
+  ],
+  "own_model_children": 3,
+  "ps_relevant": {
+    "7399": [
+      7396,
+      "R",
+      99.3,
+      8424480,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "9042": [
+      1,
+      "Ss",
+      0.0,
+      19968,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+    ],
+    "9047": [
+      1,
+      "Ss",
+      0.3,
+      21312,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py"
+    ],
+    "9052": [
+      9042,
+      "Ss",
+      0.0,
+      12960,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_off_200 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py entry reuse_off_200"
+    ],
+    "9067": [
+      9052,
+      "S",
+      0.0,
+      15568,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200/native_command.json"
+    ],
+    "9073": [
+      9047,
+      "Ss",
+      0.0,
+      12944,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示18 較正 世界2 種42 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py entry 42"
+    ],
+    "9081": [
+      9073,
+      "S",
+      0.0,
+      11808,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json"
+    ],
+    "9086": [
+      9067,
+      "R",
+      99.6,
+      274800,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "9096": [
+      9081,
+      "R",
+      99.3,
+      278560,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "21749": null,
+    "27353": null,
+    "55794": null,
+    "66840": null,
+    "72172": null,
+    "76554": null,
+    "76565": null,
+    "77300": null,
+    "77309": null,
+    "77313": null,
+    "77324": null,
+    "91021": [
+      1,
+      "Ss",
+      0.0,
+      18240,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+    ],
+    "94210": null,
+    "95408": [
+      91021,
+      "Ss",
+      0.0,
+      18720,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    ],
+    "95412": [
+      95408,
+      "S",
+      0.0,
+      27376,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    ],
+    "95421": [
+      95412,
+      "R",
+      100.0,
+      1204832,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "98780": [
+      1,
+      "Ss",
+      0.0,
+      8640,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --owner SME_deep_memory_instruction12_full1740_01 --wait --mem 11 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/full1740_01 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/run_memory_01.py full1740_01"
+    ]
+  },
+  "report_read_check": {
+    "at": "2026-10-08T10:45:34.342720+09:00",
+    "report_head": "9d342375a8bc3b5464afd6f9edf473ce2eca4bfe",
+    "instructions": [
+      {
+        "n": 1,
+        "receipt_count": 1,
+        "done_count": 1
+      },
+      {
+        "n": 2,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 3,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 4,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 5,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 6,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 7,
+        "receipt_count": 1,
+        "done_count": 1
+      },
+      {
+        "n": 8,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 9,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 10,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 11,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 12,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 13,
+        "receipt_count": 1,
+        "done_count": 1
+      },
+      {
+        "n": 14,
+        "receipt_count": 1,
+        "done_count": 1
+      },
+      {
+        "n": 15,
+        "receipt_count": 1,
+        "done_count": 1
+      },
+      {
+        "n": 16,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 17,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 18,
+        "receipt_count": 1,
+        "done_count": 0
+      },
+      {
+        "n": 19,
+        "receipt_count": 1,
+        "done_count": 0
+      }
+    ],
+    "new_unreceived": 0,
+    "eligible_queue_rows": 0,
+    "files": {
+      "control/受け箱/注意の係_Codex2.md": "e922540e85f77f3f762d525594acea71d7d62c7ade63194982a8743d96ec28f1",
+      "control/受け箱/README.md": "653324dec2c62a7156763dd7c5c7f5b73ccd017618e51a4e8f78600494e60089",
+      "control/走行の列_2026-10-08.md": "7003263025024d9b45324a8bf432c41cb0af4e714b741e5666ba354d70b1db09"
+    }
+  }
+}
