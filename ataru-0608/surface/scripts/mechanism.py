@@ -11,19 +11,26 @@
 
 数え方と出どころ（新しい版 e9ed84a の出力の形。control/2026-10-08_合わせた版の記憶が空になる診断_Codex2.md と同じ欄）：
   M1 定義の数：side の jsonl の kind=v39 の defs（その試行の学習・忘却の後）。100 試行ごとの区間の最後の試行の値
-     （試行番号は 0 始まり。区間 1 の最後は試行 99）。試行 200 以降（試行番号 200〜最後）で defs が 1 以下の試行の割合。
+     （試行番号は 0 始まり。区間 1 の最後は試行 99）。0 始まりの試行番号 200 以降（201 番目の試行から終わりまで）で
+     defs が 1 以下の試行の割合。
   M2 Δr：第二段の本流 stage2/<セル>/seedNNN.jsonl.gz の、開示の試行（f_fired が真、reason=evaluated）の rows の各席の delta
-     （照合し直した Δr）が 0・負・正の数と割合。分母は測った席。測る席が無い開示の試行は別に数える（0 に混ぜない）。
-  M3 誕生・退役：誕生＝side の jsonl の kind=birth の行の数（同化 kind=assim は別の欄）。退役＝kind=v39 の retire に並ぶ定義の数。
-     確かめ：誕生−退役＝最後の試行の defs。
+     （照合し直した Δr）が 0・負・正の数と割合。分母は測った全席（scope=all の rows）。測る席が無い開示の試行は別に数える（0 に混ぜない）。
+     別の欄に、実際に値に積まれた席（その行の applied に並ぶ (R, 席)）の数と、その中の 0・負・正の割合
+     （rows には、会計の後に世代や状態が変わって積まれなかった席もあるため）。
+  M3 誕生・退役：誕生＝side の jsonl の kind=birth の行の数（同化 kind=assim は別の欄）。退役＝定義が消えた件＝台帳の各試行の
+     deletion_event の kind=definition_removed の数（理由ごとの内訳も出す）。確かめ：kind=v39 の retire の数と同じか、
+     誕生−退役＝最後の試行の defs か。
   M4 同じ試行で同じ定義の二つ以上の席が薄くなった件数：kind=v39 の conv（実行された F→H・H→U、[種類, R, 席, V, 解放量, 理由, 同点数]）を
-     (試行, R) でまとめ、違う席が二つ以上ある組の数（と、その組の席の数）。
+     (試行, R) でまとめ、違う席が二つ以上ある組の数（と、その組の席の数）。忘却の実行を止めた較正の本（flag.json の
+     no_forget_exec）では変換を実行しないので、m4_note に「作りから 0」と書き、本番の「0 件」と区別する。
   M5 実時間・最大常駐：実時間は manifest.jsonl の elapsed_sec。最大常駐は、/usr/bin/time -v の記録（configs.json の time_log、
      Maximum resident set size）があればそれ、無ければ manifest.jsonl の peak_rss_mb（tools/v3_run.py が Linux の ru_maxrss〈KiB〉を
      1e6 で割った値。×1e6 KiB に直して GiB で出す。0.1 刻みなので約 0.1GB の粗さ）。
   M6 第二段の価値（V）が正の席の割合：researcher/<セル>/seedNNN.calibration.jsonl.gz（忘却の実行を止めた較正の本だけにある）の
-     candidates の V（reference が偽の席＝本番の候補関数の値）の符号。本番の本にはこの記録が無いので NA（報告の問いを見る）。
-     参考：stage2 の .initial.jsonl.gz（出生の仮の問い）の delta_by_slot（席ごとの出生の初期値）の符号も別の欄に出す。
+     candidates の V（reference が偽の席＝本番の候補関数の値）の符号。本番の本にはこの記録が無いので NA のまま（新しい旗は付けない。
+     M2 の Δr や出生の初期値で代えない。受け箱の指示 12 の A、台帳 D-07ψ）。
+     代わりに「参照：較正の 16 本の V の正・0・負の割合（忘却を実行しない条件）」の欄（m6_ref_calib16_*）を並べる。値は注意の係の
+     較正の集計から configs.json の m6_reference に写す（写すまでは空欄と「注意の係の集計待ち」の印）。
 """
 import argparse
 import gzip
@@ -42,7 +49,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from surface import BASE, NA, discover, fmt, load_json, one, stat_key, write_csv  # noqa: E402
 
-MSCHEMA = 1
+MSCHEMA = 2
 OUT = BASE / "out"
 CACHE = BASE / "cache_mechanism"
 BLOCK = 100
@@ -63,6 +70,19 @@ def iter_records(path, note):
                 except json.JSONDecodeError:
                     note["壊れた行で止めた"] = note.get("壊れた行で止めた", 0) + 1
                     return
+    except (EOFError, zlib.error, OSError) as e:
+        note["gzip の途中で止めた"] = type(e).__name__
+
+
+def iter_lines(path, note):
+    """gzip の行を読める所まで返す（書きかけの末尾で止まる）。"""
+    try:
+        with gzip.open(path, "rt", encoding="utf-8") as f:
+            for line in f:
+                if not line.endswith("\n"):
+                    note["書きかけの末尾"] = 1
+                    return
+                yield line
     except (EOFError, zlib.error, OSError) as e:
         note["gzip の途中で止めた"] = type(e).__name__
 
@@ -96,8 +116,8 @@ def files(run):
     if tl:
         tl = str(Path(os.path.expanduser(tl.format(run_dir=rd, seed=s))).resolve())
     return {"side": one((rd, f"side/*/seed{s:03d}.jsonl")),
+            "ledger": one((rd, f"ledgers/cells/*/seed{s:03d}.jsonl.gz")),
             "stage2": one((rd, f"stage2/*/seed{s:03d}.jsonl.gz")),
-            "initial": one((rd, f"stage2/*/seed{s:03d}.jsonl.gz.initial.jsonl.gz")),
             "calib": one((rd, f"researcher/*/seed{s:03d}.calibration.jsonl.gz")),
             "manifest": Path(rd) / "manifest.jsonl" if (Path(rd) / "manifest.jsonl").exists() else None,
             "time_log": Path(tl) if tl and Path(tl).exists() else None}
@@ -109,7 +129,10 @@ def compute(run):
     notes = {}
     res = {"run_dir": run["run_dir"], "seed": run["seed"], "complete": bool(run.get("done"))}
     flag = Path(run["run_dir"]) / "flag.json"
-    res["run_commit"] = str(load_json(flag).get("commit", ""))[:7] if flag.exists() else ""
+    fl = load_json(flag) if flag.exists() else {}
+    res["run_commit"] = str(fl.get("commit", ""))[:7]
+    nfe = bool(fl.get("no_forget_exec"))
+    res["no_forget_exec"] = "yes" if nfe else "no"
     # ---- side：M1・M3・M4
     traj = []
     births = Counter()
@@ -165,16 +188,44 @@ def compute(run):
     lim = (lambda t: last is not None and t <= last)
     res["m3_births"] = sum(v for t, v in births.items() if lim(t))
     res["m3_assim"] = sum(v for t, v in assim.items() if lim(t))
-    res["m3_retire"] = sum(v for t, v in retire.items() if lim(t))
+    v39_retire = sum(v for t, v in retire.items() if lim(t))
+    # 退役＝台帳の deletion_event の kind=definition_removed（reg_del_events は同じ出来事の写しなので数えない）
+    removed = Counter()
+    removed_by = Counter()
+    if fs["ledger"] is None:
+        res["m3_retire"] = NA
+        res["m3_retire_status"] = "台帳なし"
+    else:
+        ln = {}
+        for line in iter_lines(fs["ledger"], ln):
+            if "definition_removed" not in line:
+                continue
+            r = json.loads(line)
+            if r.get("record_type", "trial") != "trial":
+                continue
+            t = r["prediction_order"]
+            for e in r.get("deletion_event") or []:
+                if isinstance(e, dict) and e.get("kind") == "definition_removed":
+                    removed[t] += 1
+                    removed_by[e.get("v39") or e.get("why") or e.get("reason") or "（理由の欄なし）"] += 1
+        res["m3_retire"] = sum(v for t, v in removed.items() if lim(t))
+        res["m3_retire_status"] = "ok" + (f"（{ln}）" if ln else "")
+    res["m3_retire_by"] = json.dumps(dict(removed_by), ensure_ascii=False) if removed_by else ""
+    res["m3_v39_retire"] = v39_retire
+    res["m3_check_retire_eq_v39_retire"] = (NA if res["m3_retire"] == NA else
+                                            "yes" if all(removed[t] == retire[t] for t in set(removed) | set(retire) if lim(t)) else "no")
     res["m3_check_births_minus_retire_eq_defs_last"] = (
-        NA if last is None else "yes" if res["m3_births"] - res["m3_retire"] == defs_after[last] else "no")
+        NA if last is None or res["m3_retire"] == NA else "yes" if res["m3_births"] - res["m3_retire"] == defs_after[last] else "no")
     res["m4_cases"] = m4_cases if fs["side"] else NA
     res["m4_seats_in_cases"] = m4_seats if fs["side"] else NA
+    res["m4_note"] = ("作りから 0（--no-forget-exec の較正。変換を実行しない）" if nfe else
+                      "本番（変換を実行する）：0 なら 0 件") if fs["side"] else NA
     # ---- 第二段の本流：M2
     if fs["stage2"] is None:
         res["m2_status"] = "第二段の記録（stage2/…/seedNNN.jsonl.gz）なし"
         for k in ("m2_disclosed", "m2_disclosed_no_seats", "m2_seats", "m2_zero", "m2_neg", "m2_pos", "m2_nonfinite",
-                  "m2_zero_frac", "m2_neg_frac", "m2_pos_frac"):
+                  "m2_zero_frac", "m2_neg_frac", "m2_pos_frac", "m2_applied", "m2_applied_zero_frac", "m2_applied_neg_frac",
+                  "m2_applied_pos_frac", "m2_applied_not_in_rows"):
             res[k] = NA
     else:
         sn = {}
@@ -192,12 +243,23 @@ def compute(run):
                 c["no_seats"] += 1
             for x in rows:
                 c[sign(x.get("delta"))] += 1
+            by = {(x["R"], x["slot"]): x for x in rows}
+            for R, slot in r.get("applied") or []:
+                x = by.get((R, slot))
+                if x is None:
+                    c["applied_not_in_rows"] += 1
+                else:
+                    c["applied"] += 1
+                    c["applied_" + sign(x.get("delta"))] += 1
         seats = c["zero"] + c["neg"] + c["pos"] + c["nonfinite"]
         res["m2_status"] = f"ok（本流 {n2} 試行を読んだ）" + (f"（{sn}）" if sn else "")
         res.update(m2_disclosed=c["disclosed"], m2_disclosed_no_seats=c["no_seats"], m2_seats=seats, m2_zero=c["zero"],
                    m2_neg=c["neg"], m2_pos=c["pos"], m2_nonfinite=c["nonfinite"])
         for k in ("zero", "neg", "pos"):
             res[f"m2_{k}_frac"] = fmt(c[k] / seats) if seats else NA
+            res[f"m2_applied_{k}_frac"] = fmt(c["applied_" + k] / c["applied"]) if c["applied"] else NA
+        res["m2_applied"] = c["applied"]
+        res["m2_applied_not_in_rows"] = c["applied_not_in_rows"]
     # ---- M5
     rss, wall = time_log_rss(fs["time_log"])
     man = None
@@ -251,22 +313,6 @@ def compute(run):
             n = sum(v for (kk, s), v in c.items() if kk == k)
             return fmt(c[(k, "pos")] / n) if n else NA
         res["m6_FH_pos_frac"], res["m6_HU_pos_frac"], res["m6_ref_HU_pos_frac"] = frac("FH"), frac("HU"), frac("ref_HU")
-    if fs["initial"] is None:
-        res["birth_init_status"] = "第二段の出生の記録（.initial.jsonl.gz）なし"
-        for k in ("birth_init_seats", "birth_init_pos", "birth_init_zero", "birth_init_neg"):
-            res[k] = NA
-    else:
-        sn = {}
-        c = Counter()
-        n0 = 0
-        for r in iter_records(fs["initial"], sn):
-            if last is not None and r["trial"] > last:
-                break
-            n0 += 1
-            for v in (r.get("delta_by_slot") or {}).values():
-                c[sign(v)] += 1
-        res["birth_init_status"] = f"ok（出生の記録 {n0} 件）" + (f"（{sn}）" if sn else "")
-        res.update(birth_init_seats=sum(c.values()), birth_init_pos=c["pos"], birth_init_zero=c["zero"], birth_init_neg=c["neg"])
     res["notes"] = json.dumps(notes, ensure_ascii=False) if notes else ""
     res["trajectory"] = traj
     res["wall_seconds"] = round(time.monotonic() - t0, 2)
@@ -297,12 +343,14 @@ def cached(args):
 FIELDS = ["config", "lambda", "world", "seed", "run_commit", "complete", "trials_read", "results_hold",
           "m1_defs_le1_frac_from200", "m1_defs_le1_trials_from200", "m1_defs0_trials_from200", "m1_trials_from200", "m1_defs_last",
           "m2_disclosed", "m2_disclosed_no_seats", "m2_seats", "m2_zero", "m2_neg", "m2_pos", "m2_nonfinite",
-          "m2_zero_frac", "m2_neg_frac", "m2_pos_frac", "m2_status",
-          "m3_births", "m3_assim", "m3_retire", "m3_check_births_minus_retire_eq_defs_last",
-          "m4_cases", "m4_seats_in_cases",
+          "m2_zero_frac", "m2_neg_frac", "m2_pos_frac",
+          "m2_applied", "m2_applied_zero_frac", "m2_applied_neg_frac", "m2_applied_pos_frac", "m2_applied_not_in_rows", "m2_status",
+          "m3_births", "m3_assim", "m3_retire", "m3_retire_by", "m3_v39_retire", "m3_check_retire_eq_v39_retire",
+          "m3_check_births_minus_retire_eq_defs_last", "m3_retire_status",
+          "m4_cases", "m4_seats_in_cases", "m4_note", "no_forget_exec",
           "m5_elapsed_sec", "m5_elapsed_source", "m5_peak_rss_gib", "m5_rss_source",
           "m6_pos_frac", "m6_values", "m6_pos", "m6_zero", "m6_neg", "m6_FH_pos_frac", "m6_HU_pos_frac", "m6_ref_HU_pos_frac", "m6_status",
-          "birth_init_seats", "birth_init_pos", "birth_init_zero", "birth_init_neg", "birth_init_status",
+          "m6_ref_calib16_pos_frac", "m6_ref_calib16_zero_frac", "m6_ref_calib16_neg_frac", "m6_ref_calib16_note",
           "side_status", "notes", "run_dir"]
 TFIELDS = ["config", "lambda", "world", "seed", "complete", "block_first_trial", "block_last_trial", "defs_after", "F", "H", "U",
            "bits_after", "births_in_block", "assim_in_block", "retire_in_block"]
@@ -310,6 +358,19 @@ TFIELDS = ["config", "lambda", "world", "seed", "complete", "block_first_trial",
 
 def safe(name):
     return re.sub(r'[\\/:*?"<>|\s]', lambda m: "star" if m.group() == "*" else "_", name)
+
+
+M6REF = {}
+
+
+def m6_ref_cols(world):
+    """configs.json の m6_reference（注意の係の較正の集計を写す一つの値）。世界ごとの値があればそれ、無ければ "全体"。"""
+    ref = M6REF or {}
+    v = (ref.get("世界ごと") or {}).get(str(world)) or ref.get("全体") or {}
+    have = all(v.get(k) is not None for k in ("pos", "zero", "neg"))
+    return {"m6_ref_calib16_pos_frac": v.get("pos") if have else "", "m6_ref_calib16_zero_frac": v.get("zero") if have else "",
+            "m6_ref_calib16_neg_frac": v.get("neg") if have else "",
+            "m6_ref_calib16_note": (ref.get("出どころ") or "") if have else (ref.get("印") or "注意の係の集計待ち")}
 
 
 def write_tables(out, runs, results):
@@ -323,7 +384,8 @@ def write_tables(out, runs, results):
         for run, res in items:
             base = {"config": cfg, "lambda": run["lambda"], "world": run["world"], "seed": run["seed"],
                     "complete": "yes" if res["complete"] else "no（途中まで）"}
-            rows.append({**{k: res.get(k, "") for k in FIELDS}, **base, "results_hold": "yes" if run.get("results_hold") else ""})
+            rows.append({**{k: res.get(k, "") for k in FIELDS}, **base, **m6_ref_cols(run["world"]),
+                         "results_hold": "yes" if run.get("results_hold") else ""})
             trows += [{**base, **t} for t in res["trajectory"]]
         f1, f2 = out / f"mechanism_{safe(cfg)}.csv", out / f"mechanism_trajectory_{safe(cfg)}.csv"
         write_csv(f1, rows, FIELDS)
@@ -347,6 +409,7 @@ def main():
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
+    M6REF.update(load_json(a.configs).get("m6_reference") or {})
     t0 = time.monotonic()
     if a.run:
         if a.seed in range(21, 41):
