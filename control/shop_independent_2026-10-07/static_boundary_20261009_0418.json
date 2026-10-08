@@ -1,0 +1,228 @@
+{
+  "time_jst": "2026-10-09T04:32:36.604416+09:00",
+  "reviewer": "飾りの係 Codex",
+  "authority": "own inbox instruction2",
+  "pulled_commit": "51cfbf0c4ba9df2ad534b05493a19f7188053987",
+  "first_creator_source_read_not_before_jst": "2026-10-09T04:23:28+09:00",
+  "reference_freeze_time_jst": "2026-10-07T15:34:25.967654+09:00",
+  "reference_core_unchanged": true,
+  "reference_code_sha256": {
+    "reference.py": "d97f45c5d0cc2a5efc365810b749c5a4065d49bf4a9dfc81df0e7232595d6794",
+    "check_reference.py": "dbcea967ffae8b39daa8d9dfbf69918e803d682fbc91e348ad401a6e91b8d430",
+    "compare_records.py": "983edb765fc0945a1104669dbf315b9f483eadcb88f836d9109abe8ccaf32949",
+    "cpu_guard.py": "c42db5d5cb90d4c6d5db0c02fee9ac22f8f8cae5bd3a3c8967dc7cfd35301adf",
+    "README.md": "b45f48c04d1a79f13c997b864509eca03186bb1c9b7c2b41889417d64192786a"
+  },
+  "other_reviewer_reference_code_read": false,
+  "model_code_modified": false,
+  "scope": "partial static input/output boundary review; not an end-to-end leakage gate or numerical comparison",
+  "source_blob_sha256": {
+    "e9ed84ae3ee6c458f392cd58cadf9fc030639900": {
+      "abm/loop.py": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f",
+      "abm/agent_runtime.py": "23a7b8bb0b4d2f43396f2b35077e93d9ffe1a161fe8f2b09e30fceb055916241",
+      "tools/v3_run.py": "cf115295da59b880659467f0dd6e93fa3477457c5e3ce834290478e0611fff0e",
+      "tools/shopworld.py": "9074c17316782a5b1224ffb10ebb8158ac036c6390aa0720be1aab2ac8125a39",
+      "tools/attnsme.py": "c9140c9336f1467042c69c28f78b17bceace677fbb7be6ee507afd08526cf542",
+      "tools/attncstar.py": "f1c3c1898b5953d3976d1decf4535332ae3ce5cd0e7384dad984bb06867bdadd",
+      "tools/attnallin.py": "f9877f876dc52be2b872e542dd89e75ef86d2b56d0e6ca29865ec3ed9036cac5",
+      "tools/attnstage2_runtime.py": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+      "tools/attnstage2_questions.py": "8241586c7946827beb4b6e383528b6043db773ebf7821ee6b8e03062691d1f7a",
+      "tools/attnstage2_initial.py": "23515a32d2b8b2d735e96014d26df7963fde704b6991b1e50d89c4bf0efa7b5a",
+      "tools/attnstage2_birth.py": "6baf9380ae5346f5caa10b5ddd8eb1a4194a7fe5445b10d2fa7d500eb653f4b6",
+      "tools/attnstage2_sme.py": "83afc18896e9cb08e667ab60e8aab18a6208302c75ac8e8a1542f6d8e65fc404",
+      "tools/attnstage2_distribution.py": "ed64001cba480837f43223aac713747d4c42cdf7fba7fcfe0b648bc832a93e3b",
+      "tools/cstar_runtime.py": "43f5988f1f5856853b740b977be73a817f4bf429929ac4aa51da790f057274a8",
+      "tools/cstar_probability.py": "133ac0343a6ac6d951eda139d6a3421532ca356c5c80f938f283c6f5348acfa0",
+      "tools/cstar_matcher.py": "d80a4fa0b581be99bce883ddec93df0b4ca5041f216a7fdc4e32dcd1469e74c9",
+      "tools/v310be.py": "330389b59e6d4989b5313557880bc09418db878a1f0d362e11935df5cc27992b",
+      "tools/v39.py": "00eaf79680622ebfd6c79b753d9c641f50ec726e13f53ed6bf52735824493310",
+      "tools/smeshared.py": "eb1b432d2a6e5f8830f1cacb59300df97632518a941d9eccce637692257b292f",
+      "tools/smereplay.py": "4908ef08abe440c16eca56ec9f757456a9226d63c9ff90acc2c6b36d98493934",
+      "tools/answerlog.py": "798d664d3473be60cf890e034840f7c9c91ca08fbd12c1b64b575004f42ac597",
+      "tools/routelog.py": "e87f301a95b23e41ab00a29b86893f3f3aab8c052f2e9df489f170c8c8fe73a1"
+    },
+    "4ceadf63f6924bdab8013d3e39b1549a8c5c0966": {
+      "abm/loop.py": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f",
+      "abm/agent_runtime.py": "23a7b8bb0b4d2f43396f2b35077e93d9ffe1a161fe8f2b09e30fceb055916241",
+      "tools/v3_run.py": "8e5e19b2f2837c09dec5781490c7375284866e8d89ac091182f83c7db9e3fbff",
+      "tools/shopworld.py": "9074c17316782a5b1224ffb10ebb8158ac036c6390aa0720be1aab2ac8125a39",
+      "tools/attnsme.py": "c9140c9336f1467042c69c28f78b17bceace677fbb7be6ee507afd08526cf542",
+      "tools/attncstar.py": "239e50596fee5311e3c8c5624175c6e282becda79ef39615fd23c4b2b851e159",
+      "tools/attnallin.py": "f9877f876dc52be2b872e542dd89e75ef86d2b56d0e6ca29865ec3ed9036cac5",
+      "tools/attnstage2_runtime.py": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+      "tools/attnstage2_questions.py": "8241586c7946827beb4b6e383528b6043db773ebf7821ee6b8e03062691d1f7a",
+      "tools/attnstage2_initial.py": "23515a32d2b8b2d735e96014d26df7963fde704b6991b1e50d89c4bf0efa7b5a",
+      "tools/attnstage2_birth.py": "6baf9380ae5346f5caa10b5ddd8eb1a4194a7fe5445b10d2fa7d500eb653f4b6",
+      "tools/attnstage2_sme.py": "83afc18896e9cb08e667ab60e8aab18a6208302c75ac8e8a1542f6d8e65fc404",
+      "tools/attnstage2_distribution.py": "ed64001cba480837f43223aac713747d4c42cdf7fba7fcfe0b648bc832a93e3b",
+      "tools/cstar_runtime.py": "aa723189fe56017e95cc608055797254d0af1c19433342634daed789668873e3",
+      "tools/cstar_probability.py": "133ac0343a6ac6d951eda139d6a3421532ca356c5c80f938f283c6f5348acfa0",
+      "tools/cstar_matcher.py": "c7aa9b875b56691b9cf7d1eebd7a39ca313325504ed7ea643ab59d00dc1d9f18",
+      "tools/v310be.py": "2bbf584c2118946e47755136895baba58b6f0691fedc31f0643b9e372c2eff04",
+      "tools/v39.py": "83beb4f647aad457d3f0900010f1ebf7a6b90598942fa75bfc79815862e2c74f",
+      "tools/smeshared.py": "f1f91bd3ec40a2566ce010077ec948121d77d4a81d55e146382b7d3c5f0dc537",
+      "tools/smereplay.py": "4908ef08abe440c16eca56ec9f757456a9226d63c9ff90acc2c6b36d98493934",
+      "tools/answerlog.py": "798d664d3473be60cf890e034840f7c9c91ca08fbd12c1b64b575004f42ac597",
+      "tools/routelog.py": "e87f301a95b23e41ab00a29b86893f3f3aab8c052f2e9df489f170c8c8fe73a1",
+      "tools/cstar_cache_prune.py": "63fb0307d45622d263ff7a99941736c45fef24f1c4bb012acf3c516d461407e1",
+      "tools/smeprobpool.py": "580a158cea9dc7cd4458835d6ab3ee825826354237edc44462cb48c34a64a80f"
+    }
+  },
+  "reviewed_boundaries": [
+    {
+      "source": "abm/loop.py",
+      "range": [
+        77,
+        95
+      ],
+      "fact": "partial input -> prediction -> scoring -> disclosure/update; _agent_input lines384-388 passes partial graph only"
+    },
+    {
+      "source": "tools/attnsme.py",
+      "range": [
+        91,
+        108
+      ],
+      "fact": "INFO held_out_is_door bool used as trusted current task cue; explicitly allowed by specification42 triple-prime, lines1024-1030"
+    },
+    {
+      "source": "tools/attnsme.py",
+      "range": [
+        207,
+        252
+      ],
+      "fact": "learning and observed answer additions use f_fired; truth/type/seal annotations follow learning and are written to pending output row"
+    },
+    {
+      "source": "tools/attnstage2_runtime.py",
+      "range": [
+        117,
+        180
+      ],
+      "fact": "actual oracle correct passed after selected answer is fixed, in disclosed branch; Questions.finish feedback conditional on f_fired"
+    },
+    {
+      "source": "tools/attnstage2_initial.py",
+      "range": [
+        28,
+        62
+      ],
+      "fact": "prediction-before memory/RNG/attention frozen; first_material and second_visible used"
+    },
+    {
+      "source": "tools/attnstage2_birth.py",
+      "range": [
+        13,
+        94
+      ],
+      "fact": "first-only names; hide one visible relation, construct session, then loss with that already-visible name"
+    },
+    {
+      "source": "tools/cstar_runtime.py",
+      "range": [
+        165,
+        214
+      ],
+      "fact": "E wrapper uses state/config and partial scene, selected visible trace; no oracle or researcher-side parameter"
+    },
+    {
+      "source": "tools/v310be.py",
+      "range": [
+        378,
+        513
+      ],
+      "fact": "E rewrite uses hypothetical definition and visible commons x; oracle/disclosure is not a rewrite target"
+    },
+    {
+      "source": "tools/v39.py",
+      "range": [
+        1045,
+        1066
+      ],
+      "fact": "seat loss received only when coin.f_fired"
+    },
+    {
+      "source": "tools/smereplay.py",
+      "range": [
+        114,
+        165
+      ],
+      "fact": "records pre memory/input/config/RNG, prediction and post memory; replay is a separate flag, absent from published native command"
+    },
+    {
+      "source": "tools/smeshared.py",
+      "range": [
+        73,
+        117
+      ],
+      "fact": "typed graph/canonical seed entrance uses anonymous graph structure; no dynamic permutation pass claimed"
+    }
+  ],
+  "trusted_task_specification": "control/2026-10-06_渡す委任書_Claude.md:1021-1031, specification fact only",
+  "producer_leakage_checked_field_is_independent_evidence": false,
+  "published_wave1_metadata_paths": [
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/files_sha256.tsv",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/flag.json",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/ledgers/seed001.jsonl.gz",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/ledgers/seed001.jsonl.gz.sha256",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/manifest.jsonl",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/native_command.json",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/norm_hash.tsv",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/seed001.done",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/seed001.jsonl.gz",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/seed001.jsonl.gz.sha256",
+    "ataru-0608/cloud_runs/wave1_2a_w1_s1/time.log"
+  ],
+  "published_prefix": "ataru-0608/cloud_runs/wave1_2a_w1_s1",
+  "published_metadata_sha256": {
+    "native_command.json": "12da33e1e6941abba162b34be1682b50a2c7f966f6166196346d1bc8980e909e",
+    "manifest.jsonl": "dd98548f2edcf22bff5caa7b85d20d7eb52014adc762cda2af9716243ce71014",
+    "files_sha256.tsv": "8463c233dd5c0897514a5e14332c1a726900cd3735a73e600e2933981d8ccb71",
+    "norm_hash.tsv": "4cbdfc976120fd8295a2349aedfe264566603d6904f64bcdbe8e5d55362aef46",
+    "seed001.done": "a258aa2e298125c89627b9a11399b50d27512bb04ad691034ec2499e3634e61e",
+    "flag.json": "54c4422f4d940501b7d0a8ecc9de7e9a5b756132e1c2aac1e58898eef0cdbe2c"
+  },
+  "published_baseline": {
+    "configuration": "2a",
+    "world": 1,
+    "seed": 1,
+    "trial_count": 1740,
+    "stage2": "off",
+    "match_cstar": false,
+    "attention": false
+  },
+  "raw_pre_state_manifest_entry": [
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz\t312811136\t0c59f65fcd203112a1205203e078b9b0d9ed7f8bfb017d7b3623315a41972541"
+  ],
+  "raw_sme_manifest_entry": [
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz\t73067841\t3cbeee720580f3c261b0ef89f5612049b433eb6090d0deb581bb533b717f0c45"
+  ],
+  "pre_state_blob_published_in_this_git_artifact_set": false,
+  "future_record_join_keys": [
+    "configuration",
+    "world",
+    "seed",
+    "agent_id",
+    "trial",
+    "prediction-before state"
+  ],
+  "required_numerical_records": [
+    "side .sme.jsonl.gz mappings/graphs/Cstar values",
+    "side .sme.states.jsonl.gz pre memory/input/config/RNG/prediction",
+    "attention .jsonl.gz candidate m and before attention if active",
+    "stage2 .jsonl.gz disclosed delta and initial .jsonl.gz birth values if active",
+    "disclosure availability/oracle fields only for loss and after-prediction audit"
+  ],
+  "actual_trials_compared": 0,
+  "name_id_permutation_production_checks": 0,
+  "remaining": [
+    ">=50 random actual trials per each of nine configurations",
+    "production-record end-to-end truth/type/researcher-field perturbation audit including E",
+    "name/ID permutation with production tie/RNG semantics"
+  ],
+  "inbox_instruction2_complete": false,
+  "model_runs_started": 0,
+  "new_heavy_jobs_submitted": 0,
+  "shared_report_preserved_prefix_sha256": "ca64a5261c91545e06f352ae666a6c4d226463f666af12ad9cb16c5bb033de12",
+  "shared_report_prefix_preserved": true
+}

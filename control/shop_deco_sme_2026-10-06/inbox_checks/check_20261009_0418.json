@@ -1,0 +1,70 @@
+{
+  "time_jst": "2026-10-09T04:29:19.396602+09:00",
+  "scheduled_time_jst": "2026-10-09T04:18:47.426+09:00",
+  "pulled_commit": "51cfbf0c4ba9df2ad534b05493a19f7188053987",
+  "file_sha256": {
+    "control/受け箱/README.md": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce",
+    "control/受け箱/飾りの係.md": "d36fc6083835261734539b6c5ec50eaa72e5c65c1c51c932a13611589fb43ade",
+    "control/走行の列_2026-10-08.md": "c806d9dbb36c4c916678e7afb66ca81c4761ee8fcb70f98350882ed12ac7b350"
+  },
+  "changed_files": [
+    "control/走行の列_2026-10-08.md"
+  ],
+  "unreceived": [],
+  "eligible_queue_rows": [],
+  "model_workers": [
+    {
+      "pid": 33003,
+      "ppid": 33000,
+      "rss_kib": 226816,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 49468,
+      "ppid": 49459,
+      "rss_kib": 1544368,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 54226,
+      "ppid": 54217,
+      "rss_kib": 139264,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 59619,
+      "ppid": 59604,
+      "rss_kib": 1538016,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "model_worker_count": 4,
+  "other_heavy_R": [],
+  "admission_count": 4,
+  "count_rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB",
+  "own_processes": [],
+  "own_registry": [],
+  "controller_64386_alive": false,
+  "preview_status": "stopped",
+  "preview_native_raw_completed": 1,
+  "preview_supervisor_completed": 0,
+  "preview_analyses_completed": 0,
+  "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+  "seed001_done_sha256": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba",
+  "reference_fingerprint_unchanged": true,
+  "inbox_instruction_1": "done",
+  "inbox_instruction_2": "reference step1 frozen; partial static source-boundary audit progressed; actual >=50/config comparison, dynamic leakage and name/ID permutation pending",
+  "queue_zero": "#0 integrated with wave1 seeds1/2, D with wave2; one published baseline 2a/w1/seed1 artifact set at 51cfbf0c, full pre-state/SME blobs listed in manifest but not in this Git artifact set; no eligible Mac row",
+  "queue_calibration": "#00 running by other roles; latest cloud report at 04:23: 2a four native runs completed, seven stopped, seventeen running; no jobs claimed by this role",
+  "inbox_instruction_3": "done; unchanged own work or inbox does not commit/push",
+  "inbox_instruction_4": "done; deadline extended to 2026-10-11 09:00 JST",
+  "repository_report_written": true,
+  "report_time_jst": "2026-10-09T04:32:36.604416+09:00",
+  "inbox_instruction2_complete": false,
+  "own_progress_artifact": "control/shop_independent_2026-10-07/static_boundary_20261009_0418.json",
+  "record_publication_at_check": "one baseline Git artifact set 2a/world1/seed1; other raw files recorded in hash manifest, not available in this Git subset"
+}
