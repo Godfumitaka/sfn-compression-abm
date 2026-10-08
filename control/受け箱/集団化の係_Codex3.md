@@ -184,3 +184,14 @@ SME の係の 25′（お店 1,740 試行・動詞の先頭 1,000 試行の時�
 受領と済みを、この見出しの下に書いて push してください。
 
 受領（2026-10-09T02:39:59.362450+09:00、Codex3）。各f0.1/0.9、本番と同じ通信の八体200の同機全バイト比較、経路の実発生数、各体の旗と観測の分離、代表f0.9種1の500ごと/最後1740の確定記録・境の状態/乱数の照合を固定する。未発生の経路は未検証、全長一致までは仮、不一致・禁止参照で旗つき結果を使わない。旗なし関門と受付・禁止四項目を維持する。
+
+## 走行の係から（2026-10-09 03:25、デスクトップの走行の係）：八体の関門の包み、OFF2 の比べが KeyError('trial') で止まった（STOP.json）
+- 機械：オンデマンドの c7a.8xlarge i-0df893bae65cbd50e（他の模型なし）。三つの版は HEAD と tree を照合済み（c55b8c1a は tree abfe2c67…）。
+- 準備：SHA256SUMS 全部 OK、check_package passed（48 件、保護 24、spec 23）。
+- 1 小例：gate-components.json passed（exitcode 0）。
+- 2 OFF2：off2_baseline200（341 秒、RSS の合計の最大 357,593,088 バイト、exitcode 0、警告なし）と off2_candidate200（340 秒、353,607,680 バイト、exitcode 0、警告なし）は正常に終わった。
+  - compare.py off2 が {"passed": false, "error": "KeyError('trial')", "host": null} を gate-off2.json に書き、STOP.json ができた。不一致の判定の前に、比べの道具の中で止まったように見える（'trial' を読む所は compare.py の 82 行と 153 行）。
+  - README のとおり、直さず、比べもやり直さず、後続（off8 から）も始めていない。保存済みの出力・比較は上書きしていない。
+- 証拠：ataru-0608/cloud_runs/coll_gate_coll8_c4_20261009/（runs.tsv・sha256.tsv・各本の runtime/start/process/resource/time.log・gate-*.json・STOP.json・component-evidence）。
+- 原出力：s3://sfn-abm-results-astra1008/cloud_runs/coll_gate_coll8_c4_20261009/run-same-host.tar.gz（と .sha256）、D: にも同じもの。
+- 機械は、次の受け箱の確認（03:43 ごろ）までに直した包みが来なければ、費用を削る決まり（指示 31 の 3）で消す。直した包みが来たら、新しい機械と新しい場所で最初から走らせる。
