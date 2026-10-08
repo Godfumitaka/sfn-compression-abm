@@ -1,0 +1,140 @@
+diff --git a/tests/test_smeshared_json_log.py b/tests/test_smeshared_json_log.py
+new file mode 100644
+index 0000000..06a6276
+--- /dev/null
++++ b/tests/test_smeshared_json_log.py
+@@ -0,0 +1,94 @@
++"""監査の書出しだけを直し、正常時のバイトと模型の辞書を保つ。"""
++from pathlib import Path
++import copy
++import io
++import json
++import random
++import sys
++
++import pytest
++
++sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
++import smeshared as S
++
++
++@pytest.fixture(autouse=True)
++def sink(monkeypatch):
++    out = io.StringIO()
++    monkeypatch.setattr(S, 'LOG', {'f': out, 'diagnostic': False})
++    monkeypatch.setattr(S, '_diagnosing', lambda: False)
++    return out
++
++
++@pytest.mark.parametrize('record', [
++    {'kind': 'sme_use', 'reused': True, 'result': '名前'},
++    {'nested': {'b': 0.1, 'a': None}, 'tuple': (1, '名前')},
++    {'distribution': {None: 1.0}},
++    {'numbers': {1: 'a', 2: 'b'}},
++])
++def test_success_keeps_exact_old_bytes_and_never_converts(record, sink, monkeypatch):
++    expected = json.dumps(record, ensure_ascii=False, sort_keys=True) + '\n'
++    def blocked(value):
++        raise AssertionError('正常な記録でfallbackを使った')
++    monkeypatch.setattr(S, '_log_string_keys', blocked)
++    S._log(record)
++    assert sink.getvalue() == expected
++
++
++def test_nested_mixed_none_keys_and_frozen_dict_leave_input_and_rng_unchanged(sink):
++    distribution = S.freeze({'sig_e': 0.75, None: 0.25})
++    record = {'kind': 'sme_result', 'nested': [({'distribution': distribution},)]}
++    before = copy.deepcopy(record)
++    state = random.getstate()
++    with pytest.raises(TypeError):
++        json.dumps(record, ensure_ascii=False, sort_keys=True)
++    S._log(record)
++    expected = {'kind': 'sme_result', 'nested': [[{'distribution': {'sig_e': 0.75, 'null': 0.25}}]]}
++    assert sink.getvalue() == json.dumps(expected, ensure_ascii=False, sort_keys=True) + '\n'
++    assert record == before
++    assert record['nested'][0][0]['distribution'] is distribution
++    assert None in distribution and 'null' not in distribution
++    assert random.getstate() == state
++
++
++def test_json_key_spelling_uses_native_null_boolean_and_numeric_forms(sink):
++    record = {'mixed': {None: 'n', False: 'f', 2.5: 'x', 'name': 's'}}
++    S._log(record)
++    assert json.loads(sink.getvalue())['mixed'] == {'null': 'n', 'false': 'f', '2.5': 'x', 'name': 's'}
++
++
++def test_diagnostic_sink_keeps_destination(sink, monkeypatch):
++    out = io.StringIO()
++    S.LOG.update(diagnostic=True, diagnostic_f=out)
++    S._log({'p': {None: 0.5, 'name': 0.5}})
++    assert not sink.getvalue()
++    assert json.loads(out.getvalue())['p'] == {'null': 0.5, 'name': 0.5}
++
++
++def test_no_open_sink_never_serializes(monkeypatch):
++    S.LOG['f'] = None
++    S._log({'unsupported': object()})
++
++
++def test_other_serialization_errors_propagate_without_partial_write(sink):
++    with pytest.raises(TypeError):
++        S._log({'unsupported': object()})
++    assert not sink.getvalue()
++
++
++def test_key_collision_does_not_silently_drop_a_record(sink):
++    with pytest.raises(TypeError, match='衝突'):
++        S._log({'p': {None: 0.25, 'null': 0.25, 'name': 0.5}})
++    assert not sink.getvalue()
++
++
++def test_write_failure_is_not_caught_as_serialization_fallback(monkeypatch):
++    class BrokenSink:
++        def write(self, text):
++            raise TypeError('write failed')
++    S.LOG['f'] = BrokenSink()
++    def blocked(value):
++        raise AssertionError('書込失敗をfallbackにした')
++    monkeypatch.setattr(S, '_log_string_keys', blocked)
++    with pytest.raises(TypeError, match='write failed'):
++        S._log({'kind': 'sme_use'})
+diff --git a/tools/smeshared.py b/tools/smeshared.py
+index 826d98b..b3de1f8 100644
+--- a/tools/smeshared.py
++++ b/tools/smeshared.py
+@@ -178,6 +178,22 @@ def _record_json_keys(value):
+     return value
+ 
+ 
++def _log_string_keys(value):
++    """失敗した監査記録だけの写し。模型の辞書には触れない。"""
++    if isinstance(value, dict):
++        converted = {}
++        for key, item in value.items():
++            # JSON の既存の鍵の表記を使う。None は "null" になる。
++            text = key if isinstance(key, str) else next(iter(json.loads(json.dumps({key: None}, ensure_ascii=False))))
++            if text in converted:
++                raise TypeError("監査記録の鍵の文字列化で衝突した")
++            converted[text] = _log_string_keys(item)
++        return converted
++    if isinstance(value, (list, tuple)):
++        return [_log_string_keys(item) for item in value]
++    return value
++
++
+ def _log(record):
+     if LOG.get("f") is not None:
+         if LOG.get("diagnostic") or _diagnosing():
+@@ -186,7 +202,11 @@ def _log(record):
+             target = LOG["diagnostic_f"]
+         else:
+             target = LOG["f"]
+-        target.write(json.dumps(_record_json_keys(record), ensure_ascii=False, sort_keys=True) + "\n")
++        try:
++            text = json.dumps(record, ensure_ascii=False, sort_keys=True)
++        except TypeError:
++            text = json.dumps(_log_string_keys(record), ensure_ascii=False, sort_keys=True)
++        target.write(text + "\n")
+ 
+ 
+ def _diagnosing():
