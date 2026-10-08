@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-09T01:21:08.024089+09:00",
+  "instruction": 17,
+  "started": true,
+  "pid": 13200,
+  "command": [
+    "/usr/bin/caffeinate",
+    "-i",
+    "-t",
+    "200332"
+  ],
+  "deadline": "2026-10-11T09:00:00+09:00",
+  "duration_seconds": 200332,
+  "planned_expiration": "2026-10-11T08:59:59.997831+09:00",
+  "ps": {
+    "exit": 0,
+    "out": "13200 13187 Rs   /usr/bin/caffeinate -i -t 200332\n",
+    "err": ""
+  },
+  "pmset": {
+    "exit": 0,
+    "out": "System-wide power settings:\nCurrently in use:\n standby              1\n Sleep On Power Button 1\n hibernatefile        /var/vm/sleepimage\n powernap             1\n networkoversleep     0\n disksleep            10\n sleep                1 (sleep prevented by caffeinate, Claude, ChatGPT)\n hibernatemode        3\n ttyskeepawake        1\n displaysleep         10\n tcpkeepalive         1\n lowpowermode         0\n womp                 1\n",
+    "err": ""
+  },
+  "existing_caffeinate": [],
+  "processes_stopped": 0,
+  "models_started": 0
+}
