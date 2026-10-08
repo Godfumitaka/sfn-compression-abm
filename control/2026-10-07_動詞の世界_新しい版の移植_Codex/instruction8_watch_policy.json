@@ -1,0 +1,72 @@
+{
+  "instruction": 8,
+  "decision": "D-07αρ",
+  "instruction_time_jst": "2026-10-08T15:58:00+09:00",
+  "recorded_at": "2026-10-08T16:29:38+09:00",
+  "receipt_at": "2026-10-08T16:25:37+09:00",
+  "receipt_commit": "850c4b4ae97bc8215ae91ea581919bdfe1776ef1",
+  "receipt_confirmation": "3eb97e86ced51f4284b20dcba77d28634ab19b43",
+  "recorded_before_reading_verb_calibration_results": true,
+  "main_mechanism_check": {
+    "queue_rows": [
+      19,
+      22
+    ],
+    "first_seeds": [
+      1,
+      2
+    ],
+    "later_seeds": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "reviewer": "Claude",
+    "table": "M1〜M6、台帳D-07τのお店と同じ表",
+    "review_order": "mechanism_before_performance",
+    "stop_later_starts_if": {
+      "applies_to": "stage2_enabled_configurations",
+      "trial_index_min_inclusive": 200,
+      "definition_count_max_inclusive": 1,
+      "fraction_min_inclusive": 0.9
+    },
+    "later_starts_require": "Claude_has_reviewed_M1_to_M6_and_stop_criterion_is_not_met"
+  },
+  "calibration_interim_check": {
+    "queue_row": "19c",
+    "seeds": [
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48
+    ],
+    "barrier": "all_8_runs_have_finished_at_least_1000_trials",
+    "prefix_trial_count": 1000,
+    "positive_V_only": true,
+    "equal_weight_per_seed": true,
+    "quantiles": [
+      "L25",
+      "L90"
+    ],
+    "tool_and_definition": "same_as_attention_owners_shop_calibration_aggregation",
+    "tool_path": null,
+    "hold_new_main_seeds_3_to_10_if": "shop_L50_ref < verb_prefix_L25 or shop_L50_ref > verb_prefix_L90",
+    "boundary_inclusive_inside": true,
+    "running_processes": "finish_without_stopping",
+    "outside_range_action": "wait_for_final_calibration_then_instruction7_final_rule",
+    "inside_range_action": "continue_subject_to_mechanism_check_and_queue_gates"
+  },
+  "final_calibration_rule": "instruction7_strictly_below_half_or_above_twice_shop_L50_ref",
+  "commands_wait_for": "attention_on100_nonlearning_gate_then_one_300_measurement",
+  "new_model_runs_started": 0,
+  "state": "実施中：二つの条件を保存、関門と300後の命令準備待ち"
+}

@@ -1,0 +1,139 @@
+{
+  "at": "2026-10-08T16:26:43+09:00",
+  "reason": "既存資源監督のunknown_active_spawnによる一時停止の確認",
+  "recognized_active_models": 4,
+  "recognized_own_active_models": 0,
+  "unclassified_active_spawn_count": 1,
+  "recognized_paused_or_zombie_models": 3,
+  "models": [
+    {
+      "pid": 9096,
+      "ppid": 9081,
+      "pgid": 9073,
+      "state": "R",
+      "rss_bytes": 1864728576,
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 47193,
+      "ppid": 47184,
+      "pgid": 47180,
+      "state": "R",
+      "rss_bytes": 1122336768,
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 47223,
+      "ppid": 47214,
+      "pgid": 47210,
+      "state": "R",
+      "rss_bytes": 1352007680,
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe_light.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 62410,
+      "ppid": 62405,
+      "pgid": 62396,
+      "state": "R",
+      "rss_bytes": 273039360,
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "v3_run.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_intervention_port_2026-10-07/source_e9/tools/v3_run.py",
+      "own_measurement": false
+    }
+  ],
+  "unknown": [
+    {
+      "pid": 27777,
+      "ppid": 27761,
+      "pgid": 27753,
+      "state": "R",
+      "rss_bytes": 148029440,
+      "cpu_percent": 100.0,
+      "worker_kind": "spawn",
+      "parent_script": "profile_worker.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction22_disclosure_profile/profile_worker.py",
+      "own_measurement": false
+    }
+  ],
+  "paused_models": [
+    {
+      "pid": 3532,
+      "ppid": 3528,
+      "pgid": 3526,
+      "state": "T",
+      "rss_bytes": 175882240,
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "measurement_driver.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_driver.py",
+      "own_measurement": true
+    },
+    {
+      "pid": 49468,
+      "ppid": 49459,
+      "pgid": 49451,
+      "state": "T",
+      "rss_bytes": 10354688,
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py",
+      "own_measurement": false
+    },
+    {
+      "pid": 59619,
+      "ppid": 59604,
+      "pgid": 59598,
+      "state": "T",
+      "rss_bytes": 10354688,
+      "cpu_percent": 0.0,
+      "worker_kind": "spawn",
+      "parent_script": "observe.py",
+      "parent_executable": "Python",
+      "parent_script_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/observe.py",
+      "own_measurement": false
+    }
+  ],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "swap_usage": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)",
+  "free_disk_bytes": 216783478784,
+  "physical_cpu": 10,
+  "memory_bytes": 34359738368,
+  "counting_rule": "psの実際の個体workerを親scriptとspawn/forkから一回だけ数える。親・監督・time・resource_tracker・STAT T/Zを稼働数へ足さず、未分類spawnと停止模型を別欄にする。受付や停止条件を変更しない。",
+  "verified_actual_active_model_count": 5,
+  "verified_own_active_model_count": 0,
+  "unclassified_by_existing_guard_but_verified_model": [
+    {
+      "pid": 27777,
+      "parent_script": "profile_worker.py",
+      "entry_evidence": [
+        "O.worker(task)",
+        "O.v3_run.main()"
+      ],
+      "source_path": "$WORKSPACE/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction22_disclosure_profile/profile_worker.py",
+      "source_sha256": "0e4bde5be6173315ede2e0d81e6304d6893a59df6502163dee0c589b69b91f73"
+    }
+  ],
+  "guard_not_replaced_or_bypassed": true
+}
