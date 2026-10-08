@@ -1,0 +1,59 @@
+{
+  "at_jst": "2026-10-08T10:23:45+09:00",
+  "results_commit": "e12e04f26382a00b8f4fe28f46a9bbcb1d01cee8",
+  "instruction_states": [
+    {
+      "number": 1,
+      "received": true,
+      "completed": true,
+      "held": false
+    },
+    {
+      "number": 2,
+      "received": true,
+      "completed": false,
+      "held": false
+    },
+    {
+      "number": 3,
+      "received": true,
+      "completed": false,
+      "held": false
+    }
+  ],
+  "eligible_rows": 0,
+  "instruction3_status": {
+    "received_at_jst": "2026-10-08T10:13:44+09:00",
+    "base_commit": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "branch": "codex/attn-preparation-2026-10-08",
+    "state": "stopped_world_fingerprint_mismatch",
+    "port_gate_rules_unchanged": true,
+    "full_combined_gate_wait_waived_by_own_instruction": 3,
+    "all_seed_interventions_authorized": false,
+    "lightweight_heartbeat": true,
+    "stopped_at_jst": "2026-10-08T10:23:20+09:00",
+    "port_commit": "0c73f250b0e2fa357949eea67298b1c55146e168",
+    "port_branch": "codex/intervention-e9-port-2026-10-08",
+    "gate": "instruction3/off_gate_01/status.json",
+    "gate_case": "N3_w1",
+    "gate_exit_code": 1,
+    "model_and_output_comparison_trials": 0,
+    "remaining_cases_started": 0,
+    "small_native_run_started": false,
+    "full_seed_interventions_started": false,
+    "repair_or_retry_performed": false,
+    "required_next_action": "自分の受け箱又はアストラの直接指示による不一致への判断",
+    "input_bytes_preserved": true,
+    "new_files": [
+      "tools/intervention46_off_gate.py",
+      "tools/seal_intervention_batch.py",
+      "tools/seal_intervention_diag.py",
+      "tools/seal_mac_intervention.py",
+      "tools/sealrestore.py"
+    ]
+  },
+  "published": false,
+  "machine_census_performed": false,
+  "new_models_started": 0,
+  "lightweight_instruction": 3
+}

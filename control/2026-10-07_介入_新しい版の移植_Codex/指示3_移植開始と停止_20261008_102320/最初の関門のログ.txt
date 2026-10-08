@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_off_gate.py", line 142, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_off_gate.py", line 121, in main
+    print(json.dumps(one(entries[0], a.destination, a.workspace), ensure_ascii=False))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_off_gate.py", line 84, in one
+    diagnostic.one(root, destination, 1, all_doors=True)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/seal_intervention_diag.py", line 347, in one
+    try:v3_run.worker(task)
+        ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/v3_run.py", line 612, in worker
+    rec = sweep.run_one(task)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/seal_intervention_diag.py", line 344, in only_read
+    box['result']=analysis(tk,cfg,root,cells[0].parent.name,seed,dest,limit,exercise_upper,all_doors)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/seal_intervention_diag.py", line 225, in analysis
+    try:it=iter_run(str(root),cell,seed,check_hash=True);first=next(it)
+                                                               ^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/extrap_reader.py", line 61, in iter_run
+    raise RuntimeError(f"世界の指紋が合わない {led}")
+RuntimeError: 世界の指紋が合わない /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/world1_rebuild/n3_w1_A_L50/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz
