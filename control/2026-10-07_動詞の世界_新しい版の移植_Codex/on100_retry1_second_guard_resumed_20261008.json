@@ -1,0 +1,124 @@
+{
+  "checked_at": "2026-10-08T22:00:38+09:00",
+  "resumed_at": "2026-10-08T21:40:07+09:00",
+  "existing_supervisor_pid": 3333,
+  "model_process_group": 3526,
+  "existing_model_worker_pid": 3532,
+  "source_commit_unchanged": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+  "new_model_started": false,
+  "manual_resume_or_guard_replacement": false,
+  "resource_guard_events": [
+    {
+      "event": "started",
+      "cpu_limit": 8,
+      "models": 5,
+      "unknown_active_spawn": 0,
+      "own_models": 0,
+      "epoch_seconds": 1791438127.342258,
+      "outside_heavy": 5,
+      "inside_heavy": 0,
+      "own_rss_bytes": 23920640,
+      "free_disk_bytes": 216715812864,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false,
+      "model_pid": 3526
+    },
+    {
+      "event": "paused",
+      "cpu_limit": 8,
+      "models": 5,
+      "unknown_active_spawn": 1,
+      "own_models": 1,
+      "epoch_seconds": 1791442526.3756769,
+      "outside_heavy": 5,
+      "inside_heavy": 1,
+      "own_rss_bytes": 215711744,
+      "free_disk_bytes": 216415752192,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false
+    },
+    {
+      "event": "resumed",
+      "cpu_limit": 8,
+      "models": 4,
+      "unknown_active_spawn": 0,
+      "own_models": 0,
+      "epoch_seconds": 1791446668.493261,
+      "outside_heavy": 4,
+      "inside_heavy": 0,
+      "own_rss_bytes": 215859200,
+      "free_disk_bytes": 216300789760,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false
+    },
+    {
+      "event": "paused",
+      "cpu_limit": 8,
+      "models": 5,
+      "unknown_active_spawn": 1,
+      "own_models": 1,
+      "epoch_seconds": 1791448043.876058,
+      "outside_heavy": 5,
+      "inside_heavy": 1,
+      "own_rss_bytes": 243417088,
+      "free_disk_bytes": 215651971072,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false
+    },
+    {
+      "event": "resumed",
+      "cpu_limit": 8,
+      "models": 3,
+      "unknown_active_spawn": 0,
+      "own_models": 0,
+      "epoch_seconds": 1791463207.1508648,
+      "outside_heavy": 3,
+      "inside_heavy": 0,
+      "own_rss_bytes": 220708864,
+      "free_disk_bytes": 213652291584,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false
+    }
+  ],
+  "latest_existing_sample": {
+    "event": "sample",
+    "cpu_limit": 8,
+    "models": 4,
+    "unknown_active_spawn": 0,
+    "own_models": 1,
+    "epoch_seconds": 1791464436.960334,
+    "outside_heavy": 3,
+    "inside_heavy": 1,
+    "own_rss_bytes": 271958016,
+    "free_disk_bytes": 213446807552,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermal_warning": false
+  },
+  "latest_existing_sample_at": "2026-10-08T22:00:36+09:00",
+  "observed_second_epoch_pause_span_seconds": 15163.2748067379,
+  "pause_span_note": "二度目の一時停止から再開までの既存イベントのepoch差。未完走なので最終resultのpaused_secondsではない。",
+  "on100_complete": false,
+  "comparison_complete": false,
+  "measurement300_started": false,
+  "fresh_machine_census_performed": false,
+  "own_process_read_check": {
+    "supervisor": {
+      "pid": 3333,
+      "state": "Ss"
+    },
+    "time": {
+      "pid": 3526,
+      "state": "Ss"
+    },
+    "parent": {
+      "pid": 3528,
+      "state": "S"
+    },
+    "model_worker": {
+      "pid": 3532,
+      "ppid": 3528,
+      "pgid": 3526,
+      "state": "R"
+    }
+  }
+}
