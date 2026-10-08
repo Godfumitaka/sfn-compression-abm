@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-08T12:21:54.477696+09:00",
+  "pid": 9042,
+  "actual_ps": null,
+  "original_status_lock_tools_preserved": true,
+  "continued_off_processes": {
+    "49451": [
+      1,
+      "Ss",
+      0.0,
+      18928,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_off_1740 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py entry reuse_off_1740"
+    ],
+    "49459": [
+      49451,
+      "S",
+      0.0,
+      27536,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/native_command.json"
+    ],
+    "49468": [
+      49459,
+      "R",
+      99.7,
+      171824,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ]
+  },
+  "model_receipt_observer_signals": 0,
+  "original_hash": {
+    "gate.py": "ef80473bf0b2c1cb0dfbdbb86e1eea1bd7f65617428c088e87cdc5b2fb84b0ef",
+    "observe.py": "877d340d44ff6b9cfa620832e1ccd2e1a7a9287104c53df19e8a9f81ebc8618c",
+    "supervisor.lock": "551715c7374d9a636f844421ca3efbdee6600b8bb70a1e6f11ebf947e7f589dc",
+    "status.json": "8bd13d1ec811e9907c15c25a7230d11a8934715d911ac922119facdcc742248d"
+  }
+}
