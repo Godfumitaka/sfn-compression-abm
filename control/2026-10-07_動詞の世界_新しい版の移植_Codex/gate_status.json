@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-08T10:24:33.897063+09:00",
+  "supervisor_pid": 19615,
+  "state": "running_or_waiting",
+  "label": "alloff_5000",
+  "command": [
+    "/usr/bin/python3",
+    "$USER_HOME/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "Codex 動詞新移植 追加旗off5000",
+    "--mem",
+    "1.3",
+    "--disk-path",
+    "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000/output",
+    "--",
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/run_case.py",
+    "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000"
+  ]
+}
