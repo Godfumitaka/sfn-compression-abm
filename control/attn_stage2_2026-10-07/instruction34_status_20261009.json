@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-09T06:10:44.500565+09:00",
+  "pid": 78880,
+  "machine": {
+    "at": "2026-10-09T06:10:44.361676+09:00",
+    "models": {
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 1940400
+      },
+      "59619": {
+        "ppid": 59604,
+        "state": "R",
+        "rss_kb": 2053968
+      },
+      "78978": {
+        "ppid": 78938,
+        "state": "R",
+        "rss_kb": 118832
+      },
+      "78981": {
+        "ppid": 78954,
+        "state": "R",
+        "rss_kb": 122128
+      },
+      "79078": {
+        "ppid": 79043,
+        "state": "R",
+        "rss_kb": 55264
+      },
+      "79087": {
+        "ppid": 79059,
+        "state": "R",
+        "rss_kb": 61280
+      },
+      "79157": {
+        "ppid": 79137,
+        "state": "R",
+        "rss_kb": 55696
+      }
+    },
+    "model_children": 7,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 59598,
+        "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 78923,
+        "owner": "Codex2 指示34 original_e9_w1_s001_2a_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 78940,
+        "owner": "Codex2 指示34 e9_w1_s001_2a_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 79031,
+        "owner": "Codex2 指示34 e9_w1_s001_1a_200",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 79046,
+        "owner": "Codex2 指示34 4cea_w1_s001_1a_200",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 79133,
+        "owner": "Codex2 指示34 4cea_w2_s041_forget_200",
+        "mem_gb": 1.0
+      }
+    ],
+    "disk_free_bytes": 208906227712,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "phase": "models_or_comparisons_running_or_waiting",
+  "active": {
+    "original_e9_w1_s001_2a_1740": 78923,
+    "e9_w1_s001_2a_1740": 78940,
+    "e9_w1_s001_1a_200": 79031,
+    "4cea_w1_s001_1a_200": 79046,
+    "4cea_w2_s041_forget_200": 79133
+  },
+  "pending_groups": [],
+  "pending_comparisons": [
+    "b_e9_2a_1740",
+    "b_4cea_forget_200",
+    "c_1a_200"
+  ],
+  "models_not_signaled": true,
+  "automatic_retry": false
+}
