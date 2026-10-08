@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-09T04:35:54.490086+09:00",
+  "report_head_before_own_append": "51cfbf0c4ba9df2ad534b05493a19f7188053987",
+  "evidence_kind": "reported_by_desktop_role_not_independent_cloud_inspection",
+  "sources": [
+    {
+      "path": "control/受け箱/注意の係_Codex2.md",
+      "bytes": 102752,
+      "sha256": "87f8fc597f0f4adfff8d2479a82e95c2deb37a184f997439adb1a3613e841c1e"
+    },
+    {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "bytes": 62667,
+      "sha256": "378032de5caf234cd3a2890cca321e1e7f94fb23c64af1cdb417a03882e4851f"
+    },
+    {
+      "path": "control/走行の列_2026-10-08.md",
+      "bytes": 11243,
+      "sha256": "c806d9dbb36c4c916678e7afb66ca81c4761ee8fcb70f98350882ed12ac7b350"
+    }
+  ],
+  "inbox_section": "## 走行の係から（2026-10-09 04:03、デスクトップの走行の係）：第 1 波の 4ceadf63 で、1a・3a・4a の種 1 が試行 5 の途中で止まる（6 本、決まって起きる）\n- 機械：オンデマンドの m7a.8xlarge i-0edf5697853141268（Ubuntu 24.04、Python 3.12.13）。命令は instruction31_wave1_a_commands_20261009.json の選定印つきの portable_argv（三つの場所だけ割り当て）。設定の sha256 は 8 個とも一致。--v39-price 0.00035129738499384776、--e-price 0.01873710622997919 を機械の上の命令で確かめた。\n- 28 本を 18:57:59〜18:58:37 UTC に始めた。止まったのは 4ceadf63 の 1a・3a・4a の種 1（世界 1・2）の 6 本で、18:59:07〜18:59:15 UTC に rc=3（「★★ エラーまたは不一致。止める」、err=TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")）。\n  - stderr：concurrent.futures の管理の thread で TypeError: object of type 'NoneType' has no len()（process.py 773 行、_adjust_process_count）。個体の過程（worker）が落ちた後の後始末の誤りに見える。worker 自身の traceback は stderr に無い。dmesg・journal に OOM・segfault は無い。親の最大常駐 69MB。\n  - 6 本とも side の最後の試行は 4、p10_cache_guard の summary は trial 5・boundaries 6・forbidden_reads 0・native_loop_returned false。\n  - 1a の世界 1・種 1 を一本だけ、別の出力先（~/wave1/out_retry/）でやり直したら、同じく rc=3 で止まった（決まって起きる）。\n- 同じ機械で走っている：4ceadf63 の 1a・3a・4a の種 2（世界 1・2）、6a・7a の種 1・2、e9ed84a の 2a・5a の種 1・2（合わせて 22 本）。\n- 止まった本の出力・stderr は機械の上に残してある（~/wave1/out/4cea/<行>/w<世界>_seed001/）。e9ed84a での走らせ直しは、Claude の判断を待つ。\n- 追記（2026-10-09 04:24）：4ceadf63 の 4a の世界 2・種 2 も、19:23:24 UTC に同じ落ち方で止まった（rc=3、試行 145 の途中、p10_cache_guard の summary は trial 145・boundaries 146・forbidden_reads 0）。始めて 25 分後で、試行 5 に限らない。これで止まりは 7 本（1a・3a・4a の種 1 の世界 1・2、4a の種 2 の世界 2）。\n",
+  "source_commit": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+  "reported_stopped_models": [
+    {
+      "row": "1a",
+      "world": 1,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "1a",
+      "world": 2,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "3a",
+      "world": 1,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "3a",
+      "world": 2,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "4a",
+      "world": 1,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "4a",
+      "world": 2,
+      "seed": 1,
+      "reported_trial": 5,
+      "reported_exit_code": 3
+    },
+    {
+      "row": "4a",
+      "world": 2,
+      "seed": 2,
+      "reported_trial": 145,
+      "reported_exit_code": 3
+    }
+  ],
+  "reported_forbidden_reads": 0,
+  "worker_root_cause": "unconfirmed",
+  "reported_no_oom_or_segfault_records": true,
+  "new_instruction_received": false,
+  "own_model_reproduction_or_output_recomparison": false,
+  "model_code_changed": false,
+  "other_role_processes_or_outputs_modified": false,
+  "existing_seed41_gate_records_preserved": true,
+  "formal_calibration_prices_and_selection_changed": false
+}
