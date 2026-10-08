@@ -1,13 +1,13 @@
 #!/bin/bash
 # 機械を一台立てる。引数：機械の種類（許されたものだけ） [根のディスクの GB、既定 200]。立てた機械の ID と公開 IP を出す。
-# 受け箱に Claude の始めの指示が来るまで、使わない。
+# 受け箱に Claude の始めの指示が来るまで、使わない。環境変数 SUBNET で、立てる場所（可用性ゾーンのサブネット）を選べる。
 set -euo pipefail; source $(dirname "$0")/aws_env.sh
 TYPE=$1; DISK=${2:-200}; MARKET=${3:-ondemand}   # 三つ目の引数が spot ならスポット（止められたら機械が消える）
 MKT=(); [ "$MARKET" == "spot" ] && MKT=(--instance-market-options "MarketType=spot,SpotOptions={SpotInstanceType=one-time,InstanceInterruptionBehavior=terminate}")
 [[ " $ALLOWED_TYPES " == *" $TYPE "* ]] || { echo "★ 許されていない機械の種類：$TYPE（許されるのは $ALLOWED_TYPES）"; exit 2; }
 AMI=$(aws ec2 describe-images --owners 099720109477 --filters "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*" "Name=state,Values=available" --query "sort_by(Images,&CreationDate)[-1].ImageId" --output text)   # Canonical（099720109477）の公式 Ubuntu Server 24.04 LTS の最新
 SG=$(aws ec2 describe-security-groups --filters Name=group-name,Values=$SG_NAME --query 'SecurityGroups[0].GroupId' --output text)
-ID=$(aws ec2 run-instances --image-id $AMI --instance-type $TYPE --key-name $KEY_NAME --security-group-ids $SG \
+ID=$(aws ec2 run-instances --image-id $AMI --instance-type $TYPE --key-name $KEY_NAME --security-group-ids $SG ${SUBNET:+--subnet-id $SUBNET} \
   --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$DISK,VolumeType=gp3,DeleteOnTermination=true}" \
   --instance-initiated-shutdown-behavior terminate "${MKT[@]}" \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Project,Value=$TAG_PROJECT},{Key=Name,Value=sfn-$TYPE}]" \
