@@ -322,6 +322,15 @@ def _install(side_path: Path, nohash: bool, prune: bool = False, extgreedy: bool
     return fo
 
 
+def _cache_prune_path(task, out_root):
+    """集団の各体が、P10の観測を固有の場所へ書く。計算の材料にはしない。"""
+    if not task.get('v311c'):
+        return out_root.parent / 'p10_cache_guard.jsonl.gz'
+    folder = out_root / 'cache_prune' / task['cell']
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder / f"seed{task['seed']:03d}.guard.jsonl.gz"
+
+
 def worker(task: dict) -> dict:
     import sweep
     out_root = Path(task["out_root"])
@@ -513,7 +522,7 @@ def worker(task: dict) -> dict:
             import cstar_runtime
             cstar_runtime.install(**task["cstar_options"],
                                   **({'exact_speed': True} if task.get('stage2_speed') else {}),
-                                  **({'cache_prune_path':out_root.parent/'p10_cache_guard.jsonl.gz'}
+                                  **({'cache_prune_path':_cache_prune_path(task, out_root)}
                                      if task.get('stage2_cache_prune') else {}))
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
