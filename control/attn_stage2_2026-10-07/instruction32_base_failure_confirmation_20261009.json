@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-09T05:09:28.558156+09:00",
+  "instruction": 32,
+  "world": 1,
+  "seed": 1,
+  "row": "1a",
+  "trial_limit": 6,
+  "horizon": 1740,
+  "V_price": "0.00035129738499384776",
+  "E_price": "0.01873710622997919",
+  "cases": {
+    "4cea": {
+      "worker_failure": {
+        "at": "2026-10-09T05:06:39.826338+09:00",
+        "exception_type": "TypeError",
+        "error": "TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")",
+        "trials_completed": 5,
+        "native_loop_returned": false,
+        "automatic_retry": false,
+        "traceback_captured_inside_worker": true
+      },
+      "receipt_ended": {
+        "at": "2026-10-09T05:06:39.917323+09:00",
+        "pid": 67777,
+        "exit_code": 3,
+        "actual_child_exit_code": true,
+        "automatic_retry": false,
+        "model_signals": 0
+      },
+      "worker_ended": {
+        "at": "2026-10-09T05:06:39.826580+09:00",
+        "pid": 67786,
+        "trials_completed": 5,
+        "worker_returned": false,
+        "error": "TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")",
+        "wall_seconds": 49.420035249961074,
+        "cpu_seconds": 49.26374800000001,
+        "peak_rss_bytes": 55164928,
+        "scope": "same_process_worker_model_and_trace_observation",
+        "production_started": false,
+        "model_signals": 0
+      },
+      "traceback_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction32_failure_diagnosis/4cea_w1_seed001_6/worker_traceback.txt",
+      "traceback_sha256": "2ab8bed17d6a83231085ac1324fb3b5ac0a04f80ea2752384e138fbf8b62ddad"
+    },
+    "e9": {
+      "worker_failure": {
+        "at": "2026-10-09T05:08:25.058325+09:00",
+        "exception_type": "TypeError",
+        "error": "TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")",
+        "trials_completed": 5,
+        "native_loop_returned": false,
+        "automatic_retry": false,
+        "traceback_captured_inside_worker": true
+      },
+      "receipt_ended": {
+        "at": "2026-10-09T05:08:25.151356+09:00",
+        "pid": 67943,
+        "exit_code": 3,
+        "actual_child_exit_code": true,
+        "automatic_retry": false,
+        "model_signals": 0
+      },
+      "worker_ended": {
+        "at": "2026-10-09T05:08:25.058535+09:00",
+        "pid": 67948,
+        "trials_completed": 5,
+        "worker_returned": false,
+        "error": "TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")",
+        "wall_seconds": 93.6105996670085,
+        "cpu_seconds": 93.361235,
+        "peak_rss_bytes": 55296000,
+        "scope": "same_process_worker_model_and_trace_observation",
+        "production_started": false,
+        "model_signals": 0
+      },
+      "traceback_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction32_failure_diagnosis/e9_w1_seed001_6/worker_traceback.txt",
+      "traceback_sha256": "58ff793a95d99175e06e0ef2239ad5d61aa2848063c72f707c378f386a78a72e"
+    }
+  },
+  "flag_only_failure_branch": false,
+  "base_model_failure_reproduced": true,
+  "model_specification_or_source_changed": false,
+  "production_started": false,
+  "model_signals": 0,
+  "automatic_retry": false
+}

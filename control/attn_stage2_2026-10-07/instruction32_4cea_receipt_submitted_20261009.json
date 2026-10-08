@@ -1,0 +1,81 @@
+{
+  "at": "2026-10-09T05:05:49.844858+09:00",
+  "pid": 67777,
+  "command": [
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "Codex2 指示32 4cea 世界1 種1 6試行診断",
+    "--mem",
+    "1",
+    "--disk-path",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction32_failure_diagnosis/4cea_w1_seed001_6/output",
+    "--",
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction32_failure_diagnosis/launch.py",
+    "entry",
+    "4cea"
+  ],
+  "machine": {
+    "at": "2026-10-09T05:05:49.780227+09:00",
+    "models": {
+      "33003": {
+        "ppid": 33000,
+        "state": "R",
+        "rss_kb": 275136
+      },
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 1732544
+      },
+      "54226": {
+        "ppid": 54217,
+        "state": "R",
+        "rss_kb": 230736
+      },
+      "59619": {
+        "ppid": 59604,
+        "state": "R",
+        "rss_kb": 1777808
+      }
+    },
+    "model_children": 4,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 59598,
+        "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 32988,
+        "owner": "Codex 動詞 指示6 on100_with_probe_retry2",
+        "mem_gb": 2.0
+      },
+      {
+        "pid": 54207,
+        "owner": "Codex2 指示26 五つ w2_forget_exec_on_200",
+        "mem_gb": 1.0
+      }
+    ],
+    "disk_free_bytes": 209315172352,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "mem_gb": 1,
+  "mem_basis": "先頭20試行約63MBと200試行最大約350MBに余裕を置いた1GB",
+  "automatic_retry": false,
+  "production_started": false
+}
