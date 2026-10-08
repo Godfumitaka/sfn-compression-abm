@@ -3965,10 +3965,10 @@ index 0000000..9411655
 +}
 diff --git a/tools/verb_measurement/export_tables.py b/tools/verb_measurement/export_tables.py
 new file mode 100644
-index 0000000..9edd5c5
+index 0000000..9b15409
 --- /dev/null
 +++ b/tools/verb_measurement/export_tables.py
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,79 @@
 +"""模型の出力を変えず、時間・常駐・SHAの報告表を作る。成績は集計しない。"""
 +import argparse,csv,gzip,hashlib,json,math,re,shutil
 +from pathlib import Path
@@ -4026,8 +4026,9 @@ index 0000000..9edd5c5
 +        per={}
 +        opener=gzip.open if p.suffix=='.gz' else open
 +        with opener(p,'rt') as f:
-+            for line in f:
-+                for key,v in time_fields(json.loads(line)):per[key]=per.get(key,0)+v
++            records=[json.load(f)] if p.suffix=='.json' else (json.loads(line) for line in f)
++            for record in records:
++                for key,v in time_fields(record):per[key]=per.get(key,0)+v
 +        for key,v in per.items():file_totals.append(dict(path=str(p.relative_to(case/'output')),field=key,seconds=v))
 +    table(destination/'timing_breakdown.tsv',file_totals,['path','field','seconds'])
 +    fields=('label','source_commit','model_commit','observer_sha256','flags','completed_trials','configured_trial_count','horizon')
@@ -5653,10 +5654,10 @@ index 0000000..9350eb4
 +}
 diff --git a/tools/verb_measurement/test_package.py b/tools/verb_measurement/test_package.py
 new file mode 100644
-index 0000000..050633d
+index 0000000..d0105e9
 --- /dev/null
 +++ b/tools/verb_measurement/test_package.py
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,112 @@
 +"""受付・完了・同機械比較の境界を人工の小ファイルで検査。模型は起動しない。"""
 +import gzip,hashlib,json,sys,time
 +from pathlib import Path
@@ -5760,6 +5761,15 @@ index 0000000..050633d
 +    assert C.compare(a,b,tmp_path/'speed.json',200)==0
 +    v=R.read(b/'runtime.json');v['flags'][-1]='off';(b/'runtime.json').write_text(json.dumps(v))
 +    with pytest.raises(AssertionError):C.compare(a,b,tmp_path/'no.json',200)
++
++
++def test_export_pretty_stage2_summary_and_jsonl(tmp_path):
++    a=fixture(tmp_path/'a',True,300);stage=a/'output/stage2';stage.mkdir()
++    (stage/'summary.json').write_text(json.dumps({'seconds':3.5,'birth':{'engine_seconds':1.25}},indent=2)+'\n')
++    with gzip.open(stage/'trials.jsonl.gz','wt') as f:f.write(json.dumps({'seconds':2.0})+'\n')
++    export(a,tmp_path/'tables')
++    rows=(tmp_path/'tables/timing_breakdown.tsv').read_text()
++    assert 'summary.json\tseconds\t3.5' in rows and 'birth.engine_seconds\t1.25' in rows and 'trials.jsonl.gz\tseconds\t2.0' in rows
 diff --git a/tools/verbtiming.py b/tools/verbtiming.py
 new file mode 100644
 index 0000000..0667ece

@@ -6,8 +6,8 @@
 
 | 用途 | 専用ローカル枝 | 包みのコミット | 模型の出所・観察入口 |
 |---|---|---|---|
-| on100二本と300 | codex/verb-cloud-package-2026-10-09 | ccd2cb0b839cb5eb2518a4a73b192e43150d9cf0 | 模型40e87b2e1fbd8348141dd447ac49c3aaadd7d914。観察SHA6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4 |
-| 速度off/on200の準備 | codex/verb-stage2-speed-2026-10-09 | 264a7c44cbfae7664068ae90fae26aea27d355c5 | 40eへ4ceadf63の二旗を移植。観察SHA235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d |
+| on100二本と300 | codex/verb-cloud-package-2026-10-09 | 74d88e66f0ebcfcdaae007d80ad5df5514e465b7 | 模型40e87b2e1fbd8348141dd447ac49c3aaadd7d914。観察SHA6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4 |
+| 速度off/on200の準備 | codex/verb-stage2-speed-2026-10-09 | 412b9ce8ff6274d6b1da548ed4b1509f2bbf1772 | 40eへ4ceadf63の二旗を移植。観察SHA235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d |
 
 指示10（2026-10-09 01:51）により、新しい枝はoriginへpushしない。差分とGit bundleを承認済みresults-2026-09-27へ置き、クラウドへ渡す。指示9の1の新枝pushの要求はこの方式へ替わり、追加の直接承認を求めない。bundleの土台は承認済みoriginの`e9ed84ae3ee6c458f392cd58cadf9fc030639900`。旧作業枝や他の係のcheckoutへ適用しない。
 
@@ -19,8 +19,8 @@
 
 | bundle | 取り出し後のHEAD | tree hash | bundle SHA256 | バイト |
 |---|---|---|---|---|
-| cloud | `ccd2cb0b839cb5eb2518a4a73b192e43150d9cf0` | `c0a3d2686ccae82c2fcc1d4505d5147f1c73581f` | `7ed7afd68de789864ea03c6b98e58062308650abf03823f845e37e8f4e6b65dc` | 77860 |
-| speed200 | `264a7c44cbfae7664068ae90fae26aea27d355c5` | `cd55d5eb39dfd6e2e5472dbf82762652c6673c39` | `420bcde5e42db8fe2d19a8a1c5ed221fa49b8c6a5a8c9787822e786922b06323` | 93050 |
+| cloud | `74d88e66f0ebcfcdaae007d80ad5df5514e465b7` | `47f03f03cc26e40793dcce90cdc8c62d673ed9b9` | `a2c086a98da0fa2624cf14b327e13d59725d9a91f5c93659ca85a18a87e34ca5` | 78533 |
+| speed200 | `412b9ce8ff6274d6b1da548ed4b1509f2bbf1772` | `07f9428b143b9fe82b89e918b9b6921d4ea03b6f` | `83aec21dad227ad5f0b9ec0c82f92544b8c9c2e74e58c53f352e45137a62eb24` | 93716 |
 
 両bundleとも50MB以下。50MBを超える新しいbundleは送らず報告して待つ。取り出し後、HEADとtree hashの両方を上表と照合してから走行する。
 
@@ -37,16 +37,16 @@ VERB_CLEARANCE_ROOT=/srv/verb/resource_clearance
 
 git clone --no-checkout https://github.com/Godfumitaka/sfn-compression-abm.git "$VERB_SOURCE"
 git -C "$VERB_SOURCE" checkout --detach e9ed84ae3ee6c458f392cd58cadf9fc030639900
-test "$(sha256sum "$VERB_PACKAGE/cloud/source.bundle" | cut -d " " -f 1)" = 7ed7afd68de789864ea03c6b98e58062308650abf03823f845e37e8f4e6b65dc
+test "$(sha256sum "$VERB_PACKAGE/cloud/source.bundle" | cut -d " " -f 1)" = a2c086a98da0fa2624cf14b327e13d59725d9a91f5c93659ca85a18a87e34ca5
 git -C "$VERB_SOURCE" bundle verify "$VERB_PACKAGE/cloud/source.bundle"
 git -C "$VERB_SOURCE" fetch --no-tags "$VERB_PACKAGE/cloud/source.bundle" refs/heads/codex/verb-cloud-package-2026-10-09
-git -C "$VERB_SOURCE" checkout -b codex/verb-cloud-package-2026-10-09 ccd2cb0b839cb5eb2518a4a73b192e43150d9cf0
-test "$(git -C "$VERB_SOURCE" rev-parse HEAD)" = ccd2cb0b839cb5eb2518a4a73b192e43150d9cf0
-test "$(git -C "$VERB_SOURCE" rev-parse "HEAD^{tree}")" = c0a3d2686ccae82c2fcc1d4505d5147f1c73581f
+git -C "$VERB_SOURCE" checkout -b codex/verb-cloud-package-2026-10-09 74d88e66f0ebcfcdaae007d80ad5df5514e465b7
+test "$(git -C "$VERB_SOURCE" rev-parse HEAD)" = 74d88e66f0ebcfcdaae007d80ad5df5514e465b7
+test "$(git -C "$VERB_SOURCE" rev-parse "HEAD^{tree}")" = 47f03f03cc26e40793dcce90cdc8c62d673ed9b9
 python3.12 -m venv /srv/verb/env
 VERB_PY=/srv/verb/env/bin/python
 VERB_TOOLS="$VERB_SOURCE/tools/verb_measurement"
-"$VERB_PY" "$VERB_TOOLS/cloud_run.py" prepare --source "$VERB_SOURCE" --commit ccd2cb0b839cb5eb2518a4a73b192e43150d9cf0 --root "$VERB_OUTPUT_ROOT"
+"$VERB_PY" "$VERB_TOOLS/cloud_run.py" prepare --source "$VERB_SOURCE" --commit 74d88e66f0ebcfcdaae007d80ad5df5514e465b7 --root "$VERB_OUTPUT_ROOT"
 ```
 
 `prepare`は三本のruntimeを作るだけで、模型を始めない。出力済みの根や走行済みの同じ場所への再投入は拒否する。OSがLinux、Pythonが3.12、HEADが固定、作業木がclean、模型の木と観察SHAが一致しなければ走行しない。
@@ -111,6 +111,8 @@ Macの組とクラウドの組のうち、二本とも先に正常完了した�
 "$VERB_PY" "$VERB_JOBS" run --wait --mem .5 --disk-path "$VERB_OUTPUT_ROOT" -- "$VERB_PY" "$VERB_TOOLS/export_tables.py" "$VERB_OUTPUT_ROOT/allin_s01_300" "$VERB_OUTPUT_ROOT/report_allin_s01_300"
 ```
 
+第二段のJSONLと整形済みJSON summaryをそれぞれの形式で読み、時間内訳へ記録する。出力表の非模型検査はクラウド用15件、速度用13件が通った。
+
 報告表は`checkpoints.tsv`、`sha256.tsv`、`timing_breakdown.tsv`、`provenance.json`、`result.json`、`time.log`。300では`conditional_5000_estimate.json`も作る。100・200・300の累積と各区間の実時間、user/sys・合計CPU秒を区別する。Linuxのru_maxrssはKiB、MacはBなので、観察driverの原記録を変更せずLinux報告表で1024倍し、原値と単位も残す。GNU time -v原本も保持する。
 
 5000見積りは、実測三つの100区間の最小〜最大と同じ負荷が残り4700で続く場合の条件付き幅。重さの増大や資源待ちの上限を保証しない。第二段のwrapper・本体・再照合には包含があるので時間を無条件に足さない。結果の良し悪しは書かない。
@@ -121,7 +123,7 @@ Macの組とクラウドの組のうち、二本とも先に正常完了した�
 
 準備のみ。99件の構造検査、別の200観察入口の20件の非模型検査が通った。全バイトの学習関門は未実行。本番の速度旗や全長の関門は300の後にClaudeとアストラが判断する。
 
-別の専用checkoutを土台e9から作り、`speed200/source.bundle`をverify・fetchして`264a7c44cbfae7664068ae90fae26aea27d355c5`をcheckoutする。上の三本用checkoutや出力へ上書きしない。芯2・メモリ2.0GB・同機械二本・種1・trial-count/horizon5000・完了200。全旗はMacの試験あり全部入りを保ち、二本の差は`--stage2-speed`と`--stage2-cache-prune`のoff/onだけ。固定試験は各96問、fingerprint2回。観察driverの追加差分は先頭200の許可と完了説明だけ。現在のMacdriverは変更していない。
+別の専用checkoutを土台e9から作り、`speed200/source.bundle`をverify・fetchして`412b9ce8ff6274d6b1da548ed4b1509f2bbf1772`をcheckoutする。上の三本用checkoutや出力へ上書きしない。芯2・メモリ2.0GB・同機械二本・種1・trial-count/horizon5000・完了200。全旗はMacの試験あり全部入りを保ち、二本の差は`--stage2-speed`と`--stage2-cache-prune`のoff/onだけ。固定試験は各96問、fingerprint2回。観察driverの追加差分は先頭200の許可と完了説明だけ。現在のMacdriverは変更していない。
 
 ```sh
 VERB_SPEED_SOURCE=/srv/verb/speed_source
@@ -129,13 +131,13 @@ VERB_SPEED_ROOT=/srv/verb/speed200_20261009
 VERB_SPEED_TOOLS="$VERB_SPEED_SOURCE/tools/verb_measurement"
 git clone --no-checkout https://github.com/Godfumitaka/sfn-compression-abm.git "$VERB_SPEED_SOURCE"
 git -C "$VERB_SPEED_SOURCE" checkout --detach e9ed84ae3ee6c458f392cd58cadf9fc030639900
-test "$(sha256sum "$VERB_PACKAGE/speed200/source.bundle" | cut -d " " -f 1)" = 420bcde5e42db8fe2d19a8a1c5ed221fa49b8c6a5a8c9787822e786922b06323
+test "$(sha256sum "$VERB_PACKAGE/speed200/source.bundle" | cut -d " " -f 1)" = 83aec21dad227ad5f0b9ec0c82f92544b8c9c2e74e58c53f352e45137a62eb24
 git -C "$VERB_SPEED_SOURCE" bundle verify "$VERB_PACKAGE/speed200/source.bundle"
 git -C "$VERB_SPEED_SOURCE" fetch --no-tags "$VERB_PACKAGE/speed200/source.bundle" refs/heads/codex/verb-stage2-speed-2026-10-09
-git -C "$VERB_SPEED_SOURCE" checkout -b codex/verb-stage2-speed-2026-10-09 264a7c44cbfae7664068ae90fae26aea27d355c5
-test "$(git -C "$VERB_SPEED_SOURCE" rev-parse HEAD)" = 264a7c44cbfae7664068ae90fae26aea27d355c5
-test "$(git -C "$VERB_SPEED_SOURCE" rev-parse "HEAD^{tree}")" = cd55d5eb39dfd6e2e5472dbf82762652c6673c39
-"$VERB_PY" "$VERB_SPEED_TOOLS/cloud_run.py" prepare --source "$VERB_SPEED_SOURCE" --commit 264a7c44cbfae7664068ae90fae26aea27d355c5 --root "$VERB_SPEED_ROOT"
+git -C "$VERB_SPEED_SOURCE" checkout -b codex/verb-stage2-speed-2026-10-09 412b9ce8ff6274d6b1da548ed4b1509f2bbf1772
+test "$(git -C "$VERB_SPEED_SOURCE" rev-parse HEAD)" = 412b9ce8ff6274d6b1da548ed4b1509f2bbf1772
+test "$(git -C "$VERB_SPEED_SOURCE" rev-parse "HEAD^{tree}")" = 07f9428b143b9fe82b89e918b9b6921d4ea03b6f
+"$VERB_PY" "$VERB_SPEED_TOOLS/cloud_run.py" prepare --source "$VERB_SPEED_SOURCE" --commit 412b9ce8ff6274d6b1da548ed4b1509f2bbf1772 --root "$VERB_SPEED_ROOT"
 # 走行の指示を受け、受付・同機械・資源確認が揃ってから使う命令。
 "$VERB_PY" "$VERB_SPEED_TOOLS/cloud_run.py" run "$VERB_SPEED_ROOT/speed200_off" --jobs "$VERB_JOBS" --clearance "$VERB_CLEARANCE_ROOT/speed200_off.json"
 "$VERB_PY" "$VERB_SPEED_TOOLS/cloud_run.py" run "$VERB_SPEED_ROOT/speed200_on" --jobs "$VERB_JOBS" --clearance "$VERB_CLEARANCE_ROOT/speed200_on.json"
