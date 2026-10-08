@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-10-08T23:30:55+09:00",
+  "report_commit": "f23844a0ed3ce5d14a65f3f10d337a29dc74310d",
+  "model_process_count": 3,
+  "own_model_process_count": 0,
+  "unknown_active_spawn_count": 0,
+  "paused_model_count": 2,
+  "own_paused_model_count": 0,
+  "old_supervisor_active_pids": [],
+  "models": [
+    {
+      "pid": 47193,
+      "ppid": 47184,
+      "pgid": 47180,
+      "state": "R",
+      "rss_bytes": 2490105856,
+      "parent_script": "observe_light.py",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 49859,
+      "ppid": 49849,
+      "pgid": 49838,
+      "state": "R",
+      "rss_bytes": 183435264,
+      "parent_script": "observe.py",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 79046,
+      "ppid": 79035,
+      "pgid": 79025,
+      "state": "R",
+      "rss_bytes": 2176303104,
+      "parent_script": "observe_light.py",
+      "worker_kind": "spawn"
+    }
+  ],
+  "unknown_spawn": [],
+  "physical_cpu": 10,
+  "cpu_slots": 8,
+  "physical_memory_bytes": 34359738368,
+  "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)",
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "thermal_warning": false,
+  "free_disk_bytes": 213142540288,
+  "counting_rule": "psのspawn・forkの実際の個体workerを一体一回。親・監督・time・resource_trackerと停止T/Zは稼働へ足さず、停止模型と未分類spawnは別欄。既存の分類は変更しない。",
+  "memory_reservation_gb": 2.0,
+  "memory_basis": "指示6の各jobs2.0GBを維持。失敗100のtime最大常駐337412096Bを保存し、試験での保存復元の追加常駐はまだ未実測。",
+  "unreceived_instructions": 0,
+  "eligible_mac_rows": []
+}

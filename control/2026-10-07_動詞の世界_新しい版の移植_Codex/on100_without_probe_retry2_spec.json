@@ -1,6 +1,6 @@
 {
   "cwd": "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/source",
-  "output": "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurements/allin_s01_300/output",
+  "output": "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction6_checks/on100_without_probe_retry2/output",
   "sources": {
     "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/source": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914"
   },
@@ -9,9 +9,9 @@
     "/opt/homebrew/opt/python@3.12/bin/python3.12",
     "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py",
     "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/source",
-    "300",
+    "100",
     "config/sweep_verb_hide1_s1_2026-10-04.json",
-    "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurements/allin_s01_300/output",
+    "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction6_checks/on100_without_probe_retry2/output",
     "--nohash",
     "--vt",
     "0.3842",
@@ -72,7 +72,6 @@
     "--sme-intern-cache",
     "--sme-evict-trial-cache",
     "--verb-world",
-    "--probe-world",
     "--verb-timing",
     "--v39-u",
     "global",
@@ -110,7 +109,7 @@
   ],
   "memory_reservation_gb": 2.0,
   "measurement_only": true,
-  "completed_trials": 300,
+  "completed_trials": 100,
   "configured_trial_count": 5000,
   "horizon": 5000,
   "flags": [
@@ -174,7 +173,6 @@
     "--sme-intern-cache",
     "--sme-evict-trial-cache",
     "--verb-world",
-    "--probe-world",
     "--verb-timing",
     "--v39-u",
     "global",
@@ -215,11 +213,9 @@
     "sme_gc_threshold": "default",
     "sme_fast_encode": false
   },
-  "instruction": 6,
-  "start_deadline_jst": "2026-10-09T09:00:00+09:00",
-  "state": "prepared_unexecuted_waiting_on100_gate",
-  "price_is_measurement_only": true,
+  "attempt": "測定用カウンターを世界の接続後の台帳個体へ移した再試行。模型source40e87b2と全旗・測定λは維持し、失敗原本は保持。",
   "observer_files": {
     "$WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4"
-  }
+  },
+  "start_deadline_jst": "2026-10-09T09:00:00+09:00"
 }

@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-08T23:34:39+09:00",
+  "failure_finished_at": "2026-10-08T23:18:23+09:00",
+  "failure_kind": "measurement_observer_counter_unreachable_after_verb_install",
+  "primary_trace": "measurement_driver.py:53 assert completed==limit",
+  "secondary_trace": "ProcessPoolExecutor shutdown after native v3_run sys.exit(3): TypeError on len(None); primary failure already recorded",
+  "model_source_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+  "model_code_changed": false,
+  "model_rules_changed": false,
+  "observed_failed_ledger_trial_rows": 100,
+  "prediction_orders_exact_0_99": true,
+  "failed_ledger_content_bytes": 6108338,
+  "failed_ledger_content_sha256": "1ccb706c03146b768bc2e8fe73cb091080ef9321a49eaa79edf93be9dec8f85d",
+  "failed_ledger_container_sha256": "b08173c022cfa9703ec83a489191aa058d517b9da48ff87d7fa5b2f312b5afc0",
+  "configured_trial_count": 5000,
+  "horizon": 5000,
+  "partial_done_exists": false,
+  "ledger_done_files": 0,
+  "normal_completion_claimed": false,
+  "comparison_generated": false,
+  "run_case_result": {
+    "exit_code": 3,
+    "started_epoch": 1791438127.342558,
+    "finished_epoch": 1791469103.922849,
+    "wall_seconds": 30976.331601499987,
+    "paused_seconds": 19305.24419858301,
+    "cpu_limit": 8,
+    "output_bytes": 15589513
+  },
+  "native_time": {
+    "real_seconds": 8541.14,
+    "user_cpu_seconds": 11576.45,
+    "system_cpu_seconds": 25.99,
+    "maximum_resident_set_bytes": 337412096
+  },
+  "time_note": "run_caseのwallとpaused、timeのreal・CPUを原本どおり別欄で保存し、同じ時間と扱わない。",
+  "cause_evidence": {
+    "file": "tools/verbworld.py",
+    "lines": "174-188",
+    "detail": "追加の研究者欄を持つ動詞の行はreal_appendへ委ねず直接_write_lineを呼ぶので、世界の接続前のclass appendへ置いた測定カウンターへ届かない。"
+  },
+  "fix_scope": "別の測定driverだけ。世界と記録の接続後の台帳個体の最終appendを一度だけ呼んだ後で数え、終了時に元の個体入口を復元。",
+  "failed_outputs_preserved": true,
+  "byte_mismatch_repair_claimed": false,
+  "fixture_checks_passed": 16,
+  "learning_models_started_by_fixture": 0
+}

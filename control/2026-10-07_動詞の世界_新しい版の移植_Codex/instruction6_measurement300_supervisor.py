@@ -1,7 +1,7 @@
 """指示6の300一本だけを、先行関門と期限を再確認して受付する。"""
 from pathlib import Path
 from datetime import datetime,timezone
-import json,subprocess,os,re
+import json,subprocess,os,re,hashlib
 folder=Path(__file__).resolve().parent;root=folder.parents[1];checks=root/'instruction6_checks'
 py='/opt/homebrew/opt/python@3.12/bin/python3.12';jobs=str(Path.home()/'jobs/jobs.py')
 def state(**v):
@@ -9,11 +9,12 @@ def state(**v):
 try:
  assert not (folder/'result.json').exists() and not (folder/'pid.json').exists(),'同じ300を二重起動しない'
  spec=json.loads((folder/'spec.json').read_text())
+ for filename,expected in spec['observer_files'].items():assert hashlib.sha256(Path(filename).read_bytes()).hexdigest()==expected
  assert datetime.now(timezone.utc)<datetime.fromisoformat(spec['start_deadline_jst']),'期限以降は新しい300を始めない'
- assert json.loads((checks/'retry1_status.json').read_text())['state']=='all_small_gates_passed'
- for p in [root/'gates/alloff_5000/comparison.json',checks/'cue_counts/output/counts.json',checks/'shop_retry1_comparison.json',checks/'on100_retry1_comparison.json']:
+ assert json.loads((checks/'retry2_status.json').read_text())['state']=='all_small_gates_passed'
+ for p in [root/'gates/alloff_5000/comparison.json',checks/'cue_counts/output/counts.json',checks/'shop_retry1_comparison.json',checks/'on100_retry2_comparison.json']:
   assert json.loads(p.read_text())['passed'],str(p)
- m=[json.loads(x) for x in (checks/'on100_with_probe_retry1/output/manifest.jsonl').read_text().splitlines()]
+ m=[json.loads(x) for x in (checks/'on100_with_probe_retry2/output/manifest.jsonl').read_text().splitlines()]
  assert len(m)==1 and m[0]['completed_trials']==100 and not m[0]['full_5000_completed']
  probe=m[0]['probeworld'];assert probe['probes']==48 and probe['fingerprint_checks']==1
  ac=probe['attention_checks'];assert len(ac)==1 and all(x['passed'] and x['attention_before']==x['attention_after'] and x['questions_before']==x['questions_after'] for x in ac)
