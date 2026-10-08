@@ -160,6 +160,22 @@ def _record_json_keys(value):
     return value
 
 
+def _log_string_keys(value):
+    """失敗した監査記録だけの写し。模型の辞書には触れない。"""
+    if isinstance(value, dict):
+        converted = {}
+        for key, item in value.items():
+            # JSON の既存の鍵の表記を使う。None は "null" になる。
+            text = key if isinstance(key, str) else next(iter(json.loads(json.dumps({key: None}, ensure_ascii=False))))
+            if text in converted:
+                raise TypeError("監査記録の鍵の文字列化で衝突した")
+            converted[text] = _log_string_keys(item)
+        return converted
+    if isinstance(value, (list, tuple)):
+        return [_log_string_keys(item) for item in value]
+    return value
+
+
 def _log(record):
     if LOG.get("f") is not None:
         if LOG.get("diagnostic") or _diagnosing():
@@ -168,7 +184,11 @@ def _log(record):
             target = LOG["diagnostic_f"]
         else:
             target = LOG["f"]
-        target.write(json.dumps(_record_json_keys(record), ensure_ascii=False, sort_keys=True) + "\n")
+        try:
+            text = json.dumps(record, ensure_ascii=False, sort_keys=True)
+        except TypeError:
+            text = json.dumps(_log_string_keys(record), ensure_ascii=False, sort_keys=True)
+        target.write(text + "\n")
 
 
 def _diagnosing():
