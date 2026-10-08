@@ -1,0 +1,37 @@
+# 受付表（2026-10-08T09:12:23）  見込みの合計 15.0 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+77309	Codex2 指示16 較正の下見 birth_hu_off	11.0	2026-10-08T07:27:09	1.32 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+95408	Codex2 指示17 較正の下見 birth_hu_on	4.0	2026-10-08T08:38:25	0.31 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+   PID 1497（親 52419）	23 MB	Python heartbeat_check.py
+   PID 1522（親 1497）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+ R PID 77309（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示16 較正の下見 birth_hu_off --mem 11 --disk-path 
+ R PID 77313（親 77309）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 77323（親 77313）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 77324（親 77313）	1328 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 91021（親 1）	17 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 95408（親 91021）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /U
+ R PID 95412（親 95408）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 95420（親 95412）	15 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 95421（親 95412）	260 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 97541（親 1）	8 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+   PID 98780（親 1）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --owner SME_deep_memory_instruction12_full1740_01 --wait --mem 11 -
+
+# 空きメモリ
+空きの割合（memory_pressure）：78%
+free：3.4 GB
+inactive：11.0 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07）の空き 207.773 GiB、下限 20 GiB
+
+# スワップ：今 180.0 MB。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
