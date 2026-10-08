@@ -1,0 +1,840 @@
+{
+  "at": "2026-10-08T20:23:44.848992+09:00",
+  "actual_completion_checks": {
+    "p10_default_off_200": {
+      "passed": true,
+      "completed": {
+        "at": "2026-10-08T19:59:18.869849+09:00",
+        "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+        "trials": 200,
+        "receipt_pid": 89600,
+        "receipt_exit_code": 0,
+        "receipt_exit_code_observable": true,
+        "measurement": {
+          "pid": 89619,
+          "trials": 200,
+          "wall_seconds": 3283.8023136249976,
+          "cpu_user_seconds": 3266.0875739999997,
+          "cpu_system_seconds": 7.183953,
+          "cpu_seconds": 3273.271527,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 328876032,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "native_all_done": true
+      },
+      "gate": {
+        "passed": true,
+        "trials": 200,
+        "records": [
+          {
+            "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 27485839,
+            "sha256": "c3c7fa23b7d82605bf14e7b98b737252e1930c9fe592745abac24a3fa0d3d3e5",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 3157,
+            "sha256": "f2410a4011a93a6e9b8f6de71c1c8c611e49d2de7fc665eb9aaab60cb538b0d9",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed041.keys.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 21183719,
+            "sha256": "4808db64fa8f217166d6a52c2d911644d5ebd976b5888d80f65ad7883a211011",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed041.keys.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 277,
+            "sha256": "6717fdf4ce3740ec9c8ebfd300a1d64706614d9c71ada1b6ad37b7adca7df056",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 76599243,
+            "sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1",
+            "time_value_keys": [],
+            "ledger_header_excluded": true
+          },
+          {
+            "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed041.calibration.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 10037756,
+            "sha256": "d26dcbb0d0078f34a3b8c65f41e10dc65c3bcba4ee96da105423e841e93e92cd",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.answers.csv",
+            "passed": true,
+            "compared_bytes": 42275,
+            "sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl",
+            "passed": true,
+            "compared_bytes": 1437906,
+            "sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.routing.jsonl",
+            "passed": true,
+            "compared_bytes": 1576658,
+            "sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.shop.jsonl",
+            "passed": true,
+            "compared_bytes": 6013,
+            "sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 115102309,
+            "sha256": "17f187b727d000ac69e10dd2ac73cda5b5d07ab141efdf217d95469436011a4a",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.states.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 495818788,
+            "sha256": "5921a43f3560954b891df1a14733f3581ada635f2aed5f73e4045c9e54827997",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 6905932,
+            "sha256": "75ddd8f86d1aaa684803dad95c66fec0b948859bbf0f07044eda359af3bedbf4",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.initial.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 2975245,
+            "sha256": "ba6bc7b76e86f4f04680488aad0b7968d2c52d2046281114e5d76216840c6965",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.rematch.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 5632553,
+            "sha256": "9c1fc8adb76c269512e3e6776fa4ae7512ad79cc3e48a8e795605750821a60c5",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.rematch.summary.json",
+            "passed": true,
+            "compared_bytes": 665,
+            "sha256": "1b5133f35ba1bc70467ce2904a6b7a7821dce14bcadeb55910dfa6eaa50d97a0",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 837,
+            "sha256": "ca81cd6870dce1e9e33a2dfb84cc982127327cfb8cf58e857e3bdf41061070eb",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "tie_state.jsonl",
+            "passed": true,
+            "compared_bytes": 3030783,
+            "sha256": "83dbbd97d9674d8e653bec55529c5ce9a6fbc6268d4729421f6d09070008ee18",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "saved_matcher.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 166583902,
+            "sha256": "63f1194ab50a363676419d270eb0f2c00984276a21343215a1f18628a8d114fc",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          }
+        ],
+        "strictpc_counter": {
+          "passed": true,
+          "bytes": 2292,
+          "sha256": "8fccbf1adfc762240df6bf912dcf36c3da59599c71e07d934361b8433f446757"
+        },
+        "observation_cache_comparison": "原全バイト・順つき",
+        "model_time_values_only_normalized": true,
+        "provenance_files": [
+          "output/flag.json",
+          "output/manifest.jsonl（strictpcは別に比較）",
+          "*.done"
+        ],
+        "reference_not_rerun": true,
+        "adoption_decided": false,
+        "P10": false,
+        "at": "2026-10-08T19:59:23.325888+09:00",
+        "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+        "world": 2,
+        "seed": 41,
+        "world1_gate_complete": false,
+        "full_first_bundle_complete": false
+      },
+      "cpu_comparison": {
+        "at": "2026-10-08T19:59:23.326067+09:00",
+        "reference": {
+          "pid": 9086,
+          "trials": 200,
+          "wall_seconds": 3151.939249582996,
+          "cpu_user_seconds": 3109.232872,
+          "cpu_system_seconds": 8.576519,
+          "cpu_seconds": 3117.8093910000002,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 357613568,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "current": {
+          "pid": 89619,
+          "trials": 200,
+          "wall_seconds": 3283.8023136249976,
+          "cpu_user_seconds": 3266.0875739999997,
+          "cpu_system_seconds": 7.183953,
+          "cpu_seconds": 3273.271527,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 328876032,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "cpu_ratio": 1.049862617146758,
+        "wall_ratio": 1.0418355347614796,
+        "observer": "observe.py",
+        "pure_model_seconds": false,
+        "full_length_estimate": false
+      },
+      "actual_worker_parent_receipt_ended": true,
+      "native_log_evidence": [
+        "2026-10-08 19:59:11 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=3276.81 最大メモリMB=329.0 定義末=13 一致=None err=None",
+        "2026-10-08 19:59:12 ALLDONE shop_hide1_s1"
+      ]
+    },
+    "p10_on_200": {
+      "passed": true,
+      "completed": {
+        "at": "2026-10-08T20:19:31.081159+09:00",
+        "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+        "trials": 200,
+        "receipt_pid": 8551,
+        "receipt_exit_code": 0,
+        "receipt_exit_code_observable": true,
+        "measurement": {
+          "pid": 8570,
+          "trials": 200,
+          "wall_seconds": 1172.677167167014,
+          "cpu_user_seconds": 1165.82118,
+          "cpu_system_seconds": 3.336414,
+          "cpu_seconds": 1169.157594,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 218202112,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "native_all_done": true
+      },
+      "gate": {
+        "passed": true,
+        "trials": 200,
+        "records": [
+          {
+            "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 27485839,
+            "sha256": "c3c7fa23b7d82605bf14e7b98b737252e1930c9fe592745abac24a3fa0d3d3e5",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 3157,
+            "sha256": "f2410a4011a93a6e9b8f6de71c1c8c611e49d2de7fc665eb9aaab60cb538b0d9",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed041.keys.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 21183719,
+            "sha256": "4808db64fa8f217166d6a52c2d911644d5ebd976b5888d80f65ad7883a211011",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed041.keys.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 277,
+            "sha256": "6717fdf4ce3740ec9c8ebfd300a1d64706614d9c71ada1b6ad37b7adca7df056",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 76599243,
+            "sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1",
+            "time_value_keys": [],
+            "ledger_header_excluded": true
+          },
+          {
+            "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed041.calibration.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 10037756,
+            "sha256": "d26dcbb0d0078f34a3b8c65f41e10dc65c3bcba4ee96da105423e841e93e92cd",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.answers.csv",
+            "passed": true,
+            "compared_bytes": 42275,
+            "sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl",
+            "passed": true,
+            "compared_bytes": 1437906,
+            "sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.routing.jsonl",
+            "passed": true,
+            "compared_bytes": 1576658,
+            "sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.shop.jsonl",
+            "passed": true,
+            "compared_bytes": 6013,
+            "sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 115102309,
+            "sha256": "17f187b727d000ac69e10dd2ac73cda5b5d07ab141efdf217d95469436011a4a",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.states.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 495818788,
+            "sha256": "5921a43f3560954b891df1a14733f3581ada635f2aed5f73e4045c9e54827997",
+            "time_value_keys": [],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 6905932,
+            "sha256": "75ddd8f86d1aaa684803dad95c66fec0b948859bbf0f07044eda359af3bedbf4",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.initial.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 2975245,
+            "sha256": "ba6bc7b76e86f4f04680488aad0b7968d2c52d2046281114e5d76216840c6965",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.rematch.jsonl.gz",
+            "passed": true,
+            "compared_bytes": 5632553,
+            "sha256": "9c1fc8adb76c269512e3e6776fa4ae7512ad79cc3e48a8e795605750821a60c5",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.rematch.summary.json",
+            "passed": true,
+            "compared_bytes": 665,
+            "sha256": "1b5133f35ba1bc70467ce2904a6b7a7821dce14bcadeb55910dfa6eaa50d97a0",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          },
+          {
+            "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.summary.json",
+            "passed": true,
+            "compared_bytes": 837,
+            "sha256": "ca81cd6870dce1e9e33a2dfb84cc982127327cfb8cf58e857e3bdf41061070eb",
+            "time_value_keys": [
+              "engine_seconds",
+              "measure_seconds",
+              "rematch_fraction_of_stage2_seconds",
+              "seconds",
+              "wrapper_seconds"
+            ],
+            "ledger_header_excluded": false
+          }
+        ],
+        "strictpc_counter": {
+          "passed": true,
+          "bytes": 2292,
+          "sha256": "8fccbf1adfc762240df6bf912dcf36c3da59599c71e07d934361b8433f446757"
+        },
+        "observation_cache_comparison": "元走行に追加控えの観測無し",
+        "model_time_values_only_normalized": true,
+        "provenance_files": [
+          "output/flag.json",
+          "output/manifest.jsonl（strictpcは別に比較）",
+          "*.done"
+        ],
+        "reference_not_rerun": true,
+        "adoption_decided": false,
+        "cache_observation": {
+          "reference_observation_files_exist": true,
+          "order_preserved": true,
+          "transformation": {
+            "passed": true,
+            "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200",
+            "trials": 200,
+            "last_trial": 199,
+            "original_cache_rows": {
+              "cstar_cache": 8214,
+              "cstar_cache_rng": 8214
+            },
+            "kept_saved_rows": 1457,
+            "removed_saved_rows": 16332,
+            "original_rng_digest_reconstructed": true,
+            "order_preserved": true,
+            "model_files_changed": false,
+            "P10_body_imported": false
+          },
+          "records": [
+            {
+              "file": "tie_state.jsonl",
+              "passed": true,
+              "compared_bytes": 3030079,
+              "sha256": "9d384f994b76fbd0026b8a883087b8c463874f18e7ed3245596add305ee90f59",
+              "time_value_keys": [],
+              "ledger_header_excluded": false
+            },
+            {
+              "file": "saved_matcher.jsonl.gz",
+              "passed": true,
+              "compared_bytes": 6518015,
+              "sha256": "532a214b82481f1d6860b281ce53c780bedd055124487b19d15de2dd8b8d3114",
+              "time_value_keys": [],
+              "ledger_header_excluded": false
+            }
+          ]
+        },
+        "guard": {
+          "enabled": true,
+          "trial": 199,
+          "boundaries": 200,
+          "requests": {
+            "mapping": 428457,
+            "engine": 297019
+          },
+          "removed": {
+            "cache": 8166,
+            "cache_rng": 8166
+          },
+          "forbidden_reads": 0,
+          "remembered_seed_origins": 28462,
+          "native_loop_returned": true
+        },
+        "P10": true,
+        "at": "2026-10-08T20:19:35.532157+09:00",
+        "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+        "world": 2,
+        "seed": 41,
+        "world1_gate_complete": false,
+        "full_first_bundle_complete": false
+      },
+      "cpu_comparison": {
+        "at": "2026-10-08T20:19:35.532538+09:00",
+        "reference": {
+          "pid": 9086,
+          "trials": 200,
+          "wall_seconds": 3151.939249582996,
+          "cpu_user_seconds": 3109.232872,
+          "cpu_system_seconds": 8.576519,
+          "cpu_seconds": 3117.8093910000002,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 357613568,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "current": {
+          "pid": 8570,
+          "trials": 200,
+          "wall_seconds": 1172.677167167014,
+          "cpu_user_seconds": 1165.82118,
+          "cpu_system_seconds": 3.336414,
+          "cpu_seconds": 1169.157594,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 218202112,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "cpu_ratio": 0.37499328771506674,
+        "wall_ratio": 0.3720494192018961,
+        "observer": "observe.py",
+        "pure_model_seconds": false,
+        "full_length_estimate": false
+      },
+      "actual_worker_parent_receipt_ended": true,
+      "native_log_evidence": [
+        "2026-10-08 20:19:12 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=1172.39 最大メモリMB=218.2 定義末=13 一致=None err=None",
+        "2026-10-08 20:19:13 ALLDONE shop_hide1_s1"
+      ]
+    }
+  },
+  "proof_files_sha256": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_completed_20261008.json": "4e3a65f662923338f50bcfd381044440cdf795c7496d6814f36dbd0a968e3f63",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_required_gate_20261008.json": "198302e6ebd0042ceff0e4a1647e51958690b41609e5e3269ed739561177b037",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_cpu_comparison_20261008.json": "5cb11f9c9c2951778a9fd8db611a7f6864068646b0947af61c836134b2440b31",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_receipt_ended_20261008.json": "b376006bfded494c524208c6e1042fe33c53b55ec60418991abddbc06cb2cb35",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_comparison_entry_20261008.json": "ba2784953a2cb417372e53364cec73c4067084b57d70ddb55bfc133775e4cb1c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_entry_started_20261008.json": "d0dce02a20b2da4fc08c3d68206cf6976e04f65dcbdb55d40c6203ec29f4e96a",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_receipt_submitted_20261008.json": "1f8f0d62bde1d22785d93d7c1cde71decf2a1f48580a86b156dffb901d582132",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_measurement_20261008.json": "e5362698f87f5b8adfb817810a07f8a219a30312d2a65de9c2e0e9c25379b15d",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_worker_pid_20261008.json": "43ca37104865e29cf2b15d65e0e01e9169f92dbd306054bb1623e75668a0b0a2",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_default_off_200_native_command_20261008.json": "1298de351777b4fd43762dd26b86b0a4219b49005ff7224ad247c2c13eca8ae3",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_completed_20261008.json": "20246df5a1921b654e019afb874061402037fa9fe11c0337de033da7899488fb",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_required_gate_20261008.json": "1f3b620b21c446d762db71afc963874811b7bd56e9a0ff0164cfc4dbf71fe1ae",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_cpu_comparison_20261008.json": "e94433a974440ff5ec336dc5349f1f1b9df9cece4d2bf1e43455e68350fb450b",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_receipt_ended_20261008.json": "f59000dc3a30dbf9b3c042c7b4e6f86a241ffba01eadab71cca64ee00fea3cd5",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_comparison_entry_20261008.json": "c74c4aedd24b11837cab8f9633b02d4757a38edbf99dbb905942c20109651ebd",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_entry_started_20261008.json": "a91ed9eaa30afe57f02b6314f76374a56343a3087442fea7258e17c5f78afbfc",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_receipt_submitted_20261008.json": "0bb84bfcde9f87534dcd84c337d396b6d8591a6b8ddf9f935417a1a50786fbbd",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_measurement_20261008.json": "ca43bc9e2a399e983d34194ab23f8590ab91f540ae984c3ceca546327df3c691",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_worker_pid_20261008.json": "78b8fe50dda8b610fc94047ee51bf2e3b444b137465f76a9f1a46a4abc472ff1",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction27_p10_on_200_native_command_20261008.json": "da862542d376a7bc1a1c3fc50ac66bf1e24a9d517b61cd95dc6c34c2c30373ad"
+  },
+  "immutable_changed": {
+    "instruction23_pause_speed_gate": [],
+    "instruction26_basic_gate_7294389d": [],
+    "instruction26_p10_preparation": [],
+    "instruction27_p10_parallel": []
+  },
+  "source": {
+    "head": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+    "status": ""
+  },
+  "reference_not_rerun": true,
+  "comparisons_not_repeated": true,
+  "full_on_started": {
+    "at": "2026-10-08T20:19:52.058950+09:00",
+    "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+    "world": 2,
+    "seed": 41,
+    "trials": 1740,
+    "mem_gb": 4,
+    "machine": {
+      "at": "2026-10-08T20:19:52.000040+09:00",
+      "models": {
+        "3532": {
+          "ppid": 3528,
+          "state": "T",
+          "rss_kb": 184240
+        },
+        "47193": {
+          "ppid": 47184,
+          "state": "R",
+          "rss_kb": 1918496
+        },
+        "47223": {
+          "ppid": 47214,
+          "state": "R",
+          "rss_kb": 1939696
+        },
+        "49468": {
+          "ppid": 49459,
+          "state": "T",
+          "rss_kb": 10048
+        },
+        "58117": {
+          "ppid": 58110,
+          "state": "R",
+          "rss_kb": 242080
+        },
+        "59619": {
+          "ppid": 59604,
+          "state": "T",
+          "rss_kb": 10048
+        },
+        "79046": {
+          "ppid": 79035,
+          "state": "R",
+          "rss_kb": 1192848
+        }
+      },
+      "model_children": 7,
+      "paused": 3,
+      "registered": [
+        {
+          "pid": 47180,
+          "owner": "Codex2 指示20 較正 世界2 種43",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 47210,
+          "owner": "Codex2 指示20 較正 世界2 種44",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 49451,
+          "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+          "mem_gb": 4.0
+        },
+        {
+          "pid": 59598,
+          "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 62396,
+          "owner": "探索介入 指示5 記録だけ200試行関門",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 3513,
+          "owner": "Codex 動詞 指示6 on100_without_probe_retry1",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 79025,
+          "owner": "Codex2 指示26 五つ w2_basic_on_1740",
+          "mem_gb": 4.0
+        },
+        {
+          "pid": 14937,
+          "owner": "Codex2 指示27 P10 p10_on_1740",
+          "mem_gb": 4.0
+        }
+      ],
+      "disk_free_bytes": 214446374912,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "actual_native_command": [
+      "/opt/homebrew/bin/python3.12",
+      "tools/v3_run.py",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_on_1740/output",
+      "--nohash",
+      "--vt",
+      "0.3842",
+      "--extend-rule",
+      "none",
+      "--charge1",
+      "d32",
+      "--fast",
+      "--no-public-history",
+      "--dump-slot-history",
+      "--fix2-full",
+      "--fix-order2",
+      "--proj-first",
+      "--fill-norestate",
+      "--no-charge2",
+      "--own-evidence",
+      "--v39",
+      "--v39-budget",
+      "inf",
+      "--v39-decay",
+      "actr",
+      "--v310-be",
+      "--hist-role",
+      "--score-role",
+      "--u-struct",
+      "--relearn-init",
+      "--tie-struct",
+      "--amb-local",
+      "--nsim",
+      "0.7",
+      "--ident-rho",
+      "0.5",
+      "--ident-argmax",
+      "--ident-commons",
+      "--cells",
+      "f0.5000_th2.1000_first_order",
+      "--dump-answers",
+      "--dump-routing",
+      "--answer-gap",
+      "--strict-pc",
+      "--e-price",
+      "0.01873710622997919",
+      "--v39-price",
+      "0.01873710622997919",
+      "--shop-world",
+      "2",
+      "--workers",
+      "1",
+      "--seeds",
+      "41",
+      "--trial-count",
+      "1740",
+      "--no-compare",
+      "--horizon",
+      "1740",
+      "--score-arg-order",
+      "--sme2017",
+      "--shop-scatter",
+      "--sme-call-seed",
+      "--sme-tie-uniform",
+      "--sme-intern-cache",
+      "--sme-evict-trial-cache",
+      "--sme-evict-tombstone",
+      "--score-logp",
+      "--match-cstar",
+      "--match-cstar-e",
+      "--match-eps",
+      "0",
+      "--h-dirichlet",
+      "1",
+      "--birth-score",
+      "seq",
+      "--logp-eps",
+      "0.01",
+      "--attn-sme",
+      "global",
+      "--attn-position",
+      "k2",
+      "--attn-eta",
+      "0.1",
+      "--attn-allin",
+      "--stage2",
+      "on",
+      "--stage2-loss",
+      "top1",
+      "--stage2-init",
+      "virtual",
+      "--stage2-scope",
+      "all",
+      "--stage2-reuse",
+      "off",
+      "--stage2-birth-hu",
+      "on",
+      "--no-forget-exec",
+      "--stage2-speed",
+      "on",
+      "--stage2-cache-prune",
+      "on"
+    ],
+    "P10": true,
+    "speed_five": true,
+    "no_forget_exec": true
+  },
+  "actual_full_worker_ps": [
+    14947,
+    "R",
+    98.7,
+    86336,
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+  ],
+  "world1_config_present": false,
+  "full_first_bundle_passed": false,
+  "P5_P7r_started": false,
+  "external_code_push": false
+}
