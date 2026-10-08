@@ -1,0 +1,51 @@
+--- original-observer.py
++++ cloud-observe.py
+@@ -1,9 +1,12 @@
+-"""模型のファイルを変更しない、控え破棄の関門と測定に共通の外部の時計と状態の保存。"""
++"""模型は変更せず観測する。LinuxのRSS単位と並列時のlock無しだけを扱う。"""
+ from pathlib import Path
+ import datetime, gzip, json, os, random, resource, sys, time
+ ROOT = Path(__file__).resolve().parent
+ SPEC = json.loads(Path(sys.argv[1]).read_text()) if __name__ == '__main__' else None
+ START = time.monotonic()
++def peak_rss_bytes():
++    value=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
++    return value*1024 if sys.platform.startswith('linux') else value
+ FOLDER = None
+ 
+ def write(path, row):
+@@ -44,8 +47,8 @@
+                 'python_global_unchanged':random.getstate()==self.global_initial})
+         if kind == 'probe' or kind == 'received' and (self.trial+1)%100==0:
+             write(FOLDER/f'agent{self.index}.boundaries.jsonl', {'phase':kind,'trial':self.trial,
+-                **stamp(),'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+-                'active_seconds':self.lock.active()})
++                **stamp(),'peak_rss_bytes':peak_rss_bytes(),
++                'active_seconds':self.lock.active() if self.lock is not None else None})
+         return self.real.send(value)
+     def recv(self): return self.real.recv()
+     def __getattr__(self, key): return getattr(self.real,key)
+@@ -61,9 +64,11 @@
+ 
+     def agent(conn, task):
+         index = task['v311c']['agent']
+-        lock = TimedLock(task['v311c']['serial_lock'])
+-        locks[index] = lock
+-        task = dict(task, v311c=dict(task['v311c'],serial_lock=lock))
++        real_lock = task['v311c'].get('serial_lock')
++        lock = TimedLock(real_lock) if real_lock is not None else None
++        if lock is not None:
++            locks[index] = lock
++            task = dict(task, v311c=dict(task['v311c'],serial_lock=lock))
+         (FOLDER/f'agent{index}.pid.json').write_text(json.dumps({'pid':os.getpid(),'agent':index}))
+         return real_agent(Connection(conn,index,lock),task)
+ 
+@@ -102,7 +107,7 @@
+             result = real_record(agent_id,trial,*a,**kw)
+             write(FOLDER/f'agent{index}.performance.jsonl', {'trial':trial.trial,
+                 'seconds_including_wait_and_probe':time.monotonic()-begin['time'],
+-                'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
++                'peak_rss_bytes':peak_rss_bytes(),
+                 'active_seconds':locks[index].active() if index in locks else None,'timer_totals':dict(totals),**stamp()})
+             if SPEC.get('export_final'):
+                 import smeshared

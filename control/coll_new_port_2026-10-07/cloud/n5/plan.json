@@ -1,0 +1,33 @@
+{
+  "received_instruction": 5,
+  "code_commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+  "runs_planned": 13,
+  "production_groups": 10,
+  "four_agent_production": 0,
+  "four_agent_gate_removal": "保留：アストラの承認待ち",
+  "actual_new_model_runs": 0,
+  "lambda": "L50_ref 未確定",
+  "template": "control/ataru-0608/cloud/ 未取得",
+  "specs": [
+    "cloud_off8_serial200",
+    "cloud_off8_parallel200",
+    "cloud_on8_measure300_draft",
+    "cloud_prod8_f0.1_seed01_draft",
+    "cloud_prod8_f0.1_seed02_draft",
+    "cloud_prod8_f0.1_seed03_draft",
+    "cloud_prod8_f0.1_seed04_draft",
+    "cloud_prod8_f0.1_seed05_draft",
+    "cloud_prod8_f0.9_seed01_draft",
+    "cloud_prod8_f0.9_seed02_draft",
+    "cloud_prod8_f0.9_seed03_draft",
+    "cloud_prod8_f0.9_seed04_draft",
+    "cloud_prod8_f0.9_seed05_draft"
+  ],
+  "sequence": [
+    "既存八体OFF。クラウドへ移す場合だけ未開始の引き継ぎを別途確認",
+    "同じ固定版の並列OFF200と保存済み直列の全バイト比較",
+    "一体ON対e9単独200以上・隔離・受信・再生",
+    "八体短い測定300の旗案（予約は実測後）",
+    "列#20が未着手になり取得を通常pushした後だけ、本番10集団を一つずつ"
+  ]
+}
