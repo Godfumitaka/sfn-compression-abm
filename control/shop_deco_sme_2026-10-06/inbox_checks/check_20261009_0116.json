@@ -1,0 +1,68 @@
+{
+  "time_jst": "2026-10-09T01:19:27.173298+09:00",
+  "scheduled_time_jst": "2026-10-09T01:16:16.952+09:00",
+  "pulled_commit": "f8afeee235d904b3bd8f9c8779284904422e07cc",
+  "file_sha256": {
+    "control/受け箱/README.md": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce",
+    "control/受け箱/飾りの係.md": "d36fc6083835261734539b6c5ec50eaa72e5c65c1c51c932a13611589fb43ade",
+    "control/走行の列_2026-10-08.md": "6c5f6a7af53cda11c65ad16294c26a60fae2c86a4bed3187e656b4003da5348d"
+  },
+  "changed_files": [
+    "control/受け箱/README.md",
+    "control/受け箱/飾りの係.md"
+  ],
+  "unreceived": [],
+  "eligible_queue_rows": [],
+  "model_workers": [
+    {
+      "pid": 47193,
+      "ppid": 47184,
+      "rss_kib": 2786832,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 49859,
+      "ppid": 49849,
+      "rss_kib": 265120,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 77439,
+      "ppid": 77435,
+      "rss_kib": 250064,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 79724,
+      "ppid": 79706,
+      "rss_kib": 191840,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "model_worker_count": 4,
+  "other_heavy_R": [],
+  "admission_count": 4,
+  "count_rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB",
+  "own_processes": [],
+  "own_registry": [],
+  "controller_64386_alive": false,
+  "preview_status": "stopped",
+  "preview_native_raw_completed": 1,
+  "preview_supervisor_completed": 0,
+  "preview_analyses_completed": 0,
+  "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+  "seed001_done_sha256": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba",
+  "reference_fingerprint_unchanged": true,
+  "inbox_instruction_1": "done",
+  "inbox_instruction_2": "reference step1 completed; actual comparison and production leak audit pending",
+  "queue_zero": "Mechanism checks integrated with first-wave seeds1/2; calibration pending, no available record or unstarted row",
+  "queue_calibration": "#00 running by other roles; world2 seeds41-44 Mac, 45-48 desktop",
+  "inbox_instruction_3": "done; 3-hour heartbeat and unchanged-check no commit/push retained",
+  "inbox_instruction_4": "done; deadline extended to 2026-10-11 09:00 JST",
+  "instruction_4_receipt_pushed_commit": "a5cb48696c2c179926cb978edf6a855b6ed137a6",
+  "instruction_4_receipt_commit": "348ebb40"
+}
