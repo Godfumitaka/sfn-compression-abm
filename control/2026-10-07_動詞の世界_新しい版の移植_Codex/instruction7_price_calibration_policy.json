@@ -1,0 +1,55 @@
+{
+  "instruction": 7,
+  "instruction_time_jst": "2026-10-08T15:15:00+09:00",
+  "receipt_at": "2026-10-08T15:24:52+09:00",
+  "recorded_at": "2026-10-08T15:32:04+09:00",
+  "receipt_commit": "9f4beb9f900a1c9444180063ab9434cd9fc8966e",
+  "receipt_confirmation_commit": "bc2637007878e510d580acb95755295368a1b0af",
+  "recorded_before_reading_verb_calibration_results": true,
+  "main_price_reference": "shop_L50_ref",
+  "main_price_value": null,
+  "main_price_value_status": "use_the_confirmed_shop_calibration_value_when_preparing_commands",
+  "main_result_status_until_verb_calibration": "仮",
+  "calibration": {
+    "environment": "cloud",
+    "world": "verb",
+    "seeds": [
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48
+    ],
+    "trial_count_each": 5000,
+    "allin": true,
+    "no_forget_exec": true,
+    "stage2_birth_hu": true,
+    "positive_V_quantiles": [
+      "L25",
+      "L50",
+      "L90"
+    ],
+    "procedure": "same_as_shop"
+  },
+  "rerun": {
+    "strict_lower_ratio": 0.5,
+    "strict_upper_ratio": 2.0,
+    "rule": "verb_L50_ref < 0.5 * shop_L50_ref or verb_L50_ref > 2.0 * shop_L50_ref",
+    "inside_inclusive_interval": "do_not_rerun",
+    "outside_interval": "rerun_main_with_verb_L50_ref",
+    "threshold_fixed_before_results": true
+  },
+  "order": [
+    "pass_attention_on100_and_nonlearning_probe_gates",
+    "finish_one_300_measurement",
+    "prepare_one_calibration_and_one_main_cloud_command"
+  ],
+  "cloud_commands_prepared": false,
+  "cloud_runs_started_by_this_task": 0,
+  "active_source_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+  "active_measurement_price_unchanged": 0.01873710622997919,
+  "state": "実施中：on100と300待ち"
+}
