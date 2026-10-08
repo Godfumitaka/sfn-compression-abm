@@ -1,9 +1,13 @@
  config/sweep_verb_hide1_s1_2026-10-04.json |   51 ++
+ tests/test_sme_record_keys.py              |   32 +
  tests/test_verb_analysis.py                |   38 +
  tests/test_verbworld.py                    |  190 +++++
- tools/probeworld.py                        |   20 +-
- tools/shopworld.py                         |   33 +
- tools/v3_run.py                            |   61 +-
+ tests/test_world_task_instruction.py       |  107 +++
+ tools/attnsme.py                           |   47 +-
+ tools/probeworld.py                        |   30 +-
+ tools/shopworld.py                         |   48 ++
+ tools/smeshared.py                         |   16 +-
+ tools/v3_run.py                            |   73 +-
  tools/verb/U-011_seed_verb.json            | 1149 ++++++++++++++++++++++++++++
  tools/verb/aggregate.py                    |  123 +++
  tools/verb/analyze.py                      |  323 ++++++++
@@ -13,5 +17,5 @@
  tools/verb/make_seed.py                    |   28 +
  tools/verb/replay_state.py                 |  118 +++
  tools/verbtiming.py                        |   43 ++
- tools/verbworld.py                         |  250 ++++++
- 16 files changed, 2636 insertions(+), 7 deletions(-)
+ tools/verbworld.py                         |  301 ++++++++
+ 20 files changed, 2912 insertions(+), 21 deletions(-)

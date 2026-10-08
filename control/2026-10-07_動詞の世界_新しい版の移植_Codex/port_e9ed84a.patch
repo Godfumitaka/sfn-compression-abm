@@ -55,6 +55,44 @@ index 0000000..30cbe89
 + },
 + "trial_count": 5000
 +}
+diff --git a/tests/test_sme_record_keys.py b/tests/test_sme_record_keys.py
+new file mode 100644
+index 0000000..4fc7738
+--- /dev/null
++++ b/tests/test_sme_record_keys.py
+@@ -0,0 +1,32 @@
++"""C*の確率記録の書き出しだけを検査し、計算用辞書と旧いバイトを保つ。"""
++from pathlib import Path
++import copy
++import io
++import json
++import sys
++
++import pytest
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1] / "tools"), str(Path(__file__).resolve().parents[1])]
++import smeshared
++
++
++def test_mixed_none_name_keys_write_without_changing_probabilities(monkeypatch):
++    record = {"kind": "sme_result", "probabilities": {"r": {None: .25, "fold": .75}}}
++    original = copy.deepcopy(record)
++    stream = io.StringIO()
++    monkeypatch.setattr(smeshared, "LOG", {"f": stream})
++    monkeypatch.setattr(smeshared, "_diagnosing", lambda: False)
++    smeshared._log(record)
++    assert json.loads(stream.getvalue())["probabilities"]["r"] == {"null": .25, "fold": .75}
++    assert record == original
++
++
++def test_existing_record_bytes_are_unchanged():
++    record = {"kind": "sme_result", "args": [(1, 2), (3, 4)], "counts": {3: 7, 1: 9}}
++    assert json.dumps(smeshared._record_json_keys(record), ensure_ascii=False, sort_keys=True) == json.dumps(record, ensure_ascii=False, sort_keys=True)
++
++
++def test_none_and_literal_null_collision_stops():
++    with pytest.raises(ValueError, match="衝突"):
++        smeshared._record_json_keys({None: .25, "null": .75})
 diff --git a/tests/test_verb_analysis.py b/tests/test_verb_analysis.py
 new file mode 100644
 index 0000000..9d8bb35
@@ -295,11 +333,227 @@ index 0000000..a5733bf
 +    records = [json.loads(line) for line in st["f"].getvalue().splitlines()]
 +    assert len(records) == 48
 +    assert all(r["exp_path_n"] == 0 for r in records if r["verb_class"] == "novel")
+diff --git a/tests/test_world_task_instruction.py b/tests/test_world_task_instruction.py
+new file mode 100644
+index 0000000..a7799ab
+--- /dev/null
++++ b/tests/test_world_task_instruction.py
+@@ -0,0 +1,107 @@
++"""指示6の一つのboolと、回答後の研究者記録の境界を検査する。"""
++from pathlib import Path
++from types import SimpleNamespace
++from io import StringIO
++import sys
++import pytest
++sys.path[:0] = [str(Path(__file__).resolve().parents[1]/'tools'), str(Path(__file__).resolve().parents[1])]
++import abm.loop as loop
++from abm.domains import AgentInput, RelationGraph
++import attnsme
++import shopworld
++import verbworld
++import smeshared
++
++
++class OneField:
++    def __init__(self, key, value):
++        self.key, self.value, self.reads = key, value, []
++    def __getitem__(self, key):
++        self.reads.append(key)
++        assert key == self.key, '指示以外の研究者欄を読んだ'
++        return self.value
++
++
++@pytest.mark.parametrize('module,key', [(shopworld,'held_out_is_door'),(verbworld,'held_out_is_past')])
++@pytest.mark.parametrize('value',[False,True])
++def test_world_provider_returns_only_existing_bool(monkeypatch,module,key,value):
++    info = OneField(key,value)
++    monkeypatch.setattr(module,'INFO',{'scene':info})
++    tr = SimpleNamespace(G_star=SimpleNamespace(graph_id='scene'))
++    assert module.task_instruction(tr) is value
++    assert info.reads == [key]
++
++
++@pytest.mark.parametrize('value',[False,True])
++def test_agent_entry_accepts_bool_without_trial_oracle_access(monkeypatch,tmp_path,value):
++    for key in ('_agent_input','predict','_ledger_record'):
++        monkeypatch.setattr(loop,key,getattr(loop,key))
++    monkeypatch.setattr(attnsme,'ST',{})
++    monkeypatch.setattr(smeshared,'_definition_choice',smeshared._definition_choice)
++    monkeypatch.setattr(smeshared,'_text_gzip',lambda _:StringIO())
++    ai = AgentInput(RelationGraph('visible',(),()),RelationGraph('visible',(),()))
++    monkeypatch.setattr(loop,'_agent_input',lambda trial,before:ai)
++    class Trial:
++        trial = 0
++        @property
++        def G_star(self):raise AssertionError('予測側が完全グラフを読んだ')
++        @property
++        def held_out_edge(self):raise AssertionError('予測側が真値を読んだ')
++    def research(*args):raise AssertionError('予測前に研究者記録を読んだ')
++    attnsme.install(tmp_path/'attention',mode='global',position='k2',eta=.1,
++                    task_instruction=lambda _:value,research_record=research)
++    assert loop._agent_input(Trial(),None) is ai
++    assert attnsme.ST['door_task'] is value
++    assert set(attnsme.ST['individual']) == {'observations','a'}
++
++
++def test_entry_rejects_non_bool_instead_of_coercing_researcher_payload(monkeypatch,tmp_path):
++    for key in ('_agent_input','predict','_ledger_record'):
++        monkeypatch.setattr(loop,key,getattr(loop,key))
++    monkeypatch.setattr(attnsme,'ST',{})
++    monkeypatch.setattr(smeshared,'_definition_choice',smeshared._definition_choice)
++    monkeypatch.setattr(smeshared,'_text_gzip',lambda _:StringIO())
++    monkeypatch.setattr(loop,'_agent_input',lambda *args:object())
++    attnsme.install(tmp_path/'attention',mode='global',position='k2',eta=.1,
++                    task_instruction=lambda _:{'truth':'REG'},research_record=lambda *args:{})
++    with pytest.raises(TypeError,match='bool一つ'):
++        loop._agent_input(SimpleNamespace(trial=0),None)
++
++
++def test_probe_uses_attention_choice_without_learning_or_real_query_count(monkeypatch,tmp_path):
++    from abm.domains import Entity, Relation
++    from random import Random
++    import pickle
++    import attnstage2_runtime
++    from attnstage2_questions import Questions
++    for key in ('_agent_input','predict','_ledger_record'):
++        monkeypatch.setattr(loop,key,getattr(loop,key))
++    monkeypatch.setattr(attnsme,'ST',{})
++    monkeypatch.setattr(attnstage2_runtime,'ST',{'questions':{'agent':Questions()}})
++    monkeypatch.setattr(smeshared,'_definition_choice',smeshared._definition_choice)
++    monkeypatch.setattr(smeshared,'_text_gzip',lambda _:StringIO())
++    scene=RelationGraph('shown',(Entity('x'),),(
++        Relation('child','name',('x',)),Relation('parent','attach',('child','gap'))))
++    ai=AgentInput(scene,scene)
++    monkeypatch.setattr(loop,'_agent_input',lambda *args:ai)
++    calls=[]
++    def native(ai,state,config,rng):
++        calls.append(attnsme.ST['door_task'])
++        assert attnsme.ST['active']
++        assert attnsme.ST['individual']['observations'].arguments['parent']==('child','gap')
++        attnsme.ST['individual']['a']['one_position']=7.
++        return 'native_output','pending'
++    monkeypatch.setattr(loop,'predict',native)
++    def record(*args):raise AssertionError('固定試験が回答後の学習を呼んだ')
++    attnsme.install(tmp_path/'attention',mode='global',position='k2',eta=.1,
++                    task_instruction=lambda _:False,research_record=record)
++    loop._agent_input(SimpleNamespace(trial=1),None)
++    obs=attnsme.ST['individual']['observations']
++    obs.names.add('earlier');obs.parents['gap'].append(('earlier_parent',1))
++    saved=dict(attnsme.ST);before=pickle.dumps(attnsme.ST['individuals'])
++    qbefore=attnstage2_runtime.ST['questions']['agent'].record()
++    result=attnsme.ST['predict_probe'](ai,object(),object(),Random(10),instruction=True)
++    assert result==('native_output','pending') and calls==[True]
++    assert attnsme.ST==saved and pickle.dumps(attnsme.ST['individuals'])==before
++    assert attnstage2_runtime.ST['questions']['agent'].record()==qbefore
++    assert attnsme.ST['checks']==0 and attnsme.ST['pending'] is None
+diff --git a/tools/attnsme.py b/tools/attnsme.py
+index fcb8847..aa554a8 100644
+--- a/tools/attnsme.py
++++ b/tools/attnsme.py
+@@ -79,13 +79,18 @@ def _restore(snap):
+ 
+ 
+ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',), epsilon=.5,
+-            feature_policy=None,readout_policy=None,learning_policy=None,prediction_context=None):
++            feature_policy=None,readout_policy=None,learning_policy=None,prediction_context=None,
++            task_instruction=None,research_record=None):
+     import abm.loop as loop
+     import abm.agent_runtime as ar
+     import smeshared as S
+     import v39
+     if mode not in ('binary','global','position') or position not in ('k1','k2') or eta<=0 or not math.isfinite(eta):
+         raise ValueError('注意の旗が不正')
++    if task_instruction is None or research_record is None:
++        import shopworld
++        task_instruction = shopworld.task_instruction if task_instruction is None else task_instruction
++        research_record = shopworld.attention_record if research_record is None else research_record
+     Path(path).parent.mkdir(parents=True,exist_ok=True)
+     ST.clear();ST.update(f=S._text_gzip(path),mode=mode,position=position,eta=eta,
+                         fixed_zero=fixed_zero,individuals={},active=False,trial=-1,checks=0,
+@@ -99,8 +104,9 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
+         agent=sorted(agent_ids)[i]
+         individual=ST['individuals'].setdefault(agent,{'observations':Observations(),'a':{}})
+         # 信頼済みの指示の入口。このbool以外の研究者欄を予測側へ渡さない。
+-        import shopworld
+-        instruction=bool(shopworld.INFO[trial.G_star.graph_id]['held_out_is_door'])
++        instruction=task_instruction(trial)
++        if type(instruction) is not bool:
++            raise TypeError('信頼済みの課題指示の入口はbool一つだけ')
+         ST.update(trial=t,agent=agent,individual=individual,door_task=instruction,
+                   scene=[r.to_dict() for r in ai.target_graph_partial.relations],
+                   entities={e.entity_id for e in ai.target_graph_partial.entities})
+@@ -202,6 +208,33 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
+         return output,pending
+ 
+     loop.predict=predict
++    def predict_probe(ai,state,config,rng,*,instruction):
++        """固定試験も同じ注意で選ぶ。観察・a・問い数・学習は更新しない。"""
++        from copy import copy
++        from collections import ChainMap
++        if type(instruction) is not bool:
++            raise TypeError('固定試験の課題指示もbool一つだけ')
++        saved=dict(ST)
++        original=ST['individual']['observations']
++        observation=copy(original)
++        scene=[r.to_dict() for r in ai.target_graph_partial.relations]
++        entities={e.entity_id for e in ai.target_graph_partial.entities}
++        # 現在の可視構造だけを一時の層に置く。学習済みの大きい履歴は読み取り専用。
++        observation.entities=original.entities | entities
++        observation.arguments=ChainMap({},original.arguments)
++        children={a for row in scene for a in row['arguments'] if a not in entities}
++        observation.parents=ChainMap({a:list(original.parents.get(a,())) for a in children},original.parents)
++        observation.structure(scene,entities)
++        individual={'observations':observation,'a':dict(ST['individual']['a'])}
++        try:
++            ST.update(active=True,ai=ai,state=state,config=config,ranked=[],scored=[],selected=None,
++                      individual=individual,door_task=instruction,scene=scene,entities=entities)
++            # 第二段の実際の問いの入口と回答後の注意学習は通さない。
++            return real_predict(ai,state,config,rng)
++        finally:
++            ST.clear();ST.update(saved)
++
++    ST['predict_probe']=predict_probe
+     real_record=loop._ledger_record
+ 
+     def record(agent_id,trial,config,output,score,coin,state,*args,**kw):
+@@ -236,16 +269,14 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
+         observation.after(trial.trial,row.pop('scene'),row.pop('entities'),disclosed)
+         # 以下は予測後の研究者の表。学習・次の選びへ戻さない。
+         truth=(trial.held_out_edge.predicate,tuple(trial.held_out_edge.arguments))
+-        import shopworld
+-        info=shopworld.INFO[trial.G_star.graph_id]
+         for c in row['candidates']:
+             c['hit']=c['answer']==truth
+-            c['seal']=[{'slot':s['slot'],'state':s['state'],'name':s.get('predicate'),
+-                        'history':s.get('history',{})} for s in c['seats'] if shopworld.IDS.get(s['relation_id'])=='sig']
++        research = research_record(trial,row['candidates'])
++        for c in row['candidates']:
+             c.pop('signature_rows',None)
+         row.update(f_realized=coin.f_realized,f_fired=bool(coin.f_fired),L=loss,gradient=gradient,
+                    update_reason=reason,updated=updated,a_after=dict(attention),
+-                   shop_type=info['shop_type'],shop_cue=info['shop_cue'],truth=truth,hit=bool(score.hit),
++                   **research,truth=truth,hit=bool(score.hit),
+                    mode=mode,position=position,eta=eta,fixed_zero=fixed_zero,
+                    memory_bits=v39.total_bits(v39.ensure(state),v39.code_lengths(state.p_hat)),
+                    definitions=len(state.definitions),a_description_json_bytes=len(json.dumps(attention,ensure_ascii=False).encode()))
 diff --git a/tools/probeworld.py b/tools/probeworld.py
-index a333eb8..13f0744 100644
+index a333eb8..d580db7 100644
 --- a/tools/probeworld.py
 +++ b/tools/probeworld.py
-@@ -210,8 +210,9 @@ def _probe(state, config, t):
+@@ -196,7 +196,11 @@ def _probe(state, config, t):
+         try:
+             rng = Random(int.from_bytes(sha256(f"probe\x1f{rs}\x1f{t}\x1f{qi}".encode()).digest()[:8], "big"))
+             ai = AgentInput(q["partial"], q["partial"], tuple(r.relation_id for r in q["partial"].relations))
+-            out, pending = ST["predict"](ai, state, config, rng)
++            if 'predict_question' in ST:
++                # 世界の固定課題に添えた指示だけ。経路・ID・真値は予測器へ渡さない。
++                out,pending=ST['predict_question'](ai,state,config,rng,instruction=q['task_instruction'])
++            else:
++                out, pending = ST["predict"](ai, state, config, rng)
+         finally:
+             v39.select_definition = real_select
+         pred = out.prediction
+@@ -210,8 +214,9 @@ def _probe(state, config, t):
              else:
                  sts = dict(zip(v39.CTX.get("fill_ids", ()), v39.CTX.get("fill_states", ())))
                  src = f"{sts.get(rid, '?')}_fill"
@@ -311,7 +565,7 @@ index a333eb8..13f0744 100644
          else:
              rec.update(answer=None, abstain=getattr(pred, "reason", None))
          res = got.get("res")
-@@ -235,16 +236,25 @@ def _probe(state, config, t):
+@@ -235,16 +240,25 @@ def _probe(state, config, t):
              rec.update(R=f"{d.name}@{d.registered_at}", R_used=out.trace.get("R_used") is not None,
                         sel_vis=tri[0], sel_hid=tri[1], sel_none=tri[2], sel_vis_match=tri[3])
          # 経験：同じ型・同じ経路
@@ -340,8 +594,16 @@ index a333eb8..13f0744 100644
              m, info, _roles = paths_of(tau)
              if m != q["motif"] or q["path"] not in info:
                  continue
+@@ -266,4 +280,6 @@ def close() -> dict:
+     f = ST.get("f")
+     if f is not None:
+         f.close()
+-    return {"rows": ST.get("rows", 0), "fingerprint_checks": ST.get("checks", 0), "probes": len(ST.get("probes", []))}
++    result={"rows": ST.get("rows", 0), "fingerprint_checks": ST.get("checks", 0), "probes": len(ST.get("probes", []))}
++    if 'attention_checks' in ST:result['attention_checks']=ST['attention_checks']
++    return result
 diff --git a/tools/shopworld.py b/tools/shopworld.py
-index 609e542..b3e0af4 100644
+index 609e542..b749e84 100644
 --- a/tools/shopworld.py
 +++ b/tools/shopworld.py
 @@ -36,6 +36,39 @@ STATS: dict = {}
@@ -384,8 +646,64 @@ index 609e542..b3e0af4 100644
  def cue_rng(run_seed, trial_index) -> Random:
      return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fshopcue".encode("utf-8")).digest(), "big"))
  
+@@ -221,6 +254,21 @@ def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str) -> No
+     v39.score_answers = score_answers
+ 
+ 
++def task_instruction(trial):
++    """信頼済みの世界の入口。予測側へ渡す課題指示はbool一つだけ。"""
++    return INFO[trial.G_star.graph_id]['held_out_is_door']
++
++
++def attention_record(trial, candidates):
++    """回答確定後の研究者の記録。課題指示の入口とは分ける。"""
++    info = INFO[trial.G_star.graph_id]
++    for candidate in candidates:
++        candidate['seal'] = [{'slot':seat['slot'],'state':seat['state'],
++                             'name':seat.get('predicate'),'history':seat.get('history',{})}
++                            for seat in candidate['seats'] if IDS.get(seat['relation_id']) == 'sig']
++    return {'shop_type':info['shop_type'],'shop_cue':info['shop_cue']}
++
++
+ SHARED_PATHS = ("0.0.1", "0.1.0", "0.1.1")   # T1 のドア以外の一階の葉（種 v3a2 で push・carry・lift）
+ 
+ 
+diff --git a/tools/smeshared.py b/tools/smeshared.py
+index 0de2e68..eb613ba 100644
+--- a/tools/smeshared.py
++++ b/tools/smeshared.py
+@@ -146,6 +146,20 @@ def _old_on_new(left, right, best, params):
+     return w.predicate_match_weight * names + w.argument_consistency_weight * args + w.higher_order_weight * links - w.unmatched_penalty * unmatched
+ 
+ 
++def _record_json_keys(value):
++    """名前なしの確率のキーをJSON標準のnullへ写し、元の計算用辞書を保つ。"""
++    if isinstance(value, dict):
++        if None in value:
++            # C*の名前の分布は文字列とNoneだけ。衝突を黙って上書きしない。
++            if "null" in value or any(k is not None and not isinstance(k, str) for k in value):
++                raise ValueError("記録のnullキーが衝突又は非文字列キーと混在")
++            return {"null" if k is None else k: _record_json_keys(v) for k, v in value.items()}
++        return {k: _record_json_keys(v) for k, v in value.items()}
++    if isinstance(value, (list, tuple)):
++        return [_record_json_keys(v) for v in value]
++    return value
++
++
+ def _log(record):
+     if LOG.get("f") is not None:
+         if LOG.get("diagnostic") or _diagnosing():
+@@ -154,7 +168,7 @@ def _log(record):
+             target = LOG["diagnostic_f"]
+         else:
+             target = LOG["f"]
+-        target.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
++        target.write(json.dumps(_record_json_keys(record), ensure_ascii=False, sort_keys=True) + "\n")
+ 
+ 
+ def _diagnosing():
 diff --git a/tools/v3_run.py b/tools/v3_run.py
-index 9aad4eb..c488bf2 100644
+index 9aad4eb..f057436 100644
 --- a/tools/v3_run.py
 +++ b/tools/v3_run.py
 @@ -518,12 +518,21 @@ def worker(task: dict) -> dict:
@@ -420,7 +738,30 @@ index 9aad4eb..c488bf2 100644
      if task.get("cf_value"):
          # ★ 反実仮想の保持価値の診断（--cf-value、記録だけ。2026-10-01 午前の返事の段 5）：tools/cfvalue.py。試験の旗のあと、答えごとの記録より前
          if not (task.get("v39") and task.get("v310_be")):
-@@ -608,6 +620,9 @@ def worker(task: dict) -> dict:
+@@ -588,10 +600,14 @@ def worker(task: dict) -> dict:
+     if task.get("attn_sme"):
+         # 注意は選びだけを包む。既存sideと状態記録の外へ追加記録を書く。
+         import attnsme
++        # 試行の型ではなく、既に入れた世界の部品を一度だけ接続する（指示6）。
++        instruction_world = verbworld if task.get('verb_world') else shopworld
+         attnsme.install(out_root / "attention" / task["cell"] / f"seed{task['seed']:03d}.jsonl.gz",
+                         mode=task["attn_sme"], position=task["attn_position"], eta=task["attn_eta"],
+                         fixed_zero=task.get("attn_fixed_zero", False), agent_ids=tuple(task["cfg"]["agent_ids"]),
+                         epsilon=task.get('logp_eps',.5),**connection,
++                        task_instruction=instruction_world.task_instruction,
++                        research_record=instruction_world.attention_record,
+                         **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
+                            if task.get('attn_allin') else {}))
+     if task.get('stage2') == 'on':
+@@ -602,12 +618,17 @@ def worker(task: dict) -> dict:
+                                   rematch_reuse=task.get('stage2_reuse',False),
+                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
+                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
++    if task.get('verb_world') and task.get('probe_world') and task.get('attn_sme'):
++        verbworld.connect_attention_probes(probeworld,attnsme)
+     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
+     old_gc_threshold = None
+     if task.get("sme_gc_threshold") is not None:
          import gc
          old_gc_threshold = gc.get_threshold()
          gc.set_threshold(task["sme_gc_threshold"], *old_gc_threshold[1:])
@@ -430,7 +771,7 @@ index 9aad4eb..c488bf2 100644
      try:
          rec = sweep.run_one(task)
      except Exception as e:  # noqa
-@@ -660,6 +675,10 @@ def worker(task: dict) -> dict:
+@@ -660,6 +681,10 @@ def worker(task: dict) -> dict:
          sys.modules["routelog"].close()
      if task.get("probe_world"):
          rec["probeworld"] = sys.modules["probeworld"].close()
@@ -441,7 +782,16 @@ index 9aad4eb..c488bf2 100644
      if task.get("shop_world"):
          rec["shopworld"] = sys.modules["shopworld"].close()
      if task.get("strict_pc"):
-@@ -857,6 +876,11 @@ def main() -> None:
+@@ -835,7 +860,7 @@ def main() -> None:
+     ap.add_argument("--sme-intern-cache", action="store_true", help="型と全ての内容が同じ不変の照合結果の実体を共有する探索の旗")
+     ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
+     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
+-    ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="ドア課題の定義選びに位置の案1／案2′を用いる")
++    ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="世界の信頼済みboolで指示されたドア／過去形課題の定義選びに位置の案1／案2′を用いる")
+     ap.add_argument("--attn-position", choices=("k1", "k2"), default="k1", help="祖先の鍵／採用済みSME対応先の鍵")
+     ap.add_argument("--attn-eta", type=float, default=0.1, help="位置の注意の更新幅")
+     ap.add_argument('--attn-allin',action='store_true',help='指示8の共通基底・主の分布・mixture学習を接続する別版')
+@@ -857,6 +882,11 @@ def main() -> None:
      ap.add_argument("--logp-eps", type=float, default=0.5, help="背景分布bに戻る混合率ε（既定0.5）")
      ap.add_argument("--birth-score", choices=("fit", "seq"), default=None, help="二材料を観察後に当てるfit、一材料ずつ順に当てるseq")
      ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
@@ -453,7 +803,7 @@ index 9aad4eb..c488bf2 100644
      ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
      ap.add_argument("--sme-online-candidates", action="store_true", help="予測の実際の対応から候補の答えと正誤を研究者だけの別記録に残す")
      ap.add_argument("--sme-online-check", action="store_true", help="候補の記録の逆順・二回の一致を毎試行で検査する")
-@@ -899,6 +923,25 @@ def main() -> None:
+@@ -899,6 +929,25 @@ def main() -> None:
      if args.trial_count is not None:
          cfg2["trial_count"] = args.trial_count
          args.no_compare = True
@@ -479,7 +829,7 @@ index 9aad4eb..c488bf2 100644
      if args.nsim is not None:
          cfg2["fixed"]["nsim_threshold"] = args.nsim
      if args.vt is not None:
-@@ -943,7 +986,7 @@ def main() -> None:
+@@ -943,7 +992,7 @@ def main() -> None:
          raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
      if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
          raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
@@ -488,7 +838,7 @@ index 9aad4eb..c488bf2 100644
      if args.horizon is not None and not args.v39:
          raise SystemExit("--horizon は --v39 と一緒に使う（時間の幅を差し替える先が v39 の時間の設定のため）")
      commit = sweep.code_commit()
-@@ -952,7 +995,7 @@ def main() -> None:
+@@ -952,7 +1001,7 @@ def main() -> None:
                 and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                 and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                 and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
@@ -497,7 +847,7 @@ index 9aad4eb..c488bf2 100644
                 and args.horizon is None and not args.score_logp and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
      do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
      if args.compare_to is not None:
-@@ -985,6 +1028,15 @@ def main() -> None:
+@@ -985,6 +1034,15 @@ def main() -> None:
      if cstar_options:
          for task in tasks:
              task["cstar_options"] = cstar_options
@@ -513,7 +863,18 @@ index 9aad4eb..c488bf2 100644
      if args.score_arg_order:
          if not (args.v310_be and args.hist_role and args.score_role):
              raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
-@@ -1080,6 +1132,11 @@ def main() -> None:
+@@ -1014,8 +1072,8 @@ def main() -> None:
+         raise SystemExit("候補の記録と忘却停止は--sme2017 --v310-beと一緒に使う")
+     if args.sme_online_check and not args.sme_online_candidates:
+         raise SystemExit("--sme-online-checkは--sme-online-candidatesと一緒に使う")
+-    if args.attn_sme and not (args.sme2017 and args.shop_world and args.sme_call_seed):
+-        raise SystemExit("--attn-smeは--sme2017 --sme-call-seedとお店の世界で使う")
++    if args.attn_sme and not (args.sme2017 and (args.shop_world or args.verb_world) and args.sme_call_seed):
++        raise SystemExit("--attn-smeは--sme2017 --sme-call-seedとお店又は動詞の世界で使う")
+     if args.attn_fixed_zero and not args.attn_sme:
+         raise SystemExit("--attn-fixed-zeroは注意の旗と一緒に使う")
+     if args.attn_allin and not (args.attn_sme=='global' and args.attn_position=='k2' and
+@@ -1080,6 +1138,11 @@ def main() -> None:
                                                      **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                      **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
                                                          "attn_eta": args.attn_eta, "attn_fixed_zero": args.attn_fixed_zero} if args.attn_sme else {}),
@@ -2582,10 +2943,10 @@ index 0000000..0667ece
 +    return {"checkpoints": ST["points"], "elapsed_seconds": time.perf_counter() - ST["start"]}
 diff --git a/tools/verbworld.py b/tools/verbworld.py
 new file mode 100644
-index 0000000..da2c370
+index 0000000..267a934
 --- /dev/null
 +++ b/tools/verbworld.py
-@@ -0,0 +1,250 @@
+@@ -0,0 +1,301 @@
 +"""動詞の世界（委任書 2026-10-04、土台 3380344）。
 +
 +世界と研究者の台帳だけを外側から包む。abm/・模型の選び方・学習は変えない。
@@ -2776,6 +3137,21 @@ index 0000000..da2c370
 +    ledger.Ledger.append = append
 +
 +
++def task_instruction(trial):
++    """指示6の信頼済み入口。既存の世界で確定したboolだけを渡す。"""
++    return INFO[trial.G_star.graph_id]['held_out_is_past']
++
++
++def attention_record(trial, candidates):
++    """回答確定後の動詞の研究者記録。選びや学びへは戻さない。"""
++    info = INFO[trial.G_star.graph_id]
++    for candidate in candidates:
++        candidate['name_seats'] = [{'slot':seat['slot'],'state':seat['state'],
++                                   'name':seat.get('predicate'),'history':seat.get('history',{})}
++                                  for seat in candidate['seats'] if IDS.get(seat['relation_id']) == 'name']
++    return {key:info[key] for key in EXTRA_KEYS}
++
++
 +def extend_dictionary():
 +    """shopworld.extend_dictionary と同じ。既存の辞書番号は保つ。"""
 +    import v39
@@ -2815,10 +3191,46 @@ index 0000000..da2c370
 +        probes.append(dict(motif="M1", path=PAST_PATH, level=1, truth=None if item.verb_class == "novel" else item.past,
 +                           role=role, hid=info["past_id"], G=tr.G_star, partial=pw._partial(tr.G_star, info["past_id"]),
 +                           facts={(r.predicate, tuple(r.arguments)) for r in tr.G_star.relations}, verb_name=item.name,
++                           task_instruction=True,
 +                           score_truth=item.verb_class != "novel",
 +                           extra=dict(verb_probe="past", verb_name=item.name, verb_class=item.verb_class)))
 +    pst["probes"] = probes
 +    prepare_probe_snapshot(pw)
++
++
++def connect_attention_probes(pw, attention):
++    """世界が用意した過去形の固定課題を、注意ありの同じ予測器へつなぐ。"""
++    import pickle
++    import sys
++    from attnstage2_sme import isolated
++    pw.ST['predict_question']=attention.ST['predict_probe']
++    original=pw._probe
++
++    def probe(state,config,t):
++        # 注意と実際の問いの控えは触らない。照合・専用乱数・記録の控えも戻す。
++        before=sha256(pickle.dumps(attention.ST['individuals'])).hexdigest()
++        stage2=sys.modules.get('attnstage2_runtime')
++        questions={} if stage2 is None else {a:q.record() for a,q in stage2.ST.get('questions',{}).items()}
++        cstar=sys.modules.get('cstar_runtime')
++        cstar_saved=None if cstar is None or cstar.ENGINE is None else cstar.snapshot()
++        intern=sys.modules.get('smeintern')
++        intern_saved=None if intern is None else (dict(intern.POOL),dict(intern.STATS))
++        try:
++            with isolated():
++                original(state,config,t)
++        finally:
++            if cstar_saved is not None:cstar.restore(cstar_saved)
++            if intern_saved is not None:
++                intern.POOL.clear();intern.POOL.update(intern_saved[0])
++                intern.STATS.clear();intern.STATS.update(intern_saved[1])
++        after=sha256(pickle.dumps(attention.ST['individuals'])).hexdigest()
++        after_questions={} if stage2 is None else {a:q.record() for a,q in stage2.ST.get('questions',{}).items()}
++        if before!=after or questions!=after_questions:
++            raise RuntimeError(('動詞の固定試験が注意又は実際の問いの控えを変えた',t))
++        pw.ST.setdefault('attention_checks',[]).append(dict(t=t,attention_before=before,attention_after=after,
++                                    questions_before=questions,questions_after=after_questions,passed=True))
++
++    pw._probe=probe
 +
 +
 +def seen(pst, t_limit, verb_name):
