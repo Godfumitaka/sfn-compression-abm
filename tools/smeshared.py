@@ -146,6 +146,20 @@ def _old_on_new(left, right, best, params):
     return w.predicate_match_weight * names + w.argument_consistency_weight * args + w.higher_order_weight * links - w.unmatched_penalty * unmatched
 
 
+def _record_json_keys(value):
+    """名前なしの確率のキーをJSON標準のnullへ写し、元の計算用辞書を保つ。"""
+    if isinstance(value, dict):
+        if None in value:
+            # C*の名前の分布は文字列とNoneだけ。衝突を黙って上書きしない。
+            if "null" in value or any(k is not None and not isinstance(k, str) for k in value):
+                raise ValueError("記録のnullキーが衝突又は非文字列キーと混在")
+            return {"null" if k is None else k: _record_json_keys(v) for k, v in value.items()}
+        return {k: _record_json_keys(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_record_json_keys(v) for v in value]
+    return value
+
+
 def _log(record):
     if LOG.get("f") is not None:
         if LOG.get("diagnostic") or _diagnosing():
@@ -154,7 +168,7 @@ def _log(record):
             target = LOG["diagnostic_f"]
         else:
             target = LOG["f"]
-        target.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+        target.write(json.dumps(_record_json_keys(record), ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def _diagnosing():
