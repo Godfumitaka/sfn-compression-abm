@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-09T08:34:28.073480+09:00",
+  "reference": {
+    "pid": 12373,
+    "trials": 200,
+    "wall_seconds": 605.7532986670267,
+    "cpu_user_seconds": 603.786248,
+    "cpu_system_seconds": 1.5142550000000001,
+    "cpu_seconds": 605.300503,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 287588352,
+    "max_candidates": 14,
+    "max_definitions": 14,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "current": {
+    "pid": 14228,
+    "trials": 200,
+    "wall_seconds": 266.4501355000539,
+    "cpu_user_seconds": 265.414809,
+    "cpu_system_seconds": 0.883485,
+    "cpu_seconds": 266.298294,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 320159744,
+    "max_candidates": 14,
+    "max_definitions": 14,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "cpu_ratio": 0.4399439496252987,
+  "wall_ratio": 0.43986576067581173,
+  "scope": "worker_model_observer_state_save",
+  "pure_model_seconds": false,
+  "full_length_estimate": false,
+  "starts_are_different": true,
+  "individual_P5_or_P7r_effect": false,
+  "first_100": {
+    "readings": {
+      "off": {
+        "wall_seconds": 334.159223625029,
+        "cpu_seconds": 333.867745,
+        "peak_rss_bytes": 138133504,
+        "memo_diagnostics": {
+          "p5_runs": 0,
+          "p5_hits": 0,
+          "p7_stores": 0,
+          "p7_hits": 0,
+          "p7_replayed_calls": 0
+        }
+      },
+      "on": {
+        "wall_seconds": 132.57451070804382,
+        "cpu_seconds": 132.497717,
+        "peak_rss_bytes": 171048960,
+        "memo_diagnostics": {
+          "p5_runs": 18316,
+          "p5_hits": 179083,
+          "p7_stores": 14731,
+          "p7_hits": 179083,
+          "p7_replayed_calls": 179083
+        }
+      }
+    },
+    "cpu_ratio": 0.3968568961341264,
+    "wall_ratio": 0.396740539644089,
+    "scope": "sweep.run_one直前から第100台帳の原呼出し後・当該試行の追加控え保存前まで"
+  }
+}
