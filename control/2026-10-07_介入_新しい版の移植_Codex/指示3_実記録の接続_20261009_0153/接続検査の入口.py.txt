@@ -1,0 +1,190 @@
+"""指示3：実記録の復元と接続だけを確認する。模型の走行は呼ばない。"""
+from concurrent.futures import Future
+from dataclasses import replace
+from pathlib import Path
+from random import Random
+import gzip
+import hashlib
+import json
+import os
+import sys
+import time
+
+PORT = Path(__file__).resolve().parents[1]
+SOURCE = PORT / "source_e9"
+sys.path[:0] = [str(SOURCE / "tools"), str(SOURCE)]
+DEST = PORT / "instruction3/native_connection_02"
+GATE = PORT / "instruction5/gate_200_01"
+
+
+def save(name, value):
+    (DEST / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+
+
+def hashes(root):
+    result = {}
+    for path in root.rglob("*"):
+        if path.is_file():
+            h = hashlib.sha256()
+            with path.open("rb") as stream:
+                for block in iter(lambda: stream.read(1048576), b""):
+                    h.update(block)
+            result[str(path.relative_to(root))] = h.hexdigest()
+    return result
+
+
+def check(task):
+    import attnsme
+    import cstar_runtime as C
+    import smereplay
+    import smeshared as S
+    import v39
+    from abm.definition import Constituent, NamedDefinition
+    from abm.domains import Relation
+    from intervention46_native import BirthIndex, Frame, read_records
+    flags = json.loads((GATE / "with_records/output/flag.json").read_text())
+    # 原命令に明示されたoff。flag.jsonに省かれる既定値を勝手に推定しない。
+    command = json.loads((GATE / "without_records_command.json").read_text())
+    flags["stage2_reuse"] = command[command.index("--stage2-reuse") + 1]
+    pending = None
+    frames = {}
+    births = BirthIndex()
+    count = 0
+    first_answer = None
+    path = next((GATE / "research_records").rglob("*.jsonl.gz"))
+    for record in read_records(path):
+        if record["kind"] == "pre":
+            assert pending is None
+            pending = record
+        elif record["kind"] == "prediction_context":
+            frame = Frame.restore(pending, record)
+            pending = None
+            count += 1
+            if frame.trial in (0, 3, 10):
+                frames[frame.trial] = frame
+            if first_answer is None and type(frame.recorded_output.prediction).__name__ == "EdgePrediction":
+                first_answer = frame.trial
+                frames[frame.trial] = frame
+        else:
+            births.add(record)
+    assert pending is None and count == 200 and len(births.seats) == 2026
+    save("restoration.json", dict(pre_frames=count, birth_seats=len(births.seats),
+         all_typed_roundtrips_match=True, observation_fields=8, question_fields=5,
+         missing_records_filled=False, formal_3b_material=False))
+
+    # 合成の小例で、Uシールだけ・全定義・時刻・個体の制限を検査する。
+    base = frames[10]
+    rows = tuple(Constituent(i, 1, Relation(name, name + "_name", ("entity",)),
+                            None, alive=(i == 1))
+                 for i, name in enumerate(("u_sig", "f_sig", "h_sig", "u_other")))
+    definition = NamedDefinition("synthetic", rows, len(rows), 1)
+    state = replace(base.state, definitions={definition.name: definition},
+                    slot_history={(definition.name, 2): {"old_h_name": 1}})
+    fake = replace(base, state=state)
+    index = BirthIndex()
+    key = (fake.agent, definition.name, 1, 0, 1)
+    index.seats[key] = dict(predicate="recorded_birth_name", source_relation_id="u_sig",
+                          target_relation_id="target_sig", birth_trial=1,
+                          first_experienced_trial=0, second_experienced_trial=1)
+    frozen = fake.digest()
+    restored, changed = index.restore_u_seals(fake, {"u_sig", "f_sig", "h_sig"})
+    assert len(changed) == 1 and restored.definitions[definition.name].constituents[0].alive
+    assert restored.definitions[definition.name].constituents[0].relation.predicate == "recorded_birth_name"
+    assert restored.definitions[definition.name].constituents[1:] == rows[1:]
+    assert all(getattr(restored, field) is getattr(state, field) for field in
+               ("prototype", "p_hat", "slot_history", "merit", "embed", "exceptions", "v39_seats", "rng_state"))
+    assert fake.digest() == frozen
+    for bad in (BirthIndex(), index):
+        changed_frame = fake if bad is not index else replace(fake, trial=1)
+        try:
+            bad.restore_u_seals(changed_frame, {"u_sig"})
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("誕生記録の不足又は未来の材料を通した")
+    try:
+        index.restore_u_seals(replace(fake, agent="different_agent"), {"u_sig"})
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("他の個体の誕生材料を使った")
+    save("structural_checks.json", dict(checks_passed=4, u_seals_only=True,
+         f_h_and_other_u_unchanged=True, all_original_accumulators_same=True,
+         missing_future_other_agent_rejected=True, synthetic_only=True))
+
+    # 介入は行わない。三件の保存済み予測だけを同じ新版窓口で読み直す。
+    assert first_answer is not None, "回答の読み手を確かめる実記録が無い"
+    predictions = []
+    for trial in dict.fromkeys((0, 3, 10, first_answer)):
+        frame = frames[trial]
+        before = frame.digest()
+        engine_before = repr(S.snapshot())
+        started = time.perf_counter()
+        value = frame.prediction(flags)
+        actual = value["prediction"]
+        expected = attnsme.prediction_data(frame.recorded_output)
+        proof = dict(trial=trial, actual=actual, recorded=expected, match=actual == expected,
+                     original_frame_unchanged=frame.digest() == before,
+                     runtime_restored=repr(S.snapshot()) == engine_before,
+                     candidates=len(value["candidate_names"]),
+                     seconds=time.perf_counter()-started)
+        predictions.append(proof)
+        save("predictions.json", predictions)
+        if actual != expected:
+            raise RuntimeError((trial, "介入なしの新版の予測が実記録と一致しない"))
+        assert frame.digest() == before and repr(S.snapshot()) == engine_before
+    save("predictions.json", predictions)
+    return dict(cell=task["cell"], seed=task["seed"], elapsed_sec=0,
+                final_def_count=0, model_run_called=False)
+
+
+class CaptureExecutor:
+    """原ドライバの引数→taskだけを使う。子や模型は作らない。"""
+    def __init__(self, **kwargs):
+        pass
+    def __enter__(self):
+        return self
+    def __exit__(self, *args):
+        return False
+    def submit(self, function, task):
+        TASKS.append(task)
+        future = Future()
+        future.set_result(dict(cell=task["cell"], seed=task["seed"], model_run_called=False))
+        return future
+
+
+if __name__ == "__main__":
+    DEST.mkdir(exist_ok=False)
+    os.chdir(SOURCE)
+    before = hashes(GATE)
+    save("input_before.json", before)
+    status = dict(status="running", model_run_called=False, formal_3b_material=False,
+                  interventions_executed=False, pid=os.getpid())
+    save("status.json", status)
+    started = time.perf_counter()
+    TASKS = []
+    try:
+        import v3_run as native
+        import sweep
+        command = json.loads((GATE / "without_records_command.json").read_text())
+        # 同じ原命令の出力先だけを、新しい診断用の導入先へ向ける。
+        sys.argv = command[1:]
+        sys.argv[2] = str(DEST / "setup")
+        native.ProcessPoolExecutor = CaptureExecutor
+        native.main()
+        assert len(TASKS) == 1 and TASKS[0]["seed"] == 1
+        save("task.json", TASKS[0])
+        sweep.run_one = check
+        native.worker(TASKS[0])
+        status.update(status="passed", model_run_called=False,
+                      restored_frames=200, verified_birth_seats=2026, baseline_predictions=4)
+    except BaseException as error:
+        status.update(status="stopped", error=repr(error))
+        raise
+    finally:
+        after = hashes(GATE)
+        save("input_after.json", after)
+        status.update(inputs_unchanged=before == after, input_files=len(before),
+                      elapsed_seconds=time.perf_counter()-started)
+        save("status.json", status)
+        assert before == after, "旧関門の資料が変わった"

@@ -1,0 +1,48 @@
+"""新版の接続の構造pytestと、公開するソース・証拠の保全を確認する。"""
+from pathlib import Path
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+
+PORT = Path(__file__).resolve().parents[1]
+SOURCE = PORT / "source_e9"
+DEST = PORT / "instruction3/native_tests_02"
+DEST.mkdir(exist_ok=False)
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+model_names = ["abm/loop.py", "abm/agent_runtime.py", "abm/abstraction.py", "tools/v39.py",
+               "tools/v310be.py", "tools/attnstage2_runtime.py", "tools/attnstage2_initial.py", "tools/attncstar.py"]
+model_before = {name: sha(SOURCE / name) for name in model_names}
+for name, fingerprint in model_before.items():
+    old = subprocess.check_output(["git", "show", "fdaeae28fdcefa77b23f30653c7430e93cc2ab15:" + name], cwd=SOURCE)
+    assert hashlib.sha256(old).hexdigest() == fingerprint, name
+changed = subprocess.check_output(["git", "diff", "--name-only", "393893939e2016411a6026a77d714c2cbdc28c0e", "HEAD"], cwd=SOURCE, text=True).splitlines()
+assert changed == ["tools/intervention46_native.py", "tools/test_intervention46_native.py"]
+entry = SOURCE / "tools/intervention46_native.py"
+test = SOURCE / "tools/test_intervention46_native.py"
+before = {str(path): sha(path) for path in (entry, test, PORT / "instruction3/check_native_connection.py")}
+env = dict(os.environ, PYTHONPATH=str(SOURCE / "tools") + os.pathsep + str(SOURCE) + os.pathsep + str(PORT / "instruction3/test_dependencies_01"), PYTHONDONTWRITEBYTECODE="1", PYTEST_DISABLE_PLUGIN_AUTOLOAD="1")
+command = [sys.executable, "-m", "pytest", "-q", str(test), "--junitxml=" + str(DEST / "pytest.xml")]
+(DEST / "command.json").write_text(json.dumps(command, ensure_ascii=False, indent=2) + "\n")
+started = time.perf_counter()
+process = subprocess.run(command, cwd=SOURCE, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+(DEST / "pytest.log").write_text(process.stdout)
+after = {name: sha(Path(name)) for name in before}
+model_after = {name: sha(SOURCE / name) for name in model_names}
+proof = dict(exit_code=process.returncode, seconds=time.perf_counter()-started,
+             source_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=SOURCE, text=True).strip(),
+             model_before=model_before, model_after=model_after, model_unchanged=model_before == model_after,
+             source_before=before, source_after=after, source_unchanged=before == after,
+             changed_files=changed, formal_3b_material=False, model_run_called=False)
+(DEST / "status.json").write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n")
+print(process.stdout, end="")
+assert process.returncode == 0 and before == after and model_before == model_after
+for path in (entry, test, PORT / "instruction3/check_native_connection.py"):
+    (DEST / (path.name + ".txt")).write_bytes(path.read_bytes())
