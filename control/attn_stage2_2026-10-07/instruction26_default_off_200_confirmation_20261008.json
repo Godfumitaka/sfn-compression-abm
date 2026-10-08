@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-08T18:20:47.648901+09:00",
+  "gate_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_default_off_200_required_gate.json",
+  "gate_sha256": "d431910c333ffa84c91ef100cd8bc181f7981a5bccf4e78ea889e381245ee72d",
+  "passed": true,
+  "records": 19,
+  "time_keys": [
+    "engine_seconds",
+    "measure_seconds",
+    "rematch_fraction_of_stage2_seconds",
+    "seconds",
+    "wrapper_seconds"
+  ],
+  "strictpc_counter": {
+    "passed": true,
+    "bytes": 2292,
+    "sha256": "8fccbf1adfc762240df6bf912dcf36c3da59599c71e07d934361b8433f446757"
+  },
+  "actual_ps": {
+    "52320": null,
+    "52330": null,
+    "52340": null,
+    "71515": [
+      52308,
+      "Ss",
+      0.0,
+      19024,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示26 五つ w2_basic_on_200 --mem 1 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_basic_on_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/controller.py entry w2_basic_on_200"
+    ],
+    "71526": [
+      71515,
+      "S",
+      0.0,
+      27472,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_basic_on_200/native_command.json"
+    ],
+    "71537": [
+      71526,
+      "R",
+      99.4,
+      152304,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "52308": [
+      1,
+      "Ss",
+      0.0,
+      23728,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/controller.py"
+    ],
+    "62349": [
+      1,
+      "Ss",
+      0.0,
+      21216,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/gate.py"
+    ]
+  },
+  "run_log_tail": "受け付けた：PID 52320、担当 Codex2 指示26 五つ w2_default_off_200、見込み 1.0 GB（表の合計 21.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-08 17:09:38 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-08 18:07:35 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=3469.99 最大メモリMB=330.5 定義末=13 一致=None err=None\n2026-10-08 18:07:36 ALLDONE shop_hide1_s1\n消した：PID 52320\n",
+  "native_200_all_done": true,
+  "receipt_exit_code": 0,
+  "source": {
+    "head": "7294389d70795c847790472aa836b93dc1ca7fd5",
+    "status": ""
+  },
+  "comparison_not_repeated": true,
+  "reference_not_rerun": true,
+  "on_speedup_not_confirmed": true,
+  "full_length_not_confirmed": true,
+  "N25_N26_done": false
+}
