@@ -1,0 +1,51 @@
+..F.....                                                                 [100%]
+=================================== FAILURES ===================================
+__________ test_a_and_b_native_prediction_restores_frame_and_runtime ___________
+
+context = (Frame(agent='agent', trial=2, state=_state_class.<locals>.AgentStateV39(prototype=Prototype(traces=(VerbatimTrace(wri...tion(relation_id='seen_link', predicate='attach', arguments=('seen_seal', 'seen_door'), attributes=mappingproxy({})))))
+
+    def test_a_and_b_native_prediction_restores_frame_and_runtime(context):
+        frame, flags, _, full = context
+        frozen, runtime = frame.digest(), repr(S.snapshot())
+>       result = content_predictions(frame, full, flags, 'DIAG')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tools/test_intervention46_variants.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/intervention46_variants.py:75: in content_predictions
+    a = frame.prediction(flags, state=augmented, forced_definition=definition.name)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/intervention46_native.py:133: in prediction
+    session = self.session(flags, state=state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/intervention46_native.py:121: in session
+    return attncstar.Session(self.agent_input, self.state if state is None else state,
+tools/attncstar.py:80: in __init__
+    super().__init__(*args, **kwargs)
+tools/attnstage2_sme.py:121: in __init__
+    self.candidates = self.enrich(self.ranked,state)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/attnstage2_sme.py:155: in enrich
+    cs = attnsme.public_candidates(ranked,state,self.observations)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ranked = ((0.25, 1, NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relati...9573551879662210558138852491727935693186417886626988306782826328446, 'trial': 2, 'call_kind': 'v39:map_v39'}), 4, ...))
+state = _state_class.<locals>.AgentStateV39(prototype=Prototype(traces=(VerbatimTrace(written_at=0, scene=RelationGraph(graph_..., 0.0, 0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)), n_scored=0)})
+observations = <attnsme_features.Observations object at 0x10af62270>
+
+    def public_candidates(ranked, state, observations):
+        import v39
+        result=[]
+        for r in ranked:
+            d=r[2];seats=[];signature=[]
+            for row in sorted(d.constituents,key=lambda row:row.slot_index):
+                rid=row.relation.relation_id
+                if rid not in observations.arguments:
+>                   raise RuntimeError('記憶の席の構造を本人の観察から読めない')
+E                   RuntimeError: 記憶の席の構造を本人の観察から読めない
+
+tools/attnsme.py:41: RuntimeError
+=========================== short test summary info ============================
+FAILED tools/test_intervention46_variants.py::test_a_and_b_native_prediction_restores_frame_and_runtime
+1 failed, 7 passed in 0.56s

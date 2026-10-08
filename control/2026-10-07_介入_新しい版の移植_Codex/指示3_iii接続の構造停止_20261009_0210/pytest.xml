@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="8" time="0.559" timestamp="2026-10-09T02:10:09.233656+09:00" hostname="tatsu-adminnoMacBook-Air.local"><testcase classname="tools.test_intervention46_variants" name="test_complete_one_all_f_with_original_state_containers" time="0.008" /><testcase classname="tools.test_intervention46_variants" name="test_a_and_b_have_same_added_one_and_same_input" time="0.005" /><testcase classname="tools.test_intervention46_variants" name="test_a_and_b_native_prediction_restores_frame_and_runtime" time="0.022"><failure message="RuntimeError: 記憶の席の構造を本人の観察から読めない">context = (Frame(agent='agent', trial=2, state=_state_class.&lt;locals&gt;.AgentStateV39(prototype=Prototype(traces=(VerbatimTrace(wri...tion(relation_id='seen_link', predicate='attach', arguments=('seen_seal', 'seen_door'), attributes=mappingproxy({})))))
+
+    def test_a_and_b_native_prediction_restores_frame_and_runtime(context):
+        frame, flags, _, full = context
+        frozen, runtime = frame.digest(), repr(S.snapshot())
+&gt;       result = content_predictions(frame, full, flags, 'DIAG')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tools/test_intervention46_variants.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/intervention46_variants.py:75: in content_predictions
+    a = frame.prediction(flags, state=augmented, forced_definition=definition.name)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/intervention46_native.py:133: in prediction
+    session = self.session(flags, state=state)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/intervention46_native.py:121: in session
+    return attncstar.Session(self.agent_input, self.state if state is None else state,
+tools/attncstar.py:80: in __init__
+    super().__init__(*args, **kwargs)
+tools/attnstage2_sme.py:121: in __init__
+    self.candidates = self.enrich(self.ranked,state)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/attnstage2_sme.py:155: in enrich
+    cs = attnsme.public_candidates(ranked,state,self.observations)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ranked = ((0.25, 1, NamedDefinition(name='R', constituents=(Constituent(slot_index=0, registered_at=0, relation=Relation(relati...9573551879662210558138852491727935693186417886626988306782826328446, 'trial': 2, 'call_kind': 'v39:map_v39'}), 4, ...))
+state = _state_class.&lt;locals&gt;.AgentStateV39(prototype=Prototype(traces=(VerbatimTrace(written_at=0, scene=RelationGraph(graph_..., 0.0, 0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)), n_scored=0)})
+observations = &lt;attnsme_features.Observations object at 0x10af62270&gt;
+
+    def public_candidates(ranked, state, observations):
+        import v39
+        result=[]
+        for r in ranked:
+            d=r[2];seats=[];signature=[]
+            for row in sorted(d.constituents,key=lambda row:row.slot_index):
+                rid=row.relation.relation_id
+                if rid not in observations.arguments:
+&gt;                   raise RuntimeError('記憶の席の構造を本人の観察から読めない')
+E                   RuntimeError: 記憶の席の構造を本人の観察から読めない
+
+tools/attnsme.py:41: RuntimeError</failure></testcase><testcase classname="tools.test_intervention46_variants" name="test_latest_two_same_shop_and_agent_without_sorting_or_gaps" time="0.002" /><testcase classname="tools.test_intervention46_variants" name="test_complete_log_with_less_than_two_exceptions_is_material_absent" time="0.002" /><testcase classname="tools.test_intervention46_variants" name="test_native_birth_initialization_retains_all_competing_memory" time="0.282" /><testcase classname="tools.test_intervention46_variants" name="test_missing_or_current_experience_stops_before_birth" time="0.002" /><testcase classname="tools.test_intervention46_variants" name="test_different_flag_stops_before_birth" time="0.002" /></testsuite></testsuites>

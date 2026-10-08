@@ -1,0 +1,153 @@
+"""(iii)の権限の境界・一本だけの追加・全記憶の初期評価を検査。"""
+from dataclasses import fields, replace
+from random import Random
+
+import pytest
+
+from test_sme2017_connection import separate
+from test_attncstar import cstar, retained_U_structure, build
+from abm.domains import Entity, RelationGraph
+from attnstage2_questions import Snapshot
+from intervention46_native import Frame
+from intervention46_variants import ExperienceLog, add_content, add_past, content_predictions
+import attncstar as N
+import attnsme
+import cstar_runtime as C
+import smeshared as S
+import v310be as B
+
+
+@pytest.fixture
+def context(cstar, retained_U_structure, monkeypatch):
+    state, config, observations, ai = build()
+    # 競合する元の一本を初期評価の入力から落とせないようにする。
+    rival = replace(state.definitions['R'], name='competitor')
+    state = replace(state, definitions={**state.definitions, rival.name:rival},
+        slot_history={**state.slot_history, **{('competitor', key[1]):value
+                      for key, value in state.slot_history.items() if key[0]=='R'}},
+        v39_seats={**state.v39_seats, **{('competitor', key[1]):value
+                   for key, value in state.v39_seats.items() if key[0]=='R'}})
+    frame = Frame('agent', 2, state, ai, config, Random(1).getstate(), observations,
+        {'fixed':0.3}, {'fixed':0.3}, Snapshot(1, 1, frozenset({'hold'}), frozenset(), True),
+        True, None, None)
+    flags = dict(attn_allin=True, stage2='on', stage2_init='virtual', stage2_loss='top1',
+                 stage2_birth_hu=True, stage2_reuse='off', match_cstar_e=True,
+                 logp_eps=.01, attn_sme='global', attn_position='k2')
+    monkeypatch.setitem(C.CFG, 'match_cstar_e', True)
+    monkeypatch.setitem(B.CFG, 'nohash', True)
+    monkeypatch.setitem(attnsme.ST, 'active', False)
+    base = ai.base_graph
+    ids = {r.relation_id:'seen_'+r.relation_id for r in base.relations}
+    target = RelationGraph('actual_second', (Entity('y'),), tuple(replace(r,
+        relation_id=ids[r.relation_id], arguments=tuple(ids.get(x, 'y' if x=='a' else x)
+                                                      for x in r.arguments)) for r in base.relations))
+    log = ExperienceLog()
+    log.append('agent', 0, 'shop', exception_scene=base, source='synthetic_seen_0')
+    log.append('agent', 1, 'shop', exception_scene=target, source='synthetic_seen_1')
+    return frame, flags, log, target
+
+
+def test_complete_one_all_f_with_original_state_containers(context):
+    frame, _, _, full = context
+    frozen = frame.digest()
+    augmented, definition = add_content(frame, full, 'DIAG')
+    assert list(augmented.definitions) == [*frame.state.definitions, 'DIAG']
+    assert len(definition.constituents) == len(full.relations)
+    ids = {r.relation_id:row.relation.relation_id for r, row in zip(full.relations, definition.constituents)}
+    for actual, row in zip(full.relations, definition.constituents):
+        assert row.alive and row.relation.predicate == actual.predicate
+        assert row.relation.arguments == tuple(ids.get(x,x) for x in actual.arguments)
+        assert row.relation.attributes == actual.attributes
+    for field in fields(augmented):
+        if field.name != 'definitions':
+            assert getattr(augmented, field.name) is getattr(frame.state, field.name)
+    assert frame.digest() == frozen
+
+
+def test_a_and_b_have_same_added_one_and_same_input(context, monkeypatch):
+    frame, flags, _, full = context
+    calls = []
+    def capture(self, actual_flags, *, state, forced_definition=None):
+        assert self is frame and actual_flags is flags
+        calls.append((state, forced_definition))
+        return {'selection_call':forced_definition}
+    monkeypatch.setattr(Frame, 'prediction', capture)
+    result = content_predictions(frame, full, flags, 'DIAG')
+    assert result['added_definition']=='DIAG' and len(calls)==2
+    assert calls[0][0] is calls[1][0]
+    assert calls[0][1]=='DIAG' and calls[1][1] is None
+
+
+def test_a_and_b_native_prediction_restores_frame_and_runtime(context):
+    frame, flags, _, full = context
+    frozen, runtime = frame.digest(), repr(S.snapshot())
+    result = content_predictions(frame, full, flags, 'DIAG')
+    assert result['iii_a']['selected']=='DIAG'
+    assert result['iii_b']['selected'] in result['iii_b']['candidate_names']
+    assert 'DIAG' in result['iii_b']['candidate_names']
+    assert frame.digest()==frozen and repr(S.snapshot())==runtime
+
+
+def test_latest_two_same_shop_and_agent_without_sorting_or_gaps(context):
+    frame, _, _, scene = context
+    log = ExperienceLog()
+    for t, shop in enumerate(('same','other','same','same')):
+        log.append('agent',t,shop,exception_scene=scene,source=f'actual_{t}')
+    later = replace(frame, trial=4)
+    assert [e.trial for e in log.latest(later,'same')]==[2,3]
+    assert [e.trial for e in log.latest(later,'other')]==[1]
+    with pytest.raises(ValueError, match='全経験記録'):
+        log.latest(replace(later,agent='different'), 'same')
+    with pytest.raises(ValueError, match='全経験記録'):
+        log.latest(replace(later,trial=5), 'same')
+    with pytest.raises(ValueError, match='連続'):
+        ExperienceLog().append('agent',1,'same',exception_scene=scene,source='skipped')
+
+
+def test_complete_log_with_less_than_two_exceptions_is_material_absent(context):
+    frame, flags, _, scene = context
+    log = ExperienceLog()
+    log.append('agent',0,'same',exception_scene=scene,source='actual_0')
+    log.append('agent',1,'same',exception_scene=None,source='actual_1_normal')
+    unchanged, definition, proof = add_past(frame,log,'same',flags,horizon=1740,name_suffix='test')
+    assert unchanged is frame.state and definition is None and proof['status']=='材料なし'
+
+
+def test_native_birth_initialization_retains_all_competing_memory(context, monkeypatch):
+    frame, flags, log, _ = context
+    frozen, runtime = frame.digest(), repr(S.snapshot())
+    initial_states = []
+    original = N.Session
+    class CaptureSession(original):
+        def __init__(self, ai, state, *args, **kwargs):
+            assert all(name in state.definitions for name in frame.state.definitions)
+            assert all(state.definitions[name] is definition for name, definition in frame.state.definitions.items())
+            assert state.p_hat is frame.state.p_hat
+            initial_states.append(tuple(state.definitions))
+            super().__init__(ai, state, *args, **kwargs)
+    monkeypatch.setattr(N, 'Session', CaptureSession)
+    augmented, definition, proof = add_past(frame,log,'shop',flags,horizon=1740,name_suffix='test')
+    assert definition is not None and initial_states
+    assert list(augmented.definitions)==[*frame.state.definitions,definition.name]
+    assert all(augmented.definitions[name] is d for name,d in frame.state.definitions.items())
+    for field in ('slot_history','merit','embed','exceptions','v39_seats'):
+        assert all(getattr(augmented,field)[key] is value for key,value in getattr(frame.state,field).items())
+    for field in ('prototype','p_hat','rng_state'):
+        assert getattr(augmented,field) is getattr(frame.state,field)
+    assert proof['material_trials']==[0,1]
+    assert proof['initial_records'][0]['measure_birth_hu'] is True
+    assert frame.digest()==frozen and repr(S.snapshot())==runtime
+
+
+def test_missing_or_current_experience_stops_before_birth(context):
+    frame, flags, log, _ = context
+    with pytest.raises(ValueError, match='全経験記録'):
+        add_past(replace(frame,trial=1),log,'shop',flags,horizon=1740,name_suffix='test')
+    with pytest.raises(ValueError, match='全経験記録'):
+        add_past(frame,ExperienceLog(),'shop',flags,horizon=1740,name_suffix='test')
+
+
+def test_different_flag_stops_before_birth(context):
+    frame, flags, log, _ = context
+    with pytest.raises(ValueError, match='同じ旗'):
+        add_past(frame,log,'shop',{**flags,'stage2_reuse':'on'},horizon=1740,name_suffix='test')

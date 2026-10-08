@@ -1,0 +1,89 @@
+"""診断部品の合成小例だけを通常受付で検査し、元の資料を保全する。"""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+import xml.etree.ElementTree as ET
+
+PORT = Path(__file__).resolve().parents[1]
+SOURCE = PORT/'source_e9'
+GATE = PORT/'instruction5/gate_200_01'
+DEST = PORT/'instruction3'/sys.argv[1]
+DEST.mkdir(exist_ok=False)
+
+
+def save(name, value):
+    (DEST/name).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n')
+
+
+def hashes(root):
+    result = {}
+    for path in root.rglob('*'):
+        if path.is_file():
+            h = hashlib.sha256()
+            with path.open('rb') as stream:
+                for block in iter(lambda:stream.read(1048576), b''):
+                    h.update(block)
+            result[str(path.relative_to(root))] = h.hexdigest()
+    return result
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+protected = ['abm/loop.py', 'abm/agent_runtime.py', 'abm/abstraction.py', 'tools/v39.py',
+    'tools/v310be.py', 'tools/attnstage2_runtime.py', 'tools/attnstage2_initial.py',
+    'tools/attncstar.py', 'tools/intervention46_records.py', 'tools/intervention46_record_run.py',
+    'tools/intervention46_record_gate.py', 'tools/intervention46_off_gate.py',
+    'tools/intervention46_native.py', 'tools/test_intervention46_native.py']
+protected_before = {name:sha(SOURCE/name) for name in protected}
+for name, value in protected_before.items():
+    old = subprocess.check_output(['git','show','9411a26b580e3511f6cd273f7af271376fb0251e:'+name],cwd=SOURCE)
+    assert hashlib.sha256(old).hexdigest()==value, ('旧入口又は本体の変更',name)
+gate_before = hashes(GATE)
+save('protected_before.json', protected_before)
+save('input_before.json', gate_before)
+test = SOURCE/'tools/test_intervention46_variants.py'
+files = [SOURCE/'tools/intervention46_variants.py', test, Path(__file__)]
+source_before = {str(path):sha(path) for path in files}
+for path in files:
+    (DEST/(path.name+'.txt')).write_bytes(path.read_bytes())
+env = dict(os.environ, PYTHONPATH=os.pathsep.join(map(str, (SOURCE/'tools',SOURCE/'tests',SOURCE,
+    PORT/'instruction3/test_dependencies_01'))), PYTHONDONTWRITEBYTECODE='1',
+    PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+command = [sys.executable,'-m','pytest','-q',str(test),'--junitxml='+str(DEST/'pytest.xml')]
+save('command.json',command)
+status = dict(status='running', model_run_called=False, formal_3b_material=False,
+              actual_record_interventions=False, pid=os.getpid())
+save('status.json',status)
+start = time.perf_counter()
+try:
+    process = subprocess.run(command,cwd=SOURCE,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+    (DEST/'pytest.log').write_text(process.stdout)
+    print(process.stdout,end='')
+    status['exit_code'] = process.returncode
+    assert process.returncode==0, '構造pytestの停止'
+    suites = ET.parse(DEST/'pytest.xml').getroot()
+    status['tests'] = sum(int(s.attrib.get('tests',0)) for s in suites)
+    status['status'] = 'passed'
+except BaseException as error:
+    status.update(status='stopped',error=repr(error))
+    raise
+finally:
+    after = hashes(GATE)
+    protected_after = {name:sha(SOURCE/name) for name in protected}
+    source_after = {str(path):sha(path) for path in files}
+    save('input_after.json',after)
+    save('protected_after.json',protected_after)
+    status.update(seconds=time.perf_counter()-start,
+        verified_at_jst=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).isoformat(timespec='seconds'),
+        input_files=len(gate_before),inputs_unchanged=gate_before==after,
+        protected_files=len(protected_before),protected_unchanged=protected_before==protected_after,
+        source_before=source_before,source_after=source_after,source_unchanged=source_before==source_after)
+    save('status.json',status)
+    assert gate_before==after and protected_before==protected_after and source_before==source_after, '元の資料が変わった'
