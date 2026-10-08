@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-09T07:35:02.020647+09:00",
+  "original_gate": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/required_gate_1740.json",
+  "original_gate_sha256": "8c6b24a43e5e21b505f0b352c5b6151942dc8e2ececae70646c6552cd0f8850f",
+  "passed": true,
+  "scope": "固定e9ed84ae・世界2種41・全1740・HU on・忘却実行停止、GC100000と高速書出しの二旗だけ、reuse off",
+  "record_count": 9,
+  "exclusions": [
+    "台帳の見出し一行だけ"
+  ],
+  "all_records_equal": true,
+  "comparison_receipt_pid": 99551,
+  "comparison_mem_gb": 1,
+  "comparison_receipt_exit_code": 0,
+  "originals": {
+    "off": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740",
+      "measurement_sha256": "b0d551a7138aa9b067a5dfd8e9115dd68025a5445a20604a84b4403cc7a9f15a",
+      "native_command_sha256": "1285ff490bab2c9f02d78f5971dcab74bc24da6454c8def1777efc0d7bef651b",
+      "ALLDONE_tail": "受け付けた：PID 49451、担当 Codex2 指示19 高速化関門 reuse_off_1740、見込み 4.0 GB（表の合計 19.3 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-08 11:44:30 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-09 07:24:05 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=70730.1 最大メモリMB=2259.4 定義末=13 一致=None err=None\n2026-10-09 07:24:09 ALLDONE shop_hide1_s1\n消した：PID 49451\n",
+      "receipt_exit_code": null,
+      "receipt_exit_code_observable": false
+    },
+    "on": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740",
+      "measurement_sha256": "28c3bc5a8546e07e734c79b096dfdd9ba8fc521c6b1dc56e34472de47dd8b356",
+      "native_command_sha256": "a5c4ee836584b22ff121780d33d82ac85dfc402d60145ea064b89a353a64aaac",
+      "ALLDONE_tail": "受け付けた：PID 59598、担当 Codex2 指示21 GC書き出し二旗 全1740、見込み 3.0 GB（表の合計 22.3 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）\n2026-10-08 12:21:55 開始 shop_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-09 06:57:18 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=66869.94 最大メモリMB=2284.9 定義末=13 一致=None err=None\n2026-10-09 06:57:25 ALLDONE shop_hide1_s1\n消した：PID 59598\n",
+      "receipt_exit_code": 0,
+      "receipt_exit_code_observable": true
+    }
+  },
+  "actual_ended_ps": {
+    "at": "2026-10-09T07:35:02.020647+09:00",
+    "pids": [
+      59575,
+      49451,
+      49459,
+      49468,
+      59598,
+      59604,
+      59619,
+      99551
+    ],
+    "stdout": "",
+    "exit_code": 1
+  },
+  "original_copy_manifest": {
+    "control/attn_stage2_2026-10-07/instruction21_full_off_native_command_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/native_command.json",
+      "sha256": "1285ff490bab2c9f02d78f5971dcab74bc24da6454c8def1777efc0d7bef651b"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_off_worker_pid_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/worker_pid.json",
+      "sha256": "8d1c009190171ac0e52b85537b4a8682d6bf2ffb52be913b7854b65bf0b2764e"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_off_measurement_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/measurement.json",
+      "sha256": "b0d551a7138aa9b067a5dfd8e9115dd68025a5445a20604a84b4403cc7a9f15a"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_off_run_20261009.log": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/run.log",
+      "sha256": "97f794a337d16811307ed1a9709b7110cf6917b1361daf8b1df340e482dc5796"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_native_command_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740/native_command.json",
+      "sha256": "a5c4ee836584b22ff121780d33d82ac85dfc402d60145ea064b89a353a64aaac"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_worker_pid_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740/worker_pid.json",
+      "sha256": "0667bd964920bfd1e99ec5c88e4562a8b4985816ee5b8d057d7e56e84499c3a2"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_measurement_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740/measurement.json",
+      "sha256": "28c3bc5a8546e07e734c79b096dfdd9ba8fc521c6b1dc56e34472de47dd8b356"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_run_20261009.log": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740/run.log",
+      "sha256": "194da7cdde824d9b4cb43297636d260e202d98ff512b1d552529e444b1ada1fe"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_off_completed_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/off_completed.json",
+      "sha256": "58f11ab2d0150cf4c5e66200bfd2765b866198cec7862d05023e623f7129386c"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_completed_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/on_completed.json",
+      "sha256": "2aee956aa8a4d118698394656ba9d571a8e37fd6a2816724a204ea346c093bbc"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_on_receipt_ended_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/on_receipt_ended.json",
+      "sha256": "0dfe7e325bf5eacf9d3d7095e2a31979b270487e8759dc2801dcd95914f94f1a"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_required_gate_1740_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/required_gate_1740.json",
+      "sha256": "8c6b24a43e5e21b505f0b352c5b6151942dc8e2ececae70646c6552cd0f8850f"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_cpu_comparison_1740_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/cpu_comparison_1740.json",
+      "sha256": "652695646553aaf0dc75b811703dc9e554059c122177d01685449975fa849c0e"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_comparison_entry_started_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/comparison_entry_started.json",
+      "sha256": "a7b2edc5584ab20ab15aaac2f5512b8a3acef7ef6f0970954fa7dbe63dfa2f54"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_comparison_receipt_submitted_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/comparison_receipt_submitted.json",
+      "sha256": "bd9a407e9115fa4a4630359f8f89215f4a09ba9b791e563bfd97fd6aa1e03957"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_comparison_receipt_ended_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/comparison_receipt_ended.json",
+      "sha256": "d0f32078c1c4a193f3ecd4e148cd3942bb4250e3b8c68a25e24204bb4c42ed66"
+    },
+    "control/attn_stage2_2026-10-07/instruction21_full_status_20261009.json": {
+      "original": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/status.json",
+      "sha256": "db5868c0c37017a80d69c4a0bff777db9b7062398ceb75b9903216aa6bbdf00a"
+    }
+  },
+  "pause_corrected_report": "control/attn_stage2_2026-10-07/instruction21_full_pause_corrected_comparison_20261009.json",
+  "cpu_ratio": 0.8585784974737267,
+  "gc_seconds": null,
+  "gc_count": null,
+  "original_models_and_comparison_not_rerun": true,
+  "models_receipts_observers_signaled": 0,
+  "no_new_models_or_comparisons_submitted": true,
+  "adoption_decided": false,
+  "production_started": false
+}

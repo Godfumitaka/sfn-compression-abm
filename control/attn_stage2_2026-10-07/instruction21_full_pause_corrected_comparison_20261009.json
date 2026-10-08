@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-09T07:35:02.020647+09:00",
+  "original_cpu_comparison": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/cpu_comparison_1740.json",
+  "original_cpu_comparison_sha256": "652695646553aaf0dc75b811703dc9e554059c122177d01685449975fa849c0e",
+  "original_pause_record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/pair_resumed.json",
+  "original_pause_record_sha256": "8ffb7e5acbdda6e0fc03870224f60e9aed4e0aaca9a484d700daeef2cb8958ea",
+  "off": {
+    "pid": 49468,
+    "original_wall_seconds": "70774.302409834",
+    "pause_seconds": "43495.707192542",
+    "pause_lower_seconds": "43495.707174",
+    "pause_upper_seconds": "43495.707211084",
+    "wall_minus_pause_seconds": "27278.595217292",
+    "wall_minus_pause_lower_seconds": "27278.595198750",
+    "wall_minus_pause_upper_seconds": "27278.595235834",
+    "cpu_seconds_unchanged": 27195.167413000003,
+    "peak_rss_bytes": 2259075072,
+    "scope": "worker_model_observer_state_save"
+  },
+  "on": {
+    "pid": 59619,
+    "original_wall_seconds": "66922.24784750002",
+    "pause_seconds": "43495.707161750004",
+    "pause_lower_seconds": "43495.70714475",
+    "pause_upper_seconds": "43495.70717875",
+    "wall_minus_pause_seconds": "23426.540685750016",
+    "wall_minus_pause_lower_seconds": "23426.54066875002",
+    "wall_minus_pause_upper_seconds": "23426.54070275002",
+    "cpu_seconds_unchanged": 23349.185975999997,
+    "peak_rss_bytes": 2284535808,
+    "scope": "worker_model_observer_state_save"
+  },
+  "on_over_off_wall_minus_pause": "0.8587883833145427985868174739011762688315",
+  "on_over_off_wall_minus_pause_lower": "0.8587883821076019748830830860395479857723",
+  "on_over_off_wall_minus_pause_upper": "0.8587883845214839172015667029841022890625",
+  "wall_minus_pause_reduction_percent": "14.12116166854572014131825260988237311685",
+  "original_on_over_off_wall_including_pause": 0.9455726947327886,
+  "cpu_pause_not_added": true,
+  "original_measurements_not_modified": true,
+  "arithmetic": "原JSONの数値の文字列をDecimalとして停止秒を引く。上下界だけを伝播し、模型記録の丸めや比較の許容差には使わない。",
+  "adoption_decided": false
+}

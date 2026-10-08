@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-09T07:24:19.257250+09:00",
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "trials": 1740,
+  "off": {
+    "pid": 49468,
+    "trials": 1740,
+    "wall_seconds": 70774.302409834,
+    "cpu_user_seconds": 27146.742204000002,
+    "cpu_system_seconds": 48.425208999999995,
+    "cpu_seconds": 27195.167413000003,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 2259075072,
+    "max_candidates": 13,
+    "max_definitions": 13,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "on": {
+    "pid": 59619,
+    "trials": 1740,
+    "wall_seconds": 66922.24784750002,
+    "cpu_user_seconds": 23305.236005,
+    "cpu_system_seconds": 43.949971,
+    "cpu_seconds": 23349.185975999997,
+    "cpu_scope": "worker_model_observer_state_save",
+    "peak_rss_bytes": 2284535808,
+    "max_candidates": 13,
+    "max_definitions": 13,
+    "ru_maxrss_unit": "macOS_bytes"
+  },
+  "on_over_off_cpu": 0.8585784974737267,
+  "on_over_off_wall": 0.9455726947327886,
+  "includes_observer_and_state_save": true,
+  "flag_bundle": [
+    "--sme-gc-threshold 100000",
+    "--sme-fast-encode"
+  ],
+  "reuse": "off",
+  "gc_seconds": null,
+  "gc_count": null,
+  "gc_note": "原の同じ観測台本と固定模型にはGC秒・回数の計測が無い。後から補わない。",
+  "off_original_start": "2026-10-08T11:44:30.825865+09:00",
+  "on_start": "2026-10-08T12:21:55.515906+09:00",
+  "starts_at_different_times_but_runs_overlap": true,
+  "adoption_decided": false
+}

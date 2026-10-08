@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-09T01:21:22.078306+09:00",
+  "pair_wall_before": "2026-10-09T01:21:22.078261+09:00",
+  "events": [
+    {
+      "pid": 49468,
+      "signal": "SIGCONT",
+      "monotonic_before_ns": 492053218626291,
+      "monotonic_after_ns": 492053218635750
+    },
+    {
+      "pid": 59619,
+      "signal": "SIGCONT",
+      "monotonic_before_ns": 492053218639291,
+      "monotonic_after_ns": 492053218642958
+    }
+  ],
+  "all_four_calibration_native_complete": {
+    "41": true,
+    "42": true,
+    "43": true,
+    "44": true
+  },
+  "pair_signal_gap_ns": 3541,
+  "pause_intervals": {
+    "49468": {
+      "pause_seconds": 43495.707192542,
+      "pause_seconds_lower": 43495.707174,
+      "pause_seconds_upper": 43495.707211084,
+      "method": "SIGSTOP/SIGCONTの前後の単調時計の中央と上下界"
+    },
+    "59619": {
+      "pause_seconds": 43495.707161750004,
+      "pause_seconds_lower": 43495.70714475,
+      "pause_seconds_upper": 43495.70717875,
+      "method": "SIGSTOP/SIGCONTの前後の単調時計の中央と上下界"
+    }
+  },
+  "original_measurements_not_modified": true,
+  "cpu_pause_not_added": true,
+  "wall_pause_to_subtract_only_in_separate_report": true
+}
