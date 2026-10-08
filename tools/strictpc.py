@@ -42,9 +42,16 @@ USES = (  # （呼び出しの元の関数名, 使い道）。スタックを内
 def _use() -> str:
     f = sys._getframe(2)
     names = []
+    memo = sys.modules.get('stage2memo')
+    recording = memo is not None and memo.ENABLED and bool(memo.AUDITS)
+    frames = [] if recording else None
     while f is not None and len(names) < 40:
         names.append(f.f_code.co_name)
+        if recording:
+            frames.append(f)
         f = f.f_back
+    if recording:
+        memo.record_use(names, frames, sys._getframe(1))
     for fn, label in USES:
         if fn in names:
             return label

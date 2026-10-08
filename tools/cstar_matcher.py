@@ -66,8 +66,18 @@ class CstarMatcher(Matcher):
         before = self._capture_rng_state() if tie_seed is None else {
             "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
         started = time.perf_counter()
-        result = CstarEngine(left, right, self.settings, rng, probabilities,
-                             tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
+        import stage2memo
+        side = (stage2memo.engine_side(self) if stage2memo.ENABLED
+                and tie_seed is not None and foundation is None else None)
+        if side is not None and scope is not None and key in side:
+            result = side[key]
+            stage2memo.STATS['p5_hits'] += 1
+        else:
+            result = CstarEngine(left, right, self.settings, rng, probabilities,
+                                 tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
+            if side is not None:
+                side[key] = result
+                stage2memo.STATS['p5_runs'] += 1
         if scope is not None:
             stats['engine_calls'] += 1
             stats['engine_seconds'] += time.perf_counter() - started

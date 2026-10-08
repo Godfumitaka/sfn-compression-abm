@@ -238,6 +238,15 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     result = (engine.match(left,right,tie_seed=seed,probabilities=probability) if expected
               else engine.match(left,right,tie_seed=seed))
     rng_before = engine.cache_rng[key]
+    import stage2memo
+    memo = stage2memo.mapping_hit(expected, seed, key)
+    if memo is not None:
+        out, calls = memo
+        stage2memo.replay_calls(calls)
+        GRAPHS[lf], GRAPHS[rf] = left, right
+        RESULTS[key] = out
+        STATS['computed'] = STATS.get('computed', 0) + 1
+        return out
     (cstar.validate if expected else validate)(left, right, result)
     GRAPHS[lf], GRAPHS[rf] = left, right
     best = result.best
@@ -245,16 +254,20 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     rm = {} if best is None else dict(best.relation_mapping)
     # 旧い照合の計数の変更を本体へ戻さない。比較の結果だけ別の欄に残す。
     import probeworld
-    snap = probeworld._snapshot_modules()
-    sp = sys.modules.get("strictpc")
-    sp_stats = dict(sp.STATS) if sp is not None else None
+    record = stage2memo.begin_audit(expected, seed)
     try:
-        old = OLD_MAP(base_graph, target_graph_partial, params).alignment
+        snap = probeworld._snapshot_modules()
+        sp = sys.modules.get("strictpc")
+        sp_stats = dict(sp.STATS) if sp is not None else None
+        try:
+            old = OLD_MAP(base_graph, target_graph_partial, params).alignment
+        finally:
+            probeworld._restore_modules(snap)
+            if sp_stats is not None:
+                sp.STATS.clear()
+                sp.STATS.update(sp_stats)
     finally:
-        probeworld._restore_modules(snap)
-        if sp_stats is not None:
-            sp.STATS.clear()
-            sp.STATS.update(sp_stats)
+        calls = stage2memo.end_audit(record)
     identifier = sha256(repr(key).encode()).hexdigest()
     kinds = () if best is None else best.match_kinds
     visible_names = sum(k == "name" and b in {r.relation_id for r in target_graph_partial.relations} for a, b, k in kinds)
@@ -283,6 +296,7 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
                          sum(n.kind == "relation" and n.key not in rm for n in left.nodes), projectable,
                          sme_result_id=identifier, sme_audit=audit)
     out = MappingResult(alignment=al)
+    stage2memo.mapping_store(expected, seed, key, out, calls)
     RESULTS[key] = out
     STATS["computed"] = STATS.get("computed", 0) + 1
     _log({"kind": "sme_result", "caller": use, "result": identifier, **audit,
