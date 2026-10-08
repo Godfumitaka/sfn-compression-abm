@@ -1,0 +1,764 @@
+{
+  "at": "2026-10-08T10:13:46.521604+09:00",
+  "measurement_interval": "模型workerのsweep.run_one直前から、模型・原記録・軽い観測込み。受付・起動待ちを除く。途中値。",
+  "native_gzip_read": false,
+  "cases": {
+    "w2_seed041": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/blocks_100.jsonl",
+      "progress_cutoff": {
+        "at": "2026-10-08T10:13:45.664408+09:00",
+        "trial": 771,
+        "trials_completed": 772,
+        "seconds": 1.5523034579819068,
+        "elapsed_seconds": 5719.356592041964,
+        "peak_rss_bytes": 1147551744,
+        "definitions": 13,
+        "disclosed": false,
+        "disclosed_trials": 389,
+        "rematch_totals": {
+          "birth": {
+            "calls": 7288,
+            "seconds": 319.44634182489244,
+            "match_calls": 51296,
+            "result_cache_hits": 0,
+            "engine_calls": 51296,
+            "engine_seconds": 54.563326406117994,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 68036,
+            "seconds": 2972.3894561314373,
+            "match_calls": 68036,
+            "result_cache_hits": 0,
+            "engine_calls": 68036,
+            "engine_seconds": 112.39112206501886,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 269386,
+          "signs": {
+            "positive": 174540,
+            "zero": 49748,
+            "negative": 45098
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 40640
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 75097
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 18956
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 4458
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 99443
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 30792
+            }
+          ]
+        }
+      },
+      "blocks": [
+        {
+          "at": "2026-10-08T09:09:07.640343+09:00",
+          "first_completed": 1,
+          "last_completed": 100,
+          "last_trial": 99,
+          "block_seconds": 1841.3629964590073,
+          "elapsed_seconds": 1841.3629964590073,
+          "peak_rss_bytes": 221020160,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 51,
+          "rematch_calls_in_block": {
+            "birth": 7288,
+            "disclosure": 6182
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 6182,
+              "seconds": 193.44207621767418,
+              "match_calls": 6182,
+              "result_cache_hits": 0,
+              "engine_calls": 6182,
+              "engine_seconds": 5.760391382442322,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 23434,
+            "signs": {
+              "positive": 16239,
+              "zero": 4761,
+              "negative": 2434
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 2008
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 7516
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 2193
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 426
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 8723
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 2568
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T09:16:31.916625+09:00",
+          "first_completed": 101,
+          "last_completed": 200,
+          "last_trial": 199,
+          "block_seconds": 444.27286016597645,
+          "elapsed_seconds": 2285.6358566249837,
+          "peak_rss_bytes": 338804736,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 102,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 9333
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 15515,
+              "seconds": 514.1988595608855,
+              "match_calls": 15515,
+              "result_cache_hits": 0,
+              "engine_calls": 15515,
+              "engine_seconds": 15.84746404888574,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 60034,
+            "signs": {
+              "positive": 41407,
+              "zero": 12113,
+              "negative": 6514
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 5488
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 19184
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 5345
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 1026
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 22223
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 6768
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T09:24:46.490163+09:00",
+          "first_completed": 201,
+          "last_completed": 300,
+          "last_trial": 299,
+          "block_seconds": 494.5697134590009,
+          "elapsed_seconds": 2780.2055700839846,
+          "peak_rss_bytes": 474955776,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 157,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 10065
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 25580,
+              "seconds": 872.9030577425729,
+              "match_calls": 25580,
+              "result_cache_hits": 0,
+              "engine_calls": 25580,
+              "engine_seconds": 27.39317666745046,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 96634,
+            "signs": {
+              "positive": 65508,
+              "zero": 19068,
+              "negative": 12058
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 10432
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 29785
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 8100
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 1626
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 35723
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 10968
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T09:33:12.452182+09:00",
+          "first_completed": 301,
+          "last_completed": 400,
+          "last_trial": 399,
+          "block_seconds": 505.9580874579842,
+          "elapsed_seconds": 3286.163657541969,
+          "peak_rss_bytes": 599261184,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 208,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 9333
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 34913,
+              "seconds": 1235.456363404228,
+              "match_calls": 34913,
+              "result_cache_hits": 0,
+              "engine_calls": 34913,
+              "engine_seconds": 40.056725805217866,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 133234,
+            "signs": {
+              "positive": 88608,
+              "zero": 25568,
+              "negative": 19058
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 16832
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 39385
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 10400
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 2226
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 49223
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 15168
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T09:42:33.141382+09:00",
+          "first_completed": 401,
+          "last_completed": 500,
+          "last_trial": 499,
+          "block_seconds": 560.6848857500008,
+          "elapsed_seconds": 3846.8485432919697,
+          "peak_rss_bytes": 740605952,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 260,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 9516
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 44429,
+              "seconds": 1638.7482665948337,
+              "match_calls": 44429,
+              "result_cache_hits": 0,
+              "engine_calls": 44429,
+              "engine_seconds": 55.37612700089812,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 169834,
+            "signs": {
+              "positive": 111708,
+              "zero": 32068,
+              "negative": 26058
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 23232
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 48985
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 12700
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 2826
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 62723
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 19368
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T09:52:07.433263+09:00",
+          "first_completed": 501,
+          "last_completed": 600,
+          "last_trial": 599,
+          "block_seconds": 574.2874220419908,
+          "elapsed_seconds": 4421.1359653339605,
+          "peak_rss_bytes": 877133824,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 312,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 9516
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 53945,
+              "seconds": 2056.252145198174,
+              "match_calls": 53945,
+              "result_cache_hits": 0,
+              "engine_calls": 53945,
+              "engine_seconds": 71.30273304664297,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 206434,
+            "signs": {
+              "positive": 134808,
+              "zero": 38568,
+              "negative": 33058
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 29632
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 58585
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 15000
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 3426
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 76223
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 23568
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-08T10:04:49.003140+09:00",
+          "first_completed": 601,
+          "last_completed": 700,
+          "last_trial": 699,
+          "block_seconds": 761.5638824159978,
+          "elapsed_seconds": 5182.699847749958,
+          "peak_rss_bytes": 979632128,
+          "definitions_at_end": 13,
+          "max_definitions": 13,
+          "disclosed_trials_cumulative": 362,
+          "rematch_calls_in_block": {
+            "birth": 0,
+            "disclosure": 9150
+          },
+          "rematch_totals_cumulative": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 63095,
+              "seconds": 2604.897898364812,
+              "match_calls": 63095,
+              "result_cache_hits": 0,
+              "engine_calls": 63095,
+              "engine_seconds": 95.20848547434434,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts_cumulative": {
+            "count": 243034,
+            "signs": {
+              "positive": 157908,
+              "zero": 45068,
+              "negative": 40058
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 36032
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 68185
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 17300
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 4026
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 89723
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 27768
+              }
+            ]
+          }
+        }
+      ],
+      "complete_1740_confirmed": false
+    },
+    "w2_seed042": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/blocks_100.jsonl",
+      "progress_cutoff": {
+        "at": "2026-10-08T10:11:11.304513+09:00",
+        "trial": 18,
+        "trials_completed": 19,
+        "seconds": 5.661716834001709,
+        "elapsed_seconds": 939.1370729999617,
+        "peak_rss_bytes": 104333312,
+        "definitions": 9,
+        "disclosed": true,
+        "disclosed_trials": 7,
+        "rematch_totals": {
+          "birth": {
+            "calls": 4516,
+            "seconds": 222.3271268248791,
+            "match_calls": 27298,
+            "result_cache_hits": 0,
+            "engine_calls": 27298,
+            "engine_seconds": 41.99445678223856,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 537,
+            "seconds": 20.65230867068749,
+            "match_calls": 537,
+            "result_cache_hits": 0,
+            "engine_calls": 537,
+            "engine_seconds": 0.6154263251810335,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 2930,
+          "signs": {
+            "positive": 2292,
+            "zero": 595,
+            "negative": 43
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 3
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 1186
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 276
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 40
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 1106
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 319
+            }
+          ]
+        }
+      },
+      "blocks": [],
+      "complete_1740_confirmed": false
+    }
+  }
+}
