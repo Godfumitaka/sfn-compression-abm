@@ -1,0 +1,350 @@
+{
+  "at": "2026-10-08T11:22:42.573232+09:00",
+  "instruction": 20,
+  "partial_sizes": [
+    {
+      "world": 2,
+      "seed": 41,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+      "progress_sample": {
+        "at": "2026-10-08T11:22:40.152235+09:00",
+        "trial": 1104,
+        "trials_completed": 1105,
+        "seconds": 25.28371166595025,
+        "elapsed_seconds": 9853.811821749958,
+        "peak_rss_bytes": 1458651136,
+        "definitions": 13,
+        "disclosed": true,
+        "disclosed_trials": 568,
+        "rematch_totals": {
+          "birth": {
+            "calls": 7288,
+            "seconds": 319.44634182489244,
+            "match_calls": 51296,
+            "result_cache_hits": 0,
+            "engine_calls": 51296,
+            "engine_seconds": 54.563326406117994,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 100793,
+            "seconds": 5987.890411338129,
+            "match_calls": 100793,
+            "result_cache_hits": 0,
+            "engine_calls": 100793,
+            "engine_seconds": 267.3068444059463,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 391264,
+          "signs": {
+            "positive": 251463,
+            "zero": 71393,
+            "negative": 68408
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 61952
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 107065
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 26615
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 6456
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 144398
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 44778
+            }
+          ]
+        }
+      },
+      "partial": true,
+      "measurement_exists": false,
+      "worker_finished_exists": false,
+      "native_calibration": [
+        {
+          "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed041.calibration.jsonl.gz",
+          "bytes": 6824047,
+          "mtime_ns": 1791426132640908030
+        }
+      ],
+      "native_calibration_compressed_bytes": 6824047,
+      "output_files": [
+        {
+          "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+          "bytes": 12125643,
+          "mtime_ns": 1791426134868263950
+        },
+        {
+          "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed041.keys.jsonl.gz",
+          "bytes": 10052374,
+          "mtime_ns": 1791426160188794321
+        },
+        {
+          "file": "flag.json",
+          "bytes": 2013,
+          "mtime_ns": 1791416306168186663
+        },
+        {
+          "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+          "bytes": 45249998,
+          "mtime_ns": 1791426160182231436
+        },
+        {
+          "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed041.calibration.jsonl.gz",
+          "bytes": 6824047,
+          "mtime_ns": 1791426132640908030
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.answers.csv",
+          "bytes": 225627,
+          "mtime_ns": 1791425686509662327
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl",
+          "bytes": 8390848,
+          "mtime_ns": 1791426159998627782
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.routing.jsonl",
+          "bytes": 8917884,
+          "mtime_ns": 1791426159633277237
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.shop.jsonl",
+          "bytes": 0,
+          "mtime_ns": 1791416306252004057
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.jsonl.gz",
+          "bytes": 52491222,
+          "mtime_ns": 1791426160334709971
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.states.jsonl.gz",
+          "bytes": 257747177,
+          "mtime_ns": 1791426160662392510
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+          "bytes": 2333302,
+          "mtime_ns": 1791426057891803051
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.initial.jsonl.gz",
+          "bytes": 100406,
+          "mtime_ns": 1791417754498822795
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz.rematch.jsonl.gz",
+          "bytes": 2661266,
+          "mtime_ns": 1791426088146899668
+        }
+      ],
+      "output_bytes": 407121807,
+      "file_count": 14,
+      "gzip_not_decompressed_or_repaired": true,
+      "first_wave_estimate_not_final": true
+    },
+    {
+      "world": 2,
+      "seed": 42,
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042",
+      "progress_sample": {
+        "at": "2026-10-08T11:22:40.368081+09:00",
+        "trial": 436,
+        "trials_completed": 437,
+        "seconds": 16.260527915961575,
+        "elapsed_seconds": 5228.16636491596,
+        "peak_rss_bytes": 651034624,
+        "definitions": 14,
+        "disclosed": true,
+        "disclosed_trials": 206,
+        "rematch_totals": {
+          "birth": {
+            "calls": 7628,
+            "seconds": 472.8063182811602,
+            "match_calls": 52194,
+            "result_cache_hits": 0,
+            "engine_calls": 52194,
+            "engine_seconds": 85.42674842727138,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          },
+          "disclosure": {
+            "calls": 34984,
+            "seconds": 1842.0830434344243,
+            "match_calls": 34984,
+            "result_cache_hits": 0,
+            "engine_calls": 34984,
+            "engine_seconds": 63.548816626833286,
+            "foundation_builds": 0,
+            "foundation_hits": 0
+          }
+        },
+        "v_counts": {
+          "count": 147710,
+          "signs": {
+            "positive": 112077,
+            "zero": 25047,
+            "negative": 10586
+          },
+          "by_kind": [
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "negative",
+              "count": 4288
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "positive",
+              "count": 58280
+            },
+            {
+              "kind": "FH",
+              "reference": false,
+              "sign": "zero",
+              "count": 11287
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "negative",
+              "count": 6298
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "positive",
+              "count": 53797
+            },
+            {
+              "kind": "HU",
+              "reference": true,
+              "sign": "zero",
+              "count": 13760
+            }
+          ]
+        }
+      },
+      "partial": true,
+      "measurement_exists": false,
+      "worker_finished_exists": false,
+      "native_calibration": [
+        {
+          "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed042.calibration.jsonl.gz",
+          "bytes": 2586864,
+          "mtime_ns": 1791426142427010117
+        }
+      ],
+      "native_calibration_compressed_bytes": 2586864,
+      "output_files": [
+        {
+          "file": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl.gz",
+          "bytes": 4496047,
+          "mtime_ns": 1791426144107355478
+        },
+        {
+          "file": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed042.keys.jsonl.gz",
+          "bytes": 3542148,
+          "mtime_ns": 1791426160404452687
+        },
+        {
+          "file": "flag.json",
+          "bytes": 2002,
+          "mtime_ns": 1791420932035466687
+        },
+        {
+          "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl.gz",
+          "bytes": 16936803,
+          "mtime_ns": 1791426160398024386
+        },
+        {
+          "file": "researcher/f0.5000_th2.1000_vt0.3842_first_order/seed042.calibration.jsonl.gz",
+          "bytes": 2586864,
+          "mtime_ns": 1791426142427010117
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.answers.csv",
+          "bytes": 108540,
+          "mtime_ns": 1791426047131842126
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl",
+          "bytes": 3327883,
+          "mtime_ns": 1791426160206528669
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.routing.jsonl",
+          "bytes": 3494976,
+          "mtime_ns": 1791426160082852029
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.shop.jsonl",
+          "bytes": 0,
+          "mtime_ns": 1791420932151325461
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.sme.jsonl.gz",
+          "bytes": 19601818,
+          "mtime_ns": 1791426160637128603
+        },
+        {
+          "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed042.sme.states.jsonl.gz",
+          "bytes": 99040716,
+          "mtime_ns": 1791426160774076723
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl.gz",
+          "bytes": 815954,
+          "mtime_ns": 1791426078904670657
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl.gz.initial.jsonl.gz",
+          "bytes": 98977,
+          "mtime_ns": 1791422740423874893
+        },
+        {
+          "file": "stage2/f0.5000_th2.1000_vt0.3842_first_order/seed042.jsonl.gz.rematch.jsonl.gz",
+          "bytes": 1027984,
+          "mtime_ns": 1791426072872170513
+        }
+      ],
+      "output_bytes": 155080712,
+      "file_count": 14,
+      "gzip_not_decompressed_or_repaired": true,
+      "first_wave_estimate_not_final": true
+    }
+  ],
+  "stat_only": true,
+  "source_code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+}

@@ -1,0 +1,108 @@
+"""N4: 保存済みの小さい記録を読むだけの、条件付き計画用見積もり。模型をimport/起動しない。"""
+from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import hashlib
+import json
+import math
+
+ROOT = Path('/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03')
+EV = ROOT / 'evidence/new-port-20261007'
+REF = EV / 'n4-references'
+OUT = EV / 'n4-resource-estimate.json'
+assert not OUT.exists(), '保存済み見積もりを上書きしない'
+T, Q = 1740, .2
+latest = json.loads((REF / '6.json').read_text())['cases']['w2_seed041']
+progress = latest['progress']
+block = latest['blocks_added'][0]
+previous = json.loads((REF / '9.json').read_text())['new_blocks']
+prev = next(x for x in previous if x['seed'] == 41 and x['last_completed'] == 1100)
+birth_before = next(x for x in previous if x['seed'] == 42 and x['last_completed'] == 200)
+birth_after = next(x for x in previous if x['seed'] == 42 and x['last_completed'] == 300)
+resource_path = EV / 'off_recv2_200/resource.json'
+summary_path = ROOT / 'outputs/new-port-20261008/off_recv2_200/comm/run001.summary.json'
+resource = json.loads(resource_path.read_text())
+summary = json.loads(summary_path.read_text())
+assert resource['exitcode'] == 0 and resource['trials'] == 200 and not resource['errors']
+assert summary['trials'] == 200 and not summary['errors']
+assert sum(summary['recv'].values()) == summary['delivered'] == 61
+assert latest['measurement'] is None and latest['worker_finished'] is None
+assert progress['trials_completed'] == 1204 and progress['disclosed_trials'] == 624
+assert block['last_completed'] == 1200 and prev['last_completed'] == 1100
+assert birth_before['definitions_at_end'] == 13 and birth_after['definitions_at_end'] == 14
+assert birth_after['rematch_calls_in_block']['birth'] == 646
+
+elapsed = progress['elapsed_seconds']
+disclosure_s = progress['rematch_totals']['disclosure']['seconds']
+world_trial_count = progress['trials_completed']
+disclosure_count = progress['disclosed_trials']
+tail_disclosure_s = (block['rematch_totals_cumulative']['disclosure']['seconds']
+    - prev['rematch_totals_cumulative']['disclosure']['seconds'])
+tail_disclosure_count = block['disclosed_trials_cumulative'] - prev['disclosed_trials_cumulative']
+birth_reference_s = (birth_after['rematch_totals_cumulative']['birth']['seconds']
+    - birth_before['rematch_totals_cumulative']['birth']['seconds'])
+# 旧二体OFFの実際のまとめ役の事象。個体STATSの診断中の呼び出し回数を使わない。
+old_agent_trials = 2 * resource['trials']
+old_birth_rate = summary['recv']['誕生'] / old_agent_trials
+old_birth_given_receive = summary['recv']['誕生'] / summary['delivered']
+receive_birth_low_s = T * old_birth_rate * birth_reference_s
+receive_birth_high_s = T * Q * old_birth_given_receive * birth_reference_s
+# OFFの全実時間を追加の配管・観測の仮枠へ丸ごと使う。実測差分ではなく一部二重計上を含む。
+off_allowance_s = resource['elapsed_seconds'] * T / old_agent_trials
+rss_linear_gb = progress['peak_rss_bytes'] * T / world_trial_count / 1e9
+rss_tail_gb = (progress['peak_rss_bytes'] + (T - world_trial_count)
+    * (block['peak_rss_bytes'] - prev['peak_rss_bytes']) / 100) / 1e9
+rows = []
+for f in (.1, .9):
+    mean_world_s = T * (elapsed - disclosure_s) / world_trial_count + T * f * disclosure_s / disclosure_count
+    tail_world_s = T * (block['block_seconds'] - tail_disclosure_s) / 100 + T * f * tail_disclosure_s / tail_disclosure_count
+    per_actor_low_h = (min(mean_world_s, tail_world_s) + receive_birth_low_s + off_allowance_s) / 3600
+    per_actor_high_h = (max(mean_world_s, tail_world_s) + receive_birth_high_s + off_allowance_s) / 3600
+    for n in (4, 8):
+        serial_h = [n * per_actor_low_h, n * per_actor_high_h]
+        parallel_h = [per_actor_low_h, per_actor_high_h]
+        rows.append(dict(n=n, f=f, serial_cores=1, parallel_cores=n,
+            world_mean_hours_per_actor=mean_world_s / 3600,
+            world_tail_hours_per_actor=tail_world_s / 3600,
+            serial_wall_hours=serial_h, parallel_ideal_wall_hours=parallel_h,
+            serial_core_wall_hours=serial_h, parallel_ideal_core_wall_hours=serial_h,
+            rss_projection_gb=[n * min(rss_linear_gb, rss_tail_gb), n * max(rss_linear_gb, rss_tail_gb)],
+            reservation_scenario_gb=math.ceil(n * max(rss_linear_gb, rss_tail_gb) * 1.3 + 1),
+            native_output_scenario_gb=[n * 1., n * 1.3],
+            off_only_linear_output_gb=resource['output_bytes'] * T * n / old_agent_trials / 1e9))
+        # 芯×実時間の計画量の算術を検査する。CPU使用秒と同一とはしない。
+        for a, b in zip(serial_h, parallel_h):
+            assert math.isclose(a, n * b, rel_tol=1e-12)
+            assert a > 0
+all_four = [sum(row['serial_core_wall_hours'][i] for row in rows) for i in (0, 1)]
+assert len(rows) == 4 and sum(row['n'] for row in rows) == 24
+inputs = dict(horizon=T, q_assumed=Q, world=2, all_actors_same_f=True,
+    stage2_birth_hu='on', speed_flags='off', collective_audit=False, probe_every=100,
+    input_report_commit=json.loads((REF / 'provenance.json').read_text())[0]['commit'],
+    code_commit='c4cfed12a3944071951775b2c9373ca27705fb25',
+    partial_world_seconds=elapsed, partial_world_trials=world_trial_count,
+    partial_rss_bytes=progress['peak_rss_bytes'], disclosure_seconds=disclosure_s,
+    disclosure_trials=disclosure_count, latest_100_seconds=block['block_seconds'],
+    latest_100_disclosure_seconds=tail_disclosure_s, latest_100_disclosures=tail_disclosure_count,
+    old_off_seconds=resource['elapsed_seconds'], old_off_output_bytes=resource['output_bytes'],
+    old_off_delivered=summary['delivered'], old_off_receive_births=summary['recv']['誕生'],
+    birth_reference_rematch_seconds=birth_reference_s, birth_reference_calls=646,
+    receive_birth_low_per_actor=T * old_birth_rate,
+    receive_birth_high_per_actor=T * Q * old_birth_given_receive,
+    receive_birth_hours_per_actor=[receive_birth_low_s/3600, receive_birth_high_s/3600],
+    off_allowance_hours_per_actor=off_allowance_s/3600,
+    resource_sha256=hashlib.sha256(resource_path.read_bytes()).hexdigest(),
+    comm_summary_sha256=hashlib.sha256(summary_path.read_bytes()).hexdigest())
+result = dict(at=datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(), instruction=4,
+    method='two_conditional_extrapolations_not_confidence_interval_or_hard_bound',
+    no_new_model_run=True, inputs=inputs, rows=rows,
+    combined_four_conditions_core_wall_hours_per_seed=all_four,
+    combined_five_seeds_core_wall_hours=[5*x for x in all_four],
+    combined_ten_seeds_core_wall_hours=[10*x for x in all_four],
+    unknown_additions=['parallel_barrier_and_contention', 'receive_Cstar_E_cost_beyond_OFF_allowance',
+        'receive_birth_rematch_and_memory_change', 'collective_runtime_journal_bytes_and_encoding_RSS',
+        'full_length_f_and_lambda_dependent_memory', 'actual_cpu_seconds'],
+    parallel_efficiency_formula='wall=ideal_wall/eta; core_wall=ideal_core_wall/eta; eta_unmeasured',
+    actual_jobs_reservation_submitted=False)
+OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps(dict(at=result['at'], rows=rows, totals=all_four), ensure_ascii=False, indent=2))
