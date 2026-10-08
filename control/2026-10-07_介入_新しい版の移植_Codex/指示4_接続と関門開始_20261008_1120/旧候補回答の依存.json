@@ -1,0 +1,635 @@
+{
+  "at_jst": "2026-10-08T11:19:32+09:00",
+  "instruction": 3,
+  "stage": "旧形式診断の依存接続",
+  "exception": "ModuleNotFoundError: selcands",
+  "previous_world_hash_gate_reached_and_passed": true,
+  "old_byte_comparisons_completed": 0,
+  "connection_repair_is_not_output_comparison_repair": true,
+  "scope": "旧selcandsの全バイト複製のみ。模型・読み手・関門条件は変更しない。",
+  "old_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_seal_intervention_2026-10-04/source/tools/selcands.py",
+  "new_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/selcands.py",
+  "sha256": "9f9253890d12929eac88b4b4916fdb872b5006103ef170affb5ff87099d14836",
+  "imports": [
+    {
+      "reader": "sealrestore",
+      "module": "__future__",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "ast",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "copy",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "csv",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "glob",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "hashlib",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "json",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "os",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "sys",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "tempfile",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "time",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "multiprocessing",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "random",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "sweep",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "sweep",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "roletarget_recompute",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.definition",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.loop",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "shopworld",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "dataclasses",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "extrap_reader",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.world",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.loop",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "dataclasses",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "sweep",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "v3_run",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "dataclasses",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "abm.definition",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "resource",
+      "local_available": false
+    },
+    {
+      "reader": "sealrestore",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "sealrestore",
+      "module": "strictpc",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "__future__",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "argparse",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "gzip",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "hashlib",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "json",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "os",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "shutil",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "subprocess",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "sys",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "tempfile",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "time",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "collections",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "dataclasses",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "pathlib",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "random",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.definition",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.agent_runtime",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v310be",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.sme",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.loop",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "selcands",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.agent_runtime",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.sme",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.loop",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "abm.world",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "shopworld",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "sealrestore",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "extrap_reader",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "sweep",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "v3_run",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "sealrestore",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_diag",
+      "module": "strictpc",
+      "local_available": true
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "pathlib",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "argparse",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "csv",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "gzip",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "hashlib",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "json",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "sys",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "collections",
+      "local_available": false
+    },
+    {
+      "reader": "seal_intervention_batch",
+      "module": "seal_intervention_diag",
+      "local_available": true
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "pathlib",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "collections",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "argparse",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "csv",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "gzip",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "json",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "subprocess",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "time",
+      "local_available": false
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "seal_intervention_diag",
+      "local_available": true
+    },
+    {
+      "reader": "seal_mac_intervention",
+      "module": "seal_intervention_batch",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "__future__",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "csv",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "glob",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "gzip",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "json",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "os",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "sys",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "tempfile",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "time",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "random",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "dataclasses",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.domains",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.agent_runtime",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.loop",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.sme",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "abm.world",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "shopworld",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "sealrestore",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "v39",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "v310be",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "extrap_reader",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "sweep",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "v3_run",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "sealrestore",
+      "local_available": true
+    },
+    {
+      "reader": "selcands",
+      "module": "multiprocessing",
+      "local_available": false
+    },
+    {
+      "reader": "selcands",
+      "module": "strictpc",
+      "local_available": true
+    }
+  ]
+}
