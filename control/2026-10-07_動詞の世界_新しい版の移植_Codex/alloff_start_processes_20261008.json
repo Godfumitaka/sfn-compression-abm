@@ -1,0 +1,51 @@
+{
+  "observed_at": "2026-10-08T11:44台+09:00",
+  "source": "ps -axo pid,ppid,pgid,stat,etime,command, own group only",
+  "model_worker_pid": 47356,
+  "model_parent_pid": 47353,
+  "time_pid": 47351,
+  "supervisor_pid": 19615,
+  "counting": "個体worker47356だけを模型として一回数える。親47353・time47351・監督19615・resource_tracker47355を除く。RSSやCPUによる足切りなし。",
+  "processes": [
+    {
+      "pid": 19615,
+      "ppid": 1,
+      "pgid": 19615,
+      "stat": "Ss",
+      "elapsed": "01:19:43",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gate_supervisor.py"
+    },
+    {
+      "pid": 47351,
+      "ppid": 47345,
+      "pgid": 47351,
+      "stat": "Ss",
+      "elapsed": "08:33",
+      "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gate_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/source_alloff config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global"
+    },
+    {
+      "pid": 47353,
+      "ppid": 47351,
+      "pgid": 47351,
+      "stat": "S",
+      "elapsed": "08:33",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gate_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/source_alloff config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global"
+    },
+    {
+      "pid": 47355,
+      "ppid": 47353,
+      "pgid": 47351,
+      "stat": "S",
+      "elapsed": "08:33",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 47356,
+      "ppid": 47353,
+      "pgid": 47351,
+      "stat": "R",
+      "elapsed": "08:33",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ]
+}
