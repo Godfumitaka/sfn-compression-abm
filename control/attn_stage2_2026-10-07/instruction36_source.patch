@@ -1,0 +1,502 @@
+diff --git a/tests/test_stage2_memo.py b/tests/test_stage2_memo.py
+new file mode 100644
+index 00000000..994435fe
+--- /dev/null
++++ b/tests/test_stage2_memo.py
+@@ -0,0 +1,217 @@
++"""P5・P7rの完全な鍵、控え・乱数・計数と実反実仮想の不変を検査する。"""
++from collections import Counter
++from dataclasses import replace
++from pathlib import Path
++from random import Random
++import copy
++import sys
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1] / 'tools'),
++               str(Path(__file__).resolve().parents[1])]
++import pytest
++from test_attncstar import cstar, build, retained_U_structure
++from test_sme2017_connection import separate
++from test_cstar_stage2_reuse import counters
++from cstar_matcher import CstarMatcher, CstarEngine
++from cstar_reuse import Store
++from sme2017 import Graph, Node, Settings
++import attncstar as N
++import attnstage2 as T
++from attnstage2_distribution import Readout
++from attnstage2_sme import isolated
++import cstar_runtime as C
++import smeshared as S
++import strictpc
++import stage2memo as M
++import v39
++
++
++@pytest.fixture(autouse=True)
++def memo_reset():
++    M.configure(False)
++    yield
++    assert not M.AUDITS
++    M.configure(False)
++
++
++@pytest.mark.parametrize('uniform', [False, True])
++def test_engine_complete_key_result_rng_and_logical_counts(uniform, monkeypatch):
++    rng = Random(36)
++    runs = []
++    original = CstarEngine.run
++    def counted(self):
++        runs.append(self)
++        return original(self)
++    monkeypatch.setattr(CstarEngine, 'run', counted)
++    M.configure(True)
++    for case in range(25):
++        nodes = [Node('e', 'entity')]
++        for i in range(3):
++            nodes.append(Node(f'r{i}', 'relation', frozenset({f'p{i % 2}'}),
++                              tuple(rng.choice(nodes).key for _ in range(1 + i % 2))))
++        left = Graph(tuple(nodes))
++        right = Graph(tuple(replace(n, state='F') for n in nodes))
++        matcher = CstarMatcher(Settings(), tie_uniform=uniform)
++        ps = {n.key: {'p0': .5, 'p1': .5} for n in nodes if n.kind != 'entity'}
++        stats = counters()
++        monkeypatch.setitem(S.CTX, 'trial', case)
++        before = len(runs)
++        with matcher.stage2_scope(None, stats):
++            first = matcher.match(left, right, probabilities=ps, use_cache=False, tie_seed=8)
++            again = matcher.match(left, right, probabilities=ps, use_cache=False, tie_seed=8)
++        assert first is again and len(runs) == before + 1
++        assert stats['match_calls'] == stats['engine_calls'] == 2
++        assert stats['result_cache_hits'] == 0
++        assert matcher.cache == matcher.cache_rng == {}
++        # 分布を変えると、同じ形・種でも新しい点・対応を作る。
++        changed = {key: {'p0': 0., 'p1': 1.} for key in ps}
++        with matcher.stage2_scope(None, stats):
++            actual = matcher.match(left, right, probabilities=changed, use_cache=False, tie_seed=8)
++        M.configure(False)
++        baseline = CstarMatcher(matcher.settings, tie_uniform=uniform)
++        expected = baseline.match(left, right, probabilities=changed, use_cache=False, tie_seed=8)
++        assert actual == expected and matcher.snapshot() == baseline.snapshot()
++        M.configure(True)
++        monkeypatch.setitem(S.CTX, 'trial', case + 100)
++        before = len(runs)
++        with matcher.stage2_scope(None, stats):
++            matcher.match(left, right, probabilities=ps, use_cache=False, tie_seed=8)
++        assert len(runs) == before + 1
++
++
++@pytest.mark.parametrize('kind', ['unseeded', 'foundation', 'outside_scope'])
++def test_engine_never_shortcuts_ineligible_calls(kind, monkeypatch):
++    g = Graph((Node('e', 'entity'), Node('r', 'relation', frozenset({'p'}), ('e',))))
++    m = CstarMatcher(tie_seed=7, tie_uniform=True)
++    ps = {'r': {'p': 1.}}
++    runs = []
++    real = CstarEngine.run
++    def counted(self):
++        runs.append(1)
++        return real(self)
++    monkeypatch.setattr(CstarEngine, 'run', counted)
++    M.configure(True)
++    for _ in range(2):
++        if kind == 'outside_scope':
++            m.match(g, g, probabilities=ps, tie_seed=1, use_cache=False)
++        else:
++            with m.stage2_scope(Store() if kind == 'foundation' else None, counters()):
++                m.match(g, g, probabilities=ps, tie_seed=None if kind == 'unseeded' else 1, use_cache=False)
++    assert len(runs) == 2 and M.STATS['p5_hits'] == 0
++
++
++def test_mapping_replays_shallow_counter_leak_with_current_caller(cstar, monkeypatch):
++    state, cfg, obs, ai = build()
++    raw = replace(ai.base_graph, graph_id='definition:R')
++    real = S.OLD_MAP
++    calls = []
++    monkeypatch.setattr(strictpc, 'STATS', dict(calls=0, dropped=0, reasons=Counter(),
++                        use_calls=Counter(), use_dropped=Counter()))
++    def old_map(*args, **kw):
++        n, reasons = 3, Counter({'検査用の子': 2})
++        label = strictpc._use()
++        strictpc.STATS['calls'] += 1
++        strictpc.STATS['dropped'] += n
++        strictpc.STATS['reasons'].update(reasons)
++        strictpc.STATS['use_calls'][label] += 1
++        strictpc.STATS['use_dropped'][label] += n
++        calls.append(label)
++        return real(*args, **kw)
++    monkeypatch.setattr(S, 'OLD_MAP', old_map)
++    # 種は本来callerを含む。ここでは固定して同じ鍵の再生時の分類を別途点検。
++    monkeypatch.setattr(S, '_match_seed', lambda *args: 77)
++    def predict():
++        return S.map_graphs(raw, ai.target_graph_partial)
++    def counterfactuals():
++        return S.map_graphs(raw, ai.target_graph_partial)
++    M.configure(True)
++    results = []
++    for call in (predict, counterfactuals):
++        with isolated(), C.phase(state, cfg, ai.target_graph_partial, True), C.ENGINE.stage2_scope(None, counters()):
++            results.append(call())
++    assert results[0] is results[1] and len(calls) == 1 and M.STATS['p7_hits'] == 1
++    assert strictpc.STATS['calls'] == strictpc.STATS['dropped'] == 0
++    assert strictpc.STATS['reasons'] == Counter({'検査用の子': 4})
++    assert strictpc.STATS['use_calls'] == Counter({'予測の場面の照合（逐語の記憶と提示）': 1,
++                                                '反実仮想の予測': 1})
++    assert strictpc.STATS['use_dropped'] == Counter({'予測の場面の照合（逐語の記憶と提示）': 3,
++                                                  '反実仮想の予測': 3})
++
++
++@pytest.mark.parametrize('mode', ['alpha', 'top1', 'mixture'])
++def test_all_seat_values_calls_and_main_state_identical(cstar, retained_U_structure, mode):
++    state, cfg, obs, ai = build()
++    state, _ = v39._convert(state, 'FH', 'R', 1, 1)
++    before = repr(state), repr(obs.__dict__), C.snapshot(), S.ENGINE.rng.getstate(), dict(S.STATS)
++    def measure():
++        session = N.Session(ai, state, cfg, Random(1).getstate(), obs, {'k': .5}, mode='global',
++                            position='k2', door_task=True, epsilon=.01,
++                            readout_policy=Readout(), feature_policy=N.Features())
++        seats = [T.Seat(d.name, row.slot_index, v39.seat_state(d, row, state.slot_history),
++                        state.v39_seats[d.name, row.slot_index].gen)
++                 for d in state.definitions.values() for row in d.constituents]
++        rows, work = T.compare_seats(session.candidates, {}, seats, session.rematched, session.exact,
++            correct=('hold', ('x',)), ell=4., mode=mode, choose=session.choose,
++            background=session.background, method='rematched')
++        return rows, {k: v for k, v in work.items() if k != 'seconds'}
++    old = measure()
++    M.configure(True)
++    assert measure() == old
++    assert (repr(state), repr(obs.__dict__), C.snapshot(), S.ENGINE.rng.getstate(), dict(S.STATS)) == before
++    assert M.STATS['p5_hits'] and M.STATS['p7_hits']
++
++
++def test_birth_FH_HU_same_columns_and_records(cstar, retained_U_structure):
++    from attnstage2_initial import VirtualInitial
++    from attnstage2_questions import Snapshot
++    state, cfg, obs, ai = build()
++    definition = replace(state.definitions['R'], name='fresh', registered_at=2)
++    context = dict(definition=definition, row=definition.constituents[0], first_material=ai.base_graph,
++        second_visible=ai.target_graph_partial, trial=2, base_age=1,
++        pre=(ai, state, cfg, Random(1).getstate(), obs, {}, True, (), None),
++        questions=Snapshot(1, 1, frozenset({'hold'}), frozenset(), True))
++    before = repr(state), repr(obs.__dict__), C.snapshot()
++    def measure():
++        policy = VirtualInitial(loss_mode='top1', mode='global', position='k2', epsilon=.01,
++            readout_policy=Readout(), feature_policy=N.Features(), measure_birth_hu=True,
++            session_class=N.Session)
++        value = policy(v39.SeatRec(0, 'F', 2, 2, v39.ZERO4, v39.ZERO4), 'birth', context)
++        return value, [{k: v for k, v in r.items() if k != 'seconds'} for r in policy.records]
++    old = measure()
++    M.configure(True)
++    assert measure() == old
++    assert (repr(state), repr(obs.__dict__), C.snapshot()) == before
++
++
++def test_mapping_memo_requires_closed_logs_scope_and_current_trial(cstar, monkeypatch):
++    M.configure(True)
++    with C.ENGINE.stage2_scope(None, counters()):
++        assert M.active(True, 7)
++        record = M.begin_audit(True, 7)
++        calls = M.end_audit(record)
++        M.mapping_store(True, 7, ('key',), 'out', calls)
++        assert M.mapping_hit(True, 7, ('key',)) == ('out', [])
++        monkeypatch.setitem(S.LOG, 'f', object())
++        assert not M.active(True, 7)
++        monkeypatch.setitem(S.LOG, 'f', None)
++        monkeypatch.setitem(S.CTX, 'trial', 19)
++        assert M.mapping_hit(True, 7, ('key',)) is None
++        assert not M.active(False, 7) and not M.active(True, None)
++    assert not M.active(True, 7)
++
++
++def test_audit_exception_and_nested_frames_are_cleaned(cstar):
++    M.configure(True)
++    with C.ENGINE.stage2_scope(None, counters()):
++        outer = M.begin_audit(True, 7)
++        try:
++            inner = M.begin_audit(True, 7)
++            try:
++                raise ValueError('検査用の例外')
++            except ValueError:
++                pass
++            finally:
++                assert M.end_audit(inner) == []
++        finally:
++            assert M.end_audit(outer) == []
++    assert not M.AUDITS
+diff --git a/tools/cstar_matcher.py b/tools/cstar_matcher.py
+index c58b89b8..231b654a 100644
+--- a/tools/cstar_matcher.py
++++ b/tools/cstar_matcher.py
+@@ -66,8 +66,18 @@ class CstarMatcher(Matcher):
+         before = self._capture_rng_state() if tie_seed is None else {
+             "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
+         started = time.perf_counter()
+-        result = CstarEngine(left, right, self.settings, rng, probabilities,
+-                             tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
++        import stage2memo
++        side = (stage2memo.engine_side(self) if stage2memo.ENABLED
++                and tie_seed is not None and foundation is None else None)
++        if side is not None and scope is not None and key in side:
++            result = side[key]
++            stage2memo.STATS['p5_hits'] += 1
++        else:
++            result = CstarEngine(left, right, self.settings, rng, probabilities,
++                                 tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
++            if side is not None:
++                side[key] = result
++                stage2memo.STATS['p5_runs'] += 1
+         if scope is not None:
+             stats['engine_calls'] += 1
+             stats['engine_seconds'] += time.perf_counter() - started
+diff --git a/tools/smeshared.py b/tools/smeshared.py
+index 4c7f2af3..9f413468 100644
+--- a/tools/smeshared.py
++++ b/tools/smeshared.py
+@@ -238,6 +238,15 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+     result = (engine.match(left,right,tie_seed=seed,probabilities=probability) if expected
+               else engine.match(left,right,tie_seed=seed))
+     rng_before = engine.cache_rng[key]
++    import stage2memo
++    memo = stage2memo.mapping_hit(expected, seed, key)
++    if memo is not None:
++        out, calls = memo
++        stage2memo.replay_calls(calls)
++        GRAPHS[lf], GRAPHS[rf] = left, right
++        RESULTS[key] = out
++        STATS['computed'] = STATS.get('computed', 0) + 1
++        return out
+     (cstar.validate if expected else validate)(left, right, result)
+     GRAPHS[lf], GRAPHS[rf] = left, right
+     best = result.best
+@@ -245,16 +254,20 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+     rm = {} if best is None else dict(best.relation_mapping)
+     # 旧い照合の計数の変更を本体へ戻さない。比較の結果だけ別の欄に残す。
+     import probeworld
+-    snap = probeworld._snapshot_modules()
+-    sp = sys.modules.get("strictpc")
+-    sp_stats = dict(sp.STATS) if sp is not None else None
++    record = stage2memo.begin_audit(expected, seed)
+     try:
+-        old = OLD_MAP(base_graph, target_graph_partial, params).alignment
++        snap = probeworld._snapshot_modules()
++        sp = sys.modules.get("strictpc")
++        sp_stats = dict(sp.STATS) if sp is not None else None
++        try:
++            old = OLD_MAP(base_graph, target_graph_partial, params).alignment
++        finally:
++            probeworld._restore_modules(snap)
++            if sp_stats is not None:
++                sp.STATS.clear()
++                sp.STATS.update(sp_stats)
+     finally:
+-        probeworld._restore_modules(snap)
+-        if sp_stats is not None:
+-            sp.STATS.clear()
+-            sp.STATS.update(sp_stats)
++        calls = stage2memo.end_audit(record)
+     identifier = sha256(repr(key).encode()).hexdigest()
+     kinds = () if best is None else best.match_kinds
+     visible_names = sum(k == "name" and b in {r.relation_id for r in target_graph_partial.relations} for a, b, k in kinds)
+@@ -283,6 +296,7 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+                          sum(n.kind == "relation" and n.key not in rm for n in left.nodes), projectable,
+                          sme_result_id=identifier, sme_audit=audit)
+     out = MappingResult(alignment=al)
++    stage2memo.mapping_store(expected, seed, key, out, calls)
+     RESULTS[key] = out
+     STATS["computed"] = STATS.get("computed", 0) + 1
+     _log({"kind": "sme_result", "caller": use, "result": identifier, **audit,
+diff --git a/tools/stage2memo.py b/tools/stage2memo.py
+new file mode 100644
+index 00000000..404fc42a
+--- /dev/null
++++ b/tools/stage2memo.py
+@@ -0,0 +1,122 @@
++"""P5・P7r：第二段の同じ試行・同じ完全な鍵だけを使い回す。
++
++反実仮想の復元から独立した控え。模型の統計と順つきの控えは元と同じに
++書く。OLD_MAPの浅いSTATS復元で残る入れ子Counterも同じ順で再現する。
++"""
++from collections import Counter
++import sys
++
++ENABLED = False
++TRIAL = object()
++MAPPINGS = {}
++AUDITS = []
++STATS = {}
++
++
++def configure(enabled=False):
++    global ENABLED, TRIAL
++    ENABLED = bool(enabled)
++    TRIAL = object()
++    MAPPINGS.clear()
++    AUDITS.clear()
++    STATS.clear()
++    STATS.update(p5_runs=0, p5_hits=0, p7_stores=0, p7_hits=0, p7_replayed_calls=0)
++
++
++def _trial():
++    return sys.modules['smeshared'].CTX.get('trial')
++
++
++def engine_side(engine):
++    """engineのsnapshotに含めず、試行が変われば空にする。"""
++    trial = _trial()
++    if getattr(engine, '_stage2_memo_trial', object()) != trial:
++        engine._stage2_memo_trial = trial
++        engine._stage2_memo_results = {}
++    return engine._stage2_memo_results
++
++
++def active(expected, seed):
++    global TRIAL
++    if not ENABLED or not expected or seed is None:
++        return False
++    shared = sys.modules['smeshared']
++    cstar = sys.modules.get('cstar_runtime')
++    if (shared.LOG.get('f') is not None or shared.LOG.get('diagnostic_f') is not None
++            or cstar is None or getattr(cstar.ENGINE, '_stage2_scope', None) is None):
++        return False
++    trial = _trial()
++    if TRIAL != trial:
++        MAPPINGS.clear()
++        TRIAL = trial
++    return True
++
++
++def mapping_hit(expected, seed, key):
++    if not active(expected, seed):
++        return None
++    entry = MAPPINGS.get(key)
++    if entry is not None:
++        STATS['p7_hits'] += 1
++    return entry
++
++
++def mapping_store(expected, seed, key, out, calls):
++    if active(expected, seed):
++        if calls is None:
++            raise RuntimeError('P7rのOLD_MAPの記録が無い')
++        MAPPINGS[key] = out, calls
++        STATS['p7_stores'] += 1
++
++
++def begin_audit(expected, seed):
++    if not active(expected, seed):
++        return None
++    # 呼び出すmap_graphsのframeを識別し、同名のOLD_MAPと混同しない。
++    record = dict(frame=sys._getframe(1), calls=[])
++    AUDITS.append(record)
++    return record
++
++
++def end_audit(record):
++    if record is None:
++        return None
++    if not AUDITS or AUDITS[-1] is not record:
++        raise RuntimeError('P7rのOLD_MAPの記録の入れ子が違う')
++    AUDITS.pop()
++    calls = record['calls']
++    record.clear()  # frameの循環参照を控えへ残さない。
++    return calls
++
++
++def record_use(names, frames, caller):
++    if not AUDITS:
++        return
++    record = AUDITS[-1]
++    depth = next((i for i, frame in enumerate(frames) if frame is record['frame']), None)
++    record['calls'].append((tuple(names[:depth] if depth is not None else names), depth,
++                            caller.f_locals['n'], Counter(caller.f_locals['reasons'])))
++
++
++def replay_calls(calls):
++    if calls is None:
++        raise RuntimeError('P7rの控えにOLD_MAPの記録が無い')
++    sp = sys.modules.get('strictpc')
++    if sp is None:
++        if calls:
++            raise RuntimeError('P7rのstrictpcの記録の読み先が無い')
++        return
++    here = sys._getframe(1)
++    for internal, depth, n, reasons in calls:
++        names = list(internal)
++        if depth is not None:
++            frame = here
++            while frame is not None and len(names) < 40:
++                names.append(frame.f_code.co_name)
++                frame = frame.f_back
++        label = next((label for fn, label in sp.USES if fn in names), 'その他')
++        # calls/droppedなどの整数は元の浅い復元で戻る。三Counterだけが残る。
++        sp.STATS['reasons'].update(reasons)
++        sp.STATS['use_calls'][label] += 1
++        sp.STATS['use_dropped'][label] += n
++        STATS['p7_replayed_calls'] += 1
+diff --git a/tools/strictpc.py b/tools/strictpc.py
+index 713db01a..d8045e70 100644
+--- a/tools/strictpc.py
++++ b/tools/strictpc.py
+@@ -42,9 +42,16 @@ USES = (  # （呼び出しの元の関数名, 使い道）。スタックを内
+ def _use() -> str:
+     f = sys._getframe(2)
+     names = []
++    memo = sys.modules.get('stage2memo')
++    recording = memo is not None and memo.ENABLED and bool(memo.AUDITS)
++    frames = [] if recording else None
+     while f is not None and len(names) < 40:
+         names.append(f.f_code.co_name)
++        if recording:
++            frames.append(f)
+         f = f.f_back
++    if recording:
++        memo.record_use(names, frames, sys._getframe(1))
+     for fn, label in USES:
+         if fn in names:
+             return label
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index da3d6aee..0f7c44e6 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -489,6 +489,8 @@ def worker(task: dict) -> dict:
+         import selectn3
+         selectn3.install_n3()
+     if task.get("sme2017"):
++        import stage2memo
++        stage2memo.configure(task.get('stage2_memo', False))
+         import smeshared
+         smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]), call_seed=task.get("sme_call_seed", False),
+                           **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}),
+@@ -857,6 +859,8 @@ def main() -> None:
+                     help='C*の第二段の同じ分布・グラフを索引と試行内の控えで作る（P10は別旗）')
+     ap.add_argument('--stage2-cache-prune',choices=('off','on'),default='off',
+                     help='指示26のP10：過去の呼び出し種のC*控えだけを捨て、再参照なら止める')
++    ap.add_argument('--stage2-memo', choices=('off','on'), default='off',
++                    help='指示36のP5・P7r：第二段の同一試行の完全な照合鍵とOLD_MAPの計数を使い回す')
+     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+     ap.add_argument("--sme-gc-threshold", type=int, default=None,
+@@ -1045,6 +1049,9 @@ def main() -> None:
+     if args.stage2_cache_prune == 'on' and not (args.stage2 == 'on' and args.attn_allin
+                                               and args.match_cstar and args.sme_call_seed):
+         raise SystemExit('--stage2-cache-prune onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
++    if args.stage2_memo == 'on' and not (args.stage2 == 'on' and args.attn_allin
++                                      and args.match_cstar and args.sme_call_seed):
++        raise SystemExit('--stage2-memo onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
+     if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+         raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
+     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
+@@ -1059,6 +1066,7 @@ def main() -> None:
+             if args.stage2_reuse == 'on':task['stage2_reuse']=True
+             if args.stage2_speed == 'on':task['stage2_speed']=True
+             if args.stage2_cache_prune == 'on':task['stage2_cache_prune']=True
++            if args.stage2_memo == 'on':task['stage2_memo']=True
+             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
+         if args.logp_eps != .5:
+             task['logp_eps'] = args.logp_eps
+@@ -1098,6 +1106,7 @@ def main() -> None:
+                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
+                                                     **({'stage2_speed':True} if args.stage2_speed=='on' else {}),
+                                                     **({'stage2_cache_prune':True} if args.stage2_cache_prune=='on' else {}),
++                                                    **({'stage2_memo':True} if args.stage2_memo=='on' else {}),
+                                                     **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
+                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
+                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
