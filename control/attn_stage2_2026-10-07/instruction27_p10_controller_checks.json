@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-08T18:59:46.241628+09:00",
+  "passed": true,
+  "checks": [
+    "syntax",
+    "model_commands_output_only_five_cases",
+    "comparison_function_ast_unchanged",
+    "independent_postprocessor_bytes_same",
+    "two_observers_bytes_same",
+    "resource_and_source_helpers_readonly_reused",
+    "memory_1gb_4gb_unchanged",
+    "no_model_signal_delete_retry_calls",
+    "missing_200_waits",
+    "both_200_actual_pass_allows_parallel_full",
+    "gate_failure_rejected",
+    "strictpc_failure_rejected",
+    "receipt_nonzero_rejected",
+    "native_incomplete_rejected",
+    "unobservable_exit_rejected",
+    "warning_rejected",
+    "failure_rejected"
+  ],
+  "commands": {
+    "p10_default_off_200": {
+      "output_only_changed": true,
+      "argv_order_same": true,
+      "flags_same": true,
+      "mem_gb": 1,
+      "trials": 200,
+      "observer": "observe.py"
+    },
+    "p10_on_200": {
+      "output_only_changed": true,
+      "argv_order_same": true,
+      "flags_same": true,
+      "mem_gb": 1,
+      "trials": 200,
+      "observer": "observe.py"
+    },
+    "p10_on_1740": {
+      "output_only_changed": true,
+      "argv_order_same": true,
+      "flags_same": true,
+      "mem_gb": 4,
+      "trials": 1740,
+      "observer": "observe_light.py"
+    },
+    "p10_forget_exec_off_200": {
+      "output_only_changed": true,
+      "argv_order_same": true,
+      "flags_same": true,
+      "mem_gb": 1,
+      "trials": 200,
+      "observer": "observe.py"
+    },
+    "p10_forget_exec_on_200": {
+      "output_only_changed": true,
+      "argv_order_same": true,
+      "flags_same": true,
+      "mem_gb": 1,
+      "trials": 200,
+      "observer": "observe.py"
+    }
+  },
+  "source": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+  "model_processes_started": 0
+}
