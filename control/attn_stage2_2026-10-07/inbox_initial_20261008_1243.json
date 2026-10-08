@@ -1,0 +1,800 @@
+{
+  "at": "2026-10-08T12:43:42.472337+09:00",
+  "machine": {
+    "at": "2026-10-08T12:43:42.316580+09:00",
+    "models": {
+      "9096": {
+        "ppid": 9081,
+        "state": "R",
+        "rss_kb": 1065152
+      },
+      "47193": {
+        "ppid": 47184,
+        "state": "R",
+        "rss_kb": 195616
+      },
+      "47223": {
+        "ppid": 47214,
+        "state": "R",
+        "rss_kb": 319424
+      },
+      "47356": {
+        "ppid": 47353,
+        "state": "R",
+        "rss_kb": 377536
+      },
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 208432
+      },
+      "59619": {
+        "ppid": 59604,
+        "state": "R",
+        "rss_kb": 132592
+      },
+      "62410": {
+        "ppid": 62405,
+        "state": "R",
+        "rss_kb": 71328
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 1788208
+      }
+    },
+    "model_children": 8,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 9073,
+        "owner": "Codex2 指示18 較正 世界2 種42",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 47180,
+        "owner": "Codex2 指示20 較正 世界2 種43",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 47210,
+        "owner": "Codex2 指示20 較正 世界2 種44",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 19617,
+        "owner": "Codex 動詞新移植 追加旗off5000",
+        "mem_gb": 1.3
+      },
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 59598,
+        "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 62396,
+        "owner": "探索介入 指示5 記録だけ200試行関門",
+        "mem_gb": 1.0
+      }
+    ],
+    "disk_free_bytes": 218593202176,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "controllers": {
+    "instruction21_parallel_speed_gate": {
+      "pid": 59575,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        25152,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/controller.py"
+      ],
+      "files": {
+        "status.json": {
+          "at": "2026-10-08T12:43:35.798767+09:00",
+          "pid": 59575,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "phase": "parallel_models_running_or_waiting",
+          "adopted_off_receipt": 49451,
+          "on_receipt": 59598,
+          "on_submitted": true,
+          "machine": {
+            "at": "2026-10-08T12:43:35.708838+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 1065152
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 195600
+              },
+              "47223": {
+                "ppid": 47214,
+                "state": "R",
+                "rss_kb": 317024
+              },
+              "47356": {
+                "ppid": 47353,
+                "state": "R",
+                "rss_kb": 377536
+              },
+              "49468": {
+                "ppid": 49459,
+                "state": "R",
+                "rss_kb": 208432
+              },
+              "59619": {
+                "ppid": 59604,
+                "state": "R",
+                "rss_kb": 132592
+              },
+              "62410": {
+                "ppid": 62405,
+                "state": "R",
+                "rss_kb": 71296
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1788208
+              }
+            },
+            "model_children": 8,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 19617,
+                "owner": "Codex 動詞新移植 追加旗off5000",
+                "mem_gb": 1.3
+              },
+              {
+                "pid": 49451,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 59598,
+                "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 62396,
+                "owner": "探索介入 指示5 記録だけ200試行関門",
+                "mem_gb": 1.0
+              }
+            ],
+            "disk_free_bytes": 218595573760,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "effective_reserved_gb": 23.3,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "entry_started.json": null,
+        "receipt_submitted.json": null,
+        "receipt_ended.json": null,
+        "completed.json": null,
+        "off_completed.json": null,
+        "on_completed.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null
+      }
+    },
+    "instruction20_calibration_mac4344": {
+      "pid": 43207,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        20800,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py"
+      ],
+      "files": {
+        "status.json": {
+          "at": "2026-10-08T12:43:40.548728+09:00",
+          "pid": 43207,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "phase": "calibration_running_or_waiting",
+          "adopted_receipts": {
+            "41": 95408,
+            "42": 9073
+          },
+          "active": {
+            "43": 47180,
+            "44": 47210
+          },
+          "pending": [],
+          "removed_seeds": [
+            45,
+            46,
+            47,
+            48
+          ],
+          "completed": [],
+          "machine": {
+            "at": "2026-10-08T12:43:40.370722+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 1065152
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 195616
+              },
+              "47223": {
+                "ppid": 47214,
+                "state": "R",
+                "rss_kb": 317264
+              },
+              "47356": {
+                "ppid": 47353,
+                "state": "R",
+                "rss_kb": 377536
+              },
+              "49468": {
+                "ppid": 49459,
+                "state": "R",
+                "rss_kb": 208432
+              },
+              "59619": {
+                "ppid": 59604,
+                "state": "R",
+                "rss_kb": 132592
+              },
+              "62410": {
+                "ppid": 62405,
+                "state": "R",
+                "rss_kb": 71328
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1788208
+              }
+            },
+            "model_children": 8,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 19617,
+                "owner": "Codex 動詞新移植 追加旗off5000",
+                "mem_gb": 1.3
+              },
+              {
+                "pid": 49451,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 59598,
+                "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 62396,
+                "owner": "探索介入 指示5 記録だけ200試行関門",
+                "mem_gb": 1.0
+              }
+            ],
+            "disk_free_bytes": 218593411072,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "mem_gb": 3,
+          "effective_reserved_gb": 23.3,
+          "speed_gate_reserved_gb": 0,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "entry_started.json": null,
+        "receipt_submitted.json": null,
+        "receipt_ended.json": null,
+        "completed.json": null,
+        "off_completed.json": null,
+        "on_completed.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null
+      }
+    },
+    "instruction22_disclosure_profile": {
+      "pid": 63553,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        23792,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction22_disclosure_profile/controller.py"
+      ],
+      "files": {
+        "status.json": {
+          "at": "2026-10-08T12:43:36.713287+09:00",
+          "pid": 63553,
+          "phase": "waiting_before_receipt",
+          "machine": {
+            "at": "2026-10-08T12:43:36.626446+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 1065152
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 195600
+              },
+              "47223": {
+                "ppid": 47214,
+                "state": "R",
+                "rss_kb": 317024
+              },
+              "47356": {
+                "ppid": 47353,
+                "state": "R",
+                "rss_kb": 377536
+              },
+              "49468": {
+                "ppid": 49459,
+                "state": "R",
+                "rss_kb": 208432
+              },
+              "59619": {
+                "ppid": 59604,
+                "state": "R",
+                "rss_kb": 132592
+              },
+              "62410": {
+                "ppid": 62405,
+                "state": "R",
+                "rss_kb": 71296
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1788208
+              }
+            },
+            "model_children": 8,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 19617,
+                "owner": "Codex 動詞新移植 追加旗off5000",
+                "mem_gb": 1.3
+              },
+              {
+                "pid": 49451,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 59598,
+                "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 62396,
+                "owner": "探索介入 指示5 記録だけ200試行関門",
+                "mem_gb": 1.0
+              }
+            ],
+            "disk_free_bytes": 218594856960,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          }
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "entry_started.json": null,
+        "receipt_submitted.json": null,
+        "receipt_ended.json": null,
+        "completed.json": null,
+        "off_completed.json": null,
+        "on_completed.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null
+      }
+    },
+    "instruction17_on_mem4_controller": {
+      "pid": 91021,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        16384,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+      ],
+      "files": {
+        "status.json": {
+          "at": "2026-10-08T12:43:36.390110+09:00",
+          "pid": 91021,
+          "phase": "no_new_submission_waiting_natural_end",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": {
+          "at": "2026-10-08T09:47:43.052271+09:00",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "new_submission_stopped": true,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "entry_started.json": null,
+        "receipt_submitted.json": null,
+        "receipt_ended.json": null,
+        "completed.json": null,
+        "off_completed.json": null,
+        "on_completed.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null
+      }
+    }
+  },
+  "first_stage": {
+    "status": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "old_pids_actual_ps": {
+    "66840": null,
+    "9042": null,
+    "9047": null,
+    "94210": null,
+    "27353": null,
+    "72172": null
+  }
+}
