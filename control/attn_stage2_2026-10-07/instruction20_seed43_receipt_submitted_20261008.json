@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-08T11:35:10.177334+09:00",
+  "seed": 43,
+  "command": [
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "Codex2 指示20 較正 世界2 種43",
+    "--mem",
+    "3",
+    "--disk-path",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043",
+    "--",
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py",
+    "entry",
+    "43"
+  ],
+  "receipt_pid": 47180,
+  "mem_gb": 3,
+  "machine_before": {
+    "at": "2026-10-08T11:35:10.057035+09:00",
+    "models": {
+      "9096": {
+        "ppid": 9081,
+        "state": "R",
+        "rss_kb": 723648
+      },
+      "31675": {
+        "ppid": 31665,
+        "state": "R",
+        "rss_kb": 252304
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 1253968
+      }
+    },
+    "model_children": 3,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 9073,
+        "owner": "Codex2 指示18 較正 世界2 種42",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 31655,
+        "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 220116631552,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "effective_reserved_before": 12.0
+}

@@ -1,0 +1,86 @@
+{
+  "at": "2026-10-08T11:44:30.246510+09:00",
+  "passed": true,
+  "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "trials": 200,
+  "records": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+      "equal": true,
+      "bytes": 76599243,
+      "off_sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1",
+      "on_sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.answers.csv",
+      "equal": true,
+      "bytes": 42275,
+      "off_sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9",
+      "on_sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl",
+      "equal": true,
+      "bytes": 1437906,
+      "off_sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a",
+      "on_sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.routing.jsonl",
+      "equal": true,
+      "bytes": 1576658,
+      "off_sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4",
+      "on_sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.shop.jsonl",
+      "equal": true,
+      "bytes": 6013,
+      "off_sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7",
+      "on_sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.jsonl.gz",
+      "equal": true,
+      "bytes": 8472324,
+      "off_sha256": "a466f7bade737b9354d1e2844c2b3ae8b3965a1c199a84143c443621deef5dac",
+      "on_sha256": "a466f7bade737b9354d1e2844c2b3ae8b3965a1c199a84143c443621deef5dac"
+    },
+    {
+      "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.states.jsonl.gz",
+      "equal": true,
+      "bytes": 40743550,
+      "off_sha256": "017c8398a8654324758b6a98fce03f6e90da25e0c6f4452d82e86be05d5bd1e4",
+      "on_sha256": "017c8398a8654324758b6a98fce03f6e90da25e0c6f4452d82e86be05d5bd1e4"
+    },
+    {
+      "file": "tie_state.jsonl",
+      "equal": true,
+      "bytes": 3030783,
+      "off_sha256": "83dbbd97d9674d8e653bec55529c5ce9a6fbc6268d4729421f6d09070008ee18",
+      "on_sha256": "83dbbd97d9674d8e653bec55529c5ce9a6fbc6268d4729421f6d09070008ee18"
+    },
+    {
+      "file": "saved_matcher.jsonl.gz",
+      "equal": true,
+      "bytes": 9351095,
+      "off_sha256": "f1f0d6c2da5041f5f4e226fc7c806dde746f16ef0044ec967c3de92ffa0997cf",
+      "on_sha256": "f1f0d6c2da5041f5f4e226fc7c806dde746f16ef0044ec967c3de92ffa0997cf"
+    }
+  ],
+  "flag_bundle": [
+    "--stage2-reuse on",
+    "--sme-gc-threshold 100000",
+    "--sme-fast-encode"
+  ],
+  "world": 2,
+  "seed": 41,
+  "no_forget_exec": true,
+  "birth_hu": "on",
+  "excluded": [
+    "台帳の見出し一行だけ"
+  ],
+  "production_started": false,
+  "timing_diagnostics_separate": true,
+  "full_length_gate_complete": false
+}

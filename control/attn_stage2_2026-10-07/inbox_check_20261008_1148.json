@@ -1,0 +1,4816 @@
+{
+  "at": "2026-10-08T11:48:33.307182+09:00",
+  "machine": {
+    "at": "2026-10-08T11:48:33.061873+09:00",
+    "models": {
+      "9096": {
+        "ppid": 9081,
+        "state": "R",
+        "rss_kb": 819120
+      },
+      "47193": {
+        "ppid": 47184,
+        "state": "R",
+        "rss_kb": 97216
+      },
+      "47223": {
+        "ppid": 47214,
+        "state": "R",
+        "rss_kb": 88144
+      },
+      "47356": {
+        "ppid": 47353,
+        "state": "R",
+        "rss_kb": 289904
+      },
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 79408
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 1549232
+      }
+    },
+    "model_children": 6,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 9073,
+        "owner": "Codex2 指示18 較正 世界2 種42",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 47180,
+        "owner": "Codex2 指示20 較正 世界2 種43",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 47210,
+        "owner": "Codex2 指示20 較正 世界2 種44",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 19617,
+        "owner": "Codex 動詞新移植 追加旗off5000",
+        "mem_gb": 1.3
+      },
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 219749519360,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "own_model_children": 5,
+  "own_models": {
+    "9096": {
+      "ppid": 9081,
+      "state": "R",
+      "rss_kb": 819120
+    },
+    "47193": {
+      "ppid": 47184,
+      "state": "R",
+      "rss_kb": 97216
+    },
+    "47223": {
+      "ppid": 47214,
+      "state": "R",
+      "rss_kb": 88144
+    },
+    "49468": {
+      "ppid": 49459,
+      "state": "R",
+      "rss_kb": 79408
+    },
+    "95421": {
+      "ppid": 95412,
+      "state": "R",
+      "rss_kb": 1549232
+    }
+  },
+  "controllers": {
+    "instruction20_calibration_mac4344": {
+      "pid": 43207,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        20496,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py"
+      ],
+      "files": {
+        "supervisor.lock": "43207\n",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T11:24:19.090196+09:00",
+          "pid": 43207,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py"
+          ],
+          "start_new_session": true,
+          "adopted_receipts": {
+            "41": 95408,
+            "42": 9073
+          },
+          "new_seeds": [
+            43,
+            44
+          ],
+          "removed_seeds": [
+            45,
+            46,
+            47,
+            48
+          ],
+          "mem_gb": 3,
+          "existing_reservations_unchanged": true
+        },
+        "launch.json": {
+          "at": "2026-10-08T11:24:19.242273+09:00",
+          "pid": 43207,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "world": 2,
+          "seeds": [
+            41,
+            42,
+            43,
+            44
+          ],
+          "adopted_receipts": {
+            "41": 95408,
+            "42": 9073
+          },
+          "new_seeds": [
+            43,
+            44
+          ],
+          "removed_seeds": [
+            45,
+            46,
+            47,
+            48
+          ],
+          "mem_gb": 3,
+          "existing_reservations_unchanged": true,
+          "model_signals": false,
+          "deletes": false,
+          "automatic_retry": false,
+          "completed_instruction20_transfer": true
+        },
+        "status.json": {
+          "at": "2026-10-08T11:48:28.823156+09:00",
+          "pid": 43207,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "phase": "calibration_running_or_waiting",
+          "adopted_receipts": {
+            "41": 95408,
+            "42": 9073
+          },
+          "active": {
+            "43": 47180,
+            "44": 47210
+          },
+          "pending": [],
+          "removed_seeds": [
+            45,
+            46,
+            47,
+            48
+          ],
+          "completed": [],
+          "machine": {
+            "at": "2026-10-08T11:48:28.687687+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 819088
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 97216
+              },
+              "47223": {
+                "ppid": 47214,
+                "state": "R",
+                "rss_kb": 88144
+              },
+              "47356": {
+                "ppid": 47353,
+                "state": "R",
+                "rss_kb": 289904
+              },
+              "49468": {
+                "ppid": 49459,
+                "state": "R",
+                "rss_kb": 83392
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1547184
+              }
+            },
+            "model_children": 6,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 19617,
+                "owner": "Codex 動詞新移植 追加旗off5000",
+                "mem_gb": 1.3
+              },
+              {
+                "pid": 49451,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 219751071744,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "mem_gb": 3,
+          "effective_reserved_gb": 19.3,
+          "speed_gate_reserved_gb": 4,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "required_gate_200.json": null,
+        "cpu_comparison_200.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {
+        "w2_seed043_entry_started.json": {
+          "at": "2026-10-08T11:35:10.490894+09:00",
+          "machine": {
+            "at": "2026-10-08T11:35:10.442317+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 723648
+              },
+              "31675": {
+                "ppid": 31665,
+                "state": "R",
+                "rss_kb": 252304
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1253984
+              }
+            },
+            "model_children": 3,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 31655,
+                "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              }
+            ],
+            "disk_free_bytes": 220116615168,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "world": 2,
+          "seed": 43,
+          "trials": 1740,
+          "mem_gb": 3,
+          "no_forget_exec": true,
+          "birth_hu": "on",
+          "calibration": true,
+          "heavy_matcher_observer": false,
+          "speed_flags_enabled": false,
+          "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/native_command.json",
+          "actual_native_command": [
+            "/opt/homebrew/bin/python3.12",
+            "tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/config.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--cells",
+            "f0.5000_th2.1000_first_order",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--e-price",
+            "0.01873710622997919",
+            "--v39-price",
+            "0.01873710622997919",
+            "--shop-world",
+            "2",
+            "--workers",
+            "1",
+            "--seeds",
+            "43",
+            "--trial-count",
+            "1740",
+            "--no-compare",
+            "--horizon",
+            "1740",
+            "--score-arg-order",
+            "--sme2017",
+            "--shop-scatter",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--match-eps",
+            "0",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-reuse",
+            "off",
+            "--stage2-birth-hu",
+            "on",
+            "--no-forget-exec"
+          ],
+          "small_speed_gate": null,
+          "small_speed_gate_sha256": null,
+          "small_speed_gate_record": null
+        },
+        "w2_seed043_receipt_submitted.json": {
+          "at": "2026-10-08T11:35:10.177334+09:00",
+          "seed": 43,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/jobs/jobs.py",
+            "run",
+            "--wait",
+            "--owner",
+            "Codex2 指示20 較正 世界2 種43",
+            "--mem",
+            "3",
+            "--disk-path",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043",
+            "--",
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py",
+            "entry",
+            "43"
+          ],
+          "receipt_pid": 47180,
+          "mem_gb": 3,
+          "machine_before": {
+            "at": "2026-10-08T11:35:10.057035+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 723648
+              },
+              "31675": {
+                "ppid": 31665,
+                "state": "R",
+                "rss_kb": 252304
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1253968
+              }
+            },
+            "model_children": 3,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 31655,
+                "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 220116631552,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "effective_reserved_before": 12.0
+        },
+        "w2_seed044_entry_started.json": {
+          "at": "2026-10-08T11:35:15.831231+09:00",
+          "machine": {
+            "at": "2026-10-08T11:35:15.778694+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 723648
+              },
+              "31675": {
+                "ppid": 31665,
+                "state": "R",
+                "rss_kb": 256464
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 67472
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1254736
+              }
+            },
+            "model_children": 4,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 31655,
+                "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              }
+            ],
+            "disk_free_bytes": 220115890176,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "world": 2,
+          "seed": 44,
+          "trials": 1740,
+          "mem_gb": 3,
+          "no_forget_exec": true,
+          "birth_hu": "on",
+          "calibration": true,
+          "heavy_matcher_observer": false,
+          "speed_flags_enabled": false,
+          "native_command": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/native_command.json",
+          "actual_native_command": [
+            "/opt/homebrew/bin/python3.12",
+            "tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/config.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--cells",
+            "f0.5000_th2.1000_first_order",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--e-price",
+            "0.01873710622997919",
+            "--v39-price",
+            "0.01873710622997919",
+            "--shop-world",
+            "2",
+            "--workers",
+            "1",
+            "--seeds",
+            "44",
+            "--trial-count",
+            "1740",
+            "--no-compare",
+            "--horizon",
+            "1740",
+            "--score-arg-order",
+            "--sme2017",
+            "--shop-scatter",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--match-eps",
+            "0",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-reuse",
+            "off",
+            "--stage2-birth-hu",
+            "on",
+            "--no-forget-exec"
+          ],
+          "small_speed_gate": null,
+          "small_speed_gate_sha256": null,
+          "small_speed_gate_record": null
+        },
+        "w2_seed044_receipt_submitted.json": {
+          "at": "2026-10-08T11:35:15.483640+09:00",
+          "seed": 44,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/jobs/jobs.py",
+            "run",
+            "--wait",
+            "--owner",
+            "Codex2 指示20 較正 世界2 種44",
+            "--mem",
+            "3",
+            "--disk-path",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044",
+            "--",
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py",
+            "entry",
+            "44"
+          ],
+          "receipt_pid": 47210,
+          "mem_gb": 3,
+          "machine_before": {
+            "at": "2026-10-08T11:35:15.346298+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 723648
+              },
+              "31675": {
+                "ppid": 31665,
+                "state": "R",
+                "rss_kb": 256464
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 66544
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1254608
+              }
+            },
+            "model_children": 4,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 31655,
+                "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              }
+            ],
+            "disk_free_bytes": 220115988480,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "effective_reserved_before": 15.0
+        }
+      }
+    },
+    "instruction19_speed_gate": {
+      "pid": 9042,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        32928,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+      ],
+      "files": {
+        "supervisor.lock": "9042\n",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T09:55:31.215729+09:00",
+          "pid": 9042,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+          ],
+          "source": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "automatic_retry": false
+        },
+        "launch.json": {
+          "at": "2026-10-08T09:55:31.251202+09:00",
+          "pid": 9042,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "sequence": [
+            "reuse_off_200",
+            "reuse_on_200"
+          ],
+          "mem_gb": 4
+        },
+        "status.json": {
+          "phase": "receipt_wait_or_running",
+          "kind": "reuse_off_1740",
+          "at": "2026-10-08T11:44:30.418675+09:00",
+          "pid": 9042,
+          "receipt_pid": 49451,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "requested_mem_gb": 4
+        },
+        "warning.json": null,
+        "failure.json": null,
+        "required_gate_200.json": {
+          "at": "2026-10-08T11:44:30.246510+09:00",
+          "passed": true,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "trials": 200,
+          "records": [
+            {
+              "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl.gz",
+              "equal": true,
+              "bytes": 76599243,
+              "off_sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1",
+              "on_sha256": "f32dd69833ddd8a0ba8bcaff7933dbdaede3254c0590d5eeceac143bbb9814c1"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.answers.csv",
+              "equal": true,
+              "bytes": 42275,
+              "off_sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9",
+              "on_sha256": "7693be2d8a175af44f3723b89ca7643dc4bfe41f2f176eaf6fff04829ee145c9"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.jsonl",
+              "equal": true,
+              "bytes": 1437906,
+              "off_sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a",
+              "on_sha256": "c70c36d936ded457a4e5ba8f296db900d851625970f2726dee2ecc01300a7a1a"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.routing.jsonl",
+              "equal": true,
+              "bytes": 1576658,
+              "off_sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4",
+              "on_sha256": "3322ebb97122f682feea127f7128b14ea61052675fdb72967e44c7fb0a2469b4"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.shop.jsonl",
+              "equal": true,
+              "bytes": 6013,
+              "off_sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7",
+              "on_sha256": "4acff1b1025433f238108ef7319d3747e4d5e5cf9e48eba80a9fbf8e2e94aee7"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.jsonl.gz",
+              "equal": true,
+              "bytes": 8472324,
+              "off_sha256": "a466f7bade737b9354d1e2844c2b3ae8b3965a1c199a84143c443621deef5dac",
+              "on_sha256": "a466f7bade737b9354d1e2844c2b3ae8b3965a1c199a84143c443621deef5dac"
+            },
+            {
+              "file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed041.sme.states.jsonl.gz",
+              "equal": true,
+              "bytes": 40743550,
+              "off_sha256": "017c8398a8654324758b6a98fce03f6e90da25e0c6f4452d82e86be05d5bd1e4",
+              "on_sha256": "017c8398a8654324758b6a98fce03f6e90da25e0c6f4452d82e86be05d5bd1e4"
+            },
+            {
+              "file": "tie_state.jsonl",
+              "equal": true,
+              "bytes": 3030783,
+              "off_sha256": "83dbbd97d9674d8e653bec55529c5ce9a6fbc6268d4729421f6d09070008ee18",
+              "on_sha256": "83dbbd97d9674d8e653bec55529c5ce9a6fbc6268d4729421f6d09070008ee18"
+            },
+            {
+              "file": "saved_matcher.jsonl.gz",
+              "equal": true,
+              "bytes": 9351095,
+              "off_sha256": "f1f0d6c2da5041f5f4e226fc7c806dde746f16ef0044ec967c3de92ffa0997cf",
+              "on_sha256": "f1f0d6c2da5041f5f4e226fc7c806dde746f16ef0044ec967c3de92ffa0997cf"
+            }
+          ],
+          "flag_bundle": [
+            "--stage2-reuse on",
+            "--sme-gc-threshold 100000",
+            "--sme-fast-encode"
+          ],
+          "world": 2,
+          "seed": 41,
+          "no_forget_exec": true,
+          "birth_hu": "on",
+          "excluded": [
+            "台帳の見出し一行だけ"
+          ],
+          "production_started": false,
+          "timing_diagnostics_separate": true,
+          "full_length_gate_complete": false
+        },
+        "cpu_comparison_200.json": {
+          "at": "2026-10-08T11:44:30.247264+09:00",
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "trials": 200,
+          "off": {
+            "pid": 9086,
+            "trials": 200,
+            "wall_seconds": 3151.939249582996,
+            "cpu_user_seconds": 3109.232872,
+            "cpu_system_seconds": 8.576519,
+            "cpu_seconds": 3117.8093910000002,
+            "cpu_scope": "worker_model_observer_state_save",
+            "peak_rss_bytes": 357613568,
+            "max_candidates": 13,
+            "max_definitions": 13,
+            "ru_maxrss_unit": "macOS_bytes"
+          },
+          "on": {
+            "pid": 31675,
+            "trials": 200,
+            "wall_seconds": 3363.6007129999925,
+            "cpu_user_seconds": 3353.409515,
+            "cpu_system_seconds": 5.159437,
+            "cpu_seconds": 3358.5689519999996,
+            "cpu_scope": "worker_model_observer_state_save",
+            "peak_rss_bytes": 343769088,
+            "max_candidates": 13,
+            "max_definitions": 13,
+            "ru_maxrss_unit": "macOS_bytes"
+          },
+          "off_cpu_seconds": 3117.8093910000002,
+          "on_cpu_seconds": 3358.5689519999996,
+          "on_over_off": 1.077220744056704,
+          "reduction_fraction": -0.0772207440567041,
+          "includes_observer_and_state_save": true,
+          "full_length_estimate": false
+        },
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {
+        "reuse_off_1740_entry_started.json": {
+          "at": "2026-10-08T11:44:30.825865+09:00",
+          "machine": {
+            "at": "2026-10-08T11:44:30.728070+09:00",
+            "models": {
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 810960
+              },
+              "47193": {
+                "ppid": 47184,
+                "state": "R",
+                "rss_kb": 87616
+              },
+              "47223": {
+                "ppid": 47214,
+                "state": "R",
+                "rss_kb": 83936
+              },
+              "47356": {
+                "ppid": 47353,
+                "state": "R",
+                "rss_kb": 248640
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1504192
+              }
+            },
+            "model_children": 5,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 47180,
+                "owner": "Codex2 指示20 較正 世界2 種43",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 47210,
+                "owner": "Codex2 指示20 較正 世界2 種44",
+                "mem_gb": 3.0
+              },
+              {
+                "pid": 19617,
+                "owner": "Codex 動詞新移植 追加旗off5000",
+                "mem_gb": 1.3
+              },
+              {
+                "pid": 49451,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 219851558912,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+        },
+        "reuse_off_200_completed.json": {
+          "at": "2026-10-08T10:48:15.180926+09:00",
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "exit_code": 0
+        },
+        "reuse_off_200_entry_started.json": {
+          "at": "2026-10-08T09:55:31.698526+09:00",
+          "machine": {
+            "at": "2026-10-08T09:55:31.621943+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 2810176
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 889632
+              }
+            },
+            "model_children": 2,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              },
+              {
+                "pid": 9052,
+                "owner": "Codex2 指示19 高速化関門 reuse_off_200",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 222404521984,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+        },
+        "reuse_on_200_completed.json": {
+          "at": "2026-10-08T11:44:29.739067+09:00",
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "exit_code": 0
+        },
+        "reuse_on_200_entry_started.json": {
+          "at": "2026-10-08T10:48:15.589994+09:00",
+          "machine": {
+            "at": "2026-10-08T10:48:15.518947+09:00",
+            "models": {
+              "7399": {
+                "ppid": 7396,
+                "state": "R",
+                "rss_kb": 8481024
+              },
+              "9096": {
+                "ppid": 9081,
+                "state": "R",
+                "rss_kb": 331008
+              },
+              "95421": {
+                "ppid": 95412,
+                "state": "R",
+                "rss_kb": 1236064
+              }
+            },
+            "model_children": 3,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 95408,
+                "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 98780,
+                "owner": "SME_deep_memory_instruction12_full1740_01",
+                "mem_gb": 11.0
+              },
+              {
+                "pid": 9073,
+                "owner": "Codex2 指示18 較正 世界2 種42",
+                "mem_gb": 4.0
+              },
+              {
+                "pid": 31655,
+                "owner": "Codex2 指示19 高速化関門 reuse_on_200",
+                "mem_gb": 4.0
+              }
+            ],
+            "disk_free_bytes": 220687978496,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900"
+        }
+      }
+    },
+    "instruction17_on_mem4_controller": {
+      "pid": 91021,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        16256,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+      ],
+      "files": {
+        "supervisor.lock": "91021\n",
+        "supervisor_spawn.json": {
+          "at": "2026-10-08T08:20:19.808022+09:00",
+          "pid": 91021,
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+          ],
+          "old_supervisor_77300_ended": true,
+          "adopted_off_receipt": 77309,
+          "adopted_off_worker": 77324,
+          "off_model_not_restarted": true,
+          "on_mem_gb": 4,
+          "receipt_push": "8db19e92",
+          "preparation_report_push": "6388f211",
+          "models_signaled": false
+        },
+        "launch.json": {
+          "at": "2026-10-08T08:20:19.908877+09:00",
+          "pid": 91021,
+          "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+          "adopted_off_receipt_pid": 77309,
+          "off_model_not_restarted": true,
+          "on_mem_gb": 4,
+          "native_command_unchanged": true,
+          "original_helpers_unchanged": true,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "status.json": {
+          "at": "2026-10-08T11:48:28.167217+09:00",
+          "pid": 91021,
+          "phase": "no_new_submission_waiting_natural_end",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "warning.json": null,
+        "failure.json": {
+          "at": "2026-10-08T09:47:43.052271+09:00",
+          "error": "FileNotFoundError(2, 'No such file or directory')",
+          "new_submission_stopped": true,
+          "models_not_signaled": true,
+          "automatic_retry": false
+        },
+        "required_gate_200.json": null,
+        "cpu_comparison_200.json": null,
+        "required_gate_1740.json": null,
+        "cpu_comparison_1740.json": null,
+        "birth_hu_on_peak_rss_over_3gb.json": null
+      },
+      "entries": {
+        "on_receipt_submitted.json": {
+          "at": "2026-10-08T08:38:25.891648+09:00",
+          "command": [
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/jobs/jobs.py",
+            "run",
+            "--wait",
+            "--owner",
+            "Codex2 指示17 較正の下見 birth_hu_on",
+            "--mem",
+            "4",
+            "--disk-path",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+            "--",
+            "/opt/homebrew/bin/python3.12",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py",
+            "entry"
+          ],
+          "receipt_pid": 95408,
+          "mem_gb": 4,
+          "machine_before": {
+            "at": "2026-10-08T08:38:25.841517+09:00",
+            "models": {
+              "77324": {
+                "ppid": 77313,
+                "state": "R",
+                "rss_kb": 1054704
+              }
+            },
+            "model_children": 1,
+            "paused": 0,
+            "registered": [
+              {
+                "pid": 77309,
+                "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+                "mem_gb": 11.0
+              }
+            ],
+            "disk_free_bytes": 223263698944,
+            "swap_used_mb": 180.0,
+            "swap_ok": true,
+            "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+            "thermal_warnings": [],
+            "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+            "unregistered_heavy": []
+          },
+          "instruction17": true
+        }
+      }
+    }
+  },
+  "cases": {
+    "w2_seed041": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+      "files": {
+        "worker_pid.json": {
+          "at": "2026-10-08T08:38:26.234102+09:00",
+          "pid": 95421,
+          "ppid": 95412
+        },
+        "progress.json": {
+          "at": "2026-10-08T11:48:32.053055+09:00",
+          "trial": 1203,
+          "trials_completed": 1204,
+          "seconds": 2.691786083043553,
+          "elapsed_seconds": 11405.700438125,
+          "peak_rss_bytes": 1586413568,
+          "definitions": 13,
+          "disclosed": false,
+          "disclosed_trials": 624,
+          "rematch_totals": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 111041,
+              "seconds": 7130.110968742636,
+              "match_calls": 111041,
+              "result_cache_hits": 0,
+              "engine_calls": 111041,
+              "engine_seconds": 331.3186890275683,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 427498,
+            "signs": {
+              "positive": 274332,
+              "zero": 77828,
+              "negative": 75338
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 68288
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 116569
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 28892
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 7050
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 157763
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 48936
+              }
+            ]
+          }
+        },
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "41",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "at": "2026-10-08T11:48:32.053055+09:00",
+          "trial": 1203,
+          "trials_completed": 1204,
+          "seconds": 2.691786083043553,
+          "elapsed_seconds": 11405.700438125,
+          "peak_rss_bytes": 1586413568,
+          "definitions": 13,
+          "disclosed": false,
+          "disclosed_trials": 624,
+          "rematch_totals": {
+            "birth": {
+              "calls": 7288,
+              "seconds": 319.44634182489244,
+              "match_calls": 51296,
+              "result_cache_hits": 0,
+              "engine_calls": 51296,
+              "engine_seconds": 54.563326406117994,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 111041,
+              "seconds": 7130.110968742636,
+              "match_calls": 111041,
+              "result_cache_hits": 0,
+              "engine_calls": 111041,
+              "engine_seconds": 331.3186890275683,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 427498,
+            "signs": {
+              "positive": 274332,
+              "zero": 77828,
+              "negative": 75338
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 68288
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 116569
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 28892
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 7050
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 157763
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 48936
+              }
+            ]
+          }
+        },
+        "blocks_100.jsonl": [
+          {
+            "at": "2026-10-08T09:09:07.640343+09:00",
+            "first_completed": 1,
+            "last_completed": 100,
+            "last_trial": 99,
+            "block_seconds": 1841.3629964590073,
+            "elapsed_seconds": 1841.3629964590073,
+            "peak_rss_bytes": 221020160,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 51,
+            "rematch_calls_in_block": {
+              "birth": 7288,
+              "disclosure": 6182
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 6182,
+                "seconds": 193.44207621767418,
+                "match_calls": 6182,
+                "result_cache_hits": 0,
+                "engine_calls": 6182,
+                "engine_seconds": 5.760391382442322,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 23434,
+              "signs": {
+                "positive": 16239,
+                "zero": 4761,
+                "negative": 2434
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 2008
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 7516
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 2193
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 426
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 8723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 2568
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T09:16:31.916625+09:00",
+            "first_completed": 101,
+            "last_completed": 200,
+            "last_trial": 199,
+            "block_seconds": 444.27286016597645,
+            "elapsed_seconds": 2285.6358566249837,
+            "peak_rss_bytes": 338804736,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 102,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9333
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 15515,
+                "seconds": 514.1988595608855,
+                "match_calls": 15515,
+                "result_cache_hits": 0,
+                "engine_calls": 15515,
+                "engine_seconds": 15.84746404888574,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 60034,
+              "signs": {
+                "positive": 41407,
+                "zero": 12113,
+                "negative": 6514
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 5488
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 19184
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 5345
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 1026
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 22223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 6768
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T09:24:46.490163+09:00",
+            "first_completed": 201,
+            "last_completed": 300,
+            "last_trial": 299,
+            "block_seconds": 494.5697134590009,
+            "elapsed_seconds": 2780.2055700839846,
+            "peak_rss_bytes": 474955776,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 157,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 10065
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 25580,
+                "seconds": 872.9030577425729,
+                "match_calls": 25580,
+                "result_cache_hits": 0,
+                "engine_calls": 25580,
+                "engine_seconds": 27.39317666745046,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 96634,
+              "signs": {
+                "positive": 65508,
+                "zero": 19068,
+                "negative": 12058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 10432
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 29785
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 8100
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 1626
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 35723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 10968
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T09:33:12.452182+09:00",
+            "first_completed": 301,
+            "last_completed": 400,
+            "last_trial": 399,
+            "block_seconds": 505.9580874579842,
+            "elapsed_seconds": 3286.163657541969,
+            "peak_rss_bytes": 599261184,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 208,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9333
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 34913,
+                "seconds": 1235.456363404228,
+                "match_calls": 34913,
+                "result_cache_hits": 0,
+                "engine_calls": 34913,
+                "engine_seconds": 40.056725805217866,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 133234,
+              "signs": {
+                "positive": 88608,
+                "zero": 25568,
+                "negative": 19058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 16832
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 39385
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 10400
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 2226
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 49223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 15168
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T09:42:33.141382+09:00",
+            "first_completed": 401,
+            "last_completed": 500,
+            "last_trial": 499,
+            "block_seconds": 560.6848857500008,
+            "elapsed_seconds": 3846.8485432919697,
+            "peak_rss_bytes": 740605952,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 260,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9516
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 44429,
+                "seconds": 1638.7482665948337,
+                "match_calls": 44429,
+                "result_cache_hits": 0,
+                "engine_calls": 44429,
+                "engine_seconds": 55.37612700089812,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 169834,
+              "signs": {
+                "positive": 111708,
+                "zero": 32068,
+                "negative": 26058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 23232
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 48985
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 12700
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 2826
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 62723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 19368
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T09:52:07.433263+09:00",
+            "first_completed": 501,
+            "last_completed": 600,
+            "last_trial": 599,
+            "block_seconds": 574.2874220419908,
+            "elapsed_seconds": 4421.1359653339605,
+            "peak_rss_bytes": 877133824,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 312,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9516
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 53945,
+                "seconds": 2056.252145198174,
+                "match_calls": 53945,
+                "result_cache_hits": 0,
+                "engine_calls": 53945,
+                "engine_seconds": 71.30273304664297,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 206434,
+              "signs": {
+                "positive": 134808,
+                "zero": 38568,
+                "negative": 33058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 29632
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 58585
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 15000
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 3426
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 76223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 23568
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T10:04:49.003140+09:00",
+            "first_completed": 601,
+            "last_completed": 700,
+            "last_trial": 699,
+            "block_seconds": 761.5638824159978,
+            "elapsed_seconds": 5182.699847749958,
+            "peak_rss_bytes": 979632128,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 362,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9150
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 63095,
+                "seconds": 2604.897898364812,
+                "match_calls": 63095,
+                "result_cache_hits": 0,
+                "engine_calls": 63095,
+                "engine_seconds": 95.20848547434434,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 243034,
+              "signs": {
+                "positive": 157908,
+                "zero": 45068,
+                "negative": 40058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 36032
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 68185
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 17300
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 4026
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 89723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 27768
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T10:17:45.869099+09:00",
+            "first_completed": 701,
+            "last_completed": 800,
+            "last_trial": 799,
+            "block_seconds": 776.8594233750482,
+            "elapsed_seconds": 5959.5592711250065,
+            "peak_rss_bytes": 1157939200,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 402,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 7320
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 70415,
+                "seconds": 3142.8939658130985,
+                "match_calls": 70415,
+                "result_cache_hits": 0,
+                "engine_calls": 70415,
+                "engine_seconds": 119.64798378350679,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 279634,
+              "signs": {
+                "positive": 181008,
+                "zero": 51568,
+                "negative": 47058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 42432
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 77785
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 19600
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 4626
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 103223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 31968
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T10:38:19.718514+09:00",
+            "first_completed": 801,
+            "last_completed": 900,
+            "last_trial": 899,
+            "block_seconds": 1233.839637166995,
+            "elapsed_seconds": 7193.398908292002,
+            "peak_rss_bytes": 1265680384,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 455,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9699
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 80114,
+                "seconds": 4046.5673189330264,
+                "match_calls": 80114,
+                "result_cache_hits": 0,
+                "engine_calls": 80114,
+                "engine_seconds": 165.02781586447963,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 316234,
+              "signs": {
+                "positive": 204108,
+                "zero": 58068,
+                "negative": 54058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 48832
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 87385
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 21900
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 5226
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 116723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 36168
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:00:29.237304+09:00",
+            "first_completed": 901,
+            "last_completed": 1000,
+            "last_trial": 999,
+            "block_seconds": 1329.5083795419778,
+            "elapsed_seconds": 8522.90728783398,
+            "peak_rss_bytes": 1363869696,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 518,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 11529
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 91643,
+                "seconds": 5038.306398958375,
+                "match_calls": 91643,
+                "result_cache_hits": 0,
+                "engine_calls": 91643,
+                "engine_seconds": 215.50849310460035,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 352834,
+              "signs": {
+                "positive": 227208,
+                "zero": 64568,
+                "negative": 61058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 55232
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 96985
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 24200
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 5826
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 130223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 40368
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:21:22.492591+09:00",
+            "first_completed": 1001,
+            "last_completed": 1100,
+            "last_trial": 1099,
+            "block_seconds": 1253.245422707987,
+            "elapsed_seconds": 9776.152710541966,
+            "peak_rss_bytes": 1458651136,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 565,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 8601
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 100244,
+                "seconds": 5929.91422920156,
+                "match_calls": 100244,
+                "result_cache_hits": 0,
+                "engine_calls": 100244,
+                "engine_seconds": 264.5583842084743,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 389434,
+              "signs": {
+                "positive": 250308,
+                "zero": 71068,
+                "negative": 68058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 61632
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 106585
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 26500
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 6426
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 143723
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 44568
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:47:27.083067+09:00",
+            "first_completed": 1101,
+            "last_completed": 1200,
+            "last_trial": 1199,
+            "block_seconds": 1564.5781841670396,
+            "elapsed_seconds": 11340.730894709006,
+            "peak_rss_bytes": 1575272448,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 622,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 10431
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7288,
+                "seconds": 319.44634182489244,
+                "match_calls": 51296,
+                "result_cache_hits": 0,
+                "engine_calls": 51296,
+                "engine_seconds": 54.563326406117994,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 110675,
+                "seconds": 7083.097864121548,
+                "match_calls": 110675,
+                "result_cache_hits": 0,
+                "engine_calls": 110675,
+                "engine_seconds": 328.41745331924176,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 426034,
+              "signs": {
+                "positive": 273408,
+                "zero": 77568,
+                "negative": 75058
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 68032
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 116185
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 28800
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 7026
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 157223
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 48768
+                }
+              ]
+            }
+          }
+        ],
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": [
+          95412,
+          "R",
+          100.0,
+          1549232,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      }
+    },
+    "w2_seed042": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042",
+      "files": {
+        "worker_pid.json": {
+          "at": "2026-10-08T09:55:32.134620+09:00",
+          "pid": 9096,
+          "ppid": 9081
+        },
+        "progress.json": {
+          "at": "2026-10-08T11:48:20.217073+09:00",
+          "trial": 599,
+          "trials_completed": 600,
+          "seconds": 20.58413874998223,
+          "elapsed_seconds": 6768.003245249973,
+          "peak_rss_bytes": 877871104,
+          "definitions": 14,
+          "disclosed": true,
+          "disclosed_trials": 284,
+          "rematch_totals": {
+            "birth": {
+              "calls": 7628,
+              "seconds": 472.8063182811602,
+              "match_calls": 52194,
+              "result_cache_hits": 0,
+              "engine_calls": 52194,
+              "engine_seconds": 85.42674842727138,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 49648,
+              "seconds": 2938.0280767276417,
+              "match_calls": 49648,
+              "result_cache_hits": 0,
+              "engine_calls": 49648,
+              "engine_seconds": 111.37272302340716,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 208998,
+            "signs": {
+              "positive": 155435,
+              "zero": 34990,
+              "negative": 18573
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 9504
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 79959
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 15036
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 9069
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 75476
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 19954
+              }
+            ]
+          }
+        },
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "42",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "at": "2026-10-08T11:48:20.217073+09:00",
+          "trial": 599,
+          "trials_completed": 600,
+          "seconds": 20.58413874998223,
+          "elapsed_seconds": 6768.003245249973,
+          "peak_rss_bytes": 877871104,
+          "definitions": 14,
+          "disclosed": true,
+          "disclosed_trials": 284,
+          "rematch_totals": {
+            "birth": {
+              "calls": 7628,
+              "seconds": 472.8063182811602,
+              "match_calls": 52194,
+              "result_cache_hits": 0,
+              "engine_calls": 52194,
+              "engine_seconds": 85.42674842727138,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 49648,
+              "seconds": 2938.0280767276417,
+              "match_calls": 49648,
+              "result_cache_hits": 0,
+              "engine_calls": 49648,
+              "engine_seconds": 111.37272302340716,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 208998,
+            "signs": {
+              "positive": 155435,
+              "zero": 34990,
+              "negative": 18573
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "negative",
+                "count": 9504
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 79959
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 15036
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "negative",
+                "count": 9069
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 75476
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 19954
+              }
+            ]
+          }
+        },
+        "blocks_100.jsonl": [
+          {
+            "at": "2026-10-08T10:31:21.237604+09:00",
+            "first_completed": 1,
+            "last_completed": 100,
+            "last_trial": 99,
+            "block_seconds": 2149.06007745798,
+            "elapsed_seconds": 2149.06007745798,
+            "peak_rss_bytes": 213041152,
+            "definitions_at_end": 12,
+            "max_definitions": 12,
+            "disclosed_trials_cumulative": 46,
+            "rematch_calls_in_block": {
+              "birth": 6342,
+              "disclosure": 6458
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 6342,
+                "seconds": 354.34291964251315,
+                "match_calls": 41906,
+                "result_cache_hits": 0,
+                "engine_calls": 41906,
+                "engine_seconds": 64.75472586700926,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 6458,
+                "seconds": 302.7566129807383,
+                "match_calls": 6458,
+                "result_cache_hits": 0,
+                "engine_calls": 6458,
+                "engine_seconds": 8.580113258969504,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 27512,
+              "signs": {
+                "positive": 21787,
+                "zero": 4724,
+                "negative": 1001
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 84
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 11288
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 2384
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 917
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 10499
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 2340
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T10:47:30.872659+09:00",
+            "first_completed": 101,
+            "last_completed": 200,
+            "last_trial": 199,
+            "block_seconds": 969.6274282499799,
+            "elapsed_seconds": 3118.6875057079596,
+            "peak_rss_bytes": 327057408,
+            "definitions_at_end": 13,
+            "max_definitions": 13,
+            "disclosed_trials_cumulative": 93,
+            "rematch_calls_in_block": {
+              "birth": 640,
+              "disclosure": 7605
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 6982,
+                "seconds": 411.96168194472557,
+                "match_calls": 47026,
+                "result_cache_hits": 0,
+                "engine_calls": 47026,
+                "engine_seconds": 74.79910838243086,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 14063,
+                "seconds": 693.5916965521756,
+                "match_calls": 14063,
+                "result_cache_hits": 0,
+                "engine_calls": 14063,
+                "engine_seconds": 20.961149740964174,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 59856,
+              "signs": {
+                "positive": 46561,
+                "zero": 10134,
+                "negative": 3161
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 892
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 23952
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 5084
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 2269
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 22609
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 5050
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:06:32.730987+09:00",
+            "first_completed": 201,
+            "last_completed": 300,
+            "last_trial": 299,
+            "block_seconds": 1141.8492812920013,
+            "elapsed_seconds": 4260.536786999961,
+            "peak_rss_bytes": 502120448,
+            "definitions_at_end": 14,
+            "max_definitions": 14,
+            "disclosed_trials_cumulative": 146,
+            "rematch_calls_in_block": {
+              "birth": 646,
+              "disclosure": 9641
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7628,
+                "seconds": 472.8063182811602,
+                "match_calls": 52194,
+                "result_cache_hits": 0,
+                "engine_calls": 52194,
+                "engine_seconds": 85.42674842727138,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 23704,
+                "seconds": 1179.68964807241,
+                "match_calls": 23704,
+                "result_cache_hits": 0,
+                "engine_calls": 23704,
+                "engine_seconds": 37.57905311847571,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 96198,
+              "signs": {
+                "positive": 74033,
+                "zero": 16338,
+                "negative": 5827
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 1858
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 38457
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 7784
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 3969
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 35576
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 8554
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:18:37.118895+09:00",
+            "first_completed": 301,
+            "last_completed": 400,
+            "last_trial": 399,
+            "block_seconds": 724.382217541046,
+            "elapsed_seconds": 4984.919004541007,
+            "peak_rss_bytes": 602636288,
+            "definitions_at_end": 14,
+            "max_definitions": 14,
+            "disclosed_trials_cumulative": 193,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 8836
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7628,
+                "seconds": 472.8063182811602,
+                "match_calls": 52194,
+                "result_cache_hits": 0,
+                "engine_calls": 52194,
+                "engine_seconds": 85.42674842727138,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 32540,
+                "seconds": 1680.7624597550603,
+                "match_calls": 32540,
+                "result_cache_hits": 0,
+                "engine_calls": 32540,
+                "engine_seconds": 57.57559031562414,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 133798,
+              "signs": {
+                "positive": 102235,
+                "zero": 22790,
+                "negative": 8773
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 3104
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 53359
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 10436
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 5669
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 48876
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 12354
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:31:38.701276+09:00",
+            "first_completed": 401,
+            "last_completed": 500,
+            "last_trial": 499,
+            "block_seconds": 781.5762546669575,
+            "elapsed_seconds": 5766.495259207964,
+            "peak_rss_bytes": 755679232,
+            "definitions_at_end": 14,
+            "max_definitions": 14,
+            "disclosed_trials_cumulative": 235,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 7896
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7628,
+                "seconds": 472.8063182811602,
+                "match_calls": 52194,
+                "result_cache_hits": 0,
+                "engine_calls": 52194,
+                "engine_seconds": 85.42674842727138,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 40436,
+                "seconds": 2222.676566414011,
+                "match_calls": 40436,
+                "result_cache_hits": 0,
+                "engine_calls": 40436,
+                "engine_seconds": 78.5305722039775,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 171398,
+              "signs": {
+                "positive": 128835,
+                "zero": 28890,
+                "negative": 13673
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 6304
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 66659
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 12736
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 7369
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 62176
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 16154
+                }
+              ]
+            }
+          },
+          {
+            "at": "2026-10-08T11:48:20.217219+09:00",
+            "first_completed": 501,
+            "last_completed": 600,
+            "last_trial": 599,
+            "block_seconds": 1001.5079860420083,
+            "elapsed_seconds": 6768.003245249973,
+            "peak_rss_bytes": 877871104,
+            "definitions_at_end": 14,
+            "max_definitions": 14,
+            "disclosed_trials_cumulative": 284,
+            "rematch_calls_in_block": {
+              "birth": 0,
+              "disclosure": 9212
+            },
+            "rematch_totals_cumulative": {
+              "birth": {
+                "calls": 7628,
+                "seconds": 472.8063182811602,
+                "match_calls": 52194,
+                "result_cache_hits": 0,
+                "engine_calls": 52194,
+                "engine_seconds": 85.42674842727138,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              },
+              "disclosure": {
+                "calls": 49648,
+                "seconds": 2938.0280767276417,
+                "match_calls": 49648,
+                "result_cache_hits": 0,
+                "engine_calls": 49648,
+                "engine_seconds": 111.37272302340716,
+                "foundation_builds": 0,
+                "foundation_hits": 0
+              }
+            },
+            "v_counts_cumulative": {
+              "count": 208998,
+              "signs": {
+                "positive": 155435,
+                "zero": 34990,
+                "negative": 18573
+              },
+              "by_kind": [
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "negative",
+                  "count": 9504
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "positive",
+                  "count": 79959
+                },
+                {
+                  "kind": "FH",
+                  "reference": false,
+                  "sign": "zero",
+                  "count": 15036
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "negative",
+                  "count": 9069
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "positive",
+                  "count": 75476
+                },
+                {
+                  "kind": "HU",
+                  "reference": true,
+                  "sign": "zero",
+                  "count": 19954
+                }
+              ]
+            }
+          }
+        ],
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": [
+          9081,
+          "R",
+          99.4,
+          819120,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      }
+    },
+    "w2_seed043": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043",
+      "files": {
+        "worker_pid.json": {
+          "at": "2026-10-08T11:35:10.698858+09:00",
+          "pid": 47193,
+          "ppid": 47184
+        },
+        "progress.json": {
+          "at": "2026-10-08T11:47:15.787844+09:00",
+          "trial": 12,
+          "trials_completed": 13,
+          "seconds": 5.393417374987621,
+          "elapsed_seconds": 725.0414533329895,
+          "peak_rss_bytes": 97107968,
+          "definitions": 8,
+          "disclosed": true,
+          "disclosed_trials": 8,
+          "rematch_totals": {
+            "birth": {
+              "calls": 3584,
+              "seconds": 185.996582105814,
+              "match_calls": 20144,
+              "result_cache_hits": 0,
+              "engine_calls": 20144,
+              "engine_seconds": 34.37474320217734,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 459,
+              "seconds": 19.246800164866727,
+              "match_calls": 459,
+              "result_cache_hits": 0,
+              "engine_calls": 459,
+              "engine_seconds": 0.5950642566313036,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 1440,
+            "signs": {
+              "positive": 1142,
+              "zero": 298
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 573
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 147
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 569
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 151
+              }
+            ]
+          }
+        },
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "43",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "at": "2026-10-08T11:47:15.787844+09:00",
+          "trial": 12,
+          "trials_completed": 13,
+          "seconds": 5.393417374987621,
+          "elapsed_seconds": 725.0414533329895,
+          "peak_rss_bytes": 97107968,
+          "definitions": 8,
+          "disclosed": true,
+          "disclosed_trials": 8,
+          "rematch_totals": {
+            "birth": {
+              "calls": 3584,
+              "seconds": 185.996582105814,
+              "match_calls": 20144,
+              "result_cache_hits": 0,
+              "engine_calls": 20144,
+              "engine_seconds": 34.37474320217734,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 459,
+              "seconds": 19.246800164866727,
+              "match_calls": 459,
+              "result_cache_hits": 0,
+              "engine_calls": 459,
+              "engine_seconds": 0.5950642566313036,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 1440,
+            "signs": {
+              "positive": 1142,
+              "zero": 298
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 573
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 147
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 569
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 151
+              }
+            ]
+          }
+        },
+        "blocks_100.jsonl": [],
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": [
+          47184,
+          "R",
+          99.8,
+          97216,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      }
+    },
+    "w2_seed044": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044",
+      "files": {
+        "worker_pid.json": {
+          "at": "2026-10-08T11:35:16.063753+09:00",
+          "pid": 47223,
+          "ppid": 47214
+        },
+        "progress.json": {
+          "at": "2026-10-08T11:47:40.376587+09:00",
+          "trial": 8,
+          "trials_completed": 9,
+          "seconds": 281.6406298329821,
+          "elapsed_seconds": 744.2767510829726,
+          "peak_rss_bytes": 87457792,
+          "definitions": 8,
+          "disclosed": true,
+          "disclosed_trials": 6,
+          "rematch_totals": {
+            "birth": {
+              "calls": 3384,
+              "seconds": 188.494433904998,
+              "match_calls": 20220,
+              "result_cache_hits": 0,
+              "engine_calls": 20220,
+              "engine_seconds": 35.20020711154211,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 169,
+              "seconds": 5.899385464319494,
+              "match_calls": 169,
+              "result_cache_hits": 0,
+              "engine_calls": 169,
+              "engine_seconds": 0.1819818743970245,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 646,
+            "signs": {
+              "positive": 368,
+              "zero": 278
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 161
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 162
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 207
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 116
+              }
+            ]
+          }
+        },
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "44",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "at": "2026-10-08T11:47:40.376587+09:00",
+          "trial": 8,
+          "trials_completed": 9,
+          "seconds": 281.6406298329821,
+          "elapsed_seconds": 744.2767510829726,
+          "peak_rss_bytes": 87457792,
+          "definitions": 8,
+          "disclosed": true,
+          "disclosed_trials": 6,
+          "rematch_totals": {
+            "birth": {
+              "calls": 3384,
+              "seconds": 188.494433904998,
+              "match_calls": 20220,
+              "result_cache_hits": 0,
+              "engine_calls": 20220,
+              "engine_seconds": 35.20020711154211,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            },
+            "disclosure": {
+              "calls": 169,
+              "seconds": 5.899385464319494,
+              "match_calls": 169,
+              "result_cache_hits": 0,
+              "engine_calls": 169,
+              "engine_seconds": 0.1819818743970245,
+              "foundation_builds": 0,
+              "foundation_hits": 0
+            }
+          },
+          "v_counts": {
+            "count": 646,
+            "signs": {
+              "positive": 368,
+              "zero": 278
+            },
+            "by_kind": [
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "positive",
+                "count": 161
+              },
+              {
+                "kind": "FH",
+                "reference": false,
+                "sign": "zero",
+                "count": 162
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "positive",
+                "count": 207
+              },
+              {
+                "kind": "HU",
+                "reference": true,
+                "sign": "zero",
+                "count": 116
+              }
+            ]
+          }
+        },
+        "blocks_100.jsonl": [],
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": [
+          47214,
+          "R",
+          99.4,
+          88144,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      }
+    },
+    "reuse_off_200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200",
+      "files": {
+        "worker_pid.json": {
+          "pid": 9086,
+          "ppid": 9067
+        },
+        "progress.json": null,
+        "measurement.json": {
+          "pid": 9086,
+          "trials": 200,
+          "wall_seconds": 3151.939249582996,
+          "cpu_user_seconds": 3109.232872,
+          "cpu_system_seconds": 8.576519,
+          "cpu_seconds": 3117.8093910000002,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 357613568,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "41",
+          "--trial-count",
+          "200",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "trial": 199,
+          "seconds": 10.722858041990548,
+          "elapsed_seconds": 3144.8910888329847,
+          "peak_rss_bytes": 357613568,
+          "candidates": 13,
+          "definitions": 13
+        },
+        "blocks_100.jsonl": null,
+        "all_done_present_in_log_tail": true,
+        "actual_worker_ps": null
+      }
+    },
+    "reuse_on_200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200",
+      "files": {
+        "worker_pid.json": {
+          "pid": 31675,
+          "ppid": 31665
+        },
+        "progress.json": null,
+        "measurement.json": {
+          "pid": 31675,
+          "trials": 200,
+          "wall_seconds": 3363.6007129999925,
+          "cpu_user_seconds": 3353.409515,
+          "cpu_system_seconds": 5.159437,
+          "cpu_seconds": 3358.5689519999996,
+          "cpu_scope": "worker_model_observer_state_save",
+          "peak_rss_bytes": 343769088,
+          "max_candidates": 13,
+          "max_definitions": 13,
+          "ru_maxrss_unit": "macOS_bytes"
+        },
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "41",
+          "--trial-count",
+          "200",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "on",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec",
+          "--sme-gc-threshold",
+          "100000",
+          "--sme-fast-encode"
+        ],
+        "performance.jsonl": {
+          "trial": 199,
+          "seconds": 14.194922666996717,
+          "elapsed_seconds": 3354.371159499977,
+          "peak_rss_bytes": 343769088,
+          "candidates": 13,
+          "definitions": 13
+        },
+        "blocks_100.jsonl": null,
+        "all_done_present_in_log_tail": true,
+        "actual_worker_ps": null
+      }
+    },
+    "reuse_off_1740": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740",
+      "files": {
+        "worker_pid.json": {
+          "pid": 49468,
+          "ppid": 49459
+        },
+        "progress.json": null,
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "41",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "off",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec"
+        ],
+        "performance.jsonl": {
+          "trial": 6,
+          "seconds": 2.7887185830040835,
+          "elapsed_seconds": 191.32033154199598,
+          "peak_rss_bytes": 82903040,
+          "candidates": 4,
+          "definitions": 4
+        },
+        "blocks_100.jsonl": null,
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": [
+          49459,
+          "R",
+          100.0,
+          79408,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      }
+    },
+    "reuse_on_1740": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_1740",
+      "files": {
+        "worker_pid.json": null,
+        "progress.json": null,
+        "measurement.json": null,
+        "partial_measurement.json": null,
+        "worker_finished.json": null,
+        "native_command.json": [
+          "/opt/homebrew/bin/python3.12",
+          "tools/v3_run.py",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+          "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_1740/output",
+          "--nohash",
+          "--vt",
+          "0.3842",
+          "--extend-rule",
+          "none",
+          "--charge1",
+          "d32",
+          "--fast",
+          "--no-public-history",
+          "--dump-slot-history",
+          "--fix2-full",
+          "--fix-order2",
+          "--proj-first",
+          "--fill-norestate",
+          "--no-charge2",
+          "--own-evidence",
+          "--v39",
+          "--v39-budget",
+          "inf",
+          "--v39-decay",
+          "actr",
+          "--v310-be",
+          "--hist-role",
+          "--score-role",
+          "--u-struct",
+          "--relearn-init",
+          "--tie-struct",
+          "--amb-local",
+          "--nsim",
+          "0.7",
+          "--ident-rho",
+          "0.5",
+          "--ident-argmax",
+          "--ident-commons",
+          "--cells",
+          "f0.5000_th2.1000_first_order",
+          "--dump-answers",
+          "--dump-routing",
+          "--answer-gap",
+          "--strict-pc",
+          "--e-price",
+          "0.01873710622997919",
+          "--v39-price",
+          "0.01873710622997919",
+          "--shop-world",
+          "2",
+          "--workers",
+          "1",
+          "--seeds",
+          "41",
+          "--trial-count",
+          "1740",
+          "--no-compare",
+          "--horizon",
+          "1740",
+          "--score-arg-order",
+          "--sme2017",
+          "--shop-scatter",
+          "--sme-call-seed",
+          "--sme-tie-uniform",
+          "--sme-intern-cache",
+          "--sme-evict-trial-cache",
+          "--sme-evict-tombstone",
+          "--score-logp",
+          "--match-cstar",
+          "--match-cstar-e",
+          "--match-eps",
+          "0",
+          "--h-dirichlet",
+          "1",
+          "--birth-score",
+          "seq",
+          "--logp-eps",
+          "0.01",
+          "--attn-sme",
+          "global",
+          "--attn-position",
+          "k2",
+          "--attn-eta",
+          "0.1",
+          "--attn-allin",
+          "--stage2",
+          "on",
+          "--stage2-loss",
+          "top1",
+          "--stage2-init",
+          "virtual",
+          "--stage2-scope",
+          "all",
+          "--stage2-reuse",
+          "on",
+          "--stage2-birth-hu",
+          "on",
+          "--no-forget-exec",
+          "--sme-gc-threshold",
+          "100000",
+          "--sme-fast-encode"
+        ],
+        "performance.jsonl": null,
+        "blocks_100.jsonl": null,
+        "all_done_present_in_log_tail": false,
+        "actual_worker_ps": null
+      }
+    }
+  },
+  "source": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "status": ""
+    }
+  },
+  "first_stage": {
+    "status": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "old_pids_actual_ps": {
+    "66840": null,
+    "9047": null,
+    "94210": null,
+    "27353": null,
+    "21749": null,
+    "72172": null,
+    "31675": null,
+    "31665": null,
+    "31655": null,
+    "77324": null,
+    "77313": null,
+    "77309": null
+  },
+  "report_head": "ff0c0aade7d2f57ff9fa2dd0c120c66b1f4d40f5",
+  "inbox_queue_read": {
+    "control/受け箱/README.md": {
+      "sha256": "653324dec2c62a7156763dd7c5c7f5b73ccd017618e51a4e8f78600494e60089",
+      "bytes": 2027
+    },
+    "control/受け箱/注意の係_Codex2.md": {
+      "sha256": "290764a148dd897d52cbf30197ded269b375c4aad5b327ce7f76603558ecd373",
+      "bytes": 59087
+    },
+    "control/走行の列_2026-10-08.md": {
+      "sha256": "73f8cc1892374edb50746bc9c6a1297ed7b902cd28a15eefa3002a7333d0fd43",
+      "bytes": 7488
+    },
+    "inbox_markers": {
+      "1（2026-10-06": {
+        "receipt_lines": [
+          "受領（2026-10-06T21:51:56.569931+09:00、注意の係 Codex2）。25′完了まで新規投入の監督だけを保留し、稼働中の模型は維持。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-07T06:54:28.353185+09:00、25′の二本の計測と一致検査の完了を control/2026-10-06_SMEの一本の時間の内訳_Codex.md の2026-10-07T05:58:41.194784+09:00の節で確認。報告：control/2026-10-07_注意の第二段_実装_Codex2.md）。"
+        ]
+      },
+      "2（2026-10-06": {
+        "receipt_lines": [
+          "受領（2026-10-06T21:51:56.569931+09:00、注意の係 Codex2）。42⁗・42⁵を含め受領。第一段6腕とは別の版として実装・関門を進める。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "3（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T04:31:57.382011+09:00、注意の係 Codex2）。第二段の実装を優先。第一段の途中4件は保全し、再開時は同じ版・命令・旗で別の出力先を使う。受付の開始条件を満たすまで新規模型は投入しない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "4（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T15:47:51.611940+09:00、注意の係 Codex2）。C*と第二段を合わせた版の関門合格後に、指定された二つの保持Dを実装する。第1波を止めず、10/9朝のアストラの仕様確認前には走らせない。誤り駆動は作らない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "5（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T16:18:11.727513+09:00、注意の係 Codex2）。指示4の細部を補う確定仕様として受領。C*と第二段の合わせた版の関門合格後に指示4を完了し、その後に誤り駆動を作る。10/9朝の確認待ちはこの指示で置き換わった。関門・独立点検と、版・旗・出力先が埋まった走行の列を守り、第1波を止めない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "6（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T16:47:39.459051+09:00、注意の係 Codex2）。指示5Bを置き換える仕様として受領。厳密な損の差・全席でのΔℓの取り直し・予測前の時点と候補集合の固定・第二段と同じ仮の誕生を使う。指示5Aと、指示4の後に作る順番は維持する。第二段の注意の時点を既存コードで確認し、更新後なら作らず報告する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "7（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T20:17:51.200461+09:00、注意の係 Codex2）。作業版7774b60へ第二段を載せ替え、旗を切った全バイト一致の関門まで進める。C*を入れた合わせた版の関門と指示4〜6・列の走行は、C*①②の全長一致の報告を待つ。第一段の再発による停止は維持。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-07T20:52:24.146847+09:00、注意の係 Codex2）。第二段42系を7774b607へ載せ替えた自分の版2ed4063eで103部品検査と、世界2・A・λ主・種1・全1740試行の旗off関門（台帳本体・全side・保存状態・乱数の計9ファイル）が全バイト一致。報告：control/2026-10-07_注意の第二段_実装_Codex2.md、証拠：control/attn_stage2_2026-10-07/cstar_port_required_off_gate_20261007.json。私が追加したflag.jsonの比較だけは版のcommit欄が異なって監督が停止したため、停止の原記録と両出力を保全し、依頼された9ファイルを読み取りで確認した。模型は再実行していない。C*を入れた合わせた版の全関門・指示2と4〜6・列の走行の完了を意味しない。指示2の基底の問いと第一段の停止は維持。"
+        ]
+      },
+      "8（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T21:18:03.109742+09:00、注意の係 Codex2）。主Uは維持し、注意の基底を可視位置の形と階だけで絞る候補共通の全体頻度へ接続する。指示2のUの手例を指定された二つへ更新し、対応なしはm=0、基底0は既存log_costの逃げ符号を使う。合わせた版の関門で第二段・注意を入れた一本の時間と最大常駐を測り、C*ONの受付メモリは11GB以上とする。第一段の再発による停止と指示4以降の順番は維持。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "9（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T22:49:37.860288+09:00、注意の係 Codex2）。指示8のC*入り一本の計測の後に、点に依らない照合の土台の使い回しを調べ、点・順位・結合・最終対応・門・選びは再計算する。旗off/onの全バイト一致と、開示試行あたりの再照合回数・時間割合を記録する。指示8の未着手ONの再開指定待ちと第一段の停止は維持し、計測前には指示9の調査・コードに着手しない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "10（2026-10-07": {
+        "receipt_lines": [
+          "受領（2026-10-07T22:53:08.473760+09:00、注意の係 Codex2）。修正版の監督でOFFを再実行せず、固定3368df41の未着手ON20→ON1740だけを16GB・既存の受付と資源条件で進める。合格条件・記録・模型コードを変えない自分の道具の直しは理由と内容を報告して進める。第一段の停止と指示4〜6・9の順番は維持。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "11（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T01:18:03.548185+09:00、注意の係 Codex2）。指示9のコードの調べと実装を計測と並べて始める順番として受領。計測中の3368df41と走行には触れず、別の作業場所・枝で点に依らない照合の土台だけの使い回しを実装する。点・順位・結合・最終対応・門・選びは再計算し、小さい旗off/on一致関門も受付と資源条件を守る。指示8・9の計測報告、第一段の停止と指示4〜6の順番は維持。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "12（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T02:17:59.755580+09:00、注意の係 Codex2）。未開始の200試行の旗off/on関門を実測の序盤に余裕を足した4GBの受付で進め、同じ200試行のCPU秒を比較する。全長の見込み16GB・固定3368df41と走行を維持し、100試行ごとの実時間を報告する。小さい関門の実際の合格後に使い回しの枝と合わせた版の枝を通常pushする。第一段の停止と、受付・関門条件は変えない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "13（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T04:19:57.771525+09:00、注意の係 Codex2）。新しい模型を走らせず、固定3368のON全長の途中記録・ON20・旗off全長だけを読み、100試行ごとの記憶・出生・消去理由、出生初期値とλ/E、開示時の価値0、実登録、観測と模型時間の確認済みと推測を分けて指定報告へまとめる。固定コード・走行・受付・関門・第一段の停止は維持し、コードを直さない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-08T04:47:17.161147+09:00、注意の係 Codex2）。指示13の既存記録だけの診断を完了。ON1174試行の実出生1160・退役1159、全退役は価格による全席U、出生初期値・保持V・開示439席の増分0・100試行表を確認。総時間の98.785847%が出生の仮問い評価区間、観測のみ/純模型の独立時間は未測定と区別。報告：control/2026-10-08_合わせた版の記憶が空になる診断_Codex2.md、証拠：control/attn_stage2_2026-10-07/instruction13_empty_memory_diagnosis_20261008.json。新しい模型・ソース変更・走行停止なし。指示2〜6・8〜12の完了や関門合格にはしない。"
+        ]
+      },
+      "14（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T04:57:49.615965+09:00、注意の係 Codex2）。自分のON全長の関門計測を出力・記録保全のうえ停止する。既存3368df41/87d32af8を保全し、別の自分の枝で指定された較正・高速化の部品と既定offの出生H→U測定旗を準備する。全バイト一致・手例・同試行の再評価のコード確認を報告し、本番・第一段・未承認のreuse ON200は開始しない。受付・関門条件を維持する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-08T06:30:30.061805+09:00、準備版e9ed84aeの指定較正・高速化・出生HUの準備、124＋上流7検査と二つの旗off関門を完了。1740所定9件と200所定9件＋追加ambig.csvの全バイト一致。200の原件数判定停止を保全し読み取りで確認、模型・監督を再実行しない。 報告：control/2026-10-08_注意の合わせた版_較正と出生HUの準備_Codex2.md。出生HUの採用・旗on走行はアストラ待ち、合わせた版の全関門・本番合格とはしない。）"
+        ]
+      },
+      "15（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T06:14:35.559634+09:00、注意の係 Codex2）。同じ仮問い・重み・予測前の情報と他の席を固定してr_F/r_H/r_Uを測り、ΔFH=r_H−r_F、ΔHU=r_U−r_Hと実F→Hの手続き・負値・既存列の差と減衰を確認する。関門中のe9ed84aeは編集せず、独立した追加部品検査と三つの損の手例を準備する。旗onの模型走行・本番は行わず、第一段と旧reuseの停止、全資源・関門条件を維持する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-08T06:30:30.061805+09:00、現行e9ed84aeがr_H−r_Fとr_U−r_H、実FH手続き、負値、既存列の差と減衰に一致することを確認。追加6検査と同じ固定版の旗off全バイト一致を完了。模型コードの直しは不要。 報告：control/2026-10-08_注意の合わせた版_較正と出生HUの準備_Codex2.md。出生HUの採用・旗on走行はアストラ待ち、合わせた版の全関門・本番合格とはしない。）"
+        ]
+      },
+      "16（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T07:14:29.262707+09:00、注意の係 Codex2）。固定準備版e9ed84aeで世界2・種41・1740試行、忘却実行停止、出生HU off/on各一本の下見を11GB受付・PYTHONHASHSEED=0で行う。重いobserve_on.pyは付けず、100試行ごとの時間・最大常駐・定義数・開示試行の再照合回数・Vの符号割合と正の分位を記録する。24GB等の資源条件を維持し、二本目は条件成立まで待つ。採用や較正値の決定・本番と扱わず、成績は報告しない。指定準備枝を通常pushし、旧第一段・旧reuseと元の出力は保全する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "17（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T08:15:06.305835+09:00、注意の係 Codex2）。N16の未開始の出生HU on下見だけを4GBの受付へ変え、24GB・CPU・スワップ・熱等の条件を維持して投入する。走行中のoff模型と固定e9ed84ae・原道具/成果を維持し、同じ形の100試行表を記録する。最大常駐3GB超は停止せず報告、資源警告には従来どおり対応する。現予約22GBでは4GBを足すと26GBなので条件成立まで待つ。採用・本番・旧reuseの再開とは扱わない。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "18（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T09:46:36.777379+09:00、注意の係 Codex2）。自分の非本番birth_hu_offだけを停止して出力を保全し、走行中のbirth_hu_on種41は較正として継続する。固定e9ed84ae・同じ旗と命令で世界2種42〜48を各4GBの受付へ渡す。24GB・CPU・資源・期限条件を維持し、16本の原記録がそろってから所定の較正を行う。成績は見ない。報告：control/2026-10-08_較正_Codex2.md。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "19（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T09:51:50.434929+09:00、注意の係 Codex2）。固定e9ed84ae・較正と同じ条件で200試行の高速化off/on全バイト一致とCPU秒を検査し、合格後に全長を別に比較する。4GB受付・24GB等の資源条件を守る。以後の較正への旗の採用は200関門の実合格後とし、走行中の種41は再起動/編集しない。第一波の命令はL50_refを未確定のまま準備する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": []
+      },
+      "20（2026-10-08": {
+        "receipt_lines": [
+          "受領（2026-10-08T11:14:56.149531+09:00、注意の係 Codex2）。未開始の種45〜48をマックの監督の待ちから外し、種41/42と走行中の高速化on200の模型・受付・予約を維持したまま、未開始の種43/44を各3GBの受付へ引き継ぐ。200関門の実合格後に新しく始める本だけ合格済みの三旗を入れ、原較正記録の途中の大きさを報告する。on200は10:48に既に4GBで開始済みなので、その予約は変更しない。24GB・資源/関門・期限の条件を維持する。",
+          "受領と済みを、この見出しの下に書いて push してください。"
+        ],
+        "done_lines": [
+          "済み（2026-10-08T11:27:36.691280+09:00、注意の係 Codex2、報告：control/2026-10-08_較正_Codex2.md）。種45〜48をマックの待ちから外し、種41/42を監視だけ引き継いだ監督43207で新規43/44を各3GBとした。模型・受付・観測と既存の予約は維持。原記録の途中容量を報告した。43/44は資源待ち、200関門は未合格で、N18/N19の完了ではない。"
+        ]
+      }
+    }
+  }
+}
