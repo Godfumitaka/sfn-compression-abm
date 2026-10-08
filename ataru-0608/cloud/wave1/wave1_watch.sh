@@ -6,7 +6,7 @@
 # 直し（04:25）：ループの中の ssh・持ち帰りが一覧の stdin を読んでしまい、一回目で抜けていた。ssh -n と < /dev/null にした。
 # rc≠0 の本は記録だけして持ってこない（止まりは列と報告に書く）。全部が終わった（rc がある）ら抜ける。機械は消さない（次の種に使うかは指示を待つ）。
 set -u; source $HOME/cloud/aws_env.sh
-ID=$1; IP=$2; CMDS="$HOME/cloud/wave1/wave1_s12_commands.json $HOME/cloud/wave1/wave1_s12_e9_commands.json"; DONE=$HOME/cloud/wave1/done.tsv; LOG=$HOME/cloud/wave1/watch.log; RES=$HOME/v33prod/results
+ID=$1; IP=$2; CMDS="$HOME/cloud/wave1/wave1_s12_commands.json $HOME/cloud/wave1/wave1_s12_e9_commands.json $HOME/cloud/wave1/wave1_s1_jsonlog_commands.json"; DONE=$HOME/cloud/wave1/done.tsv; LOG=$HOME/cloud/wave1/watch.log; RES=$HOME/v33prod/results
 [ -f $DONE ] || echo -e "name\trc\tfinished\tfetched_at\tstatus" > $DONE
 say() { echo "$(date '+%F %T') $*" >> $LOG; }
 say "見張りを始めた（$ID、$IP）"
