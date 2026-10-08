@@ -1,0 +1,28 @@
+{
+  "commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+  "base": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "old_collective": "c55b8c1a62b04002413686b0405bc1960fa8d6b9",
+  "copied_verbatim": {
+    "tools/v311c.py": true,
+    "tools/v311c_fingerprint.py": true,
+    "tools/v311c_lineage.py": true,
+    "tools/v311c_checks/coll8_solo.py": true,
+    "tools/v311c_checks/test_sme_port.py": true
+  },
+  "tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_sme_impl_2026-10-03/testenv/bin/python -m pytest -q -p no:cacheprovider tests/test_v311c_allin.py tools/v311c_checks/test_sme_port.py",
+      "passed": 16,
+      "seconds": 0.64
+    },
+    {
+      "command": "同じ環境で tools/test_cstar_runtime.py tests/test_attnstage2_questions.py tests/test_attnstage2_runtime.py tests/test_attncstar.py",
+      "passed": 25,
+      "seconds": 0.41
+    }
+  ],
+  "evidence": "このチャットのpytestの実出力を転記。実模型の走行・全長・全関門の合格ではない。",
+  "protected_file_record": "protected-e9-files.json",
+  "ast_checked": 7,
+  "diff_check_passed": true
+}

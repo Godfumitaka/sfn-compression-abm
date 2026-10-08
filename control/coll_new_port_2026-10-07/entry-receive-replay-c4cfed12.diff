@@ -1,0 +1,253 @@
+diff --git a/tools/cstar_runtime.py b/tools/cstar_runtime.py
+index 759eb06..719dce0 100644
+--- a/tools/cstar_runtime.py
++++ b/tools/cstar_runtime.py
+@@ -184,7 +184,10 @@ def install(**options):
+         config = v39.CTX['config']
+         prediction_output = v39.CTX['output']
+         same = options['match_cstar'] == options['match_cstar_e']
+-        if same and not options.get('material_keep',False):
++        # 集団化の受信は、その公開束に対して既に二材料を選んでいる。
++        # 世界の最後の予測の材料へ置き換えず、下の同じEの計算へ渡す。
++        receiving = bool(CTX.get('collective_receive'))
++        if not receiving and same and not options.get('material_keep',False):
+             # 両方同じ照合なら、予測前に作った不変の候補をEでも順位づけする。
+             # 既に記録した同じ抽選を二度書かず、CHOICESの同じ選択を使う。
+             log = smeshared._log
+@@ -195,7 +198,7 @@ def install(**options):
+                 smeshared._log = log
+             base,alignment = chosen.scene,mapping.alignment
+             kw['base_written_at'] = chosen.written_at
+-        if not same:
++        if not receiving and not same:
+             # 混ぜた旗は診断用。Eの照合で逐語の候補を選び直す。
+             from abm.sme import map_graphs
+             partial = CTX['last_partial']
+diff --git a/tools/smereplay.py b/tools/smereplay.py
+index e0736fb..37619c8 100644
+--- a/tools/smereplay.py
++++ b/tools/smereplay.py
+@@ -38,6 +38,7 @@ ALLOWED_TYPES = frozenset({
+     ("v38", "MeritAccumulatorV38"),
+     ("v39", "AgentStateV39"),
+     ("v39", "SeatRec"),
++    ("v311c", "AgentStateV311"),
+ })
+ 
+ 
+@@ -95,6 +96,8 @@ def decode(value):
+         raise ValueError("再生で認めていない型のモジュールと名前")
+     if module == "v39" and name == "AgentStateV39":
+         cls = importlib.import_module("v39")._state_class()
++    elif module == "v311c" and name == "AgentStateV311":
++        cls = importlib.import_module("v311c")._state_class()
+     elif module == "v38" and name == "MeritAccumulatorV38":
+         # v38.install内で作られる既存の型を使う。模型の包みを再登録しない。
+         import inspect
+@@ -111,6 +114,20 @@ def decode(value):
+     raise ValueError(tag)
+ 
+ 
++def collective_phase(phase, trial, state, *, deliveries=()):
++    """世界の学習後と受信後を別に残す。通常の台帳・模型の状態は変更しない。"""
++    if phase not in ("world", "received"):
++        raise ValueError("集団化の記録の段階が未知")
++    row = {"kind": "collective_phase", "phase": phase, "trial": trial,
++           "state": encode(state), "deliveries": encode(tuple(deliveries))}
++    if ST.get("replay") is not None:
++        expected = json.loads(next(ST["replay"]))
++        if expected != row:
++            raise RuntimeError(f"再生：試行{trial}の{phase}の記憶・受信が違う")
++    ST["f"].write(json.dumps(row, ensure_ascii=False) + "\n")
++
++
++
+ def install(path, *, replay=None, fast_encode=False):
+     import gzip
+     import abm.loop as loop
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 9aad4eb..172b41a 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -438,6 +438,9 @@ def worker(task: dict) -> dict:
+             horizon.install(int(task["horizon"]))
+         if task.get("v310_be"):
+             # ★ v3.10 B＋E（書き直しの費用で結ぶ統合版、2026-09-29 午後、マック）：tools/v310be.py。v39 の上、削除の段を取る前に入れる
++            if task.get("v311c"):
++                import abm.loop as _loop
++                _REAL["m1_before_be"] = _loop.m1
+             import v310be
+             if task.get('logp_eps') is not None:
+                 v310be.EPSILON = task['logp_eps']
+@@ -450,6 +453,9 @@ def worker(task: dict) -> dict:
+                 v310be.CFG["lam"] = float(task["e_price"])
+                 v310be.STATS["cfg"]["lam"] = v310be.CFG["lam"]
+         _REAL["theta_impl"] = v39.CTX["apply"]
++        if task.get("v311c"):
++            import v311c
++            v311c.install(fo, task, _REAL)
+         if task.get("u_struct"):
+             # ★ U の照合（--u-struct）と覚え直しの初期の評価（--relearn-init）：tools/ustruct.py・tools/relearninit.py。v39・v310be のあとに入れる
+             import ustruct
+@@ -594,6 +600,10 @@ def worker(task: dict) -> dict:
+                         epsilon=task.get('logp_eps',.5),**connection,
+                         **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
+                            if task.get('attn_allin') else {}))
++    if task.get("v311c") and (task.get("cstar_options") or task.get("attn_sme")):
++        # 診断は実際の問いの計数の外から、最終の注意の選びを呼ぶ。
++        import abm.loop as _loop
++        v311c.CFG["prepared_predict"] = _loop.predict
+     if task.get('stage2') == 'on':
+         import attnstage2_runtime
+         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
+@@ -602,6 +612,9 @@ def worker(task: dict) -> dict:
+                                   rematch_reuse=task.get('stage2_reuse',False),
+                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
+                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
++    if task.get("v311c") and (task.get("cstar_options") or task.get("attn_sme") or task.get("stage2") == "on"):
++        import v311c_allin
++        v311c_allin.install(task, side_dir)
+     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
+     old_gc_threshold = None
+     if task.get("sme_gc_threshold") is not None:
+@@ -635,6 +648,8 @@ def worker(task: dict) -> dict:
+         rec["attn_sme"] = sys.modules["attnsme"].close()
+     if task.get('stage2') == 'on':
+         rec['stage2'] = sys.modules['attnstage2_runtime'].close()
++    if task.get("v311c") and "v311c_allin" in sys.modules:
++        sys.modules["v311c_allin"].close()
+     if task.get("use_forget") is not None:
+         rec["useforget"] = sys.modules["useforget"].close()
+     if task.get("select_n3"):
+@@ -698,6 +713,8 @@ def worker(task: dict) -> dict:
+         rec["lowmem"] = {"evictions": lowmem.STATE["evictions"], "max_cache": lowmem.STATE["max_cache"]}
+     rec["nohist"] = bool(task.get("nohist"))
+     import resource
++    if task.get("v311c"):
++        rec["v311c"] = dict(sys.modules["v311c"].STATS)
+     rec["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 1)  # macOS はバイト
+     alive_end = _LAST_ALIVE.pop("__alive__", [])
+     final = {"kind": "final", "alive_end": alive_end, "removed_defs": _STATS["removed"],
+@@ -745,6 +762,63 @@ def compare(task: dict) -> dict:
+             "body_sha_equal": b1 == b2}
+ 
+ 
++def _run_collective(args, tasks, out_root: Path, man: Path) -> None:
++    """★ v3.11c：集団の走行。走行（集団）ごとに、まとめ役を一つのプロセスで動かし、その中で個体ごとのプロセスを歩調を合わせて走らせる。"""
++    import multiprocessing as mp
++    import v311c
++    if len({t["cell"] for t in tasks}) != 1:
++        raise SystemExit(f"--v311c はセルを一つに絞って使う（--cells）。いま {len({t['cell'] for t in tasks})} セル")
++    tmpl = tasks[0]
++    fs = [float(x) for x in args.v311c_f.split(",")]
++    n = len(fs)
++    groups = [int(x) for x in args.v311c_groups.split(",")] if args.v311c_groups else [0] * n
++    if len(groups) != n:
++        raise SystemExit("--v311c-groups の長さが個体の数と違う")
++    comm = out_root / "comm"
++    comm.mkdir(parents=True, exist_ok=True)
++    pops = []
++    for r in [int(x) for x in args.v311c_runs.split(",")]:
++        ts = [dict(tmpl, seed=r + 1000 * i, f=fs[i], compare=False,
++                   v311c={"run": r, "agent": i, "n": n, "q": args.v311c_q, "m": args.v311c_m, "recv": args.v311c_recv,
++                          "groups": groups, "tags": not args.v311c_no_tags, "b_n": args.v311c_b_n}) for i in range(n)]
++        for key in ("probe_shop", "audit", "serial"):
++            if getattr(args, "v311c_" + key):
++                for task in ts:
++                    task["v311c"][key] = True
++        if args.v311c_sme_replay:
++            for task in ts:
++                task["sme_replay"] = str(Path(args.v311c_sme_replay) / f"seed{task['seed']:03d}.sme.states.jsonl.gz")
++        pops.append((r, ts))
++
++    def one(r, ts):
++        s = v311c.coordinate(ts, comm / f"run{r:03d}.jsonl", probe_every=args.v311c_probe_every)
++        if args.v311c_lineage and not s["errors"]:
++            from v311c_lineage import write_lineage
++            write_lineage(comm / f"run{r:03d}.jsonl", comm / f"run{r:03d}.lineage.jsonl", groups)
++        (comm / f"run{r:03d}.summary.json").write_text(json.dumps(s, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
++
++    ctx = mp.get_context("fork")
++    running = []
++    queue = list(pops)
++    while queue or running:
++        while queue and len(running) < max(1, args.workers):
++            r, ts = queue.pop(0)
++            p = ctx.Process(target=one, args=(r, ts))
++            p.start()
++            running.append((r, p))
++            print(f"{time.strftime('%F %T')} 集団 run{r:03d} を始めた（個体 {n}）", flush=True)
++        r, p = running.pop(0)
++        p.join()
++        sp = comm / f"run{r:03d}.summary.json"
++        s = json.loads(sp.read_text(encoding="utf-8")) if sp.exists() else {"errors": ["summary が無い"], "exitcode": p.exitcode}
++        with open(man, "a", encoding="utf-8") as fm:
++            for i, a in enumerate(s.get("agents") or []):
++                fm.write(json.dumps({"run": r, "agent": i, **(a if isinstance(a, dict) else {"raw": str(a)})}, ensure_ascii=False, default=str) + "\n")
++        print(f"{time.strftime('%F %T')} 集団 run{r:03d} 終わり 試行 {s.get('trials')} 束 {s.get('bundles')} 送信 {s.get('sent')} "
++              f"受信 {s.get('recv')} 失敗 {len(s.get('errors') or [])}", flush=True)
++
++
++
+ def main() -> None:
+     ap = argparse.ArgumentParser()
+     ap.add_argument("config")
+@@ -863,6 +937,21 @@ def main() -> None:
+     ap.add_argument("--no-forget-exec", action="store_true", help="本番と同じVと参照H→Uを記録し、F→H・H→Uの実行だけを止める較正の旗")
+     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
++    ap.add_argument("--v311c", action="store_true", help="v3.11c：集団化・事例伝達（tools/v311c.py）。B＋E の旗一式と一緒に")
++    ap.add_argument("--v311c-f", default="0.5,0.5", help="v3.11c：個体ごとの f（開示の確率）。個体の数はこの並びの長さ")
++    ap.add_argument("--v311c-groups", default=None, help="v3.11c：個体ごとの組（既定は全員 0）")
++    ap.add_argument("--v311c-q", type=float, default=0.2, help="v3.11c：実際に答えた人が束を送る確率 q")
++    ap.add_argument("--v311c-m", type=float, default=0.0, help="v3.11c：別の組の相手を選ぶ確率 m（二体では使わない）")
++    ap.add_argument("--v311c-recv", default="B", choices=["A", "B"], help="v3.11c：受信 A（名前を使わない）／受信 B（同じ名札を優先）")
++    ap.add_argument("--v311c-runs", default="1", help="v3.11c：走行（集団）の番号。個体 i の世界の種は 走行＋1000×i")
++    ap.add_argument("--v311c-b-n", type=int, default=None, help="v3.11c：名札の固定長 b を決める個体の数（既定は集団の個体数。単独の比べの走行で集団と同じ b にするとき）")
++    ap.add_argument("--v311c-no-tags", action="store_true", help="v3.11c の検査 ① 用：集団化の機能を全部切る（名札も通信もしない）")
++    ap.add_argument("--v311c-probe-every", type=int, default=100, help="v3.11c：回答の一致の試験の間隔（0 で試験しない）")
++    ap.add_argument("--v311c-probe-shop", action="store_true", help="一致の試験を店×日ごとの固定20問にする（学習には戻さない）")
++    ap.add_argument("--v311c-audit", action="store_true", help="研究者用：各試行の状態・乱数の指紋と試験の非干渉を検査する")
++    ap.add_argument("--v311c-lineage", action="store_true", help="研究者用：走行後に通信記録から定義ごとの出どころ候補の系譜を書く")
++    ap.add_argument("--v311c-sme-replay", default=None, help="集団化の個体別SME状態記録のディレクトリから再生する（集団の種一本）")
++    ap.add_argument("--v311c-serial", action="store_true", help="個体の重い計算を全体で一つずつ実行する（試行の歩調は同じ）")
+     ap.add_argument("--hist-role", action="store_true",
+                     help="v3.10h：m1 の一階の席の履歴を、親の行が写った場面の関係の同じ位置の子で集める（物の組で集めない。tools/histrole.py）")
+     ap.add_argument("--v39-dump-cands", action="store_true", help="v3.10 の較正用：各試行の終わりの候補の正の点数を side に書き出す")
+@@ -890,6 +979,14 @@ def main() -> None:
+     ap.add_argument("--dump-slot-history", action="store_true",
+                     help="走行末の全定義の slot_history（墓石の席も含む）と行を side の最後の行に書く（記録だけ。台帳は変えない）")
+     args = ap.parse_args()
++    if args.v311c and not (args.v39 and args.v310_be):
++        ap.error("--v311c は --v39 --v310-be と一緒に使う")
++    if args.v311c_probe_shop and args.shop_world is None:
++        ap.error("--v311c-probe-shop は --shop-world と一緒に使う")
++    if args.v311c_sme_replay and not (args.v311c and args.sme2017 and len(args.v311c_runs.split(",")) == 1):
++        ap.error("--v311c-sme-replay は --v311c --sme2017 と集団の種一本で使う")
++    if args.v311c and args.sme_replay:
++        ap.error("集団化の再生は個体別の受信段階を含む別の記録を使う")
+     import sweep
+     cfg = json.load(open(args.config, encoding="utf-8"))
+     orig_dir = cfg["output"]["dir"]
+@@ -1108,11 +1205,21 @@ def main() -> None:
+                                                     "strict_pc": args.strict_pc, "cf_value": args.cf_value, "e_price": args.e_price, "cf_learn": args.cf_learn,
+                                                     "v38_from": __import__("os").environ.get("V38_FROM"),   # ★ 検査用の環境変数（本番では None）
+                                                     "commit": commit, "driver": "tools/v3_run.py",
++                                                    **({"v311c": {"f": args.v311c_f, "groups": args.v311c_groups, "q": args.v311c_q, "m": args.v311c_m,
++                                                                  "recv": args.v311c_recv, "runs": args.v311c_runs, "no_tags": args.v311c_no_tags,
++                                                                  "probe_every": args.v311c_probe_every,
++                                                                  **({"sme_replay": args.v311c_sme_replay} if args.v311c_sme_replay else {}),
++                                                                  **{k: True for k in ("probe_shop", "audit", "serial", "lineage")
++                                                                     if getattr(args, "v311c_" + k)}}} if args.v311c else {}),
+                                                     "workers": args.workers,
+                                                     **({"horizon": args.horizon} if args.horizon is not None else {})}) + "\n")
+     man = out_root / "manifest.jsonl"
+     print(f"{time.strftime('%F %T')} 開始 {cfg['name']} nohash={args.nohash} nsim={args.nsim} vt={args.vt} "
+           f"greedy={args.greedy} extgreedy={args.extgreedy} lowmem={args.lowmem} extend={args.extend_rule} charge1={args.charge1} ρ={args.ident_rho} argmax={args.ident_argmax} commons={args.ident_commons} shadow={args.ident_shadow} fix2={args.fix2} fix2_full={args.fix2_full} fix_order={args.fix_order} fix_order2={args.fix_order2} proj_first={args.proj_first} fill_unseen={args.fill_unseen} fill_norestate={args.fill_norestate} no_charge2={args.no_charge2} own_evidence={args.own_evidence} v39={args.v39}/{args.v39_budget}/{args.v39_init}/{args.v39_a}/{args.v39_u} death_terms={args.death_terms} checks={args.checks} rename_check={args.rename_check} fast={args.fast} nohist={args.nohist} 走行 {len(tasks)} 並列 {args.workers} 比べる={do_compare}", flush=True)
++    if args.v311c:
++        _run_collective(args, tasks, out_root, man)
++        print(f"{time.strftime('%F %T')} ALLDONE {cfg['name']}", flush=True)
++        return
+     with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:
+         futs = {ex.submit(worker, t): t for t in tasks}
+         for fu in as_completed(futs):

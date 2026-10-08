@@ -1,0 +1,52 @@
+"""模型の外の開始前検査。過程を止めず、受付後にも空きを待つ。"""
+import datetime
+import json
+import os
+import re
+import subprocess
+import time
+from pathlib import Path
+
+def snapshot(exclude=()):
+    raw = subprocess.check_output(['/bin/ps','-axo','pid=,ppid=,stat=,pcpu=,rss=,command='],text=True)
+    records=[]
+    for line in raw.splitlines():
+        f=line.strip().split(None,5)
+        if len(f)!=6: continue
+        pid,parent,state,cpu,rss,cmd=f
+        if not re.fullmatch(r'python(?:3(?:\.\d+)?)?',Path(cmd.split()[0]).name,re.I): continue
+        records.append(dict(pid=int(pid),parent=int(parent),state=state,cpu=float(cpu),rss_bytes=int(rss)*1024,command=cmd))
+    parents={p['parent'] for p in records}
+    counted=[]
+    for p in records:
+        # 多重処理の待つ親・受付・監視を二重に数えない。Tの一時停止は除く。
+        if 'T' in p['state'] or 'Z' in p['state'] or p['pid']==os.getpid() or p['pid'] in exclude: continue
+        cmd=p['command']
+        if 'resource_tracker' in cmd or 'jobs.py' in cmd: continue
+        leaf=p['pid'] not in parents
+        if leaf and ('spawn_main' in cmd or 'forkserver' in cmd or 'sme_evict_observe' in cmd or 'v3_run.py' in cmd or p['rss_bytes']>=100*1024**2 or p['cpu']>=5 or p['state'].startswith('R')):
+            counted.append(p)
+    therm=subprocess.check_output(['/usr/bin/pmset','-g','therm'],text=True)
+    speed=re.search(r'CPU_Speed_Limit\s*=\s*(\d+)',therm)
+    good=('No thermal warning level has been recorded' in therm and
+          'No performance warning level has been recorded' in therm and
+          (speed is None or int(speed[1])==100))
+    return dict(time=datetime.datetime.now().astimezone().isoformat(),limit=8,
+                criterion='停止T/終了Zを除くPython末端。待機中のspawn・模型実行器も含む。重い集計と実行中のPythonも安全側に含む。待つ親を除く。',
+                counted=counted,count=len(counted),python_processes=records,thermal=therm,thermal_ok=good)
+
+def wait(path,planned=1):
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    first=True
+    with path.open('a') as f:
+        while True:
+            row=snapshot();row['planned_model_concurrency']=planned
+            row['ready']=row['thermal_ok'] and row['count']+planned<=8
+            f.write(json.dumps(row,ensure_ascii=False)+'\n');f.flush()
+            if not row['thermal_ok']: raise RuntimeError('CPU前置き：熱又は性能の警告。新しい模型処理を始めない')
+            if row['ready']:
+                print(json.dumps({'cpu_ready':row['count'],'planned':planned,'limit':8},ensure_ascii=False),flush=True)
+                return row
+            if first:
+                print(json.dumps({'cpu_wait':row['count'],'planned':planned,'limit':8},ensure_ascii=False),flush=True);first=False
+            time.sleep(15)
