@@ -42,7 +42,7 @@ with open(OUT, "a") as out:
             if len(a) > 3 and a[1] == b"tools/v3_run.py" and b"/calib_w1/" in a[3]:
                 case = a[3].decode().split("/")[-2]
                 tot = rss + sum(r for q, (_a, ppq, r) in procs.items() if ppq == p)
-                side = glob.glob(f"/home/tatsu/calib_w1/{case}/output/side/*/seed041.jsonl")
+                side = glob.glob(f"/home/tatsu/calib_w1/{case}/output/side/*/seed[0-9][0-9][0-9].jsonl")
                 t = last_trial(side[0]) if side else ""
                 out.write(f"{time.strftime('%F %T')}\t{case}\t{p}\t{t}\t{tot}\n")
                 alive += 1
