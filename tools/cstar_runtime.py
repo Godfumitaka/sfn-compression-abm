@@ -49,8 +49,17 @@ def probabilities_for_graph(raw, graph, scene):
         if node.kind in ('entity', 'unknown'):
             continue
         row = rows[node.key]
-        values = distributions(d, row, state, scene, config)
-        st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
+        if CFG.get('exact_speed'):
+            st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
+            # q_Fは固定名の一点分布。Pを使うsharedでは元の分布を作る。
+            if CFG['match_eps'] != 'shared' and st == 'F':
+                out[node.key] = {row.relation.predicate: 1.0}
+                continue
+            values = distributions(d, row, state, scene, config)
+        else:
+            # 旗offの呼び出し順も元のままにする。
+            values = distributions(d, row, state, scene, config)
+            st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
         out[node.key] = values['P' if CFG['match_eps'] == 'shared' else 'q'][st]
     return out
 
@@ -152,6 +161,12 @@ def install(**options):
     CTX.clear(); STATS.clear()
     ENGINE = CstarMatcher(smeshared.ENGINE.settings,tie_seed=0,tie_uniform=smeshared.CTX.get('tie_uniform',False))
     cstar_probability.BACKGROUND_SOURCE = v310be.probabilities
+    if options.get('exact_speed'):
+        original = cstar_probability.BACKGROUND_SOURCE
+        if original.__module__ != 'v310be' or original.__name__ != 'probabilities':
+            raise RuntimeError('C*の基底の入口が指定版と異なる')
+        cstar_probability.BACKGROUND_SOURCE = v310be.background_probabilities
+        v39.CFG['cstar_exact_speed'] = True
     if v310be.CFG.get('score_logp'):
         v310be.STATS['cfg']['epsilon'] = options['logp_eps']
     if options.get('h_dirichlet') or options['logp_eps'] != .5:

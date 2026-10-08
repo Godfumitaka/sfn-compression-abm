@@ -15,6 +15,7 @@ import math
 import random
 
 VERSION = "sme2017-ordered-component-1"
+FINGERPRINT_MEMO = False
 
 
 @dataclass(frozen=True)
@@ -84,9 +85,15 @@ class Graph:
         return {n.key: n for n in self.nodes}
 
     def fingerprint(self):
+        if FINGERPRINT_MEMO and '_fingerprint_memo' in self.__dict__:
+            return self.__dict__['_fingerprint_memo']
         data = [(n.key, n.kind, sorted(n.names), n.args, n.state, n.ubiquitous)
                 for n in sorted(self.nodes, key=lambda x: x.key)]
-        return hashlib.sha256(json.dumps(data, separators=(",", ":")).encode()).hexdigest()
+        value = hashlib.sha256(json.dumps(data, separators=(",", ":")).encode()).hexdigest()
+        if FINGERPRINT_MEMO:
+            # Graphのdataclass項目・等値・hash・保存形式は変えない。
+            object.__setattr__(self, '_fingerprint_memo', value)
+        return value
 
     def heights(self):
         by = self.by_id
