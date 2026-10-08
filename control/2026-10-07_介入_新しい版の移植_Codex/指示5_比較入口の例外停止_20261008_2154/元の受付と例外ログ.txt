@@ -1,0 +1,14 @@
+受け付けた：PID 62396、担当 探索介入 指示5 記録だけ200試行関門、見込み 1.0 GB（表の合計 23.3 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_gate.py", line 179, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_gate.py", line 161, in main
+    result = dict(file=name, **compare_files(a[name], b[name], name.startswith("ledgers/")))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_gate.py", line 58, in compare_files
+    for number, (a, b) in enumerate(zip_longest(comparable(left, ledger), comparable(right, ledger)), 1):
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_gate.py", line 48, in comparable
+    raise ValueError("台帳の見出しが無い")
+ValueError: 台帳の見出しが無い
+消した：PID 62396

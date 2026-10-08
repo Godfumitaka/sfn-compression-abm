@@ -1,0 +1,88 @@
+"""停止原因と資料保全だけを読む。模型・関門・記録の検証は再実行しない。"""
+from datetime import datetime
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+from zoneinfo import ZoneInfo
+
+ROOT = Path(__file__).resolve().parents[1]
+HERE = ROOT / "instruction5"
+GATE = HERE / "gate_200_01"
+SOURCE = ROOT / "source_e9"
+OUT = HERE / "stop_review_01"
+OUT.mkdir(exist_ok=False)
+
+
+def digest(path):
+    value = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(262144), b""):
+            value.update(block)
+    return value.hexdigest()
+
+
+def inventory():
+    return {p.relative_to(GATE).as_posix(): dict(bytes=p.stat().st_size, sha256=digest(p))
+            for p in sorted(GATE.rglob("*")) if p.is_file()}
+
+
+def save(name, value):
+    (OUT / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+
+
+before = inventory()
+status = json.loads((GATE / "status.json").read_text())
+assert status["status"] == "stopped"
+assert status["error"] == "ValueError('台帳の見出しが無い')"
+assert len(status["comparisons"]) == 1 and status["comparisons"][0]["match"]
+assert len(status["completed"]) == 2 and all(row["exit_code"] == 0 for row in status["completed"])
+dirs = ("ledgers", "side", "attention", "stage2", "evictions")
+left = GATE / "without_records/output"
+right = GATE / "with_records/output"
+# 実際の入口と同じファイル列を読むだけで、比較関数を呼ばない。
+order = [p.relative_to(left).as_posix() for name in dirs
+         for p in (left / name).rglob("*") if p.is_file()]
+assert order[0] == status["comparisons"][0]["file"]
+candidate = order[1]
+first_lines = {}
+for label, base in [("without_records", left), ("with_records", right)]:
+    path = base / candidate
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rb") as stream:
+        first = stream.readline()
+    row = json.loads(first)
+    (OUT / (label + "_exception_file_first_line.json.txt")).write_bytes(first)
+    first_lines[label] = dict(record_type=row.get("record_type"), kind=row.get("kind"),
+                              trial=row.get("trial"), keys=list(row), bytes=len(first),
+                              sha256=hashlib.sha256(first).hexdigest())
+save("exception_location.json", dict(
+    inspected_at_jst=datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds"),
+    stopped_at_jst=status["updated_at_jst"], error=status["error"],
+    compared_before_exception=status["comparisons"],
+    next_file_in_actual_iteration=candidate, first_lines=first_lines,
+    gate_code_condition='name.startswith("ledgers/")',
+    code_exception_lines=[45, 46, 47, 48],
+    gate_not_reexecuted=True, other_comparisons_not_performed=True,
+    research_records_not_validated=True, model_not_reexecuted=True))
+manifest = {}
+for label in ["without_records", "with_records"]:
+    rows = [json.loads(line) for line in (GATE / label / "output/manifest.jsonl").read_text().splitlines()]
+    assert len(rows) == 1 and rows[0]["seed"] == 1 and rows[0]["trial_count"] == 200
+    manifest[label] = {key: rows[0].get(key) for key in
+                       ["seed", "trial_count", "code_commit", "elapsed_sec", "peak_rss_mb", "finished_at"]}
+save("model_completion_metadata.json", manifest)
+saved = json.loads((HERE / "source_commit.json").read_text())["file_sha256"]
+saved.update(json.loads((HERE / "native_unchanged.json").read_text())["native_files_unchanged_from_e9"])
+assert all(digest(SOURCE / name) == sha for name, sha in saved.items())
+assert not subprocess.check_output(["git", "status", "--porcelain"], cwd=SOURCE, text=True).strip()
+assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=SOURCE, text=True).strip() == manifest["with_records"]["code_commit"]
+save("source_unchanged.json", dict(commit=manifest["with_records"]["code_commit"],
+                                  files_sha256=saved, clean=True))
+after = inventory()
+assert before == after, "読み取りの前後で関門資料が変わった"
+save("gate_preservation.json", dict(files=len(before), bytes=sum(row["bytes"] for row in before.values()),
+                                    all_bytes_unchanged_during_inspection=True, files_sha256=before))
+print(json.dumps(dict(exception_file=candidate, first_line_types=first_lines,
+                     preserved_files=len(before), output=str(OUT)), ensure_ascii=False))

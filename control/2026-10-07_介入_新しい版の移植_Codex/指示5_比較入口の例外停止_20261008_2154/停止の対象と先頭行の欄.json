@@ -1,0 +1,79 @@
+{
+  "inspected_at_jst": "2026-10-08T21:50:03+09:00",
+  "stopped_at_jst": "2026-10-08T21:40:03+09:00",
+  "error": "ValueError('台帳の見出しが無い')",
+  "compared_before_exception": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "match": true,
+      "compared_sha256": "9f2213b8cb4087619f0a96183141d0bc8ce1e02d670f4346148dbbbe06657f01",
+      "right_sha256": "9f2213b8cb4087619f0a96183141d0bc8ce1e02d670f4346148dbbbe06657f01"
+    }
+  ],
+  "next_file_in_actual_iteration": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.done",
+  "first_lines": {
+    "without_records": {
+      "record_type": null,
+      "kind": null,
+      "trial": null,
+      "keys": [
+        "cell",
+        "seed",
+        "f",
+        "theta_prime",
+        "verbatim_theta",
+        "repair_scope",
+        "world_hash",
+        "trial_count",
+        "code_commit",
+        "seed_file_sha256",
+        "snapshot_mode",
+        "snapshot_every",
+        "ledger_bytes",
+        "elapsed_sec",
+        "final_def_count",
+        "final_m_live_total",
+        "finished_at"
+      ],
+      "bytes": 580,
+      "sha256": "ca7aed9f0ca9f33b09bb295d65578655e42b462e967b06dc5d4b79c670e885e8"
+    },
+    "with_records": {
+      "record_type": null,
+      "kind": null,
+      "trial": null,
+      "keys": [
+        "cell",
+        "seed",
+        "f",
+        "theta_prime",
+        "verbatim_theta",
+        "repair_scope",
+        "world_hash",
+        "trial_count",
+        "code_commit",
+        "seed_file_sha256",
+        "snapshot_mode",
+        "snapshot_every",
+        "ledger_bytes",
+        "elapsed_sec",
+        "final_def_count",
+        "final_m_live_total",
+        "finished_at"
+      ],
+      "bytes": 579,
+      "sha256": "2c4afcbb99877c6136eb971961aeaa6569260804fca4cbc786fb71f2492b8c3e"
+    }
+  },
+  "gate_code_condition": "name.startswith(\"ledgers/\")",
+  "code_exception_lines": [
+    45,
+    46,
+    47,
+    48
+  ],
+  "gate_not_reexecuted": true,
+  "other_comparisons_not_performed": true,
+  "research_records_not_validated": true,
+  "model_not_reexecuted": true
+}

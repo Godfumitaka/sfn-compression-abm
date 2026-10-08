@@ -1,0 +1,37 @@
+{
+  "status": "stopped",
+  "at_jst": "2026-10-08T12:31:52+09:00",
+  "trials": 200,
+  "seed": 1,
+  "world": 2,
+  "time_fields_excluded": [
+    "timestamp",
+    "seconds",
+    "wrapper_seconds",
+    "engine_seconds",
+    "rematch_fraction_of_stage2_seconds"
+  ],
+  "ledger_header_only_excluded": true,
+  "comparisons": [
+    {
+      "file": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "match": true,
+      "compared_sha256": "9f2213b8cb4087619f0a96183141d0bc8ce1e02d670f4346148dbbbe06657f01",
+      "right_sha256": "9f2213b8cb4087619f0a96183141d0bc8ce1e02d670f4346148dbbbe06657f01"
+    }
+  ],
+  "completed": [
+    {
+      "label": "without_records",
+      "exit_code": 0,
+      "elapsed_seconds": 17728.55897629098
+    },
+    {
+      "label": "with_records",
+      "exit_code": 0,
+      "elapsed_seconds": 15162.379146041
+    }
+  ],
+  "error": "ValueError('台帳の見出しが無い')",
+  "updated_at_jst": "2026-10-08T21:40:03+09:00"
+}
