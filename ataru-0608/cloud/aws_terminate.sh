@@ -9,7 +9,7 @@ TAG=$(aws ec2 describe-instances --instance-ids $ID --query "Reservations[0].Ins
 # まだ模型の本が走っている機械は消さない（同じ機械に、別の見張りの本が並んでいるため。最後に終わった見張りが消す）
 IP=$(aws ec2 describe-instances --instance-ids $ID --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
 if [ "$IP" != "None" ] && [ -n "$IP" ]; then
-  N=$(ssh -i $KEY_FILE -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=4 ubuntu@$IP 'ps -eo args | grep -c "^python3.12 tools/v3_run.py"' 2>/dev/null || echo "?")
+  N=$(ssh -i $KEY_FILE -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=4 ubuntu@$IP 'ps -eo args | grep -c "^python3.12 tools/v3_run.py"; true' 2>/dev/null); N=${N:-?}
   [ "$N" == "0" ] || { echo "★ $ID ではまだ模型の本が $N 本走っている（又は数えられない）。消さない（最後に終わった見張りが消す）"; exit 3; }
 fi
 aws ec2 terminate-instances --instance-ids $ID --query 'TerminatingInstances[0].CurrentState.Name' --output text
