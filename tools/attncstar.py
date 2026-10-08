@@ -15,10 +15,16 @@ def common_bases(ai, state, config):
     rows=tuple(SimpleNamespace(relation=r,slot_index=i) for i,r in enumerate(scene.relations))
     visible=SimpleNamespace(name='attention-visible',constituents=rows)
     bases={}
+    import cstar_runtime as C
+    index = None
+    if C.CFG.get('exact_speed'):
+        from smeprobpool import signature_index, signature_pool
+        index = signature_index(scene, scene)
     for row in rows:
         signature=slot_signature(row.relation,scene)
-        pool=frozenset(p for p in state.p_hat.alive_vocab
-                       if _predicate_has_signature(p,signature,scene,scene))
+        pool = (signature_pool(state.p_hat.alive_vocab, signature, index) if index is not None
+                else frozenset(p for p in state.p_hat.alive_vocab
+                               if _predicate_has_signature(p,signature,scene,scene)))
         pool=v39._order_pool(pool,visible,row,config.higher_order_predicates)
         b=dict(_distribution(pool,state.p_hat))
         bases[row.relation.relation_id]=b if b and sum(b.values())>0 else {None:1.}

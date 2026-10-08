@@ -385,7 +385,11 @@ def u_answer(d, row, scene, p_hat, hop):
         return None, "U は棄権"
     dg = RelationGraph("definition", relations=tuple(c.relation for c in d.constituents))
     sig = slot_signature(row.relation, dg)
-    pool = frozenset(p for p in p_hat.alive_vocab if _predicate_has_signature(p, sig, scene, dg))
+    if CFG.get('cstar_exact_speed'):
+        from smeprobpool import signature_index, signature_pool
+        pool = signature_pool(p_hat.alive_vocab, sig, signature_index(scene, dg))
+    else:
+        pool = frozenset(p for p in p_hat.alive_vocab if _predicate_has_signature(p, sig, scene, dg))
     pool = _order_pool(pool, d, row, hop)
     if not pool:
         return None, "適合する名なし"

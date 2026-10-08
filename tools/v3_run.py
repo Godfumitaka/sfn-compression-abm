@@ -497,7 +497,8 @@ def worker(task: dict) -> dict:
     if task.get("sme2017"):
         import smeshared
         smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]), call_seed=task.get("sme_call_seed", False),
-                          **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}))
+                          **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}),
+                          **({'exact_speed': True} if task.get('stage2_speed') else {}))
         if task.get("sme_reuse") or task.get("sme_prune"):
             import smeopt
             smeopt.install(reuse=task.get("sme_reuse", False), prune=task.get("sme_prune", False))
@@ -510,7 +511,10 @@ def worker(task: dict) -> dict:
                             tombstone=task.get("sme_evict_tombstone", False))
         if task.get("cstar_options"):
             import cstar_runtime
-            cstar_runtime.install(**task["cstar_options"])
+            cstar_runtime.install(**task["cstar_options"],
+                                  **({'exact_speed': True} if task.get('stage2_speed') else {}),
+                                  **({'cache_prune_path':out_root.parent/'p10_cache_guard.jsonl.gz'}
+                                     if task.get('stage2_cache_prune') else {}))
     if task.get("shop_world"):
         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
         #   v39 の固定辞書に新しい述語を足す
@@ -621,8 +625,10 @@ def worker(task: dict) -> dict:
         import gc
         old_gc_threshold = gc.get_threshold()
         gc.set_threshold(task["sme_gc_threshold"], *old_gc_threshold[1:])
+    native_loop_returned = False
     try:
         rec = sweep.run_one(task)
+        native_loop_returned = True
     except Exception as e:  # noqa
         if task.get("v39") and type(e).__name__ == "Unfit":
             # ★ 容量不適合（仕様 8 節）：走行を止めて記録する。台帳は途中まで（完走分だけで成功を主張しない）
@@ -633,6 +639,8 @@ def worker(task: dict) -> dict:
     finally:
         if old_gc_threshold is not None:
             gc.set_threshold(*old_gc_threshold)
+        if task.get('stage2_cache_prune'):
+            sys.modules['cstar_runtime'].ENGINE.cache_prune_guard.close(native_loop_returned)
     if "v39" in sys.modules:
         rec["v39"] = dict(sys.modules["v39"].STATS)
     if task.get("sme2017"):
@@ -919,6 +927,10 @@ def main() -> None:
     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
+    ap.add_argument('--stage2-speed', choices=('off','on'), default='off',
+                    help='C*の第二段の同じ分布・グラフを索引と試行内の控えで作る（P10は別旗）')
+    ap.add_argument('--stage2-cache-prune',choices=('off','on'),default='off',
+                    help='指示26のP10：過去の呼び出し種のC*控えだけを捨て、再参照なら止める')
     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
     ap.add_argument("--sme-gc-threshold", type=int, default=None,
@@ -1124,6 +1136,12 @@ def main() -> None:
         raise SystemExit('第二段をほかの保持の置換と合算しない')
     if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
         raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
+    if args.stage2_speed == 'on' and not (args.stage2 == 'on' and args.attn_allin
+                                        and args.match_cstar and args.sme_call_seed):
+        raise SystemExit('--stage2-speed onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
+    if args.stage2_cache_prune == 'on' and not (args.stage2 == 'on' and args.attn_allin
+                                              and args.match_cstar and args.sme_call_seed):
+        raise SystemExit('--stage2-cache-prune onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
     if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
         raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
@@ -1136,6 +1154,8 @@ def main() -> None:
         if args.stage2 == 'on':
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
             if args.stage2_reuse == 'on':task['stage2_reuse']=True
+            if args.stage2_speed == 'on':task['stage2_speed']=True
+            if args.stage2_cache_prune == 'on':task['stage2_cache_prune']=True
             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
         if args.logp_eps != .5:
             task['logp_eps'] = args.logp_eps
@@ -1173,6 +1193,8 @@ def main() -> None:
                                                     **cstar_options,
                                                     **({'attn_allin':True} if args.attn_allin else {}),
                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
+                                                    **({'stage2_speed':True} if args.stage2_speed=='on' else {}),
+                                                    **({'stage2_cache_prune':True} if args.stage2_cache_prune=='on' else {}),
                                                     **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,

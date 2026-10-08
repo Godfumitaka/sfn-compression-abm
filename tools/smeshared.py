@@ -27,6 +27,9 @@ CHOICES: dict = {}
 STATS: dict = {}
 LOG: dict = {}
 CTX: dict = {}
+EXACT_SPEED = False
+TYPED_GRAPH_MEMO: dict = {}
+TYPED_GRAPH_TRIAL = None
 
 
 def active_version():
@@ -72,7 +75,18 @@ class SharedAlignment(Alignment):
 
 def typed_graph(g):
     """登録された許容名・忘れた引数を読む。図の名前や物のラベルは使わない。"""
+    global TYPED_GRAPH_TRIAL
     v39 = sys.modules.get("v39")
+    sp = sys.modules.get('strictpc')
+    memoize = (EXACT_SPEED and id(g) not in getattr(v39, 'REG', {})
+               and id(g) not in getattr(sp, 'RELPOS', {}))
+    if EXACT_SPEED and TYPED_GRAPH_TRIAL != CTX.get('trial'):
+        TYPED_GRAPH_MEMO.clear()
+        TYPED_GRAPH_TRIAL = CTX.get('trial')
+    if memoize:
+        saved = TYPED_GRAPH_MEMO.get(id(g))
+        if saved is not None and saved[0] is g:
+            return saved[1]
     entry = getattr(v39, "REG", {}).get(id(g))
     hallow = entry[1] if entry is not None and entry[0] is g else {}
     us = sys.modules.get("ustruct")
@@ -91,7 +105,11 @@ def typed_graph(g):
     present = entities | set(all_rels)
     missing = {a for r in all_rels.values() for a in r.arguments if a not in present}
     nodes.extend(Node(k, "unknown", args=None) for k in missing)
-    return Graph(tuple(nodes))
+    graph = Graph(tuple(nodes))
+    if memoize:
+        # 強い参照でidの再使用を防ぎ、登録のある定義は毎回作り直す。
+        TYPED_GRAPH_MEMO[id(g)] = (g, graph)
+    return graph
 
 
 @lru_cache(maxsize=4096)
@@ -188,6 +206,9 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     probability = cstar.probabilities_for_graph(base_graph,left,target_graph_partial) if expected else None
     key = (engine.match_key(left,right,seed,probabilities=probability) if expected
            else engine.match_key(left,right,seed))
+    if expected and getattr(engine,'cache_prune_guard',None) is not None:
+        # RESULTSが先に返る時も、過去の呼び出し種の参照を見逃さない。
+        engine.cache_prune_guard.request(key,CTX['trial'],'mapping')
     STATS["requests"] = STATS.get("requests", 0) + 1
     if key in RESULTS:
         STATS["reused"] = STATS.get("reused", 0) + 1
@@ -418,8 +439,13 @@ def restore(snap):
         current.update(saved)
 
 
-def install(path, *, tie_seed, call_seed=False, tie_uniform=False):
-    global ENGINE, OLD_MAP
+def install(path, *, tie_seed, call_seed=False, tie_uniform=False, exact_speed=False):
+    global ENGINE, OLD_MAP, EXACT_SPEED, TYPED_GRAPH_TRIAL
+    import sme2017
+    EXACT_SPEED = exact_speed
+    sme2017.FINGERPRINT_MEMO = exact_speed
+    TYPED_GRAPH_MEMO.clear()
+    TYPED_GRAPH_TRIAL = None
     import abm.sme as sme
     import probeworld
     import v39

@@ -46,6 +46,9 @@ class CstarMatcher(Matcher):
         if self.settings.max_local_score is not None:
             raise ValueError("C*は上限なしの点の伝達")
         key = self.match_key(left, right, tie_seed, probabilities=probabilities)
+        guard = getattr(self, 'cache_prune_guard', None)
+        if guard is not None:
+            guard.request(key, guard.trial, 'engine')
         scope = getattr(self, '_stage2_scope', None)
         foundation = None
         if scope is not None:

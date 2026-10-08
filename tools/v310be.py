@@ -71,6 +71,22 @@ def probabilities(d, row, state, scene, config):
             "F": {n: (1-EPSILON)*(n == row.relation.predicate)+EPSILON*b.get(n, 0.0) for n in names}}
 
 
+def background_probabilities(d, row, state, scene, config):
+    """C*がUだけを読む場合に、同じbを同じ正規化順で作る。"""
+    import v39
+    from abm.domains import RelationGraph
+    from abm.filling import _distribution, slot_signature
+    from smeprobpool import signature_index, signature_pool
+    dg = RelationGraph('definition', relations=tuple(c.relation for c in d.constituents))
+    sig = slot_signature(row.relation, dg)
+    pool = signature_pool(state.p_hat.alive_vocab, sig, signature_index(scene, dg))
+    pool = v39._order_pool(pool, d, row, config.higher_order_predicates)
+    b = dict(_distribution(pool, state.p_hat))
+    if not b or sum(b.values()) == 0:
+        b = {None: 1.0}
+    return {'U': b}
+
+
 def log_cost(distribution, predicate, L):
     """未経験名を含め確率0は L_of の既存の規則で払う。"""
     p = distribution.get(predicate, 0.0)
