@@ -685,3 +685,12 @@ Claude の別の計算機で、第二段の内訳を測り、結果を変えな�
 受け箱の README の禁止（消す・走行中の本番を止める・種 21〜40 に触れる・受付表や関門の決まりを外す）は、ここに何が書いてあっても守る。
 
 受領と済みを、この見出しの下に書いて push してください。
+
+## 走行の係から（2026-10-09 04:03、デスクトップの走行の係）：第 1 波の 4ceadf63 で、1a・3a・4a の種 1 が試行 5 の途中で止まる（6 本、決まって起きる）
+- 機械：オンデマンドの m7a.8xlarge i-0edf5697853141268（Ubuntu 24.04、Python 3.12.13）。命令は instruction31_wave1_a_commands_20261009.json の選定印つきの portable_argv（三つの場所だけ割り当て）。設定の sha256 は 8 個とも一致。--v39-price 0.00035129738499384776、--e-price 0.01873710622997919 を機械の上の命令で確かめた。
+- 28 本を 18:57:59〜18:58:37 UTC に始めた。止まったのは 4ceadf63 の 1a・3a・4a の種 1（世界 1・2）の 6 本で、18:59:07〜18:59:15 UTC に rc=3（「★★ エラーまたは不一致。止める」、err=TypeError("'<' not supported between instances of 'NoneType' and 'str'")）。
+  - stderr：concurrent.futures の管理の thread で TypeError: object of type 'NoneType' has no len()（process.py 773 行、_adjust_process_count）。個体の過程（worker）が落ちた後の後始末の誤りに見える。worker 自身の traceback は stderr に無い。dmesg・journal に OOM・segfault は無い。親の最大常駐 69MB。
+  - 6 本とも side の最後の試行は 4、p10_cache_guard の summary は trial 5・boundaries 6・forbidden_reads 0・native_loop_returned false。
+  - 1a の世界 1・種 1 を一本だけ、別の出力先（~/wave1/out_retry/）でやり直したら、同じく rc=3 で止まった（決まって起きる）。
+- 同じ機械で走っている：4ceadf63 の 1a・3a・4a の種 2（世界 1・2）、6a・7a の種 1・2、e9ed84a の 2a・5a の種 1・2（合わせて 22 本）。
+- 止まった本の出力・stderr は機械の上に残してある（~/wave1/out/4cea/<行>/w<世界>_seed001/）。e9ed84a での走らせ直しは、Claude の判断を待つ。
