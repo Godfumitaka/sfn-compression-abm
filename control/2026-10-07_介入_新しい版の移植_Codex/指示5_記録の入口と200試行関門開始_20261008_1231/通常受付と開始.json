@@ -1,0 +1,33 @@
+{
+  "at_jst": "2026-10-08T12:31:51+09:00",
+  "registry_pid": 62396,
+  "command": [
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "探索介入 指示5 記録だけ200試行関門",
+    "--mem",
+    "1.0",
+    "--disk-path",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction5/gate_200_01",
+    "--",
+    "/opt/homebrew/bin/python3.12",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_record_gate.py",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction5/gate_200_01"
+  ],
+  "port_commit": "fdaeae28fdcefa77b23f30653c7430e93cc2ab15",
+  "source_sha256": {
+    "tools/intervention46_records.py": "1f9bacfcb5ef779925f4204cbc3417eb1c2e2e8bc04beea45403072529538365",
+    "tools/intervention46_record_run.py": "05053fd61eaf318c1d3de4b1b7ec4455c144c237cce702c47428c757319d1275",
+    "tools/intervention46_record_gate.py": "b6bb978efec5276d2de209eac1f9e818339850bc8f4b0a0ae094c7f3405c6148"
+  },
+  "unit_tests_passed": 3,
+  "gate_status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction5/gate_200_01/status.json",
+  "registry_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction5/gate_200_01.entry.log",
+  "memory_gb": 1.0,
+  "memory_basis": "同じ全部入り200試行の実測211MB。記録と監督を含め1GBを予約。",
+  "formal_3b_material_started": false,
+  "all_seeds_started": false
+}

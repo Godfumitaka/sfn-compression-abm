@@ -1,0 +1,65 @@
+"""指示5の関門を通常受付へ一度だけ登録し、再開用の状態を保存する。"""
+from datetime import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+from zoneinfo import ZoneInfo
+
+ROOT = Path(__file__).resolve().parents[1]
+HERE = Path(__file__).resolve().parent
+SOURCE = ROOT / "source_e9"
+GATE = HERE / "gate_200_01"
+LOG = HERE / "gate_200_01.entry.log"
+PY = "/opt/homebrew/bin/python3.12"
+JOBS = "/Users/tatsu-admin/jobs/jobs.py"
+EXPECTED = "fdaeae28fdcefa77b23f30653c7430e93cc2ab15"
+
+
+def save(path, data):
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+
+def main():
+    at = datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds")
+    assert at < "2026-10-09T09:00:00+09:00", "期限以後は始めない"
+    assert not GATE.exists() and not LOG.exists(), "重複起動しない"
+    assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=SOURCE, text=True).strip() == EXPECTED
+    assert not subprocess.check_output(["git", "status", "--porcelain"], cwd=SOURCE, text=True).strip()
+    registry = subprocess.check_output([PY, JOBS, "status"], text=True)
+    (HERE / "before_gate_registry.txt").write_text(registry)
+    cmd = [PY, JOBS, "run", "--wait", "--owner", "探索介入 指示5 記録だけ200試行関門",
+           "--mem", "1.0", "--disk-path", str(GATE), "--", PY,
+           str(SOURCE / "tools/intervention46_record_gate.py"), str(GATE)]
+    save(HERE / "gate_entry_command.json", cmd)
+    environment = dict(os.environ, PYTHONHASHSEED="0")
+    with LOG.open("xb") as log:
+        process = subprocess.Popen(cmd, cwd=SOURCE, env=environment, stdout=log,
+                                   stderr=subprocess.STDOUT, start_new_session=True)
+    launch = dict(at_jst=at, registry_pid=process.pid, command=cmd, port_commit=EXPECTED,
+                  source_sha256={name: hashlib.sha256((SOURCE / name).read_bytes()).hexdigest()
+                                 for name in ("tools/intervention46_records.py",
+                                              "tools/intervention46_record_run.py",
+                                              "tools/intervention46_record_gate.py")},
+                  unit_tests_passed=3, gate_status=str(GATE / "status.json"),
+                  registry_log=str(LOG), memory_gb=1.0,
+                  memory_basis="同じ全部入り200試行の実測211MB。記録と監督を含め1GBを予約。",
+                  formal_3b_material_started=False, all_seeds_started=False)
+    save(HERE / "launch.json", launch)
+    pending = json.loads((ROOT / "instruction5_status.json").read_text())
+    pending.update(state="record_gate_running", port_commit=EXPECTED, registry_pid=process.pid,
+                   gate=str(GATE / "status.json"), gate_started_at_jst=at,
+                   required_next_action="200試行の記録有無の全バイト関門の自然終了を確認する。重複起動しない。")
+    save(ROOT / "instruction5_status.json", pending)
+    older = json.loads((ROOT / "instruction3_status.json").read_text())
+    older.update(state="record_gate_running", port_commit=EXPECTED, registry_pid=process.pid,
+                 gate=str(GATE / "status.json"), record_attachment_instruction=5,
+                 gate_started_at_jst=at,
+                 required_next_action="指示5の記録だけの関門を確認してから新版の介入接続へ戻る。正式3b材料は1aの命令待ち。")
+    save(ROOT / "instruction3_status.json", older)
+    print(json.dumps(launch, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

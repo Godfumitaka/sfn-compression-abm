@@ -1,0 +1,66 @@
+# 受付表（2026-10-08T12:31:51）  見込みの合計 22.3 / 24 GB
+PID	担当	見込み GB	開始	今の RSS 合計（子孫を含む）	コマンド
+95408	Codex2 指示17 較正の下見 birth_hu_on	4.0	2026-10-08T08:38:25	1.70 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+9073	Codex2 指示18 較正 世界2 種42	4.0	2026-10-08T09:55:31	1.02 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+47180	Codex2 指示20 較正 世界2 種43	3.0	2026-10-08T11:35:10	0.22 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+47210	Codex2 指示20 較正 世界2 種44	3.0	2026-10-08T11:35:15	0.28 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+19617	Codex 動詞新移植 追加旗off5000	1.3	2026-10-08T11:35:43	0.42 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-0
+49451	Codex2 指示19 高速化関門 reuse_off_1740	4.0	2026-10-08T11:44:30	0.23 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+59598	Codex2 指示21 GC書き出し二旗 全1740	3.0	2026-10-08T12:21:55	0.17 GB	python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-0
+
+# 表に無い重い Python
+（無い）
+
+# Python の処理すべて（重い＝*、表に登録済み＝R）
+ R PID 9073（親 1）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示18 較正 世界2 種42 --mem 4 --disk-path /Users/ta
+ R PID 9081（親 9073）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 9095（親 9081）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 9096（親 9081）	1020 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 19615（親 1）	7 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/gate_supervis
+ R PID 19617（親 19615）	12 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex 動詞新移植 追加旗off5000 --mem 1.3 --disk-path /Users/
+   PID 43207（親 1）	20 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+   PID 44480（親 1）	18 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/new_port_off8_workflow_20261008
+ R PID 47180（親 43207）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示20 較正 世界2 種43 --mem 3 --disk-path /Users/ta
+ R PID 47184（親 47180）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 47192（親 47184）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 47193（親 47184）	169 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 47210（親 43207）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示20 較正 世界2 種44 --mem 3 --disk-path /Users/ta
+ R PID 47214（親 47210）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 47222（親 47214）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 47223（親 47214）	227 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 47345（親 19617）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/run_case.py /
+ R PID 47353（親 47351）	33 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/gate_driver.p
+ R PID 47355（親 47353）	15 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 47356（親 47353）	348 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+ R PID 49451（親 1）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_off_1740 --mem 4 --disk-path
+ R PID 49459（親 49451）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 49467（親 49459）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 49468（親 49459）	179 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 59575（親 1）	24 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 59598（親 59575）	19 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示21 GC書き出し二旗 全1740 --mem 3 --disk-path /User
+ R PID 59604（親 59598）	27 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 59618（親 59604）	16 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 59619（親 59604）	112 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 62383（親 52419）	19 MB	Python codex_intervention_port_2026-10-07/instruction5/launch_gate.py
+   PID 62389（親 62383）	18 MB	Python /Users/tatsu-admin/jobs/jobs.py status
+   PID 91021（親 1）	16 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 95408（親 91021）	7 MB	Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /U
+ R PID 95412（親 95408）	10 MB	Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/inst
+ R PID 95420（親 95412）	7 MB	Python -c from multiprocessing.resource_tracker import main;main(8)
+*R PID 95421（親 95412）	1716 MB	Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiproces
+   PID 97541（親 1）	9 MB	Python /Users/tatsu-admin/jobs/jobs.py sampler
+
+# 空きメモリ
+空きの割合（memory_pressure）：78%
+free：3.2 GB
+inactive：12.4 GB
+
+# ディスクの空き
+出力先 /Users/tatsu-admin/Documents/ChatGPT/New project（測定先 /Users/tatsu-admin/Documents/ChatGPT/New project）の空き 203.801 GiB、下限 20 GiB
+
+# スワップ：今 180.0 MB。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）。sampler：動いている
+
+# 熱：警告なし。CPU の速度の制限：記録なし（制限なしとみなす）
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
