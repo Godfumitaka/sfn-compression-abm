@@ -184,7 +184,10 @@ def install(**options):
         config = v39.CTX['config']
         prediction_output = v39.CTX['output']
         same = options['match_cstar'] == options['match_cstar_e']
-        if same and not options.get('material_keep',False):
+        # 集団化の受信は、その公開束に対して既に二材料を選んでいる。
+        # 世界の最後の予測の材料へ置き換えず、下の同じEの計算へ渡す。
+        receiving = bool(CTX.get('collective_receive'))
+        if not receiving and same and not options.get('material_keep',False):
             # 両方同じ照合なら、予測前に作った不変の候補をEでも順位づけする。
             # 既に記録した同じ抽選を二度書かず、CHOICESの同じ選択を使う。
             log = smeshared._log
@@ -195,7 +198,7 @@ def install(**options):
                 smeshared._log = log
             base,alignment = chosen.scene,mapping.alignment
             kw['base_written_at'] = chosen.written_at
-        if not same:
+        if not receiving and not same:
             # 混ぜた旗は診断用。Eの照合で逐語の候補を選び直す。
             from abm.sme import map_graphs
             partial = CTX['last_partial']

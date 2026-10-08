@@ -38,6 +38,7 @@ ALLOWED_TYPES = frozenset({
     ("v38", "MeritAccumulatorV38"),
     ("v39", "AgentStateV39"),
     ("v39", "SeatRec"),
+    ("v311c", "AgentStateV311"),
 })
 
 
@@ -95,6 +96,8 @@ def decode(value):
         raise ValueError("再生で認めていない型のモジュールと名前")
     if module == "v39" and name == "AgentStateV39":
         cls = importlib.import_module("v39")._state_class()
+    elif module == "v311c" and name == "AgentStateV311":
+        cls = importlib.import_module("v311c")._state_class()
     elif module == "v38" and name == "MeritAccumulatorV38":
         # v38.install内で作られる既存の型を使う。模型の包みを再登録しない。
         import inspect
@@ -109,6 +112,20 @@ def decode(value):
     if tag == "dataclass":
         return cls(**{k: decode(v) for k, v in value["fields"].items()})
     raise ValueError(tag)
+
+
+def collective_phase(phase, trial, state, *, deliveries=()):
+    """世界の学習後と受信後を別に残す。通常の台帳・模型の状態は変更しない。"""
+    if phase not in ("world", "received"):
+        raise ValueError("集団化の記録の段階が未知")
+    row = {"kind": "collective_phase", "phase": phase, "trial": trial,
+           "state": encode(state), "deliveries": encode(tuple(deliveries))}
+    if ST.get("replay") is not None:
+        expected = json.loads(next(ST["replay"]))
+        if expected != row:
+            raise RuntimeError(f"再生：試行{trial}の{phase}の記憶・受信が違う")
+    ST["f"].write(json.dumps(row, ensure_ascii=False) + "\n")
+
 
 
 def install(path, *, replay=None, fast_encode=False):
