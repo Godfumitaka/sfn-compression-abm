@@ -1,4 +1,4 @@
- config/sweep_verb_hide1_s1_2026-10-04.json         |   51 +
+config/sweep_verb_hide1_s1_2026-10-04.json         |   51 +
  tests/test_cstar_cache_prune.py                    |  119 ++
  tests/test_sme_record_keys.py                      |   32 +
  tests/test_stage2_speed_basic.py                   |  194 ++++
@@ -26,21 +26,31 @@
  tools/verb/gate1.py                                |  123 +++
  tools/verb/make_seed.py                            |   28 +
  tools/verb/replay_state.py                         |  118 ++
- tools/verb_measurement/cloud_compare.py            |   63 ++
+ tools/verb_measurement/checkpoint_compare.py       |   80 ++
+ tools/verb_measurement/checkpoint_observer.py      |  188 ++++
+ tools/verb_measurement/cloud_compare.py            |   66 ++
  tools/verb_measurement/cloud_run.py                |  205 ++++
  tools/verb_measurement/cue_counts.json             |   34 +
  tools/verb_measurement/export_tables.py            |   79 ++
+ tools/verb_measurement/instruction11_io.py         |  157 +++
+ tools/verb_measurement/m1_at500.py                 |   32 +
  tools/verb_measurement/measurement_driver.py       |   94 ++
  tools/verb_measurement/model_count.py              |   44 +
  tools/verb_measurement/observer_fixture.json       |   26 +
  tools/verb_measurement/off5000.json                |  173 +++
- tools/verb_measurement/plan.json                   |  233 ++++
+ tools/verb_measurement/plan.json                   |  453 ++++++++
+ .../production/measurement_driver.py               |   28 +
+ tools/verb_measurement/production_commands.py      |   42 +
+ tools/verb_measurement/production_observer.py      |   28 +
+ tools/verb_measurement/production_templates.json   |  617 +++++++++++
  tools/verb_measurement/shop100.json                |  203 ++++
  tools/verb_measurement/source_manifest.json        |  546 ++++++++++
  tools/verb_measurement/speed200/fixture_checks.py  |  100 ++
  .../speed200/measurement_driver.py                 |   94 ++
  .../verb_measurement/speed200/observer_checks.json |   31 +
+ tools/verb_measurement/speed_gate.py               |  110 ++
+ tools/verb_measurement/test_instruction11.py       |  217 ++++
  tools/verb_measurement/test_package.py             |  112 ++
  tools/verbtiming.py                                |   43 +
  tools/verbworld.py                                 |  301 +++++
- 45 files changed, 5481 insertions(+), 34 deletions(-)
+ 55 files changed, 7203 insertions(+), 34 deletions(-)

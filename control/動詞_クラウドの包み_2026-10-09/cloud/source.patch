@@ -2963,7 +2963,7 @@ index 0000000..3fd3f99
 +    a=p.parse_args();raise SystemExit(compare(a.left.resolve(),a.right.resolve(),a.destination.resolve(),a.limit))
 diff --git a/tools/verb_measurement/cloud_run.py b/tools/verb_measurement/cloud_run.py
 new file mode 100644
-index 0000000..4c05638
+index 0000000..2641b45
 --- /dev/null
 +++ b/tools/verb_measurement/cloud_run.py
 @@ -0,0 +1,205 @@
@@ -3055,7 +3055,7 @@ index 0000000..4c05638
 +                 ('.jsonl','.ambig.csv','.answers.csv','.routing.jsonl','.sme.jsonl.gz','.sme.states.jsonl.gz')]
 +    assert all((folder/'output'/name).is_file() for name in required), '台帳・全side・保存状態の必須出力がない'
 +    if '--probe-world' in read(folder/'runtime.json')['flags']:
-+        p=item['probeworld'];assert p['probes']==48*(limit//100) and p['fingerprint_checks']==limit//100
++        p=item['probeworld'];assert p['probes']==48 and p['rows']==48*(limit//100) and p['fingerprint_checks']==limit//100
 +        checks=p['attention_checks'];assert len(checks)==limit//100
 +        assert all(x['passed'] and x['attention_before']==x['attention_after'] and x['questions_before']==x['questions_after'] for x in checks)
 +    return item
@@ -4750,7 +4750,7 @@ index 0000000..68b194f
 +]
 diff --git a/tools/verb_measurement/test_package.py b/tools/verb_measurement/test_package.py
 new file mode 100644
-index 0000000..eda2068
+index 0000000..1d8713c
 --- /dev/null
 +++ b/tools/verb_measurement/test_package.py
 @@ -0,0 +1,126 @@
@@ -4772,7 +4772,7 @@ index 0000000..eda2068
 +    R.save(folder/'start.json',dict(machine_sha256='host-a'))
 +    R.save(folder/'result.json',dict(exit_code=0,warnings=[],finished_epoch=1,measurement_ru_maxrss_raw_unit='KiB'))
 +    m=dict(completed_trials=limit,configured_trial_count=5000,horizon=5000,full_5000_completed=False)
-+    if probe:m['probeworld']=dict(probes=48*(limit//100),fingerprint_checks=limit//100,attention_checks=[dict(passed=True,attention_before=1,attention_after=1,questions_before=2,questions_after=2)]*(limit//100))
++    if probe:m['probeworld']=dict(probes=48,rows=48*(limit//100),fingerprint_checks=limit//100,attention_checks=[dict(passed=True,attention_before=1,attention_after=1,questions_before=2,questions_after=2)]*(limit//100))
 +    (out/'manifest.jsonl').write_text(json.dumps(m)+'\n');R.save(out/'measurement/partial_done.json',m)
 +    paths=[f'ledgers/cells/{CELL}/seed001.jsonl.gz',f'attention/{CELL}/seed001.jsonl.gz',f'evictions/{CELL}/seed001.keys.jsonl.gz']
 +    paths += [f'side/{CELL}/seed001'+s for s in ('.jsonl','.ambig.csv','.answers.csv','.routing.jsonl','.sme.jsonl.gz','.sme.states.jsonl.gz')]

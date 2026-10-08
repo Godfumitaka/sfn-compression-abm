@@ -1,0 +1,147 @@
+{
+  "at": "2026-10-09T03:12:34+09:00",
+  "received_instructions": [
+    11,
+    12,
+    13
+  ],
+  "versions": {
+    "cloud": {
+      "branch": "codex/verb-cloud-package-2026-10-09",
+      "commit": "bee30db3c2a41f00248913a57987bb54aa79aecb",
+      "tree_hash": "d1db06b3bf932a6a3cab487848696fa1e05dcd76",
+      "base": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "model_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+      "observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+      "bundle_sha256": "4ccb77290324df02d30920540cea537a4146765ae75e121f09829205b967853d",
+      "bundle_bytes": 78987,
+      "patch_sha256": "3416f8bf1584697749b4aabef9797a859c653a39428c96634820f88fb44ee475",
+      "new_branch_push": "指示10により不要。報告枝のbundleで渡す",
+      "pushed": false,
+      "run_started": false
+    },
+    "speed200": {
+      "branch": "codex/verb-stage2-speed-2026-10-09",
+      "commit": "977dcffea04c2f23c5472eab5bf760362e9fd25a",
+      "tree_hash": "df3a71e96a75352012123371c9875c31a7a96146",
+      "base": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "model_commit": "c3dea1f11240d6bf16fca95db8fb89dd51a61de0",
+      "observer_sha256": "235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d",
+      "bundle_sha256": "672200a5c9f0a3ed4fe2c99c31d4f843012f90ca50b6671cd45efbf2ae88f565",
+      "bundle_bytes": 114560,
+      "patch_sha256": "070cbe749461fb18572c32aa6d31970621cdf90237ebb28c3d356994350286f3",
+      "new_branch_push": "指示10により不要。報告枝のbundleで渡す",
+      "pushed": false,
+      "run_started": false
+    }
+  },
+  "passed_non_model_tests": {
+    "cloud": 15,
+    "speed_package_and_instructions11_12_13": 27
+  },
+  "unchanged_earlier_tests": {
+    "speed_model_structure": 99,
+    "prefix200_observer": 20
+  },
+  "bundle_restore_checks": {
+    "cloud": {
+      "passed": true,
+      "checked_at": "2026-10-09T03:05:58.673744+09:00",
+      "commit": "bee30db3c2a41f00248913a57987bb54aa79aecb",
+      "tree_hash": "d1db06b3bf932a6a3cab487848696fa1e05dcd76",
+      "tree_hash_verified": true,
+      "model_tree_verified": true,
+      "observer_sha256_verified": true,
+      "bundle_sha256": "4ccb77290324df02d30920540cea537a4146765ae75e121f09829205b967853d",
+      "bundle_bytes": 78987,
+      "prepared_labels": [
+        "on100_without_probe",
+        "on100_with_probe",
+        "allin_s01_300"
+      ],
+      "clean": true,
+      "learning_models_started": 0
+    },
+    "speed200": {
+      "passed": true,
+      "checked_at": "2026-10-09T03:05:59.585315+09:00",
+      "commit": "977dcffea04c2f23c5472eab5bf760362e9fd25a",
+      "tree_hash": "df3a71e96a75352012123371c9875c31a7a96146",
+      "tree_hash_verified": true,
+      "model_tree_verified": true,
+      "observer_sha256_verified": true,
+      "bundle_sha256": "672200a5c9f0a3ed4fe2c99c31d4f843012f90ca50b6671cd45efbf2ae88f565",
+      "bundle_bytes": 114560,
+      "prepared_labels": [
+        "speed200_off",
+        "speed200_on",
+        "calibration200_off",
+        "calibration200_on"
+      ],
+      "clean": true,
+      "learning_models_started": 0
+    }
+  },
+  "public_copy_sha256_checks": true,
+  "package_sources_clean": true,
+  "active_Mac_model_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+  "active_Mac_observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+  "active_Mac_source_clean": true,
+  "Mac_without_probe": {
+    "result": {
+      "exit_code": 0,
+      "started_epoch": 1791469900.464992,
+      "finished_epoch": 1791480339.780891,
+      "wall_seconds": 10439.236540124984,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 15662896
+    },
+    "partial_done": {
+      "measurement_only": true,
+      "configured_trial_count": 5000,
+      "horizon": 5000,
+      "completed_trials": 100,
+      "source_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+      "boundary": "301又は101の学習試行を実行せず、通常の終了処理で全出力を閉じる",
+      "full_5000_completed": false,
+      "wall_seconds": 10435.647557999997
+    }
+  },
+  "Mac_with_probe_status": {
+    "at": "2026-10-09T02:25:39.794280+09:00",
+    "supervisor_pid": 77418,
+    "state": "running_or_waiting",
+    "label": "on100_with_probe_retry2"
+  },
+  "Mac_with_probe_group": 32998,
+  "Mac_comparison_exists": false,
+  "first_pair_decision_exists": false,
+  "new_learning_models_started_by_this_chat": 0,
+  "production_models_started": 0,
+  "production_lambda": null,
+  "production_source_commit": null,
+  "pending": [
+    "Macとクラウドの同機械on100組の先行判定",
+    "300測定",
+    "実際の速度200・較正200の一致と発生数",
+    "#21のD＋注意の共通実装と関門",
+    "#22の正式旗と版・列",
+    "本番の確定L50_refと版・出力先・列",
+    "本番・較正と500ごとの全長比較、M1・較正1000の実値報告"
+  ],
+  "instruction12": {
+    "no_wait_for_calibration1000": true,
+    "initial_seeds": [
+      1,
+      2
+    ],
+    "Claude_M1_confirmation_required": true,
+    "report_without_stopping_at_later_M1_or_calibration_outside_range": true
+  },
+  "instruction13": {
+    "parallel_same_machine_cases_allowed": true,
+    "speed200_start_waits_for_on100_judgement": false,
+    "judgement_order": "on100を通常pushしてからspeed200"
+  }
+}

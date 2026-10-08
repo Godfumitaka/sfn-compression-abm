@@ -3643,12 +3643,292 @@ index 0000000..59cb7e2
 +    d = dict(d)
 +    d["v39_seats"] = {k: {kk: vv for kk, vv in v.items() if kk not in ("init", "post")} for k, v in d.get("v39_seats", {}).items()}
 +    return d
+diff --git a/tools/verb_measurement/checkpoint_compare.py b/tools/verb_measurement/checkpoint_compare.py
+new file mode 100644
+index 0000000..49ff2f9
+--- /dev/null
++++ b/tools/verb_measurement/checkpoint_compare.py
+@@ -0,0 +1,80 @@
++"""指示11。確定500境の(a)記録・STATE・RNG、(b)P10後の控え、(c)禁止参照0。"""
++from pathlib import Path
++import argparse,json
++from instruction11_io import names, compare_paths, compare_outputs, byte_row, save, sha
++from cloud_run import read
++
++def compare(left_case,right_case,completed,destination):
++    left_case,right_case=Path(left_case),Path(right_case)
++    assert completed in range(500,5001,500)
++    a,b=read(left_case/"runtime.json"),read(right_case/"runtime.json")
++    x,y=read(left_case/"start.json"),read(right_case/"start.json")
++    assert x["machine_sha256"]==y["machine_sha256"]
++    for key in ("source_commit","model_commit","observer_sha256","configured_trial_count","horizon"):
++        assert a[key]==b[key]
++    assert a["configured_trial_count"]==a["horizon"]==5000
++    expected=list(a["flags"])
++    for flag in ("--stage2-speed","--stage2-cache-prune"):
++        i=expected.index(flag);assert expected[i+1]=="off";expected[i+1]="on"
++    assert expected==b["flags"] and a["flags"][a["flags"].index("--seeds")+1]=="1"
++    def checkpoint(case):
++        paths=list((case/"output").glob(f"**/comparison_checkpoints/completed_{completed:04d}"))
++        assert len(paths)==1
++        path=paths[0];proof=read(path/"confirmed.json")
++        assert proof["confirmed"] and proof["completed_trials"]==completed and proof["last_trial"]==completed-1
++        for row in proof["records"]:
++            import hashlib
++            h=hashlib.sha256()
++            with (path/"records"/row["path"]).open("rb") as f:
++                while data:=f.read(1024*1024):h.update(data)
++            assert h.hexdigest()==row["sha256"]
++        assert {str(p) for p in names(path/"records")}=={r["path"] for r in proof["records"]}
++        assert proof["probe_save_calls"]==proof["probe_restore_calls"] and proof["probe_save_calls"]>0
++        return path,proof
++    l,lp=checkpoint(left_case);r,rp=checkpoint(right_case)
++    rows=[]
++    la,ra=names(l/"records"),names(r/"records")
++    for rel in sorted(la|ra):
++        if rel not in la or rel not in ra:
++            rows.append(dict(path=str(rel),equal=False,mismatching_bytes=None));continue
++        u,v=(p/"records"/rel for p in (l,r))
++        rows.append(compare_paths(rel,u,v,raw_evidence=True))
++    for name in ("state.json","rng.json","cache_sme.json","cache_posthoc_p10.json"):
++        rows.append(byte_row(name,(l/name).read_bytes(),(r/name).read_bytes()))
++    # on側では原控えとP10後の控えが同一であることも確認する。
++    on_cache=read(r/"cache_raw.json")==read(r/"cache_posthoc_p10.json")
++    forbidden=(lp["forbidden_reads"],rp["forbidden_reads"],rp["guard_forbidden_reads"])
++    full_outputs=None
++    if completed==5000:
++        for case in (left_case,right_case):
++            result=read(case/"result.json")
++            assert result["exit_code"]==0 and not result.get("warnings"), "両方の正常終了を待つ"
++            manifests=[json.loads(line) for line in (case/"output"/"manifest.jsonl").read_text().splitlines()]
++            assert len(manifests)==1 and manifests[0]["trial_count"]==5000 and not manifests[0].get("error")
++            assert list((case/"output").glob("ledgers/**/*.done")), "原本の完了印を待つ"
++        full_outputs=compare_outputs(left_case/"output",right_case/"output")
++    # 不一致の後に別の境の一致で採用へ戻さない。累積の判定を新しい場所へ保存。
++    history=list(Path(destination).parent.glob("checkpoint_*.json"))
++    earlier_failure=any(not read(p)["passed"] for p in history if p!=Path(destination))
++    result=dict(passed=all(x["equal"] for x in rows) and on_cache and forbidden==(0,0,0)
++                        and not earlier_failure and (full_outputs is None or full_outputs["passed"]),
++        completed_trials=completed, full_length_match=completed==5000,
++        provisional=completed<5000, flagged_results_usable=False,
++        a_records_state_rng_equal=all(x["equal"] for x in rows if x["path"] not in ("cache_sme.json","cache_posthoc_p10.json")),
++        b_off_posthoc_p10_equals_on=on_cache and all(x["equal"] for x in rows if x["path"] in ("cache_sme.json","cache_posthoc_p10.json")),
++        c_forbidden_reads=forbidden, prior_mismatch=earlier_failure,
++        mismatching_files=sum(not x["equal"] for x in rows),files=rows,
++        on_raw_cache_retained=True,off_raw_cache_retained=True,
++        source_commit=a["source_commit"],observer_sha256=a["observer_sha256"],
++        machine_sha256=x["machine_sha256"],comparator_sha256=sha(Path(__file__).read_bytes()))
++    result["final_closed_outputs_comparison"]=full_outputs
++    result["full_length_flag_match_confirmed"]=result["passed"] and result["full_length_match"]
++    result["verb_calibration_and_queue_confirmations_still_required"]=True
++    save(destination,result)
++    return 0 if result["passed"] else 1
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser(description=__doc__)
++    p.add_argument("left_case",type=Path);p.add_argument("right_case",type=Path)
++    p.add_argument("completed",type=int);p.add_argument("destination",type=Path)
++    a=p.parse_args();raise SystemExit(compare(a.left_case,a.right_case,a.completed,a.destination))
+diff --git a/tools/verb_measurement/checkpoint_observer.py b/tools/verb_measurement/checkpoint_observer.py
+new file mode 100644
+index 0000000..0cc3366
+--- /dev/null
++++ b/tools/verb_measurement/checkpoint_observer.py
+@@ -0,0 +1,188 @@
++"""指示11：接続済みの最終入口の後で、500ごとの記録・状態・乱数を観察する。"""
++from contextlib import contextmanager
++from pathlib import Path
++import io, json, sys
++from instruction11_io import confirmed_content, copy_confirmed, names, save, sha
++
++def encoded(value):
++    from smereplay import encode
++    return encode(value)
++
++def packed(value):
++    return json.dumps(encoded(value),ensure_ascii=False,separators=(",",":")).encode()
++
++def key_seed(key):
++    return key[-1] if isinstance(key,tuple) and len(key)>=2 and key[-2]=="call-seed-v1" else None
++
++def cache_rows(engine, origins):
++    """原控えを触らず、P10と同じ由来の欄を後で読める形で保存する。"""
++    result={}
++    for table in ("cache","cache_rng","self_cache"):
++        result[table]=[]
++        for key,value in getattr(engine,table).items():
++            seed=key_seed(key)
++            if seed is not None:
++                assert seed in origins, "観察していない控えの種は推測しない"
++            result[table].append(dict(key_sha256=sha(packed(key)),value_sha256=sha(packed(value)),
++                seed=seed,origin=None if seed is None else origins[seed]))
++    return result
++
++def posthoc_prune(rows, trial):
++    return {name:[r for r in records if name=="self_cache" or r["seed"] is None or r["origin"]==trial]
++            for name,records in rows.items()}
++
++def flush_records(ledger):
++    """接続済みの自分の記録のflushだけ。閉じたり行を追加したりしない。"""
++    streams=[getattr(ledger,"_stream",None)]
++    visited=set()
++    def closures(value):
++        if id(value) in visited:return
++        visited.add(id(value))
++        if isinstance(value,io.IOBase):streams.append(value)
++        elif isinstance(value,dict):
++            for x in value.values():closures(x)
++        elif isinstance(value,(tuple,list)):
++            for x in value:closures(x)
++        else:
++            for cell in getattr(value,"__closure__",None) or ():
++                try:closures(cell.cell_contents)
++                except ValueError:pass
++    import abm.loop as loop
++    for value in (loop._agent_input,loop.predict,loop.m1,loop.apply_theta,loop._ledger_record):
++        closures(value)
++    for name in ("v3_run","v39","smeshared","smereplay","attnsme","attnstage2_runtime",
++                 "probeworld","answerlog","routelog","answergap"):
++        mod=sys.modules.get(name)
++        if mod is None:continue
++        for value in vars(mod).values():
++            if isinstance(value,dict):
++                streams.extend(x for x in value.values() if isinstance(x,io.IOBase))
++            elif isinstance(value,io.IOBase):
++                streams.append(value)
++    seen=set()
++    for stream in streams:
++        if stream is not None and id(stream) not in seen and not stream.closed:
++            seen.add(id(stream));stream.flush()
++
++def individuals():
++    import attnsme
++    return {agent:{"a":value["a"],"observations":vars(value["observations"])}
++            for agent,value in attnsme.ST.get("individuals",{}).items()}
++
++@contextmanager
++def observe(out, ledger):
++    """模型の各入口を一度呼んだ後だけ観察し、終了時に元の入口へ戻す。"""
++    import abm.loop as loop, smeshared, probeworld, cstar_runtime as cstar
++    import attnstage2_runtime as stage2
++    out=Path(out);dest=out/"comparison_checkpoints";dest.mkdir(exist_ok=False)
++    native_input,native_predict,native_record=loop._agent_input,loop.predict,loop._ledger_record
++    native_key=cstar.ENGINE.match_key
++    native_sme_key=smeshared.ENGINE.match_key
++    native_append=ledger.append
++    absent=object();prior_append=vars(ledger).get("append",absent)
++    prior_key=vars(cstar.ENGINE).get("match_key",absent)
++    prior_sme_key=vars(smeshared.ENGINE).get("match_key",absent)
++    native_save,native_restore=probeworld._snapshot_modules,probeworld._restore_modules
++    native_probe=probeworld._probe
++    audit=dict(trial=None,origins={},requests=0,forbidden_reads=0,probe_saves=0,probe_restores=0)
++    boundary={}
++    inside_probe=False
++    def agent_input(trial,state):
++        audit["trial"]=trial.trial
++        return native_input(trial,state)
++    def requested(key):
++        seed=key_seed(key)
++        if seed is not None:
++            audit["requests"]+=1
++            origin=audit["origins"].setdefault(seed,audit["trial"])
++            if origin!=audit["trial"]:audit["forbidden_reads"]+=1
++        return key
++    def match_key(*args,**kw):
++        return requested(native_key(*args,**kw))
++    def sme_key(*args,**kw):
++        return requested(native_sme_key(*args,**kw))
++    def predict(ai,state,cfg,rng):
++        result=native_predict(ai,state,cfg,rng)
++        boundary["last_prediction_rng"]=encoded(rng.getstate())
++        return result
++    def record(agent_id,trial,config,output,score,coin,state,*args,**kw):
++        result=native_record(agent_id,trial,config,output,score,coin,state,*args,**kw)
++        boundary.update(state=state,trial=trial.trial,agent_id=agent_id)
++        return result
++    def snapshot():
++        value=native_save()
++        if inside_probe:audit["probe_saves"]+=1
++        return value
++    def restore(saved):
++        value=native_restore(saved)
++        if inside_probe:audit["probe_restores"]+=1
++        return value
++    def probe(*args,**kw):
++        nonlocal inside_probe
++        previous=inside_probe;inside_probe=True
++        try:return native_probe(*args,**kw)
++        finally:inside_probe=previous
++    def append(row):
++        result=native_append(row)
++        t=row["prediction_order"]
++        if t==500 or (t>=1000 and t%1000==0) or t==4999:
++            flush_records(ledger)
++            files=list(out.glob("attention/**/*.jsonl.gz"));assert len(files)==1
++            data=confirmed_content(files[0])
++            save(dest/f"m1_at_trial{t}.json",m1_rows(data,t))
++        n=t+1
++        if n%500==0:
++            assert boundary["trial"]==t
++            flush_records(ledger)
++            folder=dest/f"completed_{n:04d}";folder.mkdir()
++            proofs=[]
++            for rel in sorted(names(out)):
++                target=folder/"records"/rel
++                # 証拠の名前は原名、内容はgzip容器を除いた確定内容。
++                proof=copy_confirmed(out/rel,target)
++                proofs.append(dict(path=str(rel),**proof))
++            save(folder/"state.json",dict(agent_id=boundary["agent_id"],trial=t,
++                 state=encoded(boundary["state"]),attention=encoded(individuals()),
++                 questions=encoded({a:q.record() for a,q in stage2.ST.get("questions",{}).items()})))
++            save(folder/"rng.json",dict(last_prediction_rng=boundary["last_prediction_rng"],
++                 sme=encoded(smeshared.ENGINE.rng.getstate()),cstar=encoded(cstar.ENGINE.rng.getstate())))
++            raw=cache_rows(cstar.ENGINE,audit["origins"])
++            save(folder/"cache_raw.json",raw)
++            save(folder/"cache_posthoc_p10.json",posthoc_prune(raw,t))
++            save(folder/"cache_sme.json",cache_rows(smeshared.ENGINE,audit["origins"]))
++            guard=getattr(cstar.ENGINE,"cache_prune_guard",None)
++            proof=dict(completed_trials=n,last_trial=t,configured_trial_count=5000,horizon=5000,
++                records=proofs,forbidden_reads=audit["forbidden_reads"],
++                guard_forbidden_reads=None if guard is None else guard.forbidden_reads,
++                requests=audit["requests"],probe_save_calls=audit["probe_saves"],
++                probe_restore_calls=audit["probe_restores"],confirmed=True)
++            save(folder/"confirmed.json",proof)
++        return result
++    loop._agent_input,loop.predict,loop._ledger_record=agent_input,predict,record
++    cstar.ENGINE.match_key=match_key
++    smeshared.ENGINE.match_key=sme_key
++    probeworld._snapshot_modules,probeworld._restore_modules=snapshot,restore
++    probeworld._probe=probe
++    ledger.append=append
++    try:yield
++    finally:
++        loop._agent_input,loop.predict,loop._ledger_record=native_input,native_predict,native_record
++        probeworld._snapshot_modules,probeworld._restore_modules=native_save,native_restore
++        probeworld._probe=native_probe
++        if prior_key is absent:del cstar.ENGINE.match_key
++        else:cstar.ENGINE.match_key=prior_key
++        if prior_sme_key is absent:del smeshared.ENGINE.match_key
++        else:smeshared.ENGINE.match_key=prior_sme_key
++        if prior_append is absent:del ledger.append
++        else:ledger.append=prior_append
++
++def m1_rows(data, through=500):
++    rows=[json.loads(x) for x in data.splitlines()]
++    rows=[x for x in rows if 200<=x["trial"]<=through]
++    assert [x["trial"] for x in rows]==list(range(200,through+1)), "指定範囲の確定行がまだ無い"
++    small=sum(x["definitions"]<=1 for x in rows)
++    return dict(zero_based=True,first_trial=200,last_trial=through,trials=len(rows),
++                definitions_at_most_one=small,fraction=small/len(rows),
++                stop_criterion=10*small>=9*len(rows),
++                definition_count_stage="学習と忘却後。注意の原記録のdefinitions",
++                claude_confirmation_required=True,automatic_stop=False)
 diff --git a/tools/verb_measurement/cloud_compare.py b/tools/verb_measurement/cloud_compare.py
 new file mode 100644
-index 0000000..3fd3f99
+index 0000000..6cdd94e
 --- /dev/null
 +++ b/tools/verb_measurement/cloud_compare.py
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,66 @@
 +"""指示9。同じ機械の完了した二本だけを、retry2と同じ内容全バイトで比べる。"""
 +from pathlib import Path
 +import argparse,gzip,hashlib,json,sys
@@ -3672,7 +3952,7 @@ index 0000000..3fd3f99
 +    def names(folder):
 +        return {p.relative_to(folder) for p in folder.rglob('*') if p.is_file()
 +                and p.relative_to(folder).parts[0] in ('ledgers','side','evictions','attention')
-+                and p.suffix!='.done' and not p.name.endswith('.probe.jsonl')}
++                and p.suffix!='.done' and (limit==200 or not p.name.endswith('.probe.jsonl'))}
 +    left,right=names(a),names(b)
 +    rows=[]
 +    for rel in sorted(left|right):
@@ -3700,7 +3980,10 @@ index 0000000..3fd3f99
 +        rows.append(row)
 +    result={'passed':left==right and all(r['equal'] for r in rows),'file_count':len(rows),
 +            'mismatching_files':sum(not r['equal'] for r in rows),'files':rows,
-+            'comparison':'内容の全バイト。固定試験だけのprobe.jsonlは追加記録として保存。stage2の秒を含む診断・gzip容器・時間・manifest・flagは原本を別保存。欄の削除・丸め・再配列なし。'}
++            'comparison':('内容の全バイト。200は固定試験のprobe.jsonlも含む。100の試験なし／ありではprobeだけ除外。全試行の学習記録と保存状態を含み、試験後も省略しない。stage2の秒を含む診断・gzip容器・時間・manifest・flagは原本を別保存。欄の削除・丸め・再配列なし。')}
++    if limit==200:
++        probes=[r for r in rows if r['path'].endswith('.probe.jsonl')]
++        assert probes and '--probe-world' in vx['flags'] and '--probe-world' in vy['flags'], '200の固定試験の回答がない'
 +    assert result['file_count']>0
 +    result.update(completed_trials=limit,source_commit=vx['source_commit'],model_commit=vx['model_commit'],observer_sha256=vx['observer_sha256'],
 +                  left_case=str(left_case),right_case=str(right_case),machine_sha256=sx['machine_sha256'],
@@ -3714,7 +3997,7 @@ index 0000000..3fd3f99
 +    a=p.parse_args();raise SystemExit(compare(a.left.resolve(),a.right.resolve(),a.destination.resolve(),a.limit))
 diff --git a/tools/verb_measurement/cloud_run.py b/tools/verb_measurement/cloud_run.py
 new file mode 100644
-index 0000000..27abc80
+index 0000000..44b347f
 --- /dev/null
 +++ b/tools/verb_measurement/cloud_run.py
 @@ -0,0 +1,205 @@
@@ -3806,7 +4089,7 @@ index 0000000..27abc80
 +                 ('.jsonl','.ambig.csv','.answers.csv','.routing.jsonl','.sme.jsonl.gz','.sme.states.jsonl.gz')]
 +    assert all((folder/'output'/name).is_file() for name in required), '台帳・全side・保存状態の必須出力がない'
 +    if '--probe-world' in read(folder/'runtime.json')['flags']:
-+        p=item['probeworld'];assert p['probes']==48*(limit//100) and p['fingerprint_checks']==limit//100
++        p=item['probeworld'];assert p['probes']==48 and p['rows']==48*(limit//100) and p['fingerprint_checks']==limit//100
 +        checks=p['attention_checks'];assert len(checks)==limit//100
 +        assert all(x['passed'] and x['attention_before']==x['attention_after'] and x['questions_before']==x['questions_after'] for x in checks)
 +    return item
@@ -4048,6 +4331,207 @@ index 0000000..9b15409
 +if __name__=='__main__':
 +    p=argparse.ArgumentParser(description=__doc__);p.add_argument('case',type=Path);p.add_argument('destination',type=Path)
 +    a=p.parse_args();export(a.case.resolve(),a.destination.resolve())
+diff --git a/tools/verb_measurement/instruction11_io.py b/tools/verb_measurement/instruction11_io.py
+new file mode 100644
+index 0000000..73c85ce
+--- /dev/null
++++ b/tools/verb_measurement/instruction11_io.py
+@@ -0,0 +1,157 @@
++"""指示11の原記録の読み手。模型の欄・順・数値を変えない。"""
++from pathlib import Path
++import gzip, hashlib, json, re, zlib
++
++TIME_KEYS = frozenset(("seconds", "wrapper_seconds", "engine_seconds",
++                      "rematch_fraction_of_stage2_seconds"))
++ROOTS = frozenset(("ledgers", "side", "evictions", "attention", "stage2", "researcher"))
++
++def sha(data):
++    return hashlib.sha256(data).hexdigest()
++
++def save(path, value):
++    Path(path).parent.mkdir(parents=True, exist_ok=True)
++    with Path(path).open("x") as f:
++        f.write(json.dumps(value, ensure_ascii=False, indent=2)+"\n")
++
++def content(path):
++    path = Path(path)
++    if path.suffix == ".gz":
++        with gzip.open(path, "rb") as f:
++            return f.read()
++    return path.read_bytes()
++
++def confirmed_content(path):
++    """監督中のgzipも、flush済みの完全な行だけを別の証拠へ写す。"""
++    path = Path(path)
++    if path.suffix != ".gz":
++        data = path.read_bytes()
++    else:
++        obj = zlib.decompressobj(31)
++        pieces = []
++        with path.open("rb") as f:
++            while raw := f.read(1024*1024):
++                while raw:
++                    pieces.append(obj.decompress(raw))
++                    raw = obj.unused_data
++                    if obj.eof and raw:
++                        obj = zlib.decompressobj(31)
++                    else:
++                        break
++        data = b"".join(pieces)
++    assert not data or data.endswith(b"\n"), "確定していない行は比較へ入れない"
++    return data
++
++def copy_confirmed(path, destination):
++    """確認済みの記録を小分けに写す。gzip容器の閉じを補作しない。"""
++    path,destination=Path(path),Path(destination)
++    destination.parent.mkdir(parents=True,exist_ok=True)
++    digest=hashlib.sha256();size=0;last=b""
++    obj=zlib.decompressobj(31) if path.suffix==".gz" else None
++    with path.open("rb") as f,destination.open("xb") as g:
++        while raw:=f.read(1024*1024):
++            while raw:
++                if obj is None:data,raw=raw,b""
++                else:
++                    data=obj.decompress(raw);raw=obj.unused_data
++                    if obj.eof and raw:obj=zlib.decompressobj(31)
++                    elif not raw:raw=b""
++                if data:
++                    g.write(data);digest.update(data);size+=len(data);last=data[-1:]
++    assert not size or last==b"\n", "確定前の行を補わない"
++    return dict(sha256=digest.hexdigest(),bytes=size)
++
++def compare_paths(path, left, right, *, raw_evidence=False):
++    """字節を小分けに比べ、TIME以外の順や数値を作り直さない。"""
++    path,left,right=Path(path),Path(left),Path(right)
++    def opener(p):
++        return gzip.open(p,"rb") if p.suffix==".gz" and not raw_evidence else p.open("rb")
++    time_only=path.parts[0]=="stage2"
++    def chunks(p):
++        with opener(p) as f:
++            if not time_only:
++                while data:=f.read(1024*1024):yield data
++            elif path.suffix==".json" and not path.name.endswith(".jsonl"):
++                yield without_time(f.read())
++            else:
++                # 一行の字節を保持する。比較用の読み幅だけを同じに揃える。
++                buffer=b""
++                for line in f:
++                    buffer+=without_time(line)
++                    while len(buffer)>=1024*1024:
++                        yield buffer[:1024*1024];buffer=buffer[1024*1024:]
++                if buffer:yield buffer
++    from itertools import zip_longest
++    hashes=[hashlib.sha256(),hashlib.sha256()];sizes=[0,0];bad=0;first=None;example=None;n=0
++    for x,y in zip_longest(chunks(left),chunks(right),fillvalue=b""):
++        for i,data in enumerate((x,y)):hashes[i].update(data);sizes[i]+=len(data)
++        if x!=y:
++            bad+=sum(a!=b for a,b in zip(x,y))+abs(len(x)-len(y))
++            if first is None:
++                j=next((j for j,(a,b) in enumerate(zip(x,y)) if a!=b),min(len(x),len(y)))
++                first=n+j;example=dict(left=x[max(0,j-80):j+160].decode("utf-8","replace"),
++                                      right=y[max(0,j-80):j+160].decode("utf-8","replace"))
++        n+=max(len(x),len(y))
++    return dict(path=str(path),equal=first is None,left_sha256=hashes[0].hexdigest(),
++                right_sha256=hashes[1].hexdigest(),content_bytes=sizes,mismatching_bytes=bad,
++                first_mismatch_byte=first,example=example,
++                mode="TIME値だけ除いた全バイト" if time_only else "内容の全バイト")
++
++def names(folder):
++    return {p.relative_to(folder) for p in Path(folder).rglob("*")
++            if p.is_file() and p.relative_to(folder).parts[0] in ROOTS
++            and p.suffix != ".done"}
++
++def without_time(data):
++    """D-07αυ(a)。許されたTIME欄の値だけを印にし、他の字節はそのまま。"""
++    text = data.decode("utf-8")
++    # JSONはまず検証する。行の順・空白・キーの順を作り直さない。
++    try:
++        json.loads(text)
++    except json.JSONDecodeError:
++        for line in text.splitlines():
++            json.loads(line)
++    keys = "|".join(re.escape(x) for x in TIME_KEYS)
++    pattern = re.compile(r'("(?:'+keys+r')"\s*:\s*)(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|null)')
++    return pattern.sub(r'\g<1>0', text).encode("utf-8")
++
++def byte_row(path, x, y, mode="全バイト"):
++    bad = sum(a != b for a, b in zip(x, y))+abs(len(x)-len(y))
++    first = next((i for i, (a,b) in enumerate(zip(x,y)) if a != b),
++                 min(len(x),len(y))) if x != y else None
++    return dict(path=str(path), equal=x==y, mode=mode,
++                left_sha256=sha(x), right_sha256=sha(y),
++                content_bytes=[len(x),len(y)], mismatching_bytes=bad,
++                first_mismatch_byte=first,
++                example=None if first is None else dict(
++                    left=x[max(0,first-80):first+160].decode("utf-8","replace"),
++                    right=y[max(0,first-80):first+160].decode("utf-8","replace")))
++
++def compare_outputs(left, right, *, confirmed=False):
++    left, right = Path(left), Path(right)
++    a, b = names(left), names(right)
++    rows = []
++    for rel in sorted(a|b):
++        if rel not in a or rel not in b:
++            rows.append(dict(path=str(rel), equal=False, left_exists=rel in a,
++                             right_exists=rel in b, mismatching_bytes=None))
++            continue
++        if confirmed:
++            x,y=confirmed_content(left/rel),confirmed_content(right/rel)
++            raw=dict(left_content_sha256=sha(x),right_content_sha256=sha(y))
++            if rel.parts[0]=="stage2":x,y=without_time(x),without_time(y)
++            row=byte_row(rel,x,y)
++        else:
++            def digest_content(path):
++                h=hashlib.sha256()
++                opener=gzip.open if path.suffix==".gz" else open
++                with opener(path,"rb") as f:
++                    while data:=f.read(1024*1024):h.update(data)
++                return h.hexdigest()
++            raw=dict(left_content_sha256=digest_content(left/rel),
++                     right_content_sha256=digest_content(right/rel))
++            row=compare_paths(rel,left/rel,right/rel)
++        rows.append({**row,**raw,"left_exists":True,"right_exists":True})
++    return dict(passed=bool(rows) and a==b and all(r["equal"] for r in rows),
++                file_count=len(rows), mismatching_files=sum(not r["equal"] for r in rows),
++                files=rows)
+diff --git a/tools/verb_measurement/m1_at500.py b/tools/verb_measurement/m1_at500.py
+new file mode 100644
+index 0000000..e6a8454
+--- /dev/null
++++ b/tools/verb_measurement/m1_at500.py
+@@ -0,0 +1,32 @@
++"""指示11。#19の種1・2の試行番号200〜500のM1を、確定した観察から読む。"""
++from pathlib import Path
++import argparse
++from cloud_run import read
++from instruction11_io import save,sha
++
++def extract(case1,case2,destination,through=500):
++    assert through in (500,1000,2000,3000,4000,4999)
++    rows=[]
++    commits=[]
++    for seed,case in enumerate((Path(case1),Path(case2)),1):
++        v=read(case/"runtime.json")
++        assert v["flags"][v["flags"].index("--seeds")+1]==str(seed)
++        paths=list((case/"output").glob(f"**/comparison_checkpoints/m1_at_trial{through}.json"))
++        assert len(paths)==1,"指定番号の記録が確定するまで待つ。未読部分を補わない"
++        row=read(paths[0]);assert row["zero_based"] and row["first_trial"]==200 and row["last_trial"]==through and row["trials"]==through-199
++        rows.append(dict(seed=seed,**row,proof_sha256=sha(paths[0].read_bytes())))
++        commits.append(v["source_commit"])
++    assert commits[0]==commits[1]
++    result=dict(rows=rows,claude_confirmation_required=True,
++                no_stop_criterion=all(not x["stop_criterion"] for x in rows),
++                seeds3_to10_may_start=False,other_queue_conditions_required=True,
++                do_not_wait_for_calibration_1000=True,report_to_Claude_if_criterion=True,
++                source_commit=commits[0],automatic_stop=False)
++    save(destination,result)
++    return result
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser(description=__doc__)
++    p.add_argument("seed1",type=Path);p.add_argument("seed2",type=Path);p.add_argument("destination",type=Path)
++    p.add_argument("--through",type=int,default=500)
++    a=p.parse_args();extract(a.seed1,a.seed2,a.destination,a.through)
 diff --git a/tools/verb_measurement/measurement_driver.py b/tools/verb_measurement/measurement_driver.py
 new file mode 100644
 index 0000000..aa13e09
@@ -4411,10 +4895,10 @@ index 0000000..52748d8
 +}
 diff --git a/tools/verb_measurement/plan.json b/tools/verb_measurement/plan.json
 new file mode 100644
-index 0000000..7fa2227
+index 0000000..2e70936
 --- /dev/null
 +++ b/tools/verb_measurement/plan.json
-@@ -0,0 +1,233 @@
+@@ -0,0 +1,453 @@
 +{
 +  "model_commit": "c3dea1f11240d6bf16fca95db8fb89dd51a61de0",
 +  "observer_sha256": "235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d",
@@ -4635,6 +5119,226 @@ index 0000000..7fa2227
 +      "horizon": 5000,
 +      "memory_reservation_gb": 2.0,
 +      "cpu_start_slots": 2
++    },
++    "calibration200_off": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "0.01873710622997919",
++        "--v39-price",
++        "0.01873710622997919",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "on",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "on",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "off",
++        "--stage2-cache-prune",
++        "off",
++        "--no-forget-exec"
++      ],
++      "completed_trials": 200,
++      "configured_trial_count": 5000,
++      "horizon": 5000,
++      "memory_reservation_gb": 2.0,
++      "cpu_start_slots": 2,
++      "purpose": "#19cと同じ忘却実行停止。関門の種は1、較正本番41〜48とは別"
++    },
++    "calibration200_on": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "0.01873710622997919",
++        "--v39-price",
++        "0.01873710622997919",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "on",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "on",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "on",
++        "--stage2-cache-prune",
++        "on",
++        "--no-forget-exec"
++      ],
++      "completed_trials": 200,
++      "configured_trial_count": 5000,
++      "horizon": 5000,
++      "memory_reservation_gb": 2.0,
++      "cpu_start_slots": 2,
++      "purpose": "#19cと同じ忘却実行停止。関門の種は1、較正本番41〜48とは別"
 +    }
 +  },
 +  "gate_evidence": {
@@ -4647,6 +5351,745 @@ index 0000000..7fa2227
 +  "base_model_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
 +  "speed_upstream_commit": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
 +  "observer_filename": "speed200/measurement_driver.py"
++}
+diff --git a/tools/verb_measurement/production/measurement_driver.py b/tools/verb_measurement/production/measurement_driver.py
+new file mode 100644
+index 0000000..1a040c5
+--- /dev/null
++++ b/tools/verb_measurement/production/measurement_driver.py
+@@ -0,0 +1,28 @@
++"""指示11の全5000用観察入口。試行を切らず、模型の入口を変更し続けない。"""
++import os, sys
++from pathlib import Path
++
++if __name__ in ("__main__","__mp_main__"):
++    if __name__=="__main__":os.environ["VERB_PRODUCTION_SOURCE"]=sys.argv[1]
++    source=Path(os.environ["VERB_PRODUCTION_SOURCE"]).resolve()
++    sys.path[:0]=[str(Path(__file__).resolve().parent.parent),str(source/"tools"),str(source)]
++    import sweep, v3_run
++    from checkpoint_observer import observe
++    original_worker=v3_run.worker
++    original_longitudinal=sweep.run_longitudinal
++    sweep.code_commit=lambda:"4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2"
++    def worker(task):
++        assert task["cfg"]["trial_count"]==5000 and task["cfg"]["agent_ids"]==["agent"]
++        assert task["seed"] in (*range(1,11),*range(41,49))
++        def longitudinal(world,*args,**kw):
++            assert len(world.trials)==5000
++            ledger=kw["ledger"] if "ledger" in kw else args[2]
++            with observe(Path(task["out_root"]),ledger):
++                return original_longitudinal(world,*args,**kw)
++        sweep.run_longitudinal=longitudinal
++        try:return original_worker(task)
++        finally:sweep.run_longitudinal=original_longitudinal
++    v3_run.worker=worker
++    if __name__=="__main__":
++        sys.argv=[str(source/"tools/v3_run.py"),*sys.argv[2:]]
++        v3_run.main()
+diff --git a/tools/verb_measurement/production_commands.py b/tools/verb_measurement/production_commands.py
+new file mode 100644
+index 0000000..f3da0c5
+--- /dev/null
++++ b/tools/verb_measurement/production_commands.py
+@@ -0,0 +1,42 @@
++"""指示11の命令草稿を出力するだけ。未記入のλ・列・関門を補わず、走行しない。"""
++from pathlib import Path
++import argparse,json,shlex
++from cloud_run import read,save,digest
++
++def emit(destination):
++    destination=Path(destination);destination.mkdir(exist_ok=False)
++    plan=read(Path(__file__).with_name("production_templates.json"))
++    assert plan["lambda_value"] is None and plan["source_commit"] is None
++    for arm,spec in plan["arms"].items():
++        seeds=spec["seeds"]+spec.get("after_M1_seeds",[])
++        for seed in seeds:
++            flags=list(spec["flags"])
++            flags[flags.index("--seeds")+1]=str(seed)
++            # 空欄は明示的な環境変数。未設定で実行する台本ではない。
++            args=[]
++            for value in flags:
++                args.append('"$VERB_SHOP_L50_REF"' if value=="{{SHOP_L50_REF}}" else shlex.quote(value))
++            entry=('"$VERB_TOOLS/'+spec["observer"]+'" "$VERB_PROD_SOURCE"'
++                   if spec["observer"] else '"$VERB_PROD_SOURCE/tools/v3_run.py"')
++            label=arm.removeprefix("#")+f"_seed{seed:03d}"
++            command=('"$VERB_PY" "$VERB_JOBS" run --owner verb-production-'+label+' --wait --mem "$VERB_PROD_MEM" '
++                     '--disk-path "$VERB_PROD_OUT" -- "$VERB_PY" '+entry+
++                     ' "$VERB_PROD_SOURCE/config/sweep_verb_hide1_s1_2026-10-04.json" '
++                     '"$VERB_PROD_OUT" '+' '.join(args))
++            save(destination/(label+".json"),dict(arm=arm,seed=seed,flags=flags,
++                 source_commit=None,lambda_value=None,ready_to_start=False,
++                 claude_M1_required=seed in range(3,11),
++                 command_draft=command,resource_monitor_required=True,
++                 queue_claim_and_normal_push_required=True,
++                 production_gates_required=plan["required_speed_gates"] if spec["speed_applicable"] else [],
++                 dependency=spec.get("requires"),speed_applicable=spec["speed_applicable"],
++                 template_sha256=digest(Path(__file__).with_name("production_templates.json"))))
++    save(destination/"status.json",dict(starts_model=False,lambda_value=None,
++         source_commit=None,seeds3_to10_prepared_but_not_claimed=True,
++         initial_production_seeds=[1,2],required_confirmation="ClaudeのM1と列・版・全旗・出力先",
++         commands_are_drafts=True))
++    return destination
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser(description=__doc__);p.add_argument("destination",type=Path)
++    a=p.parse_args();emit(a.destination)
+diff --git a/tools/verb_measurement/production_observer.py b/tools/verb_measurement/production_observer.py
+new file mode 100644
+index 0000000..0267c2f
+--- /dev/null
++++ b/tools/verb_measurement/production_observer.py
+@@ -0,0 +1,28 @@
++"""指示11の全5000用観察入口。試行を切らず、模型の入口を変更し続けない。"""
++import os, sys
++from pathlib import Path
++
++if __name__ in ("__main__","__mp_main__"):
++    if __name__=="__main__":os.environ["VERB_PRODUCTION_SOURCE"]=sys.argv[1]
++    source=Path(os.environ["VERB_PRODUCTION_SOURCE"]).resolve()
++    sys.path[:0]=[str(source/"tools"),str(source)]
++    import sweep, v3_run
++    from checkpoint_observer import observe
++    original_worker=v3_run.worker
++    original_longitudinal=sweep.run_longitudinal
++    sweep.code_commit=lambda:"4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2"
++    def worker(task):
++        assert task["cfg"]["trial_count"]==5000 and task["cfg"]["agent_ids"]==["agent"]
++        assert task["seed"] in (*range(1,11),*range(41,49))
++        def longitudinal(world,*args,**kw):
++            assert len(world.trials)==5000
++            ledger=kw["ledger"] if "ledger" in kw else args[2]
++            with observe(Path(task["out_root"]),ledger):
++                return original_longitudinal(world,*args,**kw)
++        sweep.run_longitudinal=longitudinal
++        try:return original_worker(task)
++        finally:sweep.run_longitudinal=original_longitudinal
++    v3_run.worker=worker
++    if __name__=="__main__":
++        sys.argv=[str(source/"tools/v3_run.py"),*sys.argv[2:]]
++        v3_run.main()
+diff --git a/tools/verb_measurement/production_templates.json b/tools/verb_measurement/production_templates.json
+new file mode 100644
+index 0000000..a120676
+--- /dev/null
++++ b/tools/verb_measurement/production_templates.json
+@@ -0,0 +1,617 @@
++{
++  "lambda_value": null,
++  "lambda_source": "お店の確定L50_refをClaudeが記入。測定用値を代用しない",
++  "configured_trial_count": 5000,
++  "horizon": 5000,
++  "seeds_first": [
++    1,
++    2
++  ],
++  "seeds_after_Claude_M1": [
++    3,
++    4,
++    5,
++    6,
++    7,
++    8,
++    9,
++    10
++  ],
++  "new_run_deadline": "2026-10-11T09:00:00+09:00",
++  "source_commit": null,
++  "starts_model": false,
++  "required_speed_gates": [
++    "通常off/on200：試験回答・試験後・実発生の確認",
++    "#19c忘却実行停止off/on200の一致"
++  ],
++  "full_length_parallel_required": true,
++  "provisional_until_full_length_match": true,
++  "any_parallel_mismatch_flagged_results_unusable": true,
++  "arms": {
++    "#19": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "{{SHOP_L50_REF}}",
++        "--v39-price",
++        "{{SHOP_L50_REF}}",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "on",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "on",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "on",
++        "--stage2-cache-prune",
++        "on"
++      ],
++      "speed_applicable": true,
++      "observer": "production/measurement_driver.py",
++      "seeds": [
++        1,
++        2
++      ],
++      "after_M1_seeds": [
++        3,
++        4,
++        5,
++        6,
++        7,
++        8,
++        9,
++        10
++      ]
++    },
++    "#19_parallel_off": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "{{SHOP_L50_REF}}",
++        "--v39-price",
++        "{{SHOP_L50_REF}}",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "on",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "on",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "off",
++        "--stage2-cache-prune",
++        "off"
++      ],
++      "speed_applicable": false,
++      "observer": "production/measurement_driver.py",
++      "seeds": [
++        1
++      ]
++    },
++    "#21": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "{{SHOP_L50_REF}}",
++        "--v39-price",
++        "{{SHOP_L50_REF}}",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "off",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "off",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "off",
++        "--stage2-cache-prune",
++        "off",
++        "--use-forget",
++        "0.4",
++        "--use-forget-attn"
++      ],
++      "speed_applicable": false,
++      "observer": null,
++      "seeds": [
++        1,
++        2
++      ],
++      "after_M1_seeds": [
++        3,
++        4,
++        5,
++        6,
++        7,
++        8,
++        9,
++        10
++      ],
++      "ready": false,
++      "requires": "共通D＋注意 --use-forget-attnの完成・動詞移植・合格した版と列。現在の固定模型は未実装",
++      "speed_reason": "お店2aと同じ。第二段offのため二旗の条件外"
++    },
++    "#22": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "{{SHOP_L50_REF}}",
++        "--v39-price",
++        "{{SHOP_L50_REF}}",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--birth-score",
++        "seq",
++        "--stage2",
++        "off",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "off",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "off",
++        "--stage2-cache-prune",
++        "off"
++      ],
++      "speed_applicable": false,
++      "observer": null,
++      "seeds": [
++        1,
++        2
++      ],
++      "after_M1_seeds": [
++        3,
++        4,
++        5,
++        6,
++        7,
++        8,
++        9,
++        10
++      ],
++      "ready": false,
++      "requires": "列の基準の正式な全旗と版。C*off・0/ℓ・保持A・注意なし、新しいHと出生seqを共有",
++      "speed_reason": "お店5aと同じ。C*offかつ第二段offのため二旗の条件外"
++    },
++    "#19c": {
++      "flags": [
++        "--nohash",
++        "--vt",
++        "0.3842",
++        "--extend-rule",
++        "none",
++        "--charge1",
++        "d32",
++        "--fast",
++        "--no-public-history",
++        "--dump-slot-history",
++        "--fix2-full",
++        "--fix-order2",
++        "--proj-first",
++        "--fill-norestate",
++        "--no-charge2",
++        "--own-evidence",
++        "--v39",
++        "--v39-budget",
++        "inf",
++        "--v39-decay",
++        "actr",
++        "--v310-be",
++        "--hist-role",
++        "--score-role",
++        "--u-struct",
++        "--relearn-init",
++        "--tie-struct",
++        "--amb-local",
++        "--nsim",
++        "0.7",
++        "--ident-rho",
++        "0.5",
++        "--ident-argmax",
++        "--ident-commons",
++        "--cells",
++        "f0.5000_th2.1000_first_order",
++        "--dump-answers",
++        "--dump-routing",
++        "--answer-gap",
++        "--strict-pc",
++        "--e-price",
++        "{{SHOP_L50_REF}}",
++        "--v39-price",
++        "{{SHOP_L50_REF}}",
++        "--workers",
++        "1",
++        "--seeds",
++        "1",
++        "--trial-count",
++        "5000",
++        "--no-compare",
++        "--horizon",
++        "5000",
++        "--score-arg-order",
++        "--sme2017",
++        "--sme-call-seed",
++        "--sme-tie-uniform",
++        "--sme-intern-cache",
++        "--sme-evict-trial-cache",
++        "--verb-world",
++        "--probe-world",
++        "--verb-timing",
++        "--v39-u",
++        "global",
++        "--match-cstar",
++        "--match-cstar-e",
++        "--h-dirichlet",
++        "1",
++        "--match-eps",
++        "shared",
++        "--logp-eps",
++        "0.01",
++        "--birth-score",
++        "seq",
++        "--score-logp",
++        "--score-logp-e",
++        "--attn-sme",
++        "global",
++        "--attn-position",
++        "k2",
++        "--attn-eta",
++        "0.1",
++        "--attn-allin",
++        "--stage2",
++        "on",
++        "--stage2-loss",
++        "top1",
++        "--stage2-init",
++        "virtual",
++        "--stage2-scope",
++        "all",
++        "--stage2-birth-hu",
++        "on",
++        "--stage2-reuse",
++        "off",
++        "--stage2-speed",
++        "on",
++        "--stage2-cache-prune",
++        "on",
++        "--no-forget-exec"
++      ],
++      "speed_applicable": true,
++      "observer": "production/measurement_driver.py",
++      "seeds": [
++        41,
++        42,
++        43,
++        44,
++        45,
++        46,
++        47,
++        48
++      ],
++      "interim_watch": "8本が全部1000を終えたら種を同重みで正VのL25/L90、お店の同じ道具・定義。種3〜10はClaudeのM1確認後にこの判定を待たず開始可。お店L50が範囲外なら走行中を止めず報告しClaudeがアストラに諮る（指示12が旧い新規開始待ちを置換）",
++      "final_watch": "動詞L50/お店L50が1/2未満又は2より大きい時だけ再走。境界を含む区間は再走しない"
++    }
++  },
++  "instruction12_policy": {
++    "seeds1_2_first": true,
++    "after_Claude_M1_200_500_start3_10_without_waiting_calibration1000": true,
++    "calibration1000_out_of_range_report_without_stopping": true,
++    "M1_at_1000_2000_and_later_report_without_stopping": true
++  }
 +}
 diff --git a/tools/verb_measurement/shop100.json b/tools/verb_measurement/shop100.json
 new file mode 100644
@@ -5652,9 +7095,348 @@ index 0000000..9350eb4
 +  "source_commit": "c3dea1f11240d6bf16fca95db8fb89dd51a61de0",
 +  "observer_sha256": "235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d"
 +}
+diff --git a/tools/verb_measurement/speed_gate.py b/tools/verb_measurement/speed_gate.py
+new file mode 100644
+index 0000000..0ff214e
+--- /dev/null
++++ b/tools/verb_measurement/speed_gate.py
+@@ -0,0 +1,110 @@
++"""指示11：同機械の200組を読み、試験回答・試験後の学習と実発生数を記録。"""
++from pathlib import Path
++import argparse, gzip, json,re
++from cloud_run import read, complete
++from cloud_compare import compare
++from instruction11_io import content, compare_outputs, save, sha
++
++def mechanisms(case):
++    out = Path(case)/"output"
++    counts = dict(birth=0, assimilation=0, forgetting_FH=0, forgetting_HU=0,
++                  definition_removed=0, probe_answers=0)
++    seen_side = set()
++    for p in sorted(out.glob("side/**/*.jsonl")):
++        if p.name.endswith(".probe.jsonl"):
++            counts["probe_answers"] += len(content(p).splitlines())
++            continue
++        for line in content(p).splitlines():
++            row = json.loads(line)
++            if row.get("kind") in ("birth","assim"):
++                key = (row.get("trial"),row.get("R"),row["kind"])
++                if key not in seen_side:
++                    counts["birth" if row["kind"]=="birth" else "assimilation"] += 1
++                    seen_side.add(key)
++    ledger = list(out.glob("ledgers/**/*.jsonl.gz"))
++    assert len(ledger)==1
++    trials = []
++    for line in content(ledger[0]).splitlines():
++        row = json.loads(line)
++        if row.get("record_type")!="trial": continue
++        trials.append(row["prediction_order"])
++        for event in row["deletion_event"]:
++            if event.get("v39")=="FH": counts["forgetting_FH"] += 1
++            elif event.get("v39")=="HU": counts["forgetting_HU"] += 1
++            elif event.get("kind")=="definition_removed": counts["definition_removed"] += 1
++    assert trials==list(range(200)), "試験後100〜199も含む確定200行を要求"
++    m=complete(Path(case),200)
++    p=m.get("probeworld",{})
++    counts.update(probe_fingerprint_checks=p.get("fingerprint_checks",0),
++                  probe_attention_restore_checks=len(p.get("attention_checks",[])))
++    assert counts["probe_answers"]==p["rows"]==96
++    guards=list(out.rglob("p10_cache_guard.jsonl.gz"))
++    if guards:
++        assert len(guards)==1
++        rows=[json.loads(line) for line in content(guards[0]).splitlines()]
++        summary=read(Path(str(guards[0])+".summary.json"))
++        counts.update(p10_boundaries=sum(x.get("kind")=="trial_boundary" for x in rows),
++                      p10_removed_cache=sum(x.get("removed",{}).get("cache",0) for x in rows if x.get("kind")=="trial_boundary"),
++                      p10_removed_cache_rng=sum(x.get("removed",{}).get("cache_rng",0) for x in rows if x.get("kind")=="trial_boundary"),
++                      p10_forbidden_reads=summary["forbidden_reads"])
++        assert summary["native_loop_returned"] and counts["p10_forbidden_reads"]==0
++        assert counts["p10_removed_cache"]==summary["removed"]["cache"]
++        assert counts["p10_removed_cache_rng"]==summary["removed"]["cache_rng"]
++    else:
++        counts.update(p10_boundaries=None,p10_removed_cache=None,p10_removed_cache_rng=None,
++                      p10_forbidden_reads=None)
++    noforget="--no-forget-exec" in read(Path(case)/"runtime.json")["flags"]
++    executed=counts["forgetting_FH"]+counts["forgetting_HU"]+counts["definition_removed"]
++    if noforget: assert executed==0
++    def status(n): return "実発生を確認" if n else "関門では未検証"
++    return dict(counts=counts, coverage=dict(
++        birth=status(counts["birth"]),
++        forgetting="較正の命令により実行停止・実変換0" if noforget else status(executed),
++        p10_discard=status((counts["p10_removed_cache"] or 0)+(counts["p10_removed_cache_rng"] or 0)),
++        probe_save_restore=status(counts["probe_fingerprint_checks"]) if counts["probe_attention_restore_checks"] else "関門では未検証"),
++        ledger_trials=200, post_probe_learning_trials=list(range(100,200)),
++        counts_are_actual=True, model_modified=False)
++
++def gate(left,right,destination,on100_decision,on100_report_commit):
++    left,right=Path(left),Path(right)
++    assert re.fullmatch("[0-9a-f]{40}",on100_report_commit), "on100を先に判定・報告した通常pushのコミットを記す"
++    decision=read(on100_decision)
++    expected=read(Path(__file__).with_name("plan.json"))
++    from cloud_run import first_pair_check
++    selected=decision["pairs"][decision["selected_pair"]]["comparison"]
++    first_pair_check(decision,dict(model_commit=expected["base_model_commit"],
++        observer_sha256="6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4"),selected)
++    assert selected["completed_trials"]==100
++    destination=Path(destination);destination.mkdir(exist_ok=False)
++    compare(left,right,destination/"content_comparison.json",200)
++    a=compare_outputs(left/"output",right/"output")
++    # stage2もTIME欄以外を比べる。原結果を合格に書き換えない。
++    save(destination/"all_outputs_comparison.json",a)
++    l,r=mechanisms(left),mechanisms(right)
++    save(destination/"mechanisms_off.json",l);save(destination/"mechanisms_on.json",r)
++    basic=read(destination/"content_comparison.json")
++    proof=dict(passed=basic["passed"] and a["passed"], completed_trials=200,
++               source_commit=basic["source_commit"], model_commit=basic["model_commit"],
++               observer_sha256=basic["observer_sha256"],machine_sha256=basic["machine_sha256"],
++               calibration="--no-forget-exec" in read(left/"runtime.json")["flags"],
++               comparator_sha256=sha(Path(__file__).read_bytes()),
++               io_sha256=sha(Path(__file__).with_name("instruction11_io.py").read_bytes()),
++               on100_decision_sha256=sha(Path(on100_decision).read_bytes()),
++               on100_report_commit=on100_report_commit,
++               full_5000_match=False, production_result_status="仮",
++               comparison_files=["content_comparison.json","all_outputs_comparison.json"],
++               coverage={"off":l["coverage"],"on":r["coverage"]})
++    required=("birth","probe_save_restore")
++    proof["coverage_verified_for_production"]=all(
++        item["coverage"][k]=="実発生を確認" for item in (l,r) for k in required
++    ) and r["coverage"]["p10_discard"]=="実発生を確認" and (
++        proof["calibration"] or all(item["coverage"]["forgetting"]=="実発生を確認" for item in (l,r)))
++    save(destination/"gate.json",proof)
++    return 0 if proof["passed"] else 1
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser(description=__doc__)
++    p.add_argument("left",type=Path);p.add_argument("right",type=Path);p.add_argument("destination",type=Path)
++    p.add_argument("--on100-decision",required=True,type=Path)
++    p.add_argument("--on100-report-commit",required=True)
++    a=p.parse_args();raise SystemExit(gate(a.left,a.right,a.destination,a.on100_decision,a.on100_report_commit))
+diff --git a/tools/verb_measurement/test_instruction11.py b/tools/verb_measurement/test_instruction11.py
+new file mode 100644
+index 0000000..51a1563
+--- /dev/null
++++ b/tools/verb_measurement/test_instruction11.py
+@@ -0,0 +1,217 @@
++"""指示11の境界を人工記録で検査。学習模型・種21〜40は起動も読み取りもしない。"""
++import gzip,json,random,sys
++from pathlib import Path
++from dataclasses import dataclass
++from types import SimpleNamespace
++import pytest
++sys.path[:0]=[str(Path(__file__).resolve().parent),str(Path(__file__).resolve().parents[1]),
++               str(Path(__file__).resolve().parents[2])]
++import cloud_compare as C,cloud_run as R
++from test_package import fixture,CELL
++from instruction11_io import without_time,confirmed_content,compare_outputs,copy_confirmed,compare_paths
++from checkpoint_observer import observe,m1_rows,posthoc_prune
++from production_commands import emit
++from checkpoint_compare import compare as compare_checkpoint
++from speed_gate import mechanisms,gate
++from model_count import count_models
++
++def flags(on=False):
++    return ["--stage2","on","--stage2-speed","on" if on else "off",
++            "--stage2-cache-prune","on" if on else "off","--probe-world"]
++
++def test_speed200_probe_mutation_is_a_mismatch(tmp_path):
++    a=fixture(tmp_path/"a",True,200,flags());b=fixture(tmp_path/"b",True,200,flags(True))
++    assert C.compare(a,b,tmp_path/"ok.json",200)==0
++    (b/f"output/side/{CELL}/seed001.probe.jsonl").write_bytes(b"changed answer\n")
++    assert C.compare(a,b,tmp_path/"bad.json",200)==1
++    assert R.read(tmp_path/"bad.json")["mismatching_files"]==1
++
++def test_native_probe_schema_uses_fixed_question_count(tmp_path):
++    a=fixture(tmp_path/"a",True,300)
++    assert R.complete(a,300)["probeworld"]["probes"]==48
++    p=a/"output/manifest.jsonl";v=R.read(p);v["probeworld"]["rows"]=48;p.write_text(json.dumps(v))
++    with pytest.raises(AssertionError):R.complete(a,300)
++
++def test_time_only_mask_preserves_order_and_other_values():
++    a=b'{"z":1, "seconds":1.234,"wrapper_seconds":2e-4, "q":[2,1]}\n'
++    b=b'{"z":1, "seconds":9.234,"wrapper_seconds":3e-4, "q":[2,1]}\n'
++    assert without_time(a)==without_time(b)
++    assert without_time(a)!=without_time(b.replace(b'[2,1]',b'[1,2]'))
++    assert without_time(a).startswith(b'{"z":1, "seconds":0,')
++
++def test_stage2_and_researcher_are_compared(tmp_path):
++    a=tmp_path/"a";b=tmp_path/"b"
++    for out in (a,b):
++        (out/"stage2").mkdir(parents=True);(out/"researcher").mkdir()
++        (out/"stage2/x.jsonl").write_text('{"seconds":1,"rows":[1]}\n')
++        (out/"researcher/x.jsonl").write_text('{"V":0.5}\n')
++    (b/"stage2/x.jsonl").write_text('{"seconds":2,"rows":[1]}\n')
++    assert compare_outputs(a,b)["passed"]
++    (b/"stage2/x.jsonl").write_text('{"seconds":2,"rows":[2]}\n')
++    assert not compare_outputs(a,b)["passed"]
++
++def test_flushed_open_gzip_is_read_without_completing_it(tmp_path):
++    p=tmp_path/"rows.gz"
++    with gzip.open(p,"wb") as f:
++        f.write(b'{"trial":499}\n');f.flush()
++        assert confirmed_content(p)==b'{"trial":499}\n'
++        f.write(b'{"trial":500}\n');f.flush()
++        assert len(confirmed_content(p).splitlines())==2
++        proof=copy_confirmed(p,tmp_path/"copy")
++        assert proof["bytes"]==28 and (tmp_path/"copy").read_bytes()==confirmed_content(p)
++
++def test_chunked_record_compare_keeps_first_byte_position(tmp_path):
++    a=tmp_path/"a";b=tmp_path/"b"
++    a.write_bytes(b"a"*(1024*1024)+b"same\n")
++    b.write_bytes(b"a"*(1024*1024)+b"sAme\n")
++    row=compare_paths("side/x.jsonl",a,b,raw_evidence=True)
++    assert not row["equal"] and row["mismatching_bytes"]==1
++    assert row["first_mismatch_byte"]==1024*1024+1
++
++def test_p10_filter_is_posthoc_and_does_not_change_raw():
++    raw=dict(cache=[dict(seed=1,origin=1),dict(seed=2,origin=2),dict(seed=None,origin=None)],
++             cache_rng=[dict(seed=1,origin=1)],self_cache=[dict(seed=1,origin=1)])
++    copy=json.loads(json.dumps(raw))
++    pruned=posthoc_prune(raw,2)
++    assert raw==copy and len(pruned["cache"])==2 and not pruned["cache_rng"] and pruned["self_cache"]==raw["self_cache"]
++
++def test_m1_boundary_is_zero_based_inclusive_and_integer_threshold():
++    data=b"".join((json.dumps(dict(trial=n,definitions=1 if n<470 else 2))+"\n").encode() for n in range(501))
++    r=m1_rows(data)
++    assert r["trials"]==301 and not r["stop_criterion"] and r["automatic_stop"] is False
++    with pytest.raises(AssertionError):m1_rows(b"\n".join(data.splitlines()[:-1])+b"\n")
++    later=b"".join((json.dumps(dict(trial=n,definitions=1))+"\n").encode() for n in range(1001))
++    assert m1_rows(later,1000)["stop_criterion"] and m1_rows(later,1000)["trials"]==801
++
++def test_calibration_pair_and_production_drafts_are_not_starts(tmp_path):
++    p=R.read(R.HERE/"plan.json")
++    for sign in ("off","on"):
++        x=p["labels"]["calibration200_"+sign];y=p["labels"]["speed200_"+sign]
++        assert x["flags"]==y["flags"]+["--no-forget-exec"] and x["completed_trials"]==200
++    out=emit(tmp_path/"draft")
++    v=R.read(out/"21_seed001.json")
++    assert "--use-forget-attn" in v["flags"] and not v["ready_to_start"] and v["dependency"]
++    for arm in ("21","22"):
++        v=R.read(out/(arm+"_seed001.json"));assert not v["speed_applicable"]
++        for f in ("--stage2-speed","--stage2-cache-prune"):assert v["flags"][v["flags"].index(f)+1]=="off"
++    p=R.read(R.HERE/"production_templates.json")
++    assert p["lambda_value"] is None and p["source_commit"] is None
++    assert p["arms"]["#19c"]["seeds"]==list(range(41,49))
++    assert R.read(out/"19_seed003.json")["claude_M1_required"]
++    assert p["instruction12_policy"]["after_Claude_M1_200_500_start3_10_without_waiting_calibration1000"]
++
++def test_speed_judgement_requires_prior_on100_record(tmp_path):
++    with pytest.raises(AssertionError):
++        gate(tmp_path/"a",tmp_path/"b",tmp_path/"verdict",tmp_path/"no-decision.json","unrecorded")
++    assert not (tmp_path/"verdict").exists()
++
++def test_production_wrapper_uses_existing_worker_classification():
++    parent="python /srv/verb/source/tools/verb_measurement/production/measurement_driver.py /srv/verb/source"
++    rows={1:dict(pid=1,ppid=0,state="S",command=parent),
++          2:dict(pid=2,ppid=1,state="R",command="python -c multiprocessing spawn_main()"),
++          3:dict(pid=3,ppid=1,state="T",command="python -c multiprocessing spawn_main()")}
++    models,unknown,paused,stopped=count_models(rows)
++    assert len(models)==1 and not unknown and len(stopped)==1
++
++@dataclass
++class State:
++    definitions:dict
++
++def test_observer_calls_native_once_restores_and_keeps_bytes(tmp_path,monkeypatch):
++    import abm.loop as loop, smeshared, cstar_runtime as cstar,probeworld as pw
++    import attnsme,attnstage2_runtime as stage
++    counts=dict(input=0,predict=0,record=0,append=0)
++    def ai(trial,state):counts["input"]+=1;return trial
++    def predict(ai,state,cfg,rng):counts["predict"]+=1;rng.random();return ("answer","pending")
++    attention=tmp_path/"attention"/"x.jsonl.gz";attention.parent.mkdir()
++    stream=gzip.open(attention,"wt")
++    def record(agent,trial,cfg,output,score,coin,state,*args,**kw):
++        counts["record"]+=1;stream.write(json.dumps(dict(trial=trial.trial,definitions=len(state.definitions)))+"\n")
++        return ({},None,"hash")
++    for key,value in (("_agent_input",ai),("predict",predict),("_ledger_record",record)):monkeypatch.setattr(loop,key,value)
++    def engine():
++        return SimpleNamespace(rng=random.Random(1),cache={},cache_rng={},self_cache={},
++                               match_key=lambda key:key)
++    ce,se=engine(),engine()
++    monkeypatch.setattr(cstar,"ENGINE",ce);monkeypatch.setattr(smeshared,"ENGINE",se)
++    monkeypatch.setattr(attnsme,"ST",dict(f=stream,individuals={}))
++    monkeypatch.setattr(stage,"ST",dict(questions={}))
++    monkeypatch.setattr(pw,"_snapshot_modules",lambda:None)
++    monkeypatch.setattr(pw,"_restore_modules",lambda saved:None)
++    monkeypatch.setattr(pw,"_probe",lambda:pw._restore_modules(pw._snapshot_modules()))
++    rows=tmp_path/"side"/"x.jsonl";rows.parent.mkdir()
++    raw=rows.open("w")
++    def append(row):counts["append"]+=1;raw.write(json.dumps(row)+"\n")
++    ledger=SimpleNamespace(append=append,_stream=raw)
++    with observe(tmp_path,ledger):
++        for n in range(501):
++            trial=SimpleNamespace(trial=n);state=State({"R":n})
++            loop._agent_input(trial,state)
++            loop.predict(None,state,None,random.Random(n))
++            key=("fixture","call-seed-v1",n)
++            ce.match_key(key);ce.cache[key]=n;ce.cache_rng[key]=n
++            loop._ledger_record("agent",trial,None,None,None,None,state)
++            if (n+1)%100==0:pw._probe()
++            ledger.append({"prediction_order":n})
++    stream.close();raw.close()
++    assert counts==dict(input=501,predict=501,record=501,append=501)
++    assert loop.predict is predict and ledger.append is append and "match_key" in vars(ce)
++    assert rows.read_bytes()==b"".join((json.dumps({"prediction_order":n})+"\n").encode() for n in range(501))
++    root=tmp_path/"comparison_checkpoints"/"completed_0500"
++    p=R.read(root/"confirmed.json");assert p["probe_save_calls"]==p["probe_restore_calls"]==5
++    assert p["forbidden_reads"]==0 and R.read(root/"state.json")["trial"]==499
++    assert R.read(tmp_path/"comparison_checkpoints"/"m1_at_trial500.json")["trials"]==301
++
++def checkpoint_fixture(case,on):
++    case.mkdir();flags=["--seeds","1","--stage2-speed","on" if on else "off",
++                       "--stage2-cache-prune","on" if on else "off","--probe-world"]
++    R.save(case/"runtime.json",dict(flags=flags,source_commit="same",model_commit="same",
++           observer_sha256="same",configured_trial_count=5000,horizon=5000))
++    R.save(case/"start.json",dict(machine_sha256="same"))
++    folder=case/"output"/"comparison_checkpoints"/"completed_0500"
++    (folder/"records"/"side").mkdir(parents=True)
++    raw=b'{"answer":"same","trial":499}\n'
++    (folder/"records"/"side"/"seed001.probe.jsonl").write_bytes(raw)
++    for name in ("state","rng","cache_sme","cache_posthoc_p10"):
++        R.save(folder/(name+".json"),{"value":1})
++    R.save(folder/"cache_raw.json",{"value":1 if on else 2})
++    from instruction11_io import sha
++    R.save(folder/"confirmed.json",dict(confirmed=True,completed_trials=500,last_trial=499,
++        records=[dict(path="side/seed001.probe.jsonl",sha256=sha(raw))],
++        probe_save_calls=5,probe_restore_calls=5,forbidden_reads=0,guard_forbidden_reads=0 if on else None))
++    return case,folder
++
++def test_parallel_probe_rng_and_prior_failure_cannot_be_overwritten(tmp_path):
++    a,_=checkpoint_fixture(tmp_path/"a",False);b,bp=checkpoint_fixture(tmp_path/"b",True)
++    reports=tmp_path/"reports";reports.mkdir()
++    assert compare_checkpoint(a,b,500,reports/"checkpoint_500_pass.json")==0
++    assert R.read(reports/"checkpoint_500_pass.json")["provisional"]
++    (bp/"rng.json").write_text('{"value":2}\n')
++    assert compare_checkpoint(a,b,500,reports/"checkpoint_500_bad.json")==1
++    (bp/"rng.json").write_text((tmp_path/"a"/"output"/"comparison_checkpoints"/"completed_0500"/"rng.json").read_text())
++    assert compare_checkpoint(a,b,500,reports/"checkpoint_500_later.json")==1
++    assert R.read(reports/"checkpoint_500_later.json")["prior_mismatch"]
++
++def test_mechanism_actual_counts_include_post_probe_and_do_not_double_summary(tmp_path):
++    a=fixture(tmp_path/"a",True,200,flags(True));out=a/"output"
++    p=out/f"ledgers/cells/{CELL}/seed001.jsonl.gz"
++    with gzip.open(p,"wt") as f:
++        for n in range(200):
++            f.write(json.dumps(dict(record_type="trial",prediction_order=n,
++                deletion_event=[dict(v39="FH")]+([dict(kind="definition_removed")] if n==110 else [])))+"\n")
++    (out/f"side/{CELL}/seed001.jsonl").write_text('{"kind":"birth","trial":120,"R":"R1"}\n')
++    (out/f"side/{CELL}/seed001.probe.jsonl").write_text('{}\n'*96)
++    (out/f"side/{CELL}/seed001.routing.jsonl").write_text('{}\n')
++    guard=out/"p10_cache_guard.jsonl.gz"
++    with gzip.open(guard,"wt") as f:
++        f.write('{"kind":"trial_boundary","removed":{"cache":3,"cache_rng":3}}\n')
++        f.write('{"kind":"summary","removed":{"cache":3,"cache_rng":3}}\n')
++    R.save(Path(str(guard)+".summary.json"),dict(removed=dict(cache=3,cache_rng=3),forbidden_reads=0,native_loop_returned=True))
++    v=mechanisms(a)
++    assert v["counts"]["birth"]==1 and v["counts"]["forgetting_FH"]==200
++    assert v["counts"]["definition_removed"]==1 and v["counts"]["p10_removed_cache"]==3
++    assert v["coverage"]["p10_discard"]=="実発生を確認"
++    (out/f"side/{CELL}/seed001.jsonl").write_text('')
++    assert mechanisms(a)["coverage"]["birth"]=="関門では未検証"
++    r=R.read(a/"runtime.json");r["flags"]+=["--no-forget-exec"];(a/"runtime.json").write_text(json.dumps(r))
++    with pytest.raises(AssertionError):mechanisms(a)
 diff --git a/tools/verb_measurement/test_package.py b/tools/verb_measurement/test_package.py
 new file mode 100644
-index 0000000..d0105e9
+index 0000000..da2ab3a
 --- /dev/null
 +++ b/tools/verb_measurement/test_package.py
 @@ -0,0 +1,112 @@
@@ -5676,7 +7458,7 @@ index 0000000..d0105e9
 +    R.save(folder/'start.json',dict(machine_sha256='host-a'))
 +    R.save(folder/'result.json',dict(exit_code=0,warnings=[],finished_epoch=1,measurement_ru_maxrss_raw_unit='KiB'))
 +    m=dict(completed_trials=limit,configured_trial_count=5000,horizon=5000,full_5000_completed=False)
-+    if probe:m['probeworld']=dict(probes=48*(limit//100),fingerprint_checks=limit//100,attention_checks=[dict(passed=True,attention_before=1,attention_after=1,questions_before=2,questions_after=2)]*(limit//100))
++    if probe:m['probeworld']=dict(probes=48,rows=48*(limit//100),fingerprint_checks=limit//100,attention_checks=[dict(passed=True,attention_before=1,attention_after=1,questions_before=2,questions_after=2)]*(limit//100))
 +    (out/'manifest.jsonl').write_text(json.dumps(m)+'\n');R.save(out/'measurement/partial_done.json',m)
 +    paths=[f'ledgers/cells/{CELL}/seed001.jsonl.gz',f'attention/{CELL}/seed001.jsonl.gz',f'evictions/{CELL}/seed001.keys.jsonl.gz']
 +    paths += [f'side/{CELL}/seed001'+s for s in ('.jsonl','.ambig.csv','.answers.csv','.routing.jsonl','.sme.jsonl.gz','.sme.states.jsonl.gz')]
@@ -5696,7 +7478,7 @@ index 0000000..d0105e9
 +    assert p['speed_upstream_commit']=='4ceadf63f6924bdab8013d3e39b1549a8c5c0966'
 +    assert R.digest(R.HERE/'measurement_driver.py')=='6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4'
 +    assert p['observer_sha256']=='235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d'
-+    a,b=p['labels'].values();expected=list(a['flags'])
++    a,b=(p['labels'][k] for k in ('speed200_off','speed200_on'));expected=list(a['flags'])
 +    for flag in ('--stage2-speed','--stage2-cache-prune'):
 +        i=expected.index(flag);assert expected[i+1]=='off';expected[i+1]='on'
 +    assert expected==b['flags']
@@ -5757,9 +7539,9 @@ index 0000000..d0105e9
 +def test_speed_flag_changes_are_precise(tmp_path):
 +    off=['--stage2','on','--stage2-speed','off','--stage2-cache-prune','off','--stage2-birth-hu','on']
 +    on=['--stage2','on','--stage2-speed','on','--stage2-cache-prune','on','--stage2-birth-hu','on']
-+    a=fixture(tmp_path/'a',False,200,off);b=fixture(tmp_path/'b',False,200,on)
++    a=fixture(tmp_path/'a',True,200,off+['--probe-world']);b=fixture(tmp_path/'b',True,200,on+['--probe-world'])
 +    assert C.compare(a,b,tmp_path/'speed.json',200)==0
-+    v=R.read(b/'runtime.json');v['flags'][-1]='off';(b/'runtime.json').write_text(json.dumps(v))
++    v=R.read(b/'runtime.json');v['flags'][v['flags'].index('--stage2-birth-hu')+1]='off';(b/'runtime.json').write_text(json.dumps(v))
 +    with pytest.raises(AssertionError):C.compare(a,b,tmp_path/'no.json',200)
 +
 +
