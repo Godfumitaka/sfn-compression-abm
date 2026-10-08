@@ -4,7 +4,7 @@
 # - 元の台本 run_after_audit.py（変えていない、~/smeprod_a/plan/run_after_audit.py の写し）を一本ずつ呼ぶ。各本は setsid で切り離す。
 # - 同時の本数：~/queue/MAXRUN の数（無ければ 8）まで。毎回読み直すので、走りながら 12 まで上げられる。
 #   新しい本の最大は ~/queue/NEWPEAK_GIB（無ければ 2.0）。全部の v3_run.py の「最大 − 今」と合わせて、空き 4GiB を残すときだけ始める。
-# - 一本を始めるたびに C: の空きを確かめ、20GB を切っていたら新しい本を始めずに止まって受け箱・報告に書く。
+# - 一本を始めるたびに空きを確かめる（指示 24 の決まり、下の space_ok）。割っていたら新しい本を始めずに止まって受け箱・報告に書く。
 # - 各本の実時間と最大常駐（子の過程を含む最大）を /usr/bin/time -v で $D/time.log に残す（表層の解析の仕組みの表 M5 に使う）。
 # - 走っている本は止めない。消さない。
 set -u
@@ -13,6 +13,22 @@ NUM=$(python3 -c "import json;print(json.load(open('$J'))['row'])"); COMMIT=$(py
 LOG=$Q/row$NUM.log; VER=$Q/版の一覧.tsv; PL=$Q/plan_row$NUM
 say() { echo "$(date '+%F %T') $*" >> $LOG; }
 cfree() { df -BG /mnt/c | awk 'NR==2 {gsub("G","",$4); print $4}'; }
+# 空きの決まり（受け箱の指示 24、アストラの承認 10/8 17:55）：新しい本を始める前に確かめる。
+#   出力先が WSL の外のドライブ（/mnt/d など）なら：そのドライブの空き 20GB 以上、かつ C: の空き 10GB 以上。
+#   出力先が WSL の中（C: の上の仮想ディスク）なら：今までどおり C: の空き 20GB 以上。
+space_ok() {
+  local out=$1 p=$1 c d
+  while [ ! -e "$p" ]; do p=$(dirname "$p"); done
+  c=$(cfree)
+  case $(readlink -f "$p") in
+    /mnt/c|/mnt/c/*) (( c >= 20 )) || { echo "C: の空き ${c}GB（出力先が C:、20GB 未満）"; return 1; } ;;
+    /mnt/*) d=$(df -BG "$p" | awk 'NR==2 {gsub("G","",$4); print $4}')
+            (( d >= 20 )) || { echo "出力先のドライブの空き ${d}GB（20GB 未満）"; return 1; }
+            (( c >= 10 )) || { echo "C: の空き ${c}GB（10GB 未満）"; return 1; } ;;
+    *) (( c >= 20 )) || { echo "C: の空き ${c}GB（出力先が WSL の中、20GB 未満）"; return 1; } ;;
+  esac
+  echo "ok"
+}
 running() { ps -eo args | awk '$2=="tools/v3_run.py"' | wc -l; }
 maxrun() { cat $Q/MAXRUN 2>/dev/null || echo 8; }
 room() { python3 $Q/memroom_any.py "$(cat $Q/NEWPEAK_GIB 2>/dev/null || echo 2.0)"; }
@@ -24,7 +40,7 @@ for i in $(seq 0 $((N-1))); do
   read -r ARM SEED OUT < <(python3 -c "import json;x=json.load(open('$J'))['plan'][$i];print(x['arm'],x['seed'],x['command'][3])")
   [ -e "$OUT" ] && { say "既にある出力なので飛ばす：$OUT"; continue; }
   while (( $(running) >= $(maxrun) )) || [[ $(room) != ok ]]; do sleep 30; done
-  c=$(cfree); if (( c < 20 )); then say "★ C: の空き ${c}GB（20GB 未満）。$ARM 種 $SEED の前で止める"; exit 3; fi
+  if ! msg=$(space_ok "$OUT"); then say "★ $msg。$ARM 種 $SEED の前で止める"; exit 3; fi
   D=$PL/${ARM}_seed$(printf %03d $SEED); mkdir -p $D; cp $HOME/smeprod_a/plan/run_after_audit.py $D/
   python3 -c "import json;x=json.load(open('$J'))['plan'][$i];json.dump([x],open('$D/sme.commands.json','w'),ensure_ascii=False,indent=2)"
   echo -e "$NUM\t$ARM\t$SEED\t$COMMIT\t$(date '+%F %T')" >> $VER
