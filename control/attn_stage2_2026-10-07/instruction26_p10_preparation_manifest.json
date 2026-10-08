@@ -1,0 +1,84 @@
+{
+  "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+  "cases": {
+    "p10_default_off_200": {
+      "world": 2,
+      "trials": 200,
+      "mem_gb": 1,
+      "observer": "observe.py",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200",
+      "compare_observer": true,
+      "prune": false,
+      "no_forget_exec": true,
+      "filtered": null
+    },
+    "p10_on_200": {
+      "world": 2,
+      "trials": 200,
+      "mem_gb": 1,
+      "observer": "observe.py",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_200",
+      "compare_observer": true,
+      "prune": true,
+      "no_forget_exec": true,
+      "filtered": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/reference_n19_off200_transformed"
+    },
+    "p10_on_1740": {
+      "world": 2,
+      "trials": 1740,
+      "mem_gb": 4,
+      "observer": "observe_light.py",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on",
+      "compare_observer": false,
+      "prune": true,
+      "no_forget_exec": true,
+      "filtered": null
+    },
+    "p10_forget_exec_off_200": {
+      "world": 2,
+      "trials": 200,
+      "mem_gb": 1,
+      "observer": "observe.py",
+      "reference": null,
+      "compare_observer": true,
+      "prune": false,
+      "no_forget_exec": false,
+      "filtered": null
+    },
+    "p10_forget_exec_on_200": {
+      "world": 2,
+      "trials": 200,
+      "mem_gb": 1,
+      "observer": "observe.py",
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_forget_exec_off_200",
+      "compare_observer": true,
+      "prune": true,
+      "no_forget_exec": false,
+      "filtered": null
+    }
+  },
+  "dependency_code": "7294389d70795c847790472aa836b93dc1ca7fd5",
+  "immutable_sha256": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/gate.py": "4dfe70bfa9b8959321d165d274cec24daa1dbb9c574ce15ef0661e508c16d7d5",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/reference_observation.py": "94e68ebb574689b306f594c208cdcfa2506f9374c536460124d8e240be91a0d0",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/observe.py": "877d340d44ff6b9cfa620832e1ccd2e1a7a9287104c53df19e8a9f81ebc8618c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/observe_light.py": "de0aac3042eee07a38162182f9fb983398c0d6ab9938c2667aa44c2d65e9e713",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/controller.py": "d0b4c5bd802b688d402b09f81f83959354561abb842b85fd1cd4a2d80343ac53",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/compare_records.py": "cc5cb0ab5070f26f57aed941547af9bff59afc0689c49a7e9e3daa3e5a4a4834",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_default_off_200/native_command.json": "2a69fbf12f11c1bdf4a2c740b71e71fdd5e9aef1a2d9978ebbffe80abc4d5f6f",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_on_200/native_command.json": "3ba049ab075de474c9032e3f32a1c5aaa8143871dfad9c56d99b69cb4c7b4c5b",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_on_1740/native_command.json": "2d34efe4c153ecc23ce118d152a2485e86a2788c4d4dd1c3e8236e440350f31c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_forget_exec_off_200/native_command.json": "3c36447dca03dba84c510852707a00e177601281f035f0fbf61d67e0999e763d",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_p10_preparation/p10_forget_exec_on_200/native_command.json": "173997884d9cbf31f6ec34b4f3e4abad4bcc2d573432a322eb39923df04d1ef9",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json": "a0fb23a934a0c4d07115ff979c43570e6e9a3f095e6f6b5967546663c4610752",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py": "ef80473bf0b2c1cb0dfbdbb86e1eea1bd7f65617428c088e87cdc5b2fb84b0ef"
+  },
+  "P10": true,
+  "independent_postprocessor": true,
+  "forbidden_reads_required": 0,
+  "world1_gate_complete": false,
+  "world1_original_config_copy_missing": true,
+  "P5_P7r": false,
+  "models_not_started": true,
+  "external_source_push": false
+}
