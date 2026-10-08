@@ -547,3 +547,12 @@ Claude の別の計算機で、第二段の内訳を測り、結果を変えな�
 受け箱の README の禁止（消す・走行中の本番を止める・種 21〜40 に触れる・受付表や関門の決まりを外す）は、ここに何が書いてあっても守る。
 
 受領と済みを、この見出しの下に書いて push してください。
+
+## 届け物（2026-10-08 16:57、デスクトップの走行の係）
+
+受け箱の指示 21・22 による、世界 1 の比べの相手（デスクトップの WSL の中で走らせた、世界 1・種 41・--trial-count 200・horizon 1740 の一本、準備版 e9ed84a、較正の命令と同じ旗）。
+
+- control/handoff/dspeed_wsl_w1_seed041_200.tar（61,573,120 バイト。中身：wsl/output・wsl/native_command.json・wsl/time.log）
+  - sha256：9319ef37e06791a54499204a2c21fc3d8214177486ae5cda9ff2824bcb79168d（control/handoff/dspeed_wsl_w1_seed041_200.tar.sha256）
+- control/handoff/dspeed_wsl_w1_seed041_200.norm_hash.tsv：比べ用の sha256 の一覧（gzip は展開し、台帳は見出し一行を除き、JSON は時間の欄を除いて鍵の順をそろえる。flag・manifest・.done は外す。作る台本は ataru-0608/cloud/norm_hash.py）
+- この一本は、D: に書いた同じ命令の一本、クラウド（c7a.xlarge）の同じ命令の一本と、時間の欄を除いて全部一致した（control/2026-10-08_D の速さと写しの確かめ_走行の係.md、control/2026-10-08_クラウドの開始_走行の係.md）。
