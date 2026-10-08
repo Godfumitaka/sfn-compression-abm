@@ -1,0 +1,882 @@
+{
+  "at": "2026-10-08T13:14:04.758607+09:00",
+  "machine": {
+    "at": "2026-10-08T13:14:04.681516+09:00",
+    "models": {
+      "9096": {
+        "ppid": 9081,
+        "state": "R",
+        "rss_kb": 1196048
+      },
+      "47193": {
+        "ppid": 47184,
+        "state": "R",
+        "rss_kb": 304000
+      },
+      "47223": {
+        "ppid": 47214,
+        "state": "R",
+        "rss_kb": 501968
+      },
+      "47356": {
+        "ppid": 47353,
+        "state": "R",
+        "rss_kb": 416672
+      },
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 414176
+      },
+      "59619": {
+        "ppid": 59604,
+        "state": "R",
+        "rss_kb": 190192
+      },
+      "62410": {
+        "ppid": 62405,
+        "state": "R",
+        "rss_kb": 102320
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 1852416
+      }
+    },
+    "model_children": 8,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 9073,
+        "owner": "Codex2 指示18 較正 世界2 種42",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 47180,
+        "owner": "Codex2 指示20 較正 世界2 種43",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 47210,
+        "owner": "Codex2 指示20 較正 世界2 種44",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 19617,
+        "owner": "Codex 動詞新移植 追加旗off5000",
+        "mem_gb": 1.3
+      },
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 59598,
+        "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 62396,
+        "owner": "探索介入 指示5 記録だけ200試行関門",
+        "mem_gb": 1.0
+      }
+    ],
+    "disk_free_bytes": 217996800000,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "first_stage": {
+    "status": {
+      "phase": "stopped_no_automatic_retry",
+      "at": "2026-10-07T06:51:01.809811+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "existing_models_not_signaled": true
+    },
+    "warning": {
+      "at": "2026-10-07T06:13:49.063484+09:00",
+      "disk_free_bytes": 251820969984,
+      "memory": {
+        "空きの割合（memory_pressure）": "83%",
+        "free": "0.2 GB",
+        "inactive": "13.5 GB"
+      },
+      "swap_used_mb": 188.0,
+      "swap_ok": false,
+      "swap_note": "スワップの記録が直近 10 分ぶん無い（記録 0 点。sampler を始めたばかりなら 10 分待つ）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "global_model_children": 5,
+      "unpaused_model_children": 2,
+      "unregistered_heavy": [],
+      "registered": [
+        {
+          "pid": 20806,
+          "owner": "SME logP主 w2_A_L50 種17 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 20915,
+          "owner": "SME logP主 w2_A_L50 種18 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27521,
+          "owner": "SME logP主 w2_A_L50 種19 analysis",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 85937,
+          "owner": "Codex 位置U logp_U0_s2",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 85984,
+          "owner": "Codex2 SME注意 再開 native w1_s04_position_k1",
+          "mem_gb": 2.0
+        }
+      ]
+    },
+    "failure": {
+      "at": "2026-10-07T06:51:01.808633+09:00",
+      "error": "RuntimeError('資源又は10分記録不足の停止が再発。再開を繰り返さない')",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "existing_models_not_signaled": true
+    },
+    "progress": {
+      "at": "2026-10-07T05:49:19.020661+09:00",
+      "completed": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w2_s03_binary_k1",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2"
+      ],
+      "audited": [
+        "w1_s01_baseline",
+        "w1_s01_binary_k1",
+        "w1_s01_binary_k2",
+        "w1_s01_global_k1",
+        "w1_s01_global_k2",
+        "w1_s01_position_k1",
+        "w1_s01_position_k2",
+        "w1_s02_baseline",
+        "w1_s02_binary_k1",
+        "w1_s02_binary_k2",
+        "w1_s02_global_k1",
+        "w1_s02_global_k2",
+        "w1_s02_position_k1",
+        "w1_s02_position_k2",
+        "w1_s03_baseline",
+        "w1_s03_binary_k1",
+        "w1_s03_binary_k2",
+        "w1_s03_global_k1",
+        "w1_s03_global_k2",
+        "w1_s03_position_k1",
+        "w1_s03_position_k2",
+        "w1_s04_baseline",
+        "w1_s04_binary_k1",
+        "w1_s04_binary_k2",
+        "w1_s04_global_k1",
+        "w1_s04_global_k2",
+        "w2_s01_baseline",
+        "w2_s01_binary_k1",
+        "w2_s01_binary_k2",
+        "w2_s01_global_k1",
+        "w2_s01_global_k2",
+        "w2_s01_position_k1",
+        "w2_s01_position_k2",
+        "w2_s02_baseline",
+        "w2_s02_binary_k1",
+        "w2_s02_binary_k2",
+        "w2_s02_global_k1",
+        "w2_s02_global_k2",
+        "w2_s02_position_k1",
+        "w2_s02_position_k2",
+        "w2_s03_baseline",
+        "w2_s03_binary_k1",
+        "w2_s03_binary_k2",
+        "w2_s03_global_k1",
+        "w2_s03_global_k2",
+        "w2_s03_position_k1",
+        "w2_s03_position_k2"
+      ],
+      "remaining": 93
+    }
+  },
+  "controllers": {
+    "20": {
+      "pid": 43207,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.6,
+        20832,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py"
+      ],
+      "status": {
+        "at": "2026-10-08T13:13:59.371998+09:00",
+        "pid": 43207,
+        "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+        "phase": "calibration_running_or_waiting",
+        "adopted_receipts": {
+          "41": 95408,
+          "42": 9073
+        },
+        "active": {
+          "43": 47180,
+          "44": 47210
+        },
+        "pending": [],
+        "removed_seeds": [
+          45,
+          46,
+          47,
+          48
+        ],
+        "completed": [],
+        "machine": {
+          "at": "2026-10-08T13:13:59.210699+09:00",
+          "models": {
+            "9096": {
+              "ppid": 9081,
+              "state": "R",
+              "rss_kb": 1196048
+            },
+            "47193": {
+              "ppid": 47184,
+              "state": "R",
+              "rss_kb": 303840
+            },
+            "47223": {
+              "ppid": 47214,
+              "state": "R",
+              "rss_kb": 500624
+            },
+            "47356": {
+              "ppid": 47353,
+              "state": "R",
+              "rss_kb": 416848
+            },
+            "49468": {
+              "ppid": 49459,
+              "state": "R",
+              "rss_kb": 407968
+            },
+            "59619": {
+              "ppid": 59604,
+              "state": "R",
+              "rss_kb": 190192
+            },
+            "62410": {
+              "ppid": 62405,
+              "state": "R",
+              "rss_kb": 102288
+            },
+            "95421": {
+              "ppid": 95412,
+              "state": "R",
+              "rss_kb": 1852416
+            }
+          },
+          "model_children": 8,
+          "paused": 0,
+          "registered": [
+            {
+              "pid": 95408,
+              "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 9073,
+              "owner": "Codex2 指示18 較正 世界2 種42",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 47180,
+              "owner": "Codex2 指示20 較正 世界2 種43",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 47210,
+              "owner": "Codex2 指示20 較正 世界2 種44",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 19617,
+              "owner": "Codex 動詞新移植 追加旗off5000",
+              "mem_gb": 1.3
+            },
+            {
+              "pid": 49451,
+              "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 59598,
+              "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 62396,
+              "owner": "探索介入 指示5 記録だけ200試行関門",
+              "mem_gb": 1.0
+            }
+          ],
+          "disk_free_bytes": 217998958592,
+          "swap_used_mb": 180.0,
+          "swap_ok": true,
+          "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+          "thermal_warnings": [],
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "unregistered_heavy": []
+        },
+        "mem_gb": 3,
+        "effective_reserved_gb": 23.3,
+        "speed_gate_reserved_gb": 0,
+        "models_not_signaled": true,
+        "automatic_retry": false
+      },
+      "warning": null,
+      "failure": null
+    },
+    "21": {
+      "pid": 59575,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        25312,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/controller.py"
+      ],
+      "status": {
+        "at": "2026-10-08T13:13:55.708187+09:00",
+        "pid": 59575,
+        "code": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+        "phase": "parallel_models_running_or_waiting",
+        "adopted_off_receipt": 49451,
+        "on_receipt": 59598,
+        "on_submitted": true,
+        "machine": {
+          "at": "2026-10-08T13:13:55.627412+09:00",
+          "models": {
+            "9096": {
+              "ppid": 9081,
+              "state": "R",
+              "rss_kb": 1196048
+            },
+            "47193": {
+              "ppid": 47184,
+              "state": "R",
+              "rss_kb": 303840
+            },
+            "47223": {
+              "ppid": 47214,
+              "state": "R",
+              "rss_kb": 500624
+            },
+            "47356": {
+              "ppid": 47353,
+              "state": "R",
+              "rss_kb": 416720
+            },
+            "49468": {
+              "ppid": 49459,
+              "state": "R",
+              "rss_kb": 407968
+            },
+            "59619": {
+              "ppid": 59604,
+              "state": "R",
+              "rss_kb": 190192
+            },
+            "62410": {
+              "ppid": 62405,
+              "state": "R",
+              "rss_kb": 101328
+            },
+            "95421": {
+              "ppid": 95412,
+              "state": "R",
+              "rss_kb": 1852416
+            }
+          },
+          "model_children": 8,
+          "paused": 0,
+          "registered": [
+            {
+              "pid": 95408,
+              "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 9073,
+              "owner": "Codex2 指示18 較正 世界2 種42",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 47180,
+              "owner": "Codex2 指示20 較正 世界2 種43",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 47210,
+              "owner": "Codex2 指示20 較正 世界2 種44",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 19617,
+              "owner": "Codex 動詞新移植 追加旗off5000",
+              "mem_gb": 1.3
+            },
+            {
+              "pid": 49451,
+              "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 59598,
+              "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 62396,
+              "owner": "探索介入 指示5 記録だけ200試行関門",
+              "mem_gb": 1.0
+            }
+          ],
+          "disk_free_bytes": 217999073280,
+          "swap_used_mb": 180.0,
+          "swap_ok": true,
+          "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+          "thermal_warnings": [],
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "unregistered_heavy": []
+        },
+        "effective_reserved_gb": 23.3,
+        "models_not_signaled": true,
+        "automatic_retry": false
+      },
+      "warning": null,
+      "failure": null
+    },
+    "22": {
+      "pid": 63553,
+      "actual_ps": [
+        1,
+        "Ss",
+        0.0,
+        24064,
+        "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction22_disclosure_profile/controller.py"
+      ],
+      "status": {
+        "at": "2026-10-08T13:13:50.318381+09:00",
+        "pid": 63553,
+        "phase": "waiting_before_receipt",
+        "machine": {
+          "at": "2026-10-08T13:13:50.235195+09:00",
+          "models": {
+            "9096": {
+              "ppid": 9081,
+              "state": "R",
+              "rss_kb": 1196048
+            },
+            "47193": {
+              "ppid": 47184,
+              "state": "R",
+              "rss_kb": 303840
+            },
+            "47223": {
+              "ppid": 47214,
+              "state": "R",
+              "rss_kb": 500608
+            },
+            "47356": {
+              "ppid": 47353,
+              "state": "R",
+              "rss_kb": 416832
+            },
+            "49468": {
+              "ppid": 49459,
+              "state": "R",
+              "rss_kb": 407968
+            },
+            "59619": {
+              "ppid": 59604,
+              "state": "R",
+              "rss_kb": 190192
+            },
+            "62410": {
+              "ppid": 62405,
+              "state": "R",
+              "rss_kb": 101312
+            },
+            "95421": {
+              "ppid": 95412,
+              "state": "R",
+              "rss_kb": 1852416
+            }
+          },
+          "model_children": 8,
+          "paused": 0,
+          "registered": [
+            {
+              "pid": 95408,
+              "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 9073,
+              "owner": "Codex2 指示18 較正 世界2 種42",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 47180,
+              "owner": "Codex2 指示20 較正 世界2 種43",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 47210,
+              "owner": "Codex2 指示20 較正 世界2 種44",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 19617,
+              "owner": "Codex 動詞新移植 追加旗off5000",
+              "mem_gb": 1.3
+            },
+            {
+              "pid": 49451,
+              "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+              "mem_gb": 4.0
+            },
+            {
+              "pid": 59598,
+              "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+              "mem_gb": 3.0
+            },
+            {
+              "pid": 62396,
+              "owner": "探索介入 指示5 記録だけ200試行関門",
+              "mem_gb": 1.0
+            }
+          ],
+          "disk_free_bytes": 217999183872,
+          "swap_used_mb": 180.0,
+          "swap_ok": true,
+          "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+          "thermal_warnings": [],
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "unregistered_heavy": []
+        }
+      },
+      "warning": null,
+      "failure": null
+    }
+  },
+  "actual_ps": {
+    "9073": [
+      1,
+      "Ss",
+      0.0,
+      7392,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示18 較正 世界2 種42 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py entry 42"
+    ],
+    "9081": [
+      9073,
+      "S",
+      0.0,
+      10000,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json"
+    ],
+    "9096": [
+      9081,
+      "R",
+      99.0,
+      1196048,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "43207": [
+      1,
+      "Ss",
+      0.6,
+      20832,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py"
+    ],
+    "47180": [
+      43207,
+      "Ss",
+      0.0,
+      18880,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示20 較正 世界2 種43 --mem 3 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py entry 43"
+    ],
+    "47184": [
+      47180,
+      "S",
+      0.0,
+      27296,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed043/native_command.json"
+    ],
+    "47193": [
+      47184,
+      "R",
+      98.5,
+      303968,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "47210": [
+      43207,
+      "Ss",
+      0.0,
+      19328,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示20 較正 世界2 種44 --mem 3 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/controller.py entry 44"
+    ],
+    "47214": [
+      47210,
+      "S",
+      0.0,
+      27424,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/native_command.json"
+    ],
+    "47223": [
+      47214,
+      "R",
+      97.7,
+      501968,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "49451": [
+      1,
+      "Ss",
+      0.0,
+      18928,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_off_1740 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py entry reuse_off_1740"
+    ],
+    "49459": [
+      49451,
+      "S",
+      0.0,
+      27536,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_off_1740/native_command.json"
+    ],
+    "49468": [
+      49459,
+      "R",
+      100.0,
+      414176,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "59575": [
+      1,
+      "Ss",
+      0.0,
+      25312,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/controller.py"
+    ],
+    "59598": [
+      59575,
+      "Ss",
+      0.0,
+      19088,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示21 GC書き出し二旗 全1740 --mem 3 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/controller.py entry"
+    ],
+    "59604": [
+      59598,
+      "S",
+      0.0,
+      27344,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/gc_fast_1740/native_command.json"
+    ],
+    "59619": [
+      59604,
+      "R",
+      98.2,
+      190192,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "63553": [
+      1,
+      "Ss",
+      0.0,
+      24064,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction22_disclosure_profile/controller.py"
+    ],
+    "91021": [
+      1,
+      "Ss",
+      0.0,
+      16608,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+    ],
+    "95408": [
+      91021,
+      "Ss",
+      0.0,
+      7392,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    ],
+    "95412": [
+      95408,
+      "S",
+      0.0,
+      10000,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    ],
+    "95421": [
+      95412,
+      "R",
+      98.5,
+      1852416,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ]
+  }
+}
