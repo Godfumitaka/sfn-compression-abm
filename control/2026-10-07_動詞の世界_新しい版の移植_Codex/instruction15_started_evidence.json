@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-09T08:37:11.927396+09:00",
+  "instruction": 15,
+  "state": "on100_logfix_running",
+  "supervisor": {
+    "at": "2026-10-09T08:34:37.013460+09:00",
+    "pid": 15175,
+    "script": "instruction15_logfix/supervisor.py",
+    "instruction": 15,
+    "launched_once": true,
+    "production_started": false
+  },
+  "model_group": {
+    "pid": 15194,
+    "pgid": 15194
+  },
+  "start_resource": {
+    "event": "started",
+    "cpu_limit": 8,
+    "models": 0,
+    "unknown_active_spawn": 0,
+    "own_models": 0,
+    "epoch_seconds": 1791502477.32236,
+    "outside_heavy": 0,
+    "inside_heavy": 0,
+    "own_rss_bytes": 23773184,
+    "free_disk_bytes": 205868343296,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermal_warning": false,
+    "model_pid": 15194
+  },
+  "latest_existing_resource": {
+    "event": "sample",
+    "cpu_limit": 8,
+    "models": 2,
+    "unknown_active_spawn": 0,
+    "own_models": 1,
+    "epoch_seconds": 1791502628.6875362,
+    "outside_heavy": 1,
+    "inside_heavy": 1,
+    "own_rss_bytes": 202293248,
+    "free_disk_bytes": 205856432128,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermal_warning": false
+  },
+  "before_start_model_count": 0,
+  "before_start_own_model_count": 0,
+  "before_start_unknown_spawn": 0,
+  "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+  "before_start_machine": {
+    "physical_cpu": "10\n",
+    "physical_memory_bytes": "34359738368\n",
+    "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    28011.\nPages active:                                 727078.\nPages inactive:                               788888.\nPages speculative:                               231.\nPages throttled:                                   0.\nPages wired down:                             153981.\nPages purgeable:                               15027.\n\"Translation faults\":                     3058649750.\nPages copy-on-write:                       267832613.\nPages zero filled:                        1619240070.\nPages reactivated:                          97336102.\nPages purged:                                5573987.\nFile-backed pages:                            923842.\nAnonymous pages:                              592355.\nPages stored in compressor:                   669312.\nPages occupied by compressor:                 346594.\nDecompressions:                             90026081.\nCompressions:                              110802559.\nPageins:                                    94928286.\nPageouts:                                      32942.\nSwapins:                                    10024884.\nSwapouts:                                   11947901.\nPages tagged:                                 145097.\nPages tagged resident:                        108762.\nPages tagged compressed:                       36335.\nPages tag-storage:                             65536.\nPages tag-storage holding tags:                 7178.\nPages tag-storage free:                           88.\nPages tag-storage non-tag pageable:            58145.\nPages tag-storage non-tag wired:                  21.\nBytes of compressed tags:                    4931392.\nTagged compressions:                         1080175.\nTagged decompressions:                       1025907.\n",
+    "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)\n",
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "at": "2026-10-09T08:34:37.099564+09:00",
+    "free_disk_bytes": 205869268992,
+    "swap_window_minutes": 10,
+    "swap_samples": [
+      "1791501872\t180.0\t2026-10-09T08:24:31\tok\tNone",
+      "1791501932\t180.0\t2026-10-09T08:25:31\tok\tNone",
+      "1791501992\t180.0\t2026-10-09T08:26:31\tok\tNone",
+      "1791502052\t180.0\t2026-10-09T08:27:32\tok\tNone",
+      "1791502112\t180.0\t2026-10-09T08:28:32\tok\tNone",
+      "1791502172\t180.0\t2026-10-09T08:29:32\tok\tNone",
+      "1791502232\t180.0\t2026-10-09T08:30:32\tok\tNone",
+      "1791502292\t180.0\t2026-10-09T08:31:32\tok\tNone",
+      "1791502352\t180.0\t2026-10-09T08:32:32\tok\tNone",
+      "1791502412\t180.0\t2026-10-09T08:33:32\tok\tNone",
+      "1791502472\t180.0\t2026-10-09T08:34:32\tok\tNone"
+    ]
+  },
+  "jobs_initial_receipt": "受け付けた：PID 15184、担当 Codex 動詞 指示15 on100_logfix、見込み 2.0 GB（表の合計 2.0 / 24 GB）。スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+  "on100_completed": false,
+  "on100_comparison_started": false,
+  "lambda20_started": false,
+  "production_started": false,
+  "new_supervisor_launched_once": true
+}

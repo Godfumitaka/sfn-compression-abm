@@ -2,7 +2,7 @@
 from pathlib import Path
 from datetime import datetime,timezone
 from types import SimpleNamespace
-import json,os,sys,subprocess,hashlib
+import json,os,sys,subprocess,hashlib,shutil
 ROOT=Path(__file__).resolve().parent;NR=ROOT.parent
 sys.path.insert(0,str(NR))
 from inbox_snapshot import snapshot
@@ -19,6 +19,16 @@ def run(label):
     assert datetime.now(timezone.utc)<datetime.fromisoformat(spec['start_deadline_jst'])
     for name,sha in spec['observer_files'].items():assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha
     snapshot(SimpleNamespace(workspace=NR.parent.parent,output=ROOT/(label+'_before_start.json')))
+    # 開始の直前だけ機械の原値を保存する。受付・既存資源監督の判定は替えない。
+    machine={key:subprocess.check_output(cmd,text=True) for key,cmd in {
+        'physical_cpu':['/usr/sbin/sysctl','-n','hw.physicalcpu'],
+        'physical_memory_bytes':['/usr/sbin/sysctl','-n','hw.memsize'],
+        'vm_stat':['/usr/bin/vm_stat'],
+        'swap':['/usr/sbin/sysctl','vm.swapusage'],
+        'thermal':['/usr/bin/pmset','-g','therm']}.items()}
+    machine.update(at=datetime.now().astimezone().isoformat(),free_disk_bytes=shutil.disk_usage(case).free,
+                   swap_window_minutes=10,swap_samples=(Path.home()/'jobs/swap.tsv').read_text().splitlines()[-11:])
+    save(label+'_machine_before_start.json',machine)
     state(state='running_or_waiting',label=label)
     cmd=['/usr/bin/python3',JOBS,'run','--wait','--owner','Codex 動詞 指示15 '+label,'--mem',str(spec['memory_reservation_gb']),'--disk-path',spec['output'],'--',PY,str(NR/'run_case.py'),str(case)]
     with (case/'jobs.log').open('x') as f:rc=subprocess.call(cmd,stdout=f,stderr=subprocess.STDOUT)
