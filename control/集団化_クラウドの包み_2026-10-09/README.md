@@ -52,7 +52,8 @@ checkout_code () {
   git -C "$1" checkout --detach "$2"
 }
 checkout_code "$CANDIDATE" c4cfed12a3944071951775b2c9373ca27705fb25
-checkout_code "$BASELINE" c55b8c1a62b04002413686b0405bc1960fa8d6b9
+checkout_code "$BASELINE" codex/coll8-baseline-2026-10-09
+test "$(git -C "$BASELINE" rev-parse HEAD)" = c55b8c1a62b04002413686b0405bc1960fa8d6b9
 checkout_code "$PREPARATION" e9ed84ae3ee6c458f392cd58cadf9fc030639900
 "$PY" "$PKG/check_package.py" --candidate "$CANDIDATE" --baseline "$BASELINE" --preparation "$PREPARATION" --fixtures "$RUN/package-checks"
 ```
@@ -222,3 +223,5 @@ aws s3 sync "$RUN/" "${S3_PREFIX:?確認済みの永続接頭辞を記入}/"
 `check_package.py` は23specの旗・種・設定SHA・三つの固定版・保護24ファイル・CLIの既存旗を確認し、合成した記録で比較の一致／一バイト不一致／異機械／誤版／誤サイズ／誤見出しを検査する。これは台本の検査であり、実模型の関門の合格ではない。native模型の独自修正は0。新しい本番・クラウド資源の開始は0。未実測予約・L50_ref・列取得は空欄のまま。
 
 作成時の準備検査は48件合格、追加の墓石・未知名の停止の小例は2件合格。保護24ファイルは候補とe9で一致した。記録は `preparation/` に保存した。合成の比較やローカルの小例をクラウドの実関門の合格へ読み替えない。ONの予約・L50_ref・列#20の取得は未確定のまま。
+
+旧版c55がoriginから取れないとの実行係の報告を確認し、2026-10-09T02:42:33.166986+09:00までに保全した同じcommitを `codex/coll8-baseline-2026-10-09` へ通常pushした。commit `c55b8c1a62b04002413686b0405bc1960fa8d6b9`、tree `abfe2c67a4be1908fdcf1f80fd0be9a68e978fed`。旧い作業場所・枝・出力・specの版は変えていない。取得する枝だけを明示し、SHAの照合を必須にした。
