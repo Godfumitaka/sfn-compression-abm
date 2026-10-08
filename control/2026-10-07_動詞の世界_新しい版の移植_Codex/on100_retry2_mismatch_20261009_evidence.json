@@ -1,0 +1,115 @@
+{
+  "at": "2026-10-09T06:20:53+09:00",
+  "model_commit": "40e87b2e1fbd8348141dd447ac49c3aaadd7d914",
+  "observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+  "comparison_passed": false,
+  "file_count": 11,
+  "mismatching_files": 1,
+  "mismatches": [
+    {
+      "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "left_exists": true,
+      "right_exists": true,
+      "equal": false,
+      "content_bytes": [
+        56726003,
+        77650413
+      ],
+      "left_sha256": "69dcfbf63dfbb552ca4c576261fe1fdf07958948698669cba73237305abc6e84",
+      "right_sha256": "5c1ef21492813b1ca1ab8cade91405a62fb1bdca36dede23f67d9628bb9ace33",
+      "mismatching_bytes": 21010759,
+      "first_mismatch_byte": 56635449,
+      "example": {
+        "left": "ems\": []}, \"prediction_path\": null, \"filling_empty_pool_slots\": 0}}}\n{\"kind\": \"post\", \"trial\": 99, \"state\": {\"tag\": \"dataclass\", \"module\": \"v39\", \"name\": \"AgentStateV39\", \"fields\": {\"prototype\": {\"tag\": \"dataclass\", \"module\": \"abm.domains\",",
+        "right": "ems\": []}, \"prediction_path\": null, \"filling_empty_pool_slots\": 0}}}\n{\"kind\": \"pre\", \"trial\": 99, \"state\": {\"tag\": \"dataclass\", \"module\": \"v39\", \"name\": \"AgentStateV39\", \"fields\": {\"prototype\": {\"tag\": \"dataclass\", \"module\": \"abm.domains\", "
+      }
+    }
+  ],
+  "model_or_observer_changes": false,
+  "new_learning_models": 0,
+  "supervisor_finished": true,
+  "own_pids_present": [],
+  "measurement300_started": false,
+  "cloud_pair_actual_completion": "未確認。waiting/passedへ置き換えない。",
+  "first_pair_selection": "未確定。両機械の原完了記録が揃うまで判断ファイルを作らない。",
+  "dependent_work": "不一致を報告して保留。後の一致で上書きせず模型を直さない。",
+  "readonly_detail_job": {
+    "at": "2026-10-09T06:20:53+09:00",
+    "state": "waiting_for_jobs_memory",
+    "tool_session_id": 10176,
+    "memory_reservation_gb": 0.3,
+    "existing_log": "on100_retry2_mismatch_readonly_20261009.jobs.log",
+    "result": "on100_retry2_mismatch_readonly_20261009.json",
+    "model_started": 0,
+    "receipt_message": "メモリ予算24.0GBの表が満杯。受付を外さず待つ。重ねて起動しない。"
+  },
+  "originals": {
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_without_probe_retry2_result.json": {
+      "sha256": "35fd6981fe8cb4e33e83f8c700ca821ea94d03e53f7bfbc06e0230d056478c6a",
+      "bytes": 205,
+      "original": "instruction6_checks/on100_without_probe_retry2/result.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_without_probe_retry2_run.log": {
+      "sha256": "5a5234a90b18c9841786615c974776090cc7b308361bfefea61f89481d31d9d2",
+      "bytes": 1417,
+      "original": "instruction6_checks/on100_without_probe_retry2/run.log"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_without_probe_retry2_manifest.jsonl": {
+      "sha256": "5873df704f803a749bf27e93ec3a75b9b76dcf9bc1cf5095be3532002ed3d7ae",
+      "bytes": 21438,
+      "original": "instruction6_checks/on100_without_probe_retry2/output/manifest.jsonl"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_without_probe_retry2_partial_done.json": {
+      "sha256": "7c83f5b5f6d021ecdc030fd9190e2cb9cfbf64e1c543ab534c90056c2b076745",
+      "bytes": 352,
+      "original": "instruction6_checks/on100_without_probe_retry2/output/measurement/partial_done.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_without_probe_retry2_checkpoints.jsonl": {
+      "sha256": "1a37aade3519b83a429aa0a53de94bf4da3e857853fff1ca67c7a1af23e3927e",
+      "bytes": 289,
+      "original": "instruction6_checks/on100_without_probe_retry2/output/measurement/checkpoints.jsonl"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_with_probe_retry2_result.json": {
+      "sha256": "170fed269bfc2fb68f9623c7a9d88311c35d99e7e5dbc3b9b0ff4c6489c9b89a",
+      "bytes": 203,
+      "original": "instruction6_checks/on100_with_probe_retry2/result.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_with_probe_retry2_run.log": {
+      "sha256": "b3975e8412e71f8d6e3480f6213f1aa79f38a875397c891562e06fa820a2cc56",
+      "bytes": 1417,
+      "original": "instruction6_checks/on100_with_probe_retry2/run.log"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_with_probe_retry2_manifest.jsonl": {
+      "sha256": "64c3890ca736cd203d5284ee3e6db8f59e4394a44faea39ef58929e6b9b22ed3",
+      "bytes": 28821,
+      "original": "instruction6_checks/on100_with_probe_retry2/output/manifest.jsonl"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_with_probe_retry2_partial_done.json": {
+      "sha256": "0049ece3dd3f2320758ea13fa3d52f845630b77e24934c9974134f278817c568",
+      "bytes": 352,
+      "original": "instruction6_checks/on100_with_probe_retry2/output/measurement/partial_done.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_with_probe_retry2_checkpoints.jsonl": {
+      "sha256": "97552002fed71bc2916fa70d3899bbfd4c7e8745a3fc9e4d76d06da5921bb46f",
+      "bytes": 288,
+      "original": "instruction6_checks/on100_with_probe_retry2/output/measurement/checkpoints.jsonl"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_retry2_status.json": {
+      "sha256": "d4dedd8e5fd4bf191bde4c5fb8ba49abb9f3ac53c39abf8fda05004f524bd58f",
+      "bytes": 128,
+      "original": "instruction6_checks/retry2_status.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_retry2_comparison.json": {
+      "sha256": "9104dc6aa5516dca615e1b426b6bebd6e073985e44ca30debdd0f89137ad7790",
+      "bytes": 6489,
+      "original": "instruction6_checks/on100_retry2_comparison.json"
+    },
+    "control/2026-10-07_動詞の世界_新しい版の移植_Codex/on100_retry2_mismatch_20261009_on100_retry2_comparison.jobs.log": {
+      "sha256": "64b9b01096cf5407a33a2559b213e1b975a5d8b6b96d85bb1bceca416f1663bd",
+      "bytes": 536,
+      "original": "instruction6_checks/on100_retry2_comparison.jobs.log"
+    }
+  },
+  "original_path_base": "codex_verb_2026-10-04/newport_2026-10-07",
+  "publication_path_note": "公開用の出所一覧だけを相対パスにする。原本・模型記録・比較・SHAは変更しない。"
+}
