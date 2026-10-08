@@ -1,0 +1,131 @@
+{
+  "all_required_fields_present": true,
+  "counts": {
+    "pre": 200,
+    "prediction_context": 200,
+    "birth_seat": 2026
+  },
+  "samples": {
+    "pre": {
+      "trial": 0,
+      "keys": [
+        "kind",
+        "agent_id",
+        "trial",
+        "state",
+        "input",
+        "config",
+        "rng",
+        "observations",
+        "attention",
+        "questions"
+      ],
+      "field_types": {
+        "kind": "str",
+        "agent_id": "str",
+        "trial": "int",
+        "state": "dict",
+        "input": "dict",
+        "config": "dict",
+        "rng": "dict",
+        "observations": "dict",
+        "attention": "dict",
+        "questions": "dict"
+      },
+      "observations_keys": [
+        "entities",
+        "arguments",
+        "parents",
+        "shapes",
+        "table",
+        "names",
+        "events",
+        "last_trial"
+      ],
+      "questions_keys": [
+        "door",
+        "other",
+        "door_names",
+        "other_names",
+        "current_door"
+      ]
+    },
+    "prediction_context": {
+      "trial": 0,
+      "keys": [
+        "kind",
+        "agent_id",
+        "trial",
+        "attention",
+        "door_task",
+        "output",
+        "pending"
+      ],
+      "field_types": {
+        "kind": "str",
+        "agent_id": "str",
+        "trial": "int",
+        "attention": "dict",
+        "door_task": "bool",
+        "output": "dict",
+        "pending": "dict"
+      }
+    },
+    "birth_seat": {
+      "trial": 1,
+      "keys": [
+        "kind",
+        "agent_id",
+        "trial",
+        "definition_name",
+        "definition",
+        "row",
+        "first_material",
+        "second_material",
+        "second_visible",
+        "first_experienced_trial",
+        "second_experienced_trial",
+        "base_age",
+        "slot_index",
+        "source_relation_id",
+        "source_material_name",
+        "target_relation_id",
+        "target_material_name",
+        "registered_at"
+      ],
+      "field_types": {
+        "kind": "str",
+        "agent_id": "str",
+        "trial": "int",
+        "definition_name": "str",
+        "definition": "dict",
+        "row": "dict",
+        "first_material": "dict",
+        "second_material": "dict",
+        "second_visible": "dict",
+        "first_experienced_trial": "int",
+        "second_experienced_trial": "int",
+        "base_age": "int",
+        "slot_index": "int",
+        "source_relation_id": "str",
+        "source_material_name": "str",
+        "target_relation_id": "str",
+        "target_material_name": "str",
+        "registered_at": "int"
+      },
+      "source_material_name": "require",
+      "target_material_name": "require",
+      "slot_index": 0
+    }
+  },
+  "files": [
+    {
+      "file": "research_records/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "sha256_before": "098ac8eb08c4afd27efac263fa60848d9a54f3056ba1689233356bc30a82f1d6",
+      "sha256_after": "098ac8eb08c4afd27efac263fa60848d9a54f3056ba1689233356bc30a82f1d6"
+    }
+  ],
+  "records_unchanged": true,
+  "model_rerun": false,
+  "formal_3b_material": false
+}

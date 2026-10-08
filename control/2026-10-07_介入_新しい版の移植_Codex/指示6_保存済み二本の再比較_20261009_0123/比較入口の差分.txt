@@ -1,0 +1,111 @@
+diff --git a/tools/intervention46_record_gate.py b/tools/intervention46_record_gate.py
+index 67a19a0d..adf6a066 100644
+--- a/tools/intervention46_record_gate.py
++++ b/tools/intervention46_record_gate.py
+@@ -141,11 +141,88 @@ def validate_records(root):
+     return dict(pre_records=len(pre), prediction_context_records=len(context), birth_seat_records=len(births))
+ 
+ 
++def compare_outputs(root, status):
++    left, right = (root / name / "output" for name in ("without_records", "with_records"))
++    a, b = model_files(left), model_files(right)
++    assert a and set(a) == set(b), "模型の出力ファイルの集合が違う"
++    status["completion_markers"] = []
++    for name in a:
++        # 指示6：完了札は両側の存在だけを確認し、模型の記録は従来どおり全て比べる。
++        if name.endswith(".done"):
++            status["completion_markers"].append(dict(file=name, present_both=True))
++            continue
++        result = dict(file=name, **compare_files(a[name], b[name], name.startswith("ledgers/")))
++        status["comparisons"].append(result)
++        if not result["match"]:
++            status["status"] = "stopped_mismatch"
++            raise RuntimeError("記録の有無で全バイトが不一致。修正せず停止：" + name)
++    assert (left / "flag.json").read_bytes() == (right / "flag.json").read_bytes()
++
++
++def fingerprints(root):
++    result = {}
++    for path in root.rglob("*"):
++        if not path.is_file():
++            continue
++        digest = hashlib.sha256()
++        with path.open("rb") as stream:
++            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
++                digest.update(chunk)
++        result[path.relative_to(root).as_posix()] = digest.hexdigest()
++    return result
++
++
++def compare_existing(root, evidence):
++    """自然終了した本を読み取るだけ。旧関門と模型のファイルへは書かない。"""
++    assert root.is_dir() and not evidence.is_relative_to(root), "証拠は旧関門の外へ保存する"
++    previous = json.loads((root / "status.json").read_text())
++    assert (previous["seed"], previous["world"], previous["trials"]) == (1, 2, 200)
++    completed = [json.loads((root / (label + "_completed.json")).read_text())
++                 for label in ("without_records", "with_records")]
++    assert all(item["exit_code"] == 0 for item in completed), "模型の自然終了が未確認"
++    evidence.mkdir(parents=True, exist_ok=False)
++    status = dict(status="running", at_jst=now(), trials=200, seed=1, world=2,
++                  authorizing_instruction=6, model_rerun=False, input_root=str(root),
++                  time_fields_excluded=list(TIME_FIELDS), ledger_header_only_excluded=True,
++                  comparisons=[], completed=completed)
++    before = fingerprints(root)
++    save(evidence / "input_before.json", before)
++    started = time.monotonic()
++    try:
++        compare_outputs(root, status)
++        status["records"] = validate_records(root)
++        status["status"] = "passed"
++    except BaseException as error:
++        if status["status"] == "running":
++            status["status"] = "stopped"
++        status["error"] = repr(error)
++        raise
++    finally:
++        status["comparison_and_record_validation_seconds"] = time.monotonic() - started
++        after = fingerprints(root)
++        save(evidence / "input_after.json", after)
++        status["input_files_count"] = len(before)
++        status["input_files_unchanged"] = before == after
++        if before != after:
++            status["status"] = "stopped"
++            status["preservation_error"] = "読み取りの前後で入力資料の全バイトが変わった"
++        status["updated_at_jst"] = now()
++        save(evidence / "status.json", status)
++        assert before == after, "読み取りの前後で入力資料が変わった"
++
++
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument("output")
++    parser.add_argument("--compare-existing", action="store_true")
++    parser.add_argument("--evidence-dir")
+     args = parser.parse_args()
+     root = Path(args.output).resolve()
++    if args.compare_existing:
++        assert args.evidence_dir, "再比較の証拠の保存先を指定する"
++        compare_existing(root, Path(args.evidence_dir).resolve())
++        return
++    assert args.evidence_dir is None, "別保存先は再比較専用"
+     root.mkdir(parents=True, exist_ok=False)
+     status = dict(status="running", at_jst=now(), trials=200, seed=1, world=2,
+                   time_fields_excluded=list(TIME_FIELDS), ledger_header_only_excluded=True,
+@@ -154,16 +231,7 @@ def main():
+         for label, recording in (("without_records", False), ("with_records", True)):
+             save(root / "status.json", status)
+             status["completed"].append(run_one(root, label, recording))
+-        left, right = (root / name / "output" for name in ("without_records", "with_records"))
+-        a, b = model_files(left), model_files(right)
+-        assert a and set(a) == set(b), "模型の出力ファイルの集合が違う"
+-        for name in a:
+-            result = dict(file=name, **compare_files(a[name], b[name], name.startswith("ledgers/")))
+-            status["comparisons"].append(result)
+-            if not result["match"]:
+-                status["status"] = "stopped_mismatch"
+-                raise RuntimeError("記録の有無で全バイトが不一致。修正せず停止：" + name)
+-        assert (left / "flag.json").read_bytes() == (right / "flag.json").read_bytes()
++        compare_outputs(root, status)
+         status["records"] = validate_records(root)
+         status["status"] = "passed"
+     except BaseException as error:

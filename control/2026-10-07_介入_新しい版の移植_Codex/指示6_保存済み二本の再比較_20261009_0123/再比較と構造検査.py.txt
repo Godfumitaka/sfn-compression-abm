@@ -1,0 +1,91 @@
+"""指示6：構造の確認後、模型を起動せず旧資料だけを再比較する。"""
+from pathlib import Path
+import ast
+import hashlib
+import importlib.util
+import json
+import subprocess
+import sys
+import time
+
+PORT = Path(__file__).resolve().parents[1]
+HERE = PORT / "instruction6"
+SOURCE = PORT / "source_e9"
+ENTRY = SOURCE / "tools/intervention46_record_gate.py"
+spec = importlib.util.spec_from_file_location("instruction6_gate", ENTRY)
+gate = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gate)
+
+# 関門の除外欄、比較の全バイト処理、必要記録欄の検査は以前の実体と同じ。
+before_ast = ast.parse((HERE / "record_gate.before.py.txt").read_text())
+after_ast = ast.parse(ENTRY.read_text())
+for name in ["comparable", "compare_files", "validate_records", "command", "run_one", "model_files"]:
+    a = next(n for n in before_ast.body if isinstance(n, ast.FunctionDef) and n.name == name)
+    b = next(n for n in after_ast.body if isinstance(n, ast.FunctionDef) and n.name == name)
+    assert ast.dump(a, include_attributes=False) == ast.dump(b, include_attributes=False), name
+assert gate.TIME_FIELDS == ("timestamp", "seconds", "wrapper_seconds", "engine_seconds", "rematch_fraction_of_stage2_seconds")
+assert gate.MODEL_DIRS == ("ledgers", "side", "attention", "stage2", "evictions")
+
+fixture = HERE / "structural_fixture_01"
+fixture.mkdir(exist_ok=False)
+for label in ["without_records", "with_records"]:
+    out = fixture / label / "output"
+    (out / "ledgers").mkdir(parents=True)
+    (out / "side").mkdir()
+    (out / "flag.json").write_bytes(b'{"fixed":true}\n')
+    (out / "ledgers/seed001.jsonl").write_bytes(b'{"record_type":"run_header"}\n{"answer":"kept"}\n')
+    (out / "side/state.json").write_bytes(b'{"state":"kept"}\n')
+    # 中身の形式や値を問わず、両側にある完了札だけを確認する。
+    (out / "ledgers/seed001.done").write_bytes(label.encode())
+status = {"status":"running", "comparisons":[]}
+gate.compare_outputs(fixture, status)
+assert len(status["comparisons"]) == 2 and all(x["match"] for x in status["comparisons"])
+assert status["completion_markers"] == [{"file":"ledgers/seed001.done", "present_both":True}]
+
+# 一方に完了札が無い場合は、集合の照合で止まる（札は消さず、新しい写しで確認）。
+missing = HERE / "missing_marker_fixture_01"
+missing.mkdir(exist_ok=False)
+for label in ["without_records", "with_records"]:
+    out = missing / label / "output"
+    (out / "side").mkdir(parents=True)
+    (out / "side/state.json").write_bytes(b'{}\n')
+    (out / "flag.json").write_bytes(b'{}\n')
+    if label == "without_records":
+        (out / "side/seed001.done").write_bytes(b'done')
+try:
+    gate.compare_outputs(missing, {"status":"running", "comparisons":[]})
+except AssertionError:
+    pass
+else:
+    raise AssertionError("片側だけの完了札を通した")
+
+# 札の扱いを変えても、sideの実際の一文字の違いは止まる。
+(out := fixture / "with_records/output/side/state.json").write_bytes(b'{"state":"changed"}\n')
+status = {"status":"running", "comparisons":[]}
+try:
+    gate.compare_outputs(fixture, status)
+except RuntimeError:
+    assert status["status"] == "stopped_mismatch"
+    assert status["comparisons"][-1]["file"] == "side/state.json"
+    assert status["comparisons"][-1]["first_line"] == 1
+else:
+    raise AssertionError("sideの違いを通した")
+(HERE / "structural_checks.json").write_text(json.dumps({"checks_passed":3,"unchanged_functions": ["comparable","compare_files","validate_records","command","run_one","model_files"],"time_fields_unchanged":True,"model_dirs_unchanged":True,"fixtures_retained":True},ensure_ascii=False,indent=2)+"\n")
+
+assert subprocess.check_output(["git","diff","--name-only","fdaeae28fdcefa77b23f30653c7430e93cc2ab15","HEAD"],cwd=SOURCE,text=True).splitlines() == ["tools/intervention46_record_gate.py"]
+assert not subprocess.check_output(["git","status","--porcelain"],cwd=SOURCE,text=True).strip()
+source_before = {str(p.relative_to(SOURCE)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [ENTRY,SOURCE/"tools/intervention46_records.py",SOURCE/"tools/intervention46_record_run.py"]}
+# 本番起動の関数へ入ったら直ちに例外にする。再比較分岐だけを実行する。
+def forbid_model_run(*args, **kwargs):
+    raise AssertionError("再比較で模型を起動しようとした")
+gate.run_one = forbid_model_run
+sys.argv = [str(ENTRY), str(PORT/"instruction5/gate_200_01"), "--compare-existing", "--evidence-dir", str(HERE/"recompare_01")]
+started = time.monotonic()
+try:
+    gate.main()
+finally:
+    source_after = {name:hashlib.sha256((SOURCE/name).read_bytes()).hexdigest() for name in source_before}
+    proof = {"source_commit":subprocess.check_output(["git","rev-parse","HEAD"],cwd=SOURCE,text=True).strip(),"source_before":source_before,"source_after":source_after,"source_unchanged":source_before==source_after,"model_rerun":False,"elapsed_seconds":time.monotonic()-started}
+    (HERE/"source_preservation.json").write_text(json.dumps(proof,ensure_ascii=False,indent=2)+"\n")
+    assert proof["source_unchanged"]
+print("指示6の再比較と必要欄の検査が終了")

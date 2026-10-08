@@ -1,0 +1,36 @@
+"""記録欄の実体を読む。模型・旧出力を変更せず、必要欄を補わない。"""
+from pathlib import Path
+from collections import Counter
+import gzip, hashlib, json
+PORT=Path(__file__).resolve().parents[1]
+ROOT=PORT/"instruction5/gate_200_01"
+OUT=PORT/"instruction6"
+required={
+ "pre": {"kind","agent_id","trial","state","input","config","rng","observations","attention","questions"},
+ "prediction_context": {"kind","agent_id","trial","attention","door_task","output","pending"},
+ "birth_seat": {"kind","agent_id","trial","definition_name","definition","row","first_material","second_material","second_visible","first_experienced_trial","second_experienced_trial","base_age","slot_index","source_relation_id","source_material_name","target_relation_id","target_material_name","registered_at"}}
+obs={"entities","arguments","parents","shapes","table","names","events","last_trial"}
+counts=Counter();samples={};files=[]
+for p in (ROOT/"research_records").rglob("*.jsonl.gz"):
+ before=hashlib.sha256(p.read_bytes()).hexdigest()
+ with gzip.open(p,"rt",encoding="utf-8") as f:
+  for line in f:
+   row=json.loads(line);kind=row["kind"];assert required[kind] <= row.keys(),(kind,row.get("trial"))
+   assert row["agent_id"] is not None
+   if kind=="pre":
+    assert set(row["observations"])==obs
+    assert {"door","other","door_names","other_names"}<=row["questions"].keys()
+   if kind=="birth_seat":
+    assert row["first_material"] is not None and row["second_material"] is not None
+    assert row["definition"] is not None and row["row"] is not None
+    assert row["source_material_name"] is not None and row["target_material_name"] is not None
+   counts[kind]+=1
+   if kind not in samples:
+    samples[kind]={"trial":row["trial"],"keys":list(row),"field_types":{k:type(v).__name__ for k,v in row.items()}}
+    if kind=="pre":samples[kind]["observations_keys"]=list(row["observations"]);samples[kind]["questions_keys"]=list(row["questions"])
+    if kind=="birth_seat":samples[kind]["source_material_name"]=row["source_material_name"];samples[kind]["target_material_name"]=row["target_material_name"];samples[kind]["slot_index"]=row["slot_index"]
+ after=hashlib.sha256(p.read_bytes()).hexdigest();assert before==after
+ files.append({"file":str(p.relative_to(ROOT)),"sha256_before":before,"sha256_after":after})
+assert counts=={"pre":200,"prediction_context":200,"birth_seat":2026},dict(counts)
+(OUT/"record_field_review.json").write_text(json.dumps({"all_required_fields_present":True,"counts":dict(counts),"samples":samples,"files":files,"records_unchanged":True,"model_rerun":False,"formal_3b_material":False},ensure_ascii=False,indent=2)+"\n")
+print(json.dumps({"all_required_fields_present":True,"counts":dict(counts),"records_unchanged":True},ensure_ascii=False))
