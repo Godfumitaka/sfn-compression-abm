@@ -1,0 +1,299 @@
+{
+  "instruction": 28,
+  "at": "2026-10-08T23:30:19.150546+09:00",
+  "report_git_commit": "80dd9a41c2a99e6d2916225607e2e805c69d116f",
+  "selection_report": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/2026-10-08_クラウドの開始_走行の係.md",
+  "selection_report_sha256": "e97d3405cd1a5e81678332b58b517172108daf96f32c86cf5f71f4ad244cdc50",
+  "selection_table": "### 使う本の表（指示 19・25・28 の決まり：使ってよい本のうち、同じ世界・同じ種は、先に 1,740 試行を終えた本）\n| 世界・種 | 使う本 | 1,740 試行を終えた時刻 | 較正の原記録 |\n|---|---|---|---|\n| 世界 1・種 47 | クラウドの旗なし（オンデマンド i-07e59a73eab7a00a5） | 12:06:22 UTC（21:06 日本時間） | ataru-0608/cloud_runs/calib_w1_seed047/researcher/ |\n- マックの種（世界 2 の種 41・42・44）は、マックの係が受け持つ。この表には入れない。\n- ほかの種は、終わり次第この表に足す。\n",
+  "cloud_raw_blobs_present": [
+    {
+      "path": "ataru-0608/cloud_runs/calib_w1_seed047/researcher/seed047.calibration.jsonl.gz",
+      "git_blob": "e768859d132529098c9f754d4f8fd1b664daa73f",
+      "compressed_bytes": 6826872,
+      "contents_not_opened": true
+    }
+  ],
+  "slots": [
+    {
+      "world": 1,
+      "seed": 41,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 42,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 43,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 44,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 45,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 46,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 1,
+      "seed": 47,
+      "selection_pending": false,
+      "raw_record_verified": false,
+      "selected": "使う本の表：クラウド旗なしw1_seed047",
+      "native_finished_at_from_table": "2026-10-08T12:06:22Z",
+      "git_path": "ataru-0608/cloud_runs/calib_w1_seed047/researcher/seed047.calibration.jsonl.gz",
+      "git_blob": "e768859d132529098c9f754d4f8fd1b664daa73f",
+      "compressed_bytes": 6826872,
+      "declared_sha256": "f45e2d165f473bdfa6995d04d32b6b53c9dbf022908ad37c5bc37994191edb24",
+      "working_tree_absent_due_to_sparse_checkout": true,
+      "git_blob_present": true
+    },
+    {
+      "world": 1,
+      "seed": 48,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 2,
+      "seed": 41,
+      "selection_pending": false,
+      "raw_record_verified": false,
+      "selected": "Macの原e9",
+      "native_completed": true,
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/output/researcher/f0.5000_th2.1000_vt0.3842_first_order/seed041.calibration.jsonl.gz",
+      "compressed_bytes": 10933975,
+      "original_light_v_counts": {
+        "count": 623674,
+        "signs": {
+          "positive": 398148,
+          "zero": 112668,
+          "negative": 112858
+        },
+        "by_kind": [
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "negative",
+            "count": 102592
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "positive",
+            "count": 168025
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "zero",
+            "count": 41220
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "negative",
+            "count": 10266
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "positive",
+            "count": 230123
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "zero",
+            "count": 71448
+          }
+        ]
+      },
+      "raw_V_counter_independently_matched": false
+    },
+    {
+      "world": 2,
+      "seed": 42,
+      "selection_pending": false,
+      "raw_record_verified": false,
+      "selected": "Macの原e9",
+      "native_completed": true,
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/output/researcher/f0.5000_th2.1000_vt0.3842_first_order/seed042.calibration.jsonl.gz",
+      "compressed_bytes": 11418007,
+      "original_light_v_counts": {
+        "count": 637638,
+        "signs": {
+          "positive": 458675,
+          "zero": 104530,
+          "negative": 74433
+        },
+        "by_kind": [
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "negative",
+            "count": 45984
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "positive",
+            "count": 231579
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "zero",
+            "count": 41256
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "negative",
+            "count": 28449
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "positive",
+            "count": 227096
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "zero",
+            "count": 63274
+          }
+        ]
+      },
+      "raw_V_counter_independently_matched": false
+    },
+    {
+      "world": 2,
+      "seed": 43,
+      "selection_pending": true,
+      "raw_record_verified": false,
+      "selection_rule": "使う本の表でMacと適格なクラウドの先着を確認する。Macは未完走。"
+    },
+    {
+      "world": 2,
+      "seed": 44,
+      "selection_pending": false,
+      "raw_record_verified": false,
+      "selected": "Macの原e9",
+      "native_completed": true,
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction20_calibration_mac4344/w2_seed044/output/researcher/f0.5000_th2.1000_vt0.3842_first_order/seed044.calibration.jsonl.gz",
+      "compressed_bytes": 10224415,
+      "original_light_v_counts": {
+        "count": 585458,
+        "signs": {
+          "positive": 411260,
+          "zero": 143305,
+          "negative": 30893
+        },
+        "by_kind": [
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "negative",
+            "count": 27455
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "positive",
+            "count": 192651
+          },
+          {
+            "kind": "FH",
+            "reference": false,
+            "sign": "zero",
+            "count": 72623
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "negative",
+            "count": 3438
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "positive",
+            "count": 218609
+          },
+          {
+            "kind": "HU",
+            "reference": true,
+            "sign": "zero",
+            "count": 70682
+          }
+        ]
+      },
+      "raw_V_counter_independently_matched": false
+    },
+    {
+      "world": 2,
+      "seed": 45,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 2,
+      "seed": 46,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 2,
+      "seed": 47,
+      "selection_pending": true,
+      "raw_record_verified": false
+    },
+    {
+      "world": 2,
+      "seed": 48,
+      "selection_pending": true,
+      "raw_record_verified": false
+    }
+  ],
+  "required_pairs": 16,
+  "confirmed_selected_raw_paths_or_blobs": 4,
+  "all16_ready": false,
+  "aggregate_started": false,
+  "official_prices_computed": false,
+  "grades_not_read": true,
+  "raw_gzip_not_opened": true,
+  "sparse_checkout_unchanged": true,
+  "policy": {
+    "world_seed_weight": "正に絞る前に各世界×種へ1/16、組内の候補機会を等重み",
+    "positive_quantiles": "重みつき一般逆関数でL25/L50/L90",
+    "leave_out": "同じ種を両世界から一組ずつ除き各分位比を確認。>1.25又は<0.8なら41〜60へ一度だけ拡張",
+    "counts": "正/0/負、実候補FH/HU、参照HU、非正の解放ビットによる除外を別記",
+    "raw_checks": "選定した原記録のsha256、world/seed、全1740行のtrial順、Vの比と分母、軽いVカウンタとの一致",
+    "admissibility": "旗つきは該当全長関門合格済みの本だけ。同じ組は適格なうち先に実1740完走した本。指定の使う本の表に従う。"
+  },
+  "existing_weighted_aggregator": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/cstar_stage2_preparation_source/tools/calibration_summary.py",
+  "existing_weighted_aggregator_sha256": "96c6ee80a80caf3c3fc9699acebebbca378c3bb2359c0cf0a60c5a474046f381",
+  "aggregate_receipt_required": true,
+  "aggregate_mem_gb": "実測の所要量と×1.2以上を確認後に決める。未確定。",
+  "final_manifest_not_generated": true,
+  "output": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction28_wave1_preparation/formal_calibration_summary.json",
+  "preparation_tool_repair": "準備台本のmeasurementの項目名を元のtrialsに合わせた。模型・関門・原記録は変更無し。"
+}
