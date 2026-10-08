@@ -1,0 +1,576 @@
+{
+  "at": "2026-10-09T01:27:20.454173+09:00",
+  "machine": {
+    "at": "2026-10-09T01:27:20.387894+09:00",
+    "models": {
+      "15282": {
+        "ppid": 15268,
+        "state": "R",
+        "rss_kb": 53952
+      },
+      "49468": {
+        "ppid": 49459,
+        "state": "R",
+        "rss_kb": 477408
+      },
+      "49859": {
+        "ppid": 49849,
+        "state": "R",
+        "rss_kb": 273824
+      },
+      "59619": {
+        "ppid": 59604,
+        "state": "R",
+        "rss_kb": 192464
+      },
+      "77439": {
+        "ppid": 77435,
+        "state": "R",
+        "rss_kb": 263584
+      },
+      "79724": {
+        "ppid": 79706,
+        "state": "R",
+        "rss_kb": 198592
+      }
+    },
+    "model_children": 6,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 49451,
+        "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+        "mem_gb": 4.0
+      },
+      {
+        "pid": 59598,
+        "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+        "mem_gb": 3.0
+      },
+      {
+        "pid": 49838,
+        "owner": "Codex2 指示27 P10 p10_forget_exec_off_200",
+        "mem_gb": 1.0
+      },
+      {
+        "pid": 77419,
+        "owner": "Codex 動詞 指示6 on100_without_probe_retry2",
+        "mem_gb": 2.0
+      },
+      {
+        "pid": 79695,
+        "owner": "Codex2 指示26 五つ w2_forget_exec_off_200",
+        "mem_gb": 1.0
+      },
+      {
+        "pid": 15260,
+        "owner": "Codex2 指示29 P10 忘却あり ON200",
+        "mem_gb": 1.0
+      }
+    ],
+    "disk_free_bytes": 212744904704,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "records": {
+    "overlap_observed": {
+      "at": "2026-10-09T01:26:49.910752+09:00",
+      "off_worker": 49859,
+      "on_worker": 15282,
+      "actual_ps": {
+        "49859": [
+          49849,
+          "R",
+          100.0,
+          273776,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ],
+        "15282": [
+          15268,
+          "R",
+          99.1,
+          46048,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      },
+      "same_start_time": false
+    },
+    "p10_forget_exec_on_200_receipt_submitted": {
+      "at": "2026-10-09T01:26:39.572932+09:00",
+      "pid": 15260,
+      "command": [
+        "/opt/homebrew/bin/python3.12",
+        "/Users/tatsu-admin/jobs/jobs.py",
+        "run",
+        "--wait",
+        "--owner",
+        "Codex2 指示29 P10 忘却あり ON200",
+        "--mem",
+        "1",
+        "--disk-path",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/p10_forget_exec_on_200",
+        "--",
+        "/opt/homebrew/bin/python3.12",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/controller.py",
+        "entry",
+        "p10_forget_exec_on_200"
+      ],
+      "mem_gb": 1,
+      "machine_before": {
+        "at": "2026-10-09T01:26:39.512283+09:00",
+        "models": {
+          "49468": {
+            "ppid": 49459,
+            "state": "R",
+            "rss_kb": 462848
+          },
+          "49859": {
+            "ppid": 49849,
+            "state": "R",
+            "rss_kb": 273744
+          },
+          "59619": {
+            "ppid": 59604,
+            "state": "R",
+            "rss_kb": 192320
+          },
+          "77439": {
+            "ppid": 77435,
+            "state": "R",
+            "rss_kb": 263360
+          },
+          "79724": {
+            "ppid": 79706,
+            "state": "R",
+            "rss_kb": 198240
+          }
+        },
+        "model_children": 5,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 49451,
+            "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+            "mem_gb": 4.0
+          },
+          {
+            "pid": 59598,
+            "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+            "mem_gb": 3.0
+          },
+          {
+            "pid": 49838,
+            "owner": "Codex2 指示27 P10 p10_forget_exec_off_200",
+            "mem_gb": 1.0
+          },
+          {
+            "pid": 77419,
+            "owner": "Codex 動詞 指示6 on100_without_probe_retry2",
+            "mem_gb": 2.0
+          },
+          {
+            "pid": 79695,
+            "owner": "Codex2 指示26 五つ w2_forget_exec_off_200",
+            "mem_gb": 1.0
+          }
+        ],
+        "disk_free_bytes": 212748468224,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": []
+      }
+    },
+    "supervisor_spawn": {
+      "at": "2026-10-09T01:26:39.172325+09:00",
+      "pid": 15246,
+      "command": [
+        "/opt/homebrew/bin/python3.12",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/controller.py"
+      ],
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/cstar_stage2_cache_prune_source",
+      "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+      "old_supervisor_ended": true,
+      "only_on200_new_model": true
+    },
+    "old_supervisor_ended": {
+      "at": "2026-10-09T01:26:39.135775+09:00",
+      "pid": 88683,
+      "signal": "SIGTERM",
+      "signals": 1,
+      "actual_ps_after": {
+        "88683": null,
+        "49838": [
+          1,
+          "Ss",
+          0.0,
+          18928,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示27 P10 p10_forget_exec_off_200 --mem 1 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/gate.py entry p10_forget_exec_off_200"
+        ],
+        "49849": [
+          49838,
+          "S",
+          0.0,
+          26528,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200/native_command.json"
+        ],
+        "49859": [
+          49849,
+          "R",
+          99.8,
+          273744,
+          "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+        ]
+      },
+      "model_receipt_observer_signals": 0,
+      "original_files_preserved": true
+    },
+    "launch": {
+      "at": "2026-10-09T01:26:39.361601+09:00",
+      "pid": 15246,
+      "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+      "adopted_off_receipt": 49838,
+      "original_off": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200",
+      "new_on": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/p10_forget_exec_on_200",
+      "mem_gb": 1,
+      "comparison_mem_gb": 1,
+      "trials": 200,
+      "deadline": "2026-10-11T09:00:00+09:00",
+      "model_signals": false,
+      "deletes": false,
+      "automatic_retry": false
+    },
+    "p10_forget_exec_on_200_entry_started": {
+      "at": "2026-10-09T01:26:39.969679+09:00",
+      "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+      "world": 2,
+      "seed": 41,
+      "trials": 200,
+      "mem_gb": 1,
+      "machine": {
+        "at": "2026-10-09T01:26:39.916409+09:00",
+        "models": {
+          "49468": {
+            "ppid": 49459,
+            "state": "R",
+            "rss_kb": 465504
+          },
+          "49859": {
+            "ppid": 49849,
+            "state": "R",
+            "rss_kb": 273744
+          },
+          "59619": {
+            "ppid": 59604,
+            "state": "R",
+            "rss_kb": 192320
+          },
+          "77439": {
+            "ppid": 77435,
+            "state": "R",
+            "rss_kb": 263360
+          },
+          "79724": {
+            "ppid": 79706,
+            "state": "R",
+            "rss_kb": 198240
+          }
+        },
+        "model_children": 5,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 49451,
+            "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+            "mem_gb": 4.0
+          },
+          {
+            "pid": 59598,
+            "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+            "mem_gb": 3.0
+          },
+          {
+            "pid": 49838,
+            "owner": "Codex2 指示27 P10 p10_forget_exec_off_200",
+            "mem_gb": 1.0
+          },
+          {
+            "pid": 77419,
+            "owner": "Codex 動詞 指示6 on100_without_probe_retry2",
+            "mem_gb": 2.0
+          },
+          {
+            "pid": 79695,
+            "owner": "Codex2 指示26 五つ w2_forget_exec_off_200",
+            "mem_gb": 1.0
+          },
+          {
+            "pid": 15260,
+            "owner": "Codex2 指示29 P10 忘却あり ON200",
+            "mem_gb": 1.0
+          }
+        ],
+        "disk_free_bytes": 212748439552,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": []
+      },
+      "actual_native_command": [
+        "/opt/homebrew/bin/python3.12",
+        "tools/v3_run.py",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/p10_forget_exec_on_200/output",
+        "--nohash",
+        "--vt",
+        "0.3842",
+        "--extend-rule",
+        "none",
+        "--charge1",
+        "d32",
+        "--fast",
+        "--no-public-history",
+        "--dump-slot-history",
+        "--fix2-full",
+        "--fix-order2",
+        "--proj-first",
+        "--fill-norestate",
+        "--no-charge2",
+        "--own-evidence",
+        "--v39",
+        "--v39-budget",
+        "inf",
+        "--v39-decay",
+        "actr",
+        "--v310-be",
+        "--hist-role",
+        "--score-role",
+        "--u-struct",
+        "--relearn-init",
+        "--tie-struct",
+        "--amb-local",
+        "--nsim",
+        "0.7",
+        "--ident-rho",
+        "0.5",
+        "--ident-argmax",
+        "--ident-commons",
+        "--cells",
+        "f0.5000_th2.1000_first_order",
+        "--dump-answers",
+        "--dump-routing",
+        "--answer-gap",
+        "--strict-pc",
+        "--e-price",
+        "0.01873710622997919",
+        "--v39-price",
+        "0.01873710622997919",
+        "--shop-world",
+        "2",
+        "--workers",
+        "1",
+        "--seeds",
+        "41",
+        "--trial-count",
+        "200",
+        "--no-compare",
+        "--horizon",
+        "1740",
+        "--score-arg-order",
+        "--sme2017",
+        "--shop-scatter",
+        "--sme-call-seed",
+        "--sme-tie-uniform",
+        "--sme-intern-cache",
+        "--sme-evict-trial-cache",
+        "--sme-evict-tombstone",
+        "--score-logp",
+        "--match-cstar",
+        "--match-cstar-e",
+        "--match-eps",
+        "0",
+        "--h-dirichlet",
+        "1",
+        "--birth-score",
+        "seq",
+        "--logp-eps",
+        "0.01",
+        "--attn-sme",
+        "global",
+        "--attn-position",
+        "k2",
+        "--attn-eta",
+        "0.1",
+        "--attn-allin",
+        "--stage2",
+        "on",
+        "--stage2-loss",
+        "top1",
+        "--stage2-init",
+        "virtual",
+        "--stage2-scope",
+        "all",
+        "--stage2-reuse",
+        "off",
+        "--stage2-birth-hu",
+        "on",
+        "--stage2-speed",
+        "on",
+        "--stage2-cache-prune",
+        "on"
+      ],
+      "P10": true,
+      "speed_five": true,
+      "no_forget_exec": false
+    },
+    "status": {
+      "at": "2026-10-09T01:27:10.366210+09:00",
+      "pid": 15246,
+      "code": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+      "phase": "parallel_forget_models_running_or_waiting",
+      "adopted_off_receipt": 49838,
+      "on_receipt": 15260,
+      "on_submitted": true,
+      "machine": {
+        "at": "2026-10-09T01:27:10.310474+09:00",
+        "models": {
+          "15282": {
+            "ppid": 15268,
+            "state": "R",
+            "rss_kb": 53168
+          },
+          "49468": {
+            "ppid": 49459,
+            "state": "R",
+            "rss_kb": 471856
+          },
+          "49859": {
+            "ppid": 49849,
+            "state": "R",
+            "rss_kb": 273824
+          },
+          "59619": {
+            "ppid": 59604,
+            "state": "R",
+            "rss_kb": 192464
+          },
+          "77439": {
+            "ppid": 77435,
+            "state": "R",
+            "rss_kb": 263584
+          },
+          "79724": {
+            "ppid": 79706,
+            "state": "R",
+            "rss_kb": 198480
+          }
+        },
+        "model_children": 6,
+        "paused": 0,
+        "registered": [
+          {
+            "pid": 49451,
+            "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+            "mem_gb": 4.0
+          },
+          {
+            "pid": 59598,
+            "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+            "mem_gb": 3.0
+          },
+          {
+            "pid": 49838,
+            "owner": "Codex2 指示27 P10 p10_forget_exec_off_200",
+            "mem_gb": 1.0
+          },
+          {
+            "pid": 77419,
+            "owner": "Codex 動詞 指示6 on100_without_probe_retry2",
+            "mem_gb": 2.0
+          },
+          {
+            "pid": 79695,
+            "owner": "Codex2 指示26 五つ w2_forget_exec_off_200",
+            "mem_gb": 1.0
+          },
+          {
+            "pid": 15260,
+            "owner": "Codex2 指示29 P10 忘却あり ON200",
+            "mem_gb": 1.0
+          }
+        ],
+        "disk_free_bytes": 212746588160,
+        "swap_used_mb": 180.0,
+        "swap_ok": true,
+        "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+        "thermal_warnings": [],
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+        "unregistered_heavy": []
+      },
+      "models_not_signaled": true,
+      "automatic_retry": false
+    }
+  },
+  "actual_ps": {
+    "15246": [
+      1,
+      "Ss",
+      0.0,
+      24352,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/controller.py"
+    ],
+    "15260": [
+      15246,
+      "Ss",
+      0.0,
+      19504,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示29 P10 忘却あり ON200 --mem 1 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/p10_forget_exec_on_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/controller.py entry p10_forget_exec_on_200"
+    ],
+    "15268": [
+      15260,
+      "S",
+      0.0,
+      27312,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction29_forget_parallel/p10_forget_exec_on_200/native_command.json"
+    ],
+    "15282": [
+      15268,
+      "R",
+      99.7,
+      53952,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "49838": [
+      1,
+      "Ss",
+      0.0,
+      18928,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示27 P10 p10_forget_exec_off_200 --mem 1 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/gate.py entry p10_forget_exec_off_200"
+    ],
+    "49849": [
+      49838,
+      "S",
+      0.0,
+      26528,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction27_p10_parallel/p10_forget_exec_off_200/native_command.json"
+    ],
+    "49859": [
+      49849,
+      "R",
+      100.0,
+      273824,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "88683": null
+  },
+  "fixed_source_and_tools": true,
+  "model_receipt_observer_signals": 0
+}

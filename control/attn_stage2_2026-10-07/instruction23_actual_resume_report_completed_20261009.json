@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-09T01:33:32.165753+09:00",
+  "instruction": 23,
+  "scope": "既存二模型の一時停止・較正41〜44完走後の実再開・停止秒の報告",
+  "original_pair_resumed": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/pair_resumed.json",
+  "original_pair_sha256": "8ffb7e5acbdda6e0fc03870224f60e9aed4e0aaca9a484d700daeef2cb8958ea",
+  "pair_resumed": {
+    "at": "2026-10-09T01:21:22.078306+09:00",
+    "pair_wall_before": "2026-10-09T01:21:22.078261+09:00",
+    "events": [
+      {
+        "pid": 49468,
+        "signal": "SIGCONT",
+        "monotonic_before_ns": 492053218626291,
+        "monotonic_after_ns": 492053218635750
+      },
+      {
+        "pid": 59619,
+        "signal": "SIGCONT",
+        "monotonic_before_ns": 492053218639291,
+        "monotonic_after_ns": 492053218642958
+      }
+    ],
+    "all_four_calibration_native_complete": {
+      "41": true,
+      "42": true,
+      "43": true,
+      "44": true
+    },
+    "pair_signal_gap_ns": 3541,
+    "pause_intervals": {
+      "49468": {
+        "pause_seconds": 43495.707192542,
+        "pause_seconds_lower": 43495.707174,
+        "pause_seconds_upper": 43495.707211084,
+        "method": "SIGSTOP/SIGCONTの前後の単調時計の中央と上下界"
+      },
+      "59619": {
+        "pause_seconds": 43495.707161750004,
+        "pause_seconds_lower": 43495.70714475,
+        "pause_seconds_upper": 43495.70717875,
+        "method": "SIGSTOP/SIGCONTの前後の単調時計の中央と上下界"
+      }
+    },
+    "original_measurements_not_modified": true,
+    "cpu_pause_not_added": true,
+    "wall_pause_to_subtract_only_in_separate_report": true
+  },
+  "all_four_native_complete": true,
+  "actual_models_after": {
+    "49468": {
+      "ppid": 49459,
+      "state": "R",
+      "rss_kb": 498720
+    },
+    "59619": {
+      "ppid": 59604,
+      "state": "R",
+      "rss_kb": 227232
+    }
+  },
+  "original_immutable_25_changed": [],
+  "pause_interval_independently_checked": true,
+  "original_measurements_changed": false,
+  "cpu_pause_added": false,
+  "final_wall_comparison_pending_instruction21": true,
+  "heartbeat_model_signals": 0,
+  "calibration_formal_aggregation_pending": true
+}
