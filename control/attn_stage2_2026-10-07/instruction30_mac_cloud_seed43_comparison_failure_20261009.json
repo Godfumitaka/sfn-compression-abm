@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-09T03:13:51.168555+09:00",
+  "passed": false,
+  "comparison": "任意のMac43対cloud43・原較正だけ",
+  "first_line_one_based": 869,
+  "first_trial": 868,
+  "first_byte_zero_based": 84072,
+  "Mac_line_bytes": 84853,
+  "cloud_line_bytes": 84855,
+  "first_Mac_lexeme_context": "a6b7293001d\", \"slot\": 12, \"kind\": \"HU\", \"reference\": true, \"numerator\": 0.00211277329985006, \"denominator\": 20, \"V\": 0.00010563866499250299, \"sign\": \"positive\"}, {\"R\": \"R_8b0d2a6b7293001d\", \"slot\": 13, \"kind\": \"HU\", \"ref",
+  "first_cloud_lexeme_context": "a6b7293001d\", \"slot\": 12, \"kind\": \"HU\", \"reference\": true, \"numerator\": 0.0021127732998500737, \"denominator\": 20, \"V\": 0.00010563866499250368, \"sign\": \"positive\"}, {\"R\": \"R_8b0d2a6b7293001d\", \"slot\": 13, \"kind\": \"HU\", \"r",
+  "value_differences": [
+    {
+      "path": "$.candidates[499].numerator",
+      "Mac": 0.00211277329985006,
+      "cloud": 0.0021127732998500737
+    },
+    {
+      "path": "$.candidates[499].V",
+      "Mac": 0.00010563866499250299,
+      "cloud": 0.00010563866499250368
+    }
+  ],
+  "Mac_line_sha256": "dcd0ba89a38e9923df524c6f5ee65af3a34c637167cd968f3a645a0202c3868d",
+  "cloud_line_sha256": "538263c788bc11100203f780616bc91c5ed15f8ecf9b555c77272a4b2ec3d968",
+  "failed_comparison_receipt_pid": 44581,
+  "actual_exit_code": 1,
+  "first_line_only_inspection": true,
+  "original_records_changed": false,
+  "comparison_repeated": false,
+  "automatic_retry": false,
+  "formal_selected_seed43": "Mac",
+  "unused_cloud43_not_in_formal_aggregate": true,
+  "platform_cause_not_established": true,
+  "peak_rss_bytes": 24526848
+}
