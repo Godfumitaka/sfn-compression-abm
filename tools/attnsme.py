@@ -208,6 +208,33 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
         return output,pending
 
     loop.predict=predict
+    def predict_probe(ai,state,config,rng,*,instruction):
+        """固定試験も同じ注意で選ぶ。観察・a・問い数・学習は更新しない。"""
+        from copy import copy
+        from collections import ChainMap
+        if type(instruction) is not bool:
+            raise TypeError('固定試験の課題指示もbool一つだけ')
+        saved=dict(ST)
+        original=ST['individual']['observations']
+        observation=copy(original)
+        scene=[r.to_dict() for r in ai.target_graph_partial.relations]
+        entities={e.entity_id for e in ai.target_graph_partial.entities}
+        # 現在の可視構造だけを一時の層に置く。学習済みの大きい履歴は読み取り専用。
+        observation.entities=original.entities | entities
+        observation.arguments=ChainMap({},original.arguments)
+        children={a for row in scene for a in row['arguments'] if a not in entities}
+        observation.parents=ChainMap({a:list(original.parents.get(a,())) for a in children},original.parents)
+        observation.structure(scene,entities)
+        individual={'observations':observation,'a':dict(ST['individual']['a'])}
+        try:
+            ST.update(active=True,ai=ai,state=state,config=config,ranked=[],scored=[],selected=None,
+                      individual=individual,door_task=instruction,scene=scene,entities=entities)
+            # 第二段の実際の問いの入口と回答後の注意学習は通さない。
+            return real_predict(ai,state,config,rng)
+        finally:
+            ST.clear();ST.update(saved)
+
+    ST['predict_probe']=predict_probe
     real_record=loop._ledger_record
 
     def record(agent_id,trial,config,output,score,coin,state,*args,**kw):

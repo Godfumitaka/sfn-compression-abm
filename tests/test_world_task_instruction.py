@@ -66,3 +66,42 @@ def test_entry_rejects_non_bool_instead_of_coercing_researcher_payload(monkeypat
                     task_instruction=lambda _:{'truth':'REG'},research_record=lambda *args:{})
     with pytest.raises(TypeError,match='bool一つ'):
         loop._agent_input(SimpleNamespace(trial=0),None)
+
+
+def test_probe_uses_attention_choice_without_learning_or_real_query_count(monkeypatch,tmp_path):
+    from abm.domains import Entity, Relation
+    from random import Random
+    import pickle
+    import attnstage2_runtime
+    from attnstage2_questions import Questions
+    for key in ('_agent_input','predict','_ledger_record'):
+        monkeypatch.setattr(loop,key,getattr(loop,key))
+    monkeypatch.setattr(attnsme,'ST',{})
+    monkeypatch.setattr(attnstage2_runtime,'ST',{'questions':{'agent':Questions()}})
+    monkeypatch.setattr(smeshared,'_definition_choice',smeshared._definition_choice)
+    monkeypatch.setattr(smeshared,'_text_gzip',lambda _:StringIO())
+    scene=RelationGraph('shown',(Entity('x'),),(
+        Relation('child','name',('x',)),Relation('parent','attach',('child','gap'))))
+    ai=AgentInput(scene,scene)
+    monkeypatch.setattr(loop,'_agent_input',lambda *args:ai)
+    calls=[]
+    def native(ai,state,config,rng):
+        calls.append(attnsme.ST['door_task'])
+        assert attnsme.ST['active']
+        assert attnsme.ST['individual']['observations'].arguments['parent']==('child','gap')
+        attnsme.ST['individual']['a']['one_position']=7.
+        return 'native_output','pending'
+    monkeypatch.setattr(loop,'predict',native)
+    def record(*args):raise AssertionError('固定試験が回答後の学習を呼んだ')
+    attnsme.install(tmp_path/'attention',mode='global',position='k2',eta=.1,
+                    task_instruction=lambda _:False,research_record=record)
+    loop._agent_input(SimpleNamespace(trial=1),None)
+    obs=attnsme.ST['individual']['observations']
+    obs.names.add('earlier');obs.parents['gap'].append(('earlier_parent',1))
+    saved=dict(attnsme.ST);before=pickle.dumps(attnsme.ST['individuals'])
+    qbefore=attnstage2_runtime.ST['questions']['agent'].record()
+    result=attnsme.ST['predict_probe'](ai,object(),object(),Random(10),instruction=True)
+    assert result==('native_output','pending') and calls==[True]
+    assert attnsme.ST==saved and pickle.dumps(attnsme.ST['individuals'])==before
+    assert attnstage2_runtime.ST['questions']['agent'].record()==qbefore
+    assert attnsme.ST['checks']==0 and attnsme.ST['pending'] is None

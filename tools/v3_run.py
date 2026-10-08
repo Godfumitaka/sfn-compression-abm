@@ -618,6 +618,8 @@ def worker(task: dict) -> dict:
                                   rematch_reuse=task.get('stage2_reuse',False),
                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
+    if task.get('verb_world') and task.get('probe_world') and task.get('attn_sme'):
+        verbworld.connect_attention_probes(probeworld,attnsme)
     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
     old_gc_threshold = None
     if task.get("sme_gc_threshold") is not None:
@@ -858,7 +860,7 @@ def main() -> None:
     ap.add_argument("--sme-intern-cache", action="store_true", help="型と全ての内容が同じ不変の照合結果の実体を共有する探索の旗")
     ap.add_argument("--sme-evict-trial-cache", action="store_true", help="完了した試行の呼び出し種を持つ照合の控えだけを捨てる探索の旗")
     ap.add_argument("--sme-evict-tombstone", action="store_true", help="捨てた完全な鍵が後で引かれたら止める検査の旗")
-    ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="ドア課題の定義選びに位置の案1／案2′を用いる")
+    ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="世界の信頼済みboolで指示されたドア／過去形課題の定義選びに位置の案1／案2′を用いる")
     ap.add_argument("--attn-position", choices=("k1", "k2"), default="k1", help="祖先の鍵／採用済みSME対応先の鍵")
     ap.add_argument("--attn-eta", type=float, default=0.1, help="位置の注意の更新幅")
     ap.add_argument('--attn-allin',action='store_true',help='指示8の共通基底・主の分布・mixture学習を接続する別版')
@@ -1070,8 +1072,8 @@ def main() -> None:
         raise SystemExit("候補の記録と忘却停止は--sme2017 --v310-beと一緒に使う")
     if args.sme_online_check and not args.sme_online_candidates:
         raise SystemExit("--sme-online-checkは--sme-online-candidatesと一緒に使う")
-    if args.attn_sme and not (args.sme2017 and args.shop_world and args.sme_call_seed):
-        raise SystemExit("--attn-smeは--sme2017 --sme-call-seedとお店の世界で使う")
+    if args.attn_sme and not (args.sme2017 and (args.shop_world or args.verb_world) and args.sme_call_seed):
+        raise SystemExit("--attn-smeは--sme2017 --sme-call-seedとお店又は動詞の世界で使う")
     if args.attn_fixed_zero and not args.attn_sme:
         raise SystemExit("--attn-fixed-zeroは注意の旗と一緒に使う")
     if args.attn_allin and not (args.attn_sme=='global' and args.attn_position=='k2' and

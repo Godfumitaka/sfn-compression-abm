@@ -242,10 +242,46 @@ def add_probes(pst, *, run_seed, agent_ids, holdout_second):
         probes.append(dict(motif="M1", path=PAST_PATH, level=1, truth=None if item.verb_class == "novel" else item.past,
                            role=role, hid=info["past_id"], G=tr.G_star, partial=pw._partial(tr.G_star, info["past_id"]),
                            facts={(r.predicate, tuple(r.arguments)) for r in tr.G_star.relations}, verb_name=item.name,
+                           task_instruction=True,
                            score_truth=item.verb_class != "novel",
                            extra=dict(verb_probe="past", verb_name=item.name, verb_class=item.verb_class)))
     pst["probes"] = probes
     prepare_probe_snapshot(pw)
+
+
+def connect_attention_probes(pw, attention):
+    """世界が用意した過去形の固定課題を、注意ありの同じ予測器へつなぐ。"""
+    import pickle
+    import sys
+    from attnstage2_sme import isolated
+    pw.ST['predict_question']=attention.ST['predict_probe']
+    original=pw._probe
+
+    def probe(state,config,t):
+        # 注意と実際の問いの控えは触らない。照合・専用乱数・記録の控えも戻す。
+        before=sha256(pickle.dumps(attention.ST['individuals'])).hexdigest()
+        stage2=sys.modules.get('attnstage2_runtime')
+        questions={} if stage2 is None else {a:q.record() for a,q in stage2.ST.get('questions',{}).items()}
+        cstar=sys.modules.get('cstar_runtime')
+        cstar_saved=None if cstar is None or cstar.ENGINE is None else cstar.snapshot()
+        intern=sys.modules.get('smeintern')
+        intern_saved=None if intern is None else (dict(intern.POOL),dict(intern.STATS))
+        try:
+            with isolated():
+                original(state,config,t)
+        finally:
+            if cstar_saved is not None:cstar.restore(cstar_saved)
+            if intern_saved is not None:
+                intern.POOL.clear();intern.POOL.update(intern_saved[0])
+                intern.STATS.clear();intern.STATS.update(intern_saved[1])
+        after=sha256(pickle.dumps(attention.ST['individuals'])).hexdigest()
+        after_questions={} if stage2 is None else {a:q.record() for a,q in stage2.ST.get('questions',{}).items()}
+        if before!=after or questions!=after_questions:
+            raise RuntimeError(('動詞の固定試験が注意又は実際の問いの控えを変えた',t))
+        pw.ST.setdefault('attention_checks',[]).append(dict(t=t,attention_before=before,attention_after=after,
+                                    questions_before=questions,questions_after=after_questions,passed=True))
+
+    pw._probe=probe
 
 
 def seen(pst, t_limit, verb_name):

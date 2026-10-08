@@ -196,7 +196,11 @@ def _probe(state, config, t):
         try:
             rng = Random(int.from_bytes(sha256(f"probe\x1f{rs}\x1f{t}\x1f{qi}".encode()).digest()[:8], "big"))
             ai = AgentInput(q["partial"], q["partial"], tuple(r.relation_id for r in q["partial"].relations))
-            out, pending = ST["predict"](ai, state, config, rng)
+            if 'predict_question' in ST:
+                # 世界の固定課題に添えた指示だけ。経路・ID・真値は予測器へ渡さない。
+                out,pending=ST['predict_question'](ai,state,config,rng,instruction=q['task_instruction'])
+            else:
+                out, pending = ST["predict"](ai, state, config, rng)
         finally:
             v39.select_definition = real_select
         pred = out.prediction
@@ -276,4 +280,6 @@ def close() -> dict:
     f = ST.get("f")
     if f is not None:
         f.close()
-    return {"rows": ST.get("rows", 0), "fingerprint_checks": ST.get("checks", 0), "probes": len(ST.get("probes", []))}
+    result={"rows": ST.get("rows", 0), "fingerprint_checks": ST.get("checks", 0), "probes": len(ST.get("probes", []))}
+    if 'attention_checks' in ST:result['attention_checks']=ST['attention_checks']
+    return result
