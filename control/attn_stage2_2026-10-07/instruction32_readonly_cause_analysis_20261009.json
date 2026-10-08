@@ -1,0 +1,29 @@
+{
+  "common_log_function_AST_equal": true,
+  "common_log_function_AST_sha256": "6ec33fa9c07ec268fb0e7c5742b02ed2a6843ef5854aa6cb9980d36f5ee9e1d3",
+  "e9_log_function_start": 149,
+  "fourcea_log_function_start": 167,
+  "common_json_sort_keys": true,
+  "demonstration_input": {
+    "description": "文字列名とNone鍵を含むJSON書出しの独立した最小例。模型記録の補作ではない"
+  },
+  "minimal_example_error": "TypeError(\"'<' not supported between instances of 'NoneType' and 'str'\")",
+  "source_observations": [
+    "v310be.probabilitiesは空背景で{None:1.0}を返す",
+    "cstar_probability.dirichlet_historyは背景Noneと履歴の文字列名を同じ分布へ保持する",
+    "cstar_runtime.probabilities_for_graphの分布がsmeshared監査のcstar_probabilitiesへ入る"
+  ],
+  "confirmed_runtime": [
+    "両版とも試行5の予測中、smeshared._log内のJSONキー整列で同じTypeError"
+  ],
+  "inferred_runtime": [
+    "その時点のC*分布内にNone鍵と文字列名の鍵が混在した可能性"
+  ],
+  "unmeasured": [
+    "例外時record辞書そのものは今回のtrace台では保存していない",
+    "クラウド管理threadの後始末の例外はマックの同じ過程の診断の範囲外"
+  ],
+  "model_sources_modified": false,
+  "model_rerun": false,
+  "performance_grades_not_read": true
+}

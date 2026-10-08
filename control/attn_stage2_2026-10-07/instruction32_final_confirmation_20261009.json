@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-09T05:12:24.417440+09:00",
+  "diagnostic_pids": [
+    67777,
+    67786,
+    67943,
+    67948
+  ],
+  "actual_ps": {
+    "67777": null,
+    "67786": null,
+    "67943": null,
+    "67948": null
+  },
+  "same_process_workers_and_receipts_ended": true,
+  "model_signals": 0,
+  "existing_controllers": {
+    "52308": [
+      1,
+      "Ss",
+      0.0,
+      21792,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/controller.py"
+    ],
+    "59575": [
+      1,
+      "Ss",
+      0.0,
+      21552,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction21_parallel_speed_gate/controller.py"
+    ]
+  },
+  "fixed_sources_unchanged": {
+    "cstar_stage2_source": {
+      "head": "3368df4110b9a07fd47cf30c2f9bab3503649fed",
+      "status": ""
+    },
+    "cstar_stage2_reuse_source": {
+      "head": "87d32af8ea2291e6e0267d12e2f8e7adb62c3925",
+      "status": ""
+    },
+    "cstar_stage2_preparation_source": {
+      "head": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+      "status": ""
+    },
+    "cstar_stage2_disclosure_speed_source": {
+      "head": "75858e0b4bbff608b57391c075cf5b72c678e636",
+      "status": ""
+    },
+    "cstar_stage2_exact_speed_source": {
+      "head": "7294389d70795c847790472aa836b93dc1ca7fd5",
+      "status": ""
+    },
+    "cstar_stage2_cache_prune_source": {
+      "head": "4ceadf63f6924bdab8013d3e39b1549a8c5c0966",
+      "status": ""
+    }
+  },
+  "fixed_tool_changes": {
+    "instruction23_pause_speed_gate": [],
+    "instruction26_basic_gate_7294389d": [],
+    "instruction26_p10_preparation": [],
+    "instruction27_p10_parallel": [],
+    "instruction29_forget_parallel": []
+  },
+  "base_model_fix": "保留：アストラの承認待ち",
+  "N32_actual_scope_completed": "両版の6試行上限での再現・worker traceback・旗なしe9停止の即時冒頭報告",
+  "conditional_flag_fix_gates_not_applicable": true,
+  "old_stops_preserved": true
+}
