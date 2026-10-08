@@ -11,7 +11,8 @@ ln -sf "$(uv python find $PYVER)" $HOME/.local/bin/python3.12
 python3.12 --version | grep -q "Python $PYVER" || { echo "★ Python $PYVER でない"; exit 2; }
 # 模型の版（準備版）を、きれいな作業場所に取り出す。模型は標準の部品だけを使う（pip の追加は要らない、デスクトップで確かめた）
 mkdir -p $HOME/sfn/audit/_read
-[ -d $HOME/sfn/sfn-compression-abm ] || git clone -q $BUNDLE $HOME/sfn/sfn-compression-abm
+[ -d $HOME/sfn/sfn-compression-abm/.git ] || git init -q $HOME/sfn/sfn-compression-abm
+git -C $HOME/sfn/sfn-compression-abm fetch -q $BUNDLE "+refs/*:refs/bundle/*"   # 束の中の参照を全部取る（束には remote の参照だけが入っているため）
 git -C $HOME/sfn/sfn-compression-abm worktree add -q --detach $HOME/sfn/audit/_read/attnprep $VERSION
 [ "$(git -C $HOME/sfn/audit/_read/attnprep rev-parse HEAD)" == "$VERSION" ] && [ -z "$(git -C $HOME/sfn/audit/_read/attnprep status --short)" ] || { echo "★ 作業場所が版 $VERSION のきれいな形でない"; exit 2; }
 (cd $HOME/sfn/audit/_read/attnprep && python3.12 tools/v3_run.py --help > /dev/null) && echo "模型の版 $VERSION：--help 通った"

@@ -10,6 +10,6 @@ python3 $HERE/norm_hash.py $D/output $S/norm_hash.tsv
 cp $D/native_command.json $D/time.log $S/ 2>/dev/null || true
 for f in flag.json manifest.jsonl; do [ -f $D/output/$f ] && cp $D/output/$f $S/; done
 find $D/output/ledgers -name "*.done" -exec cp {} $S/ \; 2>/dev/null || true
-aws s3 sync --only-show-errors $D/output s3://$BUCKET/cloud_runs/$NAME/output
-aws s3 cp --only-show-errors $S/files_sha256.tsv s3://$BUCKET/cloud_runs/$NAME/files_sha256.tsv
+if [ "$BUCKET" != "-" ]; then aws s3 sync --only-show-errors $D/output s3://$BUCKET/cloud_runs/$NAME/output
+aws s3 cp --only-show-errors $S/files_sha256.tsv s3://$BUCKET/cloud_runs/$NAME/files_sha256.tsv; fi   # バケットが「-」なら S3 には上げない（機械に S3 の権限が無いとき。デスクトップが持ってきて上げる）
 echo "S3 に上げた：s3://$BUCKET/cloud_runs/$NAME/（小さい記録は $S）"

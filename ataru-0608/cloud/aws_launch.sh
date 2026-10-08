@@ -4,7 +4,7 @@
 set -euo pipefail; source $(dirname "$0")/aws_env.sh
 TYPE=$1; DISK=${2:-200}
 [[ " $ALLOWED_TYPES " == *" $TYPE "* ]] || { echo "★ 許されていない機械の種類：$TYPE（許されるのは $ALLOWED_TYPES）"; exit 2; }
-AMI=$(aws ssm get-parameter --name $AMI_PARAM --query Parameter.Value --output text)
+AMI=$(aws ec2 describe-images --owners 099720109477 --filters "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*" "Name=state,Values=available" --query "sort_by(Images,&CreationDate)[-1].ImageId" --output text)   # Canonical（099720109477）の公式 Ubuntu Server 24.04 LTS の最新
 SG=$(aws ec2 describe-security-groups --filters Name=group-name,Values=$SG_NAME --query 'SecurityGroups[0].GroupId' --output text)
 ID=$(aws ec2 run-instances --image-id $AMI --instance-type $TYPE --key-name $KEY_NAME --security-group-ids $SG \
   --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$DISK,VolumeType=gp3,DeleteOnTermination=true}" \

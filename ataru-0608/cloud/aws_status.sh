@@ -10,8 +10,9 @@ price() { aws pricing get-products --region us-east-1 --service-code AmazonEC2 -
 aws ec2 describe-instances --filters Name=tag:Project,Values=$TAG_PROJECT Name=instance-state-name,Values=pending,running \
   --query 'Reservations[].Instances[].[InstanceId,InstanceType,LaunchTime]' --output text | while read -r id type lt; do
   h=$(python3 -c "import datetime as d;t=d.datetime.fromisoformat('$lt'.replace('Z','+00:00'));print(round((d.datetime.now(d.timezone.utc)-t).total_seconds()/3600,2))")
-  p=$(price $type); cost=$(python3 -c "print(round($h*float('$p'),2) if '$p'!='?' else '?')")
-  echo -e "$id\t$type\t立ててから ${h} 時間\t時間単価 \$$p\t見込み \$$cost"
+  p=$(price $type); [ "$p" == "?" ] && p=$(python3 -c "import json;print(json.load(open('$HOME/cloud/prices_us_east_1.json')).get('$type','?'))") && src="見込みの表" || src="価格の API"
+  cost=$(python3 -c "print(round($h*float('$p'),2) if '$p'!='?' else '?')")
+  echo -e "$id\t$type\t立ててから ${h} 時間\t時間単価 \$$p（$src）\t見込み \$$cost"
 done
 echo "走っている機械：$(aws ec2 describe-instances --filters Name=tag:Project,Values=$TAG_PROJECT Name=instance-state-name,Values=pending,running --query 'length(Reservations[].Instances[])' --output text) 台"
 aws ce get-cost-and-usage --time-period Start=$(date -u -d '-7 days' +%F),End=$(date -u -d '+1 day' +%F) --granularity DAILY --metrics UnblendedCost \
