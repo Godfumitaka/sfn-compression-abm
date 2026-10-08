@@ -1,0 +1,225 @@
+{
+  "at": "2026-10-08T09:47:22.779374+09:00",
+  "instruction": 18,
+  "authorization": "自分の非本番birth_hu_offを停止してよい（受け箱指示18第1項、受領e18ec90fを通常push済み）",
+  "machine": {
+    "at": "2026-10-08T09:47:22.825267+09:00",
+    "models": {
+      "77324": {
+        "ppid": 77313,
+        "state": "R",
+        "rss_kb": 1700336
+      },
+      "95421": {
+        "ppid": 95412,
+        "state": "R",
+        "rss_kb": 744224
+      }
+    },
+    "model_children": 2,
+    "paused": 0,
+    "registered": [
+      {
+        "pid": 77309,
+        "owner": "Codex2 指示16 較正の下見 birth_hu_off",
+        "mem_gb": 11.0
+      },
+      {
+        "pid": 95408,
+        "owner": "Codex2 指示17 較正の下見 birth_hu_on",
+        "mem_gb": 4.0
+      }
+    ],
+    "disk_free_bytes": 222770159616,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "ps": {
+    "77324": [
+      77313,
+      "R",
+      100.0,
+      1700336,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "77313": [
+      77309,
+      "S",
+      0.0,
+      10000,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_off/native_command.json"
+    ],
+    "95421": [
+      95412,
+      "R",
+      100.0,
+      744224,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    ],
+    "95412": [
+      95408,
+      "S",
+      0.0,
+      27376,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    ],
+    "95408": [
+      91021,
+      "Ss",
+      0.0,
+      18736,
+      "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    ]
+  },
+  "off_progress": {
+    "at": "2026-10-08T09:47:15.797836+09:00",
+    "trial": 1280,
+    "trials_completed": 1281,
+    "seconds": 17.996334334020503,
+    "elapsed_seconds": 8406.062597167038,
+    "peak_rss_bytes": 1740161024,
+    "definitions": 13,
+    "disclosed": true,
+    "disclosed_trials": 661,
+    "rematch_totals": {
+      "birth": {
+        "calls": 3644,
+        "seconds": 163.91239875764586,
+        "match_calls": 25648,
+        "result_cache_hits": 0,
+        "engine_calls": 25648,
+        "engine_seconds": 28.094038639450446,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      },
+      "disclosure": {
+        "calls": 117812,
+        "seconds": 5919.909631065733,
+        "match_calls": 117812,
+        "result_cache_hits": 0,
+        "engine_calls": 117812,
+        "engine_seconds": 262.133840314229,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      }
+    },
+    "v_counts": {
+      "count": 455680,
+      "signs": {
+        "positive": 123961,
+        "zero": 258503,
+        "negative": 73216
+      },
+      "by_kind": [
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "negative",
+          "count": 73216
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "positive",
+          "count": 123961
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "zero",
+          "count": 30663
+        },
+        {
+          "kind": "HU",
+          "reference": true,
+          "sign": "zero",
+          "count": 227840
+        }
+      ]
+    }
+  },
+  "on_progress": {
+    "at": "2026-10-08T09:47:14.050539+09:00",
+    "trial": 542,
+    "trials_completed": 543,
+    "seconds": 0.9735782499774359,
+    "elapsed_seconds": 4127.755560249963,
+    "peak_rss_bytes": 794640384,
+    "definitions": 13,
+    "disclosed": false,
+    "disclosed_trials": 284,
+    "rematch_totals": {
+      "birth": {
+        "calls": 7288,
+        "seconds": 319.44634182489244,
+        "match_calls": 51296,
+        "result_cache_hits": 0,
+        "engine_calls": 51296,
+        "engine_seconds": 54.563326406117994,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      },
+      "disclosure": {
+        "calls": 48821,
+        "seconds": 1844.8545559110353,
+        "match_calls": 48821,
+        "result_cache_hits": 0,
+        "engine_calls": 48821,
+        "engine_seconds": 63.522237458615564,
+        "foundation_builds": 0,
+        "foundation_hits": 0
+      }
+    },
+    "v_counts": {
+      "count": 185572,
+      "signs": {
+        "positive": 121641,
+        "zero": 34863,
+        "negative": 29068
+      },
+      "by_kind": [
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "negative",
+          "count": 25984
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "positive",
+          "count": 53113
+        },
+        {
+          "kind": "FH",
+          "reference": false,
+          "sign": "zero",
+          "count": 13689
+        },
+        {
+          "kind": "HU",
+          "reference": true,
+          "sign": "negative",
+          "count": 3084
+        },
+        {
+          "kind": "HU",
+          "reference": true,
+          "sign": "positive",
+          "count": 68528
+        },
+        {
+          "kind": "HU",
+          "reference": true,
+          "sign": "zero",
+          "count": 21174
+        }
+      ]
+    }
+  },
+  "original_files_unchanged": true
+}
