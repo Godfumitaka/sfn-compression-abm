@@ -206,6 +206,9 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
     probability = cstar.probabilities_for_graph(base_graph,left,target_graph_partial) if expected else None
     key = (engine.match_key(left,right,seed,probabilities=probability) if expected
            else engine.match_key(left,right,seed))
+    if expected and getattr(engine,'cache_prune_guard',None) is not None:
+        # RESULTSが先に返る時も、過去の呼び出し種の参照を見逃さない。
+        engine.cache_prune_guard.request(key,CTX['trial'],'mapping')
     STATS["requests"] = STATS.get("requests", 0) + 1
     if key in RESULTS:
         STATS["reused"] = STATS.get("reused", 0) + 1

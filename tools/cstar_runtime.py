@@ -139,14 +139,18 @@ def initialize(d, row, state, base, target, trial, base_age, config):
 
 
 def snapshot():
-    return ENGINE.snapshot(),dict(CTX),dict(STATS)
+    saved = ENGINE.snapshot(),dict(CTX),dict(STATS)
+    guard = getattr(ENGINE,'cache_prune_guard',None)
+    return saved+(guard.snapshot(),) if guard is not None else saved
 
 
 def restore(saved):
-    engine,context,stats = saved
+    engine,context,stats = saved[:3]
     ENGINE.restore(engine)
     CTX.clear(); CTX.update(context)
     STATS.clear(); STATS.update(stats)
+    if len(saved)==4:
+        ENGINE.cache_prune_guard.restore(saved[3])
 
 
 def install(**options):
@@ -160,6 +164,14 @@ def install(**options):
     CFG.clear(); CFG.update(options)
     CTX.clear(); STATS.clear()
     ENGINE = CstarMatcher(smeshared.ENGINE.settings,tie_seed=0,tie_uniform=smeshared.CTX.get('tie_uniform',False))
+    if options.get('cache_prune_path'):
+        from cstar_cache_prune import PruneGuard
+        ENGINE.cache_prune_guard = PruneGuard(options['cache_prune_path'])
+        original_input = loop._agent_input
+        def agent_input(trial,before):
+            ENGINE.cache_prune_guard.begin_trial(ENGINE,trial.trial)
+            return original_input(trial,before)
+        loop._agent_input = agent_input
     cstar_probability.BACKGROUND_SOURCE = v310be.probabilities
     if options.get('exact_speed'):
         original = cstar_probability.BACKGROUND_SOURCE
