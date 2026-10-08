@@ -1,0 +1,21 @@
+{
+  "command": [
+    "<VERB_PY>",
+    "<VERB_JOBS>",
+    "run",
+    "--wait",
+    "--owner",
+    "動詞・指示9・on100_without_probe",
+    "--mem",
+    "2.0",
+    "--disk-path",
+    "<VERB_OUTPUT_ROOT>/on100_without_probe/output",
+    "--",
+    "<VERB_PY>",
+    "<VERB_SOURCE>/tools/verb_measurement/cloud_run.py",
+    "registered",
+    "<VERB_OUTPUT_ROOT>/on100_without_probe",
+    "--clearance",
+    "<VERB_CLEARANCE_ROOT>/on100_without_probe.json"
+  ]
+}

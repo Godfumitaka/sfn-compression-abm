@@ -1,0 +1,3571 @@
+{
+  "machine_sha256": "94bd008c03c6b35ac40458b24040819d1c2e925dc6d4a9cc09dffc00b69088dd",
+  "platform": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.39",
+  "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+  "source_commit": "74d88e66f0ebcfcdaae007d80ad5df5514e465b7",
+  "observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+  "cpu_budget": 30,
+  "clearance": {
+    "runtime_sha256": "930454f42e48d035739277f2fe51e8827338c5dad9e92ef7ec2d3fa6dd6960a1",
+    "machine_sha256": "94bd008c03c6b35ac40458b24040819d1c2e925dc6d4a9cc09dffc00b69088dd",
+    "memory_reservation_gb": 2.0,
+    "checked_epoch": 1791481177.2353349,
+    "physical_cpu_count": 32,
+    "cpu_budget": 30,
+    "source": "verb_clearance.py（Ubuntu 版の受付表 jobs.py の測り方）",
+    "memory_admission_ok": true,
+    "swap_stable_10min": true,
+    "thermal_ok": true,
+    "basis": {
+      "registry_total_gb": 0,
+      "budget_gb": 57.4,
+      "mem_available_gib": 56.27,
+      "started": false,
+      "swap": "スワップは直近 10 分で増えていない（0.0 MB → 今 0.0 MB）",
+      "thermal": "thermal_zone 0 個、cooling_device 32 個（cur_state の最大 0）",
+      "thermal_warnings": [],
+      "output_free_gib": 68.47
+    },
+    "warning": false
+  },
+  "processes_before": {
+    "1": {
+      "pid": 1,
+      "ppid": 0,
+      "pgid": 1,
+      "rss_bytes": 14069760,
+      "state": "Ss",
+      "command": "/sbin/init"
+    },
+    "2": {
+      "pid": 2,
+      "ppid": 0,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kthreadd]"
+    },
+    "3": {
+      "pid": 3,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[pool_workqueue_release]"
+    },
+    "4": {
+      "pid": 4,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-rcu_gp]"
+    },
+    "5": {
+      "pid": 5,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-sync_wq]"
+    },
+    "6": {
+      "pid": 6,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kvfree_rcu_reclaim]"
+    },
+    "7": {
+      "pid": 7,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-slub_flushwq]"
+    },
+    "8": {
+      "pid": 8,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-netns]"
+    },
+    "10": {
+      "pid": 10,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/0:0H-kblockd]"
+    },
+    "12": {
+      "pid": 12,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u128:0-ipv6_addrconf]"
+    },
+    "13": {
+      "pid": 13,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-mm_percpu_wq]"
+    },
+    "14": {
+      "pid": 14,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/0]"
+    },
+    "15": {
+      "pid": 15,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S<",
+      "command": "[pr/ttyS0]"
+    },
+    "16": {
+      "pid": 16,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[rcu_sched]"
+    },
+    "17": {
+      "pid": 17,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[rcu_exp_par_gp_kthread_worker/1]"
+    },
+    "18": {
+      "pid": 18,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[rcu_exp_gp_kthread_worker]"
+    },
+    "19": {
+      "pid": 19,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/0]"
+    },
+    "20": {
+      "pid": 20,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kprobe-optimizer]"
+    },
+    "21": {
+      "pid": 21,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/0]"
+    },
+    "22": {
+      "pid": 22,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/0]"
+    },
+    "23": {
+      "pid": 23,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/1]"
+    },
+    "24": {
+      "pid": 24,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/1]"
+    },
+    "25": {
+      "pid": 25,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/1]"
+    },
+    "26": {
+      "pid": 26,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/1]"
+    },
+    "27": {
+      "pid": 27,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/1:0-slub_flushwq]"
+    },
+    "28": {
+      "pid": 28,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/1:0H-kblockd]"
+    },
+    "29": {
+      "pid": 29,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/2]"
+    },
+    "30": {
+      "pid": 30,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/2]"
+    },
+    "31": {
+      "pid": 31,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/2]"
+    },
+    "32": {
+      "pid": 32,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/2]"
+    },
+    "34": {
+      "pid": 34,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/2:0H-kblockd]"
+    },
+    "35": {
+      "pid": 35,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/3]"
+    },
+    "36": {
+      "pid": 36,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/3]"
+    },
+    "37": {
+      "pid": 37,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/3]"
+    },
+    "38": {
+      "pid": 38,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/3]"
+    },
+    "40": {
+      "pid": 40,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/3:0H-kblockd]"
+    },
+    "41": {
+      "pid": 41,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/4]"
+    },
+    "42": {
+      "pid": 42,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/4]"
+    },
+    "43": {
+      "pid": 43,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/4]"
+    },
+    "44": {
+      "pid": 44,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/4]"
+    },
+    "46": {
+      "pid": 46,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/4:0H-kblockd]"
+    },
+    "47": {
+      "pid": 47,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/5]"
+    },
+    "48": {
+      "pid": 48,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/5]"
+    },
+    "49": {
+      "pid": 49,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/5]"
+    },
+    "50": {
+      "pid": 50,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/5]"
+    },
+    "52": {
+      "pid": 52,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/5:0H-kblockd]"
+    },
+    "53": {
+      "pid": 53,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/6]"
+    },
+    "54": {
+      "pid": 54,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/6]"
+    },
+    "55": {
+      "pid": 55,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/6]"
+    },
+    "56": {
+      "pid": 56,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/6]"
+    },
+    "57": {
+      "pid": 57,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/6:0-events]"
+    },
+    "58": {
+      "pid": 58,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/6:0H-kblockd]"
+    },
+    "59": {
+      "pid": 59,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/7]"
+    },
+    "60": {
+      "pid": 60,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/7]"
+    },
+    "61": {
+      "pid": 61,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/7]"
+    },
+    "62": {
+      "pid": 62,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/7]"
+    },
+    "64": {
+      "pid": 64,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/7:0H-kblockd]"
+    },
+    "65": {
+      "pid": 65,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/8]"
+    },
+    "66": {
+      "pid": 66,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/8]"
+    },
+    "67": {
+      "pid": 67,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/8]"
+    },
+    "68": {
+      "pid": 68,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/8]"
+    },
+    "70": {
+      "pid": 70,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/8:0H-kblockd]"
+    },
+    "71": {
+      "pid": 71,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/9]"
+    },
+    "72": {
+      "pid": 72,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/9]"
+    },
+    "73": {
+      "pid": 73,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/9]"
+    },
+    "74": {
+      "pid": 74,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/9]"
+    },
+    "75": {
+      "pid": 75,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/9:0-mm_percpu_wq]"
+    },
+    "76": {
+      "pid": 76,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/9:0H-kblockd]"
+    },
+    "77": {
+      "pid": 77,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/10]"
+    },
+    "78": {
+      "pid": 78,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/10]"
+    },
+    "79": {
+      "pid": 79,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/10]"
+    },
+    "80": {
+      "pid": 80,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/10]"
+    },
+    "82": {
+      "pid": 82,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/10:0H-kblockd]"
+    },
+    "83": {
+      "pid": 83,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/11]"
+    },
+    "84": {
+      "pid": 84,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/11]"
+    },
+    "85": {
+      "pid": 85,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/11]"
+    },
+    "86": {
+      "pid": 86,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/11]"
+    },
+    "87": {
+      "pid": 87,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/11:0-mm_percpu_wq]"
+    },
+    "88": {
+      "pid": 88,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/11:0H-kblockd]"
+    },
+    "89": {
+      "pid": 89,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/12]"
+    },
+    "90": {
+      "pid": 90,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/12]"
+    },
+    "91": {
+      "pid": 91,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/12]"
+    },
+    "92": {
+      "pid": 92,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/12]"
+    },
+    "94": {
+      "pid": 94,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/12:0H-kblockd]"
+    },
+    "95": {
+      "pid": 95,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/13]"
+    },
+    "96": {
+      "pid": 96,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/13]"
+    },
+    "97": {
+      "pid": 97,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/13]"
+    },
+    "98": {
+      "pid": 98,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/13]"
+    },
+    "99": {
+      "pid": 99,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/13:0-cgroup_free]"
+    },
+    "100": {
+      "pid": 100,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/13:0H-kblockd]"
+    },
+    "101": {
+      "pid": 101,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/14]"
+    },
+    "102": {
+      "pid": 102,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/14]"
+    },
+    "103": {
+      "pid": 103,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/14]"
+    },
+    "104": {
+      "pid": 104,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/14]"
+    },
+    "106": {
+      "pid": 106,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/14:0H-kblockd]"
+    },
+    "107": {
+      "pid": 107,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/15]"
+    },
+    "108": {
+      "pid": 108,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/15]"
+    },
+    "109": {
+      "pid": 109,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/15]"
+    },
+    "110": {
+      "pid": 110,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/15]"
+    },
+    "111": {
+      "pid": 111,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/15:0-cgroup_free]"
+    },
+    "112": {
+      "pid": 112,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/15:0H-kblockd]"
+    },
+    "113": {
+      "pid": 113,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/16]"
+    },
+    "114": {
+      "pid": 114,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/16]"
+    },
+    "115": {
+      "pid": 115,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/16]"
+    },
+    "116": {
+      "pid": 116,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/16]"
+    },
+    "118": {
+      "pid": 118,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/16:0H-kblockd]"
+    },
+    "119": {
+      "pid": 119,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[rcu_exp_par_gp_kthread_worker/2]"
+    },
+    "120": {
+      "pid": 120,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/17]"
+    },
+    "121": {
+      "pid": 121,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/17]"
+    },
+    "122": {
+      "pid": 122,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/17]"
+    },
+    "123": {
+      "pid": 123,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/17]"
+    },
+    "125": {
+      "pid": 125,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/17:0H-kblockd]"
+    },
+    "126": {
+      "pid": 126,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/18]"
+    },
+    "127": {
+      "pid": 127,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/18]"
+    },
+    "128": {
+      "pid": 128,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/18]"
+    },
+    "129": {
+      "pid": 129,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/18]"
+    },
+    "131": {
+      "pid": 131,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/18:0H-kblockd]"
+    },
+    "132": {
+      "pid": 132,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/19]"
+    },
+    "133": {
+      "pid": 133,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/19]"
+    },
+    "134": {
+      "pid": 134,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/19]"
+    },
+    "135": {
+      "pid": 135,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/19]"
+    },
+    "136": {
+      "pid": 136,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/19:0-mm_percpu_wq]"
+    },
+    "137": {
+      "pid": 137,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/19:0H-kblockd]"
+    },
+    "138": {
+      "pid": 138,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/20]"
+    },
+    "139": {
+      "pid": 139,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/20]"
+    },
+    "140": {
+      "pid": 140,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/20]"
+    },
+    "141": {
+      "pid": 141,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/20]"
+    },
+    "143": {
+      "pid": 143,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/20:0H-kblockd]"
+    },
+    "144": {
+      "pid": 144,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/21]"
+    },
+    "145": {
+      "pid": 145,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/21]"
+    },
+    "146": {
+      "pid": 146,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/21]"
+    },
+    "147": {
+      "pid": 147,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/21]"
+    },
+    "149": {
+      "pid": 149,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/21:0H-kblockd]"
+    },
+    "150": {
+      "pid": 150,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/22]"
+    },
+    "151": {
+      "pid": 151,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/22]"
+    },
+    "152": {
+      "pid": 152,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/22]"
+    },
+    "153": {
+      "pid": 153,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/22]"
+    },
+    "155": {
+      "pid": 155,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/22:0H-kblockd]"
+    },
+    "156": {
+      "pid": 156,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/23]"
+    },
+    "157": {
+      "pid": 157,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/23]"
+    },
+    "158": {
+      "pid": 158,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/23]"
+    },
+    "159": {
+      "pid": 159,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/23]"
+    },
+    "161": {
+      "pid": 161,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/23:0H-kblockd]"
+    },
+    "162": {
+      "pid": 162,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/24]"
+    },
+    "163": {
+      "pid": 163,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/24]"
+    },
+    "164": {
+      "pid": 164,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/24]"
+    },
+    "165": {
+      "pid": 165,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/24]"
+    },
+    "167": {
+      "pid": 167,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/24:0H-kblockd]"
+    },
+    "168": {
+      "pid": 168,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/25]"
+    },
+    "169": {
+      "pid": 169,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/25]"
+    },
+    "170": {
+      "pid": 170,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/25]"
+    },
+    "171": {
+      "pid": 171,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/25]"
+    },
+    "173": {
+      "pid": 173,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/25:0H-kblockd]"
+    },
+    "174": {
+      "pid": 174,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/26]"
+    },
+    "175": {
+      "pid": 175,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/26]"
+    },
+    "176": {
+      "pid": 176,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/26]"
+    },
+    "177": {
+      "pid": 177,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/26]"
+    },
+    "178": {
+      "pid": 178,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/26:0-events]"
+    },
+    "179": {
+      "pid": 179,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/26:0H-kblockd]"
+    },
+    "180": {
+      "pid": 180,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/27]"
+    },
+    "181": {
+      "pid": 181,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/27]"
+    },
+    "182": {
+      "pid": 182,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/27]"
+    },
+    "183": {
+      "pid": 183,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/27]"
+    },
+    "185": {
+      "pid": 185,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/27:0H-kblockd]"
+    },
+    "186": {
+      "pid": 186,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/28]"
+    },
+    "187": {
+      "pid": 187,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/28]"
+    },
+    "188": {
+      "pid": 188,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/28]"
+    },
+    "189": {
+      "pid": 189,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/28]"
+    },
+    "191": {
+      "pid": 191,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/28:0H-kblockd]"
+    },
+    "192": {
+      "pid": 192,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/29]"
+    },
+    "193": {
+      "pid": 193,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/29]"
+    },
+    "194": {
+      "pid": 194,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/29]"
+    },
+    "195": {
+      "pid": 195,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/29]"
+    },
+    "197": {
+      "pid": 197,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/29:0H-kblockd]"
+    },
+    "198": {
+      "pid": 198,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/30]"
+    },
+    "199": {
+      "pid": 199,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/30]"
+    },
+    "200": {
+      "pid": 200,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/30]"
+    },
+    "201": {
+      "pid": 201,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/30]"
+    },
+    "203": {
+      "pid": 203,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/30:0H-kblockd]"
+    },
+    "204": {
+      "pid": 204,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[cpuhp/31]"
+    },
+    "205": {
+      "pid": 205,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[idle_inject/31]"
+    },
+    "206": {
+      "pid": 206,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[migration/31]"
+    },
+    "207": {
+      "pid": 207,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ksoftirqd/31]"
+    },
+    "209": {
+      "pid": 209,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/31:0H-kblockd]"
+    },
+    "211": {
+      "pid": 211,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u130:0-events_power_efficient]"
+    },
+    "213": {
+      "pid": 213,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u132:0-ext4-rsv-conversion]"
+    },
+    "214": {
+      "pid": 214,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kdevtmpfs]"
+    },
+    "215": {
+      "pid": 215,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-inet_frag_wq]"
+    },
+    "216": {
+      "pid": 216,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[rcu_tasks_kthread]"
+    },
+    "217": {
+      "pid": 217,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[rcu_tasks_rude_kthread]"
+    },
+    "218": {
+      "pid": 218,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kauditd]"
+    },
+    "219": {
+      "pid": 219,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[khungtaskd]"
+    },
+    "221": {
+      "pid": 221,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[oom_reaper]"
+    },
+    "223": {
+      "pid": 223,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-writeback]"
+    },
+    "224": {
+      "pid": 224,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kcompactd0]"
+    },
+    "225": {
+      "pid": 225,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "SN",
+      "command": "[ksmd]"
+    },
+    "226": {
+      "pid": 226,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "SN",
+      "command": "[khugepaged]"
+    },
+    "227": {
+      "pid": 227,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kblockd]"
+    },
+    "228": {
+      "pid": 228,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-blkcg_punt_bio]"
+    },
+    "229": {
+      "pid": 229,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kintegrityd]"
+    },
+    "230": {
+      "pid": 230,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/9-acpi]"
+    },
+    "234": {
+      "pid": 234,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-tpm_dev_wq]"
+    },
+    "235": {
+      "pid": 235,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-ata_sff]"
+    },
+    "236": {
+      "pid": 236,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-md_bitmap]"
+    },
+    "237": {
+      "pid": 237,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-md_llbitmap_io]"
+    },
+    "238": {
+      "pid": 238,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-md_llbitmap_unplug]"
+    },
+    "239": {
+      "pid": 239,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-edac-poller]"
+    },
+    "240": {
+      "pid": 240,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u128:1-ipv6_addrconf]"
+    },
+    "241": {
+      "pid": 241,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-devfreq_wq]"
+    },
+    "242": {
+      "pid": 242,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/8:1-mm_percpu_wq]"
+    },
+    "243": {
+      "pid": 243,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[watchdogd]"
+    },
+    "244": {
+      "pid": 244,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u130:1-flush-259:0]"
+    },
+    "245": {
+      "pid": 245,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/25:1-mm_percpu_wq]"
+    },
+    "246": {
+      "pid": 246,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-quota_events_unbound]"
+    },
+    "248": {
+      "pid": 248,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[kswapd0]"
+    },
+    "249": {
+      "pid": 249,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[ecryptfs-kthread]"
+    },
+    "250": {
+      "pid": 250,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kthrotld]"
+    },
+    "251": {
+      "pid": 251,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/24-pciehp]"
+    },
+    "252": {
+      "pid": 252,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/25-pciehp]"
+    },
+    "253": {
+      "pid": 253,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/26-pciehp]"
+    },
+    "254": {
+      "pid": 254,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/27-pciehp]"
+    },
+    "255": {
+      "pid": 255,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/28-pciehp]"
+    },
+    "256": {
+      "pid": 256,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/29-pciehp]"
+    },
+    "257": {
+      "pid": 257,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/30-pciehp]"
+    },
+    "258": {
+      "pid": 258,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/31-pciehp]"
+    },
+    "259": {
+      "pid": 259,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/32-pciehp]"
+    },
+    "260": {
+      "pid": 260,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/33-pciehp]"
+    },
+    "261": {
+      "pid": 261,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/34-pciehp]"
+    },
+    "262": {
+      "pid": 262,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/35-pciehp]"
+    },
+    "263": {
+      "pid": 263,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/36-pciehp]"
+    },
+    "264": {
+      "pid": 264,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/37-pciehp]"
+    },
+    "265": {
+      "pid": 265,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/38-pciehp]"
+    },
+    "266": {
+      "pid": 266,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/39-pciehp]"
+    },
+    "267": {
+      "pid": 267,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/40-pciehp]"
+    },
+    "268": {
+      "pid": 268,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/41-pciehp]"
+    },
+    "269": {
+      "pid": 269,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/42-pciehp]"
+    },
+    "270": {
+      "pid": 270,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/43-pciehp]"
+    },
+    "271": {
+      "pid": 271,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/44-pciehp]"
+    },
+    "272": {
+      "pid": 272,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/45-pciehp]"
+    },
+    "273": {
+      "pid": 273,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/46-pciehp]"
+    },
+    "274": {
+      "pid": 274,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/47-pciehp]"
+    },
+    "275": {
+      "pid": 275,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/48-pciehp]"
+    },
+    "276": {
+      "pid": 276,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/49-pciehp]"
+    },
+    "277": {
+      "pid": 277,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/50-pciehp]"
+    },
+    "278": {
+      "pid": 278,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/51-pciehp]"
+    },
+    "279": {
+      "pid": 279,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/52-pciehp]"
+    },
+    "280": {
+      "pid": 280,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/53-pciehp]"
+    },
+    "281": {
+      "pid": 281,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/54-pciehp]"
+    },
+    "282": {
+      "pid": 282,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/55-pciehp]"
+    },
+    "283": {
+      "pid": 283,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/56-pciehp]"
+    },
+    "284": {
+      "pid": 284,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/57-pciehp]"
+    },
+    "285": {
+      "pid": 285,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/58-pciehp]"
+    },
+    "286": {
+      "pid": 286,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/59-pciehp]"
+    },
+    "287": {
+      "pid": 287,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/60-pciehp]"
+    },
+    "288": {
+      "pid": 288,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/61-pciehp]"
+    },
+    "289": {
+      "pid": 289,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/62-pciehp]"
+    },
+    "290": {
+      "pid": 290,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/63-pciehp]"
+    },
+    "291": {
+      "pid": 291,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/64-pciehp]"
+    },
+    "292": {
+      "pid": 292,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/65-pciehp]"
+    },
+    "293": {
+      "pid": 293,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[irq/66-pciehp]"
+    },
+    "294": {
+      "pid": 294,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-acpi_thermal_pm]"
+    },
+    "295": {
+      "pid": 295,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-nvme-wq]"
+    },
+    "296": {
+      "pid": 296,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-nvme-reset-wq]"
+    },
+    "297": {
+      "pid": 297,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-nvme-delete-wq]"
+    },
+    "298": {
+      "pid": 298,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-nvme-auth-wq]"
+    },
+    "301": {
+      "pid": 301,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-mld]"
+    },
+    "302": {
+      "pid": 302,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-ipv6_addrconf]"
+    },
+    "303": {
+      "pid": 303,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kstrp]"
+    },
+    "305": {
+      "pid": 305,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/4:1-mm_percpu_wq]"
+    },
+    "307": {
+      "pid": 307,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/11:1-events]"
+    },
+    "309": {
+      "pid": 309,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/22:1-mm_percpu_wq]"
+    },
+    "310": {
+      "pid": 310,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/26:1-mm_percpu_wq]"
+    },
+    "312": {
+      "pid": 312,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/6:1-events]"
+    },
+    "313": {
+      "pid": 313,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/14:1-events]"
+    },
+    "317": {
+      "pid": 317,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/u133:0]"
+    },
+    "318": {
+      "pid": 318,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/u134:0]"
+    },
+    "319": {
+      "pid": 319,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/u135:0]"
+    },
+    "320": {
+      "pid": 320,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/u136:0]"
+    },
+    "321": {
+      "pid": 321,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/u137:0]"
+    },
+    "333": {
+      "pid": 333,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-charger_manager]"
+    },
+    "334": {
+      "pid": 334,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[jbd2/nvme0n1p1-8]"
+    },
+    "335": {
+      "pid": 335,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-ext4-rsv-conversion]"
+    },
+    "336": {
+      "pid": 336,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/10:1-mm_percpu_wq]"
+    },
+    "361": {
+      "pid": 361,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/16:1H-kblockd]"
+    },
+    "370": {
+      "pid": 370,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/12:1-mm_percpu_wq]"
+    },
+    "381": {
+      "pid": 381,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/13:1-mm_percpu_wq]"
+    },
+    "383": {
+      "pid": 383,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/19:1-mm_percpu_wq]"
+    },
+    "384": {
+      "pid": 384,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/21:1-mm_percpu_wq]"
+    },
+    "385": {
+      "pid": 385,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/23:1-mm_percpu_wq]"
+    },
+    "386": {
+      "pid": 386,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/24:1-mm_percpu_wq]"
+    },
+    "390": {
+      "pid": 390,
+      "ppid": 1,
+      "pgid": 390,
+      "rss_bytes": 17739776,
+      "state": "S<s",
+      "command": "/usr/lib/systemd/systemd-journald"
+    },
+    "412": {
+      "pid": 412,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kmpathd]"
+    },
+    "413": {
+      "pid": 413,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-kmpath_handlerd]"
+    },
+    "446": {
+      "pid": 446,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/25:2]"
+    },
+    "455": {
+      "pid": 455,
+      "ppid": 1,
+      "pgid": 455,
+      "rss_bytes": 27955200,
+      "state": "SLsl",
+      "command": "/sbin/multipathd -d -s"
+    },
+    "458": {
+      "pid": 458,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/0:1H-kblockd]"
+    },
+    "459": {
+      "pid": 459,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u132:1-ext4-rsv-conversion]"
+    },
+    "469": {
+      "pid": 469,
+      "ppid": 1,
+      "pgid": 469,
+      "rss_bytes": 8974336,
+      "state": "Ss",
+      "command": "/usr/lib/systemd/systemd-udevd"
+    },
+    "482": {
+      "pid": 482,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[psimon]"
+    },
+    "552": {
+      "pid": 552,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/12:2-cgroup_free]"
+    },
+    "584": {
+      "pid": 584,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-ena]"
+    },
+    "630": {
+      "pid": 630,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[jbd2/nvme0n1p16-8]"
+    },
+    "631": {
+      "pid": 631,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-ext4-rsv-conversion]"
+    },
+    "699": {
+      "pid": 699,
+      "ppid": 1,
+      "pgid": 699,
+      "rss_bytes": 13180928,
+      "state": "Ss",
+      "command": "/usr/lib/systemd/systemd-resolved"
+    },
+    "715": {
+      "pid": 715,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u130:4-flush-259:0]"
+    },
+    "758": {
+      "pid": 758,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/1:1H-kblockd]"
+    },
+    "781": {
+      "pid": 781,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/1:2-mm_percpu_wq]"
+    },
+    "793": {
+      "pid": 793,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/29:1H-kblockd]"
+    },
+    "796": {
+      "pid": 796,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/5:3-mm_percpu_wq]"
+    },
+    "806": {
+      "pid": 806,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/23:1H-kblockd]"
+    },
+    "810": {
+      "pid": 810,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/8:1H-kblockd]"
+    },
+    "812": {
+      "pid": 812,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/30:1H-kblockd]"
+    },
+    "813": {
+      "pid": 813,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/4:1H-kblockd]"
+    },
+    "830": {
+      "pid": 830,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-cfg80211]"
+    },
+    "852": {
+      "pid": 852,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/13:1H-kblockd]"
+    },
+    "895": {
+      "pid": 895,
+      "ppid": 1,
+      "pgid": 895,
+      "rss_bytes": 10301440,
+      "state": "Ss",
+      "command": "/usr/lib/systemd/systemd-networkd"
+    },
+    "985": {
+      "pid": 985,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/17:1H-kblockd]"
+    },
+    "986": {
+      "pid": 986,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/18:1H-kblockd]"
+    },
+    "1004": {
+      "pid": 1004,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/10:1H-kblockd]"
+    },
+    "1005": {
+      "pid": 1005,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/2:1H-kblockd]"
+    },
+    "1013": {
+      "pid": 1013,
+      "ppid": 1,
+      "pgid": 1013,
+      "rss_bytes": 2125824,
+      "state": "Ss",
+      "command": "/usr/sbin/acpid"
+    },
+    "1017": {
+      "pid": 1017,
+      "ppid": 1,
+      "pgid": 1017,
+      "rss_bytes": 2953216,
+      "state": "Ss",
+      "command": "/usr/sbin/cron -f -P"
+    },
+    "1018": {
+      "pid": 1018,
+      "ppid": 1,
+      "pgid": 1018,
+      "rss_bytes": 5869568,
+      "state": "Ss",
+      "command": "@dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+    },
+    "1024": {
+      "pid": 1024,
+      "ppid": 1,
+      "pgid": 1024,
+      "rss_bytes": 4980736,
+      "state": "Ssl",
+      "command": "/usr/sbin/irqbalance"
+    },
+    "1026": {
+      "pid": 1026,
+      "ppid": 1,
+      "pgid": 1026,
+      "rss_bytes": 21364736,
+      "state": "Ss",
+      "command": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+    },
+    "1027": {
+      "pid": 1027,
+      "ppid": 1,
+      "pgid": 1027,
+      "rss_bytes": 10420224,
+      "state": "Ssl",
+      "command": "/usr/lib/polkit-1/polkitd --no-debug"
+    },
+    "1033": {
+      "pid": 1033,
+      "ppid": 1,
+      "pgid": 1033,
+      "rss_bytes": 46387200,
+      "state": "Ssl",
+      "command": "/snap/snapd/current/usr/lib/snapd/snapd"
+    },
+    "1035": {
+      "pid": 1035,
+      "ppid": 1,
+      "pgid": 1035,
+      "rss_bytes": 9342976,
+      "state": "Ss",
+      "command": "/usr/lib/systemd/systemd-logind"
+    },
+    "1039": {
+      "pid": 1039,
+      "ppid": 1,
+      "pgid": 1039,
+      "rss_bytes": 14254080,
+      "state": "Ssl",
+      "command": "/usr/libexec/udisks2/udisksd"
+    },
+    "1086": {
+      "pid": 1086,
+      "ppid": 1,
+      "pgid": 1086,
+      "rss_bytes": 2269184,
+      "state": "Ss+",
+      "command": "/sbin/agetty -o -p -- \\u --keep-baud 115200,57600,38400,9600 - vt220"
+    },
+    "1117": {
+      "pid": 1117,
+      "ppid": 1,
+      "pgid": 1117,
+      "rss_bytes": 6021120,
+      "state": "Ssl",
+      "command": "/usr/sbin/rsyslogd -n -iNONE"
+    },
+    "1118": {
+      "pid": 1118,
+      "ppid": 1,
+      "pgid": 1116,
+      "rss_bytes": 4063232,
+      "state": "S",
+      "command": "/usr/sbin/chronyd -F 1"
+    },
+    "1127": {
+      "pid": 1127,
+      "ppid": 1,
+      "pgid": 1127,
+      "rss_bytes": 2154496,
+      "state": "Ss+",
+      "command": "/sbin/agetty -o -p -- \\u --noclear - linux"
+    },
+    "1133": {
+      "pid": 1133,
+      "ppid": 1118,
+      "pgid": 1116,
+      "rss_bytes": 2457600,
+      "state": "S",
+      "command": "/usr/sbin/chronyd -F 1"
+    },
+    "1155": {
+      "pid": 1155,
+      "ppid": 1,
+      "pgid": 1155,
+      "rss_bytes": 23605248,
+      "state": "Ssl",
+      "command": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+    },
+    "1243": {
+      "pid": 1243,
+      "ppid": 1,
+      "pgid": 1243,
+      "rss_bytes": 13303808,
+      "state": "Ssl",
+      "command": "/usr/sbin/ModemManager"
+    },
+    "1272": {
+      "pid": 1272,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/15:1H-kblockd]"
+    },
+    "1280": {
+      "pid": 1280,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/21:1H-kblockd]"
+    },
+    "1281": {
+      "pid": 1281,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/22:1H-kblockd]"
+    },
+    "1294": {
+      "pid": 1294,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/26:1H-kblockd]"
+    },
+    "1344": {
+      "pid": 1344,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/20:1H-kblockd]"
+    },
+    "1357": {
+      "pid": 1357,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/14:1H-kblockd]"
+    },
+    "1378": {
+      "pid": 1378,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/3:1H-kblockd]"
+    },
+    "1438": {
+      "pid": 1438,
+      "ppid": 1,
+      "pgid": 1438,
+      "rss_bytes": 22589440,
+      "state": "Ssl",
+      "command": "/snap/amazon-ssm-agent/13349/amazon-ssm-agent"
+    },
+    "1452": {
+      "pid": 1452,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/24:1H-kblockd]"
+    },
+    "1473": {
+      "pid": 1473,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/19:1H-kblockd]"
+    },
+    "1485": {
+      "pid": 1485,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/25:1H-kblockd]"
+    },
+    "1529": {
+      "pid": 1529,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/27:1H-kblockd]"
+    },
+    "1532": {
+      "pid": 1532,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/28:1H-kblockd]"
+    },
+    "1540": {
+      "pid": 1540,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/31:1H-kblockd]"
+    },
+    "1574": {
+      "pid": 1574,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/15:2-mm_percpu_wq]"
+    },
+    "1604": {
+      "pid": 1604,
+      "ppid": 1,
+      "pgid": 1604,
+      "rss_bytes": 8462336,
+      "state": "Ss",
+      "command": "sshd: /usr/sbin/sshd -D -o AuthorizedKeysCommand /usr/share/ec2-instance-connect/eic_run_authorized_keys %u %f -o AuthorizedKeysCommandUser ec2-instance-connect [listener] 0 of 10-100 startups"
+    },
+    "1752": {
+      "pid": 1752,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/R-tls-strp]"
+    },
+    "1753": {
+      "pid": 1753,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/22:2]"
+    },
+    "1856": {
+      "pid": 1856,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/6:1H-kblockd]"
+    },
+    "1857": {
+      "pid": 1857,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u132:5-flush-259:0]"
+    },
+    "1858": {
+      "pid": 1858,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/5:1H-kblockd]"
+    },
+    "1865": {
+      "pid": 1865,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/7:1H-kblockd]"
+    },
+    "1866": {
+      "pid": 1866,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/9:1H-kblockd]"
+    },
+    "2134": {
+      "pid": 2134,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/11:1H-kblockd]"
+    },
+    "2135": {
+      "pid": 2135,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I<",
+      "command": "[kworker/12:1H-kblockd]"
+    },
+    "3338": {
+      "pid": 3338,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u131:4-flush-259:0]"
+    },
+    "3340": {
+      "pid": 3340,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/28:1-mm_percpu_wq]"
+    },
+    "4854": {
+      "pid": 4854,
+      "ppid": 1,
+      "pgid": 4854,
+      "rss_bytes": 50421760,
+      "state": "Ssl",
+      "command": "/usr/libexec/fwupd/fwupd"
+    },
+    "8394": {
+      "pid": 8394,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/18:1-cgroup_free]"
+    },
+    "9925": {
+      "pid": 9925,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/2:1-mm_percpu_wq]"
+    },
+    "10969": {
+      "pid": 10969,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/20:0-events]"
+    },
+    "11154": {
+      "pid": 11154,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u131:1-events_unbound]"
+    },
+    "11553": {
+      "pid": 11553,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/27:1-mm_percpu_wq]"
+    },
+    "12846": {
+      "pid": 12846,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u131:0-events_power_efficient]"
+    },
+    "13678": {
+      "pid": 13678,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/21:0-cgroup_release]"
+    },
+    "14134": {
+      "pid": 14134,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/17:1-events]"
+    },
+    "14759": {
+      "pid": 14759,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/18:0-mm_percpu_wq]"
+    },
+    "14835": {
+      "pid": 14835,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/23:0-cgroup_free]"
+    },
+    "15060": {
+      "pid": 15060,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/7:1-cgroup_free]"
+    },
+    "15356": {
+      "pid": 15356,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u129:3-flush-259:0]"
+    },
+    "15722": {
+      "pid": 15722,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/17:0-cgroup_free]"
+    },
+    "15779": {
+      "pid": 15779,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/0:2-cgroup_release]"
+    },
+    "16064": {
+      "pid": 16064,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/31:2-mm_percpu_wq]"
+    },
+    "16643": {
+      "pid": 16643,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/20:1-cgroup_free]"
+    },
+    "16685": {
+      "pid": 16685,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/3:2-mm_percpu_wq]"
+    },
+    "17939": {
+      "pid": 17939,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/7:0-events]"
+    },
+    "18391": {
+      "pid": 18391,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/31:1-cgroup_release]"
+    },
+    "18448": {
+      "pid": 18448,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/3:0]"
+    },
+    "18565": {
+      "pid": 18565,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/0:1-events]"
+    },
+    "18758": {
+      "pid": 18758,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/28:2]"
+    },
+    "19097": {
+      "pid": 19097,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/30:2]"
+    },
+    "19154": {
+      "pid": 19154,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/5:1]"
+    },
+    "19155": {
+      "pid": 19155,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u129:2-flush-259:0]"
+    },
+    "19158": {
+      "pid": 19158,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/29:1-mm_percpu_wq]"
+    },
+    "19308": {
+      "pid": 19308,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/14:2]"
+    },
+    "19363": {
+      "pid": 19363,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/27:2]"
+    },
+    "19449": {
+      "pid": 19449,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/2:2]"
+    },
+    "19581": {
+      "pid": 19581,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/4:2-cgroup_free]"
+    },
+    "19637": {
+      "pid": 19637,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/8:0-events]"
+    },
+    "19639": {
+      "pid": 19639,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/16:0]"
+    },
+    "19640": {
+      "pid": 19640,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/16:3-mm_percpu_wq]"
+    },
+    "19650": {
+      "pid": 19650,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/29:0]"
+    },
+    "19651": {
+      "pid": 19651,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/24:2-cgroup_release]"
+    },
+    "19744": {
+      "pid": 19744,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/30:1-events]"
+    },
+    "19754": {
+      "pid": 19754,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/0:0-cgroup_free]"
+    },
+    "19760": {
+      "pid": 19760,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "S",
+      "command": "[psimon]"
+    },
+    "19762": {
+      "pid": 19762,
+      "ppid": 1,
+      "pgid": 19762,
+      "rss_bytes": 11882496,
+      "state": "Ss",
+      "command": "/usr/lib/systemd/systemd --user"
+    },
+    "19763": {
+      "pid": 19763,
+      "ppid": 19762,
+      "pgid": 19762,
+      "rss_bytes": 3780608,
+      "state": "S",
+      "command": "(sd-pam)"
+    },
+    "19886": {
+      "pid": 19886,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/9:2]"
+    },
+    "19937": {
+      "pid": 19937,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u129:0-events_power_efficient]"
+    },
+    "20141": {
+      "pid": 20141,
+      "ppid": 1,
+      "pgid": 20141,
+      "rss_bytes": 4857856,
+      "state": "Ss",
+      "command": "tmux new-session -d -s verbclear <VERB_PY> /srv/jobs/verb_clearance.py <VERB_CLEARANCE_ROOT> <VERB_OUTPUT_ROOT>/on100_without_probe <VERB_OUTPUT_ROOT>/on100_with_probe <VERB_OUTPUT_ROOT>/allin_s01_300 /srv/verb/speed200_20261009/speed200_off /srv/verb/speed200_20261009/speed200_on 2>&1 | tee /srv/verb/clearance.log"
+    },
+    "20142": {
+      "pid": 20142,
+      "ppid": 20141,
+      "pgid": 20142,
+      "rss_bytes": 3616768,
+      "state": "Ss+",
+      "command": "bash -c <VERB_PY> /srv/jobs/verb_clearance.py <VERB_CLEARANCE_ROOT> <VERB_OUTPUT_ROOT>/on100_without_probe <VERB_OUTPUT_ROOT>/on100_with_probe <VERB_OUTPUT_ROOT>/allin_s01_300 /srv/verb/speed200_20261009/speed200_off /srv/verb/speed200_20261009/speed200_on 2>&1 | tee /srv/verb/clearance.log"
+    },
+    "20143": {
+      "pid": 20143,
+      "ppid": 19762,
+      "pgid": 20143,
+      "rss_bytes": 5259264,
+      "state": "Ss",
+      "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+    },
+    "20144": {
+      "pid": 20144,
+      "ppid": 20142,
+      "pgid": 20142,
+      "rss_bytes": 20160512,
+      "state": "S+",
+      "command": "<VERB_PY> /srv/jobs/verb_clearance.py <VERB_CLEARANCE_ROOT> <VERB_OUTPUT_ROOT>/on100_without_probe <VERB_OUTPUT_ROOT>/on100_with_probe <VERB_OUTPUT_ROOT>/allin_s01_300 /srv/verb/speed200_20261009/speed200_off /srv/verb/speed200_20261009/speed200_on"
+    },
+    "20145": {
+      "pid": 20145,
+      "ppid": 20142,
+      "pgid": 20142,
+      "rss_bytes": 2023424,
+      "state": "S+",
+      "command": "tee /srv/verb/clearance.log"
+    },
+    "20149": {
+      "pid": 20149,
+      "ppid": 20144,
+      "pgid": 20149,
+      "rss_bytes": 16637952,
+      "state": "Ss",
+      "command": "<VERB_PY> <VERB_JOBS> sampler"
+    },
+    "20153": {
+      "pid": 20153,
+      "ppid": 20141,
+      "pgid": 20153,
+      "rss_bytes": 3665920,
+      "state": "Ss+",
+      "command": "bash -c bash ~/cloud/verb/verb_run_on100.sh 2>&1 | tee /srv/verb/run_on100.log"
+    },
+    "20155": {
+      "pid": 20155,
+      "ppid": 20153,
+      "pgid": 20153,
+      "rss_bytes": 3616768,
+      "state": "S+",
+      "command": "bash /home/ubuntu/cloud/verb/verb_run_on100.sh"
+    },
+    "20156": {
+      "pid": 20156,
+      "ppid": 20153,
+      "pgid": 20153,
+      "rss_bytes": 2019328,
+      "state": "S+",
+      "command": "tee /srv/verb/run_on100.log"
+    },
+    "20159": {
+      "pid": 20159,
+      "ppid": 20155,
+      "pgid": 20153,
+      "rss_bytes": 18915328,
+      "state": "S+",
+      "command": "<VERB_PY> <VERB_SOURCE>/tools/verb_measurement/cloud_run.py run <VERB_OUTPUT_ROOT>/on100_without_probe --jobs <VERB_JOBS> --clearance <VERB_CLEARANCE_ROOT>/on100_without_probe.json"
+    },
+    "20160": {
+      "pid": 20160,
+      "ppid": 20141,
+      "pgid": 20160,
+      "rss_bytes": 3600384,
+      "state": "Ss+",
+      "command": "bash -c bash ~/cloud/verb/verb_run_speed200.sh 2>&1 | tee /srv/verb/run_speed200.log"
+    },
+    "20161": {
+      "pid": 20161,
+      "ppid": 20160,
+      "pgid": 20160,
+      "rss_bytes": 3633152,
+      "state": "S+",
+      "command": "bash /home/ubuntu/cloud/verb/verb_run_speed200.sh"
+    },
+    "20162": {
+      "pid": 20162,
+      "ppid": 20160,
+      "pgid": 20160,
+      "rss_bytes": 2019328,
+      "state": "S+",
+      "command": "tee /srv/verb/run_speed200.log"
+    },
+    "20164": {
+      "pid": 20164,
+      "ppid": 20161,
+      "pgid": 20160,
+      "rss_bytes": 18956288,
+      "state": "S+",
+      "command": "<VERB_PY> /srv/verb/speed_source/tools/verb_measurement/cloud_run.py run /srv/verb/speed200_20261009/speed200_off --jobs <VERB_JOBS> --clearance <VERB_CLEARANCE_ROOT>/speed200_off.json"
+    },
+    "20167": {
+      "pid": 20167,
+      "ppid": 20159,
+      "pgid": 20153,
+      "rss_bytes": 17596416,
+      "state": "S+",
+      "command": "<VERB_PY> <VERB_JOBS> run --wait --owner 動詞・指示9・on100_without_probe --mem 2.0 --disk-path <VERB_OUTPUT_ROOT>/on100_without_probe/output -- <VERB_PY> <VERB_SOURCE>/tools/verb_measurement/cloud_run.py registered <VERB_OUTPUT_ROOT>/on100_without_probe --clearance <VERB_CLEARANCE_ROOT>/on100_without_probe.json"
+    },
+    "20168": {
+      "pid": 20168,
+      "ppid": 20164,
+      "pgid": 20160,
+      "rss_bytes": 17584128,
+      "state": "S+",
+      "command": "<VERB_PY> <VERB_JOBS> run --wait --owner 動詞・指示9・speed200_off --mem 2.0 --disk-path /srv/verb/speed200_20261009/speed200_off/output -- <VERB_PY> /srv/verb/speed_source/tools/verb_measurement/cloud_run.py registered /srv/verb/speed200_20261009/speed200_off --clearance <VERB_CLEARANCE_ROOT>/speed200_off.json"
+    },
+    "20245": {
+      "pid": 20245,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/10:0]"
+    },
+    "20420": {
+      "pid": 20420,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/23:2]"
+    },
+    "20428": {
+      "pid": 20428,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u130:2-events_unbound]"
+    },
+    "20564": {
+      "pid": 20564,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/u132:2-flush-259:0]"
+    },
+    "20676": {
+      "pid": 20676,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/12:0]"
+    },
+    "20681": {
+      "pid": 20681,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/13:2]"
+    },
+    "20732": {
+      "pid": 20732,
+      "ppid": 2,
+      "pgid": 0,
+      "rss_bytes": 0,
+      "state": "I",
+      "command": "[kworker/20:2]"
+    },
+    "20733": {
+      "pid": 20733,
+      "ppid": 1604,
+      "pgid": 20733,
+      "rss_bytes": 10797056,
+      "state": "Ss",
+      "command": "sshd: ubuntu [priv]"
+    },
+    "20790": {
+      "pid": 20790,
+      "ppid": 20733,
+      "pgid": 20733,
+      "rss_bytes": 10133504,
+      "state": "S",
+      "command": "sshd: ubuntu@notty"
+    },
+    "20791": {
+      "pid": 20791,
+      "ppid": 20790,
+      "pgid": 20791,
+      "rss_bytes": 3125248,
+      "state": "Ss",
+      "command": "tar czf - -C /home/ubuntu/cloud_runs/calib_fast/w1_seed048 ."
+    },
+    "20792": {
+      "pid": 20792,
+      "ppid": 20791,
+      "pgid": 20791,
+      "rss_bytes": 2019328,
+      "state": "S",
+      "command": "/bin/sh -c gzip"
+    },
+    "20793": {
+      "pid": 20793,
+      "ppid": 20792,
+      "pgid": 20791,
+      "rss_bytes": 2043904,
+      "state": "S",
+      "command": "gzip"
+    },
+    "20851": {
+      "pid": 20851,
+      "ppid": 1604,
+      "pgid": 20851,
+      "rss_bytes": 10878976,
+      "state": "Ss",
+      "command": "sshd: ubuntu [priv]"
+    },
+    "20899": {
+      "pid": 20899,
+      "ppid": 20851,
+      "pgid": 20851,
+      "rss_bytes": 7987200,
+      "state": "S",
+      "command": "sshd: ubuntu@notty"
+    },
+    "20900": {
+      "pid": 20900,
+      "ppid": 20899,
+      "pgid": 20900,
+      "rss_bytes": 3018752,
+      "state": "Ss",
+      "command": "/usr/lib/openssh/sftp-server"
+    },
+    "20904": {
+      "pid": 20904,
+      "ppid": 20167,
+      "pgid": 20153,
+      "rss_bytes": 19701760,
+      "state": "S+",
+      "command": "<VERB_PY> <VERB_SOURCE>/tools/verb_measurement/cloud_run.py registered <VERB_OUTPUT_ROOT>/on100_without_probe --clearance <VERB_CLEARANCE_ROOT>/on100_without_probe.json"
+    },
+    "20906": {
+      "pid": 20906,
+      "ppid": 20168,
+      "pgid": 20160,
+      "rss_bytes": 19337216,
+      "state": "S+",
+      "command": "<VERB_PY> /srv/verb/speed_source/tools/verb_measurement/cloud_run.py registered /srv/verb/speed200_20261009/speed200_off --clearance <VERB_CLEARANCE_ROOT>/speed200_off.json"
+    },
+    "20914": {
+      "pid": 20914,
+      "ppid": 20906,
+      "pgid": 20160,
+      "rss_bytes": 4460544,
+      "state": "R+",
+      "command": "ps -axo pid=,ppid=,pgid=,rss=,stat=,args="
+    },
+    "20916": {
+      "pid": 20916,
+      "ppid": 20904,
+      "pgid": 20153,
+      "rss_bytes": 4456448,
+      "state": "R+",
+      "command": "ps -axo pid=,ppid=,pgid=,rss=,stat=,args="
+    }
+  },
+  "resource_before": {
+    "epoch_seconds": 1791481187.5688004,
+    "models": 0,
+    "unknown_active_spawn": 0,
+    "own_models": 0,
+    "outside_heavy": 0,
+    "inside_heavy": 0,
+    "own_rss_bytes": 23777280,
+    "free_disk_bytes": 73517645824
+  }
+}
