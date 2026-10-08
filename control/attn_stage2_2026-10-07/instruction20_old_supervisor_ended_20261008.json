@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-08T11:24:19.087766+09:00",
+  "old_pid": 9047,
+  "ended": true,
+  "ps_after": {
+    "9042": {
+      "ppid": 1,
+      "pgid": 9042,
+      "state": "Ss",
+      "rss_kb": 18576,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+    },
+    "9073": {
+      "ppid": 1,
+      "pgid": 9073,
+      "state": "Ss",
+      "rss_kb": 7392,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示18 較正 世界2 種42 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py entry 42"
+    },
+    "9081": {
+      "ppid": 9073,
+      "pgid": 9073,
+      "state": "S",
+      "rss_kb": 10000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json"
+    },
+    "9096": {
+      "ppid": 9081,
+      "pgid": 9073,
+      "state": "R",
+      "rss_kb": 651296,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    "31655": {
+      "ppid": 9042,
+      "pgid": 31655,
+      "state": "Ss",
+      "rss_kb": 7392,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_on_200 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py entry reuse_on_200"
+    },
+    "31665": {
+      "ppid": 31655,
+      "pgid": 31655,
+      "state": "S",
+      "rss_kb": 10000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200/native_command.json"
+    },
+    "31675": {
+      "ppid": 31665,
+      "pgid": 31655,
+      "state": "R",
+      "rss_kb": 208608,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    "91021": {
+      "ppid": 1,
+      "pgid": 91021,
+      "state": "Ss",
+      "rss_kb": 16304,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+    },
+    "95408": {
+      "ppid": 91021,
+      "pgid": 95408,
+      "state": "Ss",
+      "rss_kb": 7392,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    },
+    "95412": {
+      "ppid": 95408,
+      "pgid": 95408,
+      "state": "S",
+      "rss_kb": 10000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    },
+    "95421": {
+      "ppid": 95412,
+      "pgid": 95408,
+      "state": "R",
+      "rss_kb": 1393312,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  },
+  "original_status_preserved": true,
+  "old_supervisor_not_restarted": true,
+  "models_receipts_observers_alive": true
+}
