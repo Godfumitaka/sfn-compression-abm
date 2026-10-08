@@ -1,0 +1,419 @@
+"""Candidate EXACT optimizations, applied as runtime monkeypatches (prototype for measurement only).
+
+Applied after every install() of the worker has run (just before sweep.run_one).
+P1  cstar_runtime.probabilities_for_graph: with match_eps != 'shared', an F node's matcher input is
+    seat_distributions(...)['q']['F'] == {row.relation.predicate: 1.0}. Return that literal instead of
+    computing b / q_H / P_F / P_H / P_U that are discarded. (Trace graphs are always 'F'.)
+P2  BACKGROUND_SOURCE (the original v310be.probabilities captured by cstar_runtime.install) is only
+    ever indexed with ['U']. Compute only b, and compute the signature-filtered pool with a per-call
+    predicate->signatures index instead of _predicate_has_signature's O(|vocab|*|relations|) rescans.
+P3  sme2017.Graph.fingerprint: memoize per (immutable, frozen) Graph instance.
+P5  cstar_matcher.CstarMatcher.match: per-trial side memo of engine results (key -> result) that is NOT
+    rolled back by attnstage2_sme.isolated(). Only for call-seeded matches (tie_seed given, fresh
+    random.Random(tie_seed)) without a reuse foundation, and served only inside a stage-2 scope. All
+    bookkeeping (stage2 counters, self.cache/cache_rng writes, eviction epochs) is kept identical; only
+    CstarEngine(...).run() (+ smeintern.share) is skipped on a hit.
+P7  smeshared.map_graphs: on a RESULTS miss inside a stage-2 scope (SME log closed), reuse the MappingResult built
+    earlier in the same trial for the same key (skip validate / OLD_MAP audit + module snapshot / freeze), and
+    replay exactly the strictpc nested-Counter increments that the audit leaks through its shallow STATS restore.
+Select with env PROF_OPT="P1,P2,P3,P5,P7" (default P1,P2,P3). Verified: outputs equal modulo wall-clock fields.
+"""
+import os
+import sys
+
+ENABLED = set(x.strip() for x in os.environ.get("PROF_OPT", "P1,P2,P3").split(",") if x.strip())
+
+
+def apply():
+    import cstar_runtime as C
+    import cstar_probability as CP
+    import v39
+    if "P1" in ENABLED:
+        def probabilities_for_graph(raw, graph, scene):
+            state, config = C.CTX['state'], C.CTX['config']
+            name = raw.graph_id.removeprefix('definition:') if raw.graph_id.startswith('definition:') else None
+            d = state.definitions.get(name)
+            if d is None:
+                from types import SimpleNamespace
+                rows = tuple(SimpleNamespace(relation=r, slot_index=i) for i, r in enumerate(raw.relations))
+                d = SimpleNamespace(name='cstar-visible-trace', constituents=rows)
+            rows = {r.relation.relation_id: r for r in d.constituents}
+            belief = C.CFG['match_eps'] != 'shared'
+            out = {}
+            for node in graph.nodes:
+                if node.kind in ('entity', 'unknown'):
+                    continue
+                row = rows[node.key]
+                st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
+                if belief and st == 'F':
+                    # == seat_distributions(...)['q']['F'] (cstar_probability.py:69)
+                    out[node.key] = {row.relation.predicate: 1.0}
+                    continue
+                values = C.distributions(d, row, state, scene, config)
+                out[node.key] = values['P' if C.CFG['match_eps'] == 'shared' else 'q'][st]
+            return out
+        C.probabilities_for_graph = probabilities_for_graph
+
+    if "P2" in ENABLED:
+        import v310be as B
+        original = CP.BACKGROUND_SOURCE
+        if original is None or getattr(original, "__name__", "") != "probabilities" or original.__module__ != "v310be":
+            raise RuntimeError(("P2: unexpected BACKGROUND_SOURCE", original))
+        from abm.domains import RelationGraph
+        from abm.filling import _distribution, slot_signature
+
+        def background_only(d, row, state, scene, config):
+            dg = RelationGraph("definition", relations=tuple(c.relation for c in d.constituents))
+            sig = slot_signature(row.relation, dg)
+            scene_ids = {item.relation_id for item in scene.relations}
+            sigs = {}
+            for r in (*scene.relations, *dg.relations):
+                sigs.setdefault(r.predicate, []).append(
+                    (len(r.arguments), tuple("relation" if a in scene_ids else "entity" for a in r.arguments)))
+            # == _predicate_has_signature(p, sig, scene, dg): no occurrence, or one occurrence typed against scene == sig
+            pool = frozenset(p for p in state.p_hat.alive_vocab
+                             if p not in sigs or any(s == sig for s in sigs[p]))
+            pool = v39._order_pool(pool, d, row, config.higher_order_predicates)
+            b = dict(_distribution(pool, state.p_hat))
+            if not b or sum(b.values()) == 0:
+                b = {None: 1.0}
+            return {"U": b}
+        CP.BACKGROUND_SOURCE = background_only
+
+    if "P3" in ENABLED:
+        import sme2017
+        real_fp = sme2017.Graph.fingerprint
+
+        def fingerprint(self):
+            try:
+                return self.__dict__["_fp_cache"]
+            except KeyError:
+                v = real_fp(self)
+                object.__setattr__(self, "_fp_cache", v)
+                return v
+        sme2017.Graph.fingerprint = fingerprint
+
+
+def apply_p5():
+    import time
+    import random
+    import smeshared as S
+    import cstar_matcher as M
+    side, side_trial = {}, [object()]
+
+    def match(self, left, right, *, probabilities, use_cache=True, tie_seed=None):
+        if self.settings.max_local_score is not None:
+            raise ValueError("C*は上限なしの点の伝達")
+        key = self.match_key(left, right, tie_seed, probabilities=probabilities)
+        scope = getattr(self, '_stage2_scope', None)
+        foundation = None
+        if scope is not None:
+            store, stats = scope
+            stats['match_calls'] += 1
+            if store is not None:
+                foundation, built = store.get(left, right)
+                stats['foundation_builds' if built else 'foundation_hits'] += 1
+        if use_cache and key in self.cache:
+            if scope is not None:
+                stats['result_cache_hits'] += 1
+            return self.cache[key]
+        rng = self.rng if tie_seed is None else random.Random(tie_seed)
+        before = self._capture_rng_state() if tie_seed is None else {
+            "policy": "call-seed-uniform-v1" if getattr(self, "tie_uniform", False) else "call-seed-v1", "seed": tie_seed}
+        started = time.perf_counter()
+        trial = S.CTX.get('trial')
+        if side_trial[0] != trial:
+            side.clear(); side_trial[0] = trial
+        memo = tie_seed is not None and foundation is None
+        if memo and scope is not None and key in side:
+            result = side[key]
+            STATS['p5_hits'] = STATS.get('p5_hits', 0) + 1
+        else:
+            result = M.CstarEngine(left, right, self.settings, rng, probabilities,
+                                   tie_uniform=getattr(self, "tie_uniform", False), foundation=foundation).run()
+            if memo:
+                side[key] = result
+            STATS['p5_runs'] = STATS.get('p5_runs', 0) + 1
+        if scope is not None:
+            stats['engine_calls'] += 1
+            stats['engine_seconds'] += time.perf_counter() - started
+        if use_cache:
+            self.cache[key], self.cache_rng[key] = result, before
+        return result
+    M.CstarMatcher.match = match
+
+
+def apply_p7():
+    """P7  smeshared.map_graphs: on a RESULTS miss inside a stage-2 scope (SME log closed, call-seeded C*),
+    reuse the MappingResult built earlier in the same trial for the same key instead of re-running
+    validate + OLD_MAP audit (+ module snapshot/restore) + SharedAlignment/freeze. engine.match is still
+    called (bookkeeping/counters identical; P5 makes it cheap). GRAPHS/RESULTS/STATS writes replayed."""
+    import inspect
+    import smeshared as S
+    src = inspect.getsource(S.map_graphs)
+    anchor = '    rng_before = engine.cache_rng[key]\n'
+    assert src.count(anchor) == 1
+    src = src.replace(anchor, anchor + (
+        '    if _P7_OK(expected, seed, key):\n'
+        '        out, _p7_calls = _P7_SIDE[key]\n'
+        '        _P7_REPLAY(_p7_calls)\n'
+        '        GRAPHS[lf], GRAPHS[rf] = left, right\n'
+        '        RESULTS[key] = out\n'
+        '        STATS["computed"] = STATS.get("computed", 0) + 1\n'
+        '        return out\n'))
+    anchor2 = '    RESULTS[key] = out\n    STATS["computed"]'
+    assert src.count(anchor2) == 1
+    src = src.replace(anchor2, '    _P7_STORE(expected, seed, key, (out, _p7_calls))\n' + anchor2)
+    anchor3 = '    import probeworld\n    snap = probeworld._snapshot_modules()\n'
+    assert src.count(anchor3) == 1
+    src = src.replace(anchor3, '    _P7_REC_START(expected, seed)\n' + anchor3)
+    anchor4 = '    identifier = sha256(repr(key).encode()).hexdigest()\n'
+    assert src.count(anchor4) == 1
+    src = src.replace(anchor4, '    _p7_calls = _P7_REC_STOP()\n' + anchor4)
+    # strictpc._use replica that, while recording, notes each audit-time call (window names below the
+    # map_graphs frame, dropped count n, reasons) so the leaked Counter increments can be replayed exactly.
+    from collections import Counter
+    sp = sys.modules.get('strictpc')
+    rec, rec_frame = [None], [None]
+
+    def _use():
+        f = sys._getframe(2)
+        names, frames = [], []
+        while f is not None and len(names) < 40:
+            names.append(f.f_code.co_name); frames.append(f)
+            f = f.f_back
+        if rec[0] is not None:
+            d = next((i for i, fr in enumerate(frames) if fr is rec_frame[0]), None)
+            caller = sys._getframe(1)
+            rec[0].append((names[:d] if d is not None else names, d, caller.f_locals['n'], Counter(caller.f_locals['reasons'])))
+        for fn, label in sp.USES:
+            if fn in names:
+                return label
+        return "その他"
+
+    def rec_start(expected, seed):
+        if active(expected, seed):
+            rec[0], rec_frame[0] = [], sys._getframe(1)
+
+    def rec_stop():
+        calls = rec[0]
+        rec[0], rec_frame[0] = None, None
+        return calls
+
+    def replay(calls):
+        if calls is None:
+            raise RuntimeError('P7: stored entry without strictpc record')
+        if not calls:
+            return
+        here = sys._getframe(2)   # the map_graphs frame (replay <- _P7_REPLAY call site in map_graphs)
+        st = sp.STATS
+        for internal, d, n, reasons in calls:
+            names = list(internal)
+            if d is not None:
+                f = here
+                while f is not None and len(names) < 40:
+                    names.append(f.f_code.co_name)
+                    f = f.f_back
+            label = next((lab for fn, lab in sp.USES if fn in names), "その他")
+            st["reasons"].update(reasons)
+            st["use_calls"][label] += 1
+            st["use_dropped"][label] += n
+            STATS['p7_replayed_calls'] = STATS.get('p7_replayed_calls', 0) + 1
+
+    if sp is not None:
+        sp._use = _use
+    S._P7_REC_START, S._P7_REC_STOP = rec_start, rec_stop
+    S._P7_REPLAY = (lambda calls: replay(calls)) if sp is not None else (lambda calls: None)
+    side, side_trial = {}, [object()]
+
+    def active(expected, seed):
+        cstar = sys.modules.get('cstar_runtime')
+        if not (expected and seed is not None and S.LOG.get('f') is None and S.LOG.get('diagnostic_f') is None
+                and getattr(cstar.ENGINE, '_stage2_scope', None) is not None):
+            return False
+        if side_trial[0] != S.CTX.get('trial'):
+            side.clear(); side_trial[0] = S.CTX.get('trial')
+        return True
+
+    def ok(expected, seed, key):
+        hit = active(expected, seed) and key in side
+        if hit:
+            STATS['p7_hits'] = STATS.get('p7_hits', 0) + 1
+        return hit
+
+    def store(expected, seed, key, out):
+        if active(expected, seed):
+            side[key] = out
+            STATS['p7_stores'] = STATS.get('p7_stores', 0) + 1
+
+    S._P7_OK, S._P7_STORE, S._P7_SIDE = ok, store, side
+    original = S.map_graphs
+    ns = {}
+    exec(compile(src, S.__file__, 'exec'), S.__dict__, ns)
+    new = ns['map_graphs']
+    new.__globals__  # same module globals as the original
+    n = 0
+    for module in tuple(sys.modules.values()):
+        if module is None:
+            continue
+        for k, v in tuple(vars(module).items()):
+            if v is original:
+                setattr(module, k, new); n += 1
+    STATS['p7_rebound'] = n
+
+
+def apply_p8():
+    """P8  smeshared.typed_graph: per-trial memo for graphs that have no v39.REG and no strictpc.RELPOS entry
+    (verbatim traces, the presented scene). For those the result is a pure function of the (frozen) graph."""
+    import smeshared as S
+    real = S.typed_graph
+    memo, memo_trial = {}, [object()]
+
+    def typed_graph(g):
+        v39 = sys.modules.get("v39")
+        sp = sys.modules.get("strictpc")
+        gid = id(g)
+        if gid in getattr(v39, "REG", {}) or gid in getattr(sp, "RELPOS", {}):
+            return real(g)
+        if memo_trial[0] != S.CTX.get('trial'):
+            memo.clear(); memo_trial[0] = S.CTX.get('trial')
+        hit = memo.get(gid)
+        if hit is not None and hit[0] is g:
+            STATS['p8_hits'] = STATS.get('p8_hits', 0) + 1
+            return hit[1]
+        t = real(g)
+        memo[gid] = (g, t)
+        return t
+    S.typed_graph = typed_graph
+
+
+def apply_p6():
+    """P6  cstar_runtime.distributions: per-trial memo keyed by the identities of (d, row, state, scene, config),
+    used only inside a stage-2 scope (states are not mutated there; strong refs keep ids unique). Each hit returns
+    a fresh copy with the same aliasing as the original structure (q['U'] is b)."""
+    import cstar_runtime as C
+    import smeshared as S
+    real = C.distributions
+    memo, memo_trial = {}, [object()]
+
+    def clone(v):
+        nb = dict(v["b"])
+        q, P = v["q"], v["P"]
+        return {"b": nb, "q": {"F": dict(q["F"]), "H": dict(q["H"]), "U": nb},
+                "P": {k: dict(x) for k, x in P.items()}}
+
+    def distributions(d, row, state, scene, config):
+        if getattr(C.ENGINE, '_stage2_scope', None) is None:
+            return real(d, row, state, scene, config)
+        if memo_trial[0] != S.CTX.get('trial'):
+            memo.clear(); memo_trial[0] = S.CTX.get('trial')
+        key = (id(d), id(row), id(state), id(scene), id(config))
+        hit = memo.get(key)
+        if hit is not None and hit[0] is d and hit[1] is row and hit[2] is state and hit[3] is scene and hit[4] is config:
+            STATS['p6_hits'] = STATS.get('p6_hits', 0) + 1
+            return clone(hit[5])
+        v = real(d, row, state, scene, config)
+        if not (list(v) == ["b", "q", "P"] and list(v["q"]) == ["F", "H", "U"] and v["q"]["U"] is v["b"]
+                and list(v["P"]) == ["U", "H", "F"] and v["P"]["U"] is not v["b"]):
+            raise RuntimeError("P6: unexpected distributions structure")
+        memo[key] = (d, row, state, scene, config, clone(v))
+        STATS['p6_miss'] = STATS.get('p6_miss', 0) + 1
+        return v
+    C.distributions = distributions
+
+
+def fast_pool(alive_vocab, sig, target, definition_graph):
+    """== frozenset(p for p in alive_vocab if _predicate_has_signature(p, sig, target, definition_graph)),
+    built in the same iteration order (same members, same insertion sequence -> same frozenset layout)."""
+    tids = {item.relation_id for item in target.relations}
+    sigs = {}
+    for r in (*target.relations, *definition_graph.relations):
+        sigs.setdefault(r.predicate, []).append(
+            (len(r.arguments), tuple("relation" if a in tids else "entity" for a in r.arguments)))
+    return frozenset(p for p in alive_vocab if p not in sigs or any(s == sig for s in sigs[p]))
+
+
+def apply_p2b():
+    """P2b  the same indexed pool for v39.u_answer and attncstar.common_bases (same membership, same order)."""
+    import v39
+    import attncstar
+
+    def u_answer(d, row, scene, p_hat, hop):
+        from abm.domains import RelationGraph
+        from abm.filling import most_frequent, slot_signature
+        if v39.CFG["u_abstain"]:
+            return None, "U は棄権"
+        dg = RelationGraph("definition", relations=tuple(c.relation for c in d.constituents))
+        sig = slot_signature(row.relation, dg)
+        pool = fast_pool(p_hat.alive_vocab, sig, scene, dg)
+        pool = v39._order_pool(pool, d, row, hop)
+        if not pool:
+            return None, "適合する名なし"
+        p, tied = most_frequent(pool, p_hat)
+        return (None, "同点") if tied or p is None else (p, None)
+    v39.u_answer = u_answer
+
+    def common_bases(ai, state, config):
+        from types import SimpleNamespace
+        from abm.filling import slot_signature, _distribution
+        scene = ai.target_graph_partial
+        rows = tuple(SimpleNamespace(relation=r, slot_index=i) for i, r in enumerate(scene.relations))
+        visible = SimpleNamespace(name='attention-visible', constituents=rows)
+        bases = {}
+        for row in rows:
+            signature = slot_signature(row.relation, scene)
+            pool = fast_pool(state.p_hat.alive_vocab, signature, scene, scene)
+            pool = v39._order_pool(pool, visible, row, config.higher_order_predicates)
+            b = dict(_distribution(pool, state.p_hat))
+            bases[row.relation.relation_id] = b if b and sum(b.values()) > 0 else {None: 1.}
+        return bases
+    attncstar.common_bases = common_bases
+
+
+def apply_p10():
+    """P10 at each trial boundary, drop the C* engine's call-seeded cache/cache_rng entries. Their keys end with
+    ('call-seed-v1', seed) and the seed hashes CTX['trial'], so entries of earlier trials can never be looked up
+    again; self_cache (not call-seeded) is kept. The C* caches are not evicted by smeevict and are copied twice per
+    isolated() block (cstar_runtime.snapshot/restore), so their growth makes every stage-2 block O(run length)."""
+    import abm.loop as loop
+    import cstar_runtime as C
+    real = loop._agent_input
+
+    def agent_input(trial, before):
+        eng = C.ENGINE
+        if eng is not None:
+            for table in (eng.cache, eng.cache_rng):
+                dead = [k for k in table if isinstance(k, tuple) and len(k) >= 2 and k[-2] == 'call-seed-v1']
+                for k in dead:
+                    del table[k]
+                STATS['p10_evicted'] = STATS.get('p10_evicted', 0) + len(dead)
+        return real(trial, before)
+    loop._agent_input = agent_input
+
+
+STATS = {}
+
+
+def install_hook():
+    import sweep
+    real = sweep.run_one
+
+    def run_one(task):
+        apply()
+        if "P5" in ENABLED:
+            apply_p5()
+        if "P7" in ENABLED:
+            apply_p7()
+        if "P8" in ENABLED:
+            apply_p8()
+        if "P2b" in ENABLED:
+            apply_p2b()
+        if "P10" in ENABLED:
+            apply_p10()
+        if "P6" in ENABLED:
+            apply_p6()
+        try:
+            return real(task)
+        finally:
+            print("OPT_STATS", STATS, flush=True)
+    sweep.run_one = run_one

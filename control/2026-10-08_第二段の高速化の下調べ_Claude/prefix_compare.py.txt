@@ -1,0 +1,52 @@
+"""Compare a complete short run (A) against a longer, killed run (B) on their common prefix.
+For each file in A that also exists in B: decompress (truncated gz tolerated), split lines, drop B's last (possibly
+partial) line, compare line by line (JSON lines with wall-clock fields removed). Reports the first mismatch index.
+usage: python3.12 prefix_compare.py A B
+"""
+import json
+import sys
+import zlib
+from pathlib import Path
+
+TIMING = {"seconds", "wrapper_seconds", "engine_seconds", "elapsed_sec", "peak_rss_mb", "finished_at",
+          "rematch_fraction_of_stage2_seconds"}
+
+
+def raw(p):
+    b = p.read_bytes()
+    if p.suffix == ".gz":
+        d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+        b = d.decompress(b)
+    return b.decode("utf-8", "replace")
+
+
+def strip(x):
+    if isinstance(x, dict):
+        return {k: strip(v) for k, v in x.items() if k not in TIMING}
+    if isinstance(x, list):
+        return [strip(v) for v in x]
+    return x
+
+
+def norm(line):
+    try:
+        return strip(json.loads(line))
+    except Exception:
+        return line
+
+
+A, B = Path(sys.argv[1]), Path(sys.argv[2])
+for pa in sorted(p for p in A.rglob("*") if p.is_file()):
+    rel = pa.relative_to(A)
+    pb = B / rel
+    if not pb.exists():
+        print("only in A:", rel)
+        continue
+    la = raw(pa).split("\n")
+    if la and la[-1] == "":
+        la = la[:-1]
+    lb = raw(pb).split("\n")[:-1]
+    n = min(len(la), len(lb))
+    first = next((i for i in range(n) if la[i] != lb[i] and norm(la[i]) != norm(lb[i])), None)
+    status = "PREFIX-EQUAL" if first is None else f"FIRST MISMATCH at line {first} (A has {len(la)} lines)"
+    print(f"{status:45s} compared {n:6d} lines  {rel}")

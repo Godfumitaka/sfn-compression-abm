@@ -1,0 +1,48 @@
+"""Count measured seats / rematch calls per disclosed trial from the stage2 streams (works on truncated gz).
+usage: python3.12 stage2_counts.py <run out dir>
+"""
+import json
+import sys
+import zlib
+from collections import defaultdict
+from pathlib import Path
+
+
+def lines(p):
+    d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+    data = d.decompress(p.read_bytes())
+    out = []
+    for l in data.decode("utf-8", "ignore").split("\n"):
+        try:
+            out.append(json.loads(l))
+        except Exception:
+            pass
+    return out
+
+
+root = Path(sys.argv[1])
+s2 = next(p for p in root.glob("stage2/*/seed*.jsonl.gz") if p.name.count(".jsonl") == 1)
+main = lines(s2)
+rem = lines(Path(str(s2) + ".rematch.jsonl.gz"))
+ini = lines(Path(str(s2) + ".initial.jsonl.gz"))
+disc = [r for r in main if r.get("f_fired")]
+print(f"trials logged in stage2 stream: {len(main)}  disclosed: {len(disc)}  last trial: {main[-1]['trial'] if main else None}")
+if disc:
+    seats = [r.get("thinned_seats", 0) for r in disc]
+    secs = [r["seconds"] for r in disc]
+    print(f"seats per disclosed trial: mean {sum(seats)/len(seats):.1f} min {min(seats)} max {max(seats)} total {sum(seats)}")
+    print(f"stage2 'seconds' per disclosed trial: mean {sum(secs)/len(secs):.2f} total {sum(secs):.1f}; per seat {sum(secs)/max(sum(seats),1)*1000:.1f} ms")
+    print("per disclosed trial (trial, seats, rerankings, seconds):", [(r['trial'], r.get('thinned_seats'), r.get('rerankings'), round(r['seconds'], 2)) for r in disc][-15:])
+by = defaultdict(lambda: defaultdict(float))
+for r in rem:
+    o = r["origin"]
+    by[o]["calls"] += 1
+    for k in ("seconds", "match_calls", "result_cache_hits", "engine_calls", "engine_seconds"):
+        by[o][k] += r.get(k, 0)
+for o, v in by.items():
+    print(f"rematch origin={o}: " + ", ".join(f"{k}={v[k]:.3f}" if isinstance(v[k], float) else f"{k}={v[k]}" for k in v))
+    if o == "disclosure" and disc:
+        print(f"  rematch calls per disclosed trial: {v['calls']/len(disc):.1f}; ms per rematch call: {1000*v['seconds']/v['calls']:.1f}; engine ms per call: {1000*v['engine_seconds']/v['calls']:.2f}; engine share of rematch: {v['engine_seconds']/v['seconds']:.1%}")
+births = [r for r in ini if r.get("kind") == "stage2_birth_virtual"]
+if births:
+    print(f"births: {len(births)}; virtual questions evaluated: {sum(b.get('evaluated_questions',0) for b in births)}; thinned seats: {sum(b.get('thinned_seats',0) for b in births)}; birth seconds total {sum(b['seconds'] for b in births):.1f}")

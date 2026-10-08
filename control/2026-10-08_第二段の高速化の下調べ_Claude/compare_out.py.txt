@@ -1,0 +1,77 @@
+"""Compare two run output trees file-by-file.
+
+Exact byte comparison of every file (gz files compared after decompression). For files that differ,
+re-compare as JSON lines with wall-clock timing fields removed, and report which keys differ.
+usage: python3.12 compare_out.py A B
+"""
+import gzip
+import json
+import sys
+from pathlib import Path
+
+TIMING = {"seconds", "wrapper_seconds", "engine_seconds", "elapsed_sec", "peak_rss_mb", "measure_seconds", "finished_at", "started_at", "rematch_fraction_of_stage2_seconds"}
+
+
+def read(p):
+    data = p.read_bytes()
+    if p.suffix == ".gz":
+        data = gzip.decompress(data)
+    return data
+
+
+def strip(x):
+    if isinstance(x, dict):
+        return {k: strip(v) for k, v in x.items() if k not in TIMING}
+    if isinstance(x, list):
+        return [strip(v) for v in x]
+    return x
+
+
+def diffkeys(a, b, path=""):
+    out = []
+    if isinstance(a, dict) and isinstance(b, dict):
+        for k in sorted(set(a) | set(b), key=str):
+            if k not in a or k not in b:
+                out.append(path + "/" + str(k) + "(missing)")
+            elif a[k] != b[k]:
+                out += diffkeys(a[k], b[k], path + "/" + str(k))
+    elif isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
+        for i, (x, y) in enumerate(zip(a, b)):
+            if x != y:
+                out += diffkeys(x, y, path + f"[{i}]")
+    else:
+        out.append(path)
+    return out
+
+
+A, B = Path(sys.argv[1]), Path(sys.argv[2])
+fa = {p.relative_to(A) for p in A.rglob("*") if p.is_file()}
+fb = {p.relative_to(B) for p in B.rglob("*") if p.is_file()}
+ok = True
+for rel in sorted(fa | fb):
+    if rel not in fa or rel not in fb:
+        print("ONLY IN ONE:", rel); ok = False; continue
+    a, b = read(A / rel), read(B / rel)
+    if a == b:
+        print("IDENTICAL  ", rel, len(a)); continue
+    # JSON-lines comparison without timing fields
+    try:
+        la = [json.loads(l) for l in a.decode().splitlines() if l.strip()]
+        lb = [json.loads(l) for l in b.decode().splitlines() if l.strip()]
+    except Exception:
+        try:
+            la, lb = [json.loads(a)], [json.loads(b)]
+        except Exception:
+            print("DIFFERENT(bin)", rel); ok = False; continue
+    if len(la) != len(lb):
+        print("DIFFERENT(lines)", rel, len(la), len(lb)); ok = False; continue
+    keys = set()
+    for x, y in zip(la, lb):
+        sx, sy = strip(x), strip(y)
+        if sx != sy:
+            keys.update(diffkeys(sx, sy))
+    if keys:
+        print("DIFFERENT  ", rel, sorted(keys)[:12]); ok = False
+    else:
+        print("SAME-EXCEPT-TIMING", rel, len(la))
+print("ALL-EQUAL-MODULO-TIMING" if ok else "MISMATCH")

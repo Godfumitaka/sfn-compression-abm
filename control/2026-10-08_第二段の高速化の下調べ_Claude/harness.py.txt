@@ -1,0 +1,176 @@
+"""In-process profiling harness for tools/v3_run.py (profiling only; does not change the model).
+
+Usage: PROF_MODE=timers|stage2|full PROF_OUT=<dir> python3.12 harness.py <v3_run argv...>
+ - Replaces ProcessPoolExecutor with an inline executor so the worker runs in this process.
+ - timers: perf_counter split (stage-2 disclosure measurement / original accounting / birth initial / rest),
+           plus a one-off repr(before) timing per disclosed trial (done outside the measured window).
+ - stage2: cProfile enabled ONLY inside the stage-2 disclosure measurement window
+           (accounting wrapper minus the original accounting), plus timers.
+ - full:   cProfile over the whole run (worker in-process).
+"""
+import concurrent.futures as cf
+import cProfile
+import json
+import os
+import pstats
+import sys
+import time
+from pathlib import Path
+
+MODE = os.environ.get("PROF_MODE", "timers")
+OUT = Path(os.environ["PROF_OUT"])
+OUT.mkdir(parents=True, exist_ok=True)
+SRC = Path(os.environ.get("PROF_SRC", Path(__file__).resolve().parent / "src"))
+sys.path.insert(0, str(SRC))
+sys.path.insert(0, str(SRC / "tools"))
+os.chdir(SRC)
+
+PROF = cProfile.Profile()
+TIM = {"stage2_disclosed_window": 0.0, "stage2_undisclosed_window": 0.0, "orig_accounting": 0.0,
+       "accounting_total": 0.0, "birth_initial": 0.0, "birth_initial_calls": 0, "newgen_initial": 0.0,
+       "newgen_initial_calls": 0, "disclosed_trials": 0, "trials": 0, "repr_before": 0.0,
+       "repr_before_len": [], "predict_wrapper": 0.0}
+_ACTIVE = {"on": False}
+
+
+def _pause():
+    if MODE == "stage2" and _ACTIVE["on"]:
+        PROF.disable()
+
+
+def _resume():
+    if MODE == "stage2" and _ACTIVE["on"]:
+        PROF.enable()
+
+
+class InlineExecutor:
+    def __init__(self, *a, **k):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def submit(self, fn, *a, **k):
+        f = cf.Future()
+        try:
+            f.set_result(fn(*a, **k))
+        except BaseException as e:  # noqa
+            f.set_exception(e)
+        return f
+
+    def shutdown(self, *a, **k):
+        pass
+
+
+def patch():
+    import attnstage2_runtime as R
+    import attnstage2_initial as I
+    real_install = R.install
+
+    def install(path, **kw):
+        import abm.loop as loop
+        orig_acc = loop._update_accounting
+
+        def inner(*a, **k):
+            _pause()
+            t = time.perf_counter()
+            try:
+                return orig_acc(*a, **k)
+            finally:
+                TIM["orig_accounting"] += time.perf_counter() - t
+                _resume()
+
+        loop._update_accounting = inner
+        real_install(path, **kw)
+        stage2_acc = loop._update_accounting
+
+        def outer(state, output, scene, config, horizon, score, coin, revealed):
+            fired = bool(coin.f_fired)
+            TIM["trials"] += 1
+            if fired:
+                TIM["disclosed_trials"] += 1
+                if MODE == "timers":
+                    before = R.ST["pre"][1]
+                    t = time.perf_counter()
+                    s = repr(before)
+                    TIM["repr_before"] += time.perf_counter() - t
+                    TIM["repr_before_len"].append(len(s))
+                    del s
+            o0 = TIM["orig_accounting"]
+            t = time.perf_counter()
+            if fired and MODE == "stage2":
+                _ACTIVE["on"] = True
+                PROF.enable()
+            try:
+                return stage2_acc(state, output, scene, config, horizon, score, coin, revealed)
+            finally:
+                if fired and MODE == "stage2":
+                    PROF.disable()
+                    _ACTIVE["on"] = False
+                total = time.perf_counter() - t
+                TIM["accounting_total"] += total
+                window = total - (TIM["orig_accounting"] - o0)
+                TIM["stage2_disclosed_window" if fired else "stage2_undisclosed_window"] += window
+
+        loop._update_accounting = outer
+        real_pred = loop.predict
+
+        def predict(*a, **k):
+            t = time.perf_counter()
+            try:
+                return real_pred(*a, **k)
+            finally:
+                TIM["predict_wrapper"] += time.perf_counter() - t
+
+        loop.predict = predict
+
+    R.install = install
+    real_call = I.VirtualInitial.__call__
+
+    def call(self, rec, why, context):
+        t = time.perf_counter()
+        try:
+            return real_call(self, rec, why, context)
+        finally:
+            k = "birth_initial" if why == "birth" else "newgen_initial"
+            TIM[k] += time.perf_counter() - t
+            TIM[k + "_calls"] += 1
+
+    I.VirtualInitial.__call__ = call
+
+
+def main():
+    import v3_run
+    v3_run.ProcessPoolExecutor = InlineExecutor
+    patch()
+    if os.environ.get("PROF_OPT"):
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import opt
+        opt.install_hook()
+    sys.argv = ["tools/v3_run.py"] + sys.argv[1:]
+    t0 = time.perf_counter(); c0 = time.process_time()
+    if MODE == "full":
+        PROF.enable()
+    try:
+        v3_run.main()
+    finally:
+        if MODE == "full":
+            PROF.disable()
+        TIM["wall"] = time.perf_counter() - t0
+        TIM["cpu"] = time.process_time() - c0
+        L = TIM.pop("repr_before_len")
+        TIM["repr_before_len_mean"] = sum(L) / len(L) if L else None
+        TIM["repr_before_len_max"] = max(L) if L else None
+        (OUT / "timers.json").write_text(json.dumps(TIM, indent=1) + "\n")
+        if MODE in ("stage2", "full"):
+            PROF.dump_stats(str(OUT / f"{MODE}.prof"))
+            for key in ("tottime", "cumulative"):
+                with open(OUT / f"{MODE}_{key}.txt", "w") as f:
+                    pstats.Stats(str(OUT / f"{MODE}.prof"), stream=f).sort_stats(key).print_stats(60)
+
+
+if __name__ == "__main__":
+    main()
