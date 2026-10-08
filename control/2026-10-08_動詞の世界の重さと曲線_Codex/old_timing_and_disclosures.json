@@ -1,0 +1,163 @@
+{
+  "timings": [
+    {
+      "seed": 1,
+      "trial_count": 5000,
+      "horizon": 5000,
+      "commit": "6408c7cfcf30f242e6be3aa43f646f440ad3195e",
+      "started": "2026-10-04T16:59:59.292191+09:00",
+      "ended": "2026-10-04T17:23:31.226693+09:00",
+      "supervised_wall_seconds": 1411.923,
+      "process_peak_rss_bytes_time": 202997760,
+      "max_aggregate_rss_mib_sampled_1s": 241.172
+    },
+    {
+      "seed": 2,
+      "trial_count": 5000,
+      "horizon": 5000,
+      "commit": "6408c7cfcf30f242e6be3aa43f646f440ad3195e",
+      "started": "2026-10-04T17:00:02.879573+09:00",
+      "ended": "2026-10-04T17:24:37.123485+09:00",
+      "supervised_wall_seconds": 1474.232,
+      "process_peak_rss_bytes_time": 186662912,
+      "max_aggregate_rss_mib_sampled_1s": 225.406
+    },
+    {
+      "seed": 3,
+      "trial_count": 5000,
+      "horizon": 5000,
+      "commit": "6408c7cfcf30f242e6be3aa43f646f440ad3195e",
+      "started": "2026-10-04T17:00:07.362893+09:00",
+      "ended": "2026-10-04T17:23:28.341208+09:00",
+      "supervised_wall_seconds": 1400.967,
+      "process_peak_rss_bytes_time": 185171968,
+      "max_aggregate_rss_mib_sampled_1s": 224.125
+    }
+  ],
+  "disclosures": [
+    {
+      "seed": 1,
+      "trials": 5000,
+      "disclosed": 2498,
+      "past_trials": 451,
+      "past_disclosed": 223,
+      "fraction": 0.4996,
+      "blocks": [
+        {
+          "first_trial": 1,
+          "last_trial": 1000,
+          "trials": 1000,
+          "disclosed": 516
+        },
+        {
+          "first_trial": 1001,
+          "last_trial": 2000,
+          "trials": 1000,
+          "disclosed": 509
+        },
+        {
+          "first_trial": 2001,
+          "last_trial": 3000,
+          "trials": 1000,
+          "disclosed": 508
+        },
+        {
+          "first_trial": 3001,
+          "last_trial": 4000,
+          "trials": 1000,
+          "disclosed": 465
+        },
+        {
+          "first_trial": 4001,
+          "last_trial": 5000,
+          "trials": 1000,
+          "disclosed": 500
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "trials": 5000,
+      "disclosed": 2499,
+      "past_trials": 462,
+      "past_disclosed": 236,
+      "fraction": 0.4998,
+      "blocks": [
+        {
+          "first_trial": 1,
+          "last_trial": 1000,
+          "trials": 1000,
+          "disclosed": 497
+        },
+        {
+          "first_trial": 1001,
+          "last_trial": 2000,
+          "trials": 1000,
+          "disclosed": 500
+        },
+        {
+          "first_trial": 2001,
+          "last_trial": 3000,
+          "trials": 1000,
+          "disclosed": 516
+        },
+        {
+          "first_trial": 3001,
+          "last_trial": 4000,
+          "trials": 1000,
+          "disclosed": 486
+        },
+        {
+          "first_trial": 4001,
+          "last_trial": 5000,
+          "trials": 1000,
+          "disclosed": 500
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "trials": 5000,
+      "disclosed": 2547,
+      "past_trials": 468,
+      "past_disclosed": 236,
+      "fraction": 0.5094,
+      "blocks": [
+        {
+          "first_trial": 1,
+          "last_trial": 1000,
+          "trials": 1000,
+          "disclosed": 507
+        },
+        {
+          "first_trial": 1001,
+          "last_trial": 2000,
+          "trials": 1000,
+          "disclosed": 518
+        },
+        {
+          "first_trial": 2001,
+          "last_trial": 3000,
+          "trials": 1000,
+          "disclosed": 498
+        },
+        {
+          "first_trial": 3001,
+          "last_trial": 4000,
+          "trials": 1000,
+          "disclosed": 500
+        },
+        {
+          "first_trial": 4001,
+          "last_trial": 5000,
+          "trials": 1000,
+          "disclosed": 524
+        }
+      ]
+    }
+  ],
+  "total_trials": 15000,
+  "total_disclosed": 7544,
+  "total_disclosure_fraction": 0.5029333333333333,
+  "stage2_condition": "tools/attnstage2_runtime.py:123 coin.f_fired; future ALLIN rate unmeasured"
+}

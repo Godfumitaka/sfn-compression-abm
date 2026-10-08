@@ -1,0 +1,61 @@
+{
+  "status": "conditional_planning_scenarios_not_new_run_measurements",
+  "old_disclosure_fraction": 0.5029333333333333,
+  "shop_trials": 1204,
+  "shop_elapsed_seconds": 11405.700438125,
+  "shop_disclosed": 624,
+  "shop_disclosure_seconds": 7130.110968742636,
+  "shop_disclosure_time_fraction": 0.6251357386968831,
+  "shop_seconds_per_disclosed_trial": 11.426459885805507,
+  "transfer_assumed_disclosure_seconds_per_verb_trial": 5.746747558567783,
+  "scenarios": [
+    {
+      "name": "SME complete baseline + transferred disclosure",
+      "baseline_seconds_per_trial": 1.7325646246,
+      "disclosure_cost_multiplier": 1,
+      "forecast_seconds": 37396.56091583892,
+      "forecast_hours": 10.387933587733034
+    },
+    {
+      "name": "Shop whole average",
+      "baseline_seconds_per_trial": 3.7264255627984966,
+      "disclosure_cost_multiplier": 1,
+      "forecast_seconds": 47365.8656068314,
+      "forecast_hours": 13.1571848907865
+    },
+    {
+      "name": "25prime accounted mean + transferred disclosure",
+      "baseline_seconds_per_trial": 8.752134894007249,
+      "disclosure_cost_multiplier": 1,
+      "forecast_seconds": 72494.41226287516,
+      "forecast_hours": 20.137336739687544
+    },
+    {
+      "name": "25prime accounted last100 + transferred disclosure",
+      "baseline_seconds_per_trial": 10.983945940047288,
+      "disclosure_cost_multiplier": 1,
+      "forecast_seconds": 83653.46749307535,
+      "forecast_hours": 23.237074303632042
+    },
+    {
+      "name": "SME complete baseline + twice disclosure work",
+      "baseline_seconds_per_trial": 1.7325646246,
+      "disclosure_cost_multiplier": 2,
+      "forecast_seconds": 66130.29870867783,
+      "forecast_hours": 18.369527419077176
+    },
+    {
+      "name": "25prime accounted last100 + twice disclosure work",
+      "baseline_seconds_per_trial": 10.983945940047288,
+      "disclosure_cost_multiplier": 2,
+      "forecast_seconds": 112387.20528591427,
+      "forecast_hours": 31.218668134976188
+    }
+  ],
+  "planning_range_hours": [
+    10,
+    32
+  ],
+  "unbounded_above": true,
+  "growth_x2_is_sensitivity_assumption_not_measured": true
+}
