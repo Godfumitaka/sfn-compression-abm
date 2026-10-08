@@ -1,0 +1,288 @@
+{
+  "at": "2026-10-09T04:04:49.249827+09:00",
+  "code": "7294389d70795c847790472aa836b93dc1ca7fd5",
+  "off_native_completion": {
+    "at": "2026-10-09T03:53:56.677252+09:00",
+    "code": "7294389d70795c847790472aa836b93dc1ca7fd5",
+    "trials": 200,
+    "receipt_pid": 79695,
+    "receipt_exit_code": 0,
+    "receipt_exit_code_observable": true,
+    "measurement": {
+      "pid": 79724,
+      "trials": 200,
+      "wall_seconds": 15312.320950041001,
+      "cpu_user_seconds": 15240.295183,
+      "cpu_system_seconds": 27.323749000000003,
+      "cpu_seconds": 15267.618932,
+      "cpu_scope": "worker_model_observer_state_save",
+      "peak_rss_bytes": 316866560,
+      "max_candidates": 4,
+      "max_definitions": 4,
+      "ru_maxrss_unit": "macOS_bytes"
+    },
+    "native_all_done": true
+  },
+  "off_receipt_ended": {
+    "at": "2026-10-09T03:53:56.637318+09:00",
+    "pid": 79695,
+    "exit_code": 0
+  },
+  "off_native_log": [
+    "2026-10-09 03:53:47 f0.5000_th2.1000_vt0.3842_first_order seed041 秒=15304.4 最大メモリMB=316.9 定義末=0 一致=None err=None",
+    "2026-10-09 03:53:48 ALLDONE shop_hide1_s1"
+  ],
+  "off_pids_absent": [
+    79695,
+    79706,
+    79724
+  ],
+  "actual_ps_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction29_heartbeat_initial_20261009_0359.json",
+  "on_entry_started": {
+    "at": "2026-10-09T03:53:57.120725+09:00",
+    "code": "7294389d70795c847790472aa836b93dc1ca7fd5",
+    "world": 2,
+    "seed": 41,
+    "trials": 200,
+    "mem_gb": 1,
+    "machine": {
+      "at": "2026-10-09T03:53:57.072656+09:00",
+      "models": {
+        "33003": {
+          "ppid": 33000,
+          "state": "R",
+          "rss_kb": 198880
+        },
+        "49468": {
+          "ppid": 49459,
+          "state": "R",
+          "rss_kb": 1367376
+        },
+        "59619": {
+          "ppid": 59604,
+          "state": "R",
+          "rss_kb": 1368992
+        }
+      },
+      "model_children": 3,
+      "paused": 0,
+      "registered": [
+        {
+          "pid": 49451,
+          "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+          "mem_gb": 4.0
+        },
+        {
+          "pid": 59598,
+          "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 32988,
+          "owner": "Codex 動詞 指示6 on100_with_probe_retry2",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 54207,
+          "owner": "Codex2 指示26 五つ w2_forget_exec_on_200",
+          "mem_gb": 1.0
+        }
+      ],
+      "disk_free_bytes": 209984167936,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "actual_native_command": [
+      "/opt/homebrew/bin/python3.12",
+      "tools/v3_run.py",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/seed41_config.json",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_on_200/output",
+      "--nohash",
+      "--vt",
+      "0.3842",
+      "--extend-rule",
+      "none",
+      "--charge1",
+      "d32",
+      "--fast",
+      "--no-public-history",
+      "--dump-slot-history",
+      "--fix2-full",
+      "--fix-order2",
+      "--proj-first",
+      "--fill-norestate",
+      "--no-charge2",
+      "--own-evidence",
+      "--v39",
+      "--v39-budget",
+      "inf",
+      "--v39-decay",
+      "actr",
+      "--v310-be",
+      "--hist-role",
+      "--score-role",
+      "--u-struct",
+      "--relearn-init",
+      "--tie-struct",
+      "--amb-local",
+      "--nsim",
+      "0.7",
+      "--ident-rho",
+      "0.5",
+      "--ident-argmax",
+      "--ident-commons",
+      "--cells",
+      "f0.5000_th2.1000_first_order",
+      "--dump-answers",
+      "--dump-routing",
+      "--answer-gap",
+      "--strict-pc",
+      "--e-price",
+      "0.01873710622997919",
+      "--v39-price",
+      "0.01873710622997919",
+      "--shop-world",
+      "2",
+      "--workers",
+      "1",
+      "--seeds",
+      "41",
+      "--trial-count",
+      "200",
+      "--no-compare",
+      "--horizon",
+      "1740",
+      "--score-arg-order",
+      "--sme2017",
+      "--shop-scatter",
+      "--sme-call-seed",
+      "--sme-tie-uniform",
+      "--sme-intern-cache",
+      "--sme-evict-trial-cache",
+      "--sme-evict-tombstone",
+      "--score-logp",
+      "--match-cstar",
+      "--match-cstar-e",
+      "--match-eps",
+      "0",
+      "--h-dirichlet",
+      "1",
+      "--birth-score",
+      "seq",
+      "--logp-eps",
+      "0.01",
+      "--attn-sme",
+      "global",
+      "--attn-position",
+      "k2",
+      "--attn-eta",
+      "0.1",
+      "--attn-allin",
+      "--stage2",
+      "on",
+      "--stage2-loss",
+      "top1",
+      "--stage2-init",
+      "virtual",
+      "--stage2-scope",
+      "all",
+      "--stage2-reuse",
+      "off",
+      "--stage2-birth-hu",
+      "on",
+      "--stage2-speed",
+      "on"
+    ],
+    "implemented": [
+      "P1",
+      "P2",
+      "P2b",
+      "P3",
+      "P8"
+    ],
+    "P10": false,
+    "production_started": false
+  },
+  "on_alive_pids": [
+    52308,
+    54207,
+    54217,
+    54226
+  ],
+  "on_command_difference_only_output_and_stage2_speed": true,
+  "on_latest_performance": {
+    "trial": 27,
+    "seconds": 41.651590708992444,
+    "elapsed_seconds": 631.6970457499847,
+    "peak_rss_bytes": 96681984,
+    "candidates": 3,
+    "definitions": 3
+  },
+  "forget_exec_gate_completed": false,
+  "cpu_comparison_completed": false,
+  "world1_gate_completed": false,
+  "full_first_bundle_gate_completed": false,
+  "source_and_tools_unchanged": true,
+  "raw_originals": {
+    "w2_forget_exec_off_200_completed.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_off_200_completed.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_off_200_completed_20261009.json",
+      "bytes": 626,
+      "sha256": "c16529d105346e0ab4ea3bd216c8ea573d9a1998adda55ab095b25511be25e9b"
+    },
+    "w2_forget_exec_off_200_receipt_ended.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_off_200_receipt_ended.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_off_200_receipt_ended_20261009.json",
+      "bytes": 81,
+      "sha256": "38b81a8f5055b696bf9acb9cc0b24d90bfead408477a617e57f460cc61322d21"
+    },
+    "w2_forget_exec_off_200/measurement.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_off_200/measurement.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_off_200_measurement_20261009.json",
+      "bytes": 349,
+      "sha256": "cc387489b3941cd672a7ae72edabb152f80f92d6149cfb49079891cbe0480398"
+    },
+    "w2_forget_exec_off_200/worker_pid.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_off_200/worker_pid.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_off_200_worker_pid_20261009.json",
+      "bytes": 30,
+      "sha256": "f50f65da61b997f204f7deb1a93980ba7cfc8190bd2c7a38403fcdba7691a54b"
+    },
+    "w2_forget_exec_off_200/native_command.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_off_200/native_command.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_off_200_native_command_20261009.json",
+      "bytes": 1916,
+      "sha256": "2120ded0d1e7e76746f82c8b5397708160c2ca2af20513af17f7ff2ac886ebda"
+    },
+    "w2_forget_exec_on_200_entry_started.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_on_200_entry_started.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_on_200_entry_started_20261009.json",
+      "bytes": 3785,
+      "sha256": "40414b68b5ac4ae6d06494c5921dfb47c3c3c6ba0bdc6c14e11c206412811f43"
+    },
+    "w2_forget_exec_on_200_receipt_submitted.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_on_200_receipt_submitted.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_on_200_receipt_submitted_20261009.json",
+      "bytes": 709,
+      "sha256": "59a5e74f7efcd8ee8fee71c5b6dd7480d6e9446558a1834a7d6d3352e50a78a0"
+    },
+    "w2_forget_exec_on_200/worker_pid.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_on_200/worker_pid.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_on_200_worker_pid_20261009.json",
+      "bytes": 30,
+      "sha256": "af54e4f1f7f1344b2a019136958cf86f3e91a7cbc3540636aabcd132212f071e"
+    },
+    "w2_forget_exec_on_200/native_command.json": {
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/w2_forget_exec_on_200/native_command.json",
+      "saved": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction26_forget_exec_on_200_native_command_20261009.json",
+      "bytes": 1914,
+      "sha256": "fc6015bd9f86b949166c8933d9b97719eaf7d13cb5c72628231e76fa26dc5eba"
+    }
+  },
+  "new_models_submitted_by_heartbeat": 0,
+  "signals": 0
+}
