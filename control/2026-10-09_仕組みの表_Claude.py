@@ -32,7 +32,17 @@ def _conv_def(item):
 
 def one_run(root):
     out = {"root": root}
-    side = _first(root, "side/*/seed*.jsonl") or _first(root, "side/*/seed*.jsonl.gz")
+    side = (_first(root, "side/*/seed*.jsonl") or _first(root, "side/*/seed*.jsonl.gz")
+            or _first(root, "seed*.side.jsonl.gz"))
+    s2 = _first(root, "stage2/*/seed*.jsonl.gz") or _first(root, "seed*.stage2.jsonl.gz")
+    # GitHub の写しでは、side と第二段が根に seedNNN.jsonl.gz の名前で置かれることがある。中身で見分ける
+    for cand in sorted(glob.glob(os.path.join(root, "seed*.jsonl.gz"))):
+        with _open(cand) as f:
+            head = json.loads(f.readline())
+        if "kind" in head and side is None:
+            side = cand
+        elif "rows" in head and s2 is None:
+            s2 = cand
     defs_by_trial = {}
     births = 0
     retires = 0
@@ -69,7 +79,6 @@ def one_run(root):
     out["M4_same_def_multi_conv"] = multi_conv
     out["conversions_total"] = conv_total
 
-    s2 = _first(root, "stage2/*/seed*.jsonl.gz")
     zero = neg = pos = 0
     disclosed = 0
     if s2:
