@@ -518,18 +518,30 @@ def worker(task: dict) -> dict:
         if task.get("shop_scatter"):
             import shopscatter
             shopscatter.install()
+    if task.get("verb_world"):
+        if not (task.get("v39") and task.get("v310_be")):
+            raise ValueError("--verb-world は --v39 --v310-be と一緒に使う")
+        import verbworld
+        verbworld.install(variant=task.get("verb_variant", "default"),
+                          frequency_file=task.get("verb_frequencies"), door_p=task.get("shop_door_p"))
+        verbworld.extend_dictionary()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
         if not task.get("v39"):
             raise ValueError("--probe-world は --v39 と一緒に使う")
         sys.path.insert(0, str(ROOT / "tools"))
         import probeworld
+        if task.get("verb_world"):
+            verbworld.prepare_probe_snapshot(probeworld)
         probeworld.install(side_dir / f"seed{task['seed']:03d}.probe.jsonl", run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
                            seed_file=str(ROOT / task["cfg"]["seed_file"]), horizon=int(task["cfg"]["trial_count"]),
                            holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
         if task.get("shop_world"):
             # ★ お店の世界の試験（対になった試験・共有部分の試験）を足す：tools/shopworld.py add_probes
             shopworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
+                                 holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
+        if task.get("verb_world"):
+            verbworld.add_probes(probeworld.ST, run_seed=task["seed"], agent_ids=tuple(task["cfg"]["agent_ids"]),
                                  holdout_second=bool(task["cfg"]["fixed"].get("holdout_include_second_order", False)))
     if task.get("cf_value"):
         # ★ 反実仮想の保持価値の診断（--cf-value、記録だけ。2026-10-01 午前の返事の段 5）：tools/cfvalue.py。試験の旗のあと、答えごとの記録より前
@@ -608,6 +620,9 @@ def worker(task: dict) -> dict:
         import gc
         old_gc_threshold = gc.get_threshold()
         gc.set_threshold(task["sme_gc_threshold"], *old_gc_threshold[1:])
+    if task.get("verb_timing"):
+        import verbtiming
+        verbtiming.install(out_root / "timing" / f"seed{task['seed']:03d}.jsonl")
     try:
         rec = sweep.run_one(task)
     except Exception as e:  # noqa
@@ -660,6 +675,10 @@ def worker(task: dict) -> dict:
         sys.modules["routelog"].close()
     if task.get("probe_world"):
         rec["probeworld"] = sys.modules["probeworld"].close()
+    if task.get("verb_world"):
+        rec["verbworld"] = dict(sys.modules["verbworld"].STATS)
+    if task.get("verb_timing"):
+        rec["verbtiming"] = sys.modules["verbtiming"].close()
     if task.get("shop_world"):
         rec["shopworld"] = sys.modules["shopworld"].close()
     if task.get("strict_pc"):
@@ -857,6 +876,11 @@ def main() -> None:
     ap.add_argument("--logp-eps", type=float, default=0.5, help="背景分布bに戻る混合率ε（既定0.5）")
     ap.add_argument("--birth-score", choices=("fit", "seq"), default=None, help="二材料を観察後に当てるfit、一材料ずつ順に当てるseq")
     ap.add_argument("--select-n3", action="store_true", help="旧い照合の対照用に従来のN3を使う（--v39、SME2017と同時には使わない）")
+    ap.add_argument("--verb-world", action="store_true", help="動詞の世界（世界・課題と研究者の記録だけ）")
+    ap.add_argument("--verb-variant", choices=("default", "schuler54", "schuler36"), default="default")
+    ap.add_argument("--verb-frequencies", default=None, help="出典確認済みのSchulerの項目別出現数")
+    ap.add_argument("--verb-timing", action="store_true", help="動詞の走行の1000試行ごとの時間と最大常駐を別記録へ書く")
+    ap.add_argument("--shop-door-p", type=float, default=None, help="動詞の過去形を問う確率（元のお店と同じ別乱数・hide1）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--sme-online-candidates", action="store_true", help="予測の実際の対応から候補の答えと正誤を研究者だけの別記録に残す")
     ap.add_argument("--sme-online-check", action="store_true", help="候補の記録の逆順・二回の一致を毎試行で検査する")
@@ -899,6 +923,25 @@ def main() -> None:
     if args.trial_count is not None:
         cfg2["trial_count"] = args.trial_count
         args.no_compare = True
+    if args.verb_world:
+        if args.shop_world is not None or args.world_cue or args.shop_keep_cue or args.shop_scatter:
+            raise SystemExit("--verb-world は他の世界の旗と同時に使わない")
+        if not (args.v39 and args.v310_be) or cfg2["fixed"].get("holdout_include_second_order"):
+            raise SystemExit("--verb-world は --v39 --v310-be とhide1の設定で使う")
+        if args.seeds and any(int(n) not in range(1, 21) for n in args.seeds.split(",")):
+            raise SystemExit("動詞の世界の種は1〜20だけ")
+        import verbworld
+        verbworld.training_items(args.verb_variant, args.verb_frequencies)
+        if args.shop_door_p is not None and not 0 <= args.shop_door_p <= 1:
+            raise SystemExit("--shop-door-p は0〜1")
+        cfg2["seed_file"] = "tools/verb/U-011_seed_verb.json"
+        cfg2["trial_count"] = args.trial_count if args.trial_count is not None else (args.horizon or 5000)
+        if cfg2["trial_count"] <= 0 or (args.horizon is not None and args.horizon != cfg2["trial_count"]):
+            raise SystemExit("動詞の世界の正の試行数とhorizonを一致させる")
+        args.horizon = cfg2["trial_count"]
+        args.no_compare = True
+    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None:
+        raise SystemExit("動詞の追加の旗は --verb-world と一緒に使う")
     if args.nsim is not None:
         cfg2["fixed"]["nsim_threshold"] = args.nsim
     if args.vt is not None:
@@ -943,7 +986,7 @@ def main() -> None:
         raise SystemExit("--relearn-init は --u-struct と --v310-be と一緒に使う")
     if args.v310_be and (not args.v39 or args.v39_decay != "actr" or args.v39_budget != "inf" or args.v39_price is None):
         raise SystemExit("--v310-be は --v39 --v39-decay actr --v39-budget inf --v39-price λ と一緒に使う")
-    seed = sweep.load_seed(cfg["seed_file"])
+    seed = sweep.load_seed(cfg2["seed_file"] if args.verb_world else cfg["seed_file"])
     if args.horizon is not None and not args.v39:
         raise SystemExit("--horizon は --v39 と一緒に使う（時間の幅を差し替える先が v39 の時間の設定のため）")
     commit = sweep.code_commit()
@@ -952,7 +995,7 @@ def main() -> None:
                and args.ident_rho is None and not args.ident_argmax and not args.ident_commons and not args.ident_shadow
                and not args.fix2 and not args.fix2_full and not args.fix_order and not args.fix_order2 and not args.rename_check and not args.proj_first
                and not args.fill_unseen and not args.fill_norestate and not args.no_charge2 and not args.own_evidence
-               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
+               and not args.v39 and not args.hist_role and not args.world_cue and not args.u_struct and not args.tie_struct and not args.amb_local and not args.answer_gap and not args.probe_world and args.shop_world is None and not args.verb_world and not args.strict_pc and not args.cf_value and args.e_price is None and not args.cf_learn
                and args.horizon is None and not args.score_logp and not args.nohist)   # ★ public_history を外すと指紋が変わるので、runs/ とは比べない
     do_compare = (all_off or args.compare_to is not None) and (not args.no_compare)
     if args.compare_to is not None:
@@ -985,6 +1028,15 @@ def main() -> None:
     if cstar_options:
         for task in tasks:
             task["cstar_options"] = cstar_options
+    if args.verb_world:
+        for task in tasks:
+            if task["seed"] not in range(1, 21):
+                raise SystemExit("動詞の世界の種は1〜20だけ")
+            task.update(verb_world=True, verb_variant=args.verb_variant, verb_frequencies=args.verb_frequencies)
+            if args.verb_timing:
+                task["verb_timing"] = True
+            if args.shop_door_p is not None:
+                task["shop_door_p"] = args.shop_door_p
     if args.score_arg_order:
         if not (args.v310_be and args.hist_role and args.score_role):
             raise SystemExit("--score-arg-order は --v310-be --hist-role --score-role と一緒に使う")
@@ -1080,6 +1132,11 @@ def main() -> None:
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,
                                                         "attn_eta": args.attn_eta, "attn_fixed_zero": args.attn_fixed_zero} if args.attn_sme else {}),
+                                                    **({"verb_world": True, "verb_variant": args.verb_variant,
+                                                        "verb_frequencies": args.verb_frequencies,
+                                                        "effective_seed_file": cfg2["seed_file"]} if args.verb_world else {}),
+                                                    **({"verb_timing": True} if args.verb_timing else {}),
+                                                    **({"shop_door_p": args.shop_door_p} if args.shop_door_p is not None else {}),
                                                     **({"sme2017": True} if args.sme2017 else {}),
                                                     **({"sme_call_seed": True} if args.sme_call_seed else {}),
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),

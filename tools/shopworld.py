@@ -36,6 +36,39 @@ STATS: dict = {}
 CTX: dict = {}
 
 
+def door_rng(run_seed, trial_index) -> Random:
+    """--shop-door-p の乱数（場面のほかの乱数と別の流れ）。"""
+    return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fshopdoor".encode("utf-8")).digest(), "big"))
+
+
+def rehide(tr, run_seed, trial_index, p):
+    """--shop-door-p p（2026-10-02 朝の委任書「C の格子」の段 1）：伏せ辺を選び直す。確率 p でドアを伏せ、それ以外は
+    ドア以外の伏せる候補から一様に一本。乱数は door_rng（一回目 random() でドアか、ドアでなければ choice で一本）。
+    伏せる候補（元の生成器 abm/world.py generate_trial の holdout_candidates と同じ集合・同じ並び）＝元の場面の一階の関係（引数がすべて物）
+      のうち役割ユナリーを除いたもの：骨組みの一階・つなぎ（mediator）・周縁・のり（glue）。シールと link は元の生成のあとに足すので入らない。
+      ★ 設定 hide1（二階を伏せない）を前提にする（二階を伏せる設定では使えない。install で止める）。
+    並びは元の場面の関係の並び。見えている関係と見える物の作り方は abm/world.py と同じ。"""
+    import abm.world as w
+    from abm.domains import RelationGraph
+    door_id = w.opaque_id(run_seed, trial_index, f"relation:tree:{DOOR_PATH}")
+    ents = {e.entity_id for e in tr.G_star.entities}
+    unary = w.opaque_id(run_seed, trial_index, "relation:role_unary")      # 役割ユナリーは元の生成器でも候補にしない（abm/world.py の B-5）
+    cands = [r.relation_id for r in tr.G_star.relations if r.relation_id != unary and all(a in ents for a in r.arguments)]
+    if door_id not in cands or tr.held_out_edge.relation_id not in cands:
+        raise ValueError("--shop-door-p：ドアか元の伏せ辺が一階の候補に無い")
+    rng = door_rng(run_seed, trial_index)
+    held_id = door_id if rng.random() < p else rng.choice([c for c in cands if c != door_id])
+    relations = tr.G_star.relations
+    held = next(r for r in relations if r.relation_id == held_id)
+    visible = tuple(r for r in relations if r.relation_id != held_id)
+    ids = frozenset(r.relation_id for r in visible)
+    reach = frozenset(a for r in visible for a in r.arguments if a not in ids and a in ents)
+    partial = RelationGraph(graph_id=tr.G_star.graph_id, entities=tuple(e for e in tr.G_star.entities if e.entity_id in reach),
+                            relations=visible)
+    _bump("door_p_door", int(held_id == door_id))
+    return replace(tr, target_graph_partial=partial, held_out_edge=held)
+
+
 def cue_rng(run_seed, trial_index) -> Random:
     return Random(int.from_bytes(sha256(f"{run_seed}\x1f{trial_index}\x1fshopcue".encode("utf-8")).digest(), "big"))
 

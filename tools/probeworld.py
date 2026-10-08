@@ -210,8 +210,9 @@ def _probe(state, config, t):
             else:
                 sts = dict(zip(v39.CTX.get("fill_ids", ()), v39.CTX.get("fill_states", ())))
                 src = f"{sts.get(rid, '?')}_fill"
-            rec.update(answer=e.predicate, args=list(e.arguments), source=src, oracle=int((e.predicate, tuple(e.arguments)) in q["facts"]),
-                       answer_is_truth=int(e.predicate == q["truth"]))
+            rec.update(answer=e.predicate, args=list(e.arguments), source=src,
+                       oracle=int((e.predicate, tuple(e.arguments)) in q["facts"]) if q.get("score_truth", True) else None,
+                       answer_is_truth=int(e.predicate == q["truth"]) if q.get("score_truth", True) else None)
         else:
             rec.update(answer=None, abstain=getattr(pred, "reason", None))
         res = got.get("res")
@@ -235,16 +236,25 @@ def _probe(state, config, t):
             rec.update(R=f"{d.name}@{d.registered_at}", R_used=out.trace.get("R_used") is not None,
                        sel_vis=tri[0], sel_hid=tri[1], sel_none=tri[2], sel_vis_match=tri[3])
         # 経験：同じ型・同じ経路
-        names, last = _seen(t, lambda tau, tr: [(paths_of(tau)[1][q["path"]][0], paths_of(tau)[1][q["path"]][2])]
-                            if paths_of(tau)[0] == q["motif"] and q["path"] in paths_of(tau)[1] else [])
+        if "verb_name" in q:
+            import verbworld
+            names, last = verbworld.seen(ST, t, q["verb_name"])
+        else:
+            names, last = _seen(t, lambda tau, tr: [(paths_of(tau)[1][q["path"]][0], paths_of(tau)[1][q["path"]][2])]
+                                if paths_of(tau)[0] == q["motif"] and q["path"] in paths_of(tau)[1] else [])
         rec.update(exp_path_n=sum(names.values()), exp_path_names=dict(names), exp_path_last=last)
         rkey = tuple(tuple(x) for x in q["role"])
-        names, last = _seen(t, lambda tau, tr: paths_of(tau)[2].get(rkey, []))
+        if "verb_name" in q:
+            names, last = verbworld.seen(ST, t, None)
+        else:
+            names, last = _seen(t, lambda tau, tr: paths_of(tau)[2].get(rkey, []))
         rec.update(exp_role_n=sum(names.values()), exp_role_names=dict(names), exp_role_last=last)
         # 逐語の記憶
         vb = Counter()
         for tr_ in state.prototype.traces:
             tau = tr_.written_at
+            if "verb_name" in q and verbworld.INFO.get(tr_.scene.graph_id, {}).get("verb_name") != q["verb_name"]:
+                continue
             m, info, _roles = paths_of(tau)
             if m != q["motif"] or q["path"] not in info:
                 continue
