@@ -5,6 +5,7 @@
 # - 同時の本数：~/queue/MAXRUN の数（無ければ 8）まで。毎回読み直すので、走りながら 12 まで上げられる。
 #   新しい本の最大は ~/queue/NEWPEAK_GIB（無ければ 2.0）。全部の v3_run.py の「最大 − 今」と合わせて、空き 4GiB を残すときだけ始める。
 # - 一本を始めるたびに C: の空きを確かめ、20GB を切っていたら新しい本を始めずに止まって受け箱・報告に書く。
+# - 各本の実時間と最大常駐（子の過程を含む最大）を /usr/bin/time -v で $D/time.log に残す（表層の解析の仕組みの表 M5 に使う）。
 # - 走っている本は止めない。消さない。
 set -u
 J=$1; SRC=$2; Q=$HOME/queue
@@ -28,7 +29,7 @@ for i in $(seq 0 $((N-1))); do
   python3 -c "import json;x=json.load(open('$J'))['plan'][$i];json.dump([x],open('$D/sme.commands.json','w'),ensure_ascii=False,indent=2)"
   echo -e "$NUM\t$ARM\t$SEED\t$COMMIT\t$(date '+%F %T')" >> $VER
   say "始める $ARM 種 $SEED（走っている本 $(running)、上限 $(maxrun)）"
-  setsid bash -c "python3.12 $D/run_after_audit.py --source $SRC --workers 1 > $D/runner.out 2>&1; echo rc=\$? >> $D/runner.out" < /dev/null > /dev/null 2>&1 &
+  setsid bash -c "/usr/bin/time -v python3.12 $D/run_after_audit.py --source $SRC --workers 1 > $D/runner.out 2> $D/time.log; echo rc=\$? >> $D/runner.out" < /dev/null > /dev/null 2>&1 &
   sleep 20
 done
 say "行 #$NUM の本をすべて始めた。終わるのを待つ"
