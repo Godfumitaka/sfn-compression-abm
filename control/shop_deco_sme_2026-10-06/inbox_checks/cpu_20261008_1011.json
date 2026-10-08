@@ -1,0 +1,45 @@
+{
+  "time_jst": "2026-10-08T10:11:39.285006+09:00",
+  "model_workers": [
+    {
+      "pid": 7399,
+      "ppid": 7396,
+      "rss_kib": 5621552,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 9086,
+      "ppid": 9067,
+      "rss_kib": 101920,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 9096,
+      "ppid": 9081,
+      "rss_kib": 104544,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 95421,
+      "ppid": 95412,
+      "rss_kib": 1087456,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "other_heavy_R": [],
+  "admission_count": 4,
+  "own": [
+    {
+      "pid": 14212,
+      "ppid": 52419,
+      "rss_kib": 16768,
+      "state": "Ss",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -B /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/report_priority25/control/shop_independent_2026-10-07/cpu_guard.py --record /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/inbox_checks/cpu_heartbeat_20261008_1011.json -- /usr/bin/true"
+    }
+  ],
+  "rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB"
+}
