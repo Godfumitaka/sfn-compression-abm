@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-08T16:34:54.674467+09:00",
+  "pid": 35654,
+  "actual_ps": [
+    "1",
+    "Ss",
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/controller.py"
+  ],
+  "children": 0,
+  "models_started": 0,
+  "old_status": {
+    "at": "2026-10-08T16:34:42.828721+09:00",
+    "pid": 35654,
+    "phase": "waiting_two_model_slots",
+    "code": "75858e0b4bbff608b57391c075cf5b72c678e636",
+    "machine": {
+      "at": "2026-10-08T16:34:42.758065+09:00",
+      "models": {
+        "3532": {
+          "ppid": 3528,
+          "state": "T",
+          "rss_kb": 171760
+        },
+        "9096": {
+          "ppid": 9081,
+          "state": "R",
+          "rss_kb": 1855440
+        },
+        "27777": {
+          "ppid": 27761,
+          "state": "R",
+          "rss_kb": 170016
+        },
+        "47193": {
+          "ppid": 47184,
+          "state": "R",
+          "rss_kb": 1159872
+        },
+        "47223": {
+          "ppid": 47214,
+          "state": "R",
+          "rss_kb": 1360672
+        },
+        "49468": {
+          "ppid": 49459,
+          "state": "T",
+          "rss_kb": 10112
+        },
+        "59619": {
+          "ppid": 59604,
+          "state": "T",
+          "rss_kb": 10112
+        },
+        "62410": {
+          "ppid": 62405,
+          "state": "R",
+          "rss_kb": 271440
+        }
+      },
+      "model_children": 8,
+      "paused": 3,
+      "registered": [
+        {
+          "pid": 9073,
+          "owner": "Codex2 指示18 較正 世界2 種42",
+          "mem_gb": 4.0
+        },
+        {
+          "pid": 47180,
+          "owner": "Codex2 指示20 較正 世界2 種43",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 47210,
+          "owner": "Codex2 指示20 較正 世界2 種44",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 49451,
+          "owner": "Codex2 指示19 高速化関門 reuse_off_1740",
+          "mem_gb": 4.0
+        },
+        {
+          "pid": 59598,
+          "owner": "Codex2 指示21 GC書き出し二旗 全1740",
+          "mem_gb": 3.0
+        },
+        {
+          "pid": 62396,
+          "owner": "探索介入 指示5 記録だけ200試行関門",
+          "mem_gb": 1.0
+        },
+        {
+          "pid": 3513,
+          "owner": "Codex 動詞 指示6 on100_without_probe_retry1",
+          "mem_gb": 2.0
+        },
+        {
+          "pid": 27753,
+          "owner": "Codex2 指示22 開示cProfile200",
+          "mem_gb": 1.0
+        }
+      ],
+      "disk_free_bytes": 216687706112,
+      "swap_used_mb": 180.0,
+      "swap_ok": true,
+      "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+      "thermal_warnings": [],
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "unregistered_heavy": []
+    },
+    "requested_model_slots": 2,
+    "requested_mem_gb": 2
+  },
+  "original_files_sha256": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/controller_checks.json": "e5d839bd54f70b7756ac8e6c70705de4abaf833d30607076bd8635ff42828d54",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/controller.py": "7fe4ba9c81bd25c96378535550349fb4dd6668417d3dc2661c6b8ba07bee65b3",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/started_check.json": "27682308e9d307e1ab1777a3c16c00faf172d606dee83ee43b09977c39a58e14",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/supervisor_spawn.json": "472660c6370f72990f877f75140961c22a9cf811859da0467ca750cd051bc32e",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/before_start.json": "935d73c8465db3d146ba4829345e4c89d5e350a291b13e048f1806bcfeef3bac",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/observe.py": "877d340d44ff6b9cfa620832e1ccd2e1a7a9287104c53df19e8a9f81ebc8618c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/supervisor.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/required_files.json": "2bd4ac307047e9fc5bba99aa7c8544e42dcdf528634ff258bb42b9e06f102063",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/supervisor.lock": "6dd2657ac4ee7559a70eb17fcd125a41f0d8592ba7fee1b05a07ac61855c1c42",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/preparation_manifest.json": "2e111223843c8bb2694e092f18a1fdc989d2ce031610be6d91823091380ef366",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/status.json": "3b773d7c92ee2e52d75cae838f40f88ddfee562156e356ea6225d3b0b31c570f",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/isolation_off_200/native_command.json": "37aaebbdc1526cd49f5d9b9c119394eeb8aec7957bf78d98d73464249c01ae94",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/__pycache__/controller.cpython-312.pyc": "f92c53b23824de87f11ea98e81d4a800568fdf4e356c750c90bfb4d9d50f4521",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction24_disclosure_speed/gate_75858e0b/isolation_on_200/native_command.json": "bbd7e78430a9aa17b52ae3d40550ae83d358c740f7151965165068cc047265c9"
+  }
+}

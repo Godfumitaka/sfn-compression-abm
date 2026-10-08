@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-08T16:48:04.725042+09:00",
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/cstar_stage2_exact_speed_source",
+  "code": "7294389d70795c847790472aa836b93dc1ca7fd5",
+  "branch": "codex/attn-exact-speed-2026-10-08",
+  "baseline": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+  "flags": [
+    "--stage2-speed off（既定）",
+    "--stage2-speed on（五つのみ）"
+  ],
+  "implementation_diff": " tests/test_stage2_speed_basic.py | 194 +++++++++++++++++++++++++++++++++++++++\n tools/attncstar.py               |  10 +-\n tools/cstar_runtime.py           |  19 +++-\n tools/sme2017.py                 |   9 +-\n tools/smeprobpool.py             |  20 ++++\n tools/smeshared.py               |  29 +++++-\n tools/v310be.py                  |  16 ++++\n tools/v39.py                     |   6 +-\n tools/v3_run.py                  |  13 ++-\n 9 files changed, 305 insertions(+), 11 deletions(-)\n",
+  "native_gates_not_started": true,
+  "code_external_push": false
+}
