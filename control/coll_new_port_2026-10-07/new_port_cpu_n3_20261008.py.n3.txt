@@ -1,0 +1,23 @@
+"""期限内だけ待機する開始前検査。模型の状態や引数を変更しない。"""
+from datetime import datetime, timezone
+import json
+import time
+from pathlib import Path
+from new_port_cpu_20261008 import snapshot
+
+def wait(path,planned=1):
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    warned=False
+    while True:
+        if datetime.now(timezone.utc)>=datetime(2026,10,9,tzinfo=timezone.utc):
+            raise RuntimeError('期限後に新しい模型を開始しない')
+        row=snapshot();row['planned_model_concurrency']=planned
+        row['ready']=row['thermal_ok'] and row['count']+planned<=8
+        if row['ready'] or not row['thermal_ok'] or not warned:
+            with path.open('a') as f:f.write(json.dumps(row,ensure_ascii=False)+'\n')
+        if not row['thermal_ok']:raise RuntimeError('熱又は性能の警告。新しい処理を始めない')
+        if row['ready']:
+            print(json.dumps({'cpu_ready':row['count'],'planned':planned,'limit':8}),flush=True)
+            return row
+        warned=True
+        time.sleep(15)

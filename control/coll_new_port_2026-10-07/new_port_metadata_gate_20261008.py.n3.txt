@@ -1,0 +1,71 @@
+"""指示3の三つの必須検査を先行させ、保存したOFF走行だけを再判定する。"""
+from pathlib import Path
+from datetime import datetime
+import copy
+import hashlib
+import json
+import sys
+import new_port_off_compare_20261008 as C
+
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/new-port-20261007'
+COMMITS=('c55b8c1a62b04002413686b0405bc1960fa8d6b9','c4cfed12a3944071951775b2c9373ca27705fb25')
+
+def header_difference(old,new):
+    assert old.keys()==new.keys(), '見出しの欄が違う'
+    changed=[key for key in old if old[key]!=new[key]]
+    assert changed==['code_commit'], ('見出しの差が版だけではない',changed)
+    return changed
+
+def mandatory(name,baseline,agents):
+    specs=[json.loads((ROOT/'evidence/sme-evict-20261007'/baseline/'spec.json').read_text()),
+           json.loads((EV/name/'spec.json').read_text())]
+    assert tuple(s['commit'] for s in specs)==COMMITS, '固定specの版が対象と違う'
+    outputs=[Path(s['output']) for s in specs]
+    records=[]; headers=[]
+    for index,(spec,out) in enumerate(zip(specs,outputs)):
+        summary=json.loads((out/'comm/run001.summary.json').read_text())
+        assert len(summary['agents'])==agents
+        files=sorted((out/'ledgers/cells').glob('*/*.jsonl.gz'))
+        assert len(files)==agents
+        by_path={str(p.relative_to(out)):json.loads(next(C.B.lines(p))) for p in files}
+        headers.append(by_path)
+        done=sorted((out/'ledgers/cells').glob('*/*.done'))
+        assert len(done)==agents
+        rows=[json.loads(p.read_text()) for p in done]+summary['agents']
+        for row in rows:
+            C.checked_completion(row,out,spec['commit'])
+            records.append({'side':index,'cell':row['cell'],'seed':row['seed'],
+                            'code_commit':row['code_commit'],'ledger_bytes':row['ledger_bytes'],
+                            'fixed_spec_commit_matches':True,'actual_file_size_matches':True})
+        assert all(h['code_commit']==spec['commit'] for h in by_path.values())
+    assert headers[0].keys()==headers[1].keys()
+    header_checks=[{'file':key,'different_fields':header_difference(headers[0][key],headers[1][key])}
+                   for key in headers[0]]
+    # 保存記録を変えず、誤った版・サイズ・見出しが検査を抜けないことを点検する。
+    row=json.loads(next((outputs[0]/'ledgers/cells').glob('*/*.done')).read_text())
+    negative=[]
+    for field in ('code_commit','ledger_bytes'):
+        bad=dict(row);bad[field]='invalid' if field=='code_commit' else row[field]+1
+        try:C.checked_completion(bad,outputs[0],specs[0]['commit'])
+        except AssertionError:negative.append(field)
+        else:raise AssertionError('誤った記録が検査を通った：'+field)
+    a=copy.deepcopy(next(iter(headers[0].values())));b=copy.deepcopy(next(iter(headers[1].values())))
+    b['agent_ids']=['invalid']
+    try:header_difference(a,b)
+    except AssertionError:negative.append('header.agent_ids')
+    else:raise AssertionError('模型設定の違う見出しが検査を通った')
+    return {'time':datetime.now().astimezone().isoformat(),'name':name,'specs':specs,
+            'mandatory_checks_passed':True,'completion_checks':records,
+            'header_checks':header_checks,'negative_examples_rejected':negative}
+
+if __name__=='__main__':
+    name,baseline,agents=sys.argv[1:];agents=int(agents)
+    original=EV/'gate-off_recv2_200.json';before=hashlib.sha256(original.read_bytes()).hexdigest()
+    target=EV/f'n3-{name}-mandatory-metadata.json';assert not target.exists()
+    proof=mandatory(name,baseline,agents)
+    target.write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+    passed=C.compare(name,baseline,agents)
+    assert hashlib.sha256(original.read_bytes()).hexdigest()==before, '元の不合格を保全できていない'
+    print(json.dumps({'mandatory_checks_passed':True,'original_judgement_preserved':before,'passed':passed},ensure_ascii=False))
+    if not passed:raise SystemExit(1)

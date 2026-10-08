@@ -1,0 +1,80 @@
+"""指示3の再判定合格後、元の八体OFFをCPU・受付の枠が空いたら一度だけ走らせる。"""
+from datetime import datetime, timezone
+from pathlib import Path
+import ast
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+from new_port_cpu_n3_20261008 import wait
+
+ROOT=Path(__file__).resolve().parent
+EV=ROOT/'evidence/new-port-20261007'
+FOLDER=EV/'off_q0_8_200'
+PYTHON='/opt/homebrew/opt/python@3.12/bin/python3.12'
+DEADLINE=datetime(2026,10,9,tzinfo=timezone.utc)
+STATE=EV/'n3-off8-workflow.json'
+
+
+def status(phase,**values):
+    row={'time':datetime.now().astimezone().isoformat(),'pid':os.getpid(),'phase':phase,**values}
+    STATE.write_text(json.dumps(row,ensure_ascii=False,indent=2)+'\n')
+    with (EV/'n3-off8-workflow.jsonl').open('a') as f:f.write(json.dumps(row,ensure_ascii=False)+'\n')
+    print(json.dumps(row,ensure_ascii=False),flush=True)
+
+
+def registered(argv,label,mem,disk,model_run=False):
+    if datetime.now(timezone.utc)>=DEADLINE:raise RuntimeError('期限後に新しい受付を始めない')
+    command=[PYTHON,'/Users/tatsu-admin/jobs/jobs.py','run','--wait','--owner',label,'--mem',str(mem),'--disk-path',str(disk),'--',*argv]
+    with (EV/('n3-off8-'+('model' if model_run else 'comparison')+'.scheduler.log')).open('x') as log:
+        p=subprocess.Popen(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+        status('受付待ち' if model_run else '完走記録の比較の受付待ち',scheduler_pid=p.pid,command=command)
+        while p.poll() is None:
+            # 走り始めた模型は期限後も止めない。未開始の自分の受付だけ終了する。
+            started=(FOLDER/'process.json').exists() if model_run else (EV/'n3-off_q0_8_200-comparison-process.json').exists()
+            if datetime.now(timezone.utc)>=DEADLINE and not started:
+                os.killpg(p.pid,signal.SIGINT);p.wait()
+                raise RuntimeError('期限到来。未開始の自分の受付待ちを終了した')
+            time.sleep(10)
+    if p.returncode:raise RuntimeError(f'{label}の終了コード{p.returncode}')
+
+
+if __name__=='__main__':
+    assert not STATE.exists(),'同じ自動手順を重複起動しない'
+    try:
+        status('二体保存記録の再判定待ち（模型未開始・八体未受付）')
+        gate2=EV/'gate-off_recv2_200-metadata-checked.json'
+        while not gate2.exists():
+            if datetime.now(timezone.utc)>=DEADLINE:
+                # 未開始の自分の解析受付だけ下ろし、走行中の模型は触れない。
+                if not (EV/'n3-off_recv2_200-comparison-process.json').exists():
+                    for row in json.loads((EV/'n3-comparison-waiting-pids.json').read_text()):
+                        try:os.kill(row['pid'],signal.SIGINT)
+                        except ProcessLookupError:pass
+                raise RuntimeError('期限到来。二体再判定の待機を終了した')
+            time.sleep(15)
+        assert json.loads(gate2.read_text())['passed']
+        assert json.loads((EV/'n3-off_recv2_200-mandatory-metadata.json').read_text())['mandatory_checks_passed']
+        spec=json.loads((FOLDER/'spec.json').read_text())
+        assert spec['commit']=='c4cfed12a3944071951775b2c9373ca27705fb25'
+        assert spec['model_processes']==8 and spec['mem_gb']==2
+        assert not Path(spec['output']).exists()
+        assert not (FOLDER/'process.json').exists() and not (FOLDER/'resource.json').exists()
+        status('CPU枠待ち（模型未開始・未受付）',model_processes=8,mem_gb=2,output=spec['output'])
+        wait(FOLDER/'cpu-before-registration.jsonl',planned=8)
+        table=subprocess.check_output([PYTHON,'/Users/tatsu-admin/jobs/jobs.py','status','--disk-path',spec['output']],cwd=ROOT,text=True)
+        (FOLDER/'jobs-before-registration.log').write_text(table)
+        registered([PYTHON,str(ROOT/'new_port_registered_n3_20261008.py'),str(FOLDER/'spec.json')],
+                   'Codex3 指示3 準備版新旗OFF 通信なし八体200',2,spec['output'],True)
+        status('八体OFFの自然完走。比較前')
+        registered([PYTHON,str(ROOT/'new_port_metadata_registered_20261008.py'),'off_q0_8_200','q0_8_evict200','8'],
+                   'Codex3 指示3 八体OFF保存記録の比較',1,EV)
+        gate=json.loads((EV/'gate-off_q0_8_200-metadata-checked.json').read_text())
+        assert gate['passed'],'八体OFFの不一致'
+        status('八体OFF合格。次の一体ONは未開始',checks=len(gate['checks']))
+    except BaseException as exc:
+        status('停止',error=repr(exc))
+        raise

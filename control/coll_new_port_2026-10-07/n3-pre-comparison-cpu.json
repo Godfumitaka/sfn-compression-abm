@@ -1,0 +1,268 @@
+{
+  "time": "2026-10-08T11:20:58.721324+09:00",
+  "limit": 8,
+  "criterion": "停止T/終了Zを除くPython末端。待機中のspawn・模型実行器も含む。重い集計と実行中のPythonも安全側に含む。待つ親を除く。",
+  "counted": [
+    {
+      "pid": 7399,
+      "parent": 7396,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 9710485504,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 9096,
+      "parent": 9081,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 613433344,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 31675,
+      "parent": 31665,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 188153856,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41907,
+      "parent": 41904,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 263520256,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_off_gate.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/準備_01/種1の比較元.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction4/off_gate_03/N3_w1 --workspace /Users/tatsu-admin/Documents/ChatGPT/New project --case N3_w1"
+    },
+    {
+      "pid": 95421,
+      "parent": 95412,
+      "state": "R",
+      "cpu": 99.4,
+      "rss_bytes": 1417330688,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "count": 5,
+  "python_processes": [
+    {
+      "pid": 7390,
+      "parent": 98780,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 20398080,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/run_memory_01.py full1740_01"
+    },
+    {
+      "pid": 7396,
+      "parent": 7390,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 10289152,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/observe_memory_01.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/full1740_01/native_command.json"
+    },
+    {
+      "pid": 7398,
+      "parent": 7396,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 7585792,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 7399,
+      "parent": 7396,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 9710485504,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 9042,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 18153472,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py"
+    },
+    {
+      "pid": 9047,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 20185088,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py"
+    },
+    {
+      "pid": 9073,
+      "parent": 9047,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 7569408,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示18 較正 世界2 種42 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/controller.py entry 42"
+    },
+    {
+      "pid": 9081,
+      "parent": 9073,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 10240000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction18_calibration/w2_seed042/native_command.json"
+    },
+    {
+      "pid": 9095,
+      "parent": 9081,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 7585792,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 9096,
+      "parent": 9081,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 613433344,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 19615,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 7454720,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/gate_supervisor.py"
+    },
+    {
+      "pid": 19617,
+      "parent": 19615,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 12140544,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex 動詞新移植 追加旗off5000 --mem 1.3 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000/output -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/run_case.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/gates/alloff_5000"
+    },
+    {
+      "pid": 31655,
+      "parent": 9042,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 7569408,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示19 高速化関門 reuse_on_200 --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200 -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/gate.py entry reuse_on_200"
+    },
+    {
+      "pid": 31665,
+      "parent": 31655,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 10240000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction19_speed_gate/reuse_on_200/native_command.json"
+    },
+    {
+      "pid": 31674,
+      "parent": 31665,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 7585792,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 31675,
+      "parent": 31665,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 188153856,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41899,
+      "parent": 52419,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 19841024,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner 探索介入 指示3・4 種1旧形式5件OFF関門 依存接続後 --mem 0.6 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction4/off_gate_03 -- /opt/homebrew/bin/python3.12 tools/intervention46_off_gate.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/準備_01/種1の比較元.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction4/off_gate_03 --workspace /Users/tatsu-admin/Documents/ChatGPT/New project"
+    },
+    {
+      "pid": 41904,
+      "parent": 41899,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 20938752,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python tools/intervention46_off_gate.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/準備_01/種1の比較元.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction4/off_gate_03 --workspace /Users/tatsu-admin/Documents/ChatGPT/New project"
+    },
+    {
+      "pid": 41907,
+      "parent": 41904,
+      "state": "R",
+      "cpu": 100.0,
+      "rss_bytes": 263520256,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_e9/tools/intervention46_off_gate.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/準備_01/種1の比較元.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction4/off_gate_03/N3_w1 --workspace /Users/tatsu-admin/Documents/ChatGPT/New project --case N3_w1"
+    },
+    {
+      "pid": 42142,
+      "parent": 52419,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 16236544,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -"
+    },
+    {
+      "pid": 91021,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 16596992,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py"
+    },
+    {
+      "pid": 95408,
+      "parent": 91021,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 7569408,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex2 指示17 較正の下見 birth_hu_on --mem 4 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on -- /opt/homebrew/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction17_on_mem4_controller/controller.py entry"
+    },
+    {
+      "pid": 95412,
+      "parent": 95408,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 10240000,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/observe_light.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction16_calibration_preview_seed41/birth_hu_on/native_command.json"
+    },
+    {
+      "pid": 95420,
+      "parent": 95412,
+      "state": "S",
+      "cpu": 0.0,
+      "rss_bytes": 7585792,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 95421,
+      "parent": 95412,
+      "state": "R",
+      "cpu": 99.4,
+      "rss_bytes": 1417330688,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 97541,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 8159232,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+    },
+    {
+      "pid": 98780,
+      "parent": 1,
+      "state": "Ss",
+      "cpu": 0.0,
+      "rss_bytes": 7569408,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --owner SME_deep_memory_instruction12_full1740_01 --wait --mem 11 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/full1740_01 -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_profile_2026-10-08/deep_memory_instruction12_01/run_memory_01.py full1740_01"
+    }
+  ],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "thermal_ok": true
+}

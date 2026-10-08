@@ -1,0 +1,96 @@
+"""受付から呼ばれる模型走行の測定用の包み。模型の引数はspecに固定する。"""
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import os
+import re
+import signal
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT/'evidence/new-port-20261007'
+spec = json.loads(Path(sys.argv[1]).read_text())
+name = spec['name']; folder = EV/name; folder.mkdir(exist_ok=True)
+if name=='off_q0_8_200':
+    assert json.loads((EV/'gate-off_recv2_200-metadata-checked.json').read_text())['passed']
+    assert json.loads((EV/'n3-off_recv2_200-mandatory-metadata.json').read_text())['mandatory_checks_passed']
+assert not (folder/'process.json').exists() and not (folder/'resource.json').exists(), '保存済み・開始済みの走行を重複しない'
+def save(name,data): (folder/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def now(): return datetime.datetime.now().astimezone().isoformat()
+def proc_tree(pid, with_ids=False):
+    records={}
+    for line in subprocess.check_output(['/bin/ps','-axo','pid=,ppid=,rss='],text=True).splitlines():
+        fields=line.split()
+        if len(fields)==3: records[int(fields[0])]=(int(fields[1]),int(fields[2])*1024)
+    descendants={pid}
+    for _ in range(10):descendants.update(p for p,(parent,_) in records.items() if parent in descendants)
+    total=sum(records.get(p,(0,0))[1] for p in descendants)
+    return (total,descendants) if with_ids else total
+def health():
+    disk=subprocess.check_output(['/bin/df','-k',str(Path(spec['output']).parent)],text=True)
+    swap=subprocess.check_output(['/usr/sbin/sysctl','vm.swapusage'],text=True).strip()
+    therm=subprocess.check_output(['/usr/bin/pmset','-g','therm'],text=True).strip()
+    memory=subprocess.check_output(['/usr/bin/vm_stat'],text=True)
+    return {'time':now(),'disk':disk,'swap':swap,'thermal':therm,'memory':memory}
+source=Path(spec['cwd']); commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
+if commit!=spec['commit']:raise RuntimeError('模型の版がspecと違う')
+if subprocess.check_output(['git','status','--porcelain'],cwd=source):raise RuntimeError('模型の作業差分がある')
+output=Path(spec['output'])
+if output.exists():raise RuntimeError('既存の出力を上書きしない')
+from new_port_cpu_n3_20261008 import wait as cpu_wait
+from new_port_cpu_20261008 import snapshot as cpu_snapshot
+planned=int(spec["model_processes"]); cpu_wait(folder/"cpu-before-start.jsonl",planned=planned)
+for helper in ('new_port_registered_n3_20261008.py','sme_evict_observe_20261007.py','new_port_cpu_20261008.py','new_port_cpu_n3_20261008.py'):
+    data=(ROOT/helper).read_bytes();(folder/(helper+'.txt')).write_bytes(data)
+initial=health(); save('initial.json',initial); save('command.json',spec)
+start=time.monotonic();peak=0;count=0;stop=None;paused_at=None;pause_seconds=0.0
+print(json.dumps({'name':name,'started':now(),'commit':commit,'allocation':spec['mem_gb']},ensure_ascii=False),flush=True)
+with (folder/'stdout.log').open('w') as so,(folder/'time.log').open('w') as se:
+    if datetime.datetime.now(datetime.timezone.utc)>=datetime.datetime(2026,10,9,tzinfo=datetime.timezone.utc):
+        raise RuntimeError('継続確認の期限後に模型を始めない')
+    child=subprocess.Popen(['/usr/bin/time','-l',spec['argv'][0],str(ROOT/'sme_evict_observe_20261007.py'),str(Path(sys.argv[1]).resolve())],cwd=source,env={**os.environ,**spec.get('env',{})},stdout=so,stderr=se,start_new_session=True)
+    save('process.json',{'pid':child.pid,'started':now()})
+    try:
+        with gzip.open(folder/'health.jsonl.gz','wt') as log:
+            while child.poll() is None:
+                rss, own=proc_tree(child.pid,with_ids=True); peak=max(peak,rss);count+=1
+                cpu=cpu_snapshot(exclude=own)
+                cpu['own_model_processes_planned']=0 if paused_at else planned
+                cpu['own_serial_computing_upper_bound']=0 if paused_at else 1
+                with (folder/'cpu-during.jsonl').open('a') as cpu_log:cpu_log.write(json.dumps(cpu,ensure_ascii=False)+'\n')
+                if cpu['count']+planned>8 and paused_at is None:
+                    os.killpg(child.pid,signal.SIGSTOP);paused_at=time.monotonic()
+                elif cpu['count']+planned<=8 and paused_at is not None:
+                    pause_seconds+=time.monotonic()-paused_at;paused_at=None
+                    os.killpg(child.pid,signal.SIGCONT)
+                h=health();h['rss_sum_bytes']=rss;log.write(json.dumps(h,ensure_ascii=False)+'\n');log.flush()
+                limits=re.search(r'CPU_Speed_Limit\s*=\s*(\d+)',h['thermal'])
+                if ('No thermal warning level has been recorded' not in h['thermal']
+                    or 'No performance warning level has been recorded' not in h['thermal']
+                    or (limits and int(limits[1])!=100)):
+                    stop='熱又は性能の警告';break
+                if rss>spec['mem_gb']*1e9:
+                    stop='模型の観測RSS合計が受付の予約値を超えた';break
+                if float(subprocess.check_output(['/bin/df','-k',str(Path(spec['output']).parent)],text=True).splitlines()[-1].split()[3])*1024<20*2**30:
+                    stop='出力先の空きが20GiB未満';break
+                time.sleep(1)
+    except BaseException:
+        os.killpg(child.pid,signal.SIGCONT);os.killpg(child.pid,signal.SIGTERM);child.wait();raise
+    if stop:
+        os.killpg(child.pid,signal.SIGCONT);os.killpg(child.pid,signal.SIGTERM);child.wait()
+final=health(); save('final.json',final)
+result={'name':name,'start':initial['time'],'finished':now(),'elapsed_seconds':time.monotonic()-start,'exitcode':child.returncode,
+        'cpu_pause_seconds':pause_seconds+((time.monotonic()-paused_at) if paused_at else 0),'cpu_limit':8,'own_model_processes_planned':planned,'own_serial_computing_upper_bound':1,'rss_sum_peak_bytes':peak,'rss_sample_interval_seconds':1,'samples':count,'allocation_gb':spec['mem_gb'],'stop':stop,
+        'output_bytes':sum(p.stat().st_size for p in output.rglob('*') if p.is_file()) if output.exists() else 0}
+summaries=list((output/'comm').glob('*.summary.json'))
+if summaries:
+    summary=json.loads(summaries[0].read_text());result.update(trials=summary.get('trials'),errors=summary.get('errors'),agent_peak_rss_mb=[a.get('peak_rss_mb') for a in summary.get('agents',[])])
+else:
+    manifests=[json.loads(s) for s in (output/'manifest.jsonl').read_text().splitlines()] if (output/'manifest.jsonl').exists() else []
+    result['manifests']=manifests
+save('resource.json',result);print(json.dumps(result,ensure_ascii=False),flush=True)
+if result['exitcode'] or stop or result.get('errors'):raise SystemExit(1)

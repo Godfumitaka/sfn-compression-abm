@@ -1,0 +1,119 @@
+"""完走済みだけを読む。新旗OFFの模型の値は生バイトで照合する。"""
+from pathlib import Path
+import json
+import sys
+
+import sme_evict_compare_20261007 as B
+
+ROOT = Path(__file__).resolve().parent
+EV = ROOT / 'evidence/new-port-20261007'
+
+
+def checked_completion(row, output, commit):
+    # 版と圧縮サイズを無検査で落とさず、その側の実体に必ず当てる。
+    assert row['code_commit'] == commit, '終了記録の版が固定specと違う'
+    ledger = output/'ledgers/cells'/row['cell']/f"seed{row['seed']:03d}.jsonl.gz"
+    assert row['ledger_bytes'] == ledger.stat().st_size, '終了記録のサイズが実ファイルと違う'
+    body = B.lines(ledger)
+    header = json.loads(next(body))
+    assert header['code_commit'] == commit and 'agent_ids' in header
+    out = dict(row)
+    for key in ('code_commit', 'ledger_bytes', 'elapsed_sec', 'finished_at'):
+        del out[key]
+    if 'peak_rss_mb' in out:
+        del out['peak_rss_mb']
+    return out
+
+
+def checked_native(old, new):
+    commits = ('c55b8c1a62b04002413686b0405bc1960fa8d6b9',
+               'c4cfed12a3944071951775b2c9373ca27705fb25')
+    checks = []
+    for directory in ('ledgers', 'side'):
+        files = [{str(p.relative_to(out)): p for p in (out/directory).rglob('*') if p.is_file()}
+                 for out in (old, new)]
+        assert files[0].keys() == files[1].keys(), '出力の種類が異なる'
+        for key in sorted(files[0]):
+            values = []
+            for index, out in enumerate((old, new)):
+                path = files[index][key]
+                if directory == 'ledgers' and path.name.endswith('.jsonl.gz'):
+                    # 見出しの版も固定値へ当ててから、本体の生バイトを比較。
+                    header = json.loads(next(B.lines(path)))
+                    assert header['code_commit'] == commits[index]
+                    stream = B.ledger_body(path)
+                elif path.name.endswith('.done'):
+                    row = checked_completion(json.loads(path.read_text()), out, commits[index])
+                    stream = [json.dumps(row, ensure_ascii=False).encode()]
+                elif path.name.endswith('.cfvalue.jsonl'):
+                    stream = B.json_without_clock(path)
+                else:
+                    stream = B.lines(path)
+                values.append(stream)
+            checks.append(B.byte_check(key, *values))
+    def events(path):
+        for line in B.lines(path):
+            if json.loads(line).get('kind') != 'summary':
+                yield line
+    checks.append(B.byte_check('通信の全事象（終了時計の集計以外）',
+        events(old/'comm/run001.jsonl'), events(new/'comm/run001.jsonl')))
+    normalized = []
+    for index, out in enumerate((old, new)):
+        summary = json.loads((out/'comm/run001.summary.json').read_text())
+        summary['agents'] = [checked_completion(row, out, commits[index]) for row in summary['agents']]
+        normalized.append([json.dumps(summary, ensure_ascii=False).encode()])
+    checks.append(B.byte_check('終了集計の模型の全欄と検査した書出し情報', *normalized))
+    return checks
+
+
+def compare(name, baseline, agents):
+    folder = EV / name
+    resource = json.loads((folder / 'resource.json').read_text())
+    assert resource['exitcode'] == 0 and resource['stop'] is None
+    assert resource['trials'] == 200 and not resource['errors']
+    old = ROOT / 'outputs/sme-evict-20261007' / baseline
+    new = ROOT / 'outputs/new-port-20261008' / name
+    checks = checked_native(old, new)
+    for directory in ('evictions',):
+        left = {str(p.relative_to(old)): p for p in (old/directory).rglob('*') if p.is_file()}
+        right = {str(p.relative_to(new)): p for p in (new/directory).rglob('*') if p.is_file()}
+        assert left.keys() == right.keys(), '追加の記録の種類が異なる'
+        for key in sorted(left):
+            checks.append(B.byte_check(key, B.lines(left[key]), B.lines(right[key])))
+    for filename in ('run001.jsonl.state.jsonl', 'run001.lineage.jsonl'):
+        checks.append(B.byte_check(filename, B.lines(old/'comm'/filename), B.lines(new/'comm'/filename)))
+    for index in range(agents):
+        for suffix in ('final-sme.jsonl.gz', 'model-rng.jsonl', 'rng.jsonl'):
+            left = ROOT/'evidence/sme-evict-20261007'/baseline/f'agent{index}.{suffix}'
+            right = folder/f'agent{index}.{suffix}'
+            assert left.exists() == right.exists(), suffix
+            if left.exists():
+                checks.append(B.byte_check(f'個体{index}：{suffix}', B.lines(left), B.lines(right)))
+    summary = json.loads((new/'comm/run001.summary.json').read_text())
+    assert len(summary['agents']) == agents
+    for agent in summary['agents']:
+        assert agent['v39'].get('not_in_dictionary', 0) == 0
+        assert agent['v311c']['dictionary_checks'] == 400
+    tombstones = [json.loads(p.read_text()) for p in (new/'evictions').rglob('*.summary.json')]
+    assert len(tombstones) == agents
+    assert all(p['tombstone_enabled'] and p['tombstone_hits'] == 0 for p in tombstones)
+    record = dict(name=name, baseline=baseline, candidate='c4cfed12a3944071951775b2c9373ca27705fb25',
+                  baseline_commit='c55b8c1a62b04002413686b0405bc1960fa8d6b9',
+                  passed=all(c['passed'] for c in checks), checks=checks,
+                  tombstone_hits=0, dictionary_unknown_names=0,
+                  exclusions=['台帳の見出し1行', 'cfvalue.sec_trial', '.done.elapsed_sec/finished_at',
+                              '通信summary内のelapsed_sec/finished_at/peak_rss_mb',
+                              'code_commitとledger_bytesは固定spec・実体との必須検査の後に比較外',
+                              'flag.jsonとmanifest.jsonlは模型の値の照合外。引数と版はspecに全量保存'])
+    path = EV/f'gate-{name}-metadata-checked.json'
+    assert not path.exists(), '保存済みの関門の判定を上書きしない'
+    path.write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n')
+    print(json.dumps(dict(name=name, passed=record['passed'], checks=len(checks),
+                         failed=[c for c in checks if not c['passed']]), ensure_ascii=False))
+    return record['passed']
+
+
+if __name__ == '__main__':
+    name, baseline, agents = sys.argv[1:]
+    if not compare(name, baseline, int(agents)):
+        raise SystemExit(1)
