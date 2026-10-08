@@ -600,10 +600,14 @@ def worker(task: dict) -> dict:
     if task.get("attn_sme"):
         # 注意は選びだけを包む。既存sideと状態記録の外へ追加記録を書く。
         import attnsme
+        # 試行の型ではなく、既に入れた世界の部品を一度だけ接続する（指示6）。
+        instruction_world = verbworld if task.get('verb_world') else shopworld
         attnsme.install(out_root / "attention" / task["cell"] / f"seed{task['seed']:03d}.jsonl.gz",
                         mode=task["attn_sme"], position=task["attn_position"], eta=task["attn_eta"],
                         fixed_zero=task.get("attn_fixed_zero", False), agent_ids=tuple(task["cfg"]["agent_ids"]),
                         epsilon=task.get('logp_eps',.5),**connection,
+                        task_instruction=instruction_world.task_instruction,
+                        research_record=instruction_world.attention_record,
                         **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
                            if task.get('attn_allin') else {}))
     if task.get('stage2') == 'on':

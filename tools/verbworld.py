@@ -188,6 +188,21 @@ def install(*, variant="default", frequency_file=None, door_p=None):
     ledger.Ledger.append = append
 
 
+def task_instruction(trial):
+    """指示6の信頼済み入口。既存の世界で確定したboolだけを渡す。"""
+    return INFO[trial.G_star.graph_id]['held_out_is_past']
+
+
+def attention_record(trial, candidates):
+    """回答確定後の動詞の研究者記録。選びや学びへは戻さない。"""
+    info = INFO[trial.G_star.graph_id]
+    for candidate in candidates:
+        candidate['name_seats'] = [{'slot':seat['slot'],'state':seat['state'],
+                                   'name':seat.get('predicate'),'history':seat.get('history',{})}
+                                  for seat in candidate['seats'] if IDS.get(seat['relation_id']) == 'name']
+    return {key:info[key] for key in EXTRA_KEYS}
+
+
 def extend_dictionary():
     """shopworld.extend_dictionary と同じ。既存の辞書番号は保つ。"""
     import v39

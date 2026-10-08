@@ -254,6 +254,21 @@ def install(fo, *, world: int, exc: float, keep_cue: bool, side_path: str) -> No
     v39.score_answers = score_answers
 
 
+def task_instruction(trial):
+    """信頼済みの世界の入口。予測側へ渡す課題指示はbool一つだけ。"""
+    return INFO[trial.G_star.graph_id]['held_out_is_door']
+
+
+def attention_record(trial, candidates):
+    """回答確定後の研究者の記録。課題指示の入口とは分ける。"""
+    info = INFO[trial.G_star.graph_id]
+    for candidate in candidates:
+        candidate['seal'] = [{'slot':seat['slot'],'state':seat['state'],
+                             'name':seat.get('predicate'),'history':seat.get('history',{})}
+                            for seat in candidate['seats'] if IDS.get(seat['relation_id']) == 'sig']
+    return {'shop_type':info['shop_type'],'shop_cue':info['shop_cue']}
+
+
 SHARED_PATHS = ("0.0.1", "0.1.0", "0.1.1")   # T1 のドア以外の一階の葉（種 v3a2 で push・carry・lift）
 
 

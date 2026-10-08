@@ -79,13 +79,18 @@ def _restore(snap):
 
 
 def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',), epsilon=.5,
-            feature_policy=None,readout_policy=None,learning_policy=None,prediction_context=None):
+            feature_policy=None,readout_policy=None,learning_policy=None,prediction_context=None,
+            task_instruction=None,research_record=None):
     import abm.loop as loop
     import abm.agent_runtime as ar
     import smeshared as S
     import v39
     if mode not in ('binary','global','position') or position not in ('k1','k2') or eta<=0 or not math.isfinite(eta):
         raise ValueError('注意の旗が不正')
+    if task_instruction is None or research_record is None:
+        import shopworld
+        task_instruction = shopworld.task_instruction if task_instruction is None else task_instruction
+        research_record = shopworld.attention_record if research_record is None else research_record
     Path(path).parent.mkdir(parents=True,exist_ok=True)
     ST.clear();ST.update(f=S._text_gzip(path),mode=mode,position=position,eta=eta,
                         fixed_zero=fixed_zero,individuals={},active=False,trial=-1,checks=0,
@@ -99,8 +104,9 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
         agent=sorted(agent_ids)[i]
         individual=ST['individuals'].setdefault(agent,{'observations':Observations(),'a':{}})
         # 信頼済みの指示の入口。このbool以外の研究者欄を予測側へ渡さない。
-        import shopworld
-        instruction=bool(shopworld.INFO[trial.G_star.graph_id]['held_out_is_door'])
+        instruction=task_instruction(trial)
+        if type(instruction) is not bool:
+            raise TypeError('信頼済みの課題指示の入口はbool一つだけ')
         ST.update(trial=t,agent=agent,individual=individual,door_task=instruction,
                   scene=[r.to_dict() for r in ai.target_graph_partial.relations],
                   entities={e.entity_id for e in ai.target_graph_partial.entities})
@@ -236,16 +242,14 @@ def install(path, *, mode, position, eta, fixed_zero=False, agent_ids=('agent',)
         observation.after(trial.trial,row.pop('scene'),row.pop('entities'),disclosed)
         # 以下は予測後の研究者の表。学習・次の選びへ戻さない。
         truth=(trial.held_out_edge.predicate,tuple(trial.held_out_edge.arguments))
-        import shopworld
-        info=shopworld.INFO[trial.G_star.graph_id]
         for c in row['candidates']:
             c['hit']=c['answer']==truth
-            c['seal']=[{'slot':s['slot'],'state':s['state'],'name':s.get('predicate'),
-                        'history':s.get('history',{})} for s in c['seats'] if shopworld.IDS.get(s['relation_id'])=='sig']
+        research = research_record(trial,row['candidates'])
+        for c in row['candidates']:
             c.pop('signature_rows',None)
         row.update(f_realized=coin.f_realized,f_fired=bool(coin.f_fired),L=loss,gradient=gradient,
                    update_reason=reason,updated=updated,a_after=dict(attention),
-                   shop_type=info['shop_type'],shop_cue=info['shop_cue'],truth=truth,hit=bool(score.hit),
+                   **research,truth=truth,hit=bool(score.hit),
                    mode=mode,position=position,eta=eta,fixed_zero=fixed_zero,
                    memory_bits=v39.total_bits(v39.ensure(state),v39.code_lengths(state.p_hat)),
                    definitions=len(state.definitions),a_description_json_bytes=len(json.dumps(attention,ensure_ascii=False).encode()))
