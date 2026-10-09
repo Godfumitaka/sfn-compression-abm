@@ -79,7 +79,7 @@ def complete(root,name):
     completion=[];headers={}
     for p in ledgers:
         stream=rows(p);h=next(stream);assert h['code_commit']==r['commit'] and h['trial_count']==T
-        body=list(stream);assert len(body)==T and [x['trial'] for x in body]==list(range(T))
+        body=list(stream);assert len(body)==T and [x['prediction_order'] for x in body]==list(range(T))
         assert all(x['f_realized']==h['f_setting'] for x in body)
         headers[str(p.relative_to(out))]=h
     done=list((out/'ledgers/cells').glob('*/*.done'));assert len(done)==r['models']
