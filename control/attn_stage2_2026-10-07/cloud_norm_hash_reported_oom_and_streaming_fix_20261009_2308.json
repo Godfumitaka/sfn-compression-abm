@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-09T23:08:27.610785+09:00",
+  "source_report": "control/2026-10-08_クラウドの開始_走行の係.md",
+  "source_report_sha256": "63366c073973d857360c0c38e7bf21daf28181c6e7a54da846ae6410691bc2e0",
+  "report_head": "a54bde979389559db67e58aee61d61d851d3665c",
+  "reported_text": "## 10/09 22:23 の記録\n- 指示 56：継続確認の期限を 10/13 09:00 に延ばした（新しい確認の仕事 43462e47）。\n- ★ クラウドの機械 m3・m4 で、持ち帰りのときの norm_hash.py（機械の上で小さい記録を作る道具）が、記憶を 21〜35GB 使って OOM で落ちていた（m4 11:54・13:04 UTC、m3 13:05・13:15 UTC、dmesg）。落ちたのは norm_hash（python3）だけで、模型の本（python3.12）は落ちていない（m2・m3・m4 の終わった本は全部 rc=0）。持ち帰りは「次の回にやり直す」になっていた。\n  - 原因：norm_hash.py が、大きい gz（sme.states など）を全部展開して記憶に置き、書き直した行の並びも記憶に置いていた。\n  - 直し：同じバイトの並びの sha256 を、一行ずつ作って足していく形に書き直した（~/cloud/norm_hash.py、前のものは norm_hash_v1.py に残した）。持ち帰った本の、今までの norm_hash.tsv と同じになるかを確かめている（2a の一本は 12 ファイル全部同じ、最大常駐 27MB）。確かめが済んだら、クラウドの機械とデスクトップに入れる。\n- 22:56：一行ずつの norm_hash.py（sha256 cb76df15…）の確かめ：wave1_2a_w1_s3_c574 は 12 ファイル全部、wave1_1a_w2_s2_c792 は 19 ファイル全部が、今までの norm_hash.tsv と同じ（違い 0）。最大常駐は 27MB・41MB（前は機械の上で 21〜35GB）。クラウドの 5 台とデスクトップに入れた（写しは ataru-0608/cloud/norm_hash.py、前のものは norm_hash_v1.py）。\n",
+  "observed_scope": "指定報告の読み取りだけ。クラウド実ps・原dmesg・模型・集計道具・出力の独立再比較はしていない。",
+  "model_stop_reported": false,
+  "formal_instruction": false,
+  "native_fix_or_replay_by_codex2": false,
+  "notification_new_this_heartbeat": true
+}
