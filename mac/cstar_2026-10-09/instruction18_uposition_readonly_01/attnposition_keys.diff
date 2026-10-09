@@ -1,0 +1,19 @@
+--- 38旧版_126893a3
++++ c79215980a913cc426a63f25048e0dfc6fd1f758
+@@ -120,13 +120,13 @@
+     return lengths.get(name, max(lengths.values(), default=0)+1)
+ 
+ 
+-def distribution(state, fixed, q, b):
++def distribution(state, fixed, q, b, *, epsilon=.5):
+     if state == 'U':
+         return dict(b)
+     names = sorted(set(q)|set(b)|({fixed} if fixed is not None else set()))
+     if state == 'F':
+-        return {p:.5*(p==fixed)+.5*b.get(p,0.) for p in names}
+-    return {p:.5*q.get(p,0.)+.5*b.get(p,0.) for p in names}
++        return {p:(1-epsilon)*(p==fixed)+epsilon*b.get(p,0.) for p in names}
++    return {p:(1-epsilon)*q.get(p,0.)+epsilon*b.get(p,0.) for p in names}
+ 
+ 
+ def surprise(probabilities, name, p_hat):

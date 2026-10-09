@@ -1,0 +1,202 @@
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/cstar_probability.py:65〜105
+65:     source = BACKGROUND_SOURCE or v310be.probabilities
+66:     b = source(d, row, state, scene, config)["U"]
+67:     h = state.slot_history.get((d.name, row.slot_index))
+68:     q = history_distribution(d,row,state,h,b,config,alpha=alpha)
+69:     belief = {"F": {row.relation.predicate: 1.0}, "H": q, "U": b}
+70:     return {"b": b, "q": belief,
+71:             "P": value_distributions(b, q, row.relation.predicate, epsilon)}
+72: 
+73: 
+74: def history_distribution(d,row,state,history,background,config,*,alpha=None):
+75:     """答え・値付け・照合・仮の誕生で同じ履歴の分布を作る。"""
+76:     from collections.abc import Mapping
+77:     from abm.filling import _distribution
+78:     import v39
+79:     hp = v39._order_pool(frozenset(history or ()),d,row,config.higher_order_predicates)
+80:     if alpha is None:
+81:         q = dict(_distribution(hp,state.p_hat,config.local_lambda,history if isinstance(history,Mapping) else None))
+82:         if not q or sum(q.values()) == 0:
+83:             q = background.copy()
+84:     else:
+85:         counts = v39.hist_counts(history)
+86:         counts = {name: counts[name] for name in hp}
+87:         q = dirichlet_history(background,counts,alpha)
+88:     return q
+89: 
+90: 
+91: def birth_distributions(background, first_name, second_name, *, mode, alpha=1, epsilon=.5):
+92:     """誕生二材料の手計算用の基準。正解を知らない先頭の予測はbだけ。"""
+93:     b = checked_distribution(background)
+94:     if mode == 'fit' and first_name != second_name:
+95:         # この場合のFの固定名を決め直さない。呼ぶ側が件数と材料を報告する。
+96:         raise ValueError("誕生のFの名前が二材料で一意でない")
+97:     if mode == "fit":
+98:         q = dirichlet_history(b, {first_name: 2}, alpha)
+99:         after = value_distributions(b, q, first_name, epsilon)
+100:         return after, after
+101:     if mode == "seq":
+102:         before = {s: b.copy() for s in ("F", "H", "U")}
+103:         if first_name is None:
+104:             return before, {s: b.copy() for s in ("F", "H", "U")}
+105:         q = dirichlet_history(b, {first_name: 1}, alpha)
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/cstar_runtime.py:175〜190
+175:     cstar_probability.BACKGROUND_SOURCE = v310be.probabilities
+176:     if options.get('exact_speed'):
+177:         original = cstar_probability.BACKGROUND_SOURCE
+178:         if original.__module__ != 'v310be' or original.__name__ != 'probabilities':
+179:             raise RuntimeError('C*の基底の入口が指定版と異なる')
+180:         cstar_probability.BACKGROUND_SOURCE = v310be.background_probabilities
+181:         v39.CFG['cstar_exact_speed'] = True
+182:     if v310be.CFG.get('score_logp'):
+183:         v310be.STATS['cfg']['epsilon'] = options['logp_eps']
+184:     if options.get('h_dirichlet') or options['logp_eps'] != .5:
+185:         def probabilities(d,row,state,scene,config):
+186:             return distributions(d,row,state,scene,config)['P']
+187:         v310be.probabilities = probabilities
+188:     v39.CFG.update(cstar=True,h_dirichlet=options.get('h_dirichlet'))
+189:     if 'cstar_runtime' not in probeworld.SNAP_MODULES:
+190:         probeworld.SNAP_MODULES += ('cstar_runtime',)
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/attncstar.py:9〜32
+9: def common_bases(ai, state, config):
+10:     """可視位置の署名・階だけで既存の全体頻度を絞る。候補は受け取らない。"""
+11:     from abm.filling import slot_signature, _predicate_has_signature, _distribution
+12:     import v39
+13:     scene=ai.target_graph_partial
+14:     # 候補側の出現を入れず、可視グラフ内の形と階を同じ既存関数へ渡す。
+15:     rows=tuple(SimpleNamespace(relation=r,slot_index=i) for i,r in enumerate(scene.relations))
+16:     visible=SimpleNamespace(name='attention-visible',constituents=rows)
+17:     bases={}
+18:     import cstar_runtime as C
+19:     index = None
+20:     if C.CFG.get('exact_speed'):
+21:         from smeprobpool import signature_index, signature_pool
+22:         index = signature_index(scene, scene)
+23:     for row in rows:
+24:         signature=slot_signature(row.relation,scene)
+25:         pool = (signature_pool(state.p_hat.alive_vocab, signature, index) if index is not None
+26:                 else frozenset(p for p in state.p_hat.alive_vocab
+27:                                if _predicate_has_signature(p,signature,scene,scene)))
+28:         pool=v39._order_pool(pool,visible,row,config.higher_order_predicates)
+29:         b=dict(_distribution(pool,state.p_hat))
+30:         bases[row.relation.relation_id]=b if b and sum(b.values())>0 else {None:1.}
+31:     return bases
+32: 
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/attncstar.py:43〜72
+43: 
+44:     def for_session(self, ai, state, config):
+45:         import v39
+46:         return Features(self.epsilon,bases=common_bases(ai,state,config),
+47:                         lengths=v39.code_lengths(state.p_hat))
+48: 
+49:     def __call__(self, ai, state, config, observations, candidates):
+50:         import cstar_runtime as C
+51:         import v310be as B
+52:         import v39
+53:         scene=ai.target_graph_partial
+54:         bases=common_bases(ai,state,config) if self.bases is None else self.bases
+55:         lengths=v39.code_lengths(state.p_hat) if self.lengths is None else self.lengths
+56:         positions,index=I.visible_positions([r.to_dict() for r in scene.relations],
+57:                             {e.entity_id for e in scene.entities},bases)
+58:         out=[]
+59:         for candidate in candidates:
+60:             d=state.definitions[candidate['R']]
+61:             rows={row.slot_index:row for row in d.constituents}
+62:             def distribution_reader(seat,rid,b):
+63:                 row=rows[seat['slot']]
+64:                 if C.CFG:
+65:                     if C.CFG['logp_eps']!=self.epsilon:
+66:                         raise ValueError('注意と主の分布のepsilonが違う')
+67:                     return C.distributions(d,row,state,scene,config)['P'][seat['state']]
+68:                 if B.EPSILON!=self.epsilon:raise ValueError('注意と主の分布のepsilonが違う')
+69:                 return B.probabilities(d,row,state,scene,config)[seat['state']]
+70:             terms,details=I.candidate_features(positions,candidate,distribution_reader=distribution_reader,
+71:                             epsilon=self.epsilon,length_of=lambda name:v39.L_of(name,lengths))
+72:             out.append({**candidate,'m':terms,'details':details})
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/attnstage2_distribution.py:1〜17
+1: """42⁵の答えの分布。公開の控えだけで席を読み、正解から選ばない。"""
+2: import math
+3: from abm.domains import EdgePrediction
+4: 
+5: 
+6: def global_background(agent_input,state,config,door_task):
+7:     """公開の問いの形と階が不明な場合の、絞らない予測前のp̂。"""
+8:     total=state.p_hat.total
+9:     return {name:count/total for name,count in state.p_hat.counts.items() if count>0} if total>0 else {}
+10: 
+11: 
+12: def mix_distributions(distributions):
+13:     """適格席を一様に混ぜる。未開示名や微小確率は足さない。"""
+14:     if not distributions:return {}
+15:     names=set().union(*(set(d) for d in distributions))
+16:     return {name:math.fsum(d.get(name,0.) for d in distributions)/len(distributions)
+17:             for name in sorted(names,key=lambda name:(name is None,'' if name is None else name))}
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/attnstage2_distribution.py:69〜83
+69:                           if relation.relation_id==rid),None)
+70:             if row is None:
+71:                 raise RuntimeError('既存の実際の回答の元の席を控えから読めない')
+72:             item['reason']='native_answer_slot'
+73:         else:
+74:             if eligible:
+75:                 row=next(iter(eligible.values()));item['reason']='unique_public_gap_distribution'
+76:             else:
+77:                 item['reason']='no_native_answer_slot'
+78:                 return item
+79:         status=v39.seat_state(definition,row,state.slot_history)
+80:         distribution=B.probabilities(definition,row,state,scene,config)[status]
+81:         item.update(slot=row.slot_index,state=status,P=dict(distribution),distribution_case='single_slot')
+82:         return item
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/v3_run.py:506〜511
+506:         if task.get("cstar_options"):
+507:             import cstar_runtime
+508:             cstar_runtime.install(**task["cstar_options"],
+509:                                   **({'exact_speed': True} if task.get('stage2_speed') else {}),
+510:                                   **({'cache_prune_path':out_root.parent/'p10_cache_guard.jsonl.gz'}
+511:                                      if task.get('stage2_cache_prune') else {}))
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/v3_run.py:588〜608
+588:     if task.get('attn_allin'):
+589:         import attncstar
+590:         from attnstage2_distribution import Readout
+591:         connection=dict(feature_policy=attncstar.Features(task['logp_eps']),readout_policy=Readout())
+592:     if task.get("attn_sme"):
+593:         # 注意は選びだけを包む。既存sideと状態記録の外へ追加記録を書く。
+594:         import attnsme
+595:         attnsme.install(out_root / "attention" / task["cell"] / f"seed{task['seed']:03d}.jsonl.gz",
+596:                         mode=task["attn_sme"], position=task["attn_position"], eta=task["attn_eta"],
+597:                         fixed_zero=task.get("attn_fixed_zero", False), agent_ids=tuple(task["cfg"]["agent_ids"]),
+598:                         epsilon=task.get('logp_eps',.5),**connection,
+599:                         **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
+600:                            if task.get('attn_allin') else {}))
+601:     if task.get('stage2') == 'on':
+602:         import attnstage2_runtime
+603:         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
+604:                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
+605:                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
+606:                                   rematch_reuse=task.get('stage2_reuse',False),
+607:                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
+608:                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
+
+c79215980a913cc426a63f25048e0dfc6fd1f758:tools/v3_run.py:846〜860
+846:     ap.add_argument("--attn-sme", choices=("binary", "global", "position"), default=None, help="ドア課題の定義選びに位置の案1／案2′を用いる")
+847:     ap.add_argument("--attn-position", choices=("k1", "k2"), default="k1", help="祖先の鍵／採用済みSME対応先の鍵")
+848:     ap.add_argument("--attn-eta", type=float, default=0.1, help="位置の注意の更新幅")
+849:     ap.add_argument('--attn-allin',action='store_true',help='指示8の共通基底・主の分布・mixture学習を接続する別版')
+850:     ap.add_argument("--attn-fixed-zero", action="store_true", help="費用を測るがa=0を保つ全バイト一致の検査")
+851:     ap.add_argument('--stage2',choices=('off','on'),default='off',help='全候補の答えの損の差で保持を値付けする')
+852:     ap.add_argument('--stage2-loss',choices=('alpha','top1','mixture','arm'),default='arm',help='第二段の損：0/ℓ、選んだ席の分布、混合分布、土台の採点に従う')
+853:     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
+854:     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
+855:     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
+856:     ap.add_argument('--stage2-speed', choices=('off','on'), default='off',
+857:                     help='C*の第二段の同じ分布・グラフを索引と試行内の控えで作る（P10は別旗）')
+858:     ap.add_argument('--stage2-cache-prune',choices=('off','on'),default='off',
+859:                     help='指示26のP10：過去の呼び出し種のC*控えだけを捨て、再参照なら止める')
+860:     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
