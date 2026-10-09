@@ -1,0 +1,136 @@
+{
+  "instruction": 13,
+  "received_at_jst": "2026-10-10T02:06:06+09:00",
+  "receipt_pushed": true,
+  "completed": false,
+  "state": "A_gates_passed_B_not_started",
+  "old_candidate": "54f0a412201bc5c67efdfa6689fed07fa3250e31",
+  "start_deadline_jst": "2026-10-13T09:00:00+09:00",
+  "production_started": false,
+  "running_labels": [],
+  "receipt_commit": "fd538c4497b8672c3877dc6f8b56da63ecbaaea5",
+  "diagnostic_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_diagnostic_instruction13",
+  "diagnostic_commit": "d44a05af5fcb069eacbf47229097843329a3e5cf",
+  "diagnostic_branch": "codex/verb-d-probe-diagnostic-instruction13-2026-10-10",
+  "commands": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/commands_fixed_A.json",
+  "exec_sessions": {
+    "A_fixed_off100": 47129,
+    "diagnostic_q_attention_04_trace02": 77533,
+    "A_fixed_D_attention_04": 76816,
+    "A_fixed_D_attention_015": 70770
+  },
+  "diagnostic_outcomes": {
+    "diagnostic_q_attention_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "hand_tests_passed": 32,
+  "hand_gate": "instruction13/hand_gate_01.json",
+  "hand_admission_pid": 36521,
+  "source_candidate_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13",
+  "branch": "codex/verb-d-probe-fix-instruction13-2026-10-10",
+  "source_accepted": true,
+  "off_gate_passed": true,
+  "D200_gate_passed": true,
+  "source_pushed": true,
+  "trace_source_commit": "b014da7cc1a79609a89bb6bd786cdbf609bbf96b",
+  "off100_started_at_jst": "2026-10-10T02:15:38.950406+09:00",
+  "off100_wrapper_pid": 36631,
+  "off100_model_parent_pid": 36638,
+  "off100_admission_pid": "36624",
+  "next_action": "Aの版SHA・本番全argv・全関門証拠を通常pushし、その後に指示12B5・7の計算論の分、次にB6・7と指示13の試験抑止へ進む。本番は正式な列・命令・取得待ち。",
+  "trace_outcomes": {
+    "diagnostic_q_attention_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "diagnosis_confirmed": true,
+  "first_temporal_change": "ST.real False -> True in useforget.predict",
+  "progress_report_prepared_at_jst": "2026-10-10T02:20:37+09:00",
+  "progress_report_published": true,
+  "progress_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/指示13_試験D診断と構造32件_off100開始_20261010_0215",
+  "progress_report_commit": "b1bdeb5d9038a97a54945145036361227f679edb",
+  "progress_record_admission_pid": 36930,
+  "automation_updated": true,
+  "automation_verified_at_jst": "2026-10-10T02:25:36.664593+09:00",
+  "automation_verification": "instruction13/automation_progress_verified_01.json",
+  "automation_verification_report_pushed": true,
+  "automation_verification_report_commit": "b47081a53bf6aa1259c2884cb016f6bb5854eed0",
+  "off_comparison": "instruction13/A_off_comparison_01.json",
+  "off_comparison_admission_pid": 41910,
+  "off100_ended_at_jst": "2026-10-10T02:59:23.675908+09:00",
+  "A_completed": true,
+  "A_source_accepted": true,
+  "A_accepted_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+  "A_verification": "instruction13/completed_A_verification_01.json",
+  "production_A_argv": "instruction13/production_A_argv_01.json",
+  "accepted_scope": "動詞AのD・D＋注意の本体と試験抑止の構造関門。集団化Bは未着手。",
+  "completion_verification_admission_pid": 42191
+}
