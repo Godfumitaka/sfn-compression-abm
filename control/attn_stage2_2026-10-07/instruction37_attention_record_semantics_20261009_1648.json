@@ -1,0 +1,168 @@
+{
+  "at": "2026-10-09T16:48:39.742218+09:00",
+  "instruction": 37,
+  "received_and_pushed_before_code_reading": "552494eebf7440850764197c13796c423e0865a3",
+  "read_only_code_review": true,
+  "sources": {
+    "cstar_stage2_json_e9_source": {
+      "head": "c57467eab13ee9ef84277059024ab892756fd2f8",
+      "files": {
+        "tools/attnsme.py": "c9140c9336f1467042c69c28f78b17bceace677fbb7be6ee507afd08526cf542",
+        "tools/smeshared.py": "37d35545d463c582ff47a9d5249de5cc846a1c3af3e0b849f075ad8a41e59341",
+        "tools/v39.py": "00eaf79680622ebfd6c79b753d9c641f50ec726e13f53ed6bf52735824493310",
+        "tools/v3_run.py": "cf115295da59b880659467f0dd6e93fa3477457c5e3ce834290478e0611fff0e",
+        "tools/attncstar.py": "f1c3c1898b5953d3976d1decf4535332ae3ce5cd0e7384dad984bb06867bdadd",
+        "tools/attnsme_features.py": "6d1fb15d3e2fe70eb72130afd203be1a05b26bc6f269204e5c55e0a4573a913b",
+        "abm/agent_runtime.py": "23a7b8bb0b4d2f43396f2b35077e93d9ffe1a161fe8f2b09e30fceb055916241",
+        "abm/loop.py": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f"
+      }
+    },
+    "cstar_stage2_json_4cea_source": {
+      "head": "c79215980a913cc426a63f25048e0dfc6fd1f758",
+      "files": {
+        "tools/attnsme.py": "c9140c9336f1467042c69c28f78b17bceace677fbb7be6ee507afd08526cf542",
+        "tools/smeshared.py": "e5207865644eade4e8ea6ee1b73ee171b07aed8daa09695964ad51ce96997668",
+        "tools/v39.py": "83beb4f647aad457d3f0900010f1ebf7a6b90598942fa75bfc79815862e2c74f",
+        "tools/v3_run.py": "8e5e19b2f2837c09dec5781490c7375284866e8d89ac091182f83c7db9e3fbff",
+        "tools/attncstar.py": "239e50596fee5311e3c8c5624175c6e282becda79ef39615fd23c4b2b851e159",
+        "tools/attnsme_features.py": "6d1fb15d3e2fe70eb72130afd203be1a05b26bc6f269204e5c55e0a4573a913b",
+        "abm/agent_runtime.py": "23a7b8bb0b4d2f43396f2b35077e93d9ffe1a161fe8f2b09e30fceb055916241",
+        "abm/loop.py": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f"
+      }
+    },
+    "cstar_stage2_memo_source": {
+      "head": "8ed8cf2b2920787e55b6f5134300fc350dffe5e7",
+      "files": {
+        "tools/attnsme.py": "c9140c9336f1467042c69c28f78b17bceace677fbb7be6ee507afd08526cf542",
+        "tools/smeshared.py": "b7206bf6d1dc57a3a150de663f8eb8c20955ad05b7ec3df308c36dbe74f46517",
+        "tools/v39.py": "83beb4f647aad457d3f0900010f1ebf7a6b90598942fa75bfc79815862e2c74f",
+        "tools/v3_run.py": "e1f8ee020ad2d75cba456761dfcba96be963058a831dfedbe3a09b98faf8bce3",
+        "tools/attncstar.py": "239e50596fee5311e3c8c5624175c6e282becda79ef39615fd23c4b2b851e159",
+        "tools/attnsme_features.py": "6d1fb15d3e2fe70eb72130afd203be1a05b26bc6f269204e5c55e0a4573a913b",
+        "abm/agent_runtime.py": "23a7b8bb0b4d2f43396f2b35077e93d9ffe1a161fe8f2b09e30fceb055916241",
+        "abm/loop.py": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f"
+      }
+    }
+  },
+  "same_semantic_function_asts": {
+    "tools/smeshared.py:select_definition": {
+      "same_ast_across_three_versions": true,
+      "ast_sha256": "41f993ac6bb9320ea32ade740fe74286fa2a3f03148a0a8cca72824a5abb046e"
+    },
+    "tools/v39.py:predict": {
+      "same_ast_across_three_versions": true,
+      "ast_sha256": "0865530e6d73cde13573c1014e1c941fac4a54633c0f29567385e9ef812e34a3"
+    },
+    "abm/agent_runtime.py:_need": {
+      "same_ast_across_three_versions": true,
+      "ast_sha256": "fd9aea5f8eff6f3add7397b9a63ce16574794640aeb293986dde9de66d8eef86"
+    }
+  },
+  "command_definition_checks": {
+    "a": {
+      "source_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction35_wave1_a_commands_20261009.json",
+      "sha256": "9b7e154b46ffab6bd1989f781c096e7c7dfe97b79485604bf1dceced72b494fd",
+      "3a_or_3b_commands_checked": 16,
+      "all_use_attn_sme_global_and_attn_fixed_zero": true,
+      "2a_or_2b_have_no_attention_flag": true
+    },
+    "b": {
+      "source_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/report/control/attn_stage2_2026-10-07/instruction35_wave1_b_commands_20261009.json",
+      "sha256": "bf43a7e347751608d39e5717e31f14ffb821d66c668846a1e0e8f6bddf530bb9",
+      "3a_or_3b_commands_checked": 20,
+      "all_use_attn_sme_global_and_attn_fixed_zero": true,
+      "2a_or_2b_have_no_attention_flag": true
+    }
+  },
+  "findings": {
+    "candidates_pool": "実予測でsmeshared._definition_choiceへ渡したranked全件。public_candidatesとFeaturesは一候補一行を維持し、門不通過・N3=0を除外しない。",
+    "pool_exclusions": [
+      "n_FH=0の全U定義",
+      "自己点dd+xx=0で比が定義できない定義",
+      "no_prototype/below_threshold/no_definition等で選びへ到達しない試行では一覧が空"
+    ],
+    "not_a_census_of_all_memory_definitions": true,
+    "gate_passed": "予測前の当該候補の支持数support >= abm.agent_runtime._need(config.tau_acc,n_FH)。答えの生成可否・正誤そのものではない。",
+    "candidate_answer": "予測前の記憶・各候補の採用済み対応と予測前乱数の写しで、当該定義を選んだv39.predictのEdgePrediction。棄権ならNone。",
+    "candidate_hit": "研究者の後段でanswer==(held_out_edge.predicate,tuple(held_out_edge.arguments))。名前と順つき引数の全一致。棄権のNoneは偽。開示有無に関わらず研究者記録に記すが学習へ戻さない。",
+    "3a_3b": "承認済み命令は--attn-sme global --attn-fixed-zeroで記録を維持しa=0・学習停止。候補・門・hitの意味は同じ。文字通り--attn-sme offはCLIの選択肢でなく、旗を省けば注意記録自体が無い。",
+    "join_key": "同じ版・群・世界・種・cellのattention.trialをledger.prediction_orderと0始まりで突き合わせる。各試行一行・欠落/重複/数の不一致なら止め、欠落欄を空一覧や偽で補わない。",
+    "operational_reading": "good_exists=any(c.gate_passed and c.hit)。選び間違いは台帳の実誤答(predicted_edge非nullかつhit偽)かつgood_exists。区別の喪失は実誤答かつnot good_exists。正答できる定義の不在は全課題でnot good_exists。ただし当該試行の選びの候補集合における不在であり、全記憶の能力の証明とはしない。"
+  },
+  "code_references": {
+    "tools/smeshared.py": [
+      386,
+      393,
+      396,
+      399,
+      408,
+      414
+    ],
+    "tools/attnsme.py": [
+      33,
+      116,
+      125,
+      153,
+      157,
+      167,
+      181,
+      195,
+      213,
+      238,
+      241,
+      256
+    ],
+    "tools/attncstar.py": [
+      49,
+      58,
+      72
+    ],
+    "tools/v39.py": [
+      603,
+      625,
+      630,
+      643
+    ],
+    "tools/v3_run.py": [
+      592,
+      595,
+      597,
+      847,
+      850
+    ],
+    "abm/agent_runtime.py": [
+      189
+    ],
+    "abm/loop.py": [
+      481,
+      485,
+      487
+    ]
+  },
+  "instruction36_reported_result_recorded": "instruction36_full_cloud_reply_update_20261009_1638.json",
+  "instruction36_original_c574_full_gate_unconfirmed": true,
+  "memo_verb_port_left_to_designated_verb_role": true,
+  "machine": {
+    "at": "2026-10-09T16:48:39.867677+09:00",
+    "models": {},
+    "model_children": 0,
+    "paused": 0,
+    "registered": [],
+    "disk_free_bytes": 202769920000,
+    "swap_used_mb": 180.0,
+    "swap_ok": true,
+    "swap_note": "スワップは直近 10 分で増えていない（180.0 MB → 今 180.0 MB）",
+    "thermal_warnings": [],
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "unregistered_heavy": []
+  },
+  "model_source_imported": false,
+  "model_or_attention_gzip_opened": false,
+  "performance_grade_values_read": false,
+  "grade_rates_computed": false,
+  "new_models": 0,
+  "new_comparisons": 0,
+  "model_receipt_observer_signals": 0,
+  "source_changed": false,
+  "deadline_jst": "2026-10-11 09:00 JST"
+}
