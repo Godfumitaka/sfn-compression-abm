@@ -1,0 +1,22 @@
+--- /Users/tatsu-admin/Documents/ChatGPT/New project/codex_attn_2026-10-03/stage2_attention_2026-10-08/instruction26_basic_gate_7294389d/observe.py
++++ observe_ordered_cloud.py
+@@ -27,7 +27,7 @@
+                 count+=1;max_candidates=max(max_candidates,len(attnsme.ST['scored']))
+                 max_definitions=max(max_definitions,len(state.definitions))
+                 perf.write(json.dumps(dict(trial=trial.trial,seconds=now-last,elapsed_seconds=now-begin,
+-                    peak_rss_bytes=usage.ru_maxrss,candidates=len(attnsme.ST['scored']),definitions=len(state.definitions)))+'\n')
++                    peak_rss_bytes=usage.ru_maxrss*(1024 if sys.platform.startswith('linux') else 1),candidates=len(attnsme.ST['scored']),definitions=len(state.definitions)))+'\n')
+                 perf.flush();last=now
+                 engines={}
+                 for label,engine in [('sme',S.ENGINE),('cstar',C.ENGINE)]:
+@@ -56,8 +56,8 @@
+         cpu_system=usage_end.ru_stime-usage_begin.ru_stime
+         (root/'measurement.json').write_text(json.dumps(dict(pid=os.getpid(),trials=count,
+             wall_seconds=time.perf_counter()-begin,cpu_user_seconds=cpu_user,cpu_system_seconds=cpu_system,
+-            cpu_seconds=cpu_user+cpu_system,cpu_scope='worker_model_observer_state_save',peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+-            max_candidates=max_candidates,max_definitions=max_definitions,ru_maxrss_unit='macOS_bytes'),indent=2)+'\n')
++            cpu_seconds=cpu_user+cpu_system,cpu_scope='worker_model_observer_state_save',peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1024 if sys.platform.startswith('linux') else 1),
++            max_candidates=max_candidates,max_definitions=max_definitions,ru_maxrss_unit='bytes',ru_maxrss_native_unit=('linux_KiB' if sys.platform.startswith('linux') else 'macOS_bytes')),indent=2)+'\n')
+         return result
+     sweep.run_one=one
+     try: return REAL_WORKER(task)
