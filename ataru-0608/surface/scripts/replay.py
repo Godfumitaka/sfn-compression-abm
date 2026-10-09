@@ -34,7 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from surface import BASE, candidate_file, discover, expand, load_json, one  # noqa: E402
 
-TMP = BASE / "tmp"
+TMP = Path(os.environ.get("SURFACE_TMP", str(BASE / "tmp")))   # 10/09：第 1 波の再生は D: に置く（SURFACE_TMP、指示 24 の空きの決まり）
 PY = "python3.12"
 SIDE_SAME = ("answers.csv", "jsonl", "routing.jsonl", "shop.jsonl", "ambig.csv")
 
@@ -80,6 +80,15 @@ def mem_available_gib():
 def c_free_gb():
     st = os.statvfs("/mnt/c")
     return st.f_bavail * st.f_frsize / 1024 ** 3
+
+
+def space_ok():
+    """指示 24 の空きの決まり：再生の途中の写しが WSL（C:）なら C: の空き 21GiB 以上（前と同じ）、
+    D: などほかのドライブなら、そのドライブの空き 20GB 以上かつ C: の空き 10GB 以上。"""
+    if str(TMP).startswith("/mnt/") and not str(TMP).startswith("/mnt/c"):
+        st = os.statvfs(str(TMP) if TMP.exists() else str(TMP.parent))
+        return st.f_bavail * st.f_frsize / 1e9 >= 20 and c_free_gb() * 1024 ** 3 / 1e9 >= 10
+    return c_free_gb() >= 21
 
 
 def group_replay(cfg):
@@ -308,7 +317,7 @@ def main():
                     told.add(run["run_dir"])
                     print(f"{datetime.now():%F %T} 再生しない {run['arm']} 種{run['seed']}：{reason}（候補の欄は NA）", flush=True)
         if todo and len(running) < maxpar and prod_count() + replay_count() + 1 <= a.total \
-                and mem_available_gib() >= 6 and c_free_gb() >= 21:
+                and mem_available_gib() >= 6 and space_ok():
             run, rp, prep = todo[0]
             j = start(run, prep)
             j["rp"] = rp
