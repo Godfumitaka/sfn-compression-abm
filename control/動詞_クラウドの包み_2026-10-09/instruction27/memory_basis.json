@@ -1,0 +1,43 @@
+{
+  "reservation_gb": 10.0,
+  "serial100_group_peak_rss_bytes": 442302464,
+  "parallel100_group_peak_rss_bytes": 1236533248,
+  "factor": 1.5,
+  "minimum_per_model_gib": 2,
+  "model_count": 5,
+  "cpu_slots": 6,
+  "formula": "max(直列100実群RSS×1.5/2**30,2GiB)×親子5=10GiB",
+  "full_5000_peak_unmeasured": true,
+  "x86_measurement_unavailable": true,
+  "variants": {
+    "0": {
+      "child_worker_limit": 0,
+      "maximum_actual_models": 1,
+      "reserved_cpu_slots": 2,
+      "reservation_gib": 2,
+      "model_cap": 8,
+      "start_held": false
+    },
+    "4": {
+      "child_worker_limit": 4,
+      "maximum_actual_models": 5,
+      "reserved_cpu_slots": 6,
+      "reservation_gib": 10,
+      "model_cap": 8,
+      "start_held": false
+    },
+    "20": {
+      "child_worker_limit": 20,
+      "maximum_actual_models": 21,
+      "reserved_cpu_slots": 22,
+      "reservation_gib": 42,
+      "model_cap": 8,
+      "start_held": true
+    }
+  },
+  "triple_gate_maximum_models": 27,
+  "triple_gate_reserved_cpu_slots": 30,
+  "triple_gate_reservation_gib": 54,
+  "child20_start_hold": "保留：アストラの承認待ち。親と最大20出生子は21模型。現行同時8模型の上限を外さない。",
+  "child20_measurement_unavailable": true
+}
