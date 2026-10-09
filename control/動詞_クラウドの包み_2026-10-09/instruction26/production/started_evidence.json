@@ -1,0 +1,152 @@
+{
+  "at": "2026-10-09T23:42:05.056985+09:00",
+  "instruction": 26,
+  "new_model_starts": 2,
+  "queue_claim": {
+    "at": "2026-10-09T23:40:26.050549+09:00",
+    "normal_push_succeeded": true,
+    "report_commit": "8555df3dfe62278516d10f3168252d109ebf74c1",
+    "labels": [
+      "22_seed001_retry26",
+      "22_seed002_retry26"
+    ],
+    "model_starts": 0
+  },
+  "cases": [
+    {
+      "seed": 1,
+      "case": "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed001_retry26",
+      "launcher": {
+        "at": "2026-10-09T23:41:10.359098+09:00",
+        "pid": 18805,
+        "command": [
+          "/opt/homebrew/opt/python@3.12/bin/python3.12",
+          "$HOME/jobs/jobs.py",
+          "run",
+          "--wait",
+          "--mem",
+          "2",
+          "--disk-path",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed001_retry26/output",
+          "--owner",
+          "Codex 動詞 指示26 #22 種1",
+          "--",
+          "/opt/homebrew/opt/python@3.12/bin/python3.12",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/run_production.py",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed001_retry26"
+        ],
+        "normal_queue_push": "8555df3dfe62278516d10f3168252d109ebf74c1"
+      },
+      "status": {
+        "at": "2026-10-09T23:41:10.726504+09:00",
+        "runner_pid": 18810,
+        "state": "running",
+        "production_started": true,
+        "model_group": 18821,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "pid": {
+        "pid": 18821,
+        "pgid": 18821
+      },
+      "machine": {
+        "at": "2026-10-09T23:41:10.717632+09:00",
+        "cpu_limit": 8,
+        "outside_heavy": 2,
+        "model_process_count": 2,
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+        "physical_memory_bytes": 34359738368,
+        "swap": "vm.swapusage: total = 1024.00M  used = 176.75M  free = 847.25M  (encrypted)\n",
+        "swap_samples": [
+          "1791556259\t176.75\t2026-10-09T23:30:59\tok\tNone",
+          "1791556319\t176.75\t2026-10-09T23:31:59\tok\tNone",
+          "1791556379\t176.75\t2026-10-09T23:32:59\tok\tNone",
+          "1791556439\t176.75\t2026-10-09T23:33:59\tok\tNone",
+          "1791556499\t176.75\t2026-10-09T23:34:59\tok\tNone",
+          "1791556559\t176.75\t2026-10-09T23:35:59\tok\tNone",
+          "1791556619\t176.75\t2026-10-09T23:36:59\tok\tNone",
+          "1791556679\t176.75\t2026-10-09T23:37:59\tok\tNone",
+          "1791556739\t176.75\t2026-10-09T23:38:59\tok\tNone",
+          "1791556799\t176.75\t2026-10-09T23:39:59\tok\tNone",
+          "1791556859\t176.75\t2026-10-09T23:40:59\tok\tNone"
+        ],
+        "free_disk_bytes": 197348237312
+      },
+      "models_before": 2,
+      "unknown_before": 0,
+      "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+      "own_ps": "18821 18810   1312 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction26_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction26_production/22_seed001_retry26/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off --logp-eps 0.01\n18823 18821  27280 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction26_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction26_production/22_seed001_retry26/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off --logp-eps 0.01\n18824 18823  15968 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n18825 18823 154096 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "result_exists": false,
+      "original_group_preserved": true
+    },
+    {
+      "seed": 2,
+      "case": "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed002_retry26",
+      "launcher": {
+        "at": "2026-10-09T23:41:10.879663+09:00",
+        "pid": 18826,
+        "command": [
+          "/opt/homebrew/opt/python@3.12/bin/python3.12",
+          "$HOME/jobs/jobs.py",
+          "run",
+          "--wait",
+          "--mem",
+          "2",
+          "--disk-path",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed002_retry26/output",
+          "--owner",
+          "Codex 動詞 指示26 #22 種2",
+          "--",
+          "/opt/homebrew/opt/python@3.12/bin/python3.12",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/run_production.py",
+          "$WORKSPACE/newport_2026-10-07/instruction26_production/22_seed002_retry26"
+        ],
+        "normal_queue_push": "8555df3dfe62278516d10f3168252d109ebf74c1"
+      },
+      "status": {
+        "at": "2026-10-09T23:41:11.265233+09:00",
+        "runner_pid": 18830,
+        "state": "running",
+        "production_started": true,
+        "model_group": 18841,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "pid": {
+        "pid": 18841,
+        "pgid": 18841
+      },
+      "machine": {
+        "at": "2026-10-09T23:41:11.255670+09:00",
+        "cpu_limit": 8,
+        "outside_heavy": 3,
+        "model_process_count": 3,
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+        "physical_memory_bytes": 34359738368,
+        "swap": "vm.swapusage: total = 1024.00M  used = 176.75M  free = 847.25M  (encrypted)\n",
+        "swap_samples": [
+          "1791556259\t176.75\t2026-10-09T23:30:59\tok\tNone",
+          "1791556319\t176.75\t2026-10-09T23:31:59\tok\tNone",
+          "1791556379\t176.75\t2026-10-09T23:32:59\tok\tNone",
+          "1791556439\t176.75\t2026-10-09T23:33:59\tok\tNone",
+          "1791556499\t176.75\t2026-10-09T23:34:59\tok\tNone",
+          "1791556559\t176.75\t2026-10-09T23:35:59\tok\tNone",
+          "1791556619\t176.75\t2026-10-09T23:36:59\tok\tNone",
+          "1791556679\t176.75\t2026-10-09T23:37:59\tok\tNone",
+          "1791556739\t176.75\t2026-10-09T23:38:59\tok\tNone",
+          "1791556799\t176.75\t2026-10-09T23:39:59\tok\tNone",
+          "1791556859\t176.75\t2026-10-09T23:40:59\tok\tNone"
+        ],
+        "free_disk_bytes": 197341409280
+      },
+      "models_before": 3,
+      "unknown_before": 0,
+      "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+      "own_ps": "18841 18830   1312 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction26_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction26_production/22_seed002_retry26/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off --logp-eps 0.01\n18843 18841  27200 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction26_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction26_production/22_seed002_retry26/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off --logp-eps 0.01\n18851 18843  15968 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n18853 18843 163824 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "result_exists": false,
+      "original_group_preserved": true
+    }
+  ],
+  "source_changed": false,
+  "original_19_changed": false,
+  "all_5000_completion_unconfirmed": true
+}
