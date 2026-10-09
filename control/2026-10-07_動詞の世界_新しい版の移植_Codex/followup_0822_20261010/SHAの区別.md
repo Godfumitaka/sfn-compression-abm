@@ -1,0 +1,1 @@
+original_evidence_sha256.jsonは個人パスを別名化する前の非公開原控えのSHA。public_files_sha256.jsonは別名化後の公開ファイル（一覧自身を除く）のSHA。原M1の行・値・順序は変更していない。
