@@ -615,6 +615,9 @@ def worker(task: dict) -> dict:
                            if task.get('attn_allin') else {}))
     if task.get('stage2') == 'on':
         import attnstage2_runtime
+        if task.get('stage2_birth_workers', 0):
+            import attnstage2_birth_parallel
+            attnstage2_birth_parallel.install(task['stage2_birth_workers'])
         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
@@ -874,6 +877,7 @@ def main() -> None:
     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
+    ap.add_argument('--stage2-birth-workers',type=int,default=0,help='出生の仮の問いだけをforkの子N本で解く（0は既存の直列、親子とも模型枠で数える）')
     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
     ap.add_argument("--sme-gc-threshold", type=int, default=None,
                     help="探索用：GCの世代0の閾値だけを変える（世代1・2は現行のまま、既定は無変更）")
@@ -1094,6 +1098,10 @@ def main() -> None:
         raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
     if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
         raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
+    if not 0 <= args.stage2_birth_workers <= 7:
+        raise SystemExit('--stage2-birth-workersは0〜7（親と合わせて模型8本まで）')
+    if args.stage2_birth_workers and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+        raise SystemExit('--stage2-birth-workersは第二段on・virtual初期値と一緒に使う')
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
         raise SystemExit('--logp-epsは0以上1以下')
     for task in tasks:
@@ -1105,6 +1113,7 @@ def main() -> None:
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
             if args.stage2_reuse == 'on':task['stage2_reuse']=True
             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
+            if args.stage2_birth_workers:task['stage2_birth_workers']=args.stage2_birth_workers
         if args.logp_eps != .5:
             task['logp_eps'] = args.logp_eps
         if args.use_forget is not None:
