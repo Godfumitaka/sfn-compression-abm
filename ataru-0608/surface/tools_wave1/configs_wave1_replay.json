@@ -1,0 +1,85 @@
+{
+ "_説明": [
+  "第 1 波の 2a・2b（注意の記録が無い）の候補の記録を作る再生だけに使う設定（受け箱の指示 44 の 2）。版ごとに群を分けた。"
+ ],
+ "absent_basis": "gate",
+ "memory": {
+  "kind": "v39",
+  "fields": {
+   "bits": "bits_after",
+   "defs": "defs",
+   "F": "F",
+   "H": "H",
+   "U": "U"
+  }
+ },
+ "order": [
+  "基準_L50"
+ ],
+ "groups": [
+  {
+   "name": "第 1 波 2a 種 1・2（e9ed84a）",
+   "family": "新しい版",
+   "root": "/home/tatsu/surface/wave1_replay_view/2a_e9",
+   "replay_dir": "~/surface/replay",
+   "replay": {
+    "src": "~/sfn/audit/_read/attnprep",
+    "commit": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "commands": "~/surface/wave1_replay_cmds_e9.json",
+    "ignore_flags": []
+   },
+   "arms": {
+    "q2a_w1": {
+     "config": "基準_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "none"
+    },
+    "q2a_w2": {
+     "config": "基準_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "none"
+    }
+   }
+  },
+  {
+   "name": "第 1 波 2a・2b 種 3〜20（c57467ea）",
+   "family": "新しい版",
+   "root": "/home/tatsu/surface/wave1_replay_view/2a_c574",
+   "replay_dir": "~/surface/replay",
+   "replay": {
+    "src": "~/sfn/audit/_read/jsonloge9",
+    "commit": "c57467eab13ee9ef84277059024ab892756fd2f8",
+    "commands": "~/surface/wave1_replay_cmds_c574.json",
+    "ignore_flags": []
+   },
+   "arms": {
+    "q2a_w1": {
+     "config": "基準_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "none"
+    },
+    "q2a_w2": {
+     "config": "基準_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "none"
+    },
+    "q2b_w1": {
+     "config": "基準_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "none"
+    },
+    "q2b_w2": {
+     "config": "基準_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "none"
+    }
+   }
+  }
+ ]
+}
