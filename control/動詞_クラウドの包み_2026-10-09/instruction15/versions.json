@@ -48,7 +48,7 @@
     "gate100_passed": null,
     "gate20_passed": null
   },
-  "gate_updated_at": "2026-10-09T10:29:50+09:00",
+  "gate_updated_at": "2026-10-09T10:49:27+09:00",
   "mac_gate_progress": {
     "100": {
       "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
@@ -76,13 +76,16 @@
     "production_started": false,
     "20_eprice_fixed": {
       "source_commit": "81477b5bd56b1a48efcebf43bfb43fd7b6c8d2a9",
-      "state": "running",
+      "state": "completed",
       "e_price_fixed": 0.01873710622997919,
       "v39_price": 0.00035,
       "supervisor_pid": 26294,
       "group_pid": 26316,
-      "passed": null,
-      "fallback_calls": null
+      "passed": true,
+      "fallback_calls": 137,
+      "completed_trials": 20,
+      "finished_at_jst": "2026-10-09T10:39:50.071733+09:00",
+      "evidence": "eprice_fixed_completed_evidence.json"
     }
   }
 }
