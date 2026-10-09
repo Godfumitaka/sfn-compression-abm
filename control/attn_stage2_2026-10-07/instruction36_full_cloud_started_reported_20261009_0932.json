@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-09T09:32:32.068091+09:00",
+  "evidence_kind": "desktop_report_readonly",
+  "report_commit": "197e581962a37ed60ecc9232a76fbe26dda3c15f",
+  "sources": [
+    {
+      "path": "control/受け箱/デスクトップの走行の係.md",
+      "sha256": "0c500d7545e9bcd3056ef136c1cba34c285dc9a2cdaf1f52bdd7dce19dc50f19",
+      "excerpt": "- 走行の係から（2026-10-09 09:26）：受けた。全長の関門の二本（世界 2・種 1・1a・全 1,740 試行）を、第 1 波の m7a.8xlarge（i-0edf5697853141268）で 00:25:50 UTC ごろに始めた。\n  - 参考：c57467eab13ee9ef84277059024ab892756fd2f8（作業場所 jsonloge9）、候補：8ed8cf2b2920787e55b6f5134300fc350dffe5e7（stage2memo、束で送り --help 通った）。どちらも HEAD ときれいな作業木を始める前に確かめた。\n  - 命令：依頼の reference/candidate の portable_argv の三つの場所だけを割り当てた（引数 97・103、候補は末尾に --stage2-speed on --stage2-cache-prune on --stage2-memo on だけ）。--v39-price・--e-price・--shop-world 2・--seeds 1・--trial-count 1740 を確かめた。\n  - 設定は configuration_utf8 の原の UTF-8 バイト（sha256 4a8125226ed8…、報告の instruction36_full_cloud_w2_seed001_config.json と全バイト同じ）。観測は両方とも observe_ordered_cloud.py（sha256 a213f2b52d79…）、SME_EXACT_SOURCE は各固定の作業場所。PYTHONHASHSEED=0、LANG・LC_* を外す、setsid、/usr/bin/time -v。\n  - 既存の参考本は使っていない（順つきの観測が無いため、新しい非本番の比較本として走らせた）。走っている第 1 波は止めていない。\n  - 終わったら、依頼の基準（compare_records.tree・reference_observation.convert・tie_state と saved_matcher の比べ、候補の guard）で比べて、ここと報告に書く。"
+    },
+    {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "sha256": "07d17a13b79de493a24e6c8a593c8f99df72109342b8bfe7dd28cb5b3e88a286",
+      "excerpt": "## 10/09 09:23 の記録\n- 受け箱に、注意の係の届け物（指示 36 の P5・P7r の全長の関門の依頼）があった。依頼のとおり、世界 2・種 1・1a・全 1,740 試行の参考（c57467ea）と候補（8ed8cf2b、旗 speed・cache-prune・memo）を、第 1 波の機械で順つきの観測つきで始めた（09:25）。詳しくは受け箱の届け物の下に書いた。非本番の比較の本。\n- 第 1 波：c7921598 の 3a の世界 1・種 1 が 1,740 試行を終え、持ち帰った。旗あり・旗なしの組は、今そろっているのは 1 組（一致）。\n- 費用の見込み（09:25）：累計約 $48.6（較正 約 $24.9、動詞 約 $9.6、集団化 約 $2.4、第 1 波と全長の関門 約 $11.7）。今は二台、およそ $3.5／時間。"
+    }
+  ],
+  "reported_start_utc_approx": "2026-10-09T00:25:50Z",
+  "reported_start_jst_approx": "2026-10-09T09:25:50+09:00",
+  "reported_machine": "m7a.8xlarge i-0edf5697853141268",
+  "reference_commit": "c57467eab13ee9ef84277059024ab892756fd2f8",
+  "candidate_commit": "8ed8cf2b2920787e55b6f5134300fc350dffe5e7",
+  "world": 2,
+  "seed": 1,
+  "row": "1a",
+  "trial_count": 1740,
+  "request_sha256": "51e0c7685bd3330fd2ddfdcce31dc6d3a75e12169f9af6331f0e950143539159",
+  "cloud_actual_ps_not_read": true,
+  "raw_cloud_native_commands_not_yet_received": true,
+  "raw_cloud_measurements_not_yet_received": true,
+  "raw_cloud_required_gate_not_yet_received": true,
+  "full_length_gate_verified": false,
+  "instruction36_done_written": false,
+  "adoption_decided": false,
+  "verb_port_started": false,
+  "new_cloud_requests": 0,
+  "new_local_models": 0,
+  "new_local_comparisons": 0,
+  "signals": 0,
+  "inbox_same_as_0902": true,
+  "queue_same_as_0902": true,
+  "deadline_jst": "2026-10-11T09:00:00+09:00"
+}
