@@ -1,0 +1,71 @@
+"""測定専用（模型は変えない）：v3_run を同じ過程の中で走らせ、先頭 N 試行だけで正常終了する。
+usage: python3.12 drive.py <source> <N> <v3_run argv...>
+"""
+import concurrent.futures as cf
+import os
+import sys
+import time
+from dataclasses import replace
+from itertools import islice
+from pathlib import Path
+from types import SimpleNamespace
+
+source = Path(sys.argv[1]).resolve()
+limit = int(sys.argv[2])
+sys.path[:0] = [str(source / "tools"), str(source)]
+os.chdir(source)
+
+
+class InlineExecutor:
+    def __init__(self, *a, **k):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def submit(self, fn, *a, **k):
+        f = cf.Future()
+        f.set_result(fn(*a, **k))
+        return f
+
+
+class PrefixTrials:
+    def __init__(self, trials, n):
+        self.trials, self.n = trials, n
+
+    def __len__(self):
+        return len(self.trials)
+
+    def __iter__(self):
+        return islice(iter(self.trials), self.n)
+
+
+if os.environ.get('SNAP_OUT'):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import snapprobe  # noqa: F401,E402
+if os.environ.get('FASTSNAP'):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import fastsnap  # noqa: F401,E402
+import sweep  # noqa: E402
+import v3_run  # noqa: E402
+
+v3_run.ProcessPoolExecutor = InlineExecutor
+orig = sweep.run_longitudinal
+T0 = time.perf_counter()
+
+
+def longitudinal(world, *args, **kwargs):
+    prefix = SimpleNamespace(trials=PrefixTrials(world.trials, limit), world_hash=world.world_hash)
+    res = orig(prefix, *args, **kwargs)
+    return replace(res, trial_count=limit)
+
+
+sweep.run_longitudinal = longitudinal
+sys.argv = [str(source / "tools/v3_run.py"), *sys.argv[3:]]
+try:
+    v3_run.main()
+finally:
+    print(f"[drive] wall {time.perf_counter() - T0:.1f}s limit={limit}", file=sys.stderr)

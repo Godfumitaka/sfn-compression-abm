@@ -1,0 +1,36 @@
+"""計測だけ：probeworld._snapshot_modules を同じ働きのまま包み、辞書ごとの写しの時間と大きさを数える。"""
+import atexit, json, os, sys, time
+from collections import defaultdict
+import probeworld
+
+TIME = defaultdict(float); CALLS = [0]; SIZE = {}; TOPV = {}
+
+
+def _snapshot_modules():
+    CALLS[0] += 1
+    snap = []
+    for name in probeworld.SNAP_MODULES:
+        m = sys.modules.get(name)
+        if m is None or m is sys.modules.get("probeworld"):
+            continue
+        for a in probeworld.SNAP_ATTRS:
+            d = getattr(m, a, None)
+            if isinstance(d, dict):
+                t0 = time.perf_counter()
+                snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))
+                TIME[(name, a)] += time.perf_counter() - t0
+                if CALLS[0] % 500 == 0:
+                    SIZE[(name, a)] = len(d)
+                    big = sorted(((len(v), str(k)) for k, v in d.items() if isinstance(v, (dict, list))), reverse=True)[:3]
+                    TOPV[(name, a)] = big
+    return snap
+
+
+probeworld._snapshot_modules = _snapshot_modules
+
+
+@atexit.register
+def _dump():
+    rows = sorted(TIME.items(), key=lambda kv: -kv[1])[:15]
+    out = {"calls": CALLS[0], "rows": [[f"{n}.{a}", round(t, 2), SIZE.get((n, a)), TOPV.get((n, a))] for (n, a), t in rows]}
+    open(os.environ["SNAP_OUT"], "w").write(json.dumps(out, ensure_ascii=False, indent=1))

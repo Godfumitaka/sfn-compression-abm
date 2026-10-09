@@ -1,0 +1,49 @@
+"""試し（模型は変えない）：verbworld.INFO・IDS（足されるだけの辞書）を、丸ごと写す代わりに長さで控える。
+FASTSNAP=verify のときは、元の丸ごとの写しも作り、戻した後に中身と順が同じことを毎回確かめる。"""
+import os, sys
+import probeworld
+
+MODE = os.environ.get("FASTSNAP", "fast")
+APPEND_ONLY = {("verbworld", "INFO"), ("verbworld", "IDS")}
+CHECKS = [0]
+
+
+def _copy(d):
+    return {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}
+
+
+def _snapshot_modules():
+    snap = []
+    for name in probeworld.SNAP_MODULES:
+        m = sys.modules.get(name)
+        if m is None or m is sys.modules.get("probeworld"):
+            continue
+        for a in probeworld.SNAP_ATTRS:
+            d = getattr(m, a, None)
+            if isinstance(d, dict):
+                if (name, a) in APPEND_ONLY:
+                    snap.append((d, ("__len__", len(d), _copy(d) if MODE == "verify" else None)))
+                else:
+                    snap.append((d, _copy(d)))
+    return snap
+
+
+def _restore_modules(snap):
+    for d, saved in snap:
+        if isinstance(saved, tuple) and saved and saved[0] == "__len__":
+            n, full = saved[1], saved[2]
+            while len(d) > n:
+                d.popitem()
+            if full is not None:
+                CHECKS[0] += 1
+                if list(d.items()) != list(full.items()):
+                    raise RuntimeError("足されるだけの辞書が窓の中で書き換わった")
+        else:
+            d.clear()
+            d.update(saved)
+
+
+probeworld._snapshot_modules = _snapshot_modules
+probeworld._restore_modules = _restore_modules
+import atexit
+atexit.register(lambda: print(f"[fastsnap] mode={MODE} verified_restores={CHECKS[0]}", file=sys.stderr))
