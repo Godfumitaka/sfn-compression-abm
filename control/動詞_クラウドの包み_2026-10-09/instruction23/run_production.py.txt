@@ -1,0 +1,144 @@
+"""指示23の直接承認後の#19の一走行。開始前の関門と受付を通し、走行中は読み取りだけをする。"""
+from pathlib import Path
+from datetime import datetime, timezone
+from types import SimpleNamespace
+import hashlib
+import json
+import os
+import re
+import resource
+import shutil
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parent
+NR = ROOT.parent
+sys.path.insert(0, str(NR))
+from inbox_snapshot import snapshot
+
+case = Path(sys.argv[1]).resolve()
+spec = json.loads((case/'spec.json').read_text())
+PY = '/opt/homebrew/opt/python@3.12/bin/python3.12'
+
+
+def save(name, value):
+    (case/name).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n')
+
+
+def state(**value):
+    save('status.json', dict(at=datetime.now().astimezone().isoformat(), runner_pid=os.getpid(), **value))
+
+
+try:
+    assert not (case/'status.json').exists(), '同じ本番の監督を二重起動しない'
+    assert datetime.now(timezone.utc) < datetime.fromisoformat(spec['start_deadline_jst'])
+    for path, sha in spec['sources'].items():
+        assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=path, text=True).strip() == sha
+        assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=path, text=True)
+    for path, sha in spec['observer_files'].items():
+        assert hashlib.sha256(Path(path).read_bytes()).hexdigest() == sha
+    claim = json.loads((ROOT/'queue_claim_published.json').read_text())
+    assert claim['normal_push_succeeded'] and case.name in claim['labels']
+    approval = json.loads((NR/'instruction23/direct_approval.json').read_text())
+    assert approval['approved_parts'] == [1, 2] and spec['instruction'] == 23 and spec['arm'] == '#19'
+    assert spec['ready_to_start'] and spec['direct_approval_received']
+    old_case = NR / f'instruction18_production/19_seed{spec["seed"]:03d}'
+    old_spec = json.loads((old_case/'spec.json').read_text())
+    old_result = json.loads((old_case/'result.json').read_text())
+    assert old_result['exit_code'] == -15
+    assert old_spec['flags'].count('--score-logp-e') == 1
+    assert spec['flags'] == [x for x in old_spec['flags'] if x != '--score-logp-e']
+    assert spec['observer_files'] == old_spec['observer_files'] and spec['sources'] == old_spec['sources']
+    assert hashlib.sha256(Path(__file__).read_bytes()).hexdigest() == spec['runner_sha256']
+    assert json.loads((NR/'instruction15_logfix/on100_logfix_comparison.json').read_text())['passed']
+    assert spec['source_commit'] == '9c9dd0e650f765ccdadca6029e81da4efc3cc619'
+    assert '--stage2-speed' not in spec['flags'] and '--stage2-cache-prune' not in spec['flags']
+    assert '--verb-snap-append-only' not in spec['flags']
+    assert not Path(spec['output']).exists()
+    for name in ('result.json', 'pid.json', 'run.log', 'resources.jsonl'):
+        assert not (case/name).exists(), '既存の本番出力へ再投入しない'
+    state(state='admitted_checking_start', production_started=False)
+    # 受付の内側で、開始直前のMac全体の実workerを一度記録する。
+    snapshot(SimpleNamespace(workspace=NR.parent.parent, output=case/'before_start.json'))
+    record = json.loads((case/'before_start.json').read_text())
+    assert not record['other_active_spawn_workers'], '未知の個体を推測で埋めない'
+    assert record['model_process_count']+1 <= 8, '実模型8本の枠を外さない'
+    # 既存run_caseと同じCPUの二枠。開始後に本番を止める仕組みは入れない。
+    ps = subprocess.check_output(['/bin/ps', '-axo', 'pid=,rss=,stat=,args='], text=True)
+    outside = 0
+    for line in ps.splitlines():
+        fields = line.split(None, 3)
+        if len(fields) != 4: continue
+        pid, rss, stat, command = fields
+        executable = command.split(None, 1)[0].lower()
+        if (int(pid) != os.getpid() and not stat.startswith(('T', 'Z'))
+            and ('python' in executable or 'pypy' in executable)
+            and 'resource_tracker' not in command and 'jobs.py' not in command
+            and (int(rss) >= 102400 or 'spawn_main' in command)):
+            outside += 1
+    cpu_limit = int(subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.physicalcpu'], text=True))-2
+    assert outside+2 <= cpu_limit, '既存のCPU枠を満たすまで本番を開始しない'
+    thermal = subprocess.check_output(['/usr/bin/pmset', '-g', 'therm'], text=True)
+    assert 'No thermal warning level has been recorded' in thermal
+    assert shutil.disk_usage(case).free >= 20*2**30
+    machine = dict(at=datetime.now().astimezone().isoformat(), cpu_limit=cpu_limit,
+                   outside_heavy=outside, model_process_count=record['model_process_count'], thermal=thermal,
+                   physical_memory_bytes=int(subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.memsize'], text=True)),
+                   swap=subprocess.check_output(['/usr/sbin/sysctl', 'vm.swapusage'], text=True),
+                   swap_samples=(Path.home()/'jobs/swap.tsv').read_text().splitlines()[-11:],
+                   free_disk_bytes=shutil.disk_usage(case).free)
+    save('machine_before_start.json', machine)
+    began, epoch = time.perf_counter(), time.time()
+    env = dict(os.environ, PYTHONHASHSEED='0')
+    for key in ('LC_ALL', 'LANG', 'LC_CTYPE'): env.pop(key, None)
+    with (case/'run.log').open('x') as log, (case/'resources.jsonl').open('x') as samples:
+        child = subprocess.Popen(['/usr/bin/time', '-l', *spec['command']], cwd=spec['cwd'], env=env,
+                                 stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        save('pid.json', dict(pid=child.pid, pgid=child.pid))
+        state(state='running', production_started=True, model_group=child.pid, source_commit=spec['source_commit'])
+        warnings_seen = set()
+        while child.poll() is None:
+            # 自分の群だけ。別の係のPID・Mac全体の新しいpsは増やさない。
+            own = subprocess.run(['/bin/ps', '-g', str(child.pid), '-o', 'pid=,ppid=,rss=,stat=,args='],
+                                 capture_output=True, text=True)
+            samples.write(json.dumps(dict(at=datetime.now().astimezone().isoformat(),
+                own_group=child.pid, own_ps=own.stdout, free_disk_bytes=shutil.disk_usage(case).free))+'\n')
+            samples.flush()
+            # 既存の受付samplerの警告と自分の資源だけを読む。本番への停止・再開は行わない。
+            swap_lines = (Path.home()/'jobs/swap.tsv').read_text().splitlines()
+            latest_swap = swap_lines[-1] if swap_lines else ''
+            reasons = []
+            parts = latest_swap.split('\t')
+            if len(parts) >= 5 and (parts[3] != 'ok' or parts[4] not in ('100', 'None')):
+                reasons.append('既存samplerの熱・CPU警告：'+latest_swap)
+            own_rss = sum(int(line.split()[2])*1024 for line in own.stdout.splitlines()
+                          if len(line.split()) >= 4)
+            if own_rss > spec['memory_reservation_gb']*2**30:
+                reasons.append('自分の群の常駐が受付見込みを超えた')
+            if shutil.disk_usage(case).free < 18.5*2**30:
+                reasons.append('既存資源監督の空き容量の警告線を下回った')
+            for reason in reasons:
+                if reason not in warnings_seen:
+                    with (case/'resource_warnings.jsonl').open('a') as warning:
+                        warning.write(json.dumps(dict(at=datetime.now().astimezone().isoformat(),
+                            reason=reason, own_rss_bytes=own_rss, existing_sampler=latest_swap,
+                            production_stopped=False), ensure_ascii=False)+'\n')
+                    warnings_seen.add(reason)
+            time.sleep(10)
+        rc = child.wait()
+    result = dict(exit_code=rc, started_epoch=epoch, finished_epoch=time.time(),
+                  wall_seconds=time.perf_counter()-began, source_commit=spec['source_commit'],
+                  output_bytes=sum(p.stat().st_size for p in Path(spec['output']).rglob('*') if p.is_file()),
+                  configured_trial_count=5000, horizon=5000, new_stop_resume_monitor=False)
+    save('result.json', result)
+    assert rc == 0, ('本番の終了コード', rc)
+    manifest = [json.loads(x) for x in (Path(spec['output'])/'manifest.jsonl').read_text().splitlines()]
+    assert len(manifest) == 1 and not manifest[0].get('error') and manifest[0]['trial_count'] == 5000
+    times = [json.loads(x) for x in (Path(spec['output'])/'timing100.jsonl').read_text().splitlines()]
+    assert [x['completed_trials'] for x in times] == list(range(100, 5001, 100))
+    state(state='completed', production_started=True, completed_trials=5000, full_5000_completed=True)
+except Exception as exc:
+    state(state='stopped_before_start_or_error', reason=repr(exc),
+          production_started=(case/'pid.json').exists())
+    raise

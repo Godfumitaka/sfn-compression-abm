@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-09T21:03:47.174913+09:00",
+  "direct_approval": {
+    "at": "2026-10-09T21:01:44.665218+09:00",
+    "source": "このチャットのアストラによる直接入力",
+    "text": "受け箱の指示23の1・2を承認します。今の #19 の種1・2 を止めて、--score-logp-e を外して走らせ直してください。",
+    "instruction": 23,
+    "approved_parts": [
+      1,
+      2
+    ],
+    "groups": [
+      60236,
+      60278
+    ],
+    "other_production_stop_authorized": false
+  },
+  "cases": [
+    {
+      "seed": 1,
+      "result": {
+        "exit_code": -15,
+        "started_epoch": 1791534149.7565289,
+        "finished_epoch": 1791547346.832364,
+        "wall_seconds": 13196.966895750025,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+        "output_bytes": 139240012,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "new_stop_resume_monitor": false
+      },
+      "status": {
+        "at": "2026-10-09T21:02:26.834552+09:00",
+        "runner_pid": 60225,
+        "state": "stopped_before_start_or_error",
+        "reason": "AssertionError(('本番の終了コード', -15))",
+        "production_started": true
+      },
+      "run_log_sha256": "3adee830d0ee434eb9cca6d702fc55b8edbf2116104204f190baf8c4ccfa1903",
+      "normal_5000_completion": false
+    },
+    {
+      "seed": 2,
+      "result": {
+        "exit_code": -15,
+        "started_epoch": 1791534150.783641,
+        "finished_epoch": 1791547347.779746,
+        "wall_seconds": 13196.887159792008,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+        "output_bytes": 138508961,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "new_stop_resume_monitor": false
+      },
+      "status": {
+        "at": "2026-10-09T21:02:27.782152+09:00",
+        "runner_pid": 60266,
+        "state": "stopped_before_start_or_error",
+        "reason": "AssertionError(('本番の終了コード', -15))",
+        "production_started": true
+      },
+      "run_log_sha256": "e51fd44ec58c38d40b9923b8fb6d0e51fbc44f24dcc881b254e8d6165d2e8852",
+      "normal_5000_completion": false
+    }
+  ]
+}

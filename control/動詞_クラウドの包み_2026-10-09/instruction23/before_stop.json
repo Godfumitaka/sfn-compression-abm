@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-09T21:01:58.028803+09:00",
+  "learning_model_starts": 0,
+  "original_outputs_modified": false,
+  "cases": [
+    {
+      "seed": 1,
+      "group": 60236,
+      "at": "2026-10-09T21:01:48.360166+09:00",
+      "epoch_seconds": 1791547308.360204,
+      "process_rows": "60236 60225 60236    416 Ss   03:39:19   0:00.00 /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction18_production/19_seed001/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n60238 60236 60236   9696 S    03:39:19   0:00.08 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction18_production/19_seed001/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n60250 60238 60236   7200 S    03:39:19   0:00.02 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n60251 60238 60236 745584 R    03:39:19 218:26.97 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "files": {
+        "spec.json": {
+          "sha256": "4560007d7b9df91c9368688d8dfea2e6435904a4483d5586314fbf61fa448ba8",
+          "bytes": 6238
+        },
+        "status.json": {
+          "sha256": "4d14073ea46f6cf465546c00eefb54b8ee8a8af68f47867579212b29f470058c",
+          "bytes": 209
+        },
+        "pid.json": {
+          "sha256": "e574f133aa4599007595a07d5eed2ed52c2ac57f200ce820a90d735c31cc27d9",
+          "bytes": 36
+        },
+        "launcher_pid.json": {
+          "sha256": "bc78afbffa71814fd9ec4eea8df266a16a9124f9b18842bec1c90ef6c6986083",
+          "bytes": 1399
+        },
+        "output/timing100.jsonl": {
+          "sha256": "142015e6f21fd2760784a66d06c94b8f2822c549366bdfad00f9c6fd6eee920c",
+          "bytes": 570
+        }
+      },
+      "ledgers": [
+        {
+          "path": "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "snapshot_bytes": 12131943,
+          "snapshot_sha256": "f0556532e2dbc9787c146b7dad5feaf5dab7507834b70163f1ef662e0f3cd3ac",
+          "gzip_finished": false,
+          "complete_prediction_rows": 283,
+          "last_prediction_order": 282,
+          "incomplete_tail_bytes": 0
+        }
+      ],
+      "timing100": [
+        {
+          "completed_trials": 100,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 2899.397894666996,
+          "interval_seconds": 2899.397894666996,
+          "user_cpu_seconds": 2889.327196,
+          "system_cpu_seconds": 5.847755,
+          "max_worker_rss_bytes": 399966208,
+          "epoch_seconds": 1791537049.888514
+        },
+        {
+          "completed_trials": 200,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 8495.324864791939,
+          "interval_seconds": 5595.926970124943,
+          "user_cpu_seconds": 8451.587856,
+          "system_cpu_seconds": 23.014772,
+          "max_worker_rss_bytes": 4959109120,
+          "epoch_seconds": 1791542645.8862
+        }
+      ],
+      "sampled_max_group_rss_bytes": 4982898688,
+      "confirmed_trials_visible_before_stop": 283,
+      "full_5000_completed": false
+    },
+    {
+      "seed": 2,
+      "group": 60278,
+      "at": "2026-10-09T21:01:52.327362+09:00",
+      "epoch_seconds": 1791547312.3274539,
+      "process_rows": "60278 60266 60278    416 Ss   03:39:22   0:00.00 /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction18_production/19_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n60280 60278 60278   9696 S    03:39:22   0:00.06 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction18_production/19_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n60281 60280 60278   7200 S    03:39:22   0:00.02 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n60282 60280 60278 708160 R    03:39:22 218:30.84 /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "files": {
+        "spec.json": {
+          "sha256": "82bdb9972a8f07034a68e8f3b24bd115284663e49dfff1b373faad18ae6ad2dd",
+          "bytes": 6238
+        },
+        "status.json": {
+          "sha256": "aa7d7cf7ec3cdd407a4e05c8822c8c73d20c0be698cafe5ab71397bb1b073cc1",
+          "bytes": 209
+        },
+        "pid.json": {
+          "sha256": "e1f8949a451292180d0ce29830c87705fcaeab7fabe73eb4f25215b9e28d93d3",
+          "bytes": 36
+        },
+        "launcher_pid.json": {
+          "sha256": "45bd1de2e45f886da40a4ae6d9a9fab8b75a06cbcef62d666d718040531a1d74",
+          "bytes": 1399
+        },
+        "output/timing100.jsonl": {
+          "sha256": "ccc7bc0146fbfd89075cb6710267659e323ee89c3b02ab2b32c9d98ce6f13de7",
+          "bytes": 574
+        }
+      },
+      "ledgers": [
+        {
+          "path": "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz",
+          "snapshot_bytes": 11987609,
+          "snapshot_sha256": "8b99ac21cfa9e66d79d5d15730a41ff95d1fced7b426a9d71b60430e0e1ec6d4",
+          "gzip_finished": false,
+          "complete_prediction_rows": 258,
+          "last_prediction_order": 257,
+          "incomplete_tail_bytes": 0
+        }
+      ],
+      "timing100": [
+        {
+          "completed_trials": 100,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 3721.2153142919997,
+          "interval_seconds": 3721.2153142919997,
+          "user_cpu_seconds": 3708.906663,
+          "system_cpu_seconds": 7.006598,
+          "max_worker_rss_bytes": 523386880,
+          "epoch_seconds": 1791537872.760801
+        },
+        {
+          "completed_trials": 200,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 6597.642129042069,
+          "interval_seconds": 2876.4268147500698,
+          "user_cpu_seconds": 6570.082868,
+          "system_cpu_seconds": 13.761853,
+          "max_worker_rss_bytes": 644530176,
+          "epoch_seconds": 1791540749.211303
+        }
+      ],
+      "sampled_max_group_rss_bytes": 768901120,
+      "confirmed_trials_visible_before_stop": 258,
+      "full_5000_completed": false
+    }
+  ]
+}
