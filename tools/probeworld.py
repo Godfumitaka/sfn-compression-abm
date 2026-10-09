@@ -26,6 +26,7 @@ import sys
 from collections import Counter
 from hashlib import sha256
 from random import Random
+from verb_snapshot import AppendOnlyDict, AppendOnlyMark
 
 ST: dict = {}
 SNAP_MODULES = ("v39", "v310be", "fixorder2", "fix2", "v32", "projfirst", "fillnorestate", "fillunseen", "nocharge2", "v38", "v31",
@@ -43,14 +44,20 @@ def _snapshot_modules():
         for a in SNAP_ATTRS:
             d = getattr(m, a, None)
             if isinstance(d, dict):
-                snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))
+                if name == "verbworld" and a in ("INFO", "IDS") and isinstance(d, AppendOnlyDict):
+                    snap.append((d, d.snapshot()))
+                else:
+                    snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))
     return snap
 
 
 def _restore_modules(snap):
     for d, saved in snap:
-        d.clear()
-        d.update(saved)
+        if isinstance(saved, AppendOnlyMark):
+            d.restore(saved)
+        else:
+            d.clear()
+            d.update(saved)
 
 
 def _fingerprint(state) -> str:

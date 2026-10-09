@@ -524,6 +524,9 @@ def worker(task: dict) -> dict:
         import verbworld
         verbworld.install(variant=task.get("verb_variant", "default"),
                           frequency_file=task.get("verb_frequencies"), door_p=task.get("shop_door_p"))
+        if task.get("verb_snap_append_only"):
+            import verb_snapshot
+            verb_snapshot.install(verbworld)
         verbworld.extend_dictionary()
     if task.get("probe_world"):
         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
@@ -886,6 +889,8 @@ def main() -> None:
     ap.add_argument("--verb-variant", choices=("default", "schuler54", "schuler36"), default="default")
     ap.add_argument("--verb-frequencies", default=None, help="出典確認済みのSchulerの項目別出現数")
     ap.add_argument("--verb-timing", action="store_true", help="動詞の走行の1000試行ごとの時間と最大常駐を別記録へ書く")
+    ap.add_argument("--verb-snap-append-only", choices=("off", "on"), default="off",
+                    help="INFO・IDSの控えを長さで保存し、窓での書き換え・削除を止める（既定off）")
     ap.add_argument("--shop-door-p", type=float, default=None, help="動詞の過去形を問う確率（元のお店と同じ別乱数・hide1）")
     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
     ap.add_argument("--sme-online-candidates", action="store_true", help="予測の実際の対応から候補の答えと正誤を研究者だけの別記録に残す")
@@ -946,7 +951,7 @@ def main() -> None:
             raise SystemExit("動詞の世界の正の試行数とhorizonを一致させる")
         args.horizon = cfg2["trial_count"]
         args.no_compare = True
-    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None:
+    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None or args.verb_snap_append_only == "on":
         raise SystemExit("動詞の追加の旗は --verb-world と一緒に使う")
     if args.nsim is not None:
         cfg2["fixed"]["nsim_threshold"] = args.nsim
@@ -1039,6 +1044,8 @@ def main() -> None:
             if task["seed"] not in range(1, 21):
                 raise SystemExit("動詞の世界の種は1〜20だけ")
             task.update(verb_world=True, verb_variant=args.verb_variant, verb_frequencies=args.verb_frequencies)
+            if args.verb_snap_append_only == "on":
+                task["verb_snap_append_only"] = True
             if args.verb_timing:
                 task["verb_timing"] = True
             if args.shop_door_p is not None:
