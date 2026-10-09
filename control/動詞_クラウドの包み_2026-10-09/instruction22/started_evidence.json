@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-09T20:39:07.615928+09:00",
+  "instruction": 22,
+  "supervisor": {
+    "pid": 91046,
+    "started_at": "2026-10-09T20:33:27.014088+09:00"
+  },
+  "status": {
+    "at": "2026-10-09T20:33:27.065960+09:00",
+    "supervisor_pid": 91046,
+    "production_started": false,
+    "state": "probe100_off_running_or_waiting",
+    "jobs_pid": 91047
+  },
+  "off_jobs": {
+    "pid": 91047,
+    "submitted_at": "2026-10-09T20:33:27.065336+09:00",
+    "command": [
+      "/usr/bin/python3",
+      "$HOME/jobs/jobs.py",
+      "run",
+      "--wait",
+      "--owner",
+      "Codex 動詞 指示22 probe100_off",
+      "--mem",
+      "2.0",
+      "--disk-path",
+      "$WORKSPACE/newport_2026-10-07/instruction22_birth/probe100_off/output",
+      "--",
+      "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "$WORKSPACE/newport_2026-10-07/instruction22_birth/admitted_gate.py",
+      "$WORKSPACE/newport_2026-10-07/instruction22_birth/probe100_off"
+    ]
+  },
+  "off_wrapper": {
+    "at": "2026-10-09T20:33:27.363474+09:00",
+    "state": "admitted_waiting_for_existing_resource_gate",
+    "wrapper_pid": 91051,
+    "production_started": false
+  },
+  "off_pid": {
+    "pid": 91068,
+    "pgid": 91068
+  },
+  "off_started_resource": {
+    "event": "started",
+    "cpu_limit": 8,
+    "models": 5,
+    "unknown_active_spawn": 0,
+    "own_models": 0,
+    "epoch_seconds": 1791545607.666954,
+    "outside_heavy": 5,
+    "inside_heavy": 0,
+    "own_rss_bytes": 24166400,
+    "free_disk_bytes": 123519246336,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermal_warning": false,
+    "model_pid": 91068,
+    "reserved_model_slots": 1,
+    "reserved_cpu_slots": 2
+  },
+  "off_latest_existing_sample": {
+    "event": "sample",
+    "cpu_limit": 8,
+    "models": 6,
+    "unknown_active_spawn": 0,
+    "own_models": 1,
+    "epoch_seconds": 1791545943.386476,
+    "outside_heavy": 5,
+    "inside_heavy": 1,
+    "own_rss_bytes": 163938304,
+    "free_disk_bytes": 103271673856,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermal_warning": false
+  },
+  "source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+  "source_tree": "b4dd25d03844e81bf09de3421f444081a50d5b35",
+  "off_result_exists": false,
+  "on_result_exists": false,
+  "on_launcher_exists": false,
+  "comparison_exists": false,
+  "production_started": false,
+  "old_production_stop_performed": false
+}
