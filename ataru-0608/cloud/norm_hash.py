@@ -10,21 +10,49 @@ def strip(o):
     if isinstance(o, dict): return {k: strip(v) for k, v in o.items() if not TIME.search(str(k))}
     if isinstance(o, list): return [strip(x) for x in o]
     return o
-def norm_bytes(path, rel):
-    data = gzip.open(path, "rb").read() if path.endswith(".gz") else open(path, "rb").read()
-    if rel.startswith("ledgers/") and rel.endswith(".jsonl.gz"):
-        data = data.split(b"\n", 1)[1] if b"\n" in data else b""
+def _norm_line(line):
+    try: return json.dumps(strip(json.loads(line)), sort_keys=True, ensure_ascii=False).encode()
+    except Exception: return line
+
+
+def norm_hash(path, rel):
+    """前の norm_bytes と全く同じ並びのバイトの sha256 を、ファイル全体を記憶に置かずに作る（10/09 22:30 の直し：
+    大きい sme.states などで記憶を数十 GB 使い、クラウドの機械で OOM で落ちたため）。
+    前の作り方：data（gz は展開）→ 台帳は最初の改行まで（見出し）を除く → .json は全体を JSON として書き直す →
+    .jsonl は data.split(b"\n") の各要素を書き直して b"\n" でつなぐ。ここでは同じ要素の並びを一行ずつ作って足していく。"""
+    h = hashlib.sha256()
+    opener = (lambda: gzip.open(path, "rb")) if path.endswith(".gz") else (lambda: open(path, "rb"))
     name = rel[:-3] if rel.endswith(".gz") else rel
+    ledger = rel.startswith("ledgers/") and rel.endswith(".jsonl.gz")
     if name.endswith(".json"):
-        try: return json.dumps(strip(json.loads(data)), sort_keys=True, ensure_ascii=False).encode()
-        except Exception: return data
-    if name.endswith(".jsonl"):
-        out = []
-        for line in data.split(b"\n"):
-            try: out.append(json.dumps(strip(json.loads(line)), sort_keys=True, ensure_ascii=False).encode())
-            except Exception: out.append(line)
-        return b"\n".join(out)
-    return data
+        data = opener().read()
+        if ledger:
+            data = data.split(b"\n", 1)[1] if b"\n" in data else b""
+        try: h.update(json.dumps(strip(json.loads(data)), sort_keys=True, ensure_ascii=False).encode())
+        except Exception: h.update(data)
+        return h.hexdigest()
+    with opener() as f:
+        if ledger:
+            first = f.readline()
+            if not first.endswith(b"\n"):
+                # 改行が無い：前の作り方では data が b"" になる
+                return hashlib.sha256(_norm_line(b"") if name.endswith(".jsonl") else b"").hexdigest()
+        if not name.endswith(".jsonl"):
+            for chunk in iter(lambda: f.read(1 << 20), b""): h.update(chunk)
+            return h.hexdigest()
+        first_el = True; ended_nl = True
+        for line in f:
+            ended_nl = line.endswith(b"\n")
+            el = line[:-1] if ended_nl else line
+            if not first_el: h.update(b"\n")
+            h.update(_norm_line(el)); first_el = False
+        if ended_nl:
+            # split は最後の改行の後に空の要素を一つ作る（ファイルが空でも一つ）
+            if not first_el: h.update(b"\n")
+            h.update(_norm_line(b""))
+    return h.hexdigest()
+
+
 if sys.argv[1] == "--compare":
     a = dict(l.rstrip("\n").split("\t") for l in open(sys.argv[2]))
     b = dict(l.rstrip("\n").split("\t") for l in open(sys.argv[3]))
@@ -37,7 +65,7 @@ for dp, ds, fs in os.walk(root):
     for f in fs:
         p = os.path.join(dp, f); rel = os.path.relpath(p, root)
         if f in ("flag.json", "manifest.jsonl") or f.endswith(".done"): rows.append((rel, "付帯")); continue
-        rows.append((rel, hashlib.sha256(norm_bytes(p, rel)).hexdigest()))
+        rows.append((rel, norm_hash(p, rel)))
 with open(out, "w") as fo:
     for rel, h in sorted(rows): fo.write(f"{rel}\t{h}\n")
 print(len(rows), "ファイル →", out)
