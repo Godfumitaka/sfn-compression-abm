@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-09T16:35:23.615107+09:00",
+  "machine_check_at": "2026-10-09T16:34:18.242980+09:00",
+  "report_commit_checked": "9eb695c360c2e17d158a0afe02a593259f2d9afb",
+  "evidence_kind": "指定受け箱と指定クラウド報告の読み取り。クラウド実ps・原関門の確認ではない",
+  "input_files": {
+    "README": {
+      "path": "control/受け箱/README.md",
+      "sha256": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce",
+      "unchanged_since_1600": true
+    },
+    "own": {
+      "path": "control/受け箱/注意の係_Codex2.md",
+      "sha256": "2686b0fbf21e4163f725709df2a55a753e4fe451b867313a38694c6365b3cd9e",
+      "unchanged_since_1600": true
+    },
+    "queue": {
+      "path": "control/走行の列_2026-10-08.md",
+      "sha256": "d6a61b43f3f5d8c7c3a71f9ea65140946bd788e53526a38b075a555514a3eda1",
+      "unchanged_since_1600": true
+    },
+    "desktop": {
+      "path": "control/受け箱/デスクトップの走行の係.md",
+      "sha256": "8fce0056a774c3006ee3eb563469bca9f7f86b2fd938475a9ecf0bae981f8592",
+      "unchanged_since_1600": true
+    },
+    "cloud": {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "sha256": "244c2d0a4f06a52f8c75f478a3bd22838b586dc0c922f07db59b4fd44c367ded",
+      "unchanged_since_1600": false
+    }
+  },
+  "sources": [
+    {
+      "path": "control/受け箱/デスクトップの走行の係.md",
+      "sha256": "8fce0056a774c3006ee3eb563469bca9f7f86b2fd938475a9ecf0bae981f8592",
+      "n36_start_reply_unchanged": true,
+      "n36_start_reply": "- 走行の係から（2026-10-09 09:26）：受けた。全長の関門の二本（世界 2・種 1・1a・全 1,740 試行）を、第 1 波の m7a.8xlarge（i-0edf5697853141268）で 00:25:50 UTC ごろに始めた。\n  - 参考：c57467eab13ee9ef84277059024ab892756fd2f8（作業場所 jsonloge9）、候補：8ed8cf2b2920787e55b6f5134300fc350dffe5e7（stage2memo、束で送り --help 通った）。どちらも HEAD ときれいな作業木を始める前に確かめた。\n  - 命令：依頼の reference/candidate の portable_argv の三つの場所だけを割り当てた（引数 97・103、候補は末尾に --stage2-speed on --stage2-cache-prune on --stage2-memo on だけ）。--v39-price・--e-price・--shop-world 2・--seeds 1・--trial-count 1740 を確かめた。\n  - 設定は configuration_utf8 の原の UTF-8 バイト（sha256 4a8125226ed8…、報告の instruction36_full_cloud_w2_seed001_config.json と全バイト同じ）。観測は両方とも observe_ordered_cloud.py（sha256 a213f2b52d79…）、SME_EXACT_SOURCE は各固定の作業場所。PYTHONHASHSEED=0、LANG・LC_* を外す、setsid、/usr/bin/time -v。\n  - 既存の参考本は使っていない（順つきの観測が無いため、新しい非本番の比較本として走らせた）。走っている第 1 波は止めていない。\n  - 終わったら、依頼の基準（compare_records.tree・reference_observation.convert・tie_state と saved_matcher の比べ、候補の guard）で比べて、ここと報告に書く。\n",
+      "other_role_instruction42_43_not_new_codex2_instruction": true,
+      "instruction43_report_request_does_not_replace_codex2_full_gate_criteria": true
+    },
+    {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "sha256": "244c2d0a4f06a52f8c75f478a3bd22838b586dc0c922f07db59b4fd44c367ded",
+      "latest_report_excerpt": "## 10/09 15:53〜16:15 の記録（指示 42・43 を受けた）\n### 指示 42：3a・5a・6a の種 3〜20（108 本）\n- 命令：注意の係の 08:04 の届け物の 3a/3b・5a/5b・6a/6b の種 3〜20（世界 1・2）。3a・6a は c7921598、5a は c57467ea。--v39-price・--e-price・版・設定の sha256 を全部確かめた（設定は指示 41 で各機械に送ったものと全バイト同じ）。\n- 列を「走行中」にして 15:55:16 に push してから始めた。\n- 始め方：一度に全部は入らない（空いた芯 約 80、6a の予約 6GB × 36 本）ので、台本 ~/cloud/wave1/sched42.py が 2 分ごとに各機械を見て、5a → 6a → 3a の順に一本ずつ始める。\n  - 条件：模型の本が 30 本未満（32 芯のうち 2 芯を残す）、かつ（この台本が始めて走っている本の予約の合計）＋（ほかの模型の本の今の常駐）＋（次の本の予約）≦ 物理メモリ − 4GiB。\n  - 予約（種 1・2 の最大常駐に少し足した）：5a 0.6GB、6a 6.0GB、3a 3.0GB。\n  - 16:05 に始めた。上限（192 vCPU）は使い切っているので、新しい機械は立てていない。今ある 5 台に順に入れる。始められない本の数は、次の回に書く。\n- 見張り：新しい本の分を機械ごとに一つ足した（tmux w42m0〜4、~/cloud/wave1/wave1_watch3.sh。後から本が足されるので、全部済んでも抜けない）。\n- ★ 私の誤り：持ち帰りの台本で、小さい記録がもう上がっている本だと git commit が「変わりなし」で 1 を返し、持ち帰りが失敗として扱われていた（wave1_1a_w1_s2_e9 などが何度もやり直しになっていた）。変わりがあるときだけ commit するように直した。\n### 指示 43：全長の関門の候補の比べ\n- 候補の出力の norm_hash を、第 1 波と同じ道具（push_small.sh・norm_hash.py）で機械の上で作っている。できたら比べて書く。\n",
+      "n36_latest_reference_progress_excerpt": "- 集団化：on1_f0.1_collective200 が走っている。全長の関門の参考は試行 698。\n",
+      "n36_candidate_norm_hash_comparison_reported_as_pending_only": true
+    }
+  ],
+  "full_length_request_sha256": "51e0c7685bd3330fd2ddfdcce31dc6d3a75e12169f9af6331f0e950143539159",
+  "inbox_received_once_through": 36,
+  "new_instruction_headings": [],
+  "instruction36_done": false,
+  "full_length_gate_verified": false,
+  "cloud_actual_ps_not_read": true,
+  "cloud_full_length_progress_reported_only": {
+    "report_label": "10/09 15:23",
+    "reference_trial_reported": 698,
+    "earlier_candidate_completion_report_label": "10/09 13:46〜14:20",
+    "candidate_trials_completed_reported": 1740,
+    "candidate_exit_code_reported": 0,
+    "candidate_native_completion_verified_by_codex2": false,
+    "raw_native_completion_measurement_gate_not_delivered": true,
+    "comparison_not_yet_reported": true,
+    "reference_progress_latest_explicit_report_label": "10/09 15:23",
+    "candidate_norm_hash_preparation_report_label": "10/09 15:53〜16:15",
+    "candidate_norm_hash_comparison_result_not_delivered": true
+  },
+  "new_n36_related_cloud_run_publication_paths": [],
+  "no_new_notification": true,
+  "candidate_completion_already_notified_at": "2026-10-09 14:33 JST",
+  "new_cloud_requests": 0,
+  "new_models": 0,
+  "new_comparisons": 0,
+  "model_receipt_observer_signals": 0,
+  "completed_gates_not_rerun": true,
+  "deadline_jst": "2026-10-11 09:00 JST",
+  "automation": {
+    "at": "2026-10-09T16:33:49.156925+09:00",
+    "status": "ACTIVE",
+    "prompt_sha256": "23e8cb8008b20840871f18fd79cd6e775d753657cf2a1aa8196ea3940d350f2c",
+    "toml_sha256": "65dfba70e19277c107ab6a661799ea7b9efa244cca309924a8ea0d260103141e",
+    "same_verified_1433": true,
+    "id": "1-n3-a",
+    "updated_this_check": false
+  }
+}
