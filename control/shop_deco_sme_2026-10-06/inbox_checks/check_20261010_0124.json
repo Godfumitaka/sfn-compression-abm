@@ -1,0 +1,84 @@
+{
+  "time_jst": "2026-10-10T01:36:50.314684+09:00",
+  "scheduled_time_jst": "2026-10-10T01:24:52.554+09:00",
+  "pulled_commit": "c0fefe217e4c32ab701cf7bf5936edcc97696dac",
+  "initial_pulled_commit": "91ccadcf4f284c1fd7dff7af79f36625a329bcc3",
+  "file_sha256": {
+    "control/受け箱/README.md": "af61f3ecd21f049761d412b5f7a90ce91ab1a345a141f1ebdba31b338444cb0c",
+    "control/受け箱/飾りの係.md": "f87c572a93de29379cf235bf403e185358e6c33f89f571c8707a98d87c7ffa65",
+    "control/走行の列_2026-10-08.md": "17dee1de342fa6ce3cd2b2cda945757a6ff88038b8a0e62edce00a1b4b602e3e"
+  },
+  "unreceived": [],
+  "pending_queue_rows": [
+    {
+      "number": "19p",
+      "machine": "Mac",
+      "status": "未着手"
+    }
+  ],
+  "eligible_queue_rows": [],
+  "queue_19p": {
+    "spec_sha256": "e853823119e01fb3870d89653501af1ca4029958cd162c19af587f9a0380b4ed",
+    "ready_to_start": false,
+    "required_model_slots": 5,
+    "required_cpu_slots": 6,
+    "current_models_plus_requested": 9,
+    "current_admission_plus_requested": 10,
+    "status": "unclaimed; capacity insufficient and readiness not complete; not a failed model gate"
+  },
+  "model_workers": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "rss_kib": 1533504,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "rss_kib": 1036048,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 18825,
+      "ppid": 18823,
+      "rss_kib": 569440,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 18853,
+      "ppid": 18843,
+      "rss_kib": 577968,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "model_worker_count": 4,
+  "other_heavy_R": [],
+  "admission_count": 4,
+  "count_rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB",
+  "own_processes": [],
+  "own_registry": [],
+  "controller_64386_alive": false,
+  "preview_status": "stopped",
+  "preview_native_raw_completed": 1,
+  "preview_supervisor_completed": 0,
+  "preview_analyses_completed": 0,
+  "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+  "seed001_done_sha256": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba",
+  "reference_fingerprint_unchanged": true,
+  "inbox_instruction_1": "done",
+  "inbox_instruction_2": "frozen reference and partial static audit; new D retention boundary read; actual independent comparison and dynamic name-ID checks pending; no completion mark",
+  "inbox_instruction_3": "done; report only because own audit progressed",
+  "inbox_instruction_4": "done, superseded by instruction5",
+  "inbox_instruction_5": "done; native deadline extended and verified previously",
+  "deadline_jst": "2026-10-13T09:00:00+09:00",
+  "repository_report_written": true,
+  "s3_read_only_retry": "session expired; no aws login; prior confirmation unanswered",
+  "new_seed_1_2_delivery_count": 14,
+  "raw_input_paths_added_to_git": [],
+  "audit_evidence": "control/shop_independent_2026-10-07/retention_boundary_20261010_0124.json"
+}
