@@ -1,0 +1,24 @@
+--- $WORKSPACE/newport_2026-10-07/instruction20_production/tools/checkpoint_observer.py	2026-10-09 19:15:36
++++ $WORKSPACE/newport_2026-10-07/instruction26_production/tools/checkpoint_observer.py	2026-10-09 23:31:07
+@@ -2,7 +2,8 @@
+ from contextlib import contextmanager
+ from pathlib import Path
+ import io, json, sys
+-from instruction11_io import confirmed_content, copy_confirmed, names, save, sha
++from instruction11_io import confirmed_content, names, save, sha
++from confirmed_hash import hash_confirmed
+ 
+ def encoded(value):
+     from smereplay import encode
+@@ -136,9 +137,8 @@
+             folder=dest/f"completed_{n:04d}";folder.mkdir()
+             proofs=[]
+             for rel in sorted(names(out)):
+-                target=folder/"records"/rel
+-                # 証拠の名前は原名、内容はgzip容器を除いた確定内容。
+-                proof=copy_confirmed(out/rel,target)
++                # 指示26：確定した原行のSHAと行数だけ。履歴の複製を作らない。
++                proof=hash_confirmed(out/rel)
+                 proofs.append(dict(path=str(rel),**proof))
+             save(folder/"state.json",dict(agent_id=boundary["agent_id"],trial=t,
+                  state=encoded(boundary["state"]),attention=encoded(individuals()),
