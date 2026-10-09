@@ -1,0 +1,13 @@
+受け付けた：PID 12000、担当 Codex 動詞 指示22 全比較、見込み 0.3 GB（表の合計 9.3 / 24 GB）。スワップは直近 10 分で増えていない（176.8 MB → 今 176.8 MB）
+Traceback (most recent call last):
+  File "$WORKSPACE/newport_2026-10-07/instruction22_birth/compare_probe100.py", line 94, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction22_birth/compare_probe100.py", line 75, in main
+    result = compare_recordings(*(Path(read(case / 'spec.json')['output']) for case in cases))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction22_birth/compare_probe100.py", line 23, in compare_recordings
+    assert required <= names(left) and required <= names(right), '台帳・全side・保存状態・試験記録を必須にする'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 台帳・全side・保存状態・試験記録を必須にする
+消した：PID 12000
