@@ -1,0 +1,39 @@
+{
+  "legacy_requires": [
+    "gate-off8-serial-parallel.json",
+    "gate-on1-independent.json",
+    "gate-state-isolation.json",
+    "gate-receive-replay.json",
+    "gate-on8-measurement.json"
+  ],
+  "mapping": {
+    "gate-off8-serial-parallel.json": [
+      "gate-off8.json",
+      "gate-off8-parallel.json"
+    ],
+    "gate-on1-independent.json": [
+      "gate-on1-f0.1.json",
+      "gate-on1-f0.9.json"
+    ],
+    "gate-state-isolation.json": [
+      "gate-components.json"
+    ],
+    "gate-receive-replay.json": [
+      "gate-receive-replay.json"
+    ],
+    "gate-on8-measurement.json": [
+      "gate-measure.json"
+    ]
+  },
+  "additional_original_prerequisite": [
+    "gate-off2.json"
+  ],
+  "source": {
+    "n5_readme": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/coll_new_port_2026-10-07/cloud/n5/README.md",
+    "n7_readme_sha256": "351072cdbb943eeb483e3d1012cd419a19bafc24d196a58a54fe726710ca81a6",
+    "compare_sha256": "115cb4566fd6aa12dd389a1dc07e0d68b1e201806433f45b70db48235d502ce8",
+    "components_sha256": "7072bcf71e0d5946dd79360de4ce9360ea2b53457d9770c04cc64f6b6579d760",
+    "measurement_sha256": "b385c1ddbf50053f4d1a8b40a0f94b45ea88430298ad861a28a5ea25cbebb485"
+  },
+  "note": "名前だけの対応。新しいpassed札を作らず、元の各関門の実JSONを直接読む。小例・単独2条件・直列/並列・受信再生・八体300の条件を減らさない。"
+}

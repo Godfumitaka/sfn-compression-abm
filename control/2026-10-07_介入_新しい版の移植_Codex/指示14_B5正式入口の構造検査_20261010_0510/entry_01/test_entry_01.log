@@ -1,0 +1,24 @@
+test_all_eight_completion_records (__main__.EntryTests.test_all_eight_completion_records) ... ERROR
+test_all_legacy_conditions_expand (__main__.EntryTests.test_all_legacy_conditions_expand) ... ok
+test_each_missing_gate_refuses (__main__.EntryTests.test_each_missing_gate_refuses) ... ok
+test_failed_wrong_version_or_other_boot_refuses (__main__.EntryTests.test_failed_wrong_version_or_other_boot_refuses) ... ok
+test_fixed_spec_and_phase (__main__.EntryTests.test_fixed_spec_and_phase) ... ok
+test_old_stop_refuses (__main__.EntryTests.test_old_stop_refuses) ... ok
+test_outer_zero_is_insufficient (__main__.EntryTests.test_outer_zero_is_insufficient) ... ok
+test_real_candidate_is_only_the_named_audit_patch (__main__.EntryTests.test_real_candidate_is_only_the_named_audit_patch) ... ok
+
+======================================================================
+ERROR: test_all_eight_completion_records (__main__.EntryTests.test_all_eight_completion_records)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction14/cloud_gate_entry_01/test_entry.py", line 95, in test_all_eight_completion_records
+    run.verify_completed(dict(host='synthetic-only'),e,o)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction14/cloud_gate_entry_01/run_B5.py", line 215, in verify_completed
+    if not result['passed']:raise SystemExit(1)
+                            ^^^^^^^^^^^^^^^^^^^
+SystemExit: 1
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.182s
+
+FAILED (errors=1)
