@@ -1,0 +1,11 @@
+受け付けた：PID 80359、担当 intervention-instruction16-recompare、見込み 0.3 GB（表の合計 22.3 / 24 GB）。スワップは直近 10 分で増えていない（176.8 MB → 今 176.8 MB）
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction16/compare_saved_01.py", line 236, in <module>
+    main()
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction16/compare_saved_01.py", line 206, in main
+    metadata(maps)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction16/compare_saved_01.py", line 174, in metadata
+    flag = read(out/'flag.json'); assert flag['commit'] == COMMIT and flag['config'] == str(config)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+消した：PID 80359

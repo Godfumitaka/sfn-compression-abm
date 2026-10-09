@@ -1,0 +1,13 @@
+{
+  "reason": "runtime.argvはPython実行ファイル、v3_run.py、世界設定、実出力先の順。旧比較入口はargv[1]を設定として読んだ。比較を開始する前の読み違いで、実模型記録の不一致は未検出。",
+  "changes": [
+    "設定をargv[2]で読む",
+    "Pythonと模型入口を固定原命令へ照合",
+    "argv[3]を各実出力先へ必須照合し、その外の全argvを原順で比較"
+  ],
+  "old_sha256": "9f88c2ffe3624e47f144ab11685eab065915c9eab3f215e681d3786db5ea6a4e",
+  "new_sha256": "58391389fa57b1808fe5979828e49a22ce67d5cd2de41ec1ceeec5390b7fbfbb",
+  "old_stop_preserved": true,
+  "model_rerun": false,
+  "records_or_conditions_removed": false
+}

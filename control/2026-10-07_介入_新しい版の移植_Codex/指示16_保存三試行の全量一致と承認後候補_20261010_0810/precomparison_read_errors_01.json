@@ -1,0 +1,17 @@
+{
+  "recorded_at_jst": "2026-10-10T08:15:19.142539+09:00",
+  "events": [
+    {
+      "stage": "受付前のps読取",
+      "error": "PermissionError: Operation not permitted /bin/ps",
+      "action": "同じ読取をsandboxの外で許可を得て実行。受付の決まりは変更なし。"
+    },
+    {
+      "stage": "受付前の親子の点検",
+      "error": "TypeError: 'int' object is not subscriptable",
+      "action": "censusの辞書形式を原コードで確認し、parentの辞書キーを用いた点検へ訂正。模型と資源へ信号を送らない。"
+    }
+  ],
+  "model_started": false,
+  "files_deleted": false
+}
