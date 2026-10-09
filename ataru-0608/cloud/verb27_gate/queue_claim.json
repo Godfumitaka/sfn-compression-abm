@@ -18,5 +18,14 @@
    "basis": "受け箱の指示 64 の 2・65 の 2（関門が passed、比べは ff93ebab）",
    "cloud_gate_comparison_sha256": "791c3ef90844d8a2a8ed47679f863908a53de712a1afd2e347a9da1da8846117"
   }
+ },
+ "machine2": {
+  "where": "Google Cloud c2d-standard-16（sfn-verb-gate2、us-east1-c）",
+  "why": "#19 の種 2 は、関門と同じ機械に限られる（run_registered.py の machine_boot_sha256）ため、二台目で関門を通す",
+  "cases": {
+   "gate100_birth0": "f9c0509e43bebef46b08d79a2415af05271c83c305c5d893701c629933a786ea",
+   "gate100_birth4": "2d9f8a67603d2cd00f7f077893616375dfc3737c9fd2b1eae658bbf460a95e89"
+  },
+  "at": "2026-10-10T04:32:49.018708+09:00"
  }
 }
