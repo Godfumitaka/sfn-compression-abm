@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "$WORKSPACE/newport_2026-10-07/instruction27/checkpoint_digest.py", line 243, in <module>
+    raise SystemExit(compare(a.left_case, a.right_case, a.completed, a.destination))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction27/checkpoint_digest.py", line 177, in compare
+    prior_mismatch = any(not read(p)['passed'] for p in history)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction27/checkpoint_digest.py", line 177, in <genexpr>
+    prior_mismatch = any(not read(p)['passed'] for p in history)
+                             ~~~~~~~^^^^^^^^^^
+KeyError: 'passed'
+       29.79 real        28.22 user         1.43 sys
+            58540032  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                4450  page reclaims
+                  81  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  46  voluntary context switches
+               12631  involuntary context switches
+        159456608466  instructions retired
+         67083201055  cycles elapsed
+            49676792  peak memory footprint

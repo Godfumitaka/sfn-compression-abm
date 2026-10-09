@@ -1,0 +1,97 @@
+{
+  "at": "2026-10-10T07:55:36.523326+09:00",
+  "comparator_path": "$WORKSPACE/newport_2026-10-07/instruction27/checkpoint_digest.py",
+  "exception": "KeyError: 'passed'",
+  "line": 177,
+  "glob": "checkpoint_*.json",
+  "glob_inputs": [
+    {
+      "name": "checkpoint_0500_actual_worker_count.json",
+      "passed_present": false,
+      "keys": [
+        "at",
+        "original_before_start_time",
+        "raw_ps_sha256",
+        "raw_classifier_count",
+        "raw_classifier_pids",
+        "actual_worker_count",
+        "actual_workers",
+        "own_actual_workers",
+        "coordinator_pid",
+        "coordinator_parent",
+        "actual_agent_parent",
+        "prior_code_provenance",
+        "prior_code_provenance_sha256",
+        "rule",
+        "shared_classifier_or_admission_changed",
+        "new_global_ps"
+      ]
+    },
+    {
+      "name": "checkpoint_0500_status.json",
+      "passed_present": true,
+      "keys": [
+        "at",
+        "state",
+        "model_starts",
+        "exit_code",
+        "comparison_present",
+        "passed",
+        "full_length_match",
+        "flagged_results_usable"
+      ]
+    },
+    {
+      "name": "checkpoint_0500_before_start.json",
+      "passed_present": false,
+      "keys": [
+        "at",
+        "processes",
+        "counts",
+        "cpu_budget",
+        "comparison_cpu_slots",
+        "comparison_model_slots",
+        "reserved_memory_gib",
+        "thermal",
+        "free_disk_bytes",
+        "swap_original_rows",
+        "admission_registry_original",
+        "original_confirmed",
+        "counting_rule",
+        "unchanged_shared_classifier"
+      ]
+    },
+    {
+      "name": "checkpoint_0500_launcher.json",
+      "passed_present": false,
+      "keys": [
+        "at",
+        "pid",
+        "command",
+        "model_starts"
+      ]
+    },
+    {
+      "name": "checkpoint_0500_result.json",
+      "passed_present": false,
+      "keys": [
+        "at",
+        "exit_code",
+        "wall_seconds",
+        "command",
+        "model_starts"
+      ]
+    },
+    {
+      "name": "checkpoint_0500_jobs_pid.json",
+      "passed_present": false,
+      "keys": [
+        "pid"
+      ]
+    }
+  ],
+  "actual_comparison_result_present": false,
+  "model_starts": 0,
+  "comparison_restarts": 0,
+  "comparison_or_model_or_original_output_changes": 0
+}
