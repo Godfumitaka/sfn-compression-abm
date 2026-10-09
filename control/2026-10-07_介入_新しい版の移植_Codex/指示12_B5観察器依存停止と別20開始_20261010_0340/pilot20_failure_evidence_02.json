@@ -1,0 +1,204 @@
+{
+  "at_jst": "2026-10-10T03:39:53.647397+09:00",
+  "state": "stopped_observer_dependency",
+  "outer_exit_code": 0,
+  "native_completed": true,
+  "native_ledger_rows": 20,
+  "researcher_export_completed": false,
+  "case_accepted": false,
+  "first_error": {
+    "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before/model.log",
+    "line": 9,
+    "text": "ModuleNotFoundError: No module named 'runtime_capture'"
+  },
+  "agent_error": {
+    "run": 1,
+    "agent": 0,
+    "type": "error",
+    "error": "ModuleNotFoundError(\"No module named 'runtime_capture'\")",
+    "tb": "Traceback (most recent call last):\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline/tools/v311c.py\", line 797, in _agent_main\n    rec = v3_run.worker(task)\n          ^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/observe.py\", line 128, in worker\n    from runtime_capture import runtime_values\nModuleNotFoundError: No module named 'runtime_capture'\n"
+  },
+  "performance_rows": 20,
+  "observed_trials": [
+    0,
+    19
+  ],
+  "peak_agent_rss_bytes": 87490560,
+  "peak_children_rss_bytes": 87654400,
+  "model_seconds": 869.3720490830019,
+  "admission_wait_seconds": null,
+  "admission_timing_valid": false,
+  "cpu_wait_seconds": 0.060240665916353464,
+  "model_outputs_mismatch_detected": false,
+  "protected_unchanged": true,
+  "original_hashes": {
+    "agent0.rng.jsonl": {
+      "sha256": "ca3a65aa85606bed1d552fe0e272b40856b8dd76b85b7934115cc9ea367a8dc2",
+      "bytes": 147570
+    },
+    "protected_before.json": {
+      "sha256": "506d065576e0b515c0a8b91394646c4a73ffa4e5544c521793b5f1f3e0a28916",
+      "bytes": 42621
+    },
+    "runtime.json": {
+      "sha256": "4a2192e8cca430661403a10f69743e4d0dd847e7f9815e5458b5e9c417bfc48a",
+      "bytes": 6081
+    },
+    "protected_after.json": {
+      "sha256": "506d065576e0b515c0a8b91394646c4a73ffa4e5544c521793b5f1f3e0a28916",
+      "bytes": 42621
+    },
+    "admission_timing_invalid.json": {
+      "sha256": "ec5c0596078046b16b7557d09ec879e13c52417464df7bbbf368b5c37eba47fc",
+      "bytes": 520
+    },
+    "agent0.performance.jsonl": {
+      "sha256": "1cd937aac3d2e920abfb1744aac7423a367210910af8442eb2838f5f0198f1f3",
+      "bytes": 6657
+    },
+    "agent0.model-rng.jsonl": {
+      "sha256": "ca3a65aa85606bed1d552fe0e272b40856b8dd76b85b7934115cc9ea367a8dc2",
+      "bytes": 147570
+    },
+    "before_start.json": {
+      "sha256": "d3d6382278c36ef29748e24628829ab253d88a1bd3ed3ccfa4f3f181008dd264",
+      "bytes": 1219
+    },
+    "agent0.pid.json": {
+      "sha256": "79b1eb7270331d05154b1d2018c0d44846e592b96c1c597f9b7bbcada995bc9f",
+      "bytes": 26
+    },
+    "model.log": {
+      "sha256": "a12cc25d774e3b96079403f8b7bc34233c88ca4db9424e0978d0b0a87759c6f9",
+      "bytes": 1162
+    },
+    "status.json": {
+      "sha256": "fa7f2479cebc3161b5d1bf8e295632ce59c6352bed456ec60ef342a40dd417b1",
+      "bytes": 4201
+    },
+    "output/manifest.jsonl": {
+      "sha256": "4bc0a207c30ac31be7ed755fd8f0a20b28a9c3001f64a9644653e5f18c3854ba",
+      "bytes": 640
+    },
+    "output/flag.json": {
+      "sha256": "01c3b57e41d9b13dbacefcf35f22d351261bb06462c6077913d1aa6e128bb8b5",
+      "bytes": 2095
+    },
+    "output/comm/run001.lineage.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "output/comm/run001.summary.json": {
+      "sha256": "1b14026138bad9e5c33e87cc75b75e7c966b1d65b9e539f38ed35716ef10afa1",
+      "bytes": 741
+    },
+    "output/comm/run001.jsonl": {
+      "sha256": "674694beb6643e90965c2d940ab98542b820c23e5c9d0916bdb9e8dddad4d67b",
+      "bytes": 34809
+    },
+    "output/comm/run001.jsonl.state.jsonl": {
+      "sha256": "8497e34b7adedbbcf2a7100afa944372961aea923b6b8ef3678cfb4803d12ed8",
+      "bytes": 6858
+    },
+    "output/attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "a98713f2dbc7d844e37c046369d107e7a4a65434654fbdcfe935734443b6a39f",
+      "bytes": 27903
+    },
+    "output/attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json": {
+      "sha256": "d7db0efa42cf9001f1e2a65260bc5b83f14bc32a31b5549973b1baed2290d980",
+      "bytes": 2929
+    },
+    "output/evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz": {
+      "sha256": "1bbaa5d758db633c6fc50430de56a24d7f9477651fd772b3c1cce7e59cea9abc",
+      "bytes": 84677
+    },
+    "output/evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json": {
+      "sha256": "3e2f1b5ccd0acfd1c9abe460afaa7db272365b2121cbce334874cfdd280108ea",
+      "bytes": 272
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz": {
+      "sha256": "c4c72a809d1cdb66827fef3edea03cc742b790c4a0af389bb2e95fe17f662ed5",
+      "bytes": 345013
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.diagnostics.jsonl.gz": {
+      "sha256": "fb976024d37d15679708b50d037e69ddf31cf065cfab0f761ed9c6876d9274d3",
+      "bytes": 504268
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl": {
+      "sha256": "147b8496c13dffb78924f3749c14f1b25e32cfa08b6d4ec688527e41d710b260",
+      "bytes": 23501
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl": {
+      "sha256": "894377f7b70cc2eea7b93a33ae91d493bda7d2865b9d7e5c8c91003be419bc5e",
+      "bytes": 11568
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.ambig.csv": {
+      "sha256": "94e0dfdff35ff9feae47e62a82bc39b8c2eb1d1d7e51e84243522ffae3b8b925",
+      "bytes": 333
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.answers.csv": {
+      "sha256": "ddfd8ef7f4145b9a81988a00336c58f434bd84a7b4ce4be696b374c4fc2fbe13",
+      "bytes": 448
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl": {
+      "sha256": "ea25a7d2b16653ca33d381449c5b3ba0a889a95f680f1ea3c09cdee28ae50c54",
+      "bytes": 147957
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.collective-runtime.jsonl.gz": {
+      "sha256": "d662d3a06f62b11da97dd3922ce632fd10a33d0026f774316ef21176ddd01341",
+      "bytes": 269048
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl": {
+      "sha256": "d3ce6d93624dd8f392a5c50cfb18f1de79b9caf05850cb7534bc3240295f5bf3",
+      "bytes": 73129
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz": {
+      "sha256": "8128431f9babd15678b601676e2b129f271b38e7c55575a477cf86b91e898603",
+      "bytes": 1228895
+    },
+    "output/ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "7af42335e4e0ef5f148b1da7035a3f36e011ae9033041a9daf32fe53b4e13aea",
+      "bytes": 168920
+    },
+    "output/ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.done": {
+      "sha256": "74e360108bb243ce86be6949e0e82b8a7b54a6e9efb09e59f2730071c4fa862d",
+      "bytes": 576
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "ed1ed73b4da73685da600ff45503c7ea11ded0035f805c2b33e769f4045b84db",
+      "bytes": 1966
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json": {
+      "sha256": "0dc5be4d835745251f4241193159bf57c363ef956659e197bde291bb154acc11",
+      "bytes": 342
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.jsonl.gz": {
+      "sha256": "ecc905e942906c9d7d0564c9637845420c3d55772b53d4ead0c61f41990ee9db",
+      "bytes": 182473
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.summary.json": {
+      "sha256": "4edc81a6025e8a59579feaccf9e81f9683c2c985861ac34898eb6c1ef2fb37e6",
+      "bytes": 737
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz": {
+      "sha256": "09068ce6044eefab30cc502a3191a72588e76508fd18d888829a3ead62b74eab",
+      "bytes": 131467
+    }
+  },
+  "dependency_copy_verified": {
+    "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/report/control/集団化_クラウドの包み_2026-10-09/runtime_capture.py",
+    "destination": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/runtime_capture.py",
+    "sha256": "232eafb5d199316b6fbdd244498a6b8b8bfe0d33ff5db1b0f391afc3ac337551",
+    "bytes": 2417,
+    "copied_all_bytes": true,
+    "observer_changed": false,
+    "model_changed": false,
+    "reason": "元の観察器の最終控えが使う同梱の読み取り関数。欠けた依存だけを同じ形で置く。"
+  },
+  "observer_unchanged": true,
+  "candidate_changed": false,
+  "inspection01_reader_stop_preserved": true,
+  "inspection01_cause": "rg --filesの除外対象だった台帳を不存在と読んだ。実在する台帳と完了札を全量検査する。",
+  "no_model_rerun_in_inspection": true,
+  "followup": "同梱の依存だけを置いた別出力の20を受付へ通す。200は必要記録を確認してから。"
+}
