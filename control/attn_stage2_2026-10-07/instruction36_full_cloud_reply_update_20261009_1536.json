@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-09T15:36:01.494483+09:00",
+  "machine_check_at": "2026-10-09T15:33:41.270057+09:00",
+  "report_commit_checked": "25da969df598f6d138715ba0629273cc234004f3",
+  "evidence_kind": "指定受け箱と指定クラウド報告の読み取り。クラウドの実ps確認ではない",
+  "sources": [
+    {
+      "path": "control/受け箱/デスクトップの走行の係.md",
+      "sha256": "9cef755c762432f78349840cc7e923e36c5c7d86fc23fcdde762eeda59e52a38",
+      "n36_start_reply_unchanged": true,
+      "n36_start_reply": "- 走行の係から（2026-10-09 09:26）：受けた。全長の関門の二本（世界 2・種 1・1a・全 1,740 試行）を、第 1 波の m7a.8xlarge（i-0edf5697853141268）で 00:25:50 UTC ごろに始めた。\n  - 参考：c57467eab13ee9ef84277059024ab892756fd2f8（作業場所 jsonloge9）、候補：8ed8cf2b2920787e55b6f5134300fc350dffe5e7（stage2memo、束で送り --help 通った）。どちらも HEAD ときれいな作業木を始める前に確かめた。\n  - 命令：依頼の reference/candidate の portable_argv の三つの場所だけを割り当てた（引数 97・103、候補は末尾に --stage2-speed on --stage2-cache-prune on --stage2-memo on だけ）。--v39-price・--e-price・--shop-world 2・--seeds 1・--trial-count 1740 を確かめた。\n  - 設定は configuration_utf8 の原の UTF-8 バイト（sha256 4a8125226ed8…、報告の instruction36_full_cloud_w2_seed001_config.json と全バイト同じ）。観測は両方とも observe_ordered_cloud.py（sha256 a213f2b52d79…）、SME_EXACT_SOURCE は各固定の作業場所。PYTHONHASHSEED=0、LANG・LC_* を外す、setsid、/usr/bin/time -v。\n  - 既存の参考本は使っていない（順つきの観測が無いため、新しい非本番の比較本として走らせた）。走っている第 1 波は止めていない。\n  - 終わったら、依頼の基準（compare_records.tree・reference_observation.convert・tie_state と saved_matcher の比べ、候補の guard）で比べて、ここと報告に書く。\n",
+      "other_role_instruction40_not_new_codex2_instruction": true,
+      "other_role_instruction41_not_new_codex2_instruction": true,
+      "same_file_sha256_as_1533": true
+    },
+    {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "sha256": "09f3a451ae06106163b0fddc380ee623f44e561681751b61ce181c7b61231f06",
+      "latest_report_excerpt": "## 10/09 15:23 の記録：持ち帰りを並べた\n- 第 1 波の持ち帰りが一本 7〜20 分かかり、一つずつだったので、終わった本が機械の上にたまっていた（15:23 に持ち帰り済み 33 本）。\n- 測った：機械からデスクトップへの scp は 4.8MB/s（一本 約 480MB で約 100 秒）、デスクトップから S3 は 19.7MB/s。遅いのは、全体を一本ずつにしていたロック（機械の上の norm_hash、D: への書き込みと sha256 の確かめ、S3、GitHub を全部一つずつ）。\n- 持ち帰りを機械ごとに並べて行い、報告の枝への書き込み（git）だけを ~/cloud/wave1/git.lock で一つずつにした（~/cloud/aws_fetch_run_par.sh・~/cloud/wave1/wave1_watch2.sh、写しは ataru-0608/cloud/wave1/）。前の見張りは、持ち帰りの途中でない時に止めて、15:30 に五つとも始め直した。\n- 速さを測るために s3://sfn-abm-results-astra1008/cloud_runs/_speedtest/t100（100MB の乱数）を置いた。消していない。\n- 集団化：on1_f0.1_collective200 が走っている。全長の関門の参考は試行 698。\n",
+      "n36_latest_report_excerpt": "- 集団化：on1_f0.1_collective200 が走っている。全長の関門の参考は試行 698。\n",
+      "other_role_wave1_cost_verb_collection_updates_not_new_codex2_instruction": true,
+      "n36_latest_report_excerpt_unchanged": false,
+      "latest_added_section_is_other_role_collection_and_wave1_report": true,
+      "same_file_sha256_as_1533": false,
+      "n36_reference_progress_changed_only": true,
+      "earlier_candidate_completion_report_preserved": true
+    }
+  ],
+  "full_length_request_sha256": "51e0c7685bd3330fd2ddfdcce31dc6d3a75e12169f9af6331f0e950143539159",
+  "new_instruction_headings": [],
+  "inbox_received_once_through": 36,
+  "instruction36_done": false,
+  "full_length_gate_verified": false,
+  "cloud_actual_ps_not_read": true,
+  "cloud_full_length_progress_reported_only": {
+    "report_label": "10/09 15:23",
+    "candidate_trials_completed_reported": 1740,
+    "candidate_exit_code_reported": 0,
+    "reference_trial_reported": 698,
+    "raw_native_completion_measurement_gate_not_delivered": true,
+    "candidate_native_completion_verified_by_codex2": false,
+    "comparison_not_yet_reported": true
+  },
+  "previously_reported_other_role_failure": {
+    "case": "4ceadf63 第1波6a 世界2 種2",
+    "reported_stop_utc": "2026-10-09T00:47:00Z",
+    "description": "同じ落ち方との報告。こちらで原traceback・原因を確認していない。",
+    "notify_once_this_check": false,
+    "not_a_new_instruction": true,
+    "already_reported_at": "2026-10-09T10:32:49.248957+09:00",
+    "no_new_failure_report": true
+  },
+  "new_cloud_requests": 0,
+  "new_models": 0,
+  "new_comparisons": 0,
+  "model_receipt_observer_signals": 0,
+  "completed_gates_not_rerun": true,
+  "deadline_jst": "2026-10-11 09:00 JST",
+  "automation": {
+    "at": "2026-10-09T15:33:24.583218+09:00",
+    "id": "1-n3-a",
+    "name": "Codex2 受け箱と委任書の継続（10月11日9時まで）",
+    "status": "ACTIVE",
+    "toml_sha256": "65dfba70e19277c107ab6a661799ea7b9efa244cca309924a8ea0d260103141e",
+    "prompt_sha256": "23e8cb8008b20840871f18fd79cd6e775d753657cf2a1aa8196ea3940d350f2c",
+    "prompt_length": 142772,
+    "updated_this_check": false,
+    "unchanged_since_1435": true
+  },
+  "no_new_notification": true,
+  "queue_sha256": "46b2887053b1a7bf5f61ce6830dc44f2f5417289f864bf116de5880f6ac9272e",
+  "queue_cloud_start_updates_not_new_instruction": true,
+  "new_reported_candidate_completion_notified_once": false,
+  "candidate_completion_already_notified_at": "2026-10-09 14:33 JST",
+  "new_n36_related_cloud_run_publication_paths": [],
+  "all_five_input_sha256_unchanged_since_1500": false,
+  "new_notification": false,
+  "earlier_check_preserved": "control/attn_stage2_2026-10-07/instruction36_full_cloud_reply_check_20261009_1533.json",
+  "four_instruction_inputs_unchanged_since_1533": true
+}
