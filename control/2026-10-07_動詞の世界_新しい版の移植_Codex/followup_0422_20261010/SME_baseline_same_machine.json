@@ -1,0 +1,35 @@
+{
+  "baseline_case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off",
+  "baseline_spec_sha256": "8eb6c689a8c21749ed9b92353fbba930c68738c70ce249cc80d9d98eaf829f43",
+  "original_start": {
+    "at": "2026-10-09T21:12:06.973848+09:00",
+    "cpu_limit": 8,
+    "outside_heavy": 3,
+    "model_process_count": 3,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "physical_memory_bytes": 34359738368,
+    "swap": "vm.swapusage: total = 1024.00M  used = 180.88M  free = 843.12M  (encrypted)\n",
+    "swap_samples": [
+      "1791547315\t180.88\t2026-10-09T21:01:55\tok\tNone",
+      "1791547375\t180.88\t2026-10-09T21:02:55\tok\tNone",
+      "1791547435\t180.88\t2026-10-09T21:03:55\tok\tNone",
+      "1791547495\t180.88\t2026-10-09T21:04:55\tok\tNone",
+      "1791547555\t180.88\t2026-10-09T21:05:55\tok\tNone",
+      "1791547615\t180.88\t2026-10-09T21:06:55\tok\tNone",
+      "1791547675\t180.88\t2026-10-09T21:07:55\tok\tNone",
+      "1791547735\t180.88\t2026-10-09T21:08:55\tok\tNone",
+      "1791547795\t180.88\t2026-10-09T21:09:55\tok\tNone",
+      "1791547855\t180.88\t2026-10-09T21:10:55\tok\tNone",
+      "1791547915\t180.88\t2026-10-09T21:11:55\tok\tNone"
+    ],
+    "free_disk_bytes": 30796165120
+  },
+  "original_pid": {
+    "pid": 517,
+    "pgid": 517
+  },
+  "original_own_ps": "  517   495    432 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  519   517  18096 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  533   519   7344 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n  534   519 2158400 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+  "original_result": null,
+  "machine_boot_sha256": "6987aa195ec260913d211d8f82daa9f4d8d221f8f903e5d7aeb31b259362de2d",
+  "basis": "指示27が指定したこのMacの既存case、元開始記録・原PIDの自群確認。旧開始にはboot欄がないため後から作らない。"
+}
