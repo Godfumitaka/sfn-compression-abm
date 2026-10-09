@@ -1,0 +1,67 @@
+{
+  "user_authorized_cases": [
+    "instruction20_production/22_seed001_retry20",
+    "instruction20_production/22_seed002_retry20"
+  ],
+  "first_review_rejection_reason": "100ごとのcheckpointをサイズだけで消す危険",
+  "safer_scope": "全checkpointのstate/rng/cache/confirmed/M1を大きさによらず保護。100ごとのtiming100・manifest・ログも全て保護。候補は同じ二本の10MB超のraw jsonl/gz記録だけ。",
+  "preservation_verified_sha256": "db59452b9fbdf7b045e01b05eee40672a32f7e911191bf9b3f22056cef8802e9",
+  "preserved_files": 164,
+  "preserved_bytes": 141667576,
+  "all_copy_sha256_match": true,
+  "timing100_files": [
+    {
+      "seed": 1,
+      "bytes": 9752,
+      "rows": 34,
+      "last_completed_trials": 3400,
+      "sha256": "fb6c5be2b6b479787b382b3c196e7fbbe480861d14be750abbf04319f65e64b1"
+    },
+    {
+      "seed": 2,
+      "bytes": 9776,
+      "rows": 34,
+      "last_completed_trials": 3400,
+      "sha256": "efeaec11f6bc2d7f6a7f36ffbacbedf196d0c06a77fd74c80f92350acc3ee17b"
+    }
+  ],
+  "checkpoint_writer_source": "newport_2026-10-07/instruction20_production/tools/checkpoint_observer.py",
+  "checkpoint_writer_sha256": "08ae0a3d15bc27d5414b69fd1e7d86bcf3e1ca90d0980e1ace7addd4deadaee6",
+  "checkpoint_writer_excerpt": [
+    "                          stage2_enabled=stage2_enabled)",
+    "        n=t+1",
+    "        if n%500==0:",
+    "            assert boundary[\"trial\"]==t",
+    "            flush_records(ledger)",
+    "            folder=dest/f\"completed_{n:04d}\";folder.mkdir()",
+    "            proofs=[]",
+    "            for rel in sorted(names(out)):",
+    "                target=folder/\"records\"/rel",
+    "                # 証拠の名前は原名、内容はgzip容器を除いた確定内容。",
+    "                proof=copy_confirmed(out/rel,target)",
+    "                proofs.append(dict(path=str(rel),**proof))",
+    "            save(folder/\"state.json\",dict(agent_id=boundary[\"agent_id\"],trial=t,",
+    "                 state=encoded(boundary[\"state\"]),attention=encoded(individuals()),",
+    "                 questions=encoded({a:q.record() for a,q in stage2.ST.get(\"questions\",{}).items()})))",
+    "            save(folder/\"rng.json\",dict(last_prediction_rng=boundary[\"last_prediction_rng\"],",
+    "                 sme=encoded(smeshared.ENGINE.rng.getstate()),cstar=encoded(cstar.ENGINE.rng.getstate())))",
+    "            raw=cache_rows(cstar.ENGINE,audit[\"origins\"])",
+    "            save(folder/\"cache_raw.json\",raw)",
+    "            save(folder/\"cache_posthoc_p10.json\",posthoc_prune(raw,t))",
+    "            save(folder/\"cache_sme.json\",cache_rows(smeshared.ENGINE,audit[\"origins\"]))",
+    "            guard=getattr(cstar.ENGINE,\"cache_prune_guard\",None)",
+    "            proof=dict(completed_trials=n,last_trial=t,configured_trial_count=5000,horizon=5000,",
+    "                records=proofs,forbidden_reads=audit[\"forbidden_reads\"],",
+    "                guard_forbidden_reads=None if guard is None else guard.forbidden_reads,",
+    "                requests=audit[\"requests\"],probe_save_calls=audit[\"probe_saves\"],",
+    "                probe_restore_calls=audit[\"probe_restores\"],confirmed=True)",
+    "            save(folder/\"confirmed.json\",proof)",
+    "        return result",
+    "    loop._agent_input,loop.predict,loop._ledger_record=agent_input,predict,record",
+    "    cstar.ENGINE.match_key=match_key"
+  ],
+  "timing100_writer_source": "newport_2026-10-07/instruction20_production/tools/timing100_observer.py",
+  "timing100_writer_sha256": "635916dbde8cca3dc2ac085e53cdf385a1fd1a18d77b5561633e382e481c866a",
+  "pending_large_files": 106,
+  "pending_large_bytes": 196926188964
+}
