@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-09T14:01:01.014995+09:00",
+  "machine_check_at": "2026-10-09T14:00:17.061812+09:00",
+  "report_commit_checked": "332de123b1dc7ec276f91f682b568d0c2ed65bea",
+  "evidence_kind": "指定受け箱と指定クラウド報告の読み取り。クラウドの実ps確認ではない",
+  "sources": [
+    {
+      "path": "control/受け箱/デスクトップの走行の係.md",
+      "sha256": "cfd8a01f53422bc1f1af7c2839efd9a72c87496701435d0a2d26c7a4ab77b9e7",
+      "n36_start_reply_unchanged": true,
+      "n36_start_reply": "- 走行の係から（2026-10-09 09:26）：受けた。全長の関門の二本（世界 2・種 1・1a・全 1,740 試行）を、第 1 波の m7a.8xlarge（i-0edf5697853141268）で 00:25:50 UTC ごろに始めた。\n  - 参考：c57467eab13ee9ef84277059024ab892756fd2f8（作業場所 jsonloge9）、候補：8ed8cf2b2920787e55b6f5134300fc350dffe5e7（stage2memo、束で送り --help 通った）。どちらも HEAD ときれいな作業木を始める前に確かめた。\n  - 命令：依頼の reference/candidate の portable_argv の三つの場所だけを割り当てた（引数 97・103、候補は末尾に --stage2-speed on --stage2-cache-prune on --stage2-memo on だけ）。--v39-price・--e-price・--shop-world 2・--seeds 1・--trial-count 1740 を確かめた。\n  - 設定は configuration_utf8 の原の UTF-8 バイト（sha256 4a8125226ed8…、報告の instruction36_full_cloud_w2_seed001_config.json と全バイト同じ）。観測は両方とも observe_ordered_cloud.py（sha256 a213f2b52d79…）、SME_EXACT_SOURCE は各固定の作業場所。PYTHONHASHSEED=0、LANG・LC_* を外す、setsid、/usr/bin/time -v。\n  - 既存の参考本は使っていない（順つきの観測が無いため、新しい非本番の比較本として走らせた）。走っている第 1 波は止めていない。\n  - 終わったら、依頼の基準（compare_records.tree・reference_observation.convert・tie_state と saved_matcher の比べ、候補の guard）で比べて、ここと報告に書く。\n",
+      "other_role_instruction40_not_new_codex2_instruction": true,
+      "same_file_sha256_as_1332": false,
+      "other_role_instruction41_not_new_codex2_instruction": true
+    },
+    {
+      "path": "control/2026-10-08_クラウドの開始_走行の係.md",
+      "sha256": "265b2aa2c14cd0b324fdf6ede0915169925f215fbdb99a454247e2c3139133a9",
+      "latest_report_excerpt": "## 10/09 10:30〜10:45 の記録（指示 38、アストラの承認の後）\n- アストラが直接「指示 38 の compare.py の直しを認める」と書いたので、compare.py の 82 行を直した（'trial' → 'prediction_order'、sha256 51989c3d… → 115cb4566fd6aa12dd389a1dc07e0d68b1e201806433f45b70db48235d502ce8）。SHA256SUMS も直した。\n- 比べ直し：OFF2 の二本の保存済みの出力（D: の tar.gz、sha256 を確かめた）を第 1 波の機械に元と同じ場所で戻し、新しい根（証拠の写しと空の gates）で、直した compare.py の off2 を走らせた。passed（検査 38、必須のメタデータ 2、誤りの例 3 つが拒まれた）。保存済みの不合格の gate・STOP.json は上書きしていない。gate：ataru-0608/cloud_runs/coll_gate_coll8_c4_20261009/recompare_off2_fixed/gate-off2.json（sha256 f7dda6e9…）。\n- off8 から先：後の段は前の関門の host が今の機械と同じことを求めるので、新しいオンデマンドの c7a.8xlarge i-0b585df16ce1a4c42（10:38）で、包みを最初から走らせ始めた。\n  - 最初の試み（/mnt/coll_gate_20261009_3）は、準備検査 check_package.py の合成の台帳の行が 'trial' だったため、直した compare.py で止まった（模型は始まっていない）。アストラに尋ねて認められたので、34 行を prediction_order=t に直し、SHA256SUMS も直した（ea323cb1…）。\n  - /mnt/coll_gate_20261009_4 で始め直した：準備検査と小例は通り、OFF2 の baseline を 04:43 UTC に始めた。台本は ataru-0608/cloud/coll/coll_phase1_v4.sh。\n- 費用の見込み（10:45）：累計約 $53.4。今は三台（動詞、第 1 波、集団化）、およそ $5.1／時間。\n",
+      "same_file_sha256_as_1332": false,
+      "n36_latest_report_excerpt": "## 10/09 10:23 の記録\n- 旗あり・旗なしの組（指示 39 の 2）：両方そろった組は 2 つで、どちらも norm_hash が一致（違うファイル 0）。\n  | 旗あり | 旗なし | ファイル数 | 違うファイル |\n  |---|---|---:|---:|\n  | wave1_4a_w1_s2（4ceadf63） | wave1_4a_w1_s2_e9（e9ed84a） | 19・19 | 0 |\n  | wave1_4a_w1_s1_c792（c7921598） | wave1_4a_w1_s1_c574（c57467ea） | 19・19 | 0 |\n- 4ceadf63 の 6a の世界 2・種 2 も止まった（00:47 UTC、同じ落ち方）。e9ed84a の 6a の 4 本は走っている。\n- 全長の関門：参考 試行 124、候補 試行 736。動詞：speed200_on が 200 試行を終えた（result.json）。speed200_off は走っている。\n- 費用の見込み（10:25）：累計約 $52.1。今は二台、およそ $3.5／時間。\n",
+      "latest_added_section_is_other_role_collection_report": true
+    }
+  ],
+  "full_length_request_sha256": "51e0c7685bd3330fd2ddfdcce31dc6d3a75e12169f9af6331f0e950143539159",
+  "new_instruction_headings": [],
+  "inbox_received_once_through": 36,
+  "instruction36_done": false,
+  "full_length_gate_verified": false,
+  "cloud_actual_ps_not_read": true,
+  "cloud_full_length_progress_reported_only": {
+    "report_label": "10/09 10:23",
+    "reference_trial": 124,
+    "candidate_trial": 736,
+    "raw_native_completion_measurement_gate_not_delivered": true
+  },
+  "previously_reported_other_role_failure": {
+    "case": "4ceadf63 第1波6a 世界2 種2",
+    "reported_stop_utc": "2026-10-09T00:47:00Z",
+    "description": "同じ落ち方との報告。こちらで原traceback・原因を確認していない。",
+    "notify_once_this_check": false,
+    "not_a_new_instruction": true,
+    "already_reported_at": "2026-10-09T10:32:49.248957+09:00",
+    "no_new_failure_report": true
+  },
+  "new_cloud_requests": 0,
+  "new_models": 0,
+  "new_comparisons": 0,
+  "model_receipt_observer_signals": 0,
+  "completed_gates_not_rerun": true,
+  "deadline_jst": "2026-10-11 09:00 JST",
+  "automation": {
+    "at": "2026-10-09T13:59:59.428367+09:00",
+    "status": "ACTIVE",
+    "name": "Codex2 受け箱と委任書の継続（10月11日9時まで）",
+    "toml_sha256": "441471f9c5a024877bef2939094e7a32f78f2e89355a301812cbaa1e4cc1e26c",
+    "prompt_sha256": "2e1166d7467aa29f5404ccb4c7984634f16ad90f4b57ebc2771a24ee6dc31633",
+    "unchanged_since_1034": true,
+    "updated_this_check": false
+  },
+  "no_new_notification": true,
+  "queue_sha256": "46b2887053b1a7bf5f61ce6830dc44f2f5417289f864bf116de5880f6ac9272e",
+  "queue_cloud_start_updates_not_new_instruction": true
+}
