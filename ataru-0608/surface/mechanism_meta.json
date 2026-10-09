@@ -1,8 +1,8 @@
 {
- "作った時刻": "2026-10-10T04:59:24",
- "本数": 409,
- "今回読み直した本": 2,
- "時間_秒": 18.6,
+ "作った時刻": "2026-10-10T05:30:42",
+ "本数": 410,
+ "今回読み直した本": 1,
+ "時間_秒": 17.7,
  "表": [
   "mechanism_A_L50.csv",
   "mechanism_A_zero.csv",
@@ -27,6 +27,6 @@
   "mechanism_注意を外す_L50.csv",
   "mechanism_第二段をCに_L50.csv"
  ],
- "成績を保留した本（仕組みの表だけ出す）": 249,
+ "成績を保留した本（仕組みの表だけ出す）": 250,
  "数え方": "（新しい版 e9ed84a の出力の形。control/2026-10-08_合わせた版の記憶が空になる診断_Codex2.md と同じ欄）：\n  M1 定義の数：side の jsonl の kind=v39 の defs（その試行の学習・忘却の後）。100 試行ごとの区間の最後の試行の値\n     （試行番号は 0 始まり。区間 1 の最後は試行 99）。0 始まりの試行番号 200 以降（201 番目の試行から終わりまで）で\n     defs が 1 以下の試行の割合。\n  M2 Δr：第二段の本流 stage2/<セル>/seedNNN.jsonl.gz の、開示の試行（f_fired が真、reason=evaluated）の rows の各席の delta\n     （照合し直した Δr）が 0・負・正の数と割合。分母は測った全席（scope=all の rows）。測る席が無い開示の試行は別に数える（0 に混ぜない）。\n     別の欄に、実際に値に積まれた席（その行の applied に並ぶ (R, 席)）の数と、その中の 0・負・正の割合\n     （rows には、会計の後に世代や状態が変わって積まれなかった席もあるため）。\n  M3 誕生・退役：誕生＝side の jsonl の kind=birth の行の数（同化 kind=assim は別の欄）。退役＝定義が消えた件＝台帳の各試行の\n     deletion_event の kind=definition_removed の数（理由ごとの内訳も出す）。確かめ：kind=v39 の retire の数と同じか、\n     誕生−退役＝最後の試行の defs か。\n  M4 同じ試行で同じ定義の二つ以上の席が薄くなった件数：kind=v39 の conv（実行された F→H・H→U、[種類, R, 席, V, 解放量, 理由, 同点数]）を\n     (試行, R) でまとめ、違う席が二つ以上ある組の数（と、その組の席の数）。忘却の実行を止めた較正の本（flag.json の\n     no_forget_exec）では変換を実行しないので、m4_note に「作りから 0」と書き、本番の「0 件」と区別する。\n  M5 実時間・最大常駐：実時間は manifest.jsonl の elapsed_sec。最大常駐は、/usr/bin/time -v の記録（configs.json の time_log、\n     Maximum resident set size）があればそれ、無ければ manifest.jsonl の peak_rss_mb（tools/v3_run.py が Linux の ru_maxrss〈KiB〉を\n     1e6 で割った値。×1e6 KiB に直して GiB で出す。0.1 刻みなので約 0.1GB の粗さ）。\n  M6 第二段の価値（V）が正の席の割合：researcher/<セル>/seedNNN.calibration.jsonl.gz（忘却の実行を止めた較正の本だけにある）の\n     candidates の V（reference が偽の席＝本番の候補関数の値）の符号。本番の本にはこの記録が無いので NA のまま（新しい旗は付けない。\n     M2 の Δr や出生の初期値で代えない。受け箱の指示 12 の A、台帳 D-07ψ）。\n     代わりに「参照：較正の 16 本の V の正・0・負の割合（忘却を実行しない条件）」の欄（m6_ref_calib16_*）を並べる。値は注意の係の\n     較正の集計から configs.json の m6_reference に写す（写すまでは空欄と「注意の係の集計待ち」の印）。"
 }
