@@ -1,0 +1,217 @@
+diff --git a/tests/test_verb_snapshot_append_only.py b/tests/test_verb_snapshot_append_only.py
+index 5af8278..23360ec 100644
+--- a/tests/test_verb_snapshot_append_only.py
++++ b/tests/test_verb_snapshot_append_only.py
+@@ -1,4 +1,4 @@
+-"""指示17の構造検査。世界・学習模型を起動しない。"""
++"""指示20の繰り返し復元の構造検査。世界・学習模型を起動しない。"""
+ import ast
+ from pathlib import Path
+ import sys
+@@ -8,7 +8,7 @@ import pytest
+ 
+ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+ import probeworld as pw
+-from verb_snapshot import AppendOnlyDict, AppendOnlyMark, AppendOnlyViolation, install
++from verb_snapshot import AppendOnlyDict, AppendOnlyMark, AppendOnlyViolation, append_trial, install
+ 
+ 
+ @pytest.fixture
+@@ -102,7 +102,7 @@ def test_ids_change_or_delete_stops(world, action):
+     pw._restore_modules(snap)
+ 
+ 
+-def test_nested_windows_restore_last_added_items_in_order(world):
++def test_nested_snapshots_preserve_length_and_order_without_stack(world):
+     w, _ = world
+     install(w)
+     outer = pw._snapshot_modules()
+@@ -115,17 +115,60 @@ def test_nested_windows_restore_last_added_items_in_order(world):
+     assert list(w.INFO) == ["a", "b"]
+     pw._restore_modules(outer)
+     assert list(w.INFO) == ["a"]
+-    w.INFO["a"]["name"] = "outside"
+-    assert w.INFO["a"]["name"] == "outside"
++    pw._restore_modules(outer)
++    assert list(w.INFO) == ["a"]
+ 
+ 
+-def test_out_of_order_restore_stops():
++def test_same_snapshot_can_be_restored_twice_and_three_times():
+     d = AppendOnlyDict({"a": "name"})
+-    a, b = d.snapshot(), d.snapshot()
+-    with pytest.raises(AppendOnlyViolation):
+-        d.restore(a)
+-    d.restore(b)
+-    d.restore(a)
++    saved = d.snapshot()
++    for i in range(3):
++        d[f"new{i}"] = "link"
++        d.restore(saved)
++        assert list(d.items()) == [("a", "name")]
++    d.restore(saved)
++    assert not hasattr(d, "_marks")
++
++
++def test_restore_stops_if_dictionary_is_shorter_than_snapshot():
++    d = AppendOnlyDict({"a": "name", "b": "link"})
++    saved = d.snapshot()
++    # 想定外の外部変更を模す。通常の削除入口の禁止は別の検査で確認する。
++    dict.popitem(d)
++    with pytest.raises(AppendOnlyViolation, match="短い"):
++        d.restore(saved)
++    assert list(d.items()) == [("a", "name")]
++
++
++def test_snapshot_owner_cannot_be_substituted():
++    first, second = AppendOnlyDict(), AppendOnlyDict()
++    with pytest.raises(AppendOnlyViolation, match="所有者"):
++        second.restore(first.snapshot())
++
++
++def test_attnsme_style_restore_after_each_candidate_and_finally(world):
++    w, _ = world
++    install(w)
++    saved = pw._snapshot_modules()
++    for i in range(3):
++        append_trial(w.INFO, w.IDS, f"g{i}", {"name_id": f"n{i}", "link_id": f"l{i}"})
++        pw._restore_modules(saved)
++    pw._restore_modules(saved)
++    assert list(w.INFO.items()) == [("a", {"past": True, "name": "V01"})]
++    assert list(w.IDS.items()) == [("n", "name")]
++
++
++@pytest.mark.parametrize("conflict", ["graph", "name", "link"])
++def test_verb_trial_write_guard_stops_before_any_partial_append(conflict):
++    info = {"name_id": "new-name", "link_id": "new-link"}
++    a = AppendOnlyDict({"old": {"name": "V01"}}, info=True)
++    b = AppendOnlyDict({"old-name": "name", "old-link": "link"})
++    graph = "new"
++    if conflict == "graph": graph = "old"
++    else: info[conflict + "_id"] = "old-" + conflict
++    with pytest.raises(AppendOnlyViolation, match="verb_trial"):
++        append_trial(a, b, graph, info)
++    assert list(a) == ["old"] and list(b) == ["old-name", "old-link"]
+ 
+ 
+ def test_mutable_info_child_is_not_silently_allowed():
+diff --git a/tools/verb_snapshot.py b/tools/verb_snapshot.py
+index 5e2b714..d5a3869 100644
+--- a/tools/verb_snapshot.py
++++ b/tools/verb_snapshot.py
+@@ -1,4 +1,4 @@
+-"""指示17：INFO・IDSだけの追加専用の控え。模型の状態と乱数は扱わない。"""
++"""指示20：INFO・IDSの長さだけ控え、同じ控えを繰り返し戻す。"""
+ from dataclasses import dataclass
+ 
+ 
+@@ -14,14 +14,13 @@ def _scalar(value):
+ 
+ 
+ class _InfoEntry(dict):
+-    """INFOの既存値の中身も、窓の中では書き換えられない。"""
++    """verb_trialが一度記したINFOの値を、後から書き換えない。"""
+     def __init__(self, owner, values):
+         self._owner = owner
+         super().__init__((key, _scalar(value)) for key, value in values.items())
+ 
+     def _guard(self):
+-        if self._owner._marks:
+-            raise AppendOnlyViolation("控えの窓でINFOの既存値を書き換えた")
++        raise AppendOnlyViolation("INFOの既存値を書き換えた")
+ 
+     def __setitem__(self, key, value):
+         self._guard()
+@@ -65,22 +64,20 @@ class AppendOnlyMark:
+ 
+ 
+ class AppendOnlyDict(dict):
+-    """写しを作らず、通常の辞書操作を入口で監視し長さだけを控える。"""
++    """既存項目の変更を入口で止め、控えには所有者と長さだけ持つ。"""
+     def __init__(self, values=(), *, info=False):
+-        self._marks = []
+         self._info = info
+         super().__init__()
+         self.update(values)
+ 
+     def __setitem__(self, key, value):
+-        if self._marks and key in self:
+-            raise AppendOnlyViolation("控えの窓でINFO・IDSの既存キーを書き換えた")
++        if key in self:
++            raise AppendOnlyViolation("INFO・IDSの既存キーを書き換えた")
+         value = _InfoEntry(self, value) if self._info else _scalar(value)
+         super().__setitem__(key, value)
+ 
+     def _guard_delete(self):
+-        if self._marks:
+-            raise AppendOnlyViolation("控えの窓でINFO・IDSのキーを消した")
++        raise AppendOnlyViolation("INFO・IDSのキーを消した")
+ 
+     def __delitem__(self, key):
+         self._guard_delete()
+@@ -100,8 +97,8 @@ class AppendOnlyDict(dict):
+ 
+     def update(self, *args, **kwargs):
+         values = dict(*args, **kwargs)
+-        if self._marks and any(key in self for key in values):
+-            raise AppendOnlyViolation("控えの窓でINFO・IDSの既存キーを書き換えた")
++        if any(key in self for key in values):
++            raise AppendOnlyViolation("INFO・IDSの既存キーを書き換えた")
+         for key, value in values.items():
+             self[key] = value
+ 
+@@ -115,19 +112,26 @@ class AppendOnlyDict(dict):
+         return self
+ 
+     def snapshot(self):
+-        mark = AppendOnlyMark(self, len(self))
+-        self._marks.append(mark)
+-        return mark
++        return AppendOnlyMark(self, len(self))
+ 
+     def restore(self, mark):
+-        if mark.owner is not self or not self._marks or self._marks[-1] is not mark:
+-            raise AppendOnlyViolation("INFO・IDSの控えの戻し順が不一致")
++        if mark.owner is not self:
++            raise AppendOnlyViolation("INFO・IDSの控えの所有者が不一致")
+         if len(self) < mark.length:
+             raise AppendOnlyViolation("INFO・IDSが控えの長さより短い")
+-        # この入口だけが、窓の後で足された末尾を戻せる。既存の順と値は触らない。
++        # 印を消費しない。同じ控えへ二度・三度戻しても、既存の順と値は触らない。
+         while len(self) > mark.length:
+             dict.popitem(self)
+-        self._marks.pop()
++
++
++def append_trial(info_table, ids_table, graph_id, info):
++    """唯一の書き込み入口verb_trialで、三つのキーを変更前に確認する。"""
++    keys = (info["name_id"], info["link_id"])
++    if graph_id in info_table or any(key in ids_table for key in keys) or keys[0] == keys[1]:
++        raise AppendOnlyViolation("verb_trialでINFO・IDSの既存キーを上書きする")
++    info_table[graph_id] = info
++    ids_table[keys[0]] = "name"
++    ids_table[keys[1]] = "link"
+ 
+ 
+ def install(world):
+diff --git a/tools/verbworld.py b/tools/verbworld.py
+index 267a934..a43fce6 100644
+--- a/tools/verbworld.py
++++ b/tools/verbworld.py
+@@ -126,9 +126,13 @@ def verb_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
+         import shopworld
+         tr = shopworld.rehide(tr, run_seed, trial_index, CFG["door_p"])
+     out, info = build(tr, run_seed, trial_index, verb=draw_verb(run_seed, trial_index))
+-    INFO[out.G_star.graph_id] = info
+-    IDS[info["name_id"]] = "name"
+-    IDS[info["link_id"]] = "link"
++    from verb_snapshot import AppendOnlyDict, append_trial
++    if isinstance(INFO, AppendOnlyDict) or isinstance(IDS, AppendOnlyDict):
++        append_trial(INFO, IDS, out.G_star.graph_id, info)
++    else:
++        INFO[out.G_star.graph_id] = info
++        IDS[info["name_id"]] = "name"
++        IDS[info["link_id"]] = "link"
+     STATS["trials"] = STATS.get("trials", 0) + 1
+     STATS["held_out_is_past"] = STATS.get("held_out_is_past", 0) + int(info["held_out_is_past"])
+     return out

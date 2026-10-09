@@ -1,0 +1,43 @@
+{
+  "instruction": 20,
+  "source_commit": "10ee072a219f0bc355755e3643ea348998b7cd69",
+  "receipt": {
+    "at": "2026-10-09T19:11:56+09:00",
+    "first": "2baeafbb1c51b90c06bd2c82d229c560a5c297c5",
+    "confirmation": "cf738a9b2170be8d6537557b96aebefad0ec21be",
+    "branch": "results-2026-09-27"
+  },
+  "prepared_model_starts": 0,
+  "completed_trials": 100,
+  "configured_trial_count": 5000,
+  "horizon": 5000,
+  "full_5000_completed": false,
+  "observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+  "reference_production_spec_sha256": "4560007d7b9df91c9368688d8dfea2e6435904a4483d5586314fbf61fa448ba8",
+  "original_no_probe100_unchanged": true,
+  "labels": [
+    "probe100_off",
+    "probe100_on"
+  ],
+  "io_sha256": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+  "prior_pair_failed_preserved": true,
+  "prior_off_reused": false,
+  "prior_off_not_reused_reason": "稼働中offの7b25と新しい10eeの版が異なるため、同じ版の二本を別出力へ作る。稼働中offは最後まで保つ。",
+  "snapshot_version": {
+    "instruction": 20,
+    "source_commit": "10ee072a219f0bc355755e3643ea348998b7cd69",
+    "tree": "8078640c0c9de4e486a50b1044d2e7ff5ac5de05",
+    "base": "7b25d4532bba139ee57a8ce9e72c0352d15cf3ce",
+    "bundle_base": "7b25d4532bba139ee57a8ce9e72c0352d15cf3ce",
+    "bundle_bytes": 2500,
+    "bundle_sha256": "317c253abd19a19ce31b2b7bf270f4af14879bde21440ac6a67d9b8e5c7b7b27",
+    "restored_head_tree_clean": true,
+    "structural_tests_passed": 32,
+    "model_starts_in_tests": 0,
+    "observer_boundary_tests_passed": 5,
+    "new_code_branch_pushed": false,
+    "root_base": "e9ed84ae3ee6c458f392cd58cadf9fc030639900",
+    "bundle_prerequisite": "既存の指示17のverb_snapshot.bundleを土台e9へ取り込んだ7b25",
+    "public_bundle_excludes_prior_personal_commit_metadata": true
+  }
+}
