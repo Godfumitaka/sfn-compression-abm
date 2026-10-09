@@ -1,0 +1,120 @@
+{
+  "at": "2026-10-09T15:25:19.334503+09:00",
+  "instruction": 16,
+  "receipt_push": "1361f3916e7ee44c58f1f3228a6edec415f610b9",
+  "receipt_confirmation": "c482885222f3b8208f86ab3183df6f0222d3a471",
+  "state": "latest_complete_validator_already_distinguishes_question_count_from_answer_rows",
+  "source_read_commit": "977dcffea04c2f23c5472eab5bf760362e9fd25a",
+  "cloud_actual_source_commit_verified": false,
+  "configured_trial_count": 5000,
+  "horizon": 5000,
+  "completed_trials_expected": 200,
+  "fixed_questions": 48,
+  "expected_probe_times": [
+    100,
+    200
+  ],
+  "expected_answer_rows": 96,
+  "expected_fingerprint_checks": 2,
+  "expected_attention_restore_checks": 2,
+  "derivation": [
+    "speed200/measurement_driver.py: PrefixTrialsの反復だけを200にし、lenは原5000。正常終了は200行の追記後。",
+    "abm/loop.py: apply_thetaはledger.appendより前。試行199のapply_thetaも呼ぶ。",
+    "tools/probeworld.py: trial+1が100の倍数かつhorizon未満なら_probe。100と200はどちらも5000未満。",
+    "closeのprobesは固定問題一覧の長さ。rowsは各回答を数え、checksは各時点の保存復元を数える。",
+    "現行completeはprobes48、rows96、fingerprint2、attention2と前後一致を別々に要求。",
+    "speed_gateはprobe96回答と100〜199の学習を含む全体を比較し、試験行を除外しない。"
+  ],
+  "source_files": [
+    {
+      "path": "instruction9_speed/source/tools/verb_measurement/speed200/measurement_driver.py",
+      "sha256": "235a580d6f43bfffb88bc332a8eb4dcba85b7971e1617ee364570fb41435816d"
+    },
+    {
+      "path": "instruction9_speed/source/abm/loop.py",
+      "sha256": "51b369349c165c4822662b2fc97f26be319bfa1941701396969edeaf8ccbb08f"
+    },
+    {
+      "path": "instruction9_speed/source/tools/probeworld.py",
+      "sha256": "c52637b14c295bf359e7e0d026b240a7555ee19391c966dc737c6eca6ca85d91"
+    }
+  ],
+  "earlier_validator_sha256": "d6d7eff07449be8893b009dc1c3e90faf73f63e03a725f6c3fa322ae985ba99b",
+  "earlier_validator_problem": "旧412のprobes==48*(limit//100)は固定問題の数と累積回答の数を混同。実際にクラウドが旧版を使用したかは原SHA未確認。",
+  "validation_or_comparison_conditions_reduced": false,
+  "original_run_sources_and_observers_unchanged": true,
+  "comparator_changed": false,
+  "read_tool_copies_verified": [
+    {
+      "path": "read_tools/cloud_run.py",
+      "sha256": "d22265e6c4ca1ab29983b4468b9aebecd13b527ff82a47411a3e6526da95611d",
+      "bytes": 12745,
+      "origin": "instruction9_speed/source/tools/verb_measurement/cloud_run.py"
+    },
+    {
+      "path": "read_tools/cloud_compare.py",
+      "sha256": "f19c3ebede9f306f63792438bb9ecd0dfb23353e3a42150daa8af58bab85e7f8",
+      "bytes": 4525,
+      "origin": "instruction9_speed/source/tools/verb_measurement/cloud_compare.py"
+    },
+    {
+      "path": "read_tools/speed_gate.py",
+      "sha256": "dbeaa0b51b14a062f14488b96c332eecb682f7c48ceb0f755ac793dcd8b2187f",
+      "bytes": 6769,
+      "origin": "instruction9_speed/source/tools/verb_measurement/speed_gate.py"
+    },
+    {
+      "path": "read_tools/instruction11_io.py",
+      "sha256": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+      "bytes": 7439,
+      "origin": "instruction9_speed/source/tools/verb_measurement/instruction11_io.py"
+    },
+    {
+      "path": "read_tools/model_count.py",
+      "sha256": "cdb2e4346f93bc481ddd0b49b38827bbefed699e32055fbf43248139b2df15a2",
+      "bytes": 2075,
+      "origin": "instruction9_speed/source/tools/verb_measurement/model_count.py"
+    },
+    {
+      "path": "read_tools/plan.json",
+      "sha256": "e93db7a7b4b4b05f53824385f78a66835bb14743c97be68afad6d4192e0ba511",
+      "bytes": 10737,
+      "origin": "instruction9_speed/source/tools/verb_measurement/plan.json"
+    },
+    {
+      "path": "read_tools/export_tables.py",
+      "sha256": "038747ef99b2c7ef12119ecce3932751012af9b0ba5ed41953991b44fdeca122",
+      "bytes": 4900,
+      "origin": "instruction9_speed/source/tools/verb_measurement/export_tables.py"
+    }
+  ],
+  "cloud_raw_records_verified": false,
+  "cloud_comparison_executed": false,
+  "cloud_comparison_passed": null,
+  "reported_times_only": {
+    "off_seconds": 31329,
+    "on_seconds": 25617,
+    "ratio": 1.2229769293828316
+  },
+  "measured_100_trial_intervals_verified": false,
+  "conditional_5000_estimate_updated": false,
+  "pending": [
+    "クラウドon100の指示15承認済み比較",
+    "通常speed200の原完了・全バイト比較・実発生数",
+    "較正200の原完了・全バイト比較・実発生数",
+    "原checkpointの100試行ごとの実測による見込み更新",
+    "正式な本番の列"
+  ],
+  "aws_login_human_answer_received": false,
+  "aws_login_attempted": false,
+  "expired_aws_access_retried": false,
+  "model_started": 0,
+  "comparison_started": 0,
+  "tests_rerun": 0,
+  "whole_mac_ps_recorded": false,
+  "gates_rerun": 0,
+  "production_started": false,
+  "measurement300_cancelled": true,
+  "P5_P7r_port_started": false,
+  "instruction16_complete": false
+}
