@@ -6,11 +6,13 @@
 import json, os, subprocess, time
 W=os.path.expanduser("~/cloud/wave1/"); K=os.path.expanduser("~/.ssh/sfn-runner.pem")
 cmds=json.load(open(W+"wave1_s42_commands.json"))
-machines={"m0":open(os.path.expanduser("~/cloud/wave1_machine")).read().split()[1]}
+machines={}   # 指示 47 の 3：m7a（m0）には新しい本を入れない（残る本が終わったら消す）
 for i in (1,2,3,4): machines[f"m{i}"]=open(W+f"machine_m{i}").read().split()[1]
 assigned={m:(json.load(open(W+f"s42_{m}.json")) if os.path.exists(W+f"s42_{m}.json") else []) for m in machines}
-started={c["name"] for a in assigned.values() for c in a}
-queue=[c for c in cmds if c["name"] not in started]
+# 始めた本は、m0（m7a）を含む全部の機械の一覧から数える（18:24 に m0 を machines から外したとき、m0 の本を数えず、m1 で一本を重ねて始めてしまった誤りの直し）
+allstarted={c["name"] for m in ("m0","m1","m2","m3","m4") if os.path.exists(W+f"s42_{m}.json") for c in json.load(open(W+f"s42_{m}.json"))}
+started=allstarted
+queue=[c for c in cmds if c["name"] not in started and not c["name"].startswith("wave1_3b_")]   # 指示 45：まだ始まっていない 3b はデスクトップで走らせる
 log=lambda s: open(W+"sched42.log","a").write(time.strftime("%F %T ")+s+"\n")
 PROBE=r'''python3 - <<"P"
 import os,json
@@ -48,4 +50,4 @@ while queue:
                 log(f"{m} で始めた {nxt['name']}（模型 {len(runs)+1} 本、見込みの合計 {(committed+nxt['mem_gb']*1e9)/1e9:.1f}GB / {budget/1e9:.1f}GB）")
             else: log(f"★ {m} で {nxt['name']} を始められなかった：{r.stdout[-200:]} {r.stderr[-200:]}")
     if queue: time.sleep(120)
-log("108 本を全部始めた")
+log("クラウドの分（3b の残りを除く）を全部始めた")

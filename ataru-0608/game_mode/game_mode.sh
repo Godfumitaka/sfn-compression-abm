@@ -3,7 +3,8 @@
 #   ~/game_mode.sh on      較正の本（~/calib_w1・~/calib_w2 の v3_run の模型の過程と、その子の過程）に SIGSTOP を送る
 #   ~/game_mode.sh off     同じ過程に SIGCONT を送る
 #   ~/game_mode.sh status  止まっている本の数を出す
-# 対象は、引数の二つ目が tools/v3_run.py で、出力先が ~/calib_w1/ か ~/calib_w2/ の過程と、その子孫だけ。
+# 対象は、引数の二つ目が tools/v3_run.py で、出力先が ~/calib_w1/・~/calib_w2/・/mnt/d/sfn_runs/cloud/ の過程、表層の解析の再生（selcands_sme・replay.py）と
+# 第 1 波の見え方の見張り（wave1_refresh_loop.sh）と、その子孫だけ（指示 50 で足した）。
 # AWS CLI・SSH・この係（Claude）の過程・表層の解析の見張りなど、ほかの過程には送らない。決まった番号にだけ送る（名前で探して送らない）。
 # 止めた時刻と再開した時刻は ~/v33prod/results/ataru-0608/game_mode/pause_log.tsv に追記する（較正の時間から止めていた時間を引けるように）。
 set -u
@@ -24,8 +25,19 @@ for p in os.listdir("/proc"):
         procs[p] = (a, ppid)
     except Exception:
         pass
-roots = [p for p, (a, _) in procs.items()
-         if len(a) > 3 and a[1] == b"tools/v3_run.py" and (b"/calib_w1/" in a[3] or b"/calib_w2/" in a[3])]
+def target(a):
+    # 較正の本（~/calib_w1・~/calib_w2）、第 1 波のデスクトップの本（出力先が /mnt/d/sfn_runs/cloud/、指示 45・47）、
+    # 表層の解析の再生（tools/selcands_sme.py・surface の replay.py）と、その見え方を足す見張り（wave1_refresh_loop.sh）。指示 50 で足した
+    if len(a) > 3 and a[1] == b"tools/v3_run.py" and (b"/calib_w1/" in a[3] or b"/calib_w2/" in a[3] or a[3].startswith(b"/mnt/d/sfn_runs/cloud/")):
+        return True
+    if len(a) > 1 and a[1] == b"tools/selcands_sme.py":
+        return True
+    if any(x.endswith(b"surface/replay.py") or x == b"replay.py" for x in a[:3]) and b"configs_wave1_replay.json" in b" ".join(a):
+        return True
+    if len(a) > 1 and a[0] == b"bash" and a[1].endswith(b"surface/wave1_refresh_loop.sh"):
+        return True
+    return False
+roots = [p for p, (a, _) in procs.items() if target(a)]
 out, todo = set(roots), list(roots)
 while todo:
     q = todo.pop()
