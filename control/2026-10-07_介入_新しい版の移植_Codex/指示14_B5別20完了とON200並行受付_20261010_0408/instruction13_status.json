@@ -1,0 +1,202 @@
+{
+  "instruction": 13,
+  "received_at_jst": "2026-10-10T02:06:06+09:00",
+  "receipt_pushed": true,
+  "completed": false,
+  "state": "B5_on200_before_running_after_admission_wait",
+  "old_candidate": "54f0a412201bc5c67efdfa6689fed07fa3250e31",
+  "start_deadline_jst": "2026-10-13T09:00:00+09:00",
+  "production_started": false,
+  "running_labels": [
+    "B5_on200_before"
+  ],
+  "receipt_commit": "fd538c4497b8672c3877dc6f8b56da63ecbaaea5",
+  "diagnostic_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_diagnostic_instruction13",
+  "diagnostic_commit": "d44a05af5fcb069eacbf47229097843329a3e5cf",
+  "diagnostic_branch": "codex/verb-d-probe-diagnostic-instruction13-2026-10-10",
+  "commands": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/commands_fixed_A.json",
+  "exec_sessions": {
+    "A_fixed_off100": 47129,
+    "diagnostic_q_attention_04_trace02": 77533,
+    "A_fixed_D_attention_04": 76816,
+    "A_fixed_D_attention_015": 70770
+  },
+  "diagnostic_outcomes": {
+    "diagnostic_q_attention_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "hand_tests_passed": 32,
+  "hand_gate": "instruction13/hand_gate_01.json",
+  "hand_admission_pid": 36521,
+  "source_candidate_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13",
+  "branch": "codex/verb-d-probe-fix-instruction13-2026-10-10",
+  "source_accepted": true,
+  "off_gate_passed": true,
+  "D200_gate_passed": true,
+  "source_pushed": true,
+  "trace_source_commit": "b014da7cc1a79609a89bb6bd786cdbf609bbf96b",
+  "off100_started_at_jst": "2026-10-10T02:15:38.950406+09:00",
+  "off100_wrapper_pid": 36631,
+  "off100_model_parent_pid": 36638,
+  "off100_admission_pid": "36624",
+  "next_action": "二本の保存状態と受付待ちを読む。模型・比較を重複起動しない。200両側の自然終了と必要記録を通常受付で確認後、既存compare_on200.pyで全出力・全控え・乱数を照合。デスクトップへのB5(b)依頼の回答を根拠として読む。B5(a/b)が実際に揃ってからB6へ。",
+  "trace_outcomes": {
+    "diagnostic_q_attention_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "diagnosis_confirmed": true,
+  "first_temporal_change": "ST.real False -> True in useforget.predict",
+  "progress_report_prepared_at_jst": "2026-10-10T02:20:37+09:00",
+  "progress_report_published": true,
+  "progress_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/指示13_試験D診断と構造32件_off100開始_20261010_0215",
+  "progress_report_commit": "b1bdeb5d9038a97a54945145036361227f679edb",
+  "progress_record_admission_pid": 36930,
+  "automation_updated": true,
+  "automation_verified_at_jst": "2026-10-10T02:25:36.664593+09:00",
+  "automation_verification": "instruction13/automation_progress_verified_01.json",
+  "automation_verification_report_pushed": true,
+  "automation_verification_report_commit": "b47081a53bf6aa1259c2884cb016f6bb5854eed0",
+  "off_comparison": "instruction13/A_off_comparison_01.json",
+  "off_comparison_admission_pid": 41910,
+  "off100_ended_at_jst": "2026-10-10T02:59:23.675908+09:00",
+  "A_completed": true,
+  "A_source_accepted": true,
+  "A_accepted_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+  "A_verification": "instruction13/completed_A_verification_01.json",
+  "production_A_argv": "instruction13/production_A_argv_01.json",
+  "accepted_scope": "動詞AのD・D＋注意の本体と試験抑止の構造関門。集団化Bは未着手。",
+  "completion_verification_admission_pid": 42191,
+  "A_report_prepared_at_jst": "2026-10-10T03:10:42+09:00",
+  "A_report_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/指示13_A全関門と本番argv_20261010_0308",
+  "A_report_pushed": true,
+  "A_report_commit": "bcc5860a9ac1cd191680984ae58f1b37b33bd486",
+  "B_started": true,
+  "B5_candidate_commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+  "B5_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5",
+  "B5_candidate_accepted": false,
+  "B5_hand_tests_passed": 4,
+  "B5_hand_admission_pid": 43249,
+  "B5_commands": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/commands_dependency01.json",
+  "B5_pilot_status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01/status.json",
+  "B5_wrapper_pid": 46817,
+  "B5_model_parent_pid": 46824,
+  "B5_exec_session": 85835,
+  "B5_admission_timing_valid": true,
+  "B7_computational_drafts": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B7_computational_drafts",
+  "B6_started": false,
+  "automation_B5_verified_at_jst": "2026-10-10T03:28:11.907959+09:00",
+  "automation_B5_verification": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/automation_B5_verified_02.json",
+  "B5_progress_report_prepared_at_jst": "2026-10-10T03:29:38+09:00",
+  "B5_progress_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/指示12_B5記録修正と計算論草稿_20261010_0330",
+  "B5_progress_report_pushed": true,
+  "B5_progress_report_commit": "cc74c681347c5b528436832b6d9dfe18e386891a",
+  "automation_B5_verification_report_pushed": true,
+  "automation_B5_verification_report_commit": "cc74c681347c5b528436832b6d9dfe18e386891a",
+  "B5_old_pilot_status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before/status.json",
+  "B5_old_pilot_complete": false,
+  "B5_pilot_failure_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/pilot20_failure_evidence_02.json",
+  "B5_old_pilot_native_rows": 20,
+  "B5_observer_dependency": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/observer_dependency_01.json",
+  "B5_admission_pid": 46813,
+  "B5_on200_started": true,
+  "B5_verify_case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/verify_case_dependency01.py",
+  "B5_cloud_gate_draft": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/cloud_gate_request_draft01",
+  "B5_cloud_gate_requested": true,
+  "automation_B5_dependency_verified_at_jst": "2026-10-10T03:45:16.233868+09:00",
+  "automation_B5_dependency_verification": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/automation_dependency01_verified.json",
+  "automation_B5_dependency_report_pushed": true,
+  "B5_dependency_report_prepared_at_jst": "2026-10-10T03:45:37+09:00",
+  "B5_dependency_report_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/report/control/2026-10-07_介入_新しい版の移植_Codex/指示12_B5観察器依存停止と別20開始_20261010_0340",
+  "B5_dependency_report_pushed": true,
+  "B5_dependency_report_commit": "9dec4c64d23c569e9feab486a478b16539a86ec2",
+  "automation_B5_dependency_report_commit": "9dec4c64d23c569e9feab486a478b16539a86ec2",
+  "queued_labels": [
+    "B5_on200_after"
+  ],
+  "B5_on200_submitted": true,
+  "B5_on200_commands": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/commands_dependency01.json",
+  "B5_pilot_verified": true,
+  "B5_pilot_verification": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01_verification_01.json",
+  "B5_pilot_completed_at_jst": "2026-10-10T03:54:21.820177+09:00",
+  "B5_on200_sessions": {
+    "B5_on200_before": 94535,
+    "B5_on200_after": 13073
+  },
+  "B5_on200_admission_pids": {
+    "B5_on200_before": 50885,
+    "B5_on200_after": 50927
+  },
+  "B5_on200_reservation_gb_each": 3,
+  "B5_cloud_gate_request_commit": "c0c3839536f8688a11062dceb9d5fbb1161c7332",
+  "B5_cloud_gate_request": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction14/cloud_gate_request_01",
+  "B5_cloud_gate_started": false
+}
