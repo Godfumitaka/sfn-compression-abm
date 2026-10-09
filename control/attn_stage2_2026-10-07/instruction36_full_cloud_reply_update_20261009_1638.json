@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-09T16:38:57.146039+09:00",
+  "report_commit_checked": "28febec6841616338e3754af181b021199da2be3",
+  "earlier_1634_check_preserved": true,
+  "cloud_report_path": "control/2026-10-08_クラウドの開始_走行の係.md",
+  "cloud_report_sha256": "fdb9c19e97cf61ac71153c080716d088dbc53e708f32d03c903051bf6e45f358",
+  "report_excerpt": "## 10/09 16:30 の記録（指示 43 は済み）\n### 指示 43：全長の関門の候補（8ed8cf2b、--stage2-memo on）と、第 1 波の 1a・世界 2・種 1（c7921598）の比べ\n- 候補の出力の norm_hash を、第 1 波と同じ道具（push_small.sh・norm_hash.py、gz は解凍、台帳の見出しの行と JSON の時間の欄を除く、flag・manifest・.done を除く）で作った。\n- 結果：**20 ファイルのうち 20 が一致、違うファイルは 0**（ataru-0608/cloud_runs/wave1_1a_w2_s1_c792/norm_hash.tsv と比べた）。\n- manifest：\n  | 欄 | wave1_1a_w2_s1_c792 | 候補（gate36） |\n  |---|---|---|\n  | world_hash | 68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1 | 68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1 |\n  | seed_file_sha256 | 02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1 | 02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1 |\n  | trial_count | 1740 | 1740 |\n  | code_commit | c79215980a913cc426a63f25048e0dfc6fd1f758 | 8ed8cf2b2920787e55b6f5134300fc350dffe5e7 |\n- 二本の命令の違い（設定ファイルの場所と出力先を除く）は --stage2-memo（on）だけ。\n- 候補の小さい記録（manifest・norm_hash・files_sha256・time.log・native_command・flag・.done）を ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/ に上げた。\n- 報告だけ。memo の旗を使うかは Claude とアストラが決める。参考（c57467ea）の本は走らせたまま（試行 716 の辺り）。\n### 費用\n- **100 ドルの知らせの線まで、あと約 $3.4（16:30、累計 約 $96.6、時間あたり 約 $10.1、20 分ほどで越える見込み）**。越えたら次の回に一行書く。止めていない。\n### 指示 42 の進み\n- 108 本のうち 45 本を始めた（5a の 36 本は全部、6a は種 7 まで）。残りは芯と記憶が空き次第、台本が順に始める。第 1 波の持ち帰り済みは 62 本。旗あり・旗なしの組は 6 組とも一致。\n",
+  "desktop_inbox_sha256": "9e66f1d5399f4e983d38d28ad4f12dec6bd8889c6b55dce8382907d7c392322b",
+  "own_inbox_sha256": "2686b0fbf21e4163f725709df2a55a753e4fe451b867313a38694c6365b3cd9e",
+  "new_own_instruction_headings": [],
+  "candidate_published_records": {
+    "manifest.jsonl": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/manifest.jsonl",
+      "git_blob": "1c2b407f233d74e2cef4a1d47f7419c4d94a1040",
+      "bytes": 15502,
+      "sha256": "acd64866fc14eca95a3d290011ac4efcd976b717f3814f8a18514a985b5ade27"
+    },
+    "native_command.json": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/native_command.json",
+      "git_blob": "8af801f5668e9615eecbaea835ed200895a9aece",
+      "bytes": 1615,
+      "sha256": "9d6af4a729ce8800923423ab1763aa2d2e0fe68fc125b9fd30756b4ab634c29d"
+    },
+    "seed001.done": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/seed001.done",
+      "git_blob": "fc9b94384ac4434bd3ce16987b714dab676dcac1",
+      "bytes": 585,
+      "sha256": "296a0aa69c636c587489ac6590d4e4dda5f8b4ca50a5dff9482f8511c12734d9"
+    },
+    "time.log": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/time.log",
+      "git_blob": "32acc5ac50eda788a048146136101d40e325ef2a",
+      "bytes": 841,
+      "sha256": "fbebd39a3cfc4317c46333232cb80cb7df23730de7b95d4e5dd4368b8bdf6d25"
+    },
+    "flag.json": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/flag.json",
+      "git_blob": "abfce79320304e7e201daf6e4ad9067662dca677",
+      "bytes": 1947,
+      "sha256": "f88bb3b4d29750d1e4dde2a0f2b432a7c582b2d26dfd6fee3fa9aca27abaa1e2"
+    },
+    "norm_hash.tsv": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/norm_hash.tsv",
+      "git_blob": "4c88504e3a830028e35766a0ed965e3d5b13cb72",
+      "bytes": 2402,
+      "sha256": "9606e31f9031a47b36cb63e5d9aff38bf44f571cc13a39289a2edd2c0849707b"
+    },
+    "files_sha256.tsv": {
+      "path": "ataru-0608/cloud_runs/gate36_full_candidate_1a_w2_s1/files_sha256.tsv",
+      "git_blob": "e5f547264819e5ef93a9723231faac9d75791247",
+      "bytes": 2715,
+      "sha256": "d9c6bf456b90034ecddd9366596bc3c945944ba3add2f5112ec5af721ab03d38"
+    }
+  },
+  "candidate_done_selected_fields": {
+    "world_hash": "68e0046275b8f6eb57d4d35e9132887f85646315254a7aa8c1dc6a822661a7b1",
+    "seed_file_sha256": "02befb5afe3e9090f5add420e0f2cb82e67f38a8115ed7cd910e30c561500fc1",
+    "trial_count": 1740,
+    "code_commit": "8ed8cf2b2920787e55b6f5134300fc350dffe5e7",
+    "finished_at": "2026-10-09T03:16:52Z"
+  },
+  "candidate_command_all_flags_values_order_match_request": true,
+  "candidate_command_only_python_config_output_locations_assigned": true,
+  "candidate_time_log_exit_status": 0,
+  "candidate_time_log_observed_process_scope": "python3.12 observe_ordered_cloud.py の外側の /usr/bin/time -v 記録。worker measurement と区別",
+  "candidate_worker_measurement_and_actual_ps_not_delivered": true,
+  "other_role_reported_normalized_comparison": {
+    "reference": "第1波 c79215980a913cc426a63f25048e0dfc6fd1f758 世界2種1の原記録",
+    "candidate": "8ed8cf2b2920787e55b6f5134300fc350dffe5e7 世界2種1",
+    "reported_matching_rows": 20,
+    "reported_different_rows": 0,
+    "candidate_norm_tsv_rows": 20,
+    "sha256_rows": 17,
+    "metadata_marker_rows": [
+      [
+        "flag.json",
+        "付帯"
+      ],
+      [
+        "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.done",
+        "付帯"
+      ],
+      [
+        "manifest.jsonl",
+        "付帯"
+      ]
+    ],
+    "model_original_comparison_not_rerun_by_codex2": true
+  },
+  "specified_c574_reference_progress_reported_only": 716,
+  "specified_c574_comparison_full_gate_not_delivered": true,
+  "independent_ordered_observation_strictpc_guard_gate_not_delivered": true,
+  "full_length_gate_verified": false,
+  "instruction36_done": false,
+  "memo_adoption_and_verb_port_not_started": true,
+  "new_cloud_request": 0,
+  "new_models": 0,
+  "new_comparisons": 0,
+  "model_receipt_observer_signals": 0,
+  "completed_gates_not_rerun": true,
+  "new_reported_result_notification_once": true,
+  "deadline_jst": "2026-10-11 09:00 JST"
+}
