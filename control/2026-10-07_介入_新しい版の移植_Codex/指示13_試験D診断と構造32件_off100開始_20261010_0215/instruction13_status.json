@@ -1,0 +1,118 @@
+{
+  "instruction": 13,
+  "received_at_jst": "2026-10-10T02:06:06+09:00",
+  "receipt_pushed": true,
+  "completed": false,
+  "state": "hand_gate_passed_off100_running",
+  "old_candidate": "54f0a412201bc5c67efdfa6689fed07fa3250e31",
+  "start_deadline_jst": "2026-10-13T09:00:00+09:00",
+  "production_started": false,
+  "running_labels": [
+    "A_fixed_off100"
+  ],
+  "receipt_commit": "fd538c4497b8672c3877dc6f8b56da63ecbaaea5",
+  "diagnostic_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_diagnostic_instruction13",
+  "diagnostic_commit": "d44a05af5fcb069eacbf47229097843329a3e5cf",
+  "diagnostic_branch": "codex/verb-d-probe-diagnostic-instruction13-2026-10-10",
+  "commands": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/commands_fixed_A.json",
+  "exec_sessions": {
+    "A_fixed_off100": 47129,
+    "diagnostic_q_attention_04_trace02": 77533
+  },
+  "diagnostic_outcomes": {
+    "diagnostic_q_attention_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04": {
+      "status": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/status.json",
+      "record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "exit_code": 3,
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "hand_tests_passed": 32,
+  "hand_gate": "instruction13/hand_gate_01.json",
+  "hand_admission_pid": 36521,
+  "source_candidate_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+  "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13",
+  "branch": "codex/verb-d-probe-fix-instruction13-2026-10-10",
+  "source_accepted": false,
+  "off_gate_passed": false,
+  "D200_gate_passed": false,
+  "source_pushed": true,
+  "trace_source_commit": "b014da7cc1a79609a89bb6bd786cdbf609bbf96b",
+  "off100_started_at_jst": "2026-10-10T02:15:38.950406+09:00",
+  "off100_wrapper_pid": 36631,
+  "off100_model_parent_pid": 36638,
+  "off100_admission_pid": "36624",
+  "next_action": "重複起動せずoff100の自然終了を確認し、終了後にinstruction13/compare_A.pyを通常受付へ通す。一件でも不一致なら停止・報告し、一致後だけcommands_fixed_A.jsonのD200二本を受付へ通す。候補は全関門が揃うまで未受け入れ。",
+  "trace_outcomes": {
+    "diagnostic_q_attention_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_q_attention_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t",
+        "AUDIT.trial",
+        "AUDIT.amounts",
+        "AUDIT.matching",
+        "AUDIT.answers",
+        "AUDIT.selected",
+        "AUDIT.mapping",
+        "AUDIT.attention"
+      ],
+      "record_files_unchanged": true
+    },
+    "diagnostic_old_D_04_trace02": {
+      "status_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/status.json",
+      "record_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/diagnostic_old_D_04_trace02/output/diagnostic/f0.5000_th2.1000_vt0.3842_first_order/seed001.json",
+      "first_temporal_mutation": {
+        "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_trace_instruction13/tools/useforget.py",
+        "function": "predict",
+        "observed_at_line": 113,
+        "changes": [
+          {
+            "component": "ST.real",
+            "before": "False",
+            "after": "True"
+          }
+        ]
+      },
+      "changed_components": [
+        "ST.used_t"
+      ],
+      "record_files_unchanged": true
+    }
+  },
+  "diagnosis_confirmed": true,
+  "first_temporal_change": "ST.real False -> True in useforget.predict",
+  "progress_report_prepared_at_jst": "2026-10-10T02:20:37+09:00",
+  "progress_report_published": false
+}
