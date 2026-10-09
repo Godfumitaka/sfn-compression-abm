@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-09T19:23:19.589022+09:00",
+  "supervisor_pid": 58896,
+  "production_started": false,
+  "state": "append_only100_gate_passed",
+  "completed_trials_confirmed": 100,
+  "comparison_passed": true,
+  "file_count": 11,
+  "mismatching_files": 0,
+  "timing_comparison": {
+    "baseline": {
+      "real_seconds": 5240.09,
+      "user_seconds": 5227.84,
+      "system_seconds": 8.92,
+      "max_rss_bytes": 337297408
+    },
+    "append_only": {
+      "real_seconds": 8008.62,
+      "user_seconds": 7976.43,
+      "system_seconds": 15.16,
+      "max_rss_bytes": 340606976
+    },
+    "baseline_run_case": {
+      "exit_code": 0,
+      "started_epoch": 1791502477.322487,
+      "finished_epoch": 1791507722.29791,
+      "wall_seconds": 5244.944265999948,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 15644599
+    },
+    "append_only_run_case": {
+      "exit_code": 0,
+      "started_epoch": 1791533385.52245,
+      "finished_epoch": 1791541399.068032,
+      "wall_seconds": 8013.482849333086,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 15657647
+    },
+    "configured_trial_count": 5000,
+    "horizon": 5000,
+    "completed_trials": 100,
+    "full_5000_completed": false
+  }
+}
