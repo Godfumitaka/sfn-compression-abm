@@ -1,0 +1,234 @@
+{
+  "at": "2026-10-09T21:26:45.854300+09:00",
+  "new_model_starts": 0,
+  "manual_stop_or_resume": 0,
+  "file_deletions": 0,
+  "comparison_or_aggregation_restarts": 0,
+  "source_flags_observers_outputs_changed": false,
+  "new_direct_approval_for_current_production_pause": "asked_once_waiting_for_human",
+  "failures": [
+    {
+      "arm": "#22",
+      "seed": 1,
+      "case": "newport_2026-10-07/instruction20_production/22_seed001_retry20",
+      "result": {
+        "exit_code": 3,
+        "started_epoch": 1791541443.9541671,
+        "finished_epoch": 1791548362.8037162,
+        "wall_seconds": 6918.7956700830255,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+        "output_bytes": 105506080497,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "new_stop_resume_monitor": false
+      },
+      "status": {
+        "at": "2026-10-09T21:19:22.809789+09:00",
+        "runner_pid": 77765,
+        "state": "stopped_before_start_or_error",
+        "reason": "AssertionError(('本番の終了コード', 3))",
+        "production_started": true
+      },
+      "manifest": "{\"cell\": \"f0.5000_th2.1000_vt0.3842_first_order\", \"seed\": 1, \"error\": \"OSError(28, 'No space left on device')\"}\n",
+      "last_timing100": {
+        "completed_trials": 3400,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "wall_seconds": 6632.302286999999,
+        "interval_seconds": 201.2111415420659,
+        "user_cpu_seconds": 6551.185871,
+        "system_cpu_seconds": 38.325713,
+        "max_worker_rss_bytes": 632963072,
+        "epoch_seconds": 1791548077.4985511
+      },
+      "original_run_log_sha256": "d83a3333acd998011368bfc015cd4e019a088ade162823ee8f1719cd29a0455b",
+      "run_log_tail": "2026-10-09 19:24:04 開始 verb_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-09 21:19:16 f0.5000_th2.1000_vt0.3842_first_order seed001 秒=None 最大メモリMB=None 定義末=None 一致=None err=OSError(28, 'No space left on device')\n★★ エラーまたは不一致。止める\nException in thread Thread-1:\nTraceback (most recent call last):\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py\", line 1075, in _bootstrap_inner\n    self.run()\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py\", line 372, in run\n    executor._adjust_process_count()\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py\", line 773, in _adjust_process_count\n    process_count = len(self._processes)\n                    ^^^^^^^^^^^^^^^^^^^^\nTypeError: object of type 'NoneType' has no len()\n     6914.04 real      6810.92 user        45.94 sys\n           632963072  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n             4448600  page reclaims\n                 238  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n               29821  voluntary context switches\n             2653856  involuntary context switches\n           804752958  instructions retired\n           287248668  cycles elapsed\n            17908216  peak memory footprint\n",
+      "output_largest_files": [
+        {
+          "path": "comparison_checkpoints/completed_3000/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 19236239827
+        },
+        {
+          "path": "comparison_checkpoints/completed_3500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 17547900626
+        },
+        {
+          "path": "comparison_checkpoints/completed_2500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 15224428608
+        },
+        {
+          "path": "comparison_checkpoints/completed_2000/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 11365196703
+        },
+        {
+          "path": "comparison_checkpoints/completed_1500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 7837822353
+        }
+      ]
+    },
+    {
+      "arm": "#22",
+      "seed": 2,
+      "case": "newport_2026-10-07/instruction20_production/22_seed002_retry20",
+      "result": {
+        "exit_code": 3,
+        "started_epoch": 1791541463.848557,
+        "finished_epoch": 1791548362.7925801,
+        "wall_seconds": 6898.890306084068,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+        "output_bytes": 91556470526,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "new_stop_resume_monitor": false
+      },
+      "status": {
+        "at": "2026-10-09T21:19:22.798986+09:00",
+        "runner_pid": 77814,
+        "state": "stopped_before_start_or_error",
+        "reason": "AssertionError(('本番の終了コード', 3))",
+        "production_started": true
+      },
+      "manifest": "{\"cell\": \"f0.5000_th2.1000_vt0.3842_first_order\", \"seed\": 2, \"error\": \"OSError(28, 'No space left on device')\"}\n",
+      "last_timing100": {
+        "completed_trials": 3400,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "wall_seconds": 6641.394895999925,
+        "interval_seconds": 208.40856991603505,
+        "user_cpu_seconds": 6559.67094,
+        "system_cpu_seconds": 39.432586,
+        "max_worker_rss_bytes": 785137664,
+        "epoch_seconds": 1791548106.548672
+      },
+      "original_run_log_sha256": "c7c9f59b9ce2ae42d0ab10c34c15ddeb703e8c3be0eccdb82f7b01c6a9126cd3",
+      "run_log_tail": "2026-10-09 19:24:23 開始 verb_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False\n2026-10-09 21:19:16 f0.5000_th2.1000_vt0.3842_first_order seed002 秒=None 最大メモリMB=None 定義末=None 一致=None err=OSError(28, 'No space left on device')\n★★ エラーまたは不一致。止める\nException in thread Thread-1:\nTraceback (most recent call last):\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py\", line 1075, in _bootstrap_inner\n    self.run()\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py\", line 372, in run\n    executor._adjust_process_count()\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py\", line 773, in _adjust_process_count\n    process_count = len(self._processes)\n                    ^^^^^^^^^^^^^^^^^^^^\nTypeError: object of type 'NoneType' has no len()\n     6894.15 real      6798.79 user        43.95 sys\n           818446336  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n             4382942  page reclaims\n                 241  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n               23435  voluntary context switches\n             2653558  involuntary context switches\n           805022094  instructions retired\n           287890541  cycles elapsed\n            18530808  peak memory footprint\n",
+      "output_largest_files": [
+        {
+          "path": "comparison_checkpoints/completed_3000/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 19246134571
+        },
+        {
+          "path": "comparison_checkpoints/completed_2500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 15522069051
+        },
+        {
+          "path": "comparison_checkpoints/completed_2000/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 11897585527
+        },
+        {
+          "path": "comparison_checkpoints/completed_1500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 8299202097
+        },
+        {
+          "path": "comparison_checkpoints/completed_1000/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 4996533471
+        }
+      ]
+    }
+  ],
+  "current_19": [
+    {
+      "seed": 1,
+      "status": {
+        "at": "2026-10-09T21:12:06.984006+09:00",
+        "runner_pid": 495,
+        "state": "running",
+        "production_started": true,
+        "model_group": 517,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "result_exists": false,
+      "last_resources": {
+        "at": "2026-10-09T21:26:37.894781+09:00",
+        "own_group": 517,
+        "own_ps": "  517   495    464 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  519   517  19200 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  533   519   7424 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n  534   519 122544 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+        "free_disk_bytes": 351772672
+      },
+      "latest_warning": {
+        "at": "2026-10-09T21:18:57.407876+09:00",
+        "reason": "既存資源監督の空き容量の警告線を下回った",
+        "own_rss_bytes": 137773056,
+        "existing_sampler": "1791548335\t180.88\t2026-10-09T21:18:55\tok\tNone",
+        "production_stopped": false
+      },
+      "timing100_confirmed_rows": 0
+    },
+    {
+      "seed": 2,
+      "status": {
+        "at": "2026-10-09T21:12:07.219205+09:00",
+        "runner_pid": 520,
+        "state": "running",
+        "production_started": true,
+        "model_group": 558,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "result_exists": false,
+      "last_resources": {
+        "at": "2026-10-09T21:26:38.129862+09:00",
+        "own_group": 558,
+        "own_ps": "  558   520    464 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  562   558  16992 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  563   562   8336 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n  564   562 127872 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+        "free_disk_bytes": 351764480
+      },
+      "latest_warning": {
+        "at": "2026-10-09T21:18:57.635029+09:00",
+        "reason": "既存資源監督の空き容量の警告線を下回った",
+        "own_rss_bytes": 135348224,
+        "existing_sampler": "1791548335\t180.88\t2026-10-09T21:18:55\tok\tNone",
+        "production_stopped": false
+      },
+      "timing100_confirmed_rows": 0
+    }
+  ],
+  "birth_gate": {
+    "status": {
+      "at": "2026-10-09T20:33:27.065960+09:00",
+      "supervisor_pid": 91046,
+      "production_started": false,
+      "state": "probe100_off_running_or_waiting",
+      "jobs_pid": 91047
+    },
+    "automatic_pause_events": [
+      {
+        "event": "paused",
+        "cpu_limit": 8,
+        "models": 5,
+        "unknown_active_spawn": 0,
+        "own_models": 1,
+        "epoch_seconds": 1791548335.598666,
+        "outside_heavy": 4,
+        "inside_heavy": 1,
+        "own_rss_bytes": 290160640,
+        "free_disk_bytes": 16601051136,
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+        "thermal_warning": false
+      }
+    ],
+    "off_result_exists": false,
+    "on_result_exists": false
+  },
+  "worker_census_warning_time": {
+    "active_worker_pids": [
+      534,
+      564
+    ],
+    "paused_worker_pids": [
+      91073
+    ],
+    "active_models": 2,
+    "paused_models": 1,
+    "unknown_spawn": 0,
+    "counting": "ps実個体spawn_mainだけ。親/監督/time/resource_tracker/T/Zは稼働数へ足さない。"
+  },
+  "free_disk_bytes": 351436800,
+  "git_recovery": {
+    "original_head": "41042daaea9e3d8ba79b82e1f09e0ce2bcf08ba7",
+    "fetched_origin": "a76f53011c476ed347e33bfb8ec75532ce40ab56",
+    "first_merge_error": "Out of diskspace (index.lock write failed)",
+    "lock_remaining": false,
+    "all_nine_partially_applied_files_exactly_match_fetched_origin": true,
+    "recovery_commit": "0d6f4f98",
+    "merge_completed_head": "ca9bebb4412d7d0294284ac02883da4149f0cf1a",
+    "no_unreceived_instructions": true
+  }
+}
