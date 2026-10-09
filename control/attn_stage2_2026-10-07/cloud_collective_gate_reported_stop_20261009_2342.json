@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-09T23:42:24.448328+09:00",
+  "reported_only": true,
+  "source": "control/2026-10-08_クラウドの開始_走行の係.md",
+  "source_head": "8555df3dfe62278516d10f3168252d109ebf74c1",
+  "source_sha256": "add9dde91a00493189a3b8866df33db11969dff248e6b1d237b4a7e755251936",
+  "section": "10/09 23:17〜23:40 の記録（指示 57）",
+  "source_text": "## 10/09 23:17〜23:40 の記録（指示 57）\n### 7. Google Cloud の枠（project-577b8173-835f-47ef-87c、23:20）\n- **全地域：CPUS_ALL_REGIONS の上限 12**（使用 0）。これが一番きつい（無料のトライアルの口座の上限と見られる）。\n- 地域ごと（CPUS／INSTANCES／N2D_CPUS／C2D_CPUS）：us-central1・us-east1・us-east4 は 200／24／16／100、us-west1・us-east5・us-south1 は 100／24／16／100。C3D の系列の行は出ない（c3d-standard-8 は us-central1-a で立った）。\n- したがって、今は Google Cloud 全体で同時に 12 vCPU まで（c3d-standard-8 ＋ c3d-standard-4 で使い切る）。引き上げの申請はしていない。\n### 6. 集団化の関門（機械 i-0b585df16ce1a4c42）\n- 4 の最初の本 on1_f0.1_collective200 は、05:54 UTC に始まり 09:54 UTC に 200 試行で終わった（exit 0、14,375 秒、RSS の合計の最大 2,122,117,120 バイト）。しかし resource.json に警告「別の模型等の開始」があり、run.py が止まり（exit 1）、STOP.json（「受付後の走行・開始検査の失敗」）ができた。on1 の残り 3 本・比べ・on2・on8_measure300 は始まっていない。\n- 警告の原因：最初の警告は 06:23:53 UTC。その時刻に、デスクトップ（133.32.173.216）からこの機械への SSH の接続が 06:23:52〜53 にある（journalctl）。**私の 15:23 の見回りの SSH**。見回りの命令は grep だけだったが、run.py の数え方（processes.py の counted：python の名の過程で、走っている本の子孫でないもの）に、ログインのときに Ubuntu が走らせる python の過程が数えられた見込み（ログインのときの過程の中身は確かめていない）。関門の機械に見回りで入った私の誤り。\n- 機械は 09:54 UTC（18:54）から走行が無かった（約 4.5 時間、空いたまま約 $7）。走行の記録（gates・evidence・outputs）を D: と S3 に残してから消す（指示 31 の 3）。集団化の版の直しは介入の係に移る（指示 57 の 6）。\n### 1〜5. D・D＋注意（100 本）を Google Cloud で始めた\n- 版 daf69efd196db28b29f1e564ebf6dc57c6c39f60（c7921598 からの違いは 3 ファイル、+358 行）。束で送り、二台とも HEAD ときれいな作業木、--help に --use-forget-attn があることを確かめた。\n- 命令：1a（c7921598）の同じ世界・種の命令から、--stage2 off・--stage2-birth-hu off・--stage2-speed off・--stage2-cache-prune off にし、--use-forget（0.4・0.15）・--use-forget-q・（#12・#13・#17・#18 は）--use-forget-attn・（#17・#18 は）--shop-exc を足した。\n  - 台本で、関門の命令（介入の係の instruction9/commands.json の D_q・D_attention、世界 2・種 1・200 試行）と、試行数・出力先・世界・種・τ・例外の頻度のほかは、引数と順が全部同じことを、100 本とも確かめた。\n- 置き場：Google Cloud の c3d-standard-8（sfn-d-c3d8、同時 7 本）と c3d-standard-4（sfn-d-c3d4、同時 3 本）、us-central1-a。全地域の枠 12 vCPU を使い切る。順は #12 → #10 → #13 → #11 → #17 → #18。\n- 列を「走行中」にして 23:34:48 に push してから始めた（23:35 から）。台本 ~/cloud/wave1/sched57.py、見張り wave2d_watch_gcp.sh（名前 wave2_<行>_w<世界>_s<種>_cdaf、retention と useforget の記録も gz にして上げる）。\n- 一本の時間を測ってから、間に合うかを見積もり直す（Google Cloud だけで足りなければ、デスクトップの空いた芯、AWS の空きに入れる）。\n",
+  "collective_reported_status": "on1_f0.1_collective200は200試行exit0。resource警告でrun.py exit1・STOP、後続は未開始と報告。",
+  "reported_cause": "見回りSSH時のログインPythonがcountedへ入った見込みとの報告。実過程の中身は未確認。こちらが原因を確定した結果ではない。",
+  "independent_original_output_or_process_verification": false,
+  "new_own_instruction": false,
+  "instruction36_original_full_gate_satisfied": false,
+  "models_submitted": 0,
+  "models_signaled": 0,
+  "comparisons_submitted": 0,
+  "files_deleted": 0
+}
