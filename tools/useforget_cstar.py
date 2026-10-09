@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import math
+import useforget_evaluation as evaluation
 
 AUDIT = {}
 PROBE_CHECKS = []
@@ -53,6 +54,8 @@ def attention_weight(key, attention):
 
 def use_amount(key, trial, amount):
     """同じ試行の同じ席では最大量だけを、旧Dと同じ減衰記録へ足す。"""
+    if evaluation.active():
+        return False
     import useforget as D
     if not math.isfinite(amount) or amount < 0:
         raise ValueError('使用の量が有限の非負でない')
@@ -88,6 +91,8 @@ def install(path, *, expected_usage=False, attention_usage=False):
                  attention_usage=attention_usage)
 
     def record_matching(state, scene, res):
+        if evaluation.active():
+            return
         _r, _s, definition, _g, alignment, _n, _tie, _passed = res
         trial = D.ST['t']
         if AUDIT['trial'] != trial:
@@ -131,6 +136,8 @@ def install(path, *, expected_usage=False, attention_usage=False):
     D._record_matching = record_matching
 
     def record_answer(state, output):
+        if evaluation.active():
+            return
         prediction, name = output.prediction, output.trace.get('R_used')
         if not isinstance(prediction, EdgePrediction) or name not in state.definitions:
             return
@@ -160,6 +167,8 @@ def install(path, *, expected_usage=False, attention_usage=False):
     original_birth = D._birth
 
     def birth(key, trial):
+        if evaluation.active():
+            return
         original_birth(key, trial)
         if AUDIT['trial'] != trial:
             AUDIT.update(trial=trial, amounts={}, matching=[], answers=[], births=[], selected=None)
@@ -170,6 +179,8 @@ def install(path, *, expected_usage=False, attention_usage=False):
     original_conversions = v39.run_conversions
 
     def run_conversions(state, trial):
+        if evaluation.active():
+            return original_conversions(state, trial)
         before = [[d.name, row.slot_index, d.registered_at, v39.seat_state(d, row, state.slot_history),
                    D.strength(D.ST['S'].get(D._key(d, row)), trial)]
                   for d in state.definitions.values() for row in d.constituents

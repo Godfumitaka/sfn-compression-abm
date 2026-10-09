@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 from array import array
+import useforget_evaluation as evaluation
 
 ST: dict = {}
 SENTINEL = -1e9
@@ -52,6 +53,8 @@ def strength(rec, t) -> float:
 
 
 def _use(key, t):
+    if evaluation.active():
+        return False
     if key in ST["used_t"]:
         return False
     ST["used_t"].add(key)
@@ -75,7 +78,7 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_select = v39.select_definition
 
     def select_definition(state, scene, config):
-        if not ST["real"]:
+        if evaluation.active() or not ST["real"]:
             return real_select(state, scene, config)
         got = []
         real_map = v39.map_v39
@@ -102,6 +105,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_ai = loop._agent_input
 
     def _agent_input(trial, state):
+        if evaluation.active():
+            return real_ai(trial, state)
         ST["t"] = trial.trial
         return real_ai(trial, state)
 
@@ -109,6 +114,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_predict = loop.predict
 
     def predict(agent_input, state, config, rng):
+        if evaluation.active():
+            return real_predict(agent_input, state, config, rng)
         ST["real"] = True
         ST["rec"] = {"uses": [], "struct": [], "other": 0, "answer": None}
         try:
@@ -124,6 +131,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_m1 = loop.m1
 
     def m1(state, base, target, alignment, trial, **kw):
+        if evaluation.active():
+            return real_m1(state, base, target, alignment, trial, **kw)
         out, reg = real_m1(state, base, target, alignment, trial, **kw)
         if reg is not None and not reg["was_extension"]:
             d = out.definitions[reg["R"]]
@@ -135,6 +144,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_rec = v39.reconcile
 
     def reconcile(state, trial, why):
+        if evaluation.active():
+            return real_rec(state, trial, why)
         n0 = len(v39.CTX.get("relearn") or [])
         out = real_rec(state, trial, why)
         for ev in (v39.CTX.get("relearn") or [])[n0:]:
@@ -150,6 +161,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_cands = v39._candidates
 
     def _candidates(state, d, t, L, n_defs):
+        if evaluation.active():
+            return real_cands(state, d, t, L, n_defs)
         out = []
         for c in real_cands(state, d, t, L, n_defs):
             row = next(r for r in d.constituents if r.slot_index == c[3])
@@ -164,6 +177,8 @@ def install(fo_path, *, tau: float, dump_s_path=None, horizon=None) -> None:
     real_rc = v39.run_conversions
 
     def run_conversions(state, trial):
+        if evaluation.active():
+            return real_rc(state, trial)
         if ST.get("t") != trial:
             ST["stats"]["trial_mismatch"] += 1
         below = {}
@@ -234,6 +249,8 @@ def _kinds(rid):
 
 
 def _birth(k, t):
+    if evaluation.active():
+        return
     ST["n_use"][k] = 0
     ST["born"][k] = t
     ST["used_t"].discard(k)
@@ -242,6 +259,8 @@ def _birth(k, t):
 
 
 def _record_matching(state, scene, res):
+    if evaluation.active():
+        return
     import v39
     _r, _s, d, _g, al, _n, _tie, _passed = res
     vis = {r.relation_id: r for r in scene.relations}
@@ -268,6 +287,8 @@ def _record_matching(state, scene, res):
 
 
 def _record_answer(state, out):
+    if evaluation.active():
+        return
     import v39
     from abm.domains import EdgePrediction
     pred = out.prediction

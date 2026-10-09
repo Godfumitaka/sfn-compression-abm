@@ -635,6 +635,9 @@ def worker(task: dict) -> dict:
                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
     if task.get('verb_world') and task.get('probe_world') and task.get('attn_sme'):
         verbworld.connect_attention_probes(probeworld,attnsme)
+    if task.get('use_forget') is not None:
+        import useforget_evaluation
+        useforget_evaluation.install(side_dir / f"seed{task['seed']:03d}.useforget.evaluation_checks.json")
     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
     old_gc_threshold = None
     if task.get("sme_gc_threshold") is not None:
