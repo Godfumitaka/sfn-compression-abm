@@ -53,6 +53,9 @@ import sweep  # noqa: E402
 import v3_run  # noqa: E402
 
 v3_run.ProcessPoolExecutor = InlineExecutor
+if os.environ.get('BIRTHPAR'):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import birthpar  # noqa: F401,E402
 orig = sweep.run_longitudinal
 T0 = time.perf_counter()
 
