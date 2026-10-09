@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-09T14:20:38+09:00",
+  "state": "cloud_speed200_report_received_raw_confirmation_pending",
+  "new_instruction_received": false,
+  "delegation": "既存の指示11・14・15の報告と読取確認。走行の係の連絡を新しい委任として扱わない。",
+  "arrival": {
+    "path": "control/受け箱/動詞の世界の係.md",
+    "heading": "走行の係から（2026-10-09 14:14、デスクトップの走行の係）",
+    "received_report_branch_commit": "0f939525eba2bbde94296db56d159abaaccc6e7e",
+    "note_sha256": "367bb57fedf08665c7b6451cc28c11750074adf79e630a6f16c180cde829df9b"
+  },
+  "reported_only": {
+    "machine_prefix": "94bd008c",
+    "speed200_off": {
+      "exit_code": 0,
+      "wall_seconds_reported_rounded": 31329,
+      "max_rss_bytes_reported": 770969600,
+      "warnings_reported": false
+    },
+    "speed200_on": {
+      "exit_code": 0,
+      "wall_seconds_reported_rounded": 25617,
+      "max_rss_bytes_reported": 390799360,
+      "warnings_reported": false
+    },
+    "manifest_both": {
+      "probes": 48,
+      "fingerprint_checks": 2,
+      "attention_checks": 2,
+      "rows": null
+    },
+    "export_error": "cloud_run.completeのprobes数assertion。実際に使われたsource_commitとSHAは未確認。",
+    "comparison_performed_reported": false,
+    "raw_archive": "s3://sfn-abm-results-astra1008/cloud_runs/verb_speed200_20261009/speed200_20261009.tar.gz"
+  },
+  "raw_records_verified": false,
+  "local_original_speed200_results_present": false,
+  "comparison_passed": null,
+  "calibration200_verified": false,
+  "read_only_code_check": {
+    "historical_versions": [
+      {
+        "source_commit": "412b9ce8ff6274d6b1da548ed4b1509f2bbf1772",
+        "path": "tools/verb_measurement/cloud_run.py",
+        "sha256": "d6d7eff07449be8893b009dc1c3e90faf73f63e03a725f6c3fa322ae985ba99b",
+        "probe_assertion": "p=item['probeworld'];assert p['probes']==48*(limit//100) and p['fingerprint_checks']==limit//100"
+      },
+      {
+        "source_commit": "977dcffea04c2f23c5472eab5bf760362e9fd25a",
+        "path": "tools/verb_measurement/cloud_run.py",
+        "sha256": "d22265e6c4ca1ab29983b4468b9aebecd13b527ff82a47411a3e6526da95611d",
+        "probe_assertion": "p=item['probeworld'];assert p['probes']==48 and p['rows']==48*(limit//100) and p['fingerprint_checks']==limit//100"
+      }
+    ],
+    "current_cloud_run": {
+      "path": "control/動詞_クラウドの包み_2026-10-09/instruction11/cloud_run.py",
+      "sha256": "d22265e6c4ca1ab29983b4468b9aebecd13b527ff82a47411a3e6526da95611d",
+      "probe_assertion": "p=item['probeworld'];assert p['probes']==48 and p['rows']==48*(limit//100) and p['fingerprint_checks']==limit//100"
+    },
+    "current_speed_gate": {
+      "path": "control/動詞_クラウドの包み_2026-10-09/instruction11/speed_gate.py",
+      "sha256": "dbeaa0b51b14a062f14488b96c332eecb682f7c48ceb0f755ac793dcd8b2187f"
+    },
+    "semantics": "probeworld.closeのprobesは固定問題数48、rowsは累積回答行数。200ではrows96、fingerprint2、注意・問い回数の保存復元2件をそれぞれ原本で要求。既存最新completeとspeed_gateに実装済み。"
+  },
+  "actions_this_check": {
+    "model_starts": 0,
+    "model_or_observer_changes": 0,
+    "source_changes": 0,
+    "comparison_or_aggregation_runs": 0,
+    "tests_repeated": 0,
+    "aws_login_or_expired_access_retries": 0,
+    "whole_mac_ps": 0
+  },
+  "pending": "S3/D:の原result/runtime/start/manifest/partial_done/100・200checkpointと実出力、実際の取得版SHAの確認。AWSログインの回答は未到着、再質問・ログイン・期限切れアクセスを繰り返さない。",
+  "production_started": false,
+  "measurement300_cancelled": true,
+  "instructions_wholly_completed": false
+}
