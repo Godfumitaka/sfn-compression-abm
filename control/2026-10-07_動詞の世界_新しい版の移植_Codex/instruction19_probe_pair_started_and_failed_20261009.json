@@ -1,0 +1,477 @@
+{
+  "probe100_off": {
+    "launcher_pid.json": {
+      "pid": 68768,
+      "submitted_at": "2026-10-09T18:26:10.623958+09:00",
+      "command": [
+        "/usr/bin/python3",
+        "$HOME/jobs/jobs.py",
+        "run",
+        "--wait",
+        "--owner",
+        "Codex 動詞 指示19 probe100_off",
+        "--mem",
+        "2.0",
+        "--disk-path",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/probe100_off/output",
+        "--",
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/admitted_gate.py",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/probe100_off"
+      ]
+    },
+    "admitted_status.json": {
+      "at": "2026-10-09T18:26:10.882179+09:00",
+      "state": "admitted_waiting_for_existing_resource_gate",
+      "wrapper_pid": 68774,
+      "production_started": false
+    },
+    "pid.json": {
+      "pid": 68809,
+      "pgid": 68809
+    },
+    "machine_before_start.json": {
+      "physical_cpu": "10\n",
+      "physical_memory_bytes": "34359738368\n",
+      "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)\n",
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "at": "2026-10-09T18:26:11.002671+09:00",
+      "machine_boot_sha256": "773eeecfe3afc3ccc34847d05ee94097573d18caef28686fec53924894004b80",
+      "free_disk_bytes": 199656644608,
+      "swap_samples": [
+        "1791537351\t180.0\t2026-10-09T18:15:50\tok\tNone",
+        "1791537411\t180.0\t2026-10-09T18:16:50\tok\tNone",
+        "1791537471\t180.0\t2026-10-09T18:17:50\tok\tNone",
+        "1791537531\t180.0\t2026-10-09T18:18:50\tok\tNone",
+        "1791537591\t180.0\t2026-10-09T18:19:50\tok\tNone",
+        "1791537651\t180.0\t2026-10-09T18:20:50\tok\tNone",
+        "1791537711\t180.0\t2026-10-09T18:21:50\tok\tNone",
+        "1791537771\t180.0\t2026-10-09T18:22:51\tok\tNone",
+        "1791537831\t180.0\t2026-10-09T18:23:51\tok\tNone",
+        "1791537891\t180.0\t2026-10-09T18:24:51\tok\tNone",
+        "1791537951\t180.0\t2026-10-09T18:25:51\tok\tNone"
+      ]
+    },
+    "before_start.json": {
+      "checked_at": "2026-10-09T18:26:10+09:00",
+      "report_commit": "cdae5b6f0bc3ee896259cc613a4ad0a327a35b0f",
+      "source_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "model_process_count": 4,
+      "model_processes": [
+        {
+          "pid": 58930,
+          "ppid": 58919,
+          "state": "R",
+          "rss_bytes": 253788160,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction17_snapshot/source 100 config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction17_snapshot/on100_append_only/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps shared --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 60251,
+          "ppid": 60238,
+          "state": "R",
+          "rss_bytes": 3491168256,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/19_seed001/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 60282,
+          "ppid": 60280,
+          "state": "R",
+          "rss_bytes": 444088320,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/19_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 67596,
+          "ppid": 67594,
+          "state": "R",
+          "rss_bytes": 256802816,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction19_production/22_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off",
+          "worker_kind": "spawn"
+        }
+      ],
+      "other_active_spawn_workers": [],
+      "paused_or_zombie_spawn_workers": [],
+      "paused_or_zombie_model_workers": [],
+      "own_model_process_count": 4,
+      "eligible_mac_queue_rows": [],
+      "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+      "automation": {
+        "id": "automation",
+        "status": "ACTIVE",
+        "target_thread_id": "01a10594-2608-70c3-83ae-8033440c080d",
+        "created_at_jst": "2026-10-06T21:18:51.465+09:00",
+        "interval_minutes": 30,
+        "expires_at_jst": "2026-10-11T09:00:00+09:00",
+        "expiry_saved_verified": true
+      },
+      "inputs": [
+        {
+          "path": "control/受け箱/動詞の世界の係.md",
+          "bytes": 76932,
+          "sha256": "d77623c0b9ff84961fbf09625641a42b006a013c49123b0ea947e115685ec730"
+        },
+        {
+          "path": "control/受け箱/README.md",
+          "bytes": 2865,
+          "sha256": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce"
+        },
+        {
+          "path": "control/走行の列_2026-10-08.md",
+          "bytes": 17657,
+          "sha256": "517045b06d6a6bf728d79e6ca6f168c74e8f9e801ec5d790c242fb69593a2c7f"
+        },
+        {
+          "path": "control/2026-10-06_渡す委任書_Claude.md",
+          "bytes": 118841,
+          "sha256": "6b3381833320c46876e59681fceab9f51f478e196da1b162f4156d5385203f52"
+        },
+        {
+          "path": "control/2026-10-06_GPTの返事_照合と分布の統一.md",
+          "bytes": 37999,
+          "sha256": "58d1b13a03bc8c4d24937fa39f5df8fbde374e15008e7811c3f4eae940fe12fe"
+        },
+        {
+          "path": "control/2026-10-06_GPTの返事_四つの判断.md",
+          "bytes": 35758,
+          "sha256": "bf259c46dc2f01fc2c44f79976ccdefab2965211a448f05674ac51abbcad9ab9"
+        },
+        {
+          "path": "control/2026-10-07_走行の計画_案_Claude.md",
+          "bytes": 5352,
+          "sha256": "5e55d6fc9bc1089e712485f263a017495d3fc1e06c048a94ce0f999a53b535fe"
+        },
+        {
+          "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+          "bytes": 452519,
+          "sha256": "1845ecf0e8b3bac9d4252f88a096cc1c6df25469df3f517c210f68212d7fd84a"
+        },
+        {
+          "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+          "bytes": 379641,
+          "sha256": "524fb04913da0f98667596e75087db00b280bd029416f416cfa498f6acea6ba1"
+        },
+        {
+          "path": "control/2026-10-06_SMEの一本の時間の内訳_Codex.md",
+          "bytes": 36663,
+          "sha256": "34b929b1fb67f487f28e64bf4124936b34e27294b9e5f1420621ee8f9b05fec2"
+        },
+        {
+          "path": "control/2026-10-06_動詞の世界_SME版_Codex/port.patch",
+          "bytes": 112372,
+          "sha256": "265d2c27d42100d89df1f03353a30d69ef0a3d782215208a9da368174bdc809e"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/v3_run.py",
+          "bytes": 77105,
+          "sha256": "b1d0d7ead7b4ca6f55d5c4b5d8d0cb3998b42e4a7c181c013848da4bcab641ba"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbworld.py",
+          "bytes": 12296,
+          "sha256": "2b8e3093ee98d646d97739f51d65590ae9ff3886a4e3aaf00c3a15bfe23949fe"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/probeworld.py",
+          "bytes": 14742,
+          "sha256": "380285408614d518c3256eaa19e5705dec82ab5a872e9ca1bd4f1efc233f38bb"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/analyze.py",
+          "bytes": 17262,
+          "sha256": "d6916cb33f01fe2a32d29bbe3813e79324f0e235503dbba0c7c8ad4c80d7680f"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/replay_state.py",
+          "bytes": 7060,
+          "sha256": "635a96df25b07bfa4c38a320ec952b116498a8ba64a485138a79d1807d94f914"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbtiming.py",
+          "bytes": 1459,
+          "sha256": "aef1541da38f74c567e67c017e326aaa6e0f3be21b8d4e9ffb678a456474b5e1"
+        }
+      ]
+    },
+    "resource_started": {
+      "event": "started",
+      "cpu_limit": 8,
+      "models": 4,
+      "unknown_active_spawn": 0,
+      "own_models": 0,
+      "epoch_seconds": 1791537971.158561,
+      "outside_heavy": 4,
+      "inside_heavy": 0,
+      "own_rss_bytes": 24133632,
+      "free_disk_bytes": 199656607744,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false,
+      "model_pid": 68809
+    },
+    "resource_latest": {
+      "event": "sample",
+      "cpu_limit": 8,
+      "models": 4,
+      "unknown_active_spawn": 0,
+      "own_models": 1,
+      "epoch_seconds": 1791538417.296364,
+      "outside_heavy": 3,
+      "inside_heavy": 1,
+      "own_rss_bytes": 189808640,
+      "free_disk_bytes": 196955897856,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false
+    }
+  },
+  "probe100_on": {
+    "launcher_pid.json": {
+      "pid": 68769,
+      "submitted_at": "2026-10-09T18:26:10.626156+09:00",
+      "command": [
+        "/usr/bin/python3",
+        "$HOME/jobs/jobs.py",
+        "run",
+        "--wait",
+        "--owner",
+        "Codex 動詞 指示19 probe100_on",
+        "--mem",
+        "2.0",
+        "--disk-path",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/probe100_on/output",
+        "--",
+        "/opt/homebrew/opt/python@3.12/bin/python3.12",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/admitted_gate.py",
+        "$WORKSPACE/newport_2026-10-07/instruction19_probe_pair/probe100_on"
+      ]
+    },
+    "admitted_status.json": {
+      "at": "2026-10-09T18:26:10.945586+09:00",
+      "state": "admitted_waiting_for_existing_resource_gate",
+      "wrapper_pid": 68779,
+      "production_started": false
+    },
+    "pid.json": {
+      "pid": 68814,
+      "pgid": 68814
+    },
+    "machine_before_start.json": {
+      "physical_cpu": "10\n",
+      "physical_memory_bytes": "34359738368\n",
+      "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)\n",
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "at": "2026-10-09T18:26:11.055898+09:00",
+      "machine_boot_sha256": "773eeecfe3afc3ccc34847d05ee94097573d18caef28686fec53924894004b80",
+      "free_disk_bytes": 199656620032,
+      "swap_samples": [
+        "1791537351\t180.0\t2026-10-09T18:15:50\tok\tNone",
+        "1791537411\t180.0\t2026-10-09T18:16:50\tok\tNone",
+        "1791537471\t180.0\t2026-10-09T18:17:50\tok\tNone",
+        "1791537531\t180.0\t2026-10-09T18:18:50\tok\tNone",
+        "1791537591\t180.0\t2026-10-09T18:19:50\tok\tNone",
+        "1791537651\t180.0\t2026-10-09T18:20:50\tok\tNone",
+        "1791537711\t180.0\t2026-10-09T18:21:50\tok\tNone",
+        "1791537771\t180.0\t2026-10-09T18:22:51\tok\tNone",
+        "1791537831\t180.0\t2026-10-09T18:23:51\tok\tNone",
+        "1791537891\t180.0\t2026-10-09T18:24:51\tok\tNone",
+        "1791537951\t180.0\t2026-10-09T18:25:51\tok\tNone"
+      ]
+    },
+    "before_start.json": {
+      "checked_at": "2026-10-09T18:26:11+09:00",
+      "report_commit": "cdae5b6f0bc3ee896259cc613a4ad0a327a35b0f",
+      "source_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "model_process_count": 4,
+      "model_processes": [
+        {
+          "pid": 58930,
+          "ppid": 58919,
+          "state": "R",
+          "rss_bytes": 253788160,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction17_snapshot/source 100 config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction17_snapshot/on100_append_only/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.01873710622997919 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps shared --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 60251,
+          "ppid": 60238,
+          "state": "R",
+          "rss_bytes": 3491168256,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/19_seed001/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 60282,
+          "ppid": 60280,
+          "state": "R",
+          "rss_bytes": 444088320,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/19_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --score-logp-e --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off",
+          "worker_kind": "spawn"
+        },
+        {
+          "pid": 67596,
+          "ppid": 67594,
+          "state": "R",
+          "rss_bytes": 256802816,
+          "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork",
+          "parent_command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/codex_verb_2026-10-04/newport_2026-10-07/instruction19_production/22_seed002/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --h-dirichlet 1 --match-eps 0 --birth-score seq --stage2 off --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu off --stage2-reuse off",
+          "worker_kind": "spawn"
+        }
+      ],
+      "other_active_spawn_workers": [],
+      "paused_or_zombie_spawn_workers": [],
+      "paused_or_zombie_model_workers": [],
+      "own_model_process_count": 4,
+      "eligible_mac_queue_rows": [],
+      "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+      "automation": {
+        "id": "automation",
+        "status": "ACTIVE",
+        "target_thread_id": "01a10594-2608-70c3-83ae-8033440c080d",
+        "created_at_jst": "2026-10-06T21:18:51.465+09:00",
+        "interval_minutes": 30,
+        "expires_at_jst": "2026-10-11T09:00:00+09:00",
+        "expiry_saved_verified": true
+      },
+      "inputs": [
+        {
+          "path": "control/受け箱/動詞の世界の係.md",
+          "bytes": 76932,
+          "sha256": "d77623c0b9ff84961fbf09625641a42b006a013c49123b0ea947e115685ec730"
+        },
+        {
+          "path": "control/受け箱/README.md",
+          "bytes": 2865,
+          "sha256": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce"
+        },
+        {
+          "path": "control/走行の列_2026-10-08.md",
+          "bytes": 17657,
+          "sha256": "517045b06d6a6bf728d79e6ca6f168c74e8f9e801ec5d790c242fb69593a2c7f"
+        },
+        {
+          "path": "control/2026-10-06_渡す委任書_Claude.md",
+          "bytes": 118841,
+          "sha256": "6b3381833320c46876e59681fceab9f51f478e196da1b162f4156d5385203f52"
+        },
+        {
+          "path": "control/2026-10-06_GPTの返事_照合と分布の統一.md",
+          "bytes": 37999,
+          "sha256": "58d1b13a03bc8c4d24937fa39f5df8fbde374e15008e7811c3f4eae940fe12fe"
+        },
+        {
+          "path": "control/2026-10-06_GPTの返事_四つの判断.md",
+          "bytes": 35758,
+          "sha256": "bf259c46dc2f01fc2c44f79976ccdefab2965211a448f05674ac51abbcad9ab9"
+        },
+        {
+          "path": "control/2026-10-07_走行の計画_案_Claude.md",
+          "bytes": 5352,
+          "sha256": "5e55d6fc9bc1089e712485f263a017495d3fc1e06c048a94ce0f999a53b535fe"
+        },
+        {
+          "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+          "bytes": 452519,
+          "sha256": "1845ecf0e8b3bac9d4252f88a096cc1c6df25469df3f517c210f68212d7fd84a"
+        },
+        {
+          "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+          "bytes": 379641,
+          "sha256": "524fb04913da0f98667596e75087db00b280bd029416f416cfa498f6acea6ba1"
+        },
+        {
+          "path": "control/2026-10-06_SMEの一本の時間の内訳_Codex.md",
+          "bytes": 36663,
+          "sha256": "34b929b1fb67f487f28e64bf4124936b34e27294b9e5f1420621ee8f9b05fec2"
+        },
+        {
+          "path": "control/2026-10-06_動詞の世界_SME版_Codex/port.patch",
+          "bytes": 112372,
+          "sha256": "265d2c27d42100d89df1f03353a30d69ef0a3d782215208a9da368174bdc809e"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/v3_run.py",
+          "bytes": 77105,
+          "sha256": "b1d0d7ead7b4ca6f55d5c4b5d8d0cb3998b42e4a7c181c013848da4bcab641ba"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbworld.py",
+          "bytes": 12296,
+          "sha256": "2b8e3093ee98d646d97739f51d65590ae9ff3886a4e3aaf00c3a15bfe23949fe"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/probeworld.py",
+          "bytes": 14742,
+          "sha256": "380285408614d518c3256eaa19e5705dec82ab5a872e9ca1bd4f1efc233f38bb"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/analyze.py",
+          "bytes": 17262,
+          "sha256": "d6916cb33f01fe2a32d29bbe3813e79324f0e235503dbba0c7c8ad4c80d7680f"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/replay_state.py",
+          "bytes": 7060,
+          "sha256": "635a96df25b07bfa4c38a320ec952b116498a8ba64a485138a79d1807d94f914"
+        },
+        {
+          "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbtiming.py",
+          "bytes": 1459,
+          "sha256": "aef1541da38f74c567e67c017e326aaa6e0f3be21b8d4e9ffb678a456474b5e1"
+        }
+      ]
+    },
+    "result.json": {
+      "exit_code": 3,
+      "started_epoch": 1791537971.219384,
+      "finished_epoch": 1791537981.3856,
+      "wall_seconds": 10.16613370901905,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 88661
+    },
+    "resource_started": {
+      "event": "started",
+      "cpu_limit": 8,
+      "models": 4,
+      "unknown_active_spawn": 0,
+      "own_models": 0,
+      "epoch_seconds": 1791537971.219132,
+      "outside_heavy": 4,
+      "inside_heavy": 0,
+      "own_rss_bytes": 23855104,
+      "free_disk_bytes": 199656599552,
+      "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "thermal_warning": false,
+      "model_pid": 68814
+    },
+    "resource_latest": {
+      "event": "finished",
+      "cpu_limit": 8,
+      "exit_code": 3,
+      "started_epoch": 1791537971.219384,
+      "finished_epoch": 1791537981.3856,
+      "wall_seconds": 10.16613370901905,
+      "paused_seconds": 0,
+      "output_bytes": 88661
+    }
+  },
+  "supervisor": {
+    "pid": 68764,
+    "pgid": 68764,
+    "submitted_at": "2026-10-09T18:26:10.578607+09:00",
+    "prepared_published": {
+      "at": "2026-10-09T18:25:37+09:00",
+      "first": "d5099f724ce655eccc09c56e9bb89dca5367044e",
+      "confirmation": "cdae5b6f0bc3ee896259cc613a4ad0a327a35b0f",
+      "branch": "results-2026-09-27"
+    },
+    "latest_report_head": "cdae5b6f0bc3ee896259cc613a4ad0a327a35b0f"
+  }
+}

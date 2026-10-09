@@ -1,0 +1,61 @@
+2026-10-09 18:26:11 開始 verb_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False
+Traceback (most recent call last):
+  File "$WORKSPACE/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py", line 75, in measurement_worker
+    record=original_worker(task)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/v3_run.py", line 636, in worker
+    rec = sweep.run_one(task)
+          ^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/sweep.py", line 212, in run_one
+    result = run_longitudinal(
+             ^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/measurement_observer_retry2/measurement_driver.py", line 70, in longitudinal
+    result=original_longitudinal(prefix,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/abm/loop.py", line 81, in run_longitudinal
+    output, pending = predict(agent_input, before, config, Random(_rng_seed(agent_id, trial.trial)))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/attnstage2_runtime.py", line 74, in predict
+    output,pending = original_predict(ai,state,config,rng)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/attnsme.py", line 192, in predict
+    _restore(snapshot)
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/attnsme.py", line 76, in _restore
+    probeworld._restore_modules(snap[0])
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/smeshared.py", line 499, in restore_modules
+    real_restore(ordinary)
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/probeworld.py", line 57, in _restore_modules
+    d.restore(saved)
+  File "$WORKSPACE/newport_2026-10-07/instruction17_snapshot/source/tools/verb_snapshot.py", line 124, in restore
+    raise AppendOnlyViolation("INFO・IDSの控えの戻し順が不一致")
+verb_snapshot.AppendOnlyViolation: INFO・IDSの控えの戻し順が不一致
+2026-10-09 18:26:18 f0.5000_th2.1000_vt0.3842_first_order seed001 秒=None 最大メモリMB=None 定義末=None 一致=None err=AppendOnlyViolation('INFO・IDSの控えの戻し順が不一致')
+★★ エラーまたは不一致。止める
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py", line 372, in run
+    executor._adjust_process_count()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py", line 773, in _adjust_process_count
+    process_count = len(self._processes)
+                    ^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'NoneType' has no len()
+        7.30 real         7.24 user         0.08 sys
+           137412608  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               16028  page reclaims
+                 234  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  27  voluntary context switches
+                 978  involuntary context switches
+           784860430  instructions retired
+           302018514  cycles elapsed
+            18563576  peak memory footprint
