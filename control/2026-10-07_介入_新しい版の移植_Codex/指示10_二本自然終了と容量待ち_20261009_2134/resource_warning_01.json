@@ -1,0 +1,38 @@
+{
+  "at_jst": "2026-10-09T21:34:54+09:00",
+  "reason": "出力先ボリュームの空きが受付下限20GiB未満",
+  "disk_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction9",
+  "free_bytes": 389115904,
+  "minimum_free_bytes": 21474836480,
+  "models_active": 2,
+  "models_paused": 1,
+  "model_limit": 8,
+  "processes": [
+    {
+      "pid": 534,
+      "parent": 519,
+      "stat": "R",
+      "rss": 143440,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "parent": 562,
+      "stat": "R",
+      "rss": 149264,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 91073,
+      "parent": 91070,
+      "stat": "T",
+      "rss": 238560,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "excluded_ancestors": [],
+  "files_deleted": false,
+  "production_stopped": false,
+  "admission_rules_changed": false,
+  "next_heavy_work_started": false
+}
