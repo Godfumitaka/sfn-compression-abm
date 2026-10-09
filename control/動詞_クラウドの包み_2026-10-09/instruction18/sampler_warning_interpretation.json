@@ -1,0 +1,10 @@
+{
+  "interpretation": "既存samplerのok・Noneは熱警告なし、CPU_Speed_Limitが未記録。run_productionのNone!=100による誤検知。",
+  "original_warning_logs_preserved": true,
+  "actual_thermal_warning_from_this_record": false,
+  "model_flags_and_observer_unchanged": true,
+  "production_stopped": false,
+  "runner_code_unchanged_while_running": true,
+  "sampler_code_condition": "limit is not None and limit != 100",
+  "ignore_only_existing_sampler_ok_none_false_positive": true
+}

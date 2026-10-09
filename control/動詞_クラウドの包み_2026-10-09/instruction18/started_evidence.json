@@ -1,0 +1,110 @@
+{
+  "at": "2026-10-09T17:26:48+09:00",
+  "instruction": 18,
+  "queue_claim": {
+    "at": "2026-10-09T17:22:29.540023+09:00",
+    "normal_push_succeeded": true,
+    "first_commit": "d6ad4d57cca0dad26c0bbd52e307942fe026bab3",
+    "confirmation_commit": "cf6cca4c2f0a3f6c83cdadbd5745bff2509d5135",
+    "labels": [
+      "19_seed001",
+      "19_seed002"
+    ],
+    "row": "19",
+    "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+    "latest_report_head": "b20143c5a52d424edc62b0cf095b790b64d99149",
+    "claude_informed_before_start": true,
+    "unreceived_instruction_count": 0
+  },
+  "production_started": true,
+  "running_cases": [
+    {
+      "seed": 1,
+      "status": {
+        "at": "2026-10-09T17:22:29.757838+09:00",
+        "runner_pid": 60225,
+        "state": "running",
+        "production_started": true,
+        "model_group": 60236,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "pid": {
+        "pid": 60236,
+        "pgid": 60236
+      },
+      "launcher_pid": 60221,
+      "machine_before_start": {
+        "at": "2026-10-09T17:22:29.753078+09:00",
+        "cpu_limit": 8,
+        "outside_heavy": 1,
+        "model_process_count": 1,
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+        "physical_memory_bytes": 34359738368,
+        "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)\n",
+        "swap_samples": [
+          "1791533509\t180.0\t2026-10-09T17:11:49\tok\tNone",
+          "1791533569\t180.0\t2026-10-09T17:12:49\tok\tNone",
+          "1791533629\t180.0\t2026-10-09T17:13:49\tok\tNone",
+          "1791533689\t180.0\t2026-10-09T17:14:49\tok\tNone",
+          "1791533749\t180.0\t2026-10-09T17:15:49\tok\tNone",
+          "1791533809\t180.0\t2026-10-09T17:16:49\tok\tNone",
+          "1791533869\t180.0\t2026-10-09T17:17:49\tok\tNone",
+          "1791533929\t180.0\t2026-10-09T17:18:49\tok\tNone",
+          "1791533989\t180.0\t2026-10-09T17:19:49\tok\tNone",
+          "1791534049\t180.0\t2026-10-09T17:20:49\tok\tNone",
+          "1791534109\t180.0\t2026-10-09T17:21:49\tok\tNone"
+        ],
+        "free_disk_bytes": 202573127680
+      },
+      "resources_samples": 26,
+      "timing100_confirmed_rows": 0
+    },
+    {
+      "seed": 2,
+      "status": {
+        "at": "2026-10-09T17:22:30.784980+09:00",
+        "runner_pid": 60266,
+        "state": "running",
+        "production_started": true,
+        "model_group": 60278,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "pid": {
+        "pid": 60278,
+        "pgid": 60278
+      },
+      "launcher_pid": 60261,
+      "machine_before_start": {
+        "at": "2026-10-09T17:22:30.779795+09:00",
+        "cpu_limit": 8,
+        "outside_heavy": 2,
+        "model_process_count": 2,
+        "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+        "physical_memory_bytes": 34359738368,
+        "swap": "vm.swapusage: total = 1024.00M  used = 180.00M  free = 844.00M  (encrypted)\n",
+        "swap_samples": [
+          "1791533509\t180.0\t2026-10-09T17:11:49\tok\tNone",
+          "1791533569\t180.0\t2026-10-09T17:12:49\tok\tNone",
+          "1791533629\t180.0\t2026-10-09T17:13:49\tok\tNone",
+          "1791533689\t180.0\t2026-10-09T17:14:49\tok\tNone",
+          "1791533749\t180.0\t2026-10-09T17:15:49\tok\tNone",
+          "1791533809\t180.0\t2026-10-09T17:16:49\tok\tNone",
+          "1791533869\t180.0\t2026-10-09T17:17:49\tok\tNone",
+          "1791533929\t180.0\t2026-10-09T17:18:49\tok\tNone",
+          "1791533989\t180.0\t2026-10-09T17:19:49\tok\tNone",
+          "1791534049\t180.0\t2026-10-09T17:20:49\tok\tNone",
+          "1791534109\t180.0\t2026-10-09T17:21:49\tok\tNone"
+        ],
+        "free_disk_bytes": 202571522048
+      },
+      "resources_samples": 26,
+      "timing100_confirmed_rows": 0
+    }
+  ],
+  "seed3to10_started": false,
+  "calibration_started": false,
+  "instruction17_gate_separate_and_running": true,
+  "new_production_stop_resume_monitor": false,
+  "remaining_four_cases_blocked_by_unknown_flags": true,
+  "sampler_ok_none_warning_is_false_positive": true
+}
