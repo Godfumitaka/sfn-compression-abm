@@ -1,0 +1,20 @@
+--- run.py
++++ run_spawn15.py
+@@ -131,7 +131,7 @@
+     assert shutil.disk_usage(output.parent).free>=20*2**30
+     save(evidence/'start.json',dict(time=now(),host=host(),models_including_idle=s['models'],
+            computing_upper_bound=s['models'] if s['parallel'] else 1,processes_before=rows))
+-    observer='observe.py' if '--v311c' in s['model_argv'] else 'observe_independent.py'
++    observer='observe.py' if '--v311c' in s['model_argv'] else 'observe_independent_spawn15.py'
+     start=time.monotonic();peak=0;warnings=set()
+     with (evidence/'stdout.log').open('x') as log,(evidence/'resources.jsonl').open('x') as resources:
+         command=['/usr/bin/time','-v','-o',str(evidence/'time.log'),sys.executable,str(HERE/observer),args.runtime]
+@@ -179,7 +179,7 @@
+     runtime=materialize(s,a,output,evidence)
+     evidence.mkdir(parents=True,exist_ok=False);save(evidence/'runtime.json',runtime)
+     command=[sys.executable,str(a.jobs),'run','--wait','--owner','Codex3 N7 '+s['name'],
+-        '--mem',str(a.mem),'--disk-path',str(output),'--',sys.executable,str(HERE/'run.py'),
++        '--mem',str(a.mem),'--disk-path',str(output),'--',sys.executable,str(HERE/'run_spawn15.py'),
+         'registered',str(evidence/'runtime.json'),'--clearance',str(a.clearance.resolve())]
+     save(evidence/'admission-command.json',dict(command=command,time=now()))
+     code=subprocess.call(command)

@@ -1,0 +1,11 @@
+--- fork_fixture.py
++++ fork_fixture_dependency02.py
+@@ -8,7 +8,7 @@
+ 
+ runtime_path, observer_path = sys.argv[1:]
+ runtime = json.loads(Path(runtime_path).read_text())
+-sys.path[:0] = [str(Path(runtime['cwd'])/'tools'), runtime['cwd']]
++sys.path[:0] = [str(Path(observer_path).resolve().parent), str(Path(runtime['cwd'])/'tools'), runtime['cwd']]
+ import v3_run
+ 
+ 

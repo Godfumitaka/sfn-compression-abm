@@ -1,0 +1,27 @@
+{
+  "at_jst": "2026-10-10T07:13:42.269901+09:00",
+  "first_file": "manifest.jsonl",
+  "first_line": 1,
+  "first_difference_of_retained_fields": "stage2.seconds",
+  "values": [
+    6.582937203347683e-06,
+    8.37491825222969e-06
+  ],
+  "is_actual_model_value_mismatch": false,
+  "reason": "manifestのstage2.secondsは各側のstage2終了summary.secondsの写し。原README179行はmanifest/flag/runtimeを模型の全バイト表の対象外で別保存・必須検査としている。一方、今回の比較入口は全実在出力へ含めた。合格条件の読み違いの範囲を固定するため問いを残し、比較対象又は除外時計を勝手に増減しない。",
+  "passed_checks_before_first_stop": [
+    "attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+    "attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json",
+    "evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+    "evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json",
+    "flag.json",
+    "ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.done",
+    "ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+  ],
+  "small_models_naturally_finished": [
+    "old_fork3_dep02",
+    "new_fork3_dep02"
+  ],
+  "new_spawn_model_not_started": true,
+  "question": "原READMEのmanifest/flag/runtimeを別保存・必須検査とする範囲を、この小例と今後のB5(a)の比較へそのまま使ってよいか。manifestの研究者辞書のstage2.secondsと、stage2のrematch終了診断にあるseconds/engine_secondsについて、除外する既存時計欄の正確な場所を番号付きで指定してほしい。原順・全模型欄・全乱数・全控え・試験行は減らさず、旧停止と二本を保持して模型を再走行しない。"
+}

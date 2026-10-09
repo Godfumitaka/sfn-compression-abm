@@ -1,0 +1,76 @@
+--- observe_independent.py
++++ observe_independent_spawn15.py
+@@ -6,16 +6,31 @@
+ import random
+ import sys
+ 
+-spec = json.loads(Path(sys.argv[1]).read_text())
+-source = Path(spec['cwd'])
+-folder = Path(spec['evidence'])
+-sys.path[:0] = [str(source/'tools'), str(source)]
+-import v3_run
+-import sweep
+-from runtime_capture import runtime_record
+-from v311c_fingerprint import canonical
++# spawn の読込では設定と模型を触らず、親又は実際の worker 呼出し時に初期化する。
++SPEC_ENV = 'SFN_INDEPENDENT_OBSERVER_RUNTIME_PATH'
++spec = source = folder = v3_run = sweep = None
++real_run = real_worker = runtime_record = canonical = None
+ 
+-real_run, real_worker = sweep.run_one, v3_run.worker
++
++def initialize(runtime_path=None):
++    global spec, source, folder, v3_run, sweep
++    global real_run, real_worker, runtime_record, canonical
++    if spec is not None:
++        return
++    path = Path(runtime_path if runtime_path is not None else os.environ[SPEC_ENV]).resolve()
++    os.environ[SPEC_ENV] = str(path)
++    spec = json.loads(path.read_text())
++    source = Path(spec['cwd'])
++    folder = Path(spec['evidence'])
++    sys.path[:0] = [str(source/'tools'), str(source)]
++    import v3_run as model_driver
++    import sweep as model_sweep
++    from runtime_capture import runtime_record as capture_record
++    from v311c_fingerprint import canonical as encode_canonical
++    v3_run, sweep = model_driver, model_sweep
++    runtime_record, canonical = capture_record, encode_canonical
++    real_run, real_worker = sweep.run_one, v3_run.worker
++    sweep.run_one, v3_run.worker = run, worker
+ 
+ 
+ def write(path, value):
+@@ -24,6 +39,7 @@
+ 
+ 
+ def run(task):
++    initialize()
+     import abm.loop as loop
+     import smeshared as S
+     initial = random.getstate()
+@@ -49,6 +65,7 @@
+ 
+ 
+ def worker(task):
++    initialize()
+     value = real_worker(task)
+     import smeshared as S
+     import smereplay as R
+@@ -70,7 +87,12 @@
+     return value
+ 
+ 
+-sweep.run_one, v3_run.worker = run, worker
+-sys.argv = spec['argv'][1:]
+-os.chdir(source)
+-v3_run.main()
++def main():
++    initialize(sys.argv[1])
++    sys.argv = spec['argv'][1:]
++    os.chdir(source)
++    v3_run.main()
++
++
++if __name__ == '__main__':
++    main()

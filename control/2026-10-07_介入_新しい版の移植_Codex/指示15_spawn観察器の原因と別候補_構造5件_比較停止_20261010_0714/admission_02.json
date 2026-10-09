@@ -1,0 +1,14 @@
+{
+  "owner": "intervention-instruction15-spawn-dependency02",
+  "pid": 72978,
+  "reservation_gb": 0.6,
+  "admission_total_gb": 22.6,
+  "limit_gb": 24,
+  "swap_mb": 176.8,
+  "admission_wait_seconds": null,
+  "cpu_wait_seconds": null,
+  "timing_note": "受付前実時刻をこの入口では独立保存しなかったため受付待ち秒数は未計測。開始前CPU検査は機械記録として保存、独立秒数は未計測。模型時間だけ各statusに実測で保存。",
+  "memory_basis": "先行の同じ構成部品の一体ON20で最終控え込みchildren最大243974144B。試行数3へ減らし、独立driver親子とforkの控えに約2.5倍の余裕として0.6GBを予約。小例の実RSSは別保存し全長へ代用しない。",
+  "original_structure_admission_pid": 72900,
+  "old_stop_preserved": true
+}

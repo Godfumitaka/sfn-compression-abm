@@ -1,0 +1,42 @@
+{
+  "at_jst": "2026-10-10T07:08:22.131194+09:00",
+  "read_only_findings": {
+    "observer_runtime_read": [
+      [
+        9,
+        "spec = json.loads(Path(sys.argv[1]).read_text())"
+      ],
+      [
+        10,
+        "source = Path(spec['cwd'])"
+      ]
+    ],
+    "parent_model_argv_replacement": [
+      [
+        74,
+        "sys.argv = spec['argv'][1:]"
+      ]
+    ],
+    "model_pool": [
+      [
+        1116,
+        "    with ProcessPoolExecutor(max_workers=args.workers, max_tasks_per_child=1) as ex:"
+      ]
+    ]
+  },
+  "python_version": "3.12.13",
+  "spawn_copies_current_sys_argv": true,
+  "spawn_sets_sys_argv_before_main_reload": true,
+  "spawn_main_reload_name": "__mp_main__",
+  "spawn_source_sha256": "ebf9fa40eb622384c37690d8c78e7208744df031155ab4ceedab0fc791a1669b",
+  "original_model_unchanged": true,
+  "cloud_log_evidence_is_report_only": true,
+  "cloud_raw_log_not_retrieved": true,
+  "original_package_sha256_count": 94,
+  "original_observer_sha256": "e2680393d12d2568b4c5da1cf9eda955ae2c6618a9ad5282a50656e3e31abedb",
+  "model_argv_changed_by_fix": false,
+  "random_changed_by_fix": false,
+  "cloud_use_authorized": false,
+  "original_literal_search_error_preserved": "diagnosis_01のFalseは辞書リテラルの書き方を誤って検索した検査側の値。原関数はdict(...,sys_argv=sys.argv,...)で現在のargvを控える。",
+  "python_spawn_sys_argv_assignment": "sys_argv=sys.argv"
+}
