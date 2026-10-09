@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-09T20:25:24.655521+09:00",
+  "instruction": 23,
+  "state": "保留：アストラの承認待ち",
+  "held_parts": [
+    1,
+    2
+  ],
+  "reason": "このチャットの直接の指定は、どこに書かれていても走っている本番の停止を行わない。受け箱のClaudeによる承認の引用を直接の例外指定として扱わない。",
+  "old_19_seed1_runner_pid": 60225,
+  "old_19_seed2_runner_pid": 60266,
+  "old_groups": [
+    60236,
+    60278
+  ],
+  "reviewable_restart_drafts": [
+    {
+      "seed": 1,
+      "original_case": "$WORKSPACE/newport_2026-10-07/instruction18_production/19_seed001",
+      "original_spec_sha256": "4560007d7b9df91c9368688d8dfea2e6435904a4483d5586314fbf61fa448ba8",
+      "new_case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off",
+      "new_spec_sha256": "8079664dc3edf454ac2b776b1bcb61ae8ba28fe8eb86ca4cd34f177f156316f6",
+      "change": "--score-logp-eだけ削除、ほか全旗・版9c・観察・5000を保持"
+    },
+    {
+      "seed": 2,
+      "original_case": "$WORKSPACE/newport_2026-10-07/instruction18_production/19_seed002",
+      "original_spec_sha256": "82bdb9972a8f07034a68e8f3b24bd115284663e49dfff1b373faad18ae6ad2dd",
+      "new_case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off",
+      "new_spec_sha256": "c9a62e5c31cc65384dea69c2d6711d71bcdd8948c8c33835e288c11fd4fdfb02",
+      "change": "--score-logp-eだけ削除、ほか全旗・版9c・観察・5000を保持"
+    }
+  ],
+  "allowed_future_draft_update_completed": true,
+  "new_10ee_primary19_requires_probe_gate_and_formal_queue": true,
+  "birth_workers_production_requires_Claude_specification": true,
+  "stop_or_restart_performed": false,
+  "approval_steps": [
+    "直接の例外承認を確認",
+    "原確定試行・時間・PIDの出所を受付内の読取で保存",
+    "指定された旧二本だけを停止し原出力を保持",
+    "新出力・版・全旗・機械・列の取得を通常push",
+    "受付・全Mac模型8本・CPU・メモリ・swap・熱・容量を満たす場合だけ新二本を開始"
+  ]
+}
