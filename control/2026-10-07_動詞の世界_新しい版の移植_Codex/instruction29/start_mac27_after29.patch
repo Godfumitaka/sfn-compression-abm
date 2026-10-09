@@ -1,0 +1,24 @@
+--- instruction27/wait_for_start.py
++++ instruction29/start_mac27_after29.py
+@@ -11,9 +11,11 @@
+ import subprocess
+ import sys
+ import time
++sys_path_parent = __import__('pathlib').Path(__file__).resolve().parents[1]/'instruction27'
++__import__('sys').path.insert(0,str(sys_path_parent))
+ from run_registered import start_counts
+ 
+-HERE = Path(__file__).resolve().parent
++HERE = Path(__file__).resolve().parents[1]/'instruction27'
+ NR = HERE.parent
+ ROOT = NR.parent
+ RR = ROOT/'report-results'
+@@ -76,7 +78,7 @@
+                     state('new_unreceived_instruction_before_start'); return 0
+             # 受領済みの後続指示が来ても、この古い開始待ちが先行しない。
+             instructions = [int(x) for x in re.findall(r'(?m)^## 指示 (\d+)', INBOX.read_text())]
+-            if max(instructions) not in (27, 28):
++            if max(instructions) != 29:
+                 state('later_instruction_recheck_required'); return 0
+             lines = QUEUE.read_text().splitlines()
+             index = next(i for i, line in enumerate(lines) if line.startswith('| 19p |'))
