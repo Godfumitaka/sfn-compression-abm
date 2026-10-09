@@ -1,0 +1,109 @@
+{
+  "checked_at": "2026-10-09T10:28:24+09:00",
+  "report_commit": "a822f8f7b65dc4de990b411d73d140d8a2a0749c",
+  "source_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+  "model_process_count": 0,
+  "model_processes": [],
+  "other_active_spawn_workers": [],
+  "paused_or_zombie_spawn_workers": [],
+  "paused_or_zombie_model_workers": [],
+  "own_model_process_count": 0,
+  "eligible_mac_queue_rows": [],
+  "counting_rule": "実際のv3_run/計測観察過程、material_keep_driver_01のv3_run起動とselcands_smeの模型予測再生のspawnとforkの個体workerを一個体一回。RSSやCPU%を足切りにしない。親の監督・time・resource_trackerとSTAT T/Zは稼働数へ加えない。停止模型は別欄、受付のメモリ予約は変えない。未知のspawnは別欄で要確認。列の候補は実行前に版・旗・出力先と合格を本文で確かめる。",
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "target_thread_id": "01a10594-2608-70c3-83ae-8033440c080d",
+    "created_at_jst": "2026-10-06T21:18:51.465+09:00",
+    "interval_minutes": 30,
+    "expires_at_jst": "2026-10-11T09:00:00+09:00",
+    "expiry_saved_verified": true
+  },
+  "inputs": [
+    {
+      "path": "control/受け箱/動詞の世界の係.md",
+      "bytes": 51637,
+      "sha256": "be0a6f8df9d4522c9cfaf6c783fb68ba78918c33ab6a7fd91eb99089db86d78a"
+    },
+    {
+      "path": "control/受け箱/README.md",
+      "bytes": 2865,
+      "sha256": "c3a36beaa909b3f79b440970c112589f6514b7e071436c39299c9bc9005a57ce"
+    },
+    {
+      "path": "control/走行の列_2026-10-08.md",
+      "bytes": 14256,
+      "sha256": "58dc18faba2a0b3f736b989f5ff05a0ff365aeb13d29f885089cb57779fdb672"
+    },
+    {
+      "path": "control/2026-10-06_渡す委任書_Claude.md",
+      "bytes": 118841,
+      "sha256": "6b3381833320c46876e59681fceab9f51f478e196da1b162f4156d5385203f52"
+    },
+    {
+      "path": "control/2026-10-06_GPTの返事_照合と分布の統一.md",
+      "bytes": 37999,
+      "sha256": "58d1b13a03bc8c4d24937fa39f5df8fbde374e15008e7811c3f4eae940fe12fe"
+    },
+    {
+      "path": "control/2026-10-06_GPTの返事_四つの判断.md",
+      "bytes": 35758,
+      "sha256": "bf259c46dc2f01fc2c44f79976ccdefab2965211a448f05674ac51abbcad9ab9"
+    },
+    {
+      "path": "control/2026-10-07_走行の計画_案_Claude.md",
+      "bytes": 5352,
+      "sha256": "5e55d6fc9bc1089e712485f263a017495d3fc1e06c048a94ce0f999a53b535fe"
+    },
+    {
+      "path": "control/2026-10-07_C星の照合とディリクレ_実装_Codex.md",
+      "bytes": 381858,
+      "sha256": "b07367ecf2469d3b90f51cb5c31b57a16d975a9774ef000f89d7b4e87223b49e"
+    },
+    {
+      "path": "control/2026-10-07_注意の第二段_実装_Codex2.md",
+      "bytes": 345531,
+      "sha256": "e103c5788fffee8b8a284a535156e278b2ecad50dbe889a8b8804ed9f9651b39"
+    },
+    {
+      "path": "control/2026-10-06_SMEの一本の時間の内訳_Codex.md",
+      "bytes": 36663,
+      "sha256": "34b929b1fb67f487f28e64bf4124936b34e27294b9e5f1420621ee8f9b05fec2"
+    },
+    {
+      "path": "control/2026-10-06_動詞の世界_SME版_Codex/port.patch",
+      "bytes": 112372,
+      "sha256": "265d2c27d42100d89df1f03353a30d69ef0a3d782215208a9da368174bdc809e"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/v3_run.py",
+      "bytes": 77105,
+      "sha256": "b1d0d7ead7b4ca6f55d5c4b5d8d0cb3998b42e4a7c181c013848da4bcab641ba"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbworld.py",
+      "bytes": 12296,
+      "sha256": "2b8e3093ee98d646d97739f51d65590ae9ff3886a4e3aaf00c3a15bfe23949fe"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/probeworld.py",
+      "bytes": 14742,
+      "sha256": "380285408614d518c3256eaa19e5705dec82ab5a872e9ca1bd4f1efc233f38bb"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/analyze.py",
+      "bytes": 17262,
+      "sha256": "d6916cb33f01fe2a32d29bbe3813e79324f0e235503dbba0c7c8ad4c80d7680f"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verb/replay_state.py",
+      "bytes": 7060,
+      "sha256": "635a96df25b07bfa4c38a320ec952b116498a8ba64a485138a79d1807d94f914"
+    },
+    {
+      "path": "$WORKSPACE/codex_verb_2026-10-04/sme_2026-10-06/source/tools/verbtiming.py",
+      "bytes": 1459,
+      "sha256": "aef1541da38f74c567e67c017e326aaa6e0f3be21b8d4e9ffb678a456474b5e1"
+    }
+  ]
+}

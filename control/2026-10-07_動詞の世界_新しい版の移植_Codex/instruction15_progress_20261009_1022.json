@@ -1,0 +1,233 @@
+{
+  "at": "2026-10-09T10:26:31+09:00",
+  "instruction": 15,
+  "same_machine": "Mac",
+  "on100": {
+    "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+    "observer_sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+    "lambda_value": 0.01873710622997919,
+    "stage2_birth_hu": "on",
+    "speed_flags": "off",
+    "probe": false,
+    "configured_trial_count": 5000,
+    "horizon": 5000,
+    "completed_trials": 100,
+    "full_5000_completed": false,
+    "finished_at_jst": "2026-10-09T10:02:02.297910+09:00",
+    "result": {
+      "exit_code": 0,
+      "started_epoch": 1791502477.322487,
+      "finished_epoch": 1791507722.29791,
+      "wall_seconds": 5244.944265999948,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 15644599
+    },
+    "raw_time": {
+      "real_seconds": 5240.09,
+      "user_seconds": 5227.84,
+      "system_seconds": 8.92,
+      "maximum_resident_set_size_bytes": 337297408
+    },
+    "observation_checkpoint": {
+      "completed_trials": 100,
+      "configured_trial_count": 5000,
+      "horizon": 5000,
+      "wall_seconds": 5239.394679958001,
+      "interval_seconds": 5239.394679958001,
+      "user_cpu_seconds": 5227.294094,
+      "system_cpu_seconds": 8.866931,
+      "max_worker_rss_bytes": 333905920,
+      "epoch_seconds": 1791507716.9043589
+    },
+    "comparison_sha256": "1768b52dc908821bbf39e13dfb38e84c9e4b417f2e660b5e4dbda20bbb2c3800",
+    "passed": true,
+    "file_count": 11,
+    "mismatching_files": 0,
+    "mismatching_bytes": 0,
+    "excluded_state_rows": 0
+  },
+  "lambda20": {
+    "source_commit": "81477b5bd56b1a48efcebf43bfb43fd7b6c8d2a9",
+    "observer_sha256": "19084e0afd5687db83123f768f0bad904c3dfb735bbb664fccc67ed30fe0ddf0",
+    "lambda_value": 0.00035,
+    "stage2_birth_hu": "on",
+    "stage2_speed": "on",
+    "stage2_cache_prune": "on",
+    "probe": true,
+    "probe_interval": 100,
+    "configured_trial_count": 5000,
+    "horizon": 5000,
+    "intended_completed_trials": 20,
+    "actual_completed_trials": 20,
+    "fallback_calls": 161,
+    "supervisor_pid": 15175,
+    "group_pid": 23849,
+    "admission_pid": 23839,
+    "memory_reservation_gb": 2.0,
+    "started_epoch": 1791507722.860546,
+    "started_at_jst": "2026-10-09T10:02:02.860546+09:00",
+    "latest_resource_sample": {
+      "event": "finished",
+      "cpu_limit": 8,
+      "exit_code": 0,
+      "started_epoch": 1791507722.860677,
+      "finished_epoch": 1791508938.293371,
+      "wall_seconds": 1215.4253459999454,
+      "paused_seconds": 0,
+      "output_bytes": 4748518
+    },
+    "result_present": true,
+    "result": {
+      "exit_code": 0,
+      "started_epoch": 1791507722.860677,
+      "finished_epoch": 1791508938.293371,
+      "wall_seconds": 1215.4253459999454,
+      "paused_seconds": 0,
+      "cpu_limit": 8,
+      "output_bytes": 4748518
+    },
+    "raw_time": {
+      "real_seconds": 1210.73,
+      "user_seconds": 1207.96,
+      "system_seconds": 2.07,
+      "maximum_resident_set_size_bytes": 162971648
+    },
+    "gate_passed": false,
+    "gate_incomplete_reason": "E価格を0.00035にしていた命令準備の誤り。列の固定E価格0.01873710622997919と違う",
+    "actual_e_price": 0.00035,
+    "required_e_price": 0.01873710622997919
+  },
+  "production_started": false,
+  "cancelled300": true,
+  "new_model_launched_by_this_check": false,
+  "repeated_gate_or_comparison": false,
+  "files": {
+    "on100_logfix/result.json": {
+      "original_sha256": "d798a526adea5337bbed702955c04452fa5076e598c77ecff8bc7cba9deab187",
+      "original_bytes": 203,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_result.json",
+      "report_sha256": "d798a526adea5337bbed702955c04452fa5076e598c77ecff8bc7cba9deab187",
+      "path_redaction_only": false
+    },
+    "on100_logfix_comparison.json": {
+      "original_sha256": "1768b52dc908821bbf39e13dfb38e84c9e4b417f2e660b5e4dbda20bbb2c3800",
+      "original_bytes": 5875,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_comparison.json",
+      "report_sha256": "1768b52dc908821bbf39e13dfb38e84c9e4b417f2e660b5e4dbda20bbb2c3800",
+      "path_redaction_only": false
+    },
+    "on100_logfix/output/manifest.jsonl": {
+      "original_sha256": "41a08573ca119374ac0d2298a357023296ad2e358c0c73f44577110c8b7dbbeb",
+      "original_bytes": 21434,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_output_manifest.jsonl",
+      "report_sha256": "41a08573ca119374ac0d2298a357023296ad2e358c0c73f44577110c8b7dbbeb",
+      "path_redaction_only": false
+    },
+    "on100_logfix/output/measurement/partial_done.json": {
+      "original_sha256": "d57ace3d9bdf82cc436a2d7c2dbb9c8491b9bcbeec3400a0e66ded2da9f0fb09",
+      "original_bytes": 350,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_output_measurement_partial_done.json",
+      "report_sha256": "d57ace3d9bdf82cc436a2d7c2dbb9c8491b9bcbeec3400a0e66ded2da9f0fb09",
+      "path_redaction_only": false
+    },
+    "on100_logfix/output/measurement/checkpoints.jsonl": {
+      "original_sha256": "035c64fa2aa28de88ee8d22e93342d776d53496ce73b7766f7e551a9a1f86e08",
+      "original_bytes": 286,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_output_measurement_checkpoints.jsonl",
+      "report_sha256": "035c64fa2aa28de88ee8d22e93342d776d53496ce73b7766f7e551a9a1f86e08",
+      "path_redaction_only": false
+    },
+    "on100_logfix/run.log": {
+      "original_sha256": "c28184965f5e94c220653151f4e18cd3d5883ca5a57f6b9cc87a56e43ece2d40",
+      "original_bytes": 1416,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_run.log",
+      "report_sha256": "c28184965f5e94c220653151f4e18cd3d5883ca5a57f6b9cc87a56e43ece2d40",
+      "path_redaction_only": false
+    },
+    "on100_logfix/jobs.log": {
+      "original_sha256": "df5a14b8077af88d1f44e3db15fe02fc68b27b5b1543f49df6414365352e1568",
+      "original_bytes": 413,
+      "report_file": "instruction15_progress_20261009_1022_on100_logfix_jobs.log",
+      "report_sha256": "df5a14b8077af88d1f44e3db15fe02fc68b27b5b1543f49df6414365352e1568",
+      "path_redaction_only": false
+    },
+    "production_lambda20/pid.json": {
+      "original_sha256": "b45dca5cb8dafc2e39d2ea38589d02450c433a4590b68579f977071b883edf2e",
+      "original_bytes": 30,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_pid.json",
+      "report_sha256": "b45dca5cb8dafc2e39d2ea38589d02450c433a4590b68579f977071b883edf2e",
+      "path_redaction_only": false
+    },
+    "production_lambda20/jobs.log": {
+      "original_sha256": "7a367e9f288af3b84ca2b0b0840b1168f6f1e3027e875f05c384d9a1cbf3759d",
+      "original_bytes": 421,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_jobs.log",
+      "report_sha256": "7a367e9f288af3b84ca2b0b0840b1168f6f1e3027e875f05c384d9a1cbf3759d",
+      "path_redaction_only": false
+    },
+    "production_lambda20_before_start.json": {
+      "original_sha256": "abf225616e3d933dbcdd226321090aa203887286f8e09aa5b928642f41e3aa3b",
+      "original_bytes": 4518,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_before_start.json",
+      "report_sha256": "abf225616e3d933dbcdd226321090aa203887286f8e09aa5b928642f41e3aa3b",
+      "path_redaction_only": false
+    },
+    "production_lambda20_machine_before_start.json": {
+      "original_sha256": "0ca0d374ebf87287172529fd705e67b0558976cf06748d185a1ca225163a0e24",
+      "original_bytes": 2972,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_machine_before_start.json",
+      "report_sha256": "0ca0d374ebf87287172529fd705e67b0558976cf06748d185a1ca225163a0e24",
+      "path_redaction_only": false
+    },
+    "status.json": {
+      "original_sha256": "27c5055af431ceacd983f75d5e24caae0203cc90288563204e1f824cdf739ac9",
+      "original_bytes": 190,
+      "report_file": "instruction15_progress_20261009_1022_status.json",
+      "report_sha256": "27c5055af431ceacd983f75d5e24caae0203cc90288563204e1f824cdf739ac9",
+      "path_redaction_only": false
+    },
+    "production_lambda20/result.json": {
+      "original_sha256": "819cd6d65c2f1bb8a546bd24953d52600ff010e54766e03db30c1d194aaca250",
+      "original_bytes": 204,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_result.json",
+      "report_sha256": "819cd6d65c2f1bb8a546bd24953d52600ff010e54766e03db30c1d194aaca250",
+      "path_redaction_only": false
+    },
+    "production_lambda20/spec.json": {
+      "original_sha256": "1c943762d6faa5bbfb3c22bc12ee12c77ea357a6d604dd91287734b9d49bd8a5",
+      "original_bytes": 5587,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_spec.json",
+      "report_sha256": "a2b714de9783c915abd7664ff20efee957bbc97cb06a6bc9494c8eee2cd822ca",
+      "path_redaction_only": true
+    },
+    "production_lambda20/run.log": {
+      "original_sha256": "83d5391c101df439ba2eb3357cd927608ebb0f0e049f6b0e662e443f9e6e1996",
+      "original_bytes": 1416,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_run.log",
+      "report_sha256": "83d5391c101df439ba2eb3357cd927608ebb0f0e049f6b0e662e443f9e6e1996",
+      "path_redaction_only": false
+    },
+    "production_lambda20/output/manifest.jsonl": {
+      "original_sha256": "f7211301797bb4486371e4a6616684816a2bde86098959471599ae75157fb9b2",
+      "original_bytes": 12605,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_output_manifest.jsonl",
+      "report_sha256": "f7211301797bb4486371e4a6616684816a2bde86098959471599ae75157fb9b2",
+      "path_redaction_only": false
+    },
+    "production_lambda20/output/measurement/partial_done.json": {
+      "original_sha256": "0cc96b87bcbad17a6600a9dd039fc5fbbd50665268068755ac673b43d8a62177",
+      "original_bytes": 385,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_output_measurement_partial_done.json",
+      "report_sha256": "0cc96b87bcbad17a6600a9dd039fc5fbbd50665268068755ac673b43d8a62177",
+      "path_redaction_only": false
+    },
+    "production_lambda20/output/measurement/log_fallback_counts.json": {
+      "original_sha256": "ab678e1d94c2d31836bc7cd3ff6dd1a9ea597065788684605aed4e5f3401fe23",
+      "original_bytes": 150,
+      "report_file": "instruction15_progress_20261009_1022_production_lambda20_output_measurement_log_fallback_counts.json",
+      "report_sha256": "ab678e1d94c2d31836bc7cd3ff6dd1a9ea597065788684605aed4e5f3401fe23",
+      "path_redaction_only": false
+    }
+  }
+}
