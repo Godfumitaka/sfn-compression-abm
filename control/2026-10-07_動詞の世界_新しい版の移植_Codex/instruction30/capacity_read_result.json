@@ -1,0 +1,804 @@
+{
+  "at": "2026-10-10T04:01:33.899433+09:00",
+  "instruction": 30,
+  "scope": "原19種1/2、既存観察器の静的読取、原時間、サイズstat",
+  "model_starts": 0,
+  "model_stop_resume": 0,
+  "deletions": 0,
+  "running_model_or_observer_changes": 0,
+  "read_model_record_content": false,
+  "cases": [
+    {
+      "seed": 1,
+      "case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off",
+      "spec_sha256": "8eb6c689a8c21749ed9b92353fbba930c68738c70ce249cc80d9d98eaf829f43",
+      "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+      "driver": "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py",
+      "observer_files": {
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py": "d7025730e515fa776261f3d9ca3ef0ffb7c66beffec7102f38ad7c3420c08cb3",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/checkpoint_observer.py": "f3c1f8fe52c6bc7b781a00990434f22d7e6355c5fb092a64f40c76162a325429",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/instruction11_io.py": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/timing100_observer.py": "635916dbde8cca3dc2ac085e53cdf385a1fd1a18d77b5561633e382e481c866a"
+      },
+      "all_files": [
+        {
+          "path": "spec.json",
+          "bytes": 6574,
+          "allocated_bytes": 8192,
+          "mtime_ns": 1791547427177226079
+        },
+        {
+          "path": "launch.once",
+          "bytes": 33,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547565773315271
+        },
+        {
+          "path": "spec.draft.json",
+          "bytes": 6393,
+          "allocated_bytes": 8192,
+          "mtime_ns": 1791545124653310427
+        },
+        {
+          "path": "launcher_pid.json",
+          "bytes": 1420,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547565775953539
+        },
+        {
+          "path": "resource_warnings.jsonl",
+          "bytes": 247,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791548337407961402
+        },
+        {
+          "path": "run.log",
+          "bytes": 462,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927084354209
+        },
+        {
+          "path": "jobs.log",
+          "bytes": 920,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547926749810871
+        },
+        {
+          "path": "before_start.json",
+          "bytes": 10271,
+          "allocated_bytes": 12288,
+          "mtime_ns": 1791547926911897478
+        },
+        {
+          "path": "machine_before_start.json",
+          "bytes": 1097,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547926980618644
+        },
+        {
+          "path": "resources.jsonl",
+          "bytes": 9968717,
+          "allocated_bytes": 10928128,
+          "mtime_ns": 1791572487125025524
+        },
+        {
+          "path": "status.json",
+          "bytes": 205,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547926984139754
+        },
+        {
+          "path": "pid.json",
+          "bytes": 32,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547926983959378
+        },
+        {
+          "path": "output/timing100.jsonl",
+          "bytes": 1439,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791568740882072639
+        },
+        {
+          "path": "output/flag.json",
+          "bytes": 2098,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927084274458
+        },
+        {
+          "path": "output/comparison_checkpoints/m1_at_trial500.json",
+          "bytes": 315,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791568745089018442
+        },
+        {
+          "path": "output/timing/seed001.jsonl",
+          "bytes": 0,
+          "allocated_bytes": 0,
+          "mtime_ns": 1791547927232662624
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/state.json",
+          "bytes": 13750066,
+          "allocated_bytes": 13750272,
+          "mtime_ns": 1791568699997345800
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/cache_posthoc_p10.json",
+          "bytes": 189945,
+          "allocated_bytes": 192512,
+          "mtime_ns": 1791568740866403889
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/cache_sme.json",
+          "bytes": 9791,
+          "allocated_bytes": 12288,
+          "mtime_ns": 1791568740874048867
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/cache_raw.json",
+          "bytes": 18967389,
+          "allocated_bytes": 18968576,
+          "mtime_ns": 1791568740854793089
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/rng.json",
+          "bytes": 41183,
+          "allocated_bytes": 45056,
+          "mtime_ns": 1791568700003725684
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/confirmed.json",
+          "bytes": 2745,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791568740874374452
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 118825126,
+          "allocated_bytes": 118829056,
+          "mtime_ns": 1791568695539389756
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+          "bytes": 307714712,
+          "allocated_bytes": 307716096,
+          "mtime_ns": 1791568695859757172
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+          "bytes": 564903885,
+          "allocated_bytes": 564903936,
+          "mtime_ns": 1791568696814763959
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl",
+          "bytes": 170124,
+          "allocated_bytes": 172032,
+          "mtime_ns": 1791568696161153564
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+          "bytes": 121568,
+          "allocated_bytes": 122880,
+          "mtime_ns": 1791568696154375261
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+          "bytes": 4758157,
+          "allocated_bytes": 4759552,
+          "mtime_ns": 1791568696168927293
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "bytes": 3585160,
+          "allocated_bytes": 3588096,
+          "mtime_ns": 1791568696159395384
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 2584995792,
+          "allocated_bytes": 2584997888,
+          "mtime_ns": 1791568699594423103
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 236538766,
+          "allocated_bytes": 236539904,
+          "mtime_ns": 1791568696150277812
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 24868404,
+          "allocated_bytes": 24870912,
+          "mtime_ns": 1791568699619502010
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.jsonl.gz",
+          "bytes": 20469328,
+          "allocated_bytes": 20471808,
+          "mtime_ns": 1791568699651527764
+        },
+        {
+          "path": "output/comparison_checkpoints/completed_0500/records/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz",
+          "bytes": 6540704,
+          "allocated_bytes": 6541312,
+          "mtime_ns": 1791568699628012744
+        },
+        {
+          "path": "output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 10587007,
+          "allocated_bytes": 11579392,
+          "mtime_ns": 1791571153123218236
+        },
+        {
+          "path": "output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+          "bytes": 28023758,
+          "allocated_bytes": 28127232,
+          "mtime_ns": 1791571153191157983
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+          "bytes": 65626125,
+          "allocated_bytes": 65957888,
+          "mtime_ns": 1791571155444519200
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl",
+          "bytes": 170124,
+          "allocated_bytes": 200704,
+          "mtime_ns": 1791568695172246217
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+          "bytes": 138657,
+          "allocated_bytes": 200704,
+          "mtime_ns": 1791571034070668452
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+          "bytes": 5390316,
+          "allocated_bytes": 6324224,
+          "mtime_ns": 1791571153005841180
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "bytes": 4122052,
+          "allocated_bytes": 4239360,
+          "mtime_ns": 1791571154763470629
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+          "bytes": 257624944,
+          "allocated_bytes": 269389824,
+          "mtime_ns": 1791571153813352505
+        },
+        {
+          "path": "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 32379082,
+          "allocated_bytes": 33009664,
+          "mtime_ns": 1791571153132269224
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+          "bytes": 1660981,
+          "allocated_bytes": 2146304,
+          "mtime_ns": 1791571091595514956
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.jsonl.gz",
+          "bytes": 2042127,
+          "allocated_bytes": 2142208,
+          "mtime_ns": 1791571718066149774
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz",
+          "bytes": 262677,
+          "allocated_bytes": 323584,
+          "mtime_ns": 1791568743462899537
+        }
+      ],
+      "logical_bytes": 4324480918,
+      "allocated_bytes": 4341129216,
+      "existing_records_bytes": 3873491726,
+      "timing_rows": [
+        {
+          "completed_trials": 100,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 3157.7994947920088,
+          "interval_seconds": 3157.7994947920088,
+          "user_cpu_seconds": 3147.640825,
+          "system_cpu_seconds": 5.741657,
+          "max_worker_rss_bytes": 512360448,
+          "epoch_seconds": 1791551086.13594
+        },
+        {
+          "completed_trials": 200,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 7546.007689875085,
+          "interval_seconds": 4388.208195083076,
+          "user_cpu_seconds": 6763.586867,
+          "system_cpu_seconds": 15.463339,
+          "max_worker_rss_bytes": 5351407616,
+          "epoch_seconds": 1791555474.3797581
+        },
+        {
+          "completed_trials": 300,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 12482.190945167094,
+          "interval_seconds": 4936.18325529201,
+          "user_cpu_seconds": 11662.100953,
+          "system_cpu_seconds": 27.194591,
+          "max_worker_rss_bytes": 5363384320,
+          "epoch_seconds": 1791560410.598588
+        },
+        {
+          "completed_trials": 400,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 17603.52018083306,
+          "interval_seconds": 5121.329235665966,
+          "user_cpu_seconds": 16740.939902,
+          "system_cpu_seconds": 43.806219,
+          "max_worker_rss_bytes": 5363384320,
+          "epoch_seconds": 1791565531.969017
+        },
+        {
+          "completed_trials": 500,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 20812.40771125001,
+          "interval_seconds": 3208.8875304169487,
+          "user_cpu_seconds": 19933.292231,
+          "system_cpu_seconds": 50.029562,
+          "max_worker_rss_bytes": 5363384320,
+          "epoch_seconds": 1791568740.882016
+        }
+      ],
+      "last_completed_trials": 500,
+      "seconds_per_trial_recent_two_intervals": 41.65108383041457,
+      "seconds_per_trial_last_interval": 32.088875304169484,
+      "result_present": false,
+      "m1_at501_present": true
+    },
+    {
+      "seed": 2,
+      "case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off",
+      "spec_sha256": "d117832b7b603ffd355870e84bfff1c2d438ccece85e404c0ac52b5493a872c5",
+      "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+      "driver": "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py",
+      "observer_files": {
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py": "d7025730e515fa776261f3d9ca3ef0ffb7c66beffec7102f38ad7c3420c08cb3",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/checkpoint_observer.py": "f3c1f8fe52c6bc7b781a00990434f22d7e6355c5fb092a64f40c76162a325429",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/instruction11_io.py": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+        "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/timing100_observer.py": "635916dbde8cca3dc2ac085e53cdf385a1fd1a18d77b5561633e382e481c866a"
+      },
+      "all_files": [
+        {
+          "path": "spec.json",
+          "bytes": 6573,
+          "allocated_bytes": 8192,
+          "mtime_ns": 1791547427177937334
+        },
+        {
+          "path": "launch.once",
+          "bytes": 33,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547565776483710
+        },
+        {
+          "path": "spec.draft.json",
+          "bytes": 6393,
+          "allocated_bytes": 8192,
+          "mtime_ns": 1791545124654234393
+        },
+        {
+          "path": "launcher_pid.json",
+          "bytes": 1420,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547565779283812
+        },
+        {
+          "path": "resource_warnings.jsonl",
+          "bytes": 247,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791548337635100353
+        },
+        {
+          "path": "run.log",
+          "bytes": 462,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927317940877
+        },
+        {
+          "path": "jobs.log",
+          "bytes": 920,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547926992196109
+        },
+        {
+          "path": "before_start.json",
+          "bytes": 10271,
+          "allocated_bytes": 12288,
+          "mtime_ns": 1791547927150465936
+        },
+        {
+          "path": "machine_before_start.json",
+          "bytes": 1097,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927216910625
+        },
+        {
+          "path": "resources.jsonl",
+          "bytes": 9967493,
+          "allocated_bytes": 10928128,
+          "mtime_ns": 1791572487169119999
+        },
+        {
+          "path": "status.json",
+          "bytes": 205,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927219370645
+        },
+        {
+          "path": "pid.json",
+          "bytes": 32,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927219150851
+        },
+        {
+          "path": "output/timing100.jsonl",
+          "bytes": 1151,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791568610693764209
+        },
+        {
+          "path": "output/flag.json",
+          "bytes": 2098,
+          "allocated_bytes": 4096,
+          "mtime_ns": 1791547927317836501
+        },
+        {
+          "path": "output/timing/seed002.jsonl",
+          "bytes": 0,
+          "allocated_bytes": 0,
+          "mtime_ns": 1791547927451782762
+        },
+        {
+          "path": "output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz",
+          "bytes": 8264669,
+          "allocated_bytes": 8404992,
+          "mtime_ns": 1791571940460286034
+        },
+        {
+          "path": "output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed002.keys.jsonl.gz",
+          "bytes": 23507732,
+          "allocated_bytes": 24526848,
+          "mtime_ns": 1791571940578896058
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.answers.csv",
+          "bytes": 100671,
+          "allocated_bytes": 135168,
+          "mtime_ns": 1791571939316918835
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.probe.jsonl",
+          "bytes": 126739,
+          "allocated_bytes": 135168,
+          "mtime_ns": 1791568603345984895
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.ambig.csv",
+          "bytes": 0,
+          "allocated_bytes": 0,
+          "mtime_ns": 1791547991722412037
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl",
+          "bytes": 3042776,
+          "allocated_bytes": 3203072,
+          "mtime_ns": 1791571943698024687
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.routing.jsonl",
+          "bytes": 3949515,
+          "allocated_bytes": 4222976,
+          "mtime_ns": 1791571940235455959
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.jsonl.gz",
+          "bytes": 53041825,
+          "allocated_bytes": 53080064,
+          "mtime_ns": 1791571943541649571
+        },
+        {
+          "path": "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed002.sme.states.jsonl.gz",
+          "bytes": 198446634,
+          "allocated_bytes": 202326016,
+          "mtime_ns": 1791571941405154449
+        },
+        {
+          "path": "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz",
+          "bytes": 22715166,
+          "allocated_bytes": 22925312,
+          "mtime_ns": 1791571940495698231
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz.rematch.jsonl.gz",
+          "bytes": 1665258,
+          "allocated_bytes": 2142208,
+          "mtime_ns": 1791572231867379707
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz.initial.jsonl.gz",
+          "bytes": 279925,
+          "allocated_bytes": 323584,
+          "mtime_ns": 1791569942923550629
+        },
+        {
+          "path": "output/stage2/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz",
+          "bytes": 1209113,
+          "allocated_bytes": 2146304,
+          "mtime_ns": 1791571939330928155
+        }
+      ],
+      "logical_bytes": 326348418,
+      "allocated_bytes": 334569472,
+      "existing_records_bytes": 0,
+      "timing_rows": [
+        {
+          "completed_trials": 100,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 6286.698063915945,
+          "interval_seconds": 6286.698063915945,
+          "user_cpu_seconds": 3426.763124,
+          "system_cpu_seconds": 6.410238,
+          "max_worker_rss_bytes": 519372800,
+          "epoch_seconds": 1791554215.327907
+        },
+        {
+          "completed_trials": 200,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 8382.20137079095,
+          "interval_seconds": 2095.5033068750054,
+          "user_cpu_seconds": 5516.665959,
+          "system_cpu_seconds": 10.268556,
+          "max_worker_rss_bytes": 666337280,
+          "epoch_seconds": 1791556310.8491452
+        },
+        {
+          "completed_trials": 300,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 15547.302124583046,
+          "interval_seconds": 7165.100753792096,
+          "user_cpu_seconds": 12621.594636,
+          "system_cpu_seconds": 29.474876,
+          "max_worker_rss_bytes": 1076330496,
+          "epoch_seconds": 1791563476.0011158
+        },
+        {
+          "completed_trials": 400,
+          "configured_trial_count": 5000,
+          "horizon": 5000,
+          "wall_seconds": 20681.949150374974,
+          "interval_seconds": 5134.647025791928,
+          "user_cpu_seconds": 17722.112431,
+          "system_cpu_seconds": 42.754242,
+          "max_worker_rss_bytes": 1708720128,
+          "epoch_seconds": 1791568610.691327
+        }
+      ],
+      "last_completed_trials": 400,
+      "seconds_per_trial_recent_two_intervals": 61.49873889792012,
+      "seconds_per_trial_last_interval": 51.34647025791928,
+      "result_present": false,
+      "m1_at501_present": false
+    }
+  ],
+  "code_evidence": [
+    {
+      "path": "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py",
+      "sha256": "d7025730e515fa776261f3d9ca3ef0ffb7c66beffec7102f38ad7c3420c08cb3",
+      "relevant_lines": [
+        {
+          "line": 15,
+          "text": "    def worker(task):"
+        },
+        {
+          "line": 21,
+          "text": "            with observe(Path(task[\"out_root\"]),ledger), observe_timing(Path(task[\"out_root\"]), ledger):"
+        },
+        {
+          "line": 24,
+          "text": "        try:return original_worker(task)"
+        }
+      ]
+    },
+    {
+      "path": "$WORKSPACE/newport_2026-10-07/instruction18_production/tools/checkpoint_observer.py",
+      "sha256": "f3c1f8fe52c6bc7b781a00990434f22d7e6355c5fb092a64f40c76162a325429",
+      "relevant_lines": [
+        {
+          "line": 5,
+          "text": "from instruction11_io import confirmed_content, copy_confirmed, names, save, sha"
+        },
+        {
+          "line": 81,
+          "text": "    native_append=ledger.append"
+        },
+        {
+          "line": 125,
+          "text": "    def append(row):"
+        },
+        {
+          "line": 126,
+          "text": "        result=native_append(row)"
+        },
+        {
+          "line": 134,
+          "text": "        if n%500==0:"
+        },
+        {
+          "line": 142,
+          "text": "                proof=copy_confirmed(out/rel,target)"
+        },
+        {
+          "line": 166,
+          "text": "    ledger.append=append"
+        }
+      ]
+    }
+  ],
+  "observer_in_model_worker": true,
+  "separate_observer_process": false,
+  "can_swap_observer_without_touching_running_model_process": false,
+  "reason": "driverのworker内でobserveを取り付け、同じworker内のledger.appendの閉包が固定済みcopy_confirmedを呼ぶ。外部切替旗・再読込・別観察器の過程は無い。ファイルを置き換えても既存のimportと閉包は変わらない。",
+  "current_free_bytes": 184519675904,
+  "reserved_free_bytes_decimal": 30000000000,
+  "available_before_30GB": 154519675904,
+  "seed1_actual_500_copy_bytes_reused": 3873491726,
+  "forecast_is_conditional_not_measured": true,
+  "forecasts": [
+    {
+      "history_content_growth_power": 1,
+      "seed2_to_seed1_500_bytes_assumption": 0.5,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-11T19:28:39.675422+09:00",
+        "epoch_projected": 1791714519.6754224,
+        "trigger": {
+          "seed": 1,
+          "completed_trials_projected": 4000,
+          "event_epoch_projected": 1791714519.6754224,
+          "copy_bytes_projected": 30987933808.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 4000.0000000008527,
+          "2": 2772.552457336156
+        },
+        "additional_records_bytes_projected": 164623398355.0,
+        "hours_from_read_anchor_projected": 39.4516046062443
+      }
+    },
+    {
+      "history_content_growth_power": 1,
+      "seed2_to_seed1_500_bytes_assumption": 1.0,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-11T14:49:18.043013+09:00",
+        "epoch_projected": 1791697758.0430126,
+        "trigger": {
+          "seed": 2,
+          "completed_trials_projected": 2500,
+          "event_epoch_projected": 1791697758.0430126,
+          "copy_bytes_projected": 19367458630.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 3597.570318265385,
+          "2": 2499.9999999982397
+        },
+        "additional_records_bytes_projected": 162686652492.0,
+        "hours_from_read_anchor_projected": 34.79559560351902
+      }
+    },
+    {
+      "history_content_growth_power": 1,
+      "seed2_to_seed1_500_bytes_assumption": 2.0,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-11T07:54:28.591592+09:00",
+        "epoch_projected": 1791672868.591592,
+        "trigger": {
+          "seed": 1,
+          "completed_trials_projected": 3000,
+          "event_epoch_projected": 1791672868.591592,
+          "copy_bytes_projected": 23240950356.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 3000.0000000022446,
+          "2": 2095.285173864019
+        },
+        "additional_records_bytes_projected": 154939669040.0,
+        "hours_from_read_anchor_projected": 27.881859097811912
+      }
+    },
+    {
+      "history_content_growth_power": 2,
+      "seed2_to_seed1_500_bytes_assumption": 0.5,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-11T02:07:23.049677+09:00",
+        "epoch_projected": 1791652043.0496767,
+        "trigger": {
+          "seed": 1,
+          "completed_trials_projected": 2500,
+          "event_epoch_projected": 1791652043.0496767,
+          "copy_bytes_projected": 96837293150.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 2499.999999997216,
+          "2": 1756.6515321240736
+        },
+        "additional_records_bytes_projected": 236282995286.0,
+        "hours_from_read_anchor_projected": 22.09698634352949
+      }
+    },
+    {
+      "history_content_growth_power": 2,
+      "seed2_to_seed1_500_bytes_assumption": 1.0,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-10T21:44:19.304115+09:00",
+        "epoch_projected": 1791636259.3041148,
+        "trigger": {
+          "seed": 2,
+          "completed_trials_projected": 1500,
+          "event_epoch_projected": 1791636259.3041148,
+          "copy_bytes_projected": 34861425534.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 2121.048383129266,
+          "2": 1500.0000000001855
+        },
+        "additional_records_bytes_projected": 166560144218.0,
+        "hours_from_read_anchor_projected": 17.712612576352225
+      }
+    },
+    {
+      "history_content_growth_power": 2,
+      "seed2_to_seed1_500_bytes_assumption": 2.0,
+      "current_speed_basis": "各種の原timing100の最後の2区間（容量停止を含む原値）/200",
+      "threshold_crossing_projected": {
+        "at_projected_jst": "2026-10-10T21:44:19.304115+09:00",
+        "epoch_projected": 1791636259.3041148,
+        "trigger": {
+          "seed": 2,
+          "completed_trials_projected": 1500,
+          "event_epoch_projected": 1791636259.3041148,
+          "copy_bytes_projected": 69722851068.0
+        },
+        "both_seeds_trials_projected": {
+          "1": 2121.048383129266,
+          "2": 1500.0000000001855
+        },
+        "additional_records_bytes_projected": 220789028382.0,
+        "hours_from_read_anchor_projected": 17.712612576352225
+      }
+    }
+  ],
+  "assumptions": [
+    "種1の実500履歴Cを基準に履歴内容が試行数の1乗又は2乗で増えると仮定。",
+    "種2の実500コピーがまだなければ同量/半量/2倍を仮定した感度。実測として書かない。",
+    "現在の原2区間の秒/試行が保たれ、500境ごとの非圧縮コピーだけが増える。",
+    "元gzip・STATE/RNG/cache・他の係・APFSの割当変化の増分は含まないため、安全な下限/上限ではない。",
+    "checkpointは完了境の階段として加算し、総時間から未記録区間を作らない。未来の試行数は予測として分ける。"
+  ],
+  "elapsed_seconds": 0.007379770278930664
+}

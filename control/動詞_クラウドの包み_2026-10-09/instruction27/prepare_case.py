@@ -1,4 +1,4 @@
-"""指示29までのx86用50命令と100関門3本を実パスへ展開するだけ。模型を起動しない。"""
+"""指示30までのx86用70命令と100関門3本を実パスへ展開するだけ。模型を起動しない。"""
 from pathlib import Path
 import argparse
 import hashlib
@@ -13,8 +13,8 @@ def prepare(source, output_root, label):
     source, output_root = Path(source).resolve(), Path(output_root).resolve()
     plan = json.loads((HERE/'plan.json').read_text())
     draft = {**plan['commands'], **plan['gate_commands']}[label]
-    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip() == plan['source_commit']
-    assert subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=source, text=True).strip() == plan['source_tree']
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip() == draft['source_commit']
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=source, text=True).strip() == draft.get('source_tree',plan['source_tree'])
     assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=source)
     case = output_root/label
     case.mkdir(parents=True, exist_ok=False)
@@ -26,7 +26,7 @@ def prepare(source, output_root, label):
     runner = HERE/draft.get('runner_relative', 'run_registered.py')
     spec = {**draft, 'machine':'x86', 'cwd':str(source), 'output':str(case/'output'),
         'observer_files':files, 'runner_sha256':hashlib.sha256(runner.read_bytes()).hexdigest(),
-        'sources':{str(source):plan['source_commit']}, 'ready_to_start':False,
+        'sources':{str(source):draft['source_commit']}, 'ready_to_start':False,
         'command':[*prefix, str(source/'config/sweep_verb_hide1_s1_2026-10-04.json'), str(case/'output'), *draft['flags']]}
     (case/'spec.json').write_text(json.dumps(spec, ensure_ascii=False, indent=2)+'\n')
     admission = [sys.executable, '$JOBS/jobs.py', 'run', '--wait', '--owner', '動詞・指示28・'+label,
