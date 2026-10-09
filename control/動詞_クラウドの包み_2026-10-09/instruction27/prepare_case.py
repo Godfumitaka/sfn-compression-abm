@@ -1,4 +1,4 @@
-"""指示28のx86用40命令と100関門3本を実パスへ展開するだけ。模型を起動しない。"""
+"""指示29までのx86用50命令と100関門3本を実パスへ展開するだけ。模型を起動しない。"""
 from pathlib import Path
 import argparse
 import hashlib
@@ -23,14 +23,15 @@ def prepare(source, output_root, label):
     prefix = [sys.executable, str(driver), str(source)]
     if draft.get('measurement_limit') == 100:
         prefix.append('100')
+    runner = HERE/draft.get('runner_relative', 'run_registered.py')
     spec = {**draft, 'machine':'x86', 'cwd':str(source), 'output':str(case/'output'),
-        'observer_files':files, 'runner_sha256':hashlib.sha256((HERE/'run_registered.py').read_bytes()).hexdigest(),
+        'observer_files':files, 'runner_sha256':hashlib.sha256(runner.read_bytes()).hexdigest(),
         'sources':{str(source):plan['source_commit']}, 'ready_to_start':False,
         'command':[*prefix, str(source/'config/sweep_verb_hide1_s1_2026-10-04.json'), str(case/'output'), *draft['flags']]}
     (case/'spec.json').write_text(json.dumps(spec, ensure_ascii=False, indent=2)+'\n')
     admission = [sys.executable, '$JOBS/jobs.py', 'run', '--wait', '--owner', '動詞・指示28・'+label,
                  '--mem', str(spec['memory_reservation_gb']), '--disk-path', spec['output'], '--',
-                 sys.executable, str(HERE/'run_registered.py'), str(case), '--clearance', '$CLEARANCE']
+                 sys.executable, str(runner), str(case), '--clearance', '$CLEARANCE']
     (case/'admission_command.draft.json').write_text(json.dumps(dict(command=admission,
         cpu_slots=spec['cpu_start_slots'], model_slots=spec['model_start_slots'], executed=False,
         official_queue_and_clearance_required=True), ensure_ascii=False, indent=2)+'\n')
