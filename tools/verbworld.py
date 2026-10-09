@@ -126,9 +126,13 @@ def verb_trial(original, run_seed, trial_index, agent_ids, *, seed, holdout_incl
         import shopworld
         tr = shopworld.rehide(tr, run_seed, trial_index, CFG["door_p"])
     out, info = build(tr, run_seed, trial_index, verb=draw_verb(run_seed, trial_index))
-    INFO[out.G_star.graph_id] = info
-    IDS[info["name_id"]] = "name"
-    IDS[info["link_id"]] = "link"
+    from verb_snapshot import AppendOnlyDict, append_trial
+    if isinstance(INFO, AppendOnlyDict) or isinstance(IDS, AppendOnlyDict):
+        append_trial(INFO, IDS, out.G_star.graph_id, info)
+    else:
+        INFO[out.G_star.graph_id] = info
+        IDS[info["name_id"]] = "name"
+        IDS[info["link_id"]] = "link"
     STATS["trials"] = STATS.get("trials", 0) + 1
     STATS["held_out_is_past"] = STATS.get("held_out_is_past", 0) + int(info["held_out_is_past"])
     return out

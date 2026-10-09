@@ -1,4 +1,4 @@
-"""指示17の構造検査。世界・学習模型を起動しない。"""
+"""指示20の繰り返し復元の構造検査。世界・学習模型を起動しない。"""
 import ast
 from pathlib import Path
 import sys
@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import probeworld as pw
-from verb_snapshot import AppendOnlyDict, AppendOnlyMark, AppendOnlyViolation, install
+from verb_snapshot import AppendOnlyDict, AppendOnlyMark, AppendOnlyViolation, append_trial, install
 
 
 @pytest.fixture
@@ -102,7 +102,7 @@ def test_ids_change_or_delete_stops(world, action):
     pw._restore_modules(snap)
 
 
-def test_nested_windows_restore_last_added_items_in_order(world):
+def test_nested_snapshots_preserve_length_and_order_without_stack(world):
     w, _ = world
     install(w)
     outer = pw._snapshot_modules()
@@ -115,17 +115,60 @@ def test_nested_windows_restore_last_added_items_in_order(world):
     assert list(w.INFO) == ["a", "b"]
     pw._restore_modules(outer)
     assert list(w.INFO) == ["a"]
-    w.INFO["a"]["name"] = "outside"
-    assert w.INFO["a"]["name"] == "outside"
+    pw._restore_modules(outer)
+    assert list(w.INFO) == ["a"]
 
 
-def test_out_of_order_restore_stops():
+def test_same_snapshot_can_be_restored_twice_and_three_times():
     d = AppendOnlyDict({"a": "name"})
-    a, b = d.snapshot(), d.snapshot()
-    with pytest.raises(AppendOnlyViolation):
-        d.restore(a)
-    d.restore(b)
-    d.restore(a)
+    saved = d.snapshot()
+    for i in range(3):
+        d[f"new{i}"] = "link"
+        d.restore(saved)
+        assert list(d.items()) == [("a", "name")]
+    d.restore(saved)
+    assert not hasattr(d, "_marks")
+
+
+def test_restore_stops_if_dictionary_is_shorter_than_snapshot():
+    d = AppendOnlyDict({"a": "name", "b": "link"})
+    saved = d.snapshot()
+    # 想定外の外部変更を模す。通常の削除入口の禁止は別の検査で確認する。
+    dict.popitem(d)
+    with pytest.raises(AppendOnlyViolation, match="短い"):
+        d.restore(saved)
+    assert list(d.items()) == [("a", "name")]
+
+
+def test_snapshot_owner_cannot_be_substituted():
+    first, second = AppendOnlyDict(), AppendOnlyDict()
+    with pytest.raises(AppendOnlyViolation, match="所有者"):
+        second.restore(first.snapshot())
+
+
+def test_attnsme_style_restore_after_each_candidate_and_finally(world):
+    w, _ = world
+    install(w)
+    saved = pw._snapshot_modules()
+    for i in range(3):
+        append_trial(w.INFO, w.IDS, f"g{i}", {"name_id": f"n{i}", "link_id": f"l{i}"})
+        pw._restore_modules(saved)
+    pw._restore_modules(saved)
+    assert list(w.INFO.items()) == [("a", {"past": True, "name": "V01"})]
+    assert list(w.IDS.items()) == [("n", "name")]
+
+
+@pytest.mark.parametrize("conflict", ["graph", "name", "link"])
+def test_verb_trial_write_guard_stops_before_any_partial_append(conflict):
+    info = {"name_id": "new-name", "link_id": "new-link"}
+    a = AppendOnlyDict({"old": {"name": "V01"}}, info=True)
+    b = AppendOnlyDict({"old-name": "name", "old-link": "link"})
+    graph = "new"
+    if conflict == "graph": graph = "old"
+    else: info[conflict + "_id"] = "old-" + conflict
+    with pytest.raises(AppendOnlyViolation, match="verb_trial"):
+        append_trial(a, b, graph, info)
+    assert list(a) == ["old"] and list(b) == ["old-name", "old-link"]
 
 
 def test_mutable_info_child_is_not_silently_allowed():
