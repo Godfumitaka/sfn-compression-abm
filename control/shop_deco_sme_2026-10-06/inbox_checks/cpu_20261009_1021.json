@@ -1,0 +1,16 @@
+{
+  "time_jst": "2026-10-09T10:22:44.019539+09:00",
+  "model_workers": [],
+  "other_heavy_R": [],
+  "admission_count": 0,
+  "own": [
+    {
+      "pid": 25377,
+      "ppid": 52419,
+      "rss_kib": 12080,
+      "state": "Ss",
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python control/shop_independent_2026-10-07/cpu_guard.py --record /Users/tatsu-admin/Documents/ChatGPT/New project/codex_shop_deco_sme_2026-10-06/inbox_checks/cpu_heartbeat_20261009_1021.json -- /usr/bin/true"
+    }
+  ],
+  "rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB"
+}
