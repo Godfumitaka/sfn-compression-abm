@@ -1,0 +1,3 @@
+evidence_sha256.jsonは同名の非公開原控えのSHA256を保存したものです。cloud_originals_provenance.jsonも、報告枝へ到着した原GitオブジェクトのSHA256を記録しています。
+
+公開コピーでは個人のローカルパスだけを$WORKSPACE/$PROJECTS/$HOME/$CLOUD_HOMEへ置き換えました。模型の原行、時刻、版、全旗、比較の値と内容SHAは変更していません。公開ファイルそのもののSHA256はpublic_files_sha256.jsonを使ってください（その一覧自身を除く）。元の原控えと原SHAは保持し、公開SHAを模型の新しい比較には使いません。
