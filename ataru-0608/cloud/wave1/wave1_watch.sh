@@ -6,10 +6,11 @@
 # 直し（04:25）：ループの中の ssh・持ち帰りが一覧の stdin を読んでしまい、一回目で抜けていた。ssh -n と < /dev/null にした。
 # rc≠0 の本は記録だけして持ってこない（止まりは列と報告に書く）。全部が終わった（rc がある）ら抜ける。機械は消さない（次の種に使うかは指示を待つ）。
 set -u; source $HOME/cloud/aws_env.sh
-ID=$1; IP=$2; CMDS="$HOME/cloud/wave1/wave1_s12_commands.json $HOME/cloud/wave1/wave1_s12_e9_commands.json $HOME/cloud/wave1/wave1_s1_jsonlog_commands.json $HOME/cloud/wave1/wave1_w2s2_jsonlog_commands.json"; DONE=$HOME/cloud/wave1/done.tsv; LOG=$HOME/cloud/wave1/watch.log; RES=$HOME/v33prod/results
+# 直し（13:55、指示 41）：機械ごとに一つずつ走らせる。引数の残りは命令の一覧のファイル
+ID=$1; IP=$2; shift 2; CMDS="$*"; DONE=$HOME/cloud/wave1/done.tsv; LOG=$HOME/cloud/wave1/watch.log; RES=$HOME/v33prod/results
 [ -f $DONE ] || echo -e "name\trc\tfinished\tfetched_at\tstatus" > $DONE
 say() { echo "$(date '+%F %T') $*" >> $LOG; }
-say "見張りを始めた（$ID、$IP）"
+say "見張りを始めた（$ID、$IP、$CMDS）"
 while true; do
   left=0
   while read -r NAME RD; do
@@ -18,6 +19,7 @@ while true; do
     rc=$(echo "$st" | sed -n 's/^rc://p'); fin=$(echo "$st" | sed -n 's/^fin://p')
     [ -z "$rc" ] && { left=$((left+1)); continue; }
     if [ "$rc" != "rc=0" ]; then echo -e "$NAME\t$rc\t$fin\t\t止まり" >> $DONE; say "★ $NAME は $rc（持ってこない）"; continue; fi
+    exec 9>$HOME/cloud/wave1/fetch.lock; flock 9   # 何台もの見張りが同じ報告の枝に書くので、持ち帰りと上げは一つずつ
     if bash $HOME/cloud/aws_fetch_run.sh $IP $RD $NAME >> $LOG 2>&1 < /dev/null; then
       O=/mnt/d/sfn_runs/cloud/$NAME/output; G=ataru-0608/cloud_runs/$NAME; msg=""
       SIDE=$(ls $O/side/*/seed[0-9][0-9][0-9].jsonl 2>/dev/null | head -1); ST2=$(ls $O/stage2/*/seed[0-9][0-9][0-9].jsonl.gz 2>/dev/null | head -1)
@@ -30,6 +32,7 @@ while true; do
       msg="side $( [ -n "$SIDE" ] && stat -c %s $SIDE || echo 無し) バイト（gzip 前）、第二段 $( [ -n "$ST2" ] && stat -c %s $ST2 || echo 無し) バイトを上げた"
       echo -e "$NAME\trc=0\t$fin\t$(date '+%F %T')\tok、$msg" >> $DONE; say "持ってきた $NAME（$fin UTC 終了）、$msg"
     else say "★ $NAME を持ってこられなかった（次の回にやり直す）"; left=$((left+1)); fi
+    flock -u 9
   done < <(python3 -c "import json,sys;[print(c['name'],c['rundir']) for f in sys.argv[1:] for c in json.load(open(f))]" $CMDS)
   [ $left -eq 0 ] && { say "全部の本に rc が出たので、見張りを終える"; break; }
   sleep 600
