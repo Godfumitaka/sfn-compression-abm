@@ -5,13 +5,13 @@
 import json, os, subprocess, time
 W=os.path.expanduser("~/cloud/wave1/"); K=os.path.expanduser("~/.ssh/google_compute_engine")
 GO=f"-i {K} -o UserKnownHostsFile={os.path.expanduser('~/.ssh/gcp_known_hosts')} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15"
-machines={"g8":("34.57.154.198",7),"g4":("34.45.150.3",3)}
+machines={"g8":("34.57.154.198",7),"g4":("34.45.150.3",3),"g16a":("136.107.100.7",15),"g16b":("35.243.229.179",15)}   # 10/10 00:55：枠が 96 に広がったので、c3d-standard-16 を us-east4・us-east1 に足した（C3D は地域ごとに 24 vCPU まで）
 cmds=json.load(open(W+"wave2d_commands.json"))
 for c in cmds:
     c["argv"]=[a.replace("/home/USER/","/home/tatsu/").replace("/home/ubuntu/","/home/tatsu/") for a in c["argv"]]
     c["rundir"]=os.path.dirname(c["argv"][3])
 assigned={m:(json.load(open(W+f"s57_{m}.json")) if os.path.exists(W+f"s57_{m}.json") else []) for m in machines}
-started={c["name"] for a in assigned.values() for c in a}
+started={c["name"] for m in ("g8","g4","g16a","g16b") if os.path.exists(W+f"s57_{m}.json") for c in json.load(open(W+f"s57_{m}.json"))}
 queue=[c for c in cmds if c["name"] not in started]
 log=lambda s: open(W+"sched57.log","a").write(time.strftime("%F %T ")+s+"\n")
 log(f"始めた：残り {len(queue)} 本")
