@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-09T20:25:24.655521+09:00",
+  "at": "2026-10-09T21:14:39.314827+09:00",
   "instruction": 23,
-  "state": "直接承認済み・停止前の原記録保存から実施",
+  "state": "直接承認された旧二本停止・9cの新二本正常開始済み",
   "held_parts": [],
   "reason": "このチャットの直接の指定は、どこに書かれていても走っている本番の停止を行わない。受け箱のClaudeによる承認の引用を直接の例外指定として扱わない。",
   "old_19_seed1_runner_pid": 60225,
@@ -31,7 +31,7 @@
   "allowed_future_draft_update_completed": true,
   "new_10ee_primary19_requires_probe_gate_and_formal_queue": true,
   "birth_workers_production_requires_Claude_specification": true,
-  "stop_or_restart_performed": false,
+  "stop_or_restart_performed": true,
   "approval_steps": [
     "直接の例外承認を確認",
     "原確定試行・時間・PIDの出所を受付内の読取で保存",
@@ -39,5 +39,26 @@
     "新出力・版・全旗・機械・列の取得を通常push",
     "受付・全Mac模型8本・CPU・メモリ・swap・熱・容量を満たす場合だけ新二本を開始"
   ],
-  "direct_approval": "$WORKSPACE/newport_2026-10-07/instruction23/direct_approval.json"
+  "direct_approval": "$WORKSPACE/newport_2026-10-07/instruction23/direct_approval.json",
+  "old_production_stopped": true,
+  "new_production_started": true,
+  "restart_jobs_pids": [
+    99519,
+    99520
+  ],
+  "restart_memory_gb": [
+    7,
+    2
+  ],
+  "new_original_outputs_untouched": true,
+  "restart_runner_pids": [
+    495,
+    520
+  ],
+  "restart_groups": [
+    517,
+    558
+  ],
+  "parts_1_2_executed": true,
+  "full_5000_completed": false
 }

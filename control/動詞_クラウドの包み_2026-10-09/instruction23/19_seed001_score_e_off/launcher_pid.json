@@ -1,0 +1,38 @@
+{
+  "pid": 99519,
+  "pgid": 99519,
+  "submitted_at": "2026-10-09T21:06:05.775468+09:00",
+  "seed": 1,
+  "arm": "#19",
+  "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+  "command": [
+    "/usr/bin/python3",
+    "$HOME/jobs/jobs.py",
+    "run",
+    "--wait",
+    "--owner",
+    "Codex 動詞 本番19 種1 指示23 score_e_off",
+    "--mem",
+    "7.0",
+    "--disk-path",
+    "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output",
+    "--",
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "$WORKSPACE/newport_2026-10-07/instruction23_production/run_production.py",
+    "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off"
+  ],
+  "queue_claim": {
+    "at": "2026-10-09T21:05:15.452843+09:00",
+    "labels": [
+      "19_seed001_score_e_off",
+      "19_seed002_score_e_off"
+    ],
+    "row": "19",
+    "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+    "normal_push_succeeded": true,
+    "claude_informed_before_start": true,
+    "first_commit": "d6e07a3f7e65a3928f83840b148e15d3fcdf69a5",
+    "confirmation_commit": "cd4faf48f1cd0f4cfbd491d4796c16553663a8ac",
+    "latest_report_head": "cd4faf48f1cd0f4cfbd491d4796c16553663a8ac"
+  }
+}
