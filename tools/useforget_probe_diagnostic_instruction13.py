@@ -2,6 +2,7 @@
 from pathlib import Path
 import json
 import hashlib
+import sys
 
 
 def snapshot():
@@ -70,12 +71,29 @@ def install(path, *, candidate):
     def probe(state, config, trial):
         before = snapshot(); raw_before = N.probe_snapshot()
         events.clear(); active.append(trial); error = None
+        first_mutation = []
+        previous_trace = sys.gettrace()
+        targets = {str(Path(__file__).parent/name) for name in ('useforget.py', 'useforget_cstar.py')}
+        def trace(frame, event, arg):
+            if frame.f_code.co_filename not in targets:
+                return None
+            if event in ('line', 'return') and not first_mutation:
+                current = snapshot(); changed = differences(before, current)
+                if changed:
+                    first_mutation.append(dict(file=frame.f_code.co_filename,
+                        function=frame.f_code.co_name, observed_at_line=frame.f_lineno,
+                        changes=changed, snapshot=current))
+                    sys.settrace(previous_trace)
+                    return None
+            return trace
+        sys.settrace(trace)
         try:
             return original(state, config, trial)
         except BaseException as caught:
             error = repr(caught)
             raise
         finally:
+            sys.settrace(previous_trace)
             active.pop()
             after = snapshot(); raw_after = N.probe_snapshot()
             record = dict(trial=trial, candidate=candidate, unchanged=raw_before == raw_after,
@@ -83,7 +101,7 @@ def install(path, *, candidate):
                 after_sha256=hashlib.sha256(raw_after).hexdigest(),
                 before=before, after=after, changes=differences(before, after),
                 first_observed_call_change=events[0] if events else None,
-                call_changes=events, exception=error,
+                call_changes=events, first_temporal_mutation=first_mutation[0] if first_mutation else None, exception=error,
                 model_state_restored_by_this_diagnostic=False)
             output.write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n')
             output.with_suffix('.before.bin').write_bytes(raw_before)
