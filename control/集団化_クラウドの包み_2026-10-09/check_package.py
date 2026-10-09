@@ -31,7 +31,7 @@ def build_pair(root):
             ledger=d/f'seed{seed:03d}.jsonl.gz'
             with gzip.open(ledger,'wt') as file:
                 file.write(json.dumps(dict(code_commit=commit,trial_count=200,f_setting=f,agent_ids=['agent']))+'\n')
-                for t in range(200):file.write(json.dumps(dict(trial=t,f_realized=f,value=t))+'\n')
+                for t in range(200):file.write(json.dumps(dict(prediction_order=t,f_realized=f,value=t))+'\n')
             done=dict(cell=cell,seed=seed,code_commit=commit,ledger_bytes=ledger.stat().st_size,
                       elapsed_sec=1,finished_at='synthetic',trial_count=200)
             save(d/f'seed{seed:03d}.done',done)
