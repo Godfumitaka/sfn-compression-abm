@@ -1,0 +1,121 @@
+{
+  "at": "2026-10-10T02:30:35.552516+09:00",
+  "case": "$WORKSPACE/newport_2026-10-07/instruction27_production/19_seed001_flags_on",
+  "original_waiter_status": {
+    "at": "2026-10-10T02:18:19.656167+09:00",
+    "state": "actual_resources_not_ready_requires_next_check",
+    "waiter_pid": 26749,
+    "model_started": false
+  },
+  "startup_snapshot": {
+    "at": "2026-10-10T02:18:19.654276+09:00",
+    "model_process_count": 2,
+    "unknown_active_spawn": 3,
+    "outside_heavy": 5,
+    "cpu_limit": 8,
+    "free_disk_bytes": 188765499392,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "ready": false,
+    "counting_rule": "実spawn workerとその同命令を継承する出生fork子を一個体ずつ。親/監督/time/tracker/T/Zは稼働模型に加えない。未知spawnは保留。",
+    "unknown_worker_pids": [
+      36641,
+      36761,
+      36785
+    ],
+    "actual_model_count_after_parent_code_read": 5,
+    "requested_model_total_at_snapshot": 10,
+    "requested_cpu_total_at_snapshot": 11,
+    "parent_readonly_proof": [
+      {
+        "path": "$PROJECTS/codex_intervention_port_2026-10-07/instruction12/observer_100.py",
+        "sha256": "6ca7af8f64dbc9599ac256f84d15930d37d102aeff56bf2e1f29b861c49217f4",
+        "entry_calls": [
+          "v3_run.worker",
+          "original_worker(task)",
+          "v3_run.main()"
+        ]
+      },
+      {
+        "path": "$PROJECTS/codex_intervention_port_2026-10-07/instruction12/observer_200.py",
+        "sha256": "ccb924c4653572e116ac38fb35d21c202689e32dc848daca16825564af2e4903",
+        "entry_calls": [
+          "v3_run.worker",
+          "original_worker(task)",
+          "v3_run.main()"
+        ]
+      }
+    ]
+  },
+  "scoped_pid_read_at": "2026-10-10T02:27:41.699753+09:00",
+  "scoped_present": [
+    {
+      "pid": 495,
+      "state": "S"
+    },
+    {
+      "pid": 517,
+      "state": "Ss"
+    },
+    {
+      "pid": 519,
+      "state": "S"
+    },
+    {
+      "pid": 520,
+      "state": "S"
+    },
+    {
+      "pid": 533,
+      "state": "S"
+    },
+    {
+      "pid": 534,
+      "state": "R"
+    },
+    {
+      "pid": 558,
+      "state": "Ss"
+    },
+    {
+      "pid": 562,
+      "state": "S"
+    },
+    {
+      "pid": 563,
+      "state": "S"
+    },
+    {
+      "pid": 564,
+      "state": "R"
+    },
+    {
+      "pid": 36641,
+      "state": "R"
+    }
+  ],
+  "absent_pids": [
+    18805,
+    18810,
+    18821,
+    18823,
+    18824,
+    18825,
+    18826,
+    18830,
+    18841,
+    18843,
+    18851,
+    18853,
+    26749,
+    36761,
+    36785
+  ],
+  "current_visible_blocking_worker": 36641,
+  "original_classifier_unchanged": true,
+  "resource_gate_unchanged": true,
+  "new_model_starts": 0,
+  "waiter_restarted": false,
+  "model_case_status_pid_result_output_absent": true,
+  "queue19p_unclaimed": true,
+  "next_check": "既存の開始待ち終了記録と該当PIDを先に読む。枠の実変化後だけ最新受け箱・列・全資源を開始直前に確認して同じ未開始caseを受付へ通す。無条件に開始待ちを再起動しない。"
+}
