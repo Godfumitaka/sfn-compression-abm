@@ -1,0 +1,142 @@
+{
+  "status": "recorded_stop",
+  "A_passed": false,
+  "source_accepted": false,
+  "formal_3b_material": false,
+  "runs": {
+    "A_D_attention_04_retry01": {
+      "state": "stopped",
+      "exit_code": 3,
+      "started_at_jst": "2026-10-10T01:10:08.862456+09:00",
+      "ended_at_jst": "2026-10-10T01:11:05.818741+09:00",
+      "admission_wait_seconds": 0.1960289478302002,
+      "cpu_wait_seconds": 0.06680045905523002,
+      "model_seconds": 56.955566707998514,
+      "peak_children_rss_bytes": 200720384,
+      "first_error_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_04_retry01/model.log",
+      "first_error_line": 24,
+      "first_probe_boundary": 100,
+      "guard_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_instruction12/tools/useforget_cstar.py",
+      "guard_source_line": 42,
+      "manifest": [
+        {
+          "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+          "seed": 1,
+          "error": "RuntimeError('指示12：試験がDの状態又は記録を変えた（試行 100）')"
+        }
+      ],
+      "partial_D_records": [
+        {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_04_retry01/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "rows": 100,
+          "trial_first": 0,
+          "trial_last": 99
+        },
+        {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_04_retry01/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+          "rows": 100,
+          "trial_first": 0,
+          "trial_last": 99
+        }
+      ],
+      "protected_unchanged": true,
+      "completion_marker_present": false,
+      "probe_checks_saved": false,
+      "files_sha256": {
+        "before_start.json": "b5c2dd542ddd3f18dfd788e0f0a3d8ab1579627e6249c46f01ed80d9d1b5315a",
+        "model.log": "e79493298c3c453c98f9368a1c4d5a61fcbe992c716afcb4458a396c0803779c",
+        "output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": "39752dc4e2501afc70b2f83e0ad4a903f36051a9a8b42efe4fd4182f5b2bc2cb",
+        "output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz": "aaac29e254d2385f9adb8e5f4dbffa7c2fba5e98fabc2e9e16a5852b89ee38b8",
+        "output/flag.json": "d3eee9e7711f57665836d5ca85ea395967232b9c45b1461ade7f8f8ac8e559bf",
+        "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": "368997140e14f074126218cfcb9d91787a6d4e32015db4d5f1700a451f3a9204",
+        "output/manifest.jsonl": "5d019b7bfee1653149d09afdfbe6f38166a6eda13a3550fb36784057ed83752d",
+        "output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl": "184858163c097ee99a460a89962b848f246daa6c3b57d42148acc6ed700f362c",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv": "a9fced3fab2982bcd2d6b0f2a099959981fb2d843a2ff76ecec5ff1dd5472252",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl": "a1d2c3435bf89e0d466ec7db974638c12fd3cf6ca34ff4cfeab4b26c3fdbfd09",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl": "7059a8a99bc0827cdcf4b2f70e329630f951f8751307ed5034a9cde15b3b4e1d",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl": "758b3a7e8f089462c9e7abd958ae876d9dadafd0af67bff732f8fe06ead0389b",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz": "51a1602a5a643245a26f3ff903f5b7f4ee2620a3c32a04f0b51acfe86ea8efc5",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz": "a9aa500bc254212f8fe30e7c618ee8909023f2f24e7d1d2bf58868378acdf386",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+        "output/timing/seed001.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "protected_after.json": "4ee0c7857b3c1908b4e6f4bac47785b96e7f6abffeeb860537441f86e13f5cca",
+        "protected_before.json": "4ee0c7857b3c1908b4e6f4bac47785b96e7f6abffeeb860537441f86e13f5cca",
+        "status.json": "c49f37e0a278fd422437a2321d9e0a264b75ab6e6da17516d294606f3b6acc68"
+      }
+    },
+    "A_D_attention_015_retry01": {
+      "state": "stopped",
+      "exit_code": 3,
+      "started_at_jst": "2026-10-10T01:10:25.208449+09:00",
+      "ended_at_jst": "2026-10-10T01:11:52.218759+09:00",
+      "admission_wait_seconds": 0.22017288208007812,
+      "cpu_wait_seconds": 0.07840516697615385,
+      "model_seconds": 87.009331749985,
+      "peak_children_rss_bytes": 230359040,
+      "first_error_log": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_015_retry01/model.log",
+      "first_error_line": 24,
+      "first_probe_boundary": 100,
+      "guard_source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_instruction12/tools/useforget_cstar.py",
+      "guard_source_line": 42,
+      "manifest": [
+        {
+          "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+          "seed": 1,
+          "error": "RuntimeError('指示12：試験がDの状態又は記録を変えた（試行 100）')"
+        }
+      ],
+      "partial_D_records": [
+        {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_015_retry01/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+          "rows": 100,
+          "trial_first": 0,
+          "trial_last": 99
+        },
+        {
+          "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_015_retry01/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+          "rows": 100,
+          "trial_first": 0,
+          "trial_last": 99
+        }
+      ],
+      "protected_unchanged": true,
+      "completion_marker_present": false,
+      "probe_checks_saved": false,
+      "files_sha256": {
+        "before_start.json": "dab657cd10b36fad5f319940ea3d1e721d04d37f23b1ba9da78a1583f93318d2",
+        "model.log": "270f544ab4be7b678aec4b967ce67e326e328268e414d677c8c7f9f7e383776b",
+        "output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": "64c37e9202e530fb0e3ba8e79e031257621a33acb55b16d68d8efb77b6b894fe",
+        "output/evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz": "e89996a875f369fc43df8db74799c03b20678e033f25ad7d28b162df4cf04ff0",
+        "output/flag.json": "c33c55193b5a2e013a819df21b391638dc6e9fab59165712d6fe1f19e275448b",
+        "output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": "12c49df40dada01531ebbc1fbc139b164b7b62088b747781231824eb6d07a79f",
+        "output/manifest.jsonl": "5d019b7bfee1653149d09afdfbe6f38166a6eda13a3550fb36784057ed83752d",
+        "output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl": "5d759954bba92df3498a9ad8808c30f059ec11feed55d018035ee68b4905c25b",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv": "d229f9bad8a8da27b54a9983b3bed4d3e1cad1696fa447eb02393147c601f5e7",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl": "f105e127d3076b499d596a0ce0669436f5d6faf72d6c2403c9a2653687b9c38e",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl": "429f08692593a9d991672e072e6f4c01d8d17ffc282d2fb9ec63169e55ea05cb",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl": "cc2eb82a972330a26dc125857cb5343cde00052c7f90170b40e818b8756df12d",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz": "bc0b9dadd92a6630becbde5a1adcaf7cc8d4378904588570862be0de6b90190c",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz": "65bd2ebce623a99d6e36aa9379e79be487461ead6602917340fd6500ebf8c83d",
+        "output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl": "69260aef6e1f0465a9485e96f3222b2986d09b3336a460dc45bdc99f7bf958b5",
+        "output/timing/seed001.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "protected_after.json": "4ee0c7857b3c1908b4e6f4bac47785b96e7f6abffeeb860537441f86e13f5cca",
+        "protected_before.json": "4ee0c7857b3c1908b4e6f4bac47785b96e7f6abffeeb860537441f86e13f5cca",
+        "status.json": "567886dc93a9aad6ae92ab06b5aa933dfb7d44027362ca6a4e29aa3a7a3a1cab"
+      }
+    }
+  },
+  "no_model_rerun": true,
+  "no_source_correction": true,
+  "source_commit": "54f0a412201bc5c67efdfa6689fed07fa3250e31",
+  "source_status": "",
+  "source_files_sha256": {
+    "tools/v3_run.py": "03fc3be7850ea769424b727a1d7bec8b4e02996dc2622eae02650bf98a07e2bd",
+    "tools/useforget_cstar.py": "54c149348a99b8027e5279b00a539a2602de318cdd87cfc29c818fea1205af82",
+    "tools/useforget.py": "24fd6464b39cd9489098aac06aecedd6989745518eff841952d25d894b693865",
+    "tools/test_useforget_instruction9.py": "4ea59306344e0345e6f78d002662ffe518d3533c896b34618ef6b820ef4682a7",
+    "tools/test_useforget_instruction12.py": "8390d4755a0c235533451f9410b6fdc1e770785660afc86d32dd410cc98382df"
+  },
+  "scope_note": "ST/AUDITと開いているD記録口の位置・原字節を一緒に照合する検査が失敗。個別の最初の変化箇所は保存されておらず特定しない。",
+  "at_jst": "2026-10-10T01:13:11.288239+09:00",
+  "seconds": 0.16531054198276252
+}

@@ -1,0 +1,33 @@
+{
+  "at_jst": "2026-10-10T01:06:23.737981+09:00",
+  "reason": "指定6e4土台にstage2-speedとstage2-cache-pruneの実装・引数が無い。明示offだけを省き、存在しない高速化を有効にしない。",
+  "original_commands_sha256": "b121fc3ce6e9812ec7f5f7f1ba9a2abdeadacea9e51db042a101a642c58bd61e",
+  "original_commands_unchanged": true,
+  "original_stop_preserved": true,
+  "model_source_unchanged": true,
+  "comparison_gate_unchanged": true,
+  "changes": {
+    "A_D_attention_04_retry01": {
+      "original_label": "A_D_attention_04",
+      "removed_unsupported_off_arguments": [
+        "--stage2-speed",
+        "off",
+        "--stage2-cache-prune",
+        "off"
+      ],
+      "output_before": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_04/output",
+      "output_after": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_04_retry01/output"
+    },
+    "A_D_attention_015_retry01": {
+      "original_label": "A_D_attention_015",
+      "removed_unsupported_off_arguments": [
+        "--stage2-speed",
+        "off",
+        "--stage2-cache-prune",
+        "off"
+      ],
+      "output_before": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_015/output",
+      "output_after": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/A_D_attention_015_retry01/output"
+    }
+  }
+}
