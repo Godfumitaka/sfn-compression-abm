@@ -1,0 +1,1 @@
+指示17：既定offの--verb-snap-append-only on。版・木・bundleの値はversions.json、9c9dd0eからの差分はport.patch。土台e9へbundleを取り出したHEAD/tree/cleanを確認済み。新枝をoriginへpushしない。構造26件passed。指示15の同じMacの試験なし100と同じ命令に旗だけを足し、既存11ファイルを全バイト比較する。元の試験なし命令ではINFO・IDSをSNAP一覧へ入れる入口を通らず、その一覧を旗によって追加していない。100の実時間は原timeで並べる。未完了を合格や全5000としない。模型・観察・旗・出力を途中で替えず、同じ監督・100・比較を再投入しない。本番へこの版をまだ使わない。

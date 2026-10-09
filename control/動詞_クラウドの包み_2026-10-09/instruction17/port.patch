@@ -1,0 +1,397 @@
+diff --git a/tests/test_verb_snapshot_append_only.py b/tests/test_verb_snapshot_append_only.py
+new file mode 100644
+index 0000000..5af8278
+--- /dev/null
++++ b/tests/test_verb_snapshot_append_only.py
+@@ -0,0 +1,170 @@
++"""指示17の構造検査。世界・学習模型を起動しない。"""
++import ast
++from pathlib import Path
++import sys
++from types import SimpleNamespace
++
++import pytest
++
++sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
++import probeworld as pw
++from verb_snapshot import AppendOnlyDict, AppendOnlyMark, AppendOnlyViolation, install
++
++
++@pytest.fixture
++def world(monkeypatch):
++    w = SimpleNamespace(INFO={"a": {"past": True, "name": "V01"}}, IDS={"n": "name"}, STATS={"trials": 1})
++    other = SimpleNamespace(INFO={"x": {"n": 1}}, IDS={"x": "link"})
++    monkeypatch.setitem(sys.modules, "verbworld", w)
++    monkeypatch.setitem(sys.modules, "other_snapshot", other)
++    monkeypatch.setattr(pw, "SNAP_MODULES", ("verbworld", "other_snapshot"))
++    monkeypatch.setattr(pw, "SNAP_ATTRS", ("INFO", "IDS", "STATS"))
++    return w, other
++
++
++def old_snapshot(world):
++    return [(d, {k: dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v
++                 for k, v in d.items()})
++            for w in world for a in pw.SNAP_ATTRS if isinstance(d := getattr(w, a, None), dict)]
++
++
++def test_off_uses_original_full_copies(world):
++    w, _ = world
++    expected = old_snapshot(world)
++    actual = pw._snapshot_modules()
++    assert actual == expected
++    assert all(type(saved) is dict for _, saved in actual)
++    w.INFO["a"]["name"] = "changed"
++    w.INFO["b"] = {"name": "new"}
++    del w.IDS["n"]
++    pw._restore_modules(actual)
++    assert w.INFO == {"a": {"past": True, "name": "V01"}} and w.IDS == {"n": "name"}
++
++
++def test_on_restores_content_and_order_like_original_copy(world):
++    w, other = world
++    original = old_snapshot(world)
++    stats = w.STATS
++    install(w)
++    snap = pw._snapshot_modules()
++    assert [type(saved) for _, saved in snap] == [AppendOnlyMark, AppendOnlyMark, dict, dict, dict]
++    assert w.STATS is stats and type(other.INFO) is dict and type(other.IDS) is dict
++    w.INFO["b"] = {"past": False, "name": "V02"}
++    w.IDS.update({"b1": "name", "b2": "link"})
++    w.STATS["trials"] += 1
++    other.INFO["x"]["n"] = 7
++    pw._restore_modules(snap)
++    for current, (_, saved) in zip((w.INFO, w.IDS, w.STATS, other.INFO, other.IDS), original):
++        assert list(current.items()) == list(saved.items())
++
++
++@pytest.mark.parametrize("action", [
++    lambda d: d.__setitem__("a", {"name": "changed"}),
++    lambda d: d.__delitem__("a"),
++    lambda d: d.clear(), lambda d: d.pop("a"), lambda d: d.popitem(),
++    lambda d: d.update({"new": {"name": "new"}, "a": {"name": "changed"}}),
++    lambda d: d.__ior__({"a": {"name": "changed"}}),
++])
++def test_existing_info_change_or_delete_stops_before_mutation(world, action):
++    w, _ = world
++    install(w)
++    snap = pw._snapshot_modules()
++    with pytest.raises(AppendOnlyViolation):
++        action(w.INFO)
++    assert list(w.INFO.items()) == [("a", {"past": True, "name": "V01"})]
++    pw._restore_modules(snap)
++
++
++@pytest.mark.parametrize("action", [
++    lambda d: d.__setitem__("name", "changed"), lambda d: d.__delitem__("name"),
++    lambda d: d.clear(), lambda d: d.pop("name"), lambda d: d.popitem(),
++    lambda d: d.update(name="changed"), lambda d: d.__ior__({"name": "changed"}),
++    lambda d: d.setdefault("new", "new"),
++])
++def test_existing_info_value_change_stops(world, action):
++    w, _ = world
++    install(w)
++    snap = pw._snapshot_modules()
++    with pytest.raises(AppendOnlyViolation):
++        action(w.INFO["a"])
++    assert w.INFO["a"] == {"past": True, "name": "V01"}
++    pw._restore_modules(snap)
++
++
++@pytest.mark.parametrize("action", [lambda d: d.__setitem__("n", "link"), lambda d: d.__delitem__("n")])
++def test_ids_change_or_delete_stops(world, action):
++    w, _ = world
++    install(w)
++    snap = pw._snapshot_modules()
++    with pytest.raises(AppendOnlyViolation):
++        action(w.IDS)
++    assert w.IDS == {"n": "name"}
++    pw._restore_modules(snap)
++
++
++def test_nested_windows_restore_last_added_items_in_order(world):
++    w, _ = world
++    install(w)
++    outer = pw._snapshot_modules()
++    w.INFO["b"] = {"name": "V02"}
++    inner = pw._snapshot_modules()
++    w.INFO["c"] = {"name": "V03"}
++    with pytest.raises(AppendOnlyViolation):
++        w.INFO["b"]["name"] = "changed"
++    pw._restore_modules(inner)
++    assert list(w.INFO) == ["a", "b"]
++    pw._restore_modules(outer)
++    assert list(w.INFO) == ["a"]
++    w.INFO["a"]["name"] = "outside"
++    assert w.INFO["a"]["name"] == "outside"
++
++
++def test_out_of_order_restore_stops():
++    d = AppendOnlyDict({"a": "name"})
++    a, b = d.snapshot(), d.snapshot()
++    with pytest.raises(AppendOnlyViolation):
++        d.restore(a)
++    d.restore(b)
++    d.restore(a)
++
++
++def test_mutable_info_child_is_not_silently_allowed():
++    with pytest.raises(AppendOnlyViolation):
++        AppendOnlyDict({"a": {"nested": []}}, info=True)
++
++
++def test_snapshot_holds_only_length_without_iterating_entries():
++    class NoItems(AppendOnlyDict):
++        def items(self):
++            raise AssertionError("控えで全項目を読まない")
++    d = NoItems({"a": "name"})
++    mark = d.snapshot()
++    assert mark.length == 1 and mark.owner is d
++    d["b"] = "link"
++    d.restore(mark)
++    assert list(d) == ["a"]
++
++
++def test_install_is_not_repeated(world):
++    w, _ = world
++    install(w)
++    with pytest.raises(AppendOnlyViolation):
++        install(w)
++
++
++def test_install_preserves_existing_snapshot_membership(world, monkeypatch):
++    w, _ = world
++    monkeypatch.setattr(pw, "SNAP_MODULES", ("other_snapshot",))
++    modules, attrs = pw.SNAP_MODULES, pw.SNAP_ATTRS
++    install(w)
++    assert pw.SNAP_MODULES is modules and pw.SNAP_ATTRS is attrs
++    assert all(not isinstance(saved, AppendOnlyMark) for _, saved in pw._snapshot_modules())
++
++
++def test_flag_default_off_and_on_is_explicit():
++    tree = ast.parse((Path(__file__).resolve().parents[1] / "tools/v3_run.py").read_text())
++    calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and n.args
++             and isinstance(n.args[0], ast.Constant) and n.args[0].value == "--verb-snap-append-only"]
++    assert len(calls) == 1
++    options = {k.arg: ast.literal_eval(k.value) for k in calls[0].keywords}
++    assert options["default"] == "off" and options["choices"] == ("off", "on")
+diff --git a/tools/probeworld.py b/tools/probeworld.py
+index d580db7..5bf063b 100644
+--- a/tools/probeworld.py
++++ b/tools/probeworld.py
+@@ -26,6 +26,7 @@ import sys
+ from collections import Counter
+ from hashlib import sha256
+ from random import Random
++from verb_snapshot import AppendOnlyDict, AppendOnlyMark
+ 
+ ST: dict = {}
+ SNAP_MODULES = ("v39", "v310be", "fixorder2", "fix2", "v32", "projfirst", "fillnorestate", "fillunseen", "nocharge2", "v38", "v31",
+@@ -43,14 +44,20 @@ def _snapshot_modules():
+         for a in SNAP_ATTRS:
+             d = getattr(m, a, None)
+             if isinstance(d, dict):
+-                snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))
++                if name == "verbworld" and a in ("INFO", "IDS") and isinstance(d, AppendOnlyDict):
++                    snap.append((d, d.snapshot()))
++                else:
++                    snap.append((d, {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v) for k, v in d.items()}))
+     return snap
+ 
+ 
+ def _restore_modules(snap):
+     for d, saved in snap:
+-        d.clear()
+-        d.update(saved)
++        if isinstance(saved, AppendOnlyMark):
++            d.restore(saved)
++        else:
++            d.clear()
++            d.update(saved)
+ 
+ 
+ def _fingerprint(state) -> str:
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index f057436..ef7d3d8 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -524,6 +524,9 @@ def worker(task: dict) -> dict:
+         import verbworld
+         verbworld.install(variant=task.get("verb_variant", "default"),
+                           frequency_file=task.get("verb_frequencies"), door_p=task.get("shop_door_p"))
++        if task.get("verb_snap_append_only"):
++            import verb_snapshot
++            verb_snapshot.install(verbworld)
+         verbworld.extend_dictionary()
+     if task.get("probe_world"):
+         # ★ 内的世界の試験（--probe-world、記録だけ）：tools/probeworld.py。世界の旗のあと、答えごとの記録より前、世界を作る前に入れる
+@@ -886,6 +889,8 @@ def main() -> None:
+     ap.add_argument("--verb-variant", choices=("default", "schuler54", "schuler36"), default="default")
+     ap.add_argument("--verb-frequencies", default=None, help="出典確認済みのSchulerの項目別出現数")
+     ap.add_argument("--verb-timing", action="store_true", help="動詞の走行の1000試行ごとの時間と最大常駐を別記録へ書く")
++    ap.add_argument("--verb-snap-append-only", choices=("off", "on"), default="off",
++                    help="INFO・IDSの控えを長さで保存し、窓での書き換え・削除を止める（既定off）")
+     ap.add_argument("--shop-door-p", type=float, default=None, help="動詞の過去形を問う確率（元のお店と同じ別乱数・hide1）")
+     ap.add_argument("--sme-replay", default=None, help="順を保った状態の記録から、同じ予測と更新を再生する検査（--sme2017、種1本だけ）")
+     ap.add_argument("--sme-online-candidates", action="store_true", help="予測の実際の対応から候補の答えと正誤を研究者だけの別記録に残す")
+@@ -946,7 +951,7 @@ def main() -> None:
+             raise SystemExit("動詞の世界の正の試行数とhorizonを一致させる")
+         args.horizon = cfg2["trial_count"]
+         args.no_compare = True
+-    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None:
++    elif args.verb_variant != "default" or args.verb_frequencies or args.verb_timing or args.shop_door_p is not None or args.verb_snap_append_only == "on":
+         raise SystemExit("動詞の追加の旗は --verb-world と一緒に使う")
+     if args.nsim is not None:
+         cfg2["fixed"]["nsim_threshold"] = args.nsim
+@@ -1039,6 +1044,8 @@ def main() -> None:
+             if task["seed"] not in range(1, 21):
+                 raise SystemExit("動詞の世界の種は1〜20だけ")
+             task.update(verb_world=True, verb_variant=args.verb_variant, verb_frequencies=args.verb_frequencies)
++            if args.verb_snap_append_only == "on":
++                task["verb_snap_append_only"] = True
+             if args.verb_timing:
+                 task["verb_timing"] = True
+             if args.shop_door_p is not None:
+diff --git a/tools/verb_snapshot.py b/tools/verb_snapshot.py
+new file mode 100644
+index 0000000..5e2b714
+--- /dev/null
++++ b/tools/verb_snapshot.py
+@@ -0,0 +1,138 @@
++"""指示17：INFO・IDSだけの追加専用の控え。模型の状態と乱数は扱わない。"""
++from dataclasses import dataclass
++
++
++class AppendOnlyViolation(RuntimeError):
++    """控えの窓で追加以外の変更が試みられた。"""
++
++
++def _scalar(value):
++    # 現行INFOの値は文字列とbool、IDSの値は文字列。可変な子を素通ししない。
++    if type(value) not in (str, bool, int, float, type(None)):
++        raise AppendOnlyViolation("INFO・IDSの値に未対応の可変な構造がある")
++    return value
++
++
++class _InfoEntry(dict):
++    """INFOの既存値の中身も、窓の中では書き換えられない。"""
++    def __init__(self, owner, values):
++        self._owner = owner
++        super().__init__((key, _scalar(value)) for key, value in values.items())
++
++    def _guard(self):
++        if self._owner._marks:
++            raise AppendOnlyViolation("控えの窓でINFOの既存値を書き換えた")
++
++    def __setitem__(self, key, value):
++        self._guard()
++        super().__setitem__(key, _scalar(value))
++
++    def __delitem__(self, key):
++        self._guard()
++        super().__delitem__(key)
++
++    def clear(self):
++        self._guard()
++        super().clear()
++
++    def pop(self, key, *default):
++        self._guard()
++        return super().pop(key, *default)
++
++    def popitem(self):
++        self._guard()
++        return super().popitem()
++
++    def update(self, *args, **kwargs):
++        self._guard()
++        for key, value in dict(*args, **kwargs).items():
++            self[key] = value
++
++    def setdefault(self, key, default=None):
++        if key not in self:
++            self[key] = default
++        return self[key]
++
++    def __ior__(self, other):
++        self.update(other)
++        return self
++
++
++@dataclass(frozen=True, eq=False)
++class AppendOnlyMark:
++    owner: object
++    length: int
++
++
++class AppendOnlyDict(dict):
++    """写しを作らず、通常の辞書操作を入口で監視し長さだけを控える。"""
++    def __init__(self, values=(), *, info=False):
++        self._marks = []
++        self._info = info
++        super().__init__()
++        self.update(values)
++
++    def __setitem__(self, key, value):
++        if self._marks and key in self:
++            raise AppendOnlyViolation("控えの窓でINFO・IDSの既存キーを書き換えた")
++        value = _InfoEntry(self, value) if self._info else _scalar(value)
++        super().__setitem__(key, value)
++
++    def _guard_delete(self):
++        if self._marks:
++            raise AppendOnlyViolation("控えの窓でINFO・IDSのキーを消した")
++
++    def __delitem__(self, key):
++        self._guard_delete()
++        super().__delitem__(key)
++
++    def clear(self):
++        self._guard_delete()
++        super().clear()
++
++    def pop(self, key, *default):
++        self._guard_delete()
++        return super().pop(key, *default)
++
++    def popitem(self):
++        self._guard_delete()
++        return super().popitem()
++
++    def update(self, *args, **kwargs):
++        values = dict(*args, **kwargs)
++        if self._marks and any(key in self for key in values):
++            raise AppendOnlyViolation("控えの窓でINFO・IDSの既存キーを書き換えた")
++        for key, value in values.items():
++            self[key] = value
++
++    def setdefault(self, key, default=None):
++        if key not in self:
++            self[key] = default
++        return self[key]
++
++    def __ior__(self, other):
++        self.update(other)
++        return self
++
++    def snapshot(self):
++        mark = AppendOnlyMark(self, len(self))
++        self._marks.append(mark)
++        return mark
++
++    def restore(self, mark):
++        if mark.owner is not self or not self._marks or self._marks[-1] is not mark:
++            raise AppendOnlyViolation("INFO・IDSの控えの戻し順が不一致")
++        if len(self) < mark.length:
++            raise AppendOnlyViolation("INFO・IDSが控えの長さより短い")
++        # この入口だけが、窓の後で足された末尾を戻せる。既存の順と値は触らない。
++        while len(self) > mark.length:
++            dict.popitem(self)
++        self._marks.pop()
++
++
++def install(world):
++    """旗onのとき、世界の接続後・場面生成前に二つの辞書だけを包む。"""
++    if isinstance(world.INFO, AppendOnlyDict) or isinstance(world.IDS, AppendOnlyDict):
++        raise AppendOnlyViolation("INFO・IDSの追加専用の入口を二重に接続した")
++    world.INFO = AppendOnlyDict(world.INFO, info=True)
++    world.IDS = AppendOnlyDict(world.IDS)
