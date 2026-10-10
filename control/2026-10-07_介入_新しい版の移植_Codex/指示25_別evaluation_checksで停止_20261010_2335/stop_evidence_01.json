@@ -1,0 +1,87 @@
+{
+  "at_jst": "2026-10-11T00:05:18.801875+09:00",
+  "comparison_result": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/candidate_on_D_04_200_01_comparison_02.json",
+  "comparison_result_sha256": "06cbe76e35ce4543c55a8aba2308b44aaa5716e6a8e8a1e24660726f40587873",
+  "admission_pid": 88422,
+  "reservation_gb": 1,
+  "exec_session_id": 97209,
+  "ended_at_jst": "2026-10-10T23:35:43.050707+09:00",
+  "outer_ended_at_jst": "2026-10-10T23:35:43.477095+09:00",
+  "seconds": 6.148234708001837,
+  "max_rss_bytes": 287162368,
+  "submitted_to_outer_end_seconds": 495.8372128009796,
+  "independent_admission_wait_seconds": null,
+  "independent_cpu_wait_seconds": null,
+  "first_mismatch": {
+    "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+    "equal": false,
+    "left_sha256": "2069f32965c8ddac18df43dffbe1625c2a17774e9e89287ee04d9848062bebda",
+    "right_sha256": "e1e7b81f04ccddd2d3e1ebc390409f513509c2feab3826750dfdc0ee7e5825e4",
+    "content_bytes": [
+      485,
+      485
+    ],
+    "mismatching_bytes": 240,
+    "first_mismatch_byte": 84,
+    "example": {
+      "left": "{\n    \"call\": \"probeworld._probe\",\n    \"unchanged\": true,\n    \"before_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\",\n    \"after_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\"\n  },\n ",
+      "right": "{\n    \"call\": \"probeworld._probe\",\n    \"unchanged\": true,\n    \"before_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\",\n    \"after_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\"\n  },\n "
+    },
+    "mode": "内容の全バイト",
+    "line": 5
+  },
+  "first_field": "before_sha256",
+  "left_original_value": "1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870",
+  "right_original_value": "e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a",
+  "records": {
+    "left": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/A_fixed_D_attention_04/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+      "sha256": "2069f32965c8ddac18df43dffbe1625c2a17774e9e89287ee04d9848062bebda",
+      "bytes": 485,
+      "calls": [
+        {
+          "call": "probeworld._probe",
+          "unchanged": true,
+          "before_sha256": "1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870",
+          "after_sha256": "1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870"
+        },
+        {
+          "call": "probeworld._probe",
+          "unchanged": true,
+          "before_sha256": "a46b30ec4849f9d851afdc0590964dff696344a3816ed35486bf5588f9f1d717",
+          "after_sha256": "a46b30ec4849f9d851afdc0590964dff696344a3816ed35486bf5588f9f1d717"
+        }
+      ],
+      "side_before_after_equal": true
+    },
+    "right": {
+      "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/candidate_on_D_04_200_01/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+      "sha256": "e1e7b81f04ccddd2d3e1ebc390409f513509c2feab3826750dfdc0ee7e5825e4",
+      "bytes": 485,
+      "calls": [
+        {
+          "call": "probeworld._probe",
+          "unchanged": true,
+          "before_sha256": "e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a",
+          "after_sha256": "e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a"
+        },
+        {
+          "call": "probeworld._probe",
+          "unchanged": true,
+          "before_sha256": "346dadfb27f240f1cae3e964ef02ced49bd1d3c3475c8bc56ed51111b47b8810",
+          "after_sha256": "346dadfb27f240f1cae3e964ef02ced49bd1d3c3475c8bc56ed51111b47b8810"
+        }
+      ],
+      "side_before_after_equal": true
+    }
+  },
+  "passed_model_files": 13,
+  "full_model_file_names": 15,
+  "full_manifest_dictionary_comparison_reached": false,
+  "uncompared_model_file": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+  "saved_output_unchanged": true,
+  "protected_1109_unchanged": true,
+  "model_restarted": false,
+  "new_jobs_registered": 0,
+  "scope": "指示25のretention/probe_checks二欄の成分代替は通過。evaluation_checksの欄へ広げず最初の差で停止。全量合格ではない。"
+}

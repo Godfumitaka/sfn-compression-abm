@@ -1,0 +1,51 @@
+{
+  "instruction": 25,
+  "received_at_jst": "2026-10-10T22:56:34.122475+09:00",
+  "state": "instruction25_comparison02_evaluation_checks_sha_stopped_numbered_answer_wait",
+  "receipt_pushed": true,
+  "completed": false,
+  "running_labels": [],
+  "queued_labels": [],
+  "model_source_changed": false,
+  "candidate_accepted": false,
+  "receipt_commit": "c64aef82adae76bb295216138eee9bc0c8e04a25",
+  "admission_session": 1451,
+  "reservation_gb": 1,
+  "model_starts": 0,
+  "comparison_passed": false,
+  "saved_at_jst": "2026-10-11T00:05:18.801875+09:00",
+  "same_admission_preserved": true,
+  "report_pushed": true,
+  "instruction25_report_pushed": false,
+  "instruction25_report_commit": "310df1f2beb13d0d746dbff5b83a5844be66adf5",
+  "instruction25_report_delivery": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/report_delivery_03.json",
+  "report_commit": "310df1f2beb13d0d746dbff5b83a5844be66adf5",
+  "instruction25_reader_stop": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/reader_stop_and_correction_01.json",
+  "instruction25_comparison_result": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/candidate_on_D_04_200_01_comparison_02.json",
+  "instruction25_session_id": 97209,
+  "admission_session_id": 97209,
+  "models_started_this_instruction": 0,
+  "instruction25_comparison_passed": false,
+  "instruction25_first_mismatch": {
+    "path": "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+    "equal": false,
+    "left_sha256": "2069f32965c8ddac18df43dffbe1625c2a17774e9e89287ee04d9848062bebda",
+    "right_sha256": "e1e7b81f04ccddd2d3e1ebc390409f513509c2feab3826750dfdc0ee7e5825e4",
+    "content_bytes": [
+      485,
+      485
+    ],
+    "mismatching_bytes": 240,
+    "first_mismatch_byte": 84,
+    "example": {
+      "left": "{\n    \"call\": \"probeworld._probe\",\n    \"unchanged\": true,\n    \"before_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\",\n    \"after_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\"\n  },\n ",
+      "right": "{\n    \"call\": \"probeworld._probe\",\n    \"unchanged\": true,\n    \"before_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\",\n    \"after_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\"\n  },\n "
+    },
+    "mode": "内容の全バイト",
+    "line": 5
+  },
+  "instruction25_stop_evidence": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/evaluation_checks_stop_01/stop_evidence_01.json",
+  "evaluation_checks_numbered_answer_wait": true,
+  "instruction25_session_completed": true,
+  "instruction25_admission_pid": 88422
+}
