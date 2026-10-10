@@ -1,0 +1,224 @@
+{
+  "status": "stopped",
+  "passed": false,
+  "files": [
+    {
+      "path": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "equal": true,
+      "left_sha256": "e0c474b676622d9ec46355d2fe3b87c53449e036b6ded63abf536ef0997b92f1",
+      "right_sha256": "e0c474b676622d9ec46355d2fe3b87c53449e036b6ded63abf536ef0997b92f1",
+      "content_bytes": [
+        12436397,
+        12436397
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json",
+      "equal": true,
+      "left_sha256": "f8a4461f3d05b0df4404d7ff3c84f26954bba6c1f0522142ffb4fa046a9a7f9c",
+      "right_sha256": "f8a4461f3d05b0df4404d7ff3c84f26954bba6c1f0522142ffb4fa046a9a7f9c",
+      "content_bytes": [
+        3221,
+        3221
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+      "equal": true,
+      "left_sha256": "71f1e4f09dfd78439f5ca91c833deed66d2522fd58f2178e3ad1d5f90cf92708",
+      "right_sha256": "71f1e4f09dfd78439f5ca91c833deed66d2522fd58f2178e3ad1d5f90cf92708",
+      "content_bytes": [
+        11983136,
+        11983136
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json",
+      "equal": true,
+      "left_sha256": "710f87bb5028c2b82fcb4b8a7a24120caf1c23d61505afe64f360491708be3f1",
+      "right_sha256": "710f87bb5028c2b82fcb4b8a7a24120caf1c23d61505afe64f360491708be3f1",
+      "content_bytes": [
+        278,
+        278
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "equal": true,
+      "left_sha256": "f7ccb3b4a7ac9c5f409e48622b57f0bbe9b7cc0ec7a457819091451c30d7313b",
+      "right_sha256": "f7ccb3b4a7ac9c5f409e48622b57f0bbe9b7cc0ec7a457819091451c30d7313b",
+      "content_bytes": [
+        24527090,
+        24527090
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "equal": true,
+      "left_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+      "right_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+      "content_bytes": [
+        2558367,
+        2558367
+      ],
+      "mismatching_bytes": 0,
+      "first_mismatch_byte": null,
+      "example": null,
+      "mode": "内容の全バイト"
+    },
+    {
+      "path": "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json",
+      "equal": false,
+      "left_sha256": "ed6f5fa21cd0a688eb82da46597430ee4e23a2abc6c9630b9cce33682755980d",
+      "right_sha256": "c3ba19561e1a1f763f5a9bc2b066e741d0d15e8fe59c644e7c50bbe0b088dd39",
+      "content_bytes": [
+        455,
+        455
+      ],
+      "mismatching_bytes": 240,
+      "first_mismatch_byte": 69,
+      "example": {
+        "left": "[\n  {\n    \"trial\": 100,\n    \"unchanged\": true,\n    \"before_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\",\n    \"after_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\"\n  },\n ",
+        "right": "[\n  {\n    \"trial\": 100,\n    \"unchanged\": true,\n    \"before_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\",\n    \"after_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\"\n  },\n "
+      },
+      "mode": "内容の全バイト"
+    }
+  ],
+  "metadata": [
+    {
+      "case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/A_fixed_D_attention_04",
+      "actual_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "completed_trials": 200,
+      "done_present": true,
+      "done_bytes": 2587897,
+      "model_rows": 200,
+      "raw_order_verified": true
+    },
+    {
+      "case": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/candidate_on_D_04_200_01",
+      "actual_commit": "70df13393e437580cb58d2c6e6f84dd5244aca4e",
+      "completed_trials": 200,
+      "done_present": true,
+      "done_bytes": 2587897,
+      "model_rows": 200,
+      "raw_order_verified": true
+    }
+  ],
+  "baseline_reused_without_rerunning": true,
+  "actual_files_excluded": 0,
+  "probe_rows_excluded": 0,
+  "comparator_reference": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/instruction11_io.py": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/compare_probe100.py": "2368121c1c8b2211e39defe4fc96c9276a4e6bba426b10192cef77b9ae18a68a",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/pair_common.py": "4928b544e8b5d1d6db5e4065c7ccc9b39b5d0998d1abff7ca00085039cfb80d2"
+  },
+  "machine_boot_sha256": "773eeecfe3afc3ccc34847d05ee94097573d18caef28686fec53924894004b80",
+  "declared_flag_metadata": {
+    "field": "attn_probe_name_receipts",
+    "baseline": "absent",
+    "candidate": true,
+    "all_other_flag_bytes_equal": true,
+    "basis": "指示22・23で明示した新旗on。全argvと実版を別に照合する"
+  },
+  "file_names_identical": true,
+  "left_names": [
+    "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+    "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json",
+    "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+    "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json",
+    "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+    "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+    "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl"
+  ],
+  "right_names": [
+    "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+    "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json",
+    "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+    "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json",
+    "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+    "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+    "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+    "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl"
+  ],
+  "original_required_names_reference": {
+    "path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction13/completed_A_verification_01.json",
+    "sha256": "21ffc6868d12c65310a3e16abbc1fca9a94d6afa2475b9d4fd87d3ee543703a0",
+    "label": "A_fixed_D_attention_04",
+    "names": [
+      "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json",
+      "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz",
+      "evictions/f0.5000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json",
+      "ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz",
+      "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.answers.csv",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.evaluation_checks.json",
+      "side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl"
+    ],
+    "all_actual_files_retained": true
+  },
+  "first_mismatch": {
+    "path": "retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json",
+    "equal": false,
+    "left_sha256": "ed6f5fa21cd0a688eb82da46597430ee4e23a2abc6c9630b9cce33682755980d",
+    "right_sha256": "c3ba19561e1a1f763f5a9bc2b066e741d0d15e8fe59c644e7c50bbe0b088dd39",
+    "content_bytes": [
+      455,
+      455
+    ],
+    "mismatching_bytes": 240,
+    "first_mismatch_byte": 69,
+    "example": {
+      "left": "[\n  {\n    \"trial\": 100,\n    \"unchanged\": true,\n    \"before_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\",\n    \"after_sha256\": \"1cb59fb6a195b540d2784ef930a1847e2caddf40c28dcd8a9fa25785721c3870\"\n  },\n ",
+      "right": "[\n  {\n    \"trial\": 100,\n    \"unchanged\": true,\n    \"before_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\",\n    \"after_sha256\": \"e70b46431482c07b67812e7704ed7c4e88284f8bb8a317780cbf3d5f0adc950a\"\n  },\n "
+    },
+    "mode": "内容の全バイト",
+    "line": 5
+  },
+  "error": "AssertionError('retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.probe_checks.json:5')",
+  "at_jst": "2026-10-10T21:03:31.188705+09:00",
+  "seconds": 1.467725541908294,
+  "max_rss_bytes": 302120960,
+  "policy": "原比較器と動詞26.1(a-c)の全名前・原順・字節・全manifest研究者辞書。既存TIMEだけ。試験行を含む。"
+}
