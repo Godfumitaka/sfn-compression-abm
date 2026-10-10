@@ -1,0 +1,178 @@
+{
+  "at_jst": "2026-10-10T14:07:05.504318+09:00",
+  "method": "全ps親子。低RSSを除かずPythonの待つ祖先/jobs/resource_trackerを二重計数しない。自身の読取は除く。",
+  "active_model_count_conservative": 6,
+  "paused_model_count": 0,
+  "active": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "stat": "R",
+      "rss_kib": 1453872,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "stat": "R",
+      "rss_kib": 1561616,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21582,
+      "ppid": 49513,
+      "stat": "U",
+      "rss_kib": 1218544,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21583,
+      "ppid": 49513,
+      "stat": "U",
+      "rss_kib": 1598960,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21584,
+      "ppid": 49513,
+      "stat": "U",
+      "rss_kib": 1096272,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21585,
+      "ppid": 49513,
+      "stat": "U",
+      "rss_kib": 1359600,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "paused": [],
+  "waiting_ancestors": [
+    {
+      "pid": 495,
+      "ppid": 99519,
+      "stat": "S",
+      "rss_kib": 9008,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/run_production.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed001_score_e_off"
+    },
+    {
+      "pid": 517,
+      "ppid": 495,
+      "stat": "Ss",
+      "rss_kib": 352,
+      "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off"
+    },
+    {
+      "pid": 519,
+      "ppid": 517,
+      "stat": "S",
+      "rss_kib": 9088,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off"
+    },
+    {
+      "pid": 520,
+      "ppid": 99520,
+      "stat": "S",
+      "rss_kib": 8656,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/run_production.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed002_score_e_off"
+    },
+    {
+      "pid": 558,
+      "ppid": 520,
+      "stat": "Ss",
+      "rss_kib": 352,
+      "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off"
+    },
+    {
+      "pid": 562,
+      "ppid": 558,
+      "stat": "S",
+      "rss_kib": 9088,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off"
+    },
+    {
+      "pid": 49499,
+      "ppid": 49493,
+      "stat": "S",
+      "rss_kib": 8688,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27/run_registered.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_pending_2026-10-06/queue19p_20261010/19_seed001_flags_on"
+    },
+    {
+      "pid": 49509,
+      "ppid": 49499,
+      "stat": "Ss",
+      "rss_kib": 368,
+      "command": "/usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27_production/19_seed001_flags_on/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on --stage2-birth-workers 4"
+    },
+    {
+      "pid": 49511,
+      "ppid": 49509,
+      "stat": "S",
+      "rss_kib": 9104,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27/tools/production/measurement_driver.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/source /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/source/config/sweep_verb_hide1_s1_2026-10-04.json /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27_production/19_seed001_flags_on/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on --stage2-birth-workers 4"
+    },
+    {
+      "pid": 49513,
+      "ppid": 49511,
+      "stat": "S",
+      "rss_kib": 9376,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "excluded_reception_and_tracker": [
+    {
+      "pid": 533,
+      "ppid": 519,
+      "stat": "S",
+      "rss_kib": 7072,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 563,
+      "ppid": 562,
+      "stat": "S",
+      "rss_kib": 7072,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 49493,
+      "ppid": 1,
+      "stat": "Ss",
+      "rss_kib": 7024,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner SME_Codex_queue19p_seed1 --mem 10 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27_production/19_seed001_flags_on/output -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction27/run_registered.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_cstar_pending_2026-10-06/queue19p_20261010/19_seed001_flags_on"
+    },
+    {
+      "pid": 49512,
+      "ppid": 49511,
+      "stat": "S",
+      "rss_kib": 7088,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)"
+    },
+    {
+      "pid": 97541,
+      "ppid": 1,
+      "stat": "Ss",
+      "rss_kib": 3008,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py sampler"
+    },
+    {
+      "pid": 99519,
+      "ppid": 1,
+      "stat": "Ss",
+      "rss_kib": 3776,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex 動詞 本番19 種1 指示23 score_e_off --mem 7.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/run_production.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed001_score_e_off"
+    },
+    {
+      "pid": 99520,
+      "ppid": 1,
+      "stat": "Ss",
+      "rss_kib": 3776,
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/jobs/jobs.py run --wait --owner Codex 動詞 本番19 種2 指示23 score_e_off --mem 2.0 --disk-path /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output -- /opt/homebrew/opt/python@3.12/bin/python3.12 /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/run_production.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction23_production/19_seed002_score_e_off"
+    }
+  ],
+  "free_disk_bytes": 183185711104,
+  "model_limit": 8,
+  "disk_minimum_bytes": 21474836480,
+  "analysis_only": true
+}
