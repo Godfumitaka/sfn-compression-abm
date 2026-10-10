@@ -227,7 +227,9 @@
       "machine": "Google Cloud d3",
       "machine_type": "c2d-standard-16",
       "machine_assignment_instruction": 36,
-      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb",
+      "priority19_all_assigned_completed_required": true,
+      "instruction37_receipt_commit": "8e7bfbd30b8c973a446e798d4229efe93f8c9520"
     },
     "speed_off": {
       "instruction": 33,
@@ -463,7 +465,9 @@
       "machine": "Google Cloud d3",
       "machine_type": "c2d-standard-16",
       "machine_assignment_instruction": 36,
-      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb",
+      "priority19_all_assigned_completed_required": true,
+      "instruction37_receipt_commit": "8e7bfbd30b8c973a446e798d4229efe93f8c9520"
     },
     "speed_on": {
       "instruction": 33,
@@ -699,7 +703,9 @@
       "machine": "Google Cloud d3",
       "machine_type": "c2d-standard-16",
       "machine_assignment_instruction": 36,
-      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb",
+      "priority19_all_assigned_completed_required": true,
+      "instruction37_receipt_commit": "8e7bfbd30b8c973a446e798d4229efe93f8c9520"
     }
   },
   "model_starts": 0,
@@ -711,6 +717,15 @@
     "defaults": "off",
     "on_gate_passed": null,
     "use_before_on_gate": false,
-    "followup_commands_pending_primary_gate": true
+    "followup_commands_pending_primary_gate": true,
+    "gc_freeze_held_by_instruction37": true
+  },
+  "instruction37_gating": {
+    "gc_flag_status": "held_unused",
+    "failed_tests_preserved": 4,
+    "structure_scope": "serial169/extra46/birth19。全構造合格ではない",
+    "priority": "この機械の#19担当種が全て正常に先頭1000を終えた実証と通常push後",
+    "estimated_start_only": "10/12朝以降は見込み、開始許可ではない",
+    "actual100_started": false
   }
 }

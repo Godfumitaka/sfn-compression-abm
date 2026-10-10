@@ -1,4 +1,4 @@
-最新の構造検査と実100は未確認。模型 ddb119f5eb7e78c2bd39de2a932390688914a664（指示35の小さい二旗は既定off）、指示36指定のGoogle Cloud d3向け。旧fe89準備と旧直列受付終了2は履歴として保持する。
+最新は指示37：GC旗保留不使用／4件不合格のまま。169/46/出生19の使用範囲を受け入れ、実100三本はd3の担当#19の原正常先頭1000完了を待つ。模型ddb・bundle5369c350は不変。以下のfe89や旧待機の本文は過去の準備履歴、末尾の指示37と現在のSHA一覧を使う。
 
 # 指示33：速度二旗の6e4上への移植・実関門待ち
 
@@ -32,3 +32,12 @@ prepare_gate100.py BASE_SOURCE NEW_SOURCE NEW_CASE_ROOT で baseline6e4/speed_of
 旧直列受付は17:52:41に分類9/外側CPU8で条件不成立、終了2、tests_started=false、result/tests.log未生成。serial_initial_admission_ended.json と私有原本を読む。同じ終了済み受付を再投入しない。記録済み出生子とB6本人の不在という実変化後にだけ、新しい三部分runtimeで元の条件を再確認する一回待機を用意する。足りない枠を推測で減らさず、資源不成立なら自動再試行しない。
 
 後の速度測定はlater_timing_proposal.jsonの未実行案。元本番の状態や観測を途中へ差し込まず、別の新出力で先頭600まで自然終了し、原500/600時間行の501〜600区間を比較する。実100関門・正式機械・費用/受付/全資源条件の後にだけ始める。1000で同じ比とは仮定しない。35の既存SME19pの表と大きい手の設計は33の後に続ける。大きい手の実装はClaudeの判断待ち。
+
+
+## 指示37：現在の使用範囲と順番
+
+GC旗保留不使用／4件不合格のまま。模型ddb・bundleと原4失敗の証拠は不変。structural_scope37.jsonはpassed=falseを保ち、指示37の直列169・追加46・出生19だけの使用範囲を記録する。原結果終了0/0/1、原ログSHAと4例の375/line40を検査する。GC旗onはrun_gate100.pyの入口で拒否する。未実100の全ファイル・試験行・STATE/RNG/全cache・P10・manifestの比較条件は変更しない。
+
+三本はGoogle Cloud d3の担当#19が全て先頭1000で正常終了してから。priority19_assignment.template.jsonへClaude確定の全担当を記し、priority19_complete.template.jsonへ全ケースの原spec/result/partial_done/startのSHAと同機械、通常pushを記す。未確認の空欄は開始を止める。1〜10以外を読まない。10/11 01〜02に空く見込みだけで開始せず、#19を優先する。10/12朝以降も見込み。いま実100は未開始でreadyfalse。
+
+指示33三本の元旗列は不変（読取観測窓もGCも既定off）。読取観測窓onの実100は別の同機械off/on関門と正式な命令を要し、構造の範囲受け入れだけで本番に使わない。旧structural_checks.template.jsonや旧全構造条件は履歴。新しいclaimはstructural_scope37のSHAと送信40桁を使う。旧原失敗を後の一致で上書きしない。

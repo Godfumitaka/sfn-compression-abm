@@ -1,0 +1,85 @@
+[
+  {
+    "case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off",
+    "spec_sha256": "8eb6c689a8c21749ed9b92353fbba930c68738c70ce249cc80d9d98eaf829f43",
+    "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+    "result_present": false,
+    "last_timing": {
+      "completed_trials": 900,
+      "configured_trial_count": 5000,
+      "horizon": 5000,
+      "wall_seconds": 87141.47146370809,
+      "interval_seconds": 30302.849903833005,
+      "user_cpu_seconds": 71064.106452,
+      "system_cpu_seconds": 6806.115404,
+      "max_worker_rss_bytes": 5363384320,
+      "epoch_seconds": 1791635070.462671
+    },
+    "confirmed": [
+      "completed_0500"
+    ],
+    "last_resource": {
+      "at": "2026-10-10T22:25:30.613588+09:00",
+      "own_group": 517,
+      "own_ps": "  517   495    336 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  519   517   4336 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  533   519   4064 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n  534   519 4358192 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "free_disk_bytes": 179003465728
+    },
+    "warnings_rows": 1
+  },
+  {
+    "case": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off",
+    "spec_sha256": "d117832b7b603ffd355870e84bfff1c2d438ccece85e404c0ac52b5493a872c5",
+    "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+    "result_present": false,
+    "last_timing": {
+      "completed_trials": 800,
+      "configured_trial_count": 5000,
+      "horizon": 5000,
+      "wall_seconds": 64993.225827165996,
+      "interval_seconds": 14576.433767957962,
+      "user_cpu_seconds": 57540.392274,
+      "system_cpu_seconds": 2639.634918,
+      "max_worker_rss_bytes": 4328603648,
+      "epoch_seconds": 1791612922.3161721
+    },
+    "confirmed": [
+      "completed_0500"
+    ],
+    "last_resource": {
+      "at": "2026-10-10T22:25:30.613410+09:00",
+      "own_group": 558,
+      "own_ps": "  558   520    336 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  562   558   4336 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction18_production/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction15_logfix/source $WORKSPACE/newport_2026-10-07/instruction15_logfix/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 2 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off\n  563   562   4064 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n  564   562 2143328 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "free_disk_bytes": 179003465728
+    },
+    "warnings_rows": 2
+  },
+  {
+    "case": "$PROJECTS/codex_cstar_pending_2026-10-06/queue19p_20261010/19_seed001_flags_on",
+    "spec_sha256": "c81d44f5511c9e6520d72110ce3ec97b1aa68b571b5ab56b0a905695bdd0394e",
+    "source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+    "result_present": false,
+    "last_timing": {
+      "completed_trials": 1000,
+      "configured_trial_count": 5000,
+      "horizon": 5000,
+      "wall_seconds": 62485.649068292,
+      "interval_seconds": 27830.190336708096,
+      "user_cpu_seconds": 23451.695642,
+      "system_cpu_seconds": 105.335778,
+      "max_worker_rss_bytes": 5482070016,
+      "epoch_seconds": 1791635077.153961
+    },
+    "confirmed": [
+      "completed_0500",
+      "completed_1000"
+    ],
+    "last_resource": {
+      "at": "2026-10-10T22:25:30.560660+09:00",
+      "own_group": 49509,
+      "own_ps": "49509 49499    336 Ss   /usr/bin/time -l /opt/homebrew/opt/python@3.12/bin/python3.12 $WORKSPACE/newport_2026-10-07/instruction27/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction22_birth/source $WORKSPACE/newport_2026-10-07/instruction22_birth/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction27_production/19_seed001_flags_on/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on --stage2-birth-workers 4\n49511 49509   4352 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python $WORKSPACE/newport_2026-10-07/instruction27/tools/production/measurement_driver.py $WORKSPACE/newport_2026-10-07/instruction22_birth/source $WORKSPACE/newport_2026-10-07/instruction22_birth/source/config/sweep_verb_hide1_s1_2026-10-04.json $WORKSPACE/newport_2026-10-07/instruction27_production/19_seed001_flags_on/output --nohash --vt 0.3842 --extend-rule none --charge1 d32 --fast --no-public-history --dump-slot-history --fix2-full --fix-order2 --proj-first --fill-norestate --no-charge2 --own-evidence --v39 --v39-budget inf --v39-decay actr --v310-be --hist-role --score-role --u-struct --relearn-init --tie-struct --amb-local --nsim 0.7 --ident-rho 0.5 --ident-argmax --ident-commons --cells f0.5000_th2.1000_first_order --dump-answers --dump-routing --answer-gap --strict-pc --e-price 0.01873710622997919 --v39-price 0.00035129738499384776 --workers 1 --seeds 1 --trial-count 5000 --no-compare --horizon 5000 --score-arg-order --sme2017 --sme-call-seed --sme-tie-uniform --sme-intern-cache --sme-evict-trial-cache --verb-world --probe-world --verb-timing --v39-u global --match-cstar --match-cstar-e --h-dirichlet 1 --match-eps 0 --logp-eps 0.01 --birth-score seq --score-logp --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin --stage2 on --stage2-loss top1 --stage2-init virtual --stage2-scope all --stage2-birth-hu on --stage2-reuse off --verb-snap-append-only on --stage2-birth-workers 4\n49512 49511   4080 S    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_tracker import main;main(8)\n49513 49511 5529360 R    /opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork\n",
+      "own_rss_bytes": 5671043072,
+      "free_disk_bytes": 179003514880
+    },
+    "warnings_rows": 1
+  }
+]

@@ -5,6 +5,7 @@ import hashlib,json,os,platform,re,shutil,subprocess,sys,time
 from run_structural import SERIAL, BIRTH
 from run_extra_structural import EXTRA
 from birth_census import count_models
+from prerequisites37 import gc_off, accepted_structure_scope, priority19_complete
 HERE=Path(__file__).resolve().parent
 
 def read(path): return json.loads(Path(path).read_text())
@@ -42,6 +43,7 @@ def registered(case, clearance=None):
     assert Path(spec['command'][1])==HERE/'tools/production/prefix_measurement_driver.py'
     assert spec['command'][2]==spec['cwd'] and spec['command'][3]=='100' and spec['command'][6:]==spec['flags']
     assert '--score-logp-e' not in spec['flags']
+    gc_off(spec['flags'])
     assert datetime.now(timezone.utc)<datetime.fromisoformat(spec['start_deadline_jst'])
     for name in ('status.json','result.json','pid.json','run.log','resources.jsonl'):
         assert not (case/name).exists(), '同じ過程へ二重起動しない'
@@ -55,17 +57,21 @@ def registered(case, clearance=None):
     assert sha(__file__)==spec['runner_sha256']
     for file,digest in spec['observer_files'].items(): assert sha(file)==digest
     for file,digest in read(HERE/'fixed_tools.json').items(): assert sha(HERE/file)==digest
-    structures=read(claim['structural_checks_path']);assert structures['passed'] is True
+    structures=read(claim['structural_checks_path'])
     assert structures['source_commit']==read(HERE/'versions.json')['source_commit'] and structures['model_starts']==0
     assert sha(claim['structural_checks_path'])==claim['structural_checks_sha256']
     assert len(claim['structural_checks_published_commit'])==40
-    checked_files=[]
-    for label in ('serial','extra','birth'):
-        entry=structures[label];raw=Path(entry['result_path']);proof=read(raw)
-        assert proof['exit_code']==0 and proof['source_commit']==structures['source_commit']
-        assert sha(raw)==entry['result_sha256'];checked_files+=proof['files']
-    assert set(SERIAL+EXTRA+BIRTH).issubset(checked_files)
-    assert any(Path(f).name=='test_compare100.py' for f in checked_files)
+    if structures.get('instruction') == 37:
+        accepted_structure_scope(claim['structural_checks_path'], structures['source_commit'], SERIAL+EXTRA+BIRTH)
+    else:
+        assert structures['passed'] is True
+        checked_files=[]
+        for label in ('serial','extra','birth'):
+            entry=structures[label];raw=Path(entry['result_path']);proof=read(raw)
+            assert proof['exit_code']==0 and proof['source_commit']==structures['source_commit']
+            assert sha(raw)==entry['result_sha256'];checked_files+=proof['files']
+        assert set(SERIAL+EXTRA+BIRTH).issubset(checked_files)
+        assert any(Path(f).name=='test_compare100.py' for f in checked_files)
     if case.name=='speed_on':
         gate_a=read(claim['comparison_a_path'])
         assert gate_a['mode']=='a' and gate_a['passed'] is True and gate_a['mismatching_files']==0
@@ -106,6 +112,8 @@ def registered(case, clearance=None):
         time_args = ['/usr/bin/time', '-l']
     if case.name=='speed_on':
         assert gate_a['machine_boot_sha256']==boot
+    assert sha(claim['priority19_complete_path']) == claim['priority19_complete_sha256']
+    priority19_complete(claim['priority19_complete_path'], spec['machine'], boot)
     # ここだけが開始直前の全機械ps。開始後の常駐停止/再開機構は作らない。
     raw = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
     counts = start_counts(raw)
