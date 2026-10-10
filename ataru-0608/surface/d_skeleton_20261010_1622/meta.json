@@ -1,0 +1,88 @@
+{
+  "made_at": "2026-10-10T16:22〜16:45（作った folder の名は 16:22）",
+  "rule": "受け箱の指示 80 C（探り。既存の記録を読むだけ、新しい走行なし。主張には使わない）",
+  "script": "d_skeleton.py（nice -n 15 python3 d_skeleton.py --src <SRC> --out .）",
+  "source_tree": {
+    "commit": "daf69efd196db28b29f1e564ebf6dc57c6c39f60（枝 origin/codex/retention-d-attn-instruction9-2026-10-09）",
+    "how": "この版の worktree は git worktree list にも ~/sfn/audit/_read/ にも無い。git -C ~/sfn/sfn-compression-abm archive daf69efd | tar -x で一時置き場に出して読んだ（repo は変えていない）",
+    "files_read": [
+      "tools/v3_run.py",
+      "tools/attnsme.py",
+      "tools/attncstar.py",
+      "tools/attnallin.py",
+      "tools/attnposition_keys.py",
+      "tools/useforget.py",
+      "tools/useforget_cstar.py",
+      "tools/shopworld.py",
+      "tools/v39.py（seat_state）",
+      "abm/loop.py（_apply・_json_bytes・_constituent_states）",
+      "abm/world.py（opaque_id）"
+    ]
+  },
+  "which_is_D": {
+    "how": "~/cloud/wave1/wave2d_commands.json の argv と ~/v33prod/results/control/走行の列_2026-10-08.md の #10〜#13 の行",
+    "10": "D τ0.4：--use-forget 0.4 --use-forget-q（--use-forget-attn なし）",
+    "11": "D τ0.15：--use-forget 0.15 --use-forget-q",
+    "12": "D＋注意 τ0.4：--use-forget 0.4 --use-forget-q --use-forget-attn",
+    "13": "D＋注意 τ0.15：--use-forget 0.15 --use-forget-q --use-forget-attn",
+    "common": "四行とも --attn-sme global --attn-position k2 --attn-eta 0.1 --attn-allin、版 daf69efd。つまり注意の a は D でも学ばれて記録される。違いは D の照合使用の量に a の重み w＝(1＋a)／(1＋ā) を掛けるか（tools/useforget_cstar.py attention_weight）だけ",
+    "not_used": "#17・#18（D＋注意 τ0.4、--shop-exc 0.1・0.3、世界 2 だけ）は今回は読んでいない"
+  },
+  "runs": "wave2_{10,11,12,13}_w{1,2}_s{1,2,3}_cdaf の 24 本（全部 done.tsv で rc=0）",
+  "checkpoints": "試行 500・1000・1500・1739（最後、trial_count 1740）。a はその試行の a_after、状態はその試行の台帳の状態（変換の後）",
+  "inputs_per_run": {
+    "ledger": "/mnt/d/sfn_runs/cloud/<run>/output/ledgers/cells/<cell>/seedNNN.jsonl.gz：state_snapshot（full/delta）を abm.loop._apply で全試行積み、checkpoint で sha256(_json_bytes(state)) を agent_state_snapshot_hash と照合",
+    "attention": "/mnt/d/sfn_runs/cloud/<run>/output/attention/<cell>/seedNNN.jsonl.gz（tools/attnsme.py、一試行一行。a_before・a_after・candidates[].details[].key・update_reason）",
+    "shop": "/mnt/d/sfn_runs/cloud/<run>/output/side/<cell>/seedNNN.shop.jsonl（照合だけ）",
+    "useforget": "~/v33prod/results/ataru-0608/cloud_runs/<run>/seedNNN.useforget.jsonl.gz（10 試行ごとの snap。照合だけ）",
+    "retention": "~/v33prod/results/ataru-0608/cloud_runs/<run>/seedNNN.retention.jsonl.gz（tools/useforget_cstar.py の AUDIT を一試行一行で書いたもの。matching[].key・a・a_mean・weight）",
+    "flag": "/mnt/d/sfn_runs/cloud/<run>/output/flag.json"
+  },
+  "definitions": {
+    "席の状態": "tools/v39.py seat_state：F＝行が生きている（alive）。H＝墓石で slot_history に (定義, 席) の欄がある（空の表も H）。U＝墓石で欄が無い。台帳から戻した状態の definitions[].constituents[].alive と slot_history で数えた",
+    "シールの席": "関係 ID が shopworld の IDS で sig のもの。IDS は opaque_id(run_seed, 試行, 'relation:shop:sig') なので、全試行ぶんをこの式で作り直して見分けた（attnsme.py・useforget.py と同じ見分け）。link・root・door も同じく opaque_id から",
+    "骨だけの定義 skeleton_gt50": "シールの席が F で、シール以外の席（link を含む）のうち U が半分を超える",
+    "skeleton_allU": "シールが F で、シール以外の席がすべて U",
+    "D_e（例外の定義）": "記録に D_e という名札は無い。ここでは二つの欄を並べた：seal_name_if_F（シールの席の固定名 sig_e／sig_n）と birth_shop_cue（定義が生まれた試行 registered_at の台帳の shop_cue、e＝例外の日）。どちらで D_e と呼ぶかは決めていない",
+    "シールの位置の鍵": "k2 の鍵 [[[[[2,[\"relation\",\"relation\"]],0]]],[1,[\"entity\"]]]（tools/attnposition_keys.position_index：一引数・物、親は link の 0 番目）。注意の記録の全候補の details で、シールの関係 ID の鍵がこれと一致することを全試行で照合した（checks.csv attention_seal_key_matches_details）",
+    "seal_weight_w": "(1＋a_seal)／(1＋ā)、ā は a の全鍵の平均（useforget_cstar.attention_weight と同じ式）。D でも計算はできるが、D の走行では使われていない",
+    "key_roles_seen": "その鍵が走行中に注意の記録の details で当たった関係の役（sig・link・root・door、ほかは other）",
+    "骨だけの区間": "全 1740 試行の台帳の状態を走査し、同じ (定義, 生まれた試行) が骨だけである連続した試行を一つの区間にした"
+  },
+  "tables": {
+    "attention_seal_key.csv": "走行×checkpoint：鍵の数、a の平均・最大、シールの鍵の a・順位・w、それまでの最大、走行中の最大とその試行、a が更新された試行の数",
+    "attention_top_keys.csv": "走行×checkpoint：a の上位 5 鍵（同点は鍵の文字順）。シールの鍵が 6 位以下ならその行も足した",
+    "seat_states_by_definition.csv": "走行×checkpoint×定義：席の数、F・H・U、シールの席の状態・名・履歴、link の状態、ほかの席の U の数と割合、骨だけの印",
+    "skeleton_summary.csv": "走行×checkpoint の合計",
+    "skeleton_all_trials.csv": "走行ごと：全試行を走査して、骨だけの定義がいた試行の数・区間の数",
+    "skeleton_episodes.csv": "骨だけの区間ごと：定義、生まれた試行と shop_cue・型、シールの名、始まり・終わりの試行、終わった理由",
+    "retention_seal_weight.csv": "走行ごと：保持の記録の matching のうちシールの席（mapped_to がその試行のシールの ID）の行の数、a が入っている行の数、w の最大とそのときの a・試行",
+    "checks.csv": "照合の結果"
+  },
+  "checks_summary": {
+    "attention_seal_key_matches_details=True": 24,
+    "attention_update_reasons=": 24,
+    "ledger_state_hash=True": 96,
+    "shop_jsonl_seal_state=True": 96,
+    "useforget_snap_FH=True": 96
+  },
+  "pair_file_identity": "cloud_runs/<run>/files_sha256.tsv で D と D＋注意（同じ世界・種・τ）を比べた：世界 1 の 6 組は attention・side（answers・jsonl・routing・shop・sme・sme.states）が sha256 一致、違うのは台帳・retention・flag・manifest（と 5 組で side の useforget）。世界 2 は τ0.4 の 3 組と τ0.15 の種 1・2 で attention・side も違う（side の行の違いは 5〜23 行）。τ0.15 種 3 は世界 1 と同じ形",
+  "not_recorded_or_not_used": [
+    "useforget.jsonl（D の記録）には a も重み w も無い（欄：trial・uses・struct_only・other_cand_mapped・answer_seat・forgot・births・snap）。snap は U でない席だけで、U の席は書かれていない",
+    "retention.jsonl（useforget_cstar の AUDIT）の a・weight は D＋注意（#12・#13）だけ。D（#10・#11）では matching の a は null、attention は {}（attention_usage が偽）",
+    "D_e という名札・欄はどの記録にも無い（定義の分類は上の二欄を並べただけ）",
+    "side/seedNNN.sme.states.jsonl.gz・sme.jsonl.gz・routing・answers・evictions は読んでいない（台帳の状態で足りたため）",
+    "#17・#18、種 4〜10 は読んでいない"
+  ],
+  "files_sha256": {
+    "attention_seal_key.csv": "8065ae9b3655e510eeaaf7bdf9426705b5f9b7023db884eab5600dac177a857b",
+    "attention_top_keys.csv": "bb6ec52f26072cbb8ddc697246a3718fb0a76ee135c871328a7277d1d0d80203",
+    "checks.csv": "3c020fad0855a693a1690779a57f45174793f637b15105dc5c315e7d5a2da188",
+    "d_skeleton.py": "d0878ccd7496515d937d3eedde883240be26b67088612a77c1223c4d7e2d6463",
+    "retention_seal_weight.csv": "07011dd06319f366b1993a6a2b115961fdb7ecaa48d0339fe56fad3060f4bd3f",
+    "seat_states_by_definition.csv": "28cdf10481d1d704c9f80431e9bf8550c9a2f17c663a2bc529f6c5c1c7cd7280",
+    "skeleton_all_trials.csv": "437c9bafc030afc2d84e2d480a0be9d46baebc60270a30bf98f1651e91d431bb",
+    "skeleton_episodes.csv": "c41d8f9976c45bb807df012405a110d0afa55edd451c2119e9c144809d71bef4",
+    "skeleton_summary.csv": "85e7ececc50298bf373de2265c54ca7697c6fe728bcb3724dbc6001cffca188e"
+  }
+}
