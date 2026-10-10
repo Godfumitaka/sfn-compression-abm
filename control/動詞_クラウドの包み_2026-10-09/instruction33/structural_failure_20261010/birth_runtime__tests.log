@@ -1,0 +1,82 @@
+...................FFFF                                                  [100%]
+=================================== FAILURES ===================================
+______ test_freeze_keeps_original_fork_order_all_counts_and_rng[False-1] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1087d6660>
+tmp_path = PosixPath('/private/var/folders/5s/k47dhtj56p54v5qsfddjly940000gn/T/pytest-of-user/pytest-99/test_freeze_keeps_original_for0')
+workers = 1, hu = False
+
+    @pytest.mark.parametrize('workers',[1,4])
+    @pytest.mark.parametrize('hu',[False,True])
+    def test_freeze_keeps_original_fork_order_all_counts_and_rng(monkeypatch,tmp_path,workers,hu):
+        before=(P.gc.isenabled(),P.gc.get_freeze_count())
+>       assert before[1]==0
+E       assert 375 == 0
+
+tests/test_birth_gc_freeze_instruction35.py:40: AssertionError
+______ test_freeze_keeps_original_fork_order_all_counts_and_rng[False-4] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10879c7a0>
+tmp_path = PosixPath('/private/var/folders/5s/k47dhtj56p54v5qsfddjly940000gn/T/pytest-of-user/pytest-99/test_freeze_keeps_original_for1')
+workers = 4, hu = False
+
+    @pytest.mark.parametrize('workers',[1,4])
+    @pytest.mark.parametrize('hu',[False,True])
+    def test_freeze_keeps_original_fork_order_all_counts_and_rng(monkeypatch,tmp_path,workers,hu):
+        before=(P.gc.isenabled(),P.gc.get_freeze_count())
+>       assert before[1]==0
+E       assert 375 == 0
+
+tests/test_birth_gc_freeze_instruction35.py:40: AssertionError
+_______ test_freeze_keeps_original_fork_order_all_counts_and_rng[True-1] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x108797920>
+tmp_path = PosixPath('/private/var/folders/5s/k47dhtj56p54v5qsfddjly940000gn/T/pytest-of-user/pytest-99/test_freeze_keeps_original_for2')
+workers = 1, hu = True
+
+    @pytest.mark.parametrize('workers',[1,4])
+    @pytest.mark.parametrize('hu',[False,True])
+    def test_freeze_keeps_original_fork_order_all_counts_and_rng(monkeypatch,tmp_path,workers,hu):
+        before=(P.gc.isenabled(),P.gc.get_freeze_count())
+>       assert before[1]==0
+E       assert 375 == 0
+
+tests/test_birth_gc_freeze_instruction35.py:40: AssertionError
+_______ test_freeze_keeps_original_fork_order_all_counts_and_rng[True-4] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1087d5b20>
+tmp_path = PosixPath('/private/var/folders/5s/k47dhtj56p54v5qsfddjly940000gn/T/pytest-of-user/pytest-99/test_freeze_keeps_original_for3')
+workers = 4, hu = True
+
+    @pytest.mark.parametrize('workers',[1,4])
+    @pytest.mark.parametrize('hu',[False,True])
+    def test_freeze_keeps_original_fork_order_all_counts_and_rng(monkeypatch,tmp_path,workers,hu):
+        before=(P.gc.isenabled(),P.gc.get_freeze_count())
+>       assert before[1]==0
+E       assert 375 == 0
+
+tests/test_birth_gc_freeze_instruction35.py:40: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_birth_gc_freeze_instruction35.py::test_freeze_keeps_original_fork_order_all_counts_and_rng[False-1]
+FAILED tests/test_birth_gc_freeze_instruction35.py::test_freeze_keeps_original_fork_order_all_counts_and_rng[False-4]
+FAILED tests/test_birth_gc_freeze_instruction35.py::test_freeze_keeps_original_fork_order_all_counts_and_rng[True-1]
+FAILED tests/test_birth_gc_freeze_instruction35.py::test_freeze_keeps_original_fork_order_all_counts_and_rng[True-4]
+4 failed, 19 passed in 0.80s
+        0.98 real         0.29 user         0.15 sys
+            44204032  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               23030  page reclaims
+                  80  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 145  voluntary context switches
+                 981  involuntary context switches
+          2496636804  instructions retired
+          1177949975  cycles elapsed
+            33637000  peak memory footprint

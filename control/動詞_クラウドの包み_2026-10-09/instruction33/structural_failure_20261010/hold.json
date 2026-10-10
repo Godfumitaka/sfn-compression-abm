@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-10T21:13:36.409078+09:00",
+  "state": "held_after_structural_gc_precondition_failure",
+  "source_commit": "ddb119f5eb7e78c2bd39de2a932390688914a664",
+  "structural_passed": false,
+  "actual_gate_passed": null,
+  "model_starts": 0,
+  "failed_tests": 4,
+  "same_test_or_admission_restarted": false,
+  "reason": "新しいPythonの起動時のgc.get_freeze_countが375。現在の検査とGC入口は0を要求し、比較を始める前に拒否する。原失敗を保持し、後続指示を確認するまで実100と新しい検査の再受付を保留。"
+}

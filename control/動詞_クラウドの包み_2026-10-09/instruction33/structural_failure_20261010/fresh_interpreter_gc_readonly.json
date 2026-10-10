@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-10T21:13:36.409078+09:00",
+  "kind": "fresh_interpreter_readonly_gc_query",
+  "code": "import gc,sys,json; print(json.dumps(dict(version=sys.version, enabled=gc.isenabled(), frozen=gc.get_freeze_count(), executable=sys.executable),ensure_ascii=False))",
+  "observations": [
+    {
+      "executable": "/opt/homebrew/opt/python@3.12/bin/python3.12",
+      "version": "3.12.13 (main, Mar 3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]",
+      "enabled": true,
+      "frozen": 375,
+      "exit_code": 0
+    },
+    {
+      "executable": "$WORKSPACE/newport_2026-10-07/instruction9_cloud/testenv/bin/python",
+      "version": "3.12.13 (main, Mar 3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]",
+      "enabled": true,
+      "frozen": 375,
+      "exit_code": 0
+    }
+  ],
+  "model_starts": 0,
+  "gc_state_changed": false,
+  "test_retries": 0,
+  "inference": "検査の前の新品のPythonでも375。0という前提はこのMacで成立しない。375の内部由来は未確認。現実装のGC旗は入口の非ゼロ拒否に当たる。"
+}

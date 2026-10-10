@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-10T21:13:36.409078+09:00",
+  "source_commit": "ddb119f5eb7e78c2bd39de2a932390688914a664",
+  "structural_tests_passed": false,
+  "serial": {
+    "passed": 169,
+    "failed": 0,
+    "exit_code": 0,
+    "pytest_seconds": 6.25
+  },
+  "extra": {
+    "passed": 46,
+    "failed": 0,
+    "exit_code": 0,
+    "pytest_seconds": 0.58
+  },
+  "birth": {
+    "passed": 19,
+    "failed": 4,
+    "exit_code": 1,
+    "pytest_seconds": 0.8,
+    "failures": [
+      {
+        "test": "test_freeze_keeps_original_fork_order_all_counts_and_rng",
+        "hu": false,
+        "workers": 1,
+        "field": "before[1] = gc.get_freeze_count()",
+        "expected": 0,
+        "actual": 375,
+        "assert_line": 40,
+        "native_comparison_started": false
+      },
+      {
+        "test": "test_freeze_keeps_original_fork_order_all_counts_and_rng",
+        "hu": false,
+        "workers": 4,
+        "field": "before[1] = gc.get_freeze_count()",
+        "expected": 0,
+        "actual": 375,
+        "assert_line": 40,
+        "native_comparison_started": false
+      },
+      {
+        "test": "test_freeze_keeps_original_fork_order_all_counts_and_rng",
+        "hu": true,
+        "workers": 1,
+        "field": "before[1] = gc.get_freeze_count()",
+        "expected": 0,
+        "actual": 375,
+        "assert_line": 40,
+        "native_comparison_started": false
+      },
+      {
+        "test": "test_freeze_keeps_original_fork_order_all_counts_and_rng",
+        "hu": true,
+        "workers": 4,
+        "field": "before[1] = gc.get_freeze_count()",
+        "expected": 0,
+        "actual": 375,
+        "assert_line": 40,
+        "native_comparison_started": false
+      }
+    ]
+  },
+  "actual_gate_passed": null,
+  "actual_byte_mismatch_count": null,
+  "model_starts": 0,
+  "model_or_test_source_changed": false,
+  "automatic_retry": false,
+  "failed_test_reexecuted": false,
+  "source_hashes": {
+    "tools/attnstage2_birth_parallel.py": "54ca7d85a92bdee505ffa4111cc13f8d7c66928cbbb967036dadf34c6cab357b",
+    "tests/test_birth_gc_freeze_instruction35.py": "9bd6e03053f83cc70dc119a7cdcb9471e1cb1dfb495252b34e5c8e17bcff456c",
+    "tests/test_birth_workers_instruction22.py": "bd2842eac169feaba74cf9167bc4932858b6d2a4ff405d8f50c8915bee33926a"
+  },
+  "d3_actual100_start_allowed": false,
+  "next_step": "GC固定数の起動時非ゼロと既存固定の区別を、原検査の条件を外さずどう確認するかの判断待ち。模型・検査条件を直して一致を作らず、実100を始めない。",
+  "running_three_cases_changed": false,
+  "current_original_timing_trials": [
+    800,
+    800,
+    900
+  ],
+  "new_full_mac_ps": 0
+}
