@@ -1,0 +1,693 @@
+{
+  "pid": 51939,
+  "ppid": 51923,
+  "at_jst": "2026-10-10T18:20:19.873507+09:00",
+  "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/tools/v3_run.py",
+  "line": 1226,
+  "function": "main",
+  "instruction_offset": 20350,
+  "exception_type": "AssertionError",
+  "exception_args": [],
+  "stack": [
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/tools/v3_run.py",
+      "line": 1226,
+      "function": "main",
+      "locals": {
+        "ap": {
+          "type": "ArgumentParser"
+        },
+        "args": {
+          "type": "Namespace"
+        },
+        "sweep": {
+          "type": "module"
+        },
+        "cfg": {
+          "agent_ids": [
+            "agent"
+          ],
+          "axes": {
+            "f": [
+              0.5
+            ],
+            "fill_selection": [
+              "sample",
+              "most_frequent"
+            ],
+            "repair_scope": [
+              "first_order"
+            ],
+            "theta_prime": [
+              2.1,
+              2.3
+            ]
+          },
+          "fixed": {
+            "abstain_charge": false,
+            "alpha": 0.0,
+            "beta": 0.0,
+            "correction_mode": "none",
+            "holdout_include_second_order": false,
+            "identification_graph": "live",
+            "kappa": 1.0,
+            "lambda_mix": 0.1,
+            "local_lambda": 1.0,
+            "nsim_threshold": 0.95,
+            "pricing_rule": "spec",
+            "refill_rule": "one_per_slot",
+            "self_score_cache": "off",
+            "tau_acc": 0.67,
+            "threshold": 0.0,
+            "w": 0.0
+          },
+          "name": "verb_hide1_s1",
+          "output": {
+            "dir": "../runs/verb",
+            "snapshot_every": 1,
+            "snapshot_mode": "delta"
+          },
+          "seed_file": "tools/verb/U-011_seed_verb.json",
+          "seeds": {
+            "count": 20,
+            "start": 1
+          },
+          "trial_count": 5000
+        },
+        "orig_dir": "../runs/verb",
+        "out_root": {
+          "type": "PosixPath"
+        },
+        "cfg2": {
+          "agent_ids": [
+            "agent"
+          ],
+          "axes": {
+            "f": [
+              0.5
+            ],
+            "fill_selection": [
+              "sample",
+              "most_frequent"
+            ],
+            "repair_scope": [
+              "first_order"
+            ],
+            "theta_prime": [
+              2.1,
+              2.3
+            ],
+            "verbatim_theta": [
+              0.3842
+            ]
+          },
+          "fixed": {
+            "abstain_charge": false,
+            "alpha": 0.0,
+            "beta": 0.0,
+            "correction_mode": "none",
+            "holdout_include_second_order": false,
+            "identification_graph": "live",
+            "kappa": 1.0,
+            "lambda_mix": 0.1,
+            "local_lambda": 1.0,
+            "nsim_threshold": 0.7,
+            "pricing_rule": "spec",
+            "refill_rule": "one_per_slot",
+            "self_score_cache": "off",
+            "tau_acc": 0.67,
+            "threshold": 0.0,
+            "w": 0.0
+          },
+          "name": "verb_hide1_s1",
+          "output": {
+            "dir": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output/ledgers",
+            "snapshot_every": 1,
+            "snapshot_mode": "delta"
+          },
+          "seed_file": "tools/verb/U-011_seed_verb.json",
+          "seeds": {
+            "count": 20,
+            "start": 1
+          },
+          "trial_count": 5000
+        },
+        "verbworld": {
+          "type": "module"
+        },
+        "runs": [
+          {
+            "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+            "f": 0.5,
+            "theta_prime": 2.1,
+            "repair_scope": "first_order",
+            "verbatim_theta": 0.3842,
+            "fill_selection": "most_frequent",
+            "seed": 7
+          }
+        ],
+        "keep": [
+          7
+        ],
+        "keep_c": [
+          "f0.5000_th2.1000_first_order"
+        ],
+        "cstar_options": {
+          "match_cstar": true,
+          "match_cstar_e": true,
+          "h_dirichlet": 1,
+          "match_eps": "0",
+          "logp_eps": 0.01,
+          "birth_score": "seq"
+        },
+        "seed": {
+          "type": "Seed"
+        },
+        "commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "all_off": false,
+        "do_compare": false,
+        "tasks": [
+          {
+            "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+            "f": 0.5,
+            "theta_prime": 2.1,
+            "repair_scope": "first_order",
+            "verbatim_theta": 0.3842,
+            "fill_selection": "most_frequent",
+            "seed": 7,
+            "cfg": {
+              "agent_ids": [
+                "agent"
+              ],
+              "axes": {
+                "f": [
+                  0.5
+                ],
+                "fill_selection": [
+                  "sample",
+                  "most_frequent"
+                ],
+                "repair_scope": [
+                  "first_order"
+                ],
+                "theta_prime": [
+                  2.1,
+                  2.3
+                ],
+                "verbatim_theta": [
+                  0.3842
+                ]
+              },
+              "fixed": {
+                "abstain_charge": false,
+                "alpha": 0.0,
+                "beta": 0.0,
+                "correction_mode": "none",
+                "holdout_include_second_order": false,
+                "identification_graph": "live",
+                "kappa": 1.0,
+                "lambda_mix": 0.1,
+                "local_lambda": 1.0,
+                "nsim_threshold": 0.7,
+                "pricing_rule": "spec",
+                "refill_rule": "one_per_slot",
+                "self_score_cache": "off",
+                "tau_acc": 0.67,
+                "threshold": 0.0,
+                "w": 0.0
+              },
+              "name": "verb_hide1_s1",
+              "output": {
+                "dir": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output/ledgers",
+                "snapshot_every": 1,
+                "snapshot_mode": "delta"
+              },
+              "seed_file": "tools/verb/U-011_seed_verb.json",
+              "seeds": {
+                "count": 20,
+                "start": 1
+              },
+              "trial_count": 5000
+            },
+            "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+            "orig_dir": "../runs/verb",
+            "out_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output",
+            "seed_file_sha256": "8de4a7bb217415df79caa5ea4b98d50fa639f100bcf5afaacbefe838f9e2c6da",
+            "nohash": true,
+            "prune": false,
+            "extgreedy": false,
+            "lowmem": true,
+            "extend_rule": "none",
+            "charge1": "d32",
+            "dump_slot_history": true,
+            "ident_rho": 0.5,
+            "ident_argmax": true,
+            "ident_shadow": false,
+            "ident_commons": true,
+            "fast": true,
+            "nohist": true,
+            "fix2": false,
+            "fix_order": false,
+            "fix_order2": true,
+            "rename_check": false,
+            "proj_first": true,
+            "fix2_full": true,
+            "fill_unseen": false,
+            "fill_norestate": true,
+            "no_charge2": true,
+            "death_terms": false,
+            "checks": false,
+            "own_evidence": true,
+            "v39": true,
+            "v39_budget": null,
+            "v39_init": "two",
+            "v39_a": 0.5,
+            "v39_u": "global",
+            "v39_decay": "actr",
+            "v39_price": 0.00035129738499384776,
+            "v39_dump_cands": false,
+            "v310_be": true,
+            "hist_role": true,
+            "score_role": true,
+            "world_cue": false,
+            "world_cue_p": 0.8,
+            "dump_answers": true,
+            "dump_routing": true,
+            "u_struct": true,
+            "relearn_init": true,
+            "tie_struct": true,
+            "amb_local": true,
+            "answer_gap": true,
+            "probe_world": true,
+            "shop_world": null,
+            "shop_exc": 0.2,
+            "shop_keep_cue": false,
+            "strict_pc": true,
+            "cf_value": false,
+            "e_price": 0.01873710622997919,
+            "cf_learn": false,
+            "compare": false,
+            "horizon": 5000,
+            "score_logp": true,
+            "score_logp_e": false,
+            "cstar_options": {
+              "match_cstar": true,
+              "match_cstar_e": true,
+              "h_dirichlet": 1,
+              "match_eps": "0",
+              "logp_eps": 0.01,
+              "birth_score": "seq"
+            },
+            "verb_world": true,
+            "verb_variant": "default",
+            "verb_frequencies": null,
+            "verb_timing": true,
+            "score_arg_order": true,
+            "attn_allin": true,
+            "logp_eps": 0.01,
+            "use_forget": 0.4,
+            "use_forget_q": true,
+            "use_forget_attn": true,
+            "sme2017": true,
+            "sme_intern_cache": true,
+            "sme_evict_trial_cache": true,
+            "sme_call_seed": true,
+            "sme_tie_uniform": true,
+            "attn_sme": "global",
+            "attn_position": "k2",
+            "attn_eta": 0.1,
+            "attn_fixed_zero": false
+          }
+        ],
+        "task": {
+          "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+          "f": 0.5,
+          "theta_prime": 2.1,
+          "repair_scope": "first_order",
+          "verbatim_theta": 0.3842,
+          "fill_selection": "most_frequent",
+          "seed": 7,
+          "cfg": {
+            "agent_ids": [
+              "agent"
+            ],
+            "axes": {
+              "f": [
+                0.5
+              ],
+              "fill_selection": [
+                "sample",
+                "most_frequent"
+              ],
+              "repair_scope": [
+                "first_order"
+              ],
+              "theta_prime": [
+                2.1,
+                2.3
+              ],
+              "verbatim_theta": [
+                0.3842
+              ]
+            },
+            "fixed": {
+              "abstain_charge": false,
+              "alpha": 0.0,
+              "beta": 0.0,
+              "correction_mode": "none",
+              "holdout_include_second_order": false,
+              "identification_graph": "live",
+              "kappa": 1.0,
+              "lambda_mix": 0.1,
+              "local_lambda": 1.0,
+              "nsim_threshold": 0.7,
+              "pricing_rule": "spec",
+              "refill_rule": "one_per_slot",
+              "self_score_cache": "off",
+              "tau_acc": 0.67,
+              "threshold": 0.0,
+              "w": 0.0
+            },
+            "name": "verb_hide1_s1",
+            "output": {
+              "dir": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output/ledgers",
+              "snapshot_every": 1,
+              "snapshot_mode": "delta"
+            },
+            "seed_file": "tools/verb/U-011_seed_verb.json",
+            "seeds": {
+              "count": 20,
+              "start": 1
+            },
+            "trial_count": 5000
+          },
+          "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+          "orig_dir": "../runs/verb",
+          "out_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output",
+          "seed_file_sha256": "8de4a7bb217415df79caa5ea4b98d50fa639f100bcf5afaacbefe838f9e2c6da",
+          "nohash": true,
+          "prune": false,
+          "extgreedy": false,
+          "lowmem": true,
+          "extend_rule": "none",
+          "charge1": "d32",
+          "dump_slot_history": true,
+          "ident_rho": 0.5,
+          "ident_argmax": true,
+          "ident_shadow": false,
+          "ident_commons": true,
+          "fast": true,
+          "nohist": true,
+          "fix2": false,
+          "fix_order": false,
+          "fix_order2": true,
+          "rename_check": false,
+          "proj_first": true,
+          "fix2_full": true,
+          "fill_unseen": false,
+          "fill_norestate": true,
+          "no_charge2": true,
+          "death_terms": false,
+          "checks": false,
+          "own_evidence": true,
+          "v39": true,
+          "v39_budget": null,
+          "v39_init": "two",
+          "v39_a": 0.5,
+          "v39_u": "global",
+          "v39_decay": "actr",
+          "v39_price": 0.00035129738499384776,
+          "v39_dump_cands": false,
+          "v310_be": true,
+          "hist_role": true,
+          "score_role": true,
+          "world_cue": false,
+          "world_cue_p": 0.8,
+          "dump_answers": true,
+          "dump_routing": true,
+          "u_struct": true,
+          "relearn_init": true,
+          "tie_struct": true,
+          "amb_local": true,
+          "answer_gap": true,
+          "probe_world": true,
+          "shop_world": null,
+          "shop_exc": 0.2,
+          "shop_keep_cue": false,
+          "strict_pc": true,
+          "cf_value": false,
+          "e_price": 0.01873710622997919,
+          "cf_learn": false,
+          "compare": false,
+          "horizon": 5000,
+          "score_logp": true,
+          "score_logp_e": false,
+          "cstar_options": {
+            "match_cstar": true,
+            "match_cstar_e": true,
+            "h_dirichlet": 1,
+            "match_eps": "0",
+            "logp_eps": 0.01,
+            "birth_score": "seq"
+          },
+          "verb_world": true,
+          "verb_variant": "default",
+          "verb_frequencies": null,
+          "verb_timing": true,
+          "score_arg_order": true,
+          "attn_allin": true,
+          "logp_eps": 0.01,
+          "use_forget": 0.4,
+          "use_forget_q": true,
+          "use_forget_attn": true,
+          "sme2017": true,
+          "sme_intern_cache": true,
+          "sme_evict_trial_cache": true,
+          "sme_call_seed": true,
+          "sme_tie_uniform": true,
+          "attn_sme": "global",
+          "attn_position": "k2",
+          "attn_eta": 0.1,
+          "attn_fixed_zero": false
+        },
+        "opt": "sme_evict_tombstone",
+        "man": {
+          "type": "PosixPath"
+        },
+        "ex": {
+          "type": "ProcessPoolExecutor"
+        },
+        "t": {
+          "cell": "f0.5000_th2.1000_vt0.3842_first_order",
+          "f": 0.5,
+          "theta_prime": 2.1,
+          "repair_scope": "first_order",
+          "verbatim_theta": 0.3842,
+          "fill_selection": "most_frequent",
+          "seed": 7,
+          "cfg": {
+            "agent_ids": [
+              "agent"
+            ],
+            "axes": {
+              "f": [
+                0.5
+              ],
+              "fill_selection": [
+                "sample",
+                "most_frequent"
+              ],
+              "repair_scope": [
+                "first_order"
+              ],
+              "theta_prime": [
+                2.1,
+                2.3
+              ],
+              "verbatim_theta": [
+                0.3842
+              ]
+            },
+            "fixed": {
+              "abstain_charge": false,
+              "alpha": 0.0,
+              "beta": 0.0,
+              "correction_mode": "none",
+              "holdout_include_second_order": false,
+              "identification_graph": "live",
+              "kappa": 1.0,
+              "lambda_mix": 0.1,
+              "local_lambda": 1.0,
+              "nsim_threshold": 0.7,
+              "pricing_rule": "spec",
+              "refill_rule": "one_per_slot",
+              "self_score_cache": "off",
+              "tau_acc": 0.67,
+              "threshold": 0.0,
+              "w": 0.0
+            },
+            "name": "verb_hide1_s1",
+            "output": {
+              "dir": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output/ledgers",
+              "snapshot_every": 1,
+              "snapshot_mode": "delta"
+            },
+            "seed_file": "tools/verb/U-011_seed_verb.json",
+            "seeds": {
+              "count": 20,
+              "start": 1
+            },
+            "trial_count": 5000
+          },
+          "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+          "orig_dir": "../runs/verb",
+          "out_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/reproduction_01/output",
+          "seed_file_sha256": "8de4a7bb217415df79caa5ea4b98d50fa639f100bcf5afaacbefe838f9e2c6da",
+          "nohash": true,
+          "prune": false,
+          "extgreedy": false,
+          "lowmem": true,
+          "extend_rule": "none",
+          "charge1": "d32",
+          "dump_slot_history": true,
+          "ident_rho": 0.5,
+          "ident_argmax": true,
+          "ident_shadow": false,
+          "ident_commons": true,
+          "fast": true,
+          "nohist": true,
+          "fix2": false,
+          "fix_order": false,
+          "fix_order2": true,
+          "rename_check": false,
+          "proj_first": true,
+          "fix2_full": true,
+          "fill_unseen": false,
+          "fill_norestate": true,
+          "no_charge2": true,
+          "death_terms": false,
+          "checks": false,
+          "own_evidence": true,
+          "v39": true,
+          "v39_budget": null,
+          "v39_init": "two",
+          "v39_a": 0.5,
+          "v39_u": "global",
+          "v39_decay": "actr",
+          "v39_price": 0.00035129738499384776,
+          "v39_dump_cands": false,
+          "v310_be": true,
+          "hist_role": true,
+          "score_role": true,
+          "world_cue": false,
+          "world_cue_p": 0.8,
+          "dump_answers": true,
+          "dump_routing": true,
+          "u_struct": true,
+          "relearn_init": true,
+          "tie_struct": true,
+          "amb_local": true,
+          "answer_gap": true,
+          "probe_world": true,
+          "shop_world": null,
+          "shop_exc": 0.2,
+          "shop_keep_cue": false,
+          "strict_pc": true,
+          "cf_value": false,
+          "e_price": 0.01873710622997919,
+          "cf_learn": false,
+          "compare": false,
+          "horizon": 5000,
+          "score_logp": true,
+          "score_logp_e": false,
+          "cstar_options": {
+            "match_cstar": true,
+            "match_cstar_e": true,
+            "h_dirichlet": 1,
+            "match_eps": "0",
+            "logp_eps": 0.01,
+            "birth_score": "seq"
+          },
+          "verb_world": true,
+          "verb_variant": "default",
+          "verb_frequencies": null,
+          "verb_timing": true,
+          "score_arg_order": true,
+          "attn_allin": true,
+          "logp_eps": 0.01,
+          "use_forget": 0.4,
+          "use_forget_q": true,
+          "use_forget_attn": true,
+          "sme2017": true,
+          "sme_intern_cache": true,
+          "sme_evict_trial_cache": true,
+          "sme_call_seed": true,
+          "sme_tie_uniform": true,
+          "attn_sme": "global",
+          "attn_position": "k2",
+          "attn_eta": 0.1,
+          "attn_fixed_zero": false
+        },
+        "futs": {},
+        "fu": {
+          "type": "Future"
+        }
+      }
+    },
+    {
+      "file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/production_reference_01/tools/production/measurement_driver.py",
+      "line": 30,
+      "function": "<module>",
+      "locals": {
+        "__name__": "__main__",
+        "__doc__": "指示11の全5000用観察入口。試行を切らず、模型の入口を変更し続けない。",
+        "__package__": null,
+        "__loader__": {
+          "type": "SourceFileLoader"
+        },
+        "__spec__": null,
+        "__annotations__": {},
+        "__builtins__": {
+          "type": "module"
+        },
+        "__file__": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction22/production_reference_01/tools/production/measurement_driver.py",
+        "__cached__": null,
+        "os": {
+          "type": "module"
+        },
+        "sys": {
+          "type": "module"
+        },
+        "Path": {
+          "type": "type"
+        },
+        "source": {
+          "type": "PosixPath"
+        },
+        "sweep": {
+          "type": "module"
+        },
+        "v3_run": {
+          "type": "module"
+        },
+        "observe": {
+          "type": "function"
+        },
+        "observe_timing": {
+          "type": "function"
+        },
+        "original_worker": {
+          "type": "function"
+        },
+        "original_longitudinal": {
+          "type": "function"
+        },
+        "worker": {
+          "type": "function"
+        }
+      }
+    }
+  ],
+  "researcher_only": true,
+  "exception_propagation_unchanged": true
+}
