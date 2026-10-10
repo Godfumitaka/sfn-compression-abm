@@ -1,0 +1,38 @@
+2026-10-10 22:03:18 開始 verb_hide1_s1 nohash=True nsim=0.7 vt=0.3842 greedy=False extgreedy=False lowmem=True extend=none charge1=d32 ρ=0.5 argmax=True commons=True shadow=False fix2=False fix2_full=True fix_order=False fix_order2=True proj_first=True fill_unseen=False fill_norestate=True no_charge2=True own_evidence=True v39=True/inf/two/0.5/global death_terms=False checks=False rename_check=False fast=True nohist=True 走行 1 並列 1 比べる=False
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/observer_200.py", line 75, in measurement_worker
+    record=original_worker(task)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/tools/v3_run.py", line 651, in worker
+    rec = sweep.run_one(task)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/sweep.py", line 212, in run_one
+    result = run_longitudinal(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/observer_200.py", line 70, in longitudinal
+    result=original_longitudinal(prefix,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/abm/loop.py", line 119, in run_longitudinal
+    after, deletion_events = apply_theta(after, config, trial.trial, horizon=len(world.trials))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/tools/probeworld.py", line 144, in apply_theta
+    _probe(after, config, nxt)
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_verb_fixed_instruction13/tools/useforget_evaluation.py", line 35, in evaluated
+    before = N.probe_snapshot()
+             ^^^^^^^^^^^^^^^^^^
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/observe_components_01.py", line 22, in capture_snapshot
+    assert context['trial'] is not None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+2026-10-10 22:04:03 f0.5000_th2.1000_vt0.3842_first_order seed001 秒=None 最大メモリMB=None 定義末=None 一致=None err=AssertionError()
+★★ エラーまたは不一致。止める
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py", line 372, in run
+    executor._adjust_process_count()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/process.py", line 773, in _adjust_process_count
+    process_count = len(self._processes)
+                    ^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'NoneType' has no len()

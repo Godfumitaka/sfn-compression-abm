@@ -1,0 +1,1264 @@
+{
+  "state": "stopped",
+  "passed": false,
+  "model_changed": false,
+  "probe_hash_fields_excluded": false,
+  "decision_before_results": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/gate_plan_01.json",
+  "checks": [
+    {
+      "trial": 100,
+      "phase": "before",
+      "component": "D.ST",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value000.bin"
+        },
+        {
+          "key_repr": "'horizon'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value001.bin"
+        },
+        {
+          "key_repr": "'tau'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value002.bin"
+        },
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value003.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 242,
+            "right_bytes": 243,
+            "left_sha256": "ae9244b155bdc5fbb2365439c0ccbc58ad5aac9292f02d8cbe3fb524613b785f",
+            "right_sha256": "69acdabacbad98cfd55e707bbb7a645cf12b072e6b7d99e3c26ddeb4914327da",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+          },
+          "record_ports": {
+            "left": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 120252,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 120252,
+              "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 120252,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 120252,
+              "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'S'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value004.bin"
+        },
+        {
+          "key_repr": "'born'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value005.bin"
+        },
+        {
+          "key_repr": "'n_use'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value006.bin"
+        },
+        {
+          "key_repr": "'used_t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value007.bin"
+        },
+        {
+          "key_repr": "'real'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value008.bin"
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value009.bin"
+        },
+        {
+          "key_repr": "'rows'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value010.bin"
+        },
+        {
+          "key_repr": "'dumps'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value011.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value011.bin"
+        },
+        {
+          "key_repr": "'stats'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value012.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value012.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 167,
+        "line_one_based": 1,
+        "left_bytes": 34785,
+        "right_bytes": 34786,
+        "left_sha256": "b445235ddc5b87d0e308c50f47d4810aadbc11777e8671702ba3a9df3d3990e9",
+        "right_sha256": "c88bacab8831faaaf50dc01972c62802c31b7fac19aa22dfffc15a93fd8c7e02",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+      }
+    },
+    {
+      "trial": 100,
+      "phase": "before",
+      "component": "AUDIT",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value000.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 237,
+            "right_bytes": 238,
+            "left_sha256": "cb485b1f7728e10b8f79c6be97e67843e45902df06c41595bdb623fee336720c",
+            "right_sha256": "ee1fa0d9160e756125db833eff23191c40fd3ad1b69e5a1a06e9e3729d406052",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+          },
+          "record_ports": {
+            "left": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 1151843,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 1151843,
+              "raw_sha256": "184858163c097ee99a460a89962b848f246daa6c3b57d42148acc6ed700f362c",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 1151843,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 1151843,
+              "raw_sha256": "184858163c097ee99a460a89962b848f246daa6c3b57d42148acc6ed700f362c",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value001.bin"
+        },
+        {
+          "key_repr": "'amounts'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value002.bin"
+        },
+        {
+          "key_repr": "'matching'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value003.bin"
+        },
+        {
+          "key_repr": "'answers'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value004.bin"
+        },
+        {
+          "key_repr": "'births'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value005.bin"
+        },
+        {
+          "key_repr": "'selected'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value006.bin"
+        },
+        {
+          "key_repr": "'expected_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value007.bin"
+        },
+        {
+          "key_repr": "'attention_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value008.bin"
+        },
+        {
+          "key_repr": "'mapping'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value009.bin"
+        },
+        {
+          "key_repr": "'attention'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/AUDIT.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/AUDIT.value010.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 129,
+        "line_one_based": 1,
+        "left_bytes": 418,
+        "right_bytes": 419,
+        "left_sha256": "d23e23cf948deafa26a16f192ad8c09313b70f717dbff20d2a7628b4d524f785",
+        "right_sha256": "063ad39693e34b546be23551e0317b85756669c41cd8761f2f17f80c8e7c7185",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+      }
+    },
+    {
+      "trial": 100,
+      "phase": "after",
+      "component": "D.ST",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value000.bin"
+        },
+        {
+          "key_repr": "'horizon'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value001.bin"
+        },
+        {
+          "key_repr": "'tau'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value002.bin"
+        },
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value003.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 242,
+            "right_bytes": 243,
+            "left_sha256": "ae9244b155bdc5fbb2365439c0ccbc58ad5aac9292f02d8cbe3fb524613b785f",
+            "right_sha256": "69acdabacbad98cfd55e707bbb7a645cf12b072e6b7d99e3c26ddeb4914327da",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+          },
+          "record_ports": {
+            "left": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 120252,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 120252,
+              "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 120252,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 120252,
+              "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'S'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value004.bin"
+        },
+        {
+          "key_repr": "'born'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value005.bin"
+        },
+        {
+          "key_repr": "'n_use'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value006.bin"
+        },
+        {
+          "key_repr": "'used_t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value007.bin"
+        },
+        {
+          "key_repr": "'real'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value008.bin"
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value009.bin"
+        },
+        {
+          "key_repr": "'rows'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value010.bin"
+        },
+        {
+          "key_repr": "'dumps'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value011.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value011.bin"
+        },
+        {
+          "key_repr": "'stats'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/D.ST.value012.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/D.ST.value012.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 167,
+        "line_one_based": 1,
+        "left_bytes": 34785,
+        "right_bytes": 34786,
+        "left_sha256": "b445235ddc5b87d0e308c50f47d4810aadbc11777e8671702ba3a9df3d3990e9",
+        "right_sha256": "c88bacab8831faaaf50dc01972c62802c31b7fac19aa22dfffc15a93fd8c7e02",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+      }
+    },
+    {
+      "trial": 100,
+      "phase": "after",
+      "component": "AUDIT",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value000.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 237,
+            "right_bytes": 238,
+            "left_sha256": "cb485b1f7728e10b8f79c6be97e67843e45902df06c41595bdb623fee336720c",
+            "right_sha256": "ee1fa0d9160e756125db833eff23191c40fd3ad1b69e5a1a06e9e3729d406052",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+          },
+          "record_ports": {
+            "left": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 1151843,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 1151843,
+              "raw_sha256": "184858163c097ee99a460a89962b848f246daa6c3b57d42148acc6ed700f362c",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 1151843,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 1151843,
+              "raw_sha256": "184858163c097ee99a460a89962b848f246daa6c3b57d42148acc6ed700f362c",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value001.bin"
+        },
+        {
+          "key_repr": "'amounts'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value002.bin"
+        },
+        {
+          "key_repr": "'matching'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value003.bin"
+        },
+        {
+          "key_repr": "'answers'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value004.bin"
+        },
+        {
+          "key_repr": "'births'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value005.bin"
+        },
+        {
+          "key_repr": "'selected'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value006.bin"
+        },
+        {
+          "key_repr": "'expected_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value007.bin"
+        },
+        {
+          "key_repr": "'attention_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value008.bin"
+        },
+        {
+          "key_repr": "'mapping'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value009.bin"
+        },
+        {
+          "key_repr": "'attention'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_after/AUDIT.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_after/AUDIT.value010.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 129,
+        "line_one_based": 1,
+        "left_bytes": 418,
+        "right_bytes": 419,
+        "left_sha256": "d23e23cf948deafa26a16f192ad8c09313b70f717dbff20d2a7628b4d524f785",
+        "right_sha256": "063ad39693e34b546be23551e0317b85756669c41cd8761f2f17f80c8e7c7185",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+      }
+    },
+    {
+      "trial": 200,
+      "phase": "before",
+      "component": "D.ST",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value000.bin"
+        },
+        {
+          "key_repr": "'horizon'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value001.bin"
+        },
+        {
+          "key_repr": "'tau'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value002.bin"
+        },
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value003.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 242,
+            "right_bytes": 243,
+            "left_sha256": "ae9244b155bdc5fbb2365439c0ccbc58ad5aac9292f02d8cbe3fb524613b785f",
+            "right_sha256": "69acdabacbad98cfd55e707bbb7a645cf12b072e6b7d99e3c26ddeb4914327da",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+          },
+          "record_ports": {
+            "left": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 246245,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 246245,
+              "raw_sha256": "c82e7440c249ad6849fb95b019be07d7d21cd2eeb8dc63f55ebd5a0e82cf7f38",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 246245,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 246245,
+              "raw_sha256": "c82e7440c249ad6849fb95b019be07d7d21cd2eeb8dc63f55ebd5a0e82cf7f38",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'S'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value004.bin"
+        },
+        {
+          "key_repr": "'born'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value005.bin"
+        },
+        {
+          "key_repr": "'n_use'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value006.bin"
+        },
+        {
+          "key_repr": "'used_t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value007.bin"
+        },
+        {
+          "key_repr": "'real'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value008.bin"
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value009.bin"
+        },
+        {
+          "key_repr": "'rows'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value010.bin"
+        },
+        {
+          "key_repr": "'dumps'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value011.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value011.bin"
+        },
+        {
+          "key_repr": "'stats'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/D.ST.value012.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/D.ST.value012.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 168,
+        "line_one_based": 1,
+        "left_bytes": 45068,
+        "right_bytes": 45069,
+        "left_sha256": "a263a577c7722ff0d72d677567647b07d4dace46a6809867414203ab7b1f4797",
+        "right_sha256": "fd42ee908c5e664e7edd18d0c5ab03bb2dea0c70b441f02c482e2554820da257",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+      }
+    },
+    {
+      "trial": 200,
+      "phase": "before",
+      "component": "AUDIT",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value000.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 237,
+            "right_bytes": 238,
+            "left_sha256": "cb485b1f7728e10b8f79c6be97e67843e45902df06c41595bdb623fee336720c",
+            "right_sha256": "ee1fa0d9160e756125db833eff23191c40fd3ad1b69e5a1a06e9e3729d406052",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+          },
+          "record_ports": {
+            "left": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 2558367,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 2558367,
+              "raw_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 2558367,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 2558367,
+              "raw_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value001.bin"
+        },
+        {
+          "key_repr": "'amounts'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value002.bin"
+        },
+        {
+          "key_repr": "'matching'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value003.bin"
+        },
+        {
+          "key_repr": "'answers'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value004.bin"
+        },
+        {
+          "key_repr": "'births'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value005.bin"
+        },
+        {
+          "key_repr": "'selected'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value006.bin"
+        },
+        {
+          "key_repr": "'expected_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value007.bin"
+        },
+        {
+          "key_repr": "'attention_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value008.bin"
+        },
+        {
+          "key_repr": "'mapping'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value009.bin"
+        },
+        {
+          "key_repr": "'attention'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_before/AUDIT.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_before/AUDIT.value010.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 129,
+        "line_one_based": 1,
+        "left_bytes": 418,
+        "right_bytes": 419,
+        "left_sha256": "d23e23cf948deafa26a16f192ad8c09313b70f717dbff20d2a7628b4d524f785",
+        "right_sha256": "063ad39693e34b546be23551e0317b85756669c41cd8761f2f17f80c8e7c7185",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+      }
+    },
+    {
+      "trial": 200,
+      "phase": "after",
+      "component": "D.ST",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value000.bin"
+        },
+        {
+          "key_repr": "'horizon'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value001.bin"
+        },
+        {
+          "key_repr": "'tau'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value002.bin"
+        },
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value003.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 242,
+            "right_bytes": 243,
+            "left_sha256": "ae9244b155bdc5fbb2365439c0ccbc58ad5aac9292f02d8cbe3fb524613b785f",
+            "right_sha256": "69acdabacbad98cfd55e707bbb7a645cf12b072e6b7d99e3c26ddeb4914327da",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+          },
+          "record_ports": {
+            "left": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 246245,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 246245,
+              "raw_sha256": "c82e7440c249ad6849fb95b019be07d7d21cd2eeb8dc63f55ebd5a0e82cf7f38",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "D.ST",
+              "index": 3,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+              "position": 246245,
+              "raw_file": "D.ST.port003.raw",
+              "raw_bytes": 246245,
+              "raw_sha256": "c82e7440c249ad6849fb95b019be07d7d21cd2eeb8dc63f55ebd5a0e82cf7f38",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'S'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value004.bin"
+        },
+        {
+          "key_repr": "'born'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value005.bin"
+        },
+        {
+          "key_repr": "'n_use'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value006.bin"
+        },
+        {
+          "key_repr": "'used_t'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value007.bin"
+        },
+        {
+          "key_repr": "'real'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value008.bin"
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value009.bin"
+        },
+        {
+          "key_repr": "'rows'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value010.bin"
+        },
+        {
+          "key_repr": "'dumps'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value011.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value011.bin"
+        },
+        {
+          "key_repr": "'stats'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/D.ST.value012.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/D.ST.value012.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 168,
+        "line_one_based": 1,
+        "left_bytes": 45068,
+        "right_bytes": 45069,
+        "left_sha256": "a263a577c7722ff0d72d677567647b07d4dace46a6809867414203ab7b1f4797",
+        "right_sha256": "fd42ee908c5e664e7edd18d0c5ab03bb2dea0c70b441f02c482e2554820da257",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+      }
+    },
+    {
+      "trial": 200,
+      "phase": "after",
+      "component": "AUDIT",
+      "raw_bytes_equal": false,
+      "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.original_repr.bin",
+      "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.original_repr.bin",
+      "all_keys": [
+        {
+          "key_repr": "'f'",
+          "raw_bytes_equal": false,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value000.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value000.bin",
+          "difference": {
+            "byte_offset_zero_based": 123,
+            "line_one_based": 1,
+            "left_bytes": 237,
+            "right_bytes": 238,
+            "left_sha256": "cb485b1f7728e10b8f79c6be97e67843e45902df06c41595bdb623fee336720c",
+            "right_sha256": "ee1fa0d9160e756125db833eff23191c40fd3ad1b69e5a1a06e9e3729d406052",
+            "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+            "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+          },
+          "record_ports": {
+            "left": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 2558367,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 2558367,
+              "raw_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "right": {
+              "store": "AUDIT",
+              "index": 0,
+              "key_repr": "'f'",
+              "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl",
+              "position": 2558367,
+              "raw_file": "AUDIT.port000.raw",
+              "raw_bytes": 2558367,
+              "raw_sha256": "8a5ff17057baa8b9dec03e1e3d9e52635c37c7a9e336955fc002dbd81a4d4422",
+              "type_name": "_io.TextIOWrapper",
+              "mode": "w",
+              "encoding": "utf-8",
+              "closed": false,
+              "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/retention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl' mode='w' encoding='utf-8'>"
+            },
+            "raw_file_bytes_equal": true,
+            "position_equal": true,
+            "type_mode_encoding_closed_equal": true
+          }
+        },
+        {
+          "key_repr": "'trial'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value001.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value001.bin"
+        },
+        {
+          "key_repr": "'amounts'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value002.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value002.bin"
+        },
+        {
+          "key_repr": "'matching'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value003.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value003.bin"
+        },
+        {
+          "key_repr": "'answers'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value004.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value004.bin"
+        },
+        {
+          "key_repr": "'births'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value005.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value005.bin"
+        },
+        {
+          "key_repr": "'selected'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value006.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value006.bin"
+        },
+        {
+          "key_repr": "'expected_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value007.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value007.bin"
+        },
+        {
+          "key_repr": "'attention_usage'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value008.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value008.bin"
+        },
+        {
+          "key_repr": "'mapping'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value009.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value009.bin"
+        },
+        {
+          "key_repr": "'attention'",
+          "raw_bytes_equal": true,
+          "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0200_02_after/AUDIT.value010.bin",
+          "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0200_02_after/AUDIT.value010.bin"
+        }
+      ],
+      "non_record_port_keys_equal": true,
+      "difference": {
+        "byte_offset_zero_based": 129,
+        "line_one_based": 1,
+        "left_bytes": 418,
+        "right_bytes": 419,
+        "left_sha256": "d23e23cf948deafa26a16f192ad8c09313b70f717dbff20d2a7628b4d524f785",
+        "right_sha256": "063ad39693e34b546be23551e0317b85756669c41cd8761f2f17f80c8e7c7185",
+        "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d277727",
+        "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f726574656e74696f6e2f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e6a736f6e6c27206d6f64653d2777"
+      }
+    }
+  ],
+  "all_side_probe_before_after_equal": true,
+  "all_original_snapshots_reconstructed": true,
+  "first_original_component_difference": {
+    "trial": 100,
+    "phase": "before",
+    "component": "D.ST",
+    "raw_bytes_equal": false,
+    "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.original_repr.bin",
+    "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.original_repr.bin",
+    "all_keys": [
+      {
+        "key_repr": "'t'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value000.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value000.bin"
+      },
+      {
+        "key_repr": "'horizon'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value001.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value001.bin"
+      },
+      {
+        "key_repr": "'tau'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value002.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value002.bin"
+      },
+      {
+        "key_repr": "'f'",
+        "raw_bytes_equal": false,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value003.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value003.bin",
+        "difference": {
+          "byte_offset_zero_based": 123,
+          "line_one_based": 1,
+          "left_bytes": 242,
+          "right_bytes": 243,
+          "left_sha256": "ae9244b155bdc5fbb2365439c0ccbc58ad5aac9292f02d8cbe3fb524613b785f",
+          "right_sha256": "69acdabacbad98cfd55e707bbb7a645cf12b072e6b7d99e3c26ddeb4914327da",
+          "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+          "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+        },
+        "record_ports": {
+          "left": {
+            "store": "D.ST",
+            "index": 3,
+            "key_repr": "'f'",
+            "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+            "position": 120252,
+            "raw_file": "D.ST.port003.raw",
+            "raw_bytes": 120252,
+            "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+            "type_name": "_io.TextIOWrapper",
+            "mode": "w",
+            "encoding": "utf-8",
+            "closed": false,
+            "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+          },
+          "right": {
+            "store": "D.ST",
+            "index": 3,
+            "key_repr": "'f'",
+            "name": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl",
+            "position": 120252,
+            "raw_file": "D.ST.port003.raw",
+            "raw_bytes": 120252,
+            "raw_sha256": "e831991cfa5a87fac64e717f8831a0d2101c69ac5064f02e382bc24e76c4fce6",
+            "type_name": "_io.TextIOWrapper",
+            "mode": "w",
+            "encoding": "utf-8",
+            "closed": false,
+            "original_repr": "<_io.TextIOWrapper name='/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/output/side/f0.5000_th2.1000_vt0.3842_first_order/seed001.useforget.jsonl' mode='w' encoding='utf-8'>"
+          },
+          "raw_file_bytes_equal": true,
+          "position_equal": true,
+          "type_mode_encoding_closed_equal": true
+        }
+      },
+      {
+        "key_repr": "'S'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value004.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value004.bin"
+      },
+      {
+        "key_repr": "'born'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value005.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value005.bin"
+      },
+      {
+        "key_repr": "'n_use'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value006.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value006.bin"
+      },
+      {
+        "key_repr": "'used_t'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value007.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value007.bin"
+      },
+      {
+        "key_repr": "'real'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value008.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value008.bin"
+      },
+      {
+        "key_repr": "'trial'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value009.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value009.bin"
+      },
+      {
+        "key_repr": "'rows'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value010.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value010.bin"
+      },
+      {
+        "key_repr": "'dumps'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value011.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value011.bin"
+      },
+      {
+        "key_repr": "'stats'",
+        "raw_bytes_equal": true,
+        "left_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/left_tau04_200_02/components/pid78526_trial0100_01_before/D.ST.value012.bin",
+        "right_file": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction24/right_tau04_200_02/components/pid78557_trial0100_01_before/D.ST.value012.bin"
+      }
+    ],
+    "non_record_port_keys_equal": true,
+    "difference": {
+      "byte_offset_zero_based": 167,
+      "line_one_based": 1,
+      "left_bytes": 34785,
+      "right_bytes": 34786,
+      "left_sha256": "b445235ddc5b87d0e308c50f47d4810aadbc11777e8671702ba3a9df3d3990e9",
+      "right_sha256": "c88bacab8831faaaf50dc01972c62802c31b7fac19aa22dfffc15a93fd8c7e02",
+      "left_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f6c6566745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f64",
+      "right_hex": "6e5f706f72745f323032362d31302d30372f696e737472756374696f6e32342f72696768745f74617530345f3230305f30322f6f75747075742f736964652f66302e353030305f7468322e313030305f7674302e333834325f66697273745f6f726465722f736565643030312e757365666f726765742e6a736f6e6c27206d6f"
+    }
+  },
+  "decision": "24.3(b)：D.ST又はAUDITの全原字節に差。原字節を除外せず停止",
+  "subsequent_model_or_comparison_started": false,
+  "at_jst": "2026-10-10T22:09:17.515810+09:00",
+  "seconds": 0.10379974998068064,
+  "peak_rss_bytes": 30425088
+}
