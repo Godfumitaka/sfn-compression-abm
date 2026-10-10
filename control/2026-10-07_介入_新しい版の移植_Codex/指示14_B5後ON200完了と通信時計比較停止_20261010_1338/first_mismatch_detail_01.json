@@ -1,0 +1,119 @@
+{
+  "at_jst": "2026-10-10T13:39:14.768319+09:00",
+  "file": "comm/run001.jsonl",
+  "line": 4,
+  "first_difference": {
+    "field": "agents.0.stage2.seconds",
+    "left": 6.227952464832924,
+    "right": 5.909945693332702
+  },
+  "all_remaining_field_differences": [
+    {
+      "field": "agents.0.stage2.seconds",
+      "left": 6.227952464832924,
+      "right": 5.909945693332702
+    }
+  ],
+  "source_proof": [
+    {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline",
+      "files": {
+        "tools/attnstage2_runtime.py": {
+          "sha256": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+          "excerpts": [
+            {
+              "first_line": 149,
+              "last_line": 166,
+              "text": "149:         measure_seconds = time.perf_counter()-start\n150:         after,account = original_accounting(state,output,scene,config,horizon,score,coin,revealed)\n151:         accumulation_start = time.perf_counter()\n152:         if rows:\n153:             seats,applied = T.accumulate(after.v39_seats,rows,coin.t)\n154:             after = replace(after,v39_seats=seats)\n155:         else:\n156:             applied = []\n157:         # 元の会計にかかった時間は追加時間から除き、総時間を別に残す。\n158:         seconds = measure_seconds+time.perf_counter()-accumulation_start\n159:         wrapper_seconds = time.perf_counter()-start\n160:         ST['trials']+=1;ST['scored_seats']+=len(applied);ST['seconds']+=seconds\n161:         ST['stream'].write(json.dumps({'trial':coin.t,'f_realized':coin.f_realized,'f_fired':bool(coin.f_fired),\n162:             'loss':mode,'temperature':T.LEARNING_TEMPERATURE,'epsilon':epsilon,'reason':reason,\n163:             'initial_mode':initial_mode,'scope':scope,'counterfactual_method':'rematch_affected_definition',\n164:             'question_counts':{'door':ST['question'].door,'other':ST['question'].other},\n165:             'rows':rows,'applied':[list(k) for k in applied],'seconds':seconds,\n166:             'wrapper_seconds':wrapper_seconds,**work},ensure_ascii=False)+'\\n')"
+            },
+            {
+              "first_line": 198,
+              "last_line": 201,
+              "text": "198:     summary = {k:ST[k] for k in ('trials','scored_seats','seconds','mode','epsilon','initial_mode','scope')}\n199:     summary['questions']={agent:questions.record() for agent,questions in ST['questions'].items()}\n200:     Path(ST['path']+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\\n')\n201:     return summary"
+            }
+          ]
+        },
+        "tools/v3_run.py": {
+          "sha256": "1ffff060b78039403ecd6bb68edec5ce04fdd14aa9e460fa3554c8db11cc3422",
+          "excerpts": [
+            {
+              "first_line": 646,
+              "last_line": 651,
+              "text": "646:             sys.modules[\"smeevict\"].close()\n647:     if task.get(\"attn_sme\"):\n648:         rec[\"attn_sme\"] = sys.modules[\"attnsme\"].close()\n649:     if task.get('stage2') == 'on':\n650:         rec['stage2'] = sys.modules['attnstage2_runtime'].close()\n651:     if task.get(\"v311c\") and \"v311c_allin\" in sys.modules:"
+            }
+          ]
+        },
+        "tools/v311c.py": {
+          "sha256": "3997d47a2381fb2a8cc01fd3805ca7bcd4b17e1db69fc10acab09434435be53c",
+          "excerpts": [
+            {
+              "first_line": 788,
+              "last_line": 808,
+              "text": "788:     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n789:     import v3_run\n790:     task = dict(task)\n791:     task[\"v311c\"] = dict(task[\"v311c\"], conn=conn)\n792:     lock = task[\"v311c\"].get(\"serial_lock\")\n793:     if lock is not None:\n794:         lock.acquire()\n795:     try:\n796:         try:\n797:             rec = v3_run.worker(task)\n798:             message = {\"type\": \"done\", \"rec\": _jsonable({k: v for k, v in rec.items() if k != \"v311c\"} | {\"v311c\": rec.get(\"v311c\")})}\n799:         finally:\n800:             if lock is not None:\n801:                 # 終了通知は大きく、個体番号順の読取りを待ち得る。計算と通知の準備だけを直列化する。\n802:                 # ここで一度だけ解放し、送信が詰まっても他の個体の計算を止めない。\n803:                 try:\n804:                     lock.release()\n805:                 except ValueError:\n806:                     pass\n807:         conn.send(message)\n808:     except BaseException as e:  # noqa"
+            },
+            {
+              "first_line": 1008,
+              "last_line": 1028,
+              "text": "1008:         fo.flush()\n1009:         for c in conns:\n1010:             c.send({\"type\": \"go\"})\n1011:         summ[\"trials\"] = t + 1\n1012:     for i, c in enumerate(conns):\n1013:         # ★ 先に終わった個体の知らせも取りこぼさない（プロセスが終わっていても、届いた知らせは読める）\n1014:         while done[i] is None:\n1015:             try:\n1016:                 if c.poll(5):\n1017:                     m = c.recv()\n1018:                     if m.get(\"type\") in (\"done\", \"error\"):\n1019:                         done[i] = m\n1020:                 elif not procs[i].is_alive():\n1021:                     done[i] = {\"type\": \"error\", \"error\": \"終わりの知らせが無いまま個体のプロセスが終わった\"}\n1022:             except EOFError:\n1023:                 done[i] = {\"type\": \"error\", \"error\": \"EOF\"}\n1024:     for p in procs:\n1025:         p.join()\n1026:     summ[\"agents\"] = [d.get(\"rec\") if d and d.get(\"type\") == \"done\" else d for d in done]\n1027:     fo.write(json.dumps({\"kind\": \"summary\", **summ}, ensure_ascii=False, default=str) + \"\\n\")\n1028:     fo.close()"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5",
+      "files": {
+        "tools/attnstage2_runtime.py": {
+          "sha256": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+          "excerpts": [
+            {
+              "first_line": 149,
+              "last_line": 166,
+              "text": "149:         measure_seconds = time.perf_counter()-start\n150:         after,account = original_accounting(state,output,scene,config,horizon,score,coin,revealed)\n151:         accumulation_start = time.perf_counter()\n152:         if rows:\n153:             seats,applied = T.accumulate(after.v39_seats,rows,coin.t)\n154:             after = replace(after,v39_seats=seats)\n155:         else:\n156:             applied = []\n157:         # 元の会計にかかった時間は追加時間から除き、総時間を別に残す。\n158:         seconds = measure_seconds+time.perf_counter()-accumulation_start\n159:         wrapper_seconds = time.perf_counter()-start\n160:         ST['trials']+=1;ST['scored_seats']+=len(applied);ST['seconds']+=seconds\n161:         ST['stream'].write(json.dumps({'trial':coin.t,'f_realized':coin.f_realized,'f_fired':bool(coin.f_fired),\n162:             'loss':mode,'temperature':T.LEARNING_TEMPERATURE,'epsilon':epsilon,'reason':reason,\n163:             'initial_mode':initial_mode,'scope':scope,'counterfactual_method':'rematch_affected_definition',\n164:             'question_counts':{'door':ST['question'].door,'other':ST['question'].other},\n165:             'rows':rows,'applied':[list(k) for k in applied],'seconds':seconds,\n166:             'wrapper_seconds':wrapper_seconds,**work},ensure_ascii=False)+'\\n')"
+            },
+            {
+              "first_line": 198,
+              "last_line": 201,
+              "text": "198:     summary = {k:ST[k] for k in ('trials','scored_seats','seconds','mode','epsilon','initial_mode','scope')}\n199:     summary['questions']={agent:questions.record() for agent,questions in ST['questions'].items()}\n200:     Path(ST['path']+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\\n')\n201:     return summary"
+            }
+          ]
+        },
+        "tools/v3_run.py": {
+          "sha256": "1ffff060b78039403ecd6bb68edec5ce04fdd14aa9e460fa3554c8db11cc3422",
+          "excerpts": [
+            {
+              "first_line": 646,
+              "last_line": 651,
+              "text": "646:             sys.modules[\"smeevict\"].close()\n647:     if task.get(\"attn_sme\"):\n648:         rec[\"attn_sme\"] = sys.modules[\"attnsme\"].close()\n649:     if task.get('stage2') == 'on':\n650:         rec['stage2'] = sys.modules['attnstage2_runtime'].close()\n651:     if task.get(\"v311c\") and \"v311c_allin\" in sys.modules:"
+            }
+          ]
+        },
+        "tools/v311c.py": {
+          "sha256": "3997d47a2381fb2a8cc01fd3805ca7bcd4b17e1db69fc10acab09434435be53c",
+          "excerpts": [
+            {
+              "first_line": 788,
+              "last_line": 808,
+              "text": "788:     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n789:     import v3_run\n790:     task = dict(task)\n791:     task[\"v311c\"] = dict(task[\"v311c\"], conn=conn)\n792:     lock = task[\"v311c\"].get(\"serial_lock\")\n793:     if lock is not None:\n794:         lock.acquire()\n795:     try:\n796:         try:\n797:             rec = v3_run.worker(task)\n798:             message = {\"type\": \"done\", \"rec\": _jsonable({k: v for k, v in rec.items() if k != \"v311c\"} | {\"v311c\": rec.get(\"v311c\")})}\n799:         finally:\n800:             if lock is not None:\n801:                 # 終了通知は大きく、個体番号順の読取りを待ち得る。計算と通知の準備だけを直列化する。\n802:                 # ここで一度だけ解放し、送信が詰まっても他の個体の計算を止めない。\n803:                 try:\n804:                     lock.release()\n805:                 except ValueError:\n806:                     pass\n807:         conn.send(message)\n808:     except BaseException as e:  # noqa"
+            },
+            {
+              "first_line": 1008,
+              "last_line": 1028,
+              "text": "1008:         fo.flush()\n1009:         for c in conns:\n1010:             c.send({\"type\": \"go\"})\n1011:         summ[\"trials\"] = t + 1\n1012:     for i, c in enumerate(conns):\n1013:         # ★ 先に終わった個体の知らせも取りこぼさない（プロセスが終わっていても、届いた知らせは読める）\n1014:         while done[i] is None:\n1015:             try:\n1016:                 if c.poll(5):\n1017:                     m = c.recv()\n1018:                     if m.get(\"type\") in (\"done\", \"error\"):\n1019:                         done[i] = m\n1020:                 elif not procs[i].is_alive():\n1021:                     done[i] = {\"type\": \"error\", \"error\": \"終わりの知らせが無いまま個体のプロセスが終わった\"}\n1022:             except EOFError:\n1023:                 done[i] = {\"type\": \"error\", \"error\": \"EOF\"}\n1024:     for p in procs:\n1025:         p.join()\n1026:     summ[\"agents\"] = [d.get(\"rec\") if d and d.get(\"type\") == \"done\" else d for d in done]\n1027:     fo.write(json.dumps({\"kind\": \"summary\", **summ}, ensure_ascii=False, default=str) + \"\\n\")\n1028:     fo.close()"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "full_files_sha256": [
+    "e3fa14f5098cda68f80c77e53bec1e64468b4576248bc9dbdb8608ef5a3d5023",
+    "329495a6c0462b59617b1abc3858a302573c3f73ee3be0eee856915bc9c54b11"
+  ],
+  "original_comparison_stopped": true,
+  "comparison_rerun": false,
+  "model_rerun": false,
+  "new_exclusions_added": false,
+  "elapsed_seconds": 0.008040709071792662,
+  "max_rss_bytes": 22855680
+}
