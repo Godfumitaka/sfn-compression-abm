@@ -1,0 +1,97 @@
+{
+  "made_at": "2026-10-10T19:52:20",
+  "rule": "受け箱の指示 84 の 4・5（理解の場の決定 10/10 16:26・18:39、記録を読むだけ、探りの数え）",
+  "script": "exception_defs.py（nice -n 15 python3 exception_defs.py --out . --workers 3）",
+  "world": 2,
+  "rows": "1a/1b・5a/5b・7a/7b（door_errors.py と同じく a と b を合わせ、種 1〜20）。指示の「1a」「5a」「7a」はこの合わせ方で読んだ",
+  "selection": "~/surface/wave1_view/selection.tsv（sha256 feb81a47775b85b6f9a8954807550d4e601998921d21c293ba240657cc71f6da）",
+  "runs_absent": [
+    "5a 種 5：未完（持ち帰っていない）",
+    "5a 種 6：未完（持ち帰っていない）",
+    "5a 種 9：未完（持ち帰っていない）",
+    "5b 種 11：未完（持ち帰っていない）",
+    "5b 種 15：未完（持ち帰っていない）",
+    "5b 種 19：未完（持ち帰っていない）"
+  ],
+  "runs_na": "なし",
+  "totals_vs_door_errors": {
+    "1a/1b": {
+      "selection_error": 218,
+      "door_exception_tasks": 612,
+      "runs": 20,
+      "door_errors_20261010_1211": [
+        218,
+        612
+      ],
+      "same": true
+    },
+    "5a/5b": {
+      "selection_error": 169,
+      "door_exception_tasks": 431,
+      "runs": 14,
+      "door_errors_20261010_1211": [
+        169,
+        431
+      ],
+      "same": true
+    },
+    "7a/7b": {
+      "selection_error": 21,
+      "door_exception_tasks": 612,
+      "runs": 20,
+      "door_errors_20261010_1211": [
+        21,
+        612
+      ],
+      "same": true
+    }
+  },
+  "tables": {
+    "t1_7a_door_exception_tasks.csv": "7a/7b：例外の日のドアの課題ごとの正答の候補（R・q）と、その試行の E の選び",
+    "t1_7a_seed_summary.csv": "7a/7b：種・お店の型ごとのまとめ（選び間違いの試行・正答の候補の入れ替わり・同化・D_e の誕生）",
+    "e_choice_exception_days.csv": "1a/1b・7a/7b：例外の日の場面ごとの E の選び（同化先・誕生、K）",
+    "t2_1a_exception_defs.csv": "1a/1b：D_e（誕生で、又はその時点で）ごとのシールの席の移り変わり・V・λ・退役",
+    "t2_1a_seal_events.csv": "1a/1b：全定義のシールの席の移り変わり（shop.jsonl）一行ずつ、V（v39 の conv）・λ",
+    "t3_1a_5a_wrong_picks.csv": "1a/1b・5a/5b：例外の日のドアの課題の選び間違いの一件ごと、選んだ定義とほかの候補のシール",
+    "t4_1a_De_per_trial.csv": "1a/1b：試行ごとの D_e の数",
+    "t4_1a_births.csv": "1a/1b：誕生ごと（D_e かどうか・その時の既存の D_e・E の候補の点）"
+  },
+  "definitions": {
+    "課題・例外の日・ドアの課題・誤答・capable・選び間違い・選んだ定義・正答の候補・q": "door_errors.py（~/surface/door_errors/meta.json）と同じ。q＝q_numerator/q_denominator",
+    "シールの席": "side/*/seedNNN.shop.jsonl の kind=shop_seat・which=sig に出る (R, reg, slot)",
+    "席の状態 F/H/U": "台帳の state_snapshot を積んで戻した記憶で、alive なら F、slot_history に (R, slot) の鍵があれば H（空の表 {} も H）、ほかは U（tools/v39.seat_state・d_skeleton.py と同じ）",
+    "F の名前（sig_n・sig_e）": "F の席の relation.predicate。F→H で predicate は ⟨消去⟩ になるので、H の名前は履歴の表だけで見る",
+    "D_e（その時点）": "シールの席が F で名前 sig_e、又は H で履歴の表に sig_e が 1 以上。記録に D_e という欄は無い。この定義で数えた",
+    "D_e（誕生で）": "誕生の試行（registered_at＝side の kind=birth の trial）の終わりの記憶で D_e（その時点）に当たる定義。誕生と同じ試行で退役した定義は NA",
+    "D_n の F[sig_n]": "シールの席が F で名前 sig_n の定義",
+    "その試行の前の記憶": "試行 t の予測・E の選びの時の記憶＝試行 t−1 の終わりの記憶（注意の記録の seal と照合、checks.csv）",
+    "誕生・同化": "side/*/seedNNN.jsonl の kind=birth（誕生）・kind=assim（同化、m1 が既存の定義を登録し直した）。試行 t の場面を登録した",
+    "E の選び": "side の kind=v310be（tools/v310be.py choose_and_register）。chosen が null＝新しい定義（誕生）、reg＝登録した定義。cands＝[R(null＝新), A, r, ΔC, K, 内訳] を K の小さい順に 12 件まで。K＝A＋r＋λ_E·ΔC、最小の K を選ぶ",
+    "C* の点（取り込み先の点）": "記録に「C* の点」という欄は無い。1 の行は match_cstar_e が真で、E の r（書換ビット）は C* の照合の下で計られる（tools/cstar_runtime.py の rewrite の包み）。そこで取り込み先の候補の K・A・r・ΔC を並べた",
+    "V": "シールの席の変換（F→H・H→U）の時の V は side の kind=v39 の conv（[種類, R, 席, V, ΔC, why, 同点の数]、tools/v39.run_conversions）。shop.jsonl の cand.V は、その試行で最後に計った候補の値（変換の後に計り直した値で上書きされることがある）なので別の欄（shop_cand_*）に置いた",
+    "λ": "記録に試行ごとの変換の λ の欄は無い。変換の λ＝flag.json の v39_price（走行の定数、V＜λ で変換、tools/v39.py の LAM＝CFG['price']）。E の λ＝side の v310be の lam（flag.json の e_price と同じ値）。台帳の lambda 欄は null（lambda_ledger 欄）",
+    "退役": "shop.jsonl の to＝「定義ごと消えた」の試行（v39 の retire とも照らした：retire_in_v39 欄）",
+    "t1 の top_correct": "正答の候補のうち q が最大の候補（同じ q なら candidates の先）。top_correct_changed_same_type＝同じお店の型（台帳の shop_type、甲・乙でドアの正解が違う）の一つ前の例外の日のドアの課題の top_correct と (R, reg) が違う",
+    "t1_summary の pattern": "機械的な分け：R_after（同じ型で、最後の選び間違いの後の最初の課題の top_correct）が、b＝最後の選び間違いより後に生まれた／a＝選び間違いの課題でも正答の候補だった／c＝前に生まれたが選び間違いの課題では正答の候補でなかった。良し悪しの判断ではない",
+    "t3 の others": "注意の記録の候補のうち、選んだ定義でも正答の候補（gate_passed かつ hit）でもないもの。書式 R@reg:分類:履歴:gate=gate_passed"
+  },
+  "fields": {
+    "row,world,seed,run,version": "selection.tsv",
+    "trial,cue,door_task,outcome,capable,selection_error": "台帳の prediction_order・shop_cue・held_out_is_door・hit・predicted_edge と注意の記録（capable）",
+    "selected_*,correct_*,n_candidates,n_correct,*_q,*_seal,*_seal_history,n_defs_attention": "注意の記録 attention/*/seedNNN.jsonl.gz（seal は F 名前／H sig_e あり・なし／U に分類）",
+    "*_is_De,*_assim_count,n_De_*,memory_*,n_defs*,n_F_sig_n,seal_history_*,seal_name_*,birth_seal_*": "台帳の state_snapshot から戻した記憶（試行の前＝t−1 の終わり、誕生＝誕生の試行の終わり）",
+    "*_is_De_birth": "上の D_e（誕生で）",
+    "E_kind,E_R,E_route": "side の kind=birth/assim",
+    "E_record,K_*,A_*,r_*,dC_*,ties,lam_E,n_cands_recorded,R_best_existing*,De_before_E_scores": "side の kind=v310be",
+    "from,to,slot,birth_seal_shop,retire_trial,seal_path": "shop.jsonl（which=sig）",
+    "V_FH,V_HU,why_FH,why_HU,dC_FH,dC_HU,V_at_FH,V_at_HU,retire_in_v39": "side の kind=v39 の conv・retire",
+    "shop_cand_*": "shop.jsonl の cand（その試行で最後に計った変換の候補の値）",
+    "lambda_conv": "flag.json の v39_price",
+    "lambda_E,lambda_E_at_*": "side の v310be の lam",
+    "lambda_ledger": "台帳の lambda 欄",
+    "assim_*,R_after_assim_*,exception_scenes_*": "side の kind=assim/birth と台帳の shop_cue"
+  },
+  "source_code": "~/sfn/sfn-compression-abm の c7921598 の tools/v39.py・tools/v310be.py・tools/shopworld.py・tools/cstar_runtime.py・tools/v3_run.py・abm/loop.py を読んで合わせた。abm/loop.py・tools/shopworld.py は 4 版で同じ中身、tools/v39.py・tools/v310be.py は c7921598＝4ceadf63、c57467ea＝e9ed84a（記録の形は同じとして読んだ）",
+  "reused": "~/surface/door_errors/door_errors.py（sha256 642edea6447698057a9f16de1113e961bd922ba116126f33f0cf99e393a4ac3b）の rows_gz・one・seal_fields・fmtf を import。記憶の戻し方は d_skeleton_20261010_1622/d_skeleton.py と同じ（abm.loop._apply、ソースは /mnt/d/sfn_runs/scratch_exception_defs_20261010/src_c792 に c7921598 から git archive）",
+  "not_read": "side の sme.jsonl.gz・sme.states.jsonl.gz・routing.jsonl・answers.csv・ambig.csv、stage2、evictions は読んでいない"
+}
