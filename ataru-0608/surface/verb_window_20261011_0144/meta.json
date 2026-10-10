@@ -1,0 +1,1371 @@
+{
+  "made_at": "2026-10-11T02:09:05",
+  "kind": "探索（受け箱の指示 85、理解の場の決定 10/9 18:39 の動詞の予想の形。記録を読むだけ。判定はしない）",
+  "rule": "#19（全部入り）の本・関門（19_・19_seed・prefix_gate・gate100_・production34）は名前で外し、包みを開いていない。窓 1〜1000 は #19 を見る前の約束（D-07επ）",
+  "script": "verb_window.py（nice -n 15 python3 verb_window.py --out . --workers 4）",
+  "script_sha256": "22d14fd7a068e2e8435abe8075d57a058a1992be59ba47d02b6f8712a0411705",
+  "sources": {
+    "index": "/home/tatsu/cloud/ops/verb_fetched.tsv",
+    "index_sha256": "05959c9f9a833ad81eef921e882f18a19f7279f6cc0b5c5382a59d659edd3b41",
+    "archives": "/mnt/d/sfn_runs/cloud/verb/<機械>/<根>/<本>.tar.gz を流しながら読み、同じ読みで sha256 を表と突き合わせた（展開の写しは作らない）",
+    "members_read": [
+      "<本>/spec.json",
+      "<本>/status.json",
+      "<本>/result.json",
+      "<本>/output/flag.json",
+      "<本>/output/ledgers/cells/<セル>/seedNNN.jsonl.gz",
+      "<本>/output/attention/<セル>/seedNNN.jsonl.gz（#21・#21b だけ）"
+    ],
+    "record_format": "台帳と注意の記録の欄は、包みの道具（~/v33prod/results/control/動詞_クラウドの包み_2026-10-09/instruction27/）と、版の源（~/sfn/sfn-compression-abm を git archive で /mnt/d に写した 94dbebc（#21 の包みの版）・6e4bcba（22c の包みの版）。台帳の code_commit は 4dc6a05）の abm/loop.py・tools/v39.py・tools/attnsme.py・tools/verbworld.py・tools/verb/analyze.py で確かめた"
+  },
+  "definitions": {
+    "trial": "台帳の prediction_order＋1（試行 1〜5000）。窓：1-1000・1-5000・1001-5000、と 500 ごと",
+    "tasks": "窓の中の全試行（全課題）。率の分母",
+    "correct": "台帳の hit＝1",
+    "silent": "台帳の predicted_edge が無い（棄権）",
+    "wrong": "それ以外（predicted_edge があって hit＝0）",
+    "capable": {
+      "#21・#21b": "注意の記録の candidates に gate_passed（support ≥ need(tau_acc, n)、tools/attnsme.py）かつ hit の候補が一つ以上ある（~/surface/wave1.py と同じ）",
+      "22c": "注意の記録が無い（--attn-sme なし）。台帳だけの定義 capable_ledgerdef を使う：台帳の hit＝1、または counterfactual_predictions（tau_passed_defs のうち選ばれなかった定義ごとの答え直し、tools/v39.py の counterfactuals）のどれかの hit＝1。再生（selcands・tools/verb/analyze.py の答え直し）は計算なのでしていない"
+    },
+    "selection_error（選び間違い）": "wrong かつ capable",
+    "distinction_loss（区別の喪失）": "wrong かつ capable でない",
+    "absent（定義の不在）": "capable でない（全課題）",
+    "*_ledgerdef": "capable_ledgerdef で数えた同じ量。全部の本で同じ定義。#21・#21b では cap_agree_attention_vs_ledgerdef に、注意の記録の capable と一致した試行の数",
+    "rate_*": "n_* ÷ tasks",
+    "mean_rate_*": "腕の中の本ごとの率の単純平均（種の平均）",
+    "past_task": "台帳の held_out_is_past が真（伏せた辺が過去形の hold の席）",
+    "REG": "past_task のうち predicted_edge の predicate が REG（引数は問わない）",
+    "share_REG_of_past_tasks": "REG ÷ past_tasks（棄権も分母に入る。tools/verb/analyze.py の REG_all_queries_rate と同じ形）",
+    "share_REG_of_answered": "REG ÷ answered（答えた past_task だけ）",
+    "REG_over_correct_plus_REG": "REG ÷ (correct＋REG)（analyze.py の marcus_rate と同じ形。規則動詞では REG が正解なので 1）",
+    "freq_rank": "tools/verbworld.py training_items('default') の確率の降順（規則 Vj＝0.30/(H32·j)、不規則 V(32+k)＝0.70/(H8·k)）。flag.json の verb_variant＝default・verb_frequencies＝null を本ごとに確かめた",
+    "direction_a": "腕の平均の差（#21 または #21b の mean_rate − 22c の mean_rate）の符号を、1-1000 と 1-5000（と 1001-5000）で比べた。paired は同じ種の番号どうしの差の符号（1-1000 と 1-5000）が同じだった種の数",
+    "error_share_b": "n_1-1000 ÷ n_1-5000（試行の 20% が 1-1000）"
+  },
+  "fields": {
+    "per_run_windows.csv / per_run_blocks500.csv": [
+      "arm",
+      "seed",
+      "case",
+      "window",
+      "trial_from",
+      "trial_to",
+      "tasks",
+      "capable_source",
+      "n_correct",
+      "n_wrong",
+      "n_silent",
+      "n_selection_error",
+      "n_distinction_loss",
+      "n_absent",
+      "n_selection_error_ledgerdef",
+      "n_distinction_loss_ledgerdef",
+      "n_absent_ledgerdef",
+      "rate_correct",
+      "rate_wrong",
+      "rate_silent",
+      "rate_selection_error",
+      "rate_distinction_loss",
+      "rate_absent",
+      "rate_selection_error_ledgerdef",
+      "rate_distinction_loss_ledgerdef",
+      "rate_absent_ledgerdef",
+      "cap_agree_attention_vs_ledgerdef"
+    ],
+    "arm_windows.csv / arm_blocks500.csv": [
+      "arm",
+      "window",
+      "trial_from",
+      "trial_to",
+      "runs",
+      "seeds",
+      "tasks",
+      "n_correct",
+      "n_wrong",
+      "n_silent",
+      "n_selection_error",
+      "n_distinction_loss",
+      "n_absent",
+      "n_selection_error_ledgerdef",
+      "n_distinction_loss_ledgerdef",
+      "n_absent_ledgerdef",
+      "mean_rate_correct",
+      "mean_rate_wrong",
+      "mean_rate_silent",
+      "mean_rate_selection_error",
+      "mean_rate_distinction_loss",
+      "mean_rate_absent",
+      "mean_rate_selection_error_ledgerdef",
+      "mean_rate_distinction_loss_ledgerdef",
+      "mean_rate_absent_ledgerdef"
+    ],
+    "per_verb_REG_windows.csv / per_verb_REG_blocks500.csv": [
+      "arm",
+      "seed",
+      "case",
+      "window",
+      "trial_from",
+      "trial_to",
+      "freq_rank",
+      "verb",
+      "verb_class",
+      "correct_past",
+      "probability",
+      "past_tasks",
+      "answered",
+      "abstain",
+      "REG",
+      "correct",
+      "other",
+      "share_REG_of_past_tasks",
+      "share_REG_of_answered",
+      "REG_over_correct_plus_REG"
+    ],
+    "direction_a.csv": [
+      "metric",
+      "compare",
+      "mean_base_1-1000",
+      "mean_D_1-1000",
+      "diff_1-1000",
+      "mean_base_1-5000",
+      "mean_D_1-5000",
+      "diff_1-5000",
+      "diff_1001-5000",
+      "same_sign_1-1000_vs_1-5000",
+      "same_sign_1-1000_vs_1001-5000",
+      "paired_seeds",
+      "paired_same_sign_1-1000_vs_1-5000"
+    ],
+    "error_share_b.csv": [
+      "arm",
+      "seed",
+      "case",
+      "metric",
+      "n_1-1000",
+      "n_1-5000",
+      "n_1001-5000",
+      "share_in_1-1000"
+    ]
+  },
+  "verbs_frequency_order": [
+    {
+      "rank": 1,
+      "verb": "V33",
+      "verb_class": "irregular",
+      "correct_past": "IRR_1",
+      "probability": 0.257556
+    },
+    {
+      "rank": 2,
+      "verb": "V34",
+      "verb_class": "irregular",
+      "correct_past": "IRR_2",
+      "probability": 0.128778
+    },
+    {
+      "rank": 3,
+      "verb": "V35",
+      "verb_class": "irregular",
+      "correct_past": "IRR_3",
+      "probability": 0.085852
+    },
+    {
+      "rank": 4,
+      "verb": "V01",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.073919
+    },
+    {
+      "rank": 5,
+      "verb": "V36",
+      "verb_class": "irregular",
+      "correct_past": "IRR_4",
+      "probability": 0.064389
+    },
+    {
+      "rank": 6,
+      "verb": "V37",
+      "verb_class": "irregular",
+      "correct_past": "IRR_5",
+      "probability": 0.051511
+    },
+    {
+      "rank": 7,
+      "verb": "V38",
+      "verb_class": "irregular",
+      "correct_past": "IRR_6",
+      "probability": 0.042926
+    },
+    {
+      "rank": 8,
+      "verb": "V02",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.03696
+    },
+    {
+      "rank": 9,
+      "verb": "V39",
+      "verb_class": "irregular",
+      "correct_past": "IRR_7",
+      "probability": 0.036794
+    },
+    {
+      "rank": 10,
+      "verb": "V40",
+      "verb_class": "irregular",
+      "correct_past": "IRR_8",
+      "probability": 0.032194
+    },
+    {
+      "rank": 11,
+      "verb": "V03",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.02464
+    },
+    {
+      "rank": 12,
+      "verb": "V04",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.01848
+    },
+    {
+      "rank": 13,
+      "verb": "V05",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.014784
+    },
+    {
+      "rank": 14,
+      "verb": "V06",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.01232
+    },
+    {
+      "rank": 15,
+      "verb": "V07",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.01056
+    },
+    {
+      "rank": 16,
+      "verb": "V08",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00924
+    },
+    {
+      "rank": 17,
+      "verb": "V09",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.008213
+    },
+    {
+      "rank": 18,
+      "verb": "V10",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.007392
+    },
+    {
+      "rank": 19,
+      "verb": "V11",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00672
+    },
+    {
+      "rank": 20,
+      "verb": "V12",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00616
+    },
+    {
+      "rank": 21,
+      "verb": "V13",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.005686
+    },
+    {
+      "rank": 22,
+      "verb": "V14",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00528
+    },
+    {
+      "rank": 23,
+      "verb": "V15",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.004928
+    },
+    {
+      "rank": 24,
+      "verb": "V16",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00462
+    },
+    {
+      "rank": 25,
+      "verb": "V17",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.004348
+    },
+    {
+      "rank": 26,
+      "verb": "V18",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.004107
+    },
+    {
+      "rank": 27,
+      "verb": "V19",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00389
+    },
+    {
+      "rank": 28,
+      "verb": "V20",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.003696
+    },
+    {
+      "rank": 29,
+      "verb": "V21",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00352
+    },
+    {
+      "rank": 30,
+      "verb": "V22",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00336
+    },
+    {
+      "rank": 31,
+      "verb": "V23",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.003214
+    },
+    {
+      "rank": 32,
+      "verb": "V24",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00308
+    },
+    {
+      "rank": 33,
+      "verb": "V25",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002957
+    },
+    {
+      "rank": 34,
+      "verb": "V26",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002843
+    },
+    {
+      "rank": 35,
+      "verb": "V27",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002738
+    },
+    {
+      "rank": 36,
+      "verb": "V28",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00264
+    },
+    {
+      "rank": 37,
+      "verb": "V29",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002549
+    },
+    {
+      "rank": 38,
+      "verb": "V30",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002464
+    },
+    {
+      "rank": 39,
+      "verb": "V31",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.002384
+    },
+    {
+      "rank": 40,
+      "verb": "V32",
+      "verb_class": "regular",
+      "correct_past": "REG",
+      "probability": 0.00231
+    }
+  ],
+  "runs": [
+    {
+      "arm": "22c",
+      "seed": 1,
+      "case": "22_seed001_birth0",
+      "machine": "sfn-verb-gate",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 15:41:53",
+      "sha256": "525071d0dfcb85dfdf9162f0658cde1737193efa83d05f9cf9fcda754796c6b0",
+      "sha256_read": "525071d0dfcb85dfdf9162f0658cde1737193efa83d05f9cf9fcda754796c6b0",
+      "bytes": 2891528204,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed001_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 1,
+        "trial_count": 5000,
+        "world_hash": "c1e84bcf8790b4f94ce88295cc8a53aef1c4cc2786c1fc3baa3e13db48e6891f"
+      },
+      "seconds": 83.8,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 12051
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 2,
+      "case": "22_seed002_birth0",
+      "machine": "sfn-verb-gate2",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 15:59:30",
+      "sha256": "d498f3485d4a83b3cf53acea49028adc0e2933d2a377dba42e13ec236828cb07",
+      "sha256_read": "d498f3485d4a83b3cf53acea49028adc0e2933d2a377dba42e13ec236828cb07",
+      "bytes": 3009464307,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed002_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 2,
+        "trial_count": 5000,
+        "world_hash": "595e489c1d41a0d9756b46fa1aa588d474608ff6a89298fda254decad7dcd45f"
+      },
+      "seconds": 85.0,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 10518
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 3,
+      "case": "22_seed003_birth0",
+      "machine": "sfn-verb-gate",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 18:14:15",
+      "sha256": "7ace2a56638e6e78b52f297e79222ee16195ea17236f40e1efd6c620ad748ef5",
+      "sha256_read": "7ace2a56638e6e78b52f297e79222ee16195ea17236f40e1efd6c620ad748ef5",
+      "bytes": 3036381525,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed003_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed003.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 3,
+        "trial_count": 5000,
+        "world_hash": "fce5d50d2f6dde24af25490acf7288d931c5ae776cc6b683c91a4cb9801ffabd"
+      },
+      "seconds": 85.7,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 28187
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 4,
+      "case": "22_seed004_birth0",
+      "machine": "sfn-verb-gate2",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 17:51:50",
+      "sha256": "832191dc12bdd1dabe23cefafffb4ce1baa0c04d3dd68bee57fdcfe60434996f",
+      "sha256_read": "832191dc12bdd1dabe23cefafffb4ce1baa0c04d3dd68bee57fdcfe60434996f",
+      "bytes": 2560197946,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed004_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed004.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 4,
+        "trial_count": 5000,
+        "world_hash": "9a09f9df3ae12e4063cddfc924f497f9e600a4ceca263321fb1884aff8b6ad2b"
+      },
+      "seconds": 69.4,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 14950
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 5,
+      "case": "22_seed005_birth0",
+      "machine": "sfn-verb-gate",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 21:55:42",
+      "sha256": "d712249659bdb8949ada40ad65b09c0eb486da3929ffed6aaeaaa1884731a64d",
+      "sha256_read": "d712249659bdb8949ada40ad65b09c0eb486da3929ffed6aaeaaa1884731a64d",
+      "bytes": 3091573321,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed005_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed005.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 5,
+        "trial_count": 5000,
+        "world_hash": "22020dca6f1b053315e8477815f8663bc1e75e1bac6736a5488543b4535806c1"
+      },
+      "seconds": 151.1,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 36143
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 6,
+      "case": "22_seed006_birth0",
+      "machine": "sfn-verb-gate2",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-10 20:43:09",
+      "sha256": "b4193cba89795808ff11da9722bcb146a26094e0712a9666de00f87fbf561e90",
+      "sha256_read": "b4193cba89795808ff11da9722bcb146a26094e0712a9666de00f87fbf561e90",
+      "bytes": 3406906966,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed006_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed006.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 6,
+        "trial_count": 5000,
+        "world_hash": "2c55243677995908e16eebf537e38b1c05d3f308fc6d105fcf1df5bf0babb31d"
+      },
+      "seconds": 182.6,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 33973
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 7,
+      "case": "22_seed007_birth0",
+      "machine": "sfn-verb-gate",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-11 00:17:41",
+      "sha256": "ac4a418a27d2d84a87f749321a67d12651688a1b5034010ab015f5c9a972a9b8",
+      "sha256_read": "ac4a418a27d2d84a87f749321a67d12651688a1b5034010ab015f5c9a972a9b8",
+      "bytes": 3340869993,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed007_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed007.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 7,
+        "trial_count": 5000,
+        "world_hash": "1b7bb848cf6b00dc784760135d2087940b12e8b80aa2eda4c1246b06c5bc72b1"
+      },
+      "seconds": 187.5,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 44029
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "22c",
+      "seed": 8,
+      "case": "22_seed008_birth0",
+      "machine": "sfn-verb-gate2",
+      "root": "production_instruction27_p32",
+      "fetched": "2026-10-11 00:23:17",
+      "sha256": "eb7cfb4e47e6cfe8ea61957b5520294b56bc9206dcdc83f1673a1db485daf04e",
+      "sha256_read": "eb7cfb4e47e6cfe8ea61957b5520294b56bc9206dcdc83f1673a1db485daf04e",
+      "bytes": 2827109795,
+      "tsv_files": 113,
+      "files_in_archive": 92,
+      "status": "ok",
+      "capable_source": "ledger_counterfactual",
+      "ledger_member": [
+        "22_seed008_birth0/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed008.jsonl.gz"
+      ],
+      "attention_member": [],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 8,
+        "trial_count": 5000,
+        "world_hash": "8601245f5a6a0e2c73e3a0e8c24da60d11e5053d10bcdb415ad38a991b86d75b"
+      },
+      "seconds": 153.2,
+      "spec_arm": "#22",
+      "spec_source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 42753
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": null,
+      "flag_use_forget": null
+    },
+    {
+      "arm": "#21",
+      "seed": 1,
+      "case": "21_seed001",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 16:45:44",
+      "sha256": "072261c43f17b63a8abcaf30d6587f21e1a9b32f9349697fb0902482f67bd2af",
+      "sha256_read": "072261c43f17b63a8abcaf30d6587f21e1a9b32f9349697fb0902482f67bd2af",
+      "bytes": 2122113274,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed001/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed001/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 1,
+        "trial_count": 5000,
+        "world_hash": "c1e84bcf8790b4f94ce88295cc8a53aef1c4cc2786c1fc3baa3e13db48e6891f"
+      },
+      "seconds": 131.7,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 7173
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 2,
+      "case": "21_seed002",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 14:23:20",
+      "sha256": "e4433c4c1700a30843744ac367ca972f7f65754f535e7e437c8a5a11aac9f145",
+      "sha256_read": "e4433c4c1700a30843744ac367ca972f7f65754f535e7e437c8a5a11aac9f145",
+      "bytes": 1658101461,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed002/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed002/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 2,
+        "trial_count": 5000,
+        "world_hash": "595e489c1d41a0d9756b46fa1aa588d474608ff6a89298fda254decad7dcd45f"
+      },
+      "seconds": 100.2,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 4715
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 3,
+      "case": "21_seed003",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 17:23:43",
+      "sha256": "9c6b3e1f509d9b4cc555ce8d64f3e5094284e207e147dfa9e7c1f29e0560a7c3",
+      "sha256_read": "9c6b3e1f509d9b4cc555ce8d64f3e5094284e207e147dfa9e7c1f29e0560a7c3",
+      "bytes": 2188029274,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed003/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed003.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed003/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed003.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 3,
+        "trial_count": 5000,
+        "world_hash": "fce5d50d2f6dde24af25490acf7288d931c5ae776cc6b683c91a4cb9801ffabd"
+      },
+      "seconds": 115.9,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 8906
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 5,
+      "case": "21_seed005",
+      "machine": "sfn-verb-d2",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 17:05:53",
+      "sha256": "e8af215a6b04dae60c64e89ff82dd350b338515ff01991a76577afa5790a49ca",
+      "sha256_read": "e8af215a6b04dae60c64e89ff82dd350b338515ff01991a76577afa5790a49ca",
+      "bytes": 1903045770,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed005/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed005.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed005/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed005.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 5,
+        "trial_count": 5000,
+        "world_hash": "22020dca6f1b053315e8477815f8663bc1e75e1bac6736a5488543b4535806c1"
+      },
+      "seconds": 101.0,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 3352
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 6,
+      "case": "21_seed006",
+      "machine": "sfn-verb-d2",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 17:10:31",
+      "sha256": "cbfaf214d4b20fb02d67f0dbc12354d4e7104a489dd2abcb3ef4658fc65b4b22",
+      "sha256_read": "cbfaf214d4b20fb02d67f0dbc12354d4e7104a489dd2abcb3ef4658fc65b4b22",
+      "bytes": 1841137008,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed006/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed006.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed006/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed006.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 6,
+        "trial_count": 5000,
+        "world_hash": "2c55243677995908e16eebf537e38b1c05d3f308fc6d105fcf1df5bf0babb31d"
+      },
+      "seconds": 82.1,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 3835
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 8,
+      "case": "21_seed008",
+      "machine": "sfn-verb-d2",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 17:56:52",
+      "sha256": "6ddb2e4fa108ebec10d7ecd815520cbf51822a6bd6b7eb6c0966ed1e880a94f8",
+      "sha256_read": "6ddb2e4fa108ebec10d7ecd815520cbf51822a6bd6b7eb6c0966ed1e880a94f8",
+      "bytes": 1957848828,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed008/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed008.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed008/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed008.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 8,
+        "trial_count": 5000,
+        "world_hash": "8601245f5a6a0e2c73e3a0e8c24da60d11e5053d10bcdb415ad38a991b86d75b"
+      },
+      "seconds": 98.4,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 4755
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 9,
+      "case": "21_seed009",
+      "machine": "sfn-verb-d3",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 16:50:53",
+      "sha256": "dd83e5904db03c04975c16e0218d722b3f9bbb61e9f53e875a4b342070aa33f9",
+      "sha256_read": "dd83e5904db03c04975c16e0218d722b3f9bbb61e9f53e875a4b342070aa33f9",
+      "bytes": 1923951181,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed009/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed009.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed009/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed009.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 9,
+        "trial_count": 5000,
+        "world_hash": "8451424a80a1d48b85f67c364e76a42ce4f6a4371775e1af5f29ab7100f707ba"
+      },
+      "seconds": 103.6,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 3006
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21",
+      "seed": 10,
+      "case": "21_seed010",
+      "machine": "sfn-verb-d3",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 18:19:58",
+      "sha256": "947bf0441843f0c3280965776135dfeac3ef680c2eab34d07b682874aefa5669",
+      "sha256_read": "947bf0441843f0c3280965776135dfeac3ef680c2eab34d07b682874aefa5669",
+      "bytes": 2179916314,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21_seed010/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed010.jsonl.gz"
+      ],
+      "attention_member": [
+        "21_seed010/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed010.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 10,
+        "trial_count": 5000,
+        "world_hash": "f19fb656f681eb006027d62a67579dadbf678add0d7308b55643647464a9dd30"
+      },
+      "seconds": 118.3,
+      "spec_arm": "#21",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 3368
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.4
+    },
+    {
+      "arm": "#21b",
+      "seed": 1,
+      "case": "21b_seed001",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 21:06:18",
+      "sha256": "62a19af609217afbc8d85cc77726a764195955387b89af128e416bc068cc6521",
+      "sha256_read": "62a19af609217afbc8d85cc77726a764195955387b89af128e416bc068cc6521",
+      "bytes": 3670432363,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed001/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed001/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 1,
+        "trial_count": 5000,
+        "world_hash": "c1e84bcf8790b4f94ce88295cc8a53aef1c4cc2786c1fc3baa3e13db48e6891f"
+      },
+      "seconds": 224.4,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 5277
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    },
+    {
+      "arm": "#21b",
+      "seed": 2,
+      "case": "21b_seed002",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-10 21:16:38",
+      "sha256": "bfe111a8692e6f06ad7c01df3d22347b3347a5a5fbd133f9dd60dee65a76749e",
+      "sha256_read": "bfe111a8692e6f06ad7c01df3d22347b3347a5a5fbd133f9dd60dee65a76749e",
+      "bytes": 3686399250,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed002/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed002/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed002.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 2,
+        "trial_count": 5000,
+        "world_hash": "595e489c1d41a0d9756b46fa1aa588d474608ff6a89298fda254decad7dcd45f"
+      },
+      "seconds": 233.2,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 6131
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    },
+    {
+      "arm": "#21b",
+      "seed": 3,
+      "case": "21b_seed003",
+      "machine": "sfn-verb-d3",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-11 00:37:27",
+      "sha256": "859de2c8c91f5db4ae63ba2fd9640a6a0d99017b40f13c7b8b39a03b5ec049a5",
+      "sha256_read": "859de2c8c91f5db4ae63ba2fd9640a6a0d99017b40f13c7b8b39a03b5ec049a5",
+      "bytes": 4054207006,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed003/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed003.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed003/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed003.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 3,
+        "trial_count": 5000,
+        "world_hash": "fce5d50d2f6dde24af25490acf7288d931c5ae776cc6b683c91a4cb9801ffabd"
+      },
+      "seconds": 252.0,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 3919
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    },
+    {
+      "arm": "#21b",
+      "seed": 5,
+      "case": "21b_seed005",
+      "machine": "sfn-verb-d3",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-11 00:43:10",
+      "sha256": "6509d96c8a16ba40d68cb7c343b32875f2b20f15037fa706c8a675dd0afc9fc7",
+      "sha256_read": "6509d96c8a16ba40d68cb7c343b32875f2b20f15037fa706c8a675dd0afc9fc7",
+      "bytes": 3457299688,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed005/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed005.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed005/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed005.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 5,
+        "trial_count": 5000,
+        "world_hash": "22020dca6f1b053315e8477815f8663bc1e75e1bac6736a5488543b4535806c1"
+      },
+      "seconds": 210.9,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 5011
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    },
+    {
+      "arm": "#21b",
+      "seed": 6,
+      "case": "21b_seed006",
+      "machine": "sfn-verb-d",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-11 00:27:23",
+      "sha256": "bdf32908e9da271a427b93229735bdec64071337f97c468592c1a22b2c0e32c4",
+      "sha256_read": "bdf32908e9da271a427b93229735bdec64071337f97c468592c1a22b2c0e32c4",
+      "bytes": 3472999699,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed006/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed006.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed006/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed006.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 6,
+        "trial_count": 5000,
+        "world_hash": "2c55243677995908e16eebf537e38b1c05d3f308fc6d105fcf1df5bf0babb31d"
+      },
+      "seconds": 150.7,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 11720
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    },
+    {
+      "arm": "#21b",
+      "seed": 8,
+      "case": "21b_seed008",
+      "machine": "sfn-verb-d3",
+      "root": "production_instruction30_p32",
+      "fetched": "2026-10-11 00:50:47",
+      "sha256": "1b480da4292a24f0e6fffe88ceec462af36495ad7a8188a258ded86d3debf8e4",
+      "sha256_read": "1b480da4292a24f0e6fffe88ceec462af36495ad7a8188a258ded86d3debf8e4",
+      "bytes": 3204003756,
+      "tsv_files": 122,
+      "files_in_archive": 97,
+      "status": "ok",
+      "capable_source": "attention",
+      "ledger_member": [
+        "21b_seed008/output/ledgers/cells/f0.5000_th2.1000_vt0.3842_first_order/seed008.jsonl.gz"
+      ],
+      "attention_member": [
+        "21b_seed008/output/attention/f0.5000_th2.1000_vt0.3842_first_order/seed008.jsonl.gz"
+      ],
+      "ledger_header": {
+        "code_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+        "run_seed": 8,
+        "trial_count": 5000,
+        "world_hash": "8601245f5a6a0e2c73e3a0e8c24da60d11e5053d10bcdb415ad38a991b86d75b"
+      },
+      "seconds": 134.0,
+      "spec_arm": "#21b",
+      "spec_source_commit": "94dbebc259981eec86efab1864f61df86ec68dd3",
+      "status_json": {
+        "state": "completed",
+        "completed_trials": 5000,
+        "full_5000_completed": true,
+        "flagged_result_provisional": true,
+        "runner_pid": 24073
+      },
+      "result_exit_code": 0,
+      "flag_commit": "4dc6a05d88ba10dbc22fd14ec77ec5c720e1c9a2",
+      "flag_verb_variant": "default",
+      "flag_verb_frequencies": null,
+      "flag_attn_sme": "global",
+      "flag_use_forget": 0.15
+    }
+  ],
+  "runs_not_used": [
+    "sfn-verb-d2:production_instruction30_p32/21_seed004　failed_rc3",
+    "sfn-verb-d2:production_instruction30_p32/21_seed007　failed_rc3",
+    "sfn-verb-d3:production_instruction30_p32/21b_seed004　failed_rc3",
+    "sfn-verb-d3:production_instruction30_p32/21b_seed007　failed_rc3"
+  ]
+}
