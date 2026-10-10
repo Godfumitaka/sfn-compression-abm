@@ -1,0 +1,1 @@
+この差分は直接承認待ちの未適用案。現行のクラウド包み、Mac台本、受付表、原模型、版/旗/観察/出力は変更していない。専用Google Cloud機械の既存受付の資源確認へ dedicated_google_cloud_gate_and_production_machine=true の確認済み原証拠が届く場合だけ、模型上限を既存の physical_cpu_count-2 とする案。専用機械の実際の確認・受付による根拠が未到着なら8を保つ。Macと他の機械は8、未知0・CPU枠・記憶・swap・熱・空き・同機械関門・正式列・通常pushの全条件は既存のまま。草稿を走行に使わない。

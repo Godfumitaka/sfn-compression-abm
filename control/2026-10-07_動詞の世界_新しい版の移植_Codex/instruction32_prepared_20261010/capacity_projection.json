@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-10T09:31:13.816327+09:00",
+  "resource_snapshot_at": "2026-10-10T09:29:28.773128+09:00",
+  "actual_free_bytes": 177183461376,
+  "margin_above_30_decimal_GB": 147183461376,
+  "actual_completed500_records_bytes_by_seed": {
+    "1": 3873491726,
+    "2": 4441778042
+  },
+  "existing_records_original_bytes": 8315269768,
+  "confirmed_last_trials": {
+    "1": 700,
+    "2": 600
+  },
+  "last_two_100_intervals_rate_seconds_per_trial": {
+    "1": 73.27142218291527,
+    "2": 102.19149772625009
+  },
+  "assumptions": [
+    "新しいrecords量を各種の実500量×(n/500)^pと仮定、p=1/2",
+    "各種の最後の二つの100区間の原時間/200を固定して、最後の確定行の時刻から未来の500境界を置く",
+    "既存500写しは既に空きへ反映されているので二重に引かない",
+    "原写し削除は0。gzip追加量は未確認なので、追加0と原写し量×1.01の二案を分ける",
+    "原gzip/STATE/RNG/cache/他の出力/APFS増分と今後の速度・成長は未実測、予測は安全な期限/上下限ではない"
+  ],
+  "scenarios": [
+    {
+      "history_volume_power": 1,
+      "compressed_archive_extra_allocation_bytes": 0,
+      "crossing": {
+        "epoch": 1791788555.2641032,
+        "JST": "2026-10-12T16:02:35.264103+09:00",
+        "trigger_seed": 1,
+        "trigger_completed_trials": 3500,
+        "remaining_bytes": 10414292186.0,
+        "projection_only": true
+      }
+    },
+    {
+      "history_volume_power": 1,
+      "compressed_archive_extra_allocation_bytes": 8398422465.68,
+      "crossing": {
+        "epoch": 1791783212.9970608,
+        "JST": "2026-10-12T14:33:32.997061+09:00",
+        "trigger_seed": 2,
+        "trigger_completed_trials": 2500,
+        "remaining_bytes": 29130311802.320007,
+        "projection_only": true
+      }
+    },
+    {
+      "history_volume_power": 2,
+      "compressed_archive_extra_allocation_bytes": 0,
+      "crossing": {
+        "epoch": 1791681021.4993346,
+        "JST": "2026-10-11T10:10:21.499335+09:00",
+        "trigger_seed": 2,
+        "trigger_completed_trials": 1500,
+        "remaining_bytes": 7109086776.0,
+        "projection_only": true
+      }
+    },
+    {
+      "history_volume_power": 2,
+      "compressed_archive_extra_allocation_bytes": 8398422465.68,
+      "crossing": {
+        "epoch": 1791681021.4993346,
+        "JST": "2026-10-11T10:10:21.499335+09:00",
+        "trigger_seed": 2,
+        "trigger_completed_trials": 1500,
+        "remaining_bytes": -1289335689.6799927,
+        "projection_only": true
+      }
+    }
+  ],
+  "model_starts": 0,
+  "deletions": 0,
+  "completed_future_trials_inferred": false
+}

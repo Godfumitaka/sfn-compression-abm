@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-10T09:29:28.773128+09:00",
+  "original_sha256": "05de039e5db207599a7a32163b7eb9af18f2160b8cd8ffb9aabac56aa3c929dd",
+  "classified_models": 9,
+  "model_pids": [
+    534,
+    564,
+    49513,
+    85059,
+    85060,
+    89543,
+    89544,
+    89545,
+    89546
+  ],
+  "actual_worker_pids": [
+    534,
+    564,
+    49513,
+    85060,
+    89543,
+    89544,
+    89545,
+    89546
+  ],
+  "actual_workers": 8,
+  "coordinator_pid": 85059,
+  "provenance": "同じ開始前原ps。B5の既存原agent0.pidで85060が本人、85059はまとめ役。89543〜89546は49513の同命令を継承した出生子。",
+  "unknown_active_spawn": 0,
+  "outside_heavy": 7,
+  "cpu_budget": 8,
+  "read_cpu_slots": 1,
+  "memory_reservation_gib": 0.3,
+  "free_disk_bytes": 177183461376,
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "swap_original_rows": [
+    "1791591494\t176.75\t2026-10-10T09:18:14\tok\tNone",
+    "1791591554\t176.75\t2026-10-10T09:19:14\tok\tNone",
+    "1791591615\t176.75\t2026-10-10T09:20:14\tok\tNone",
+    "1791591675\t176.75\t2026-10-10T09:21:14\tok\tNone",
+    "1791591735\t176.75\t2026-10-10T09:22:14\tok\tNone",
+    "1791591795\t176.75\t2026-10-10T09:23:14\tok\tNone",
+    "1791591855\t176.75\t2026-10-10T09:24:14\tok\tNone",
+    "1791591915\t176.75\t2026-10-10T09:25:14\tok\tNone",
+    "1791591975\t176.75\t2026-10-10T09:26:14\tok\tNone",
+    "1791592035\t176.75\t2026-10-10T09:27:14\tok\tNone",
+    "1791592095\t176.75\t2026-10-10T09:28:14\tok\tNone",
+    "1791592155\t176.75\t2026-10-10T09:29:14\tok\tNone"
+  ],
+  "counting_rule": "実spawn workerとその同命令を継承する出生fork子を一個体ずつ。親/監督/time/tracker/T/Zは稼働模型に加えない。未知spawnは保留。",
+  "resource_guard_not_changed": true,
+  "processing_started": false
+}

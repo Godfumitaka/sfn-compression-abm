@@ -1,0 +1,45 @@
+--- current/run_registered.py
++++ proposed/run_registered.py
+@@ -135,8 +135,10 @@
+     # ここだけが開始直前の全機械ps。開始後の常駐停止/再開機構は作らない。
+     raw = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
+     counts = start_counts(raw)
+-    # 子20は親を含め21。現行の8模型の規則は指示28の準備でも外さない。
+-    assert counts['model_process_count']+children+1 <= 8 and counts['unknown_active_spawn'] == 0
++    # 指示32の専用Google Cloud機械だけを対象とする未適用案。直接承認前は使わない。
++    dedicated_gcp = linux and proof.get('dedicated_google_cloud_gate_and_production_machine') is True
++    model_limit = limit if dedicated_gcp else 8
++    assert counts['model_process_count']+children+1 <= model_limit and counts['unknown_active_spawn'] == 0
+     assert counts['outside_heavy']+children+2 <= limit
+     free = shutil.disk_usage(case).free
+     assert free >= 20*2**30
+--- current/run_registered21.py
++++ proposed/run_registered21.py
+@@ -133,8 +133,10 @@
+     # ここだけが開始直前の全機械ps。開始後の常駐停止/再開機構は作らない。
+     raw = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
+     counts = start_counts(raw)
+-    # 子20は親を含め21。現行の8模型の規則は指示28の準備でも外さない。
+-    assert counts['model_process_count']+children+1 <= 8 and counts['unknown_active_spawn'] == 0
++    # 指示32の専用Google Cloud機械だけを対象とする未適用案。直接承認前は使わない。
++    dedicated_gcp = linux and proof.get('dedicated_google_cloud_gate_and_production_machine') is True
++    model_limit = limit if dedicated_gcp else 8
++    assert counts['model_process_count']+children+1 <= model_limit and counts['unknown_active_spawn'] == 0
+     assert counts['outside_heavy']+children+2 <= limit
+     free = shutil.disk_usage(case).free
+     assert free >= 20*2**30
+--- current/run_registered22.py
++++ proposed/run_registered22.py
+@@ -131,8 +131,10 @@
+     # ここだけが開始直前の全機械ps。開始後の常駐停止/再開機構は作らない。
+     raw = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
+     counts = start_counts(raw)
+-    # 子20は親を含め21。現行の8模型の規則は指示28の準備でも外さない。
+-    assert counts['model_process_count']+children+1 <= 8 and counts['unknown_active_spawn'] == 0
++    # 指示32の専用Google Cloud機械だけを対象とする未適用案。直接承認前は使わない。
++    dedicated_gcp = linux and proof.get('dedicated_google_cloud_gate_and_production_machine') is True
++    model_limit = limit if dedicated_gcp else 8
++    assert counts['model_process_count']+children+1 <= model_limit and counts['unknown_active_spawn'] == 0
+     assert counts['outside_heavy']+children+2 <= limit
+     free = shutil.disk_usage(case).free
+     assert free >= 20*2**30

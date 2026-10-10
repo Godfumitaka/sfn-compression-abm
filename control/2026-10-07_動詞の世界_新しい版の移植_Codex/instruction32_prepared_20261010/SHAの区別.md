@@ -1,0 +1,1 @@
+prepared_original_evidence_sha256.jsonは非公開の原SHA。public_files_sha256.jsonは個人パスを別名化した公開ファイル（一覧自身を除く）のSHA。全Mac原psとgzipの大容量実内容は公開しない。未適用draftは走行に使わない。模型の値/行/順・原写し・現行台本は不変。
