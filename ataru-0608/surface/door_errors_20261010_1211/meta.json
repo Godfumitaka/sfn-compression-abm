@@ -1,0 +1,107 @@
+{
+  "made_at": "2026-10-10T12:11:02",
+  "rule": "受け箱の指示 77（探りの数え、主張には使わない）",
+  "script": "door_errors.py",
+  "world": 2,
+  "rows": "1a/1b・7a/7b・5a/5b（wave1.py と同じく a と b を合わせ、種 1〜20）",
+  "selection": "~/surface/wave1_view/selection.tsv（wave1.py と同じ本）。per_run.csv（wave1_20261010_0600）の run と照らした",
+  "selection_vs_per_run_mismatch": "なし",
+  "runs_absent": [
+    "5a 種 5：未完（持ち帰っていない）",
+    "5a 種 6：未完（持ち帰っていない）",
+    "5a 種 9：未完（持ち帰っていない）",
+    "5b 種 11：未完（持ち帰っていない）",
+    "5b 種 15：未完（持ち帰っていない）",
+    "5b 種 19：未完（持ち帰っていない）"
+  ],
+  "runs_na": "なし",
+  "totals": {
+    "1a/1b": {
+      "selection_error": 218,
+      "door_exception_tasks": 612,
+      "runs": 20,
+      "expected_selection_error": 218,
+      "expected_tasks": 612,
+      "same": true
+    },
+    "7a/7b": {
+      "selection_error": 21,
+      "door_exception_tasks": 612,
+      "runs": 20,
+      "expected_selection_error": 21,
+      "expected_tasks": 612,
+      "same": true
+    },
+    "5a/5b": {
+      "selection_error": 169,
+      "door_exception_tasks": 431,
+      "runs": 14,
+      "expected_selection_error": 169,
+      "expected_tasks": 431,
+      "same": true
+    }
+  },
+  "definitions": {
+    "課題": "台帳の record_type が trial の行（試行の番号 prediction_order）",
+    "例外の日": "台帳の shop_cue が e（通常の日は n）",
+    "ドアの課題": "台帳の held_out_is_door が真",
+    "誤答": "台帳の hit が偽で predicted_edge が null でない",
+    "capable": "注意の記録の同じ試行の candidates に gate_passed かつ hit の候補が一つ以上ある",
+    "選び間違い": "誤答で capable（wave1.py と同じ）",
+    "選んだ定義": "注意の記録の selected_R の候補",
+    "正答の候補": "注意の記録の candidates のうち gate_passed かつ hit",
+    "前半・後半": "試行の番号 < trial_count/2 を前半（trial_count は台帳の run_header）",
+    "q": "候補の q_numerator / q_denominator（smeshared.select_definition の n3＝2·SES/(S_dd+S_xx)、選びの第一の鍵）。1・7 は match_cstar が真（C* の照合）、5 は flag.json で match_cstar・match_cstar_e が偽",
+    "penalty（注意の費用）": "Σ_k a_before[k]·m[k]、k は候補の m の名前順（tools/attnsme.py の penalties と同じ足し順）",
+    "z": "ln(q) − penalty（tools/attnsme.py の choices、tools/attnratio.py の log_scores と同じ式。q=0 の候補は z が無い）。ドアの課題で全候補の penalty が 0 のときは、選びは z でなく q の大小（all_penalties_zero 欄）",
+    "印の席（seal）": "注意の記録の候補の seal（attnsme.py が shopworld.IDS で sig の席を選んだもの）。状態 F/H/U、F は name、H は history（名前:数）。H で履歴の表が空のものは {}（v39.seat_state：空の表も H）",
+    "印の席の状態（side）": "side/*/seedNNN.shop.jsonl の kind=shop_seat・which=sig の移り変わりのうち、trial < その試行の最後の to。無ければ「記録なし」"
+  },
+  "fields": {
+    "row,world,seed,run,version": "~/surface/wave1_view/selection.tsv",
+    "trial": "台帳 ledgers/cells/*/seedNNN.jsonl.gz の prediction_order（注意の記録の trial と同じ番号）",
+    "trial_count": "台帳の run_header の trial_count",
+    "half": "trial と trial_count から",
+    "truth_predicate": "台帳の held_out_content.predicate",
+    "predicted_predicate": "台帳の predicted_edge.predicate",
+    "ledger_R_used": "台帳の R_used",
+    "selected_R": "注意の記録 attention/*/seedNNN.jsonl.gz の selected_R",
+    "attention_door_task,attention_shop_cue": "注意の記録の door_task・shop_cue（台帳との突き合わせ用）",
+    "n_candidates": "注意の記録の candidates の数",
+    "n_correct": "candidates のうち gate_passed かつ hit の数",
+    "all_penalties_zero": "注意の記録の a_before と各候補の m から計算",
+    "a_before_nonzero_keys": "注意の記録の a_before の 0 でない鍵の数",
+    "chosen_gate_passed,chosen_hit": "注意の記録の選んだ候補の gate_passed・hit",
+    "*_seal_slots,*_seal_state,*_seal_name,*_seal_history,*_seal_history_total": "注意の記録の候補の seal（slot・state・name・history）",
+    "*_seal_state_side": "side/*/seedNNN.shop.jsonl（shop_seat、which=sig）の R・slot・trial・to",
+    "*_q,chosen_q_exact": "注意の記録の候補の q_numerator・q_denominator",
+    "*_penalty": "注意の記録の a_before と候補の m",
+    "*_z": "q と penalty から",
+    "correct_best_z,correct_best_q": "正答の候補の z・q の最大",
+    "z_chosen_minus_best_correct,q_chosen_minus_best_correct": "選んだ定義の z（q）− 正答の候補の z（q）の最大",
+    "5a_breakdown の tasks・selection_error": "台帳（held_out_is_door・shop_cue・hit・predicted_edge）と注意の記録（capable）",
+    "5a_breakdown の rate_in_cell": "その種類の選び間違い ÷ その種類の課題",
+    "5a_breakdown の contribution_to_overall": "その種類の選び間違い ÷ 全課題（wave1.py の率の分母）。4 種類の和が全課題の率"
+  },
+  "multi_value_format": "一つの候補に印の席が複数あれば | で区切る。正答の候補が複数あれば ; で区切る（並びは candidates の順）",
+  "na_values_in_cases": "なし",
+  "side_seal_check": {
+    "1a/1b": {
+      "checked": 735,
+      "agree": 735,
+      "disagree_examples": []
+    },
+    "7a/7b": {
+      "checked": 64,
+      "agree": 64,
+      "disagree_examples": []
+    },
+    "5a/5b": {
+      "checked": 658,
+      "agree": 658,
+      "disagree_examples": []
+    }
+  },
+  "source_code": "計算の式は ~/sfn/sfn-compression-abm の tools/attnsme.py・tools/attnratio.py・tools/smeshared.py・tools/v39.py（c7921598・4ceadf63・c57467ea・e9ed84a で attnsme.py は同じ中身）を読んで合わせた",
+  "not_read": "side の sme.states.jsonl.gz・routing.jsonl・stage2・evictions は読んでいない"
+}

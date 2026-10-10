@@ -20,6 +20,7 @@ import argparse
 import csv
 import glob
 import gzip
+import hashlib
 import json
 import math
 import random
@@ -72,10 +73,15 @@ def capable_from_replay(arm, seed):
     rep = json.loads(rj.read_text())
     # 指示 73 の 1：status が failed でも、replay_accept.py の確かめ（違いが設定の置き場の文字列だけで中身の sha256 が同じ）で採用した本は使う。
     acc = ACCEPT.get(f"{arm}/seed{seed:03d}", {})
-    if not (rep.get("status") == "ok" or acc.get("adopted")) or not (d / "sme.candidates.jsonl.gz").exists():
+    cf = d / "sme.candidates.jsonl.gz"
+    if rep.get("status") != "ok" and acc.get("adopted"):
+        cf = Path(acc["candidates_path"])   # 採用した本の候補の記録は、残した一時の置き場（replay_accept.json に置き場と sha256）
+        if hashlib.sha256(cf.read_bytes()).hexdigest() != acc["candidates_sha256"]:
+            return None, "採用した再生の候補の記録の sha256 が記録と違う"
+    if not (rep.get("status") == "ok" or acc.get("adopted")) or not cf.exists():
         return None, f"再生が ok でない（{rep.get('status')}）"
     cap = {}
-    for r in rows_gz(d / "sme.candidates.jsonl.gz"):
+    for r in rows_gz(cf):
         cap[r["trial"]] = bool(r["correct_gate_passed"])
     return cap, f"再生 {rep.get('replay_code_commit', '')}"
 

@@ -5,7 +5,12 @@ replay.json の status が failed で、errors が「旗の違い ['config']」�
 結果は ~/surface/replay_accept.json（arm/seedNNN → 採用か、理由、両方の sha256）。"""
 import glob, hashlib, json
 from pathlib import Path
-H = Path.home(); AWS = {l.split()[1]: l.split()[0] for l in open(H / "surface/replay_config_sha_aws_m7a.txt")}
+H = Path.home(); AWS = {}
+# 本番の置き場の設定ファイルの sha256：AWS の m7a（10/10 09:5x に読んだ）と m1（12:2x に読んだ。m7a を消した後に終わった種のため）。両方にある置き場は同じ値であることを確かめる。
+for f in ("surface/replay_config_sha_aws_m7a.txt", "surface/replay_config_sha_aws_m1.txt"):
+    for l in open(H / f):
+        h, path = l.split()[:2]
+        assert AWS.setdefault(path, h) == h, path
 out = {}
 for rj in sorted(glob.glob(str(H / "surface/replay/q2*/seed*/replay.json"))):
     d = json.load(open(rj)); key = rj.split("/replay/")[1].rsplit("/", 1)[0]
@@ -17,7 +22,11 @@ for rj in sorted(glob.glob(str(H / "surface/replay/q2*/seed*/replay.json"))):
               "side_same": d.get("side_diff") == {}, "candidate_rows_all": d.get("candidate_rows") == d.get("ledger_body_rows") == pm["trial_count"],
               "config_sha256_same": ps is not None and ps == rs,
               "manifest_world_seed_same": (pm["world_hash"], pm["seed_file_sha256"]) == (rm["world_hash"], rm["seed_file_sha256"])}
-    out[key] = dict(adopted=all(checks.values()), checks=checks, production_config=prod["config"], production_config_sha256=ps,
+    # 候補の記録：replay.py は ok の本だけ ~/surface/replay/<arm>/seedNNN/ に写す。採用した本は、残した一時の置き場（kept_tmp）の中のものを使う（置き場と sha256 を記録）。
+    cg = sorted(glob.glob(str(Path(d["kept_tmp"]) / "out/side/*" / f"seed{int(key.split('seed')[1]):03d}.sme.candidates.jsonl.gz")))
+    checks["candidates_file_one"] = len(cg) == 1
+    cands = dict(candidates_path=cg[0] if cg else None, candidates_sha256=hashlib.sha256(open(cg[0], "rb").read()).hexdigest() if cg else None)
+    out[key] = dict(adopted=all(checks.values()), checks=checks, **cands, production_config=prod["config"], production_config_sha256=ps,
                     replay_config=rep["config"], replay_config_sha256=rs, replay_status=d["status"])
 json.dump(out, open(H / "surface/replay_accept.json", "w"), ensure_ascii=False, indent=1)
 print(len(out), "本、採用", sum(v["adopted"] for v in out.values()))
