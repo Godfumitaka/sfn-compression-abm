@@ -1,0 +1,62 @@
+{
+  "original_record": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/resource_warning_01.json",
+  "original_active_conservative": 7,
+  "corrected_active_models": 6,
+  "paused_models": 0,
+  "actual_models": [
+    {
+      "pid": 534,
+      "parent": 519,
+      "state": "R",
+      "rss_kib": 969552,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "parent": 562,
+      "state": "R",
+      "rss_kib": 1556064,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21582,
+      "parent": 49513,
+      "state": "R",
+      "rss_kib": 984016,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21583,
+      "parent": 49513,
+      "state": "R",
+      "rss_kib": 1326608,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21584,
+      "parent": 49513,
+      "state": "U",
+      "rss_kib": 1546848,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 21585,
+      "parent": 49513,
+      "state": "R",
+      "rss_kib": 1319760,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "waiting_reception_parents": [
+    {
+      "pid": 30258,
+      "parent": 52419,
+      "state": "Ss",
+      "rss_kib": 7200,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python instruction21/B6_gate_03/launch_case_B6_03.py B6_off_on200_candidate03 3"
+    }
+  ],
+  "all_ps_reused_no_new_census": true,
+  "original_record_kept": true,
+  "reason": "待つjobs run --waitのPython親を実模型に含めない。低RSSの実模型は残す。"
+}

@@ -1,0 +1,167 @@
+{
+  "sources": [
+    {
+      "side": 0,
+      "commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+      "files": {
+        "tools/attncstar.py": {
+          "sha256": "f1c3c1898b5953d3976d1decf4535332ae3ce5cd0e7384dad984bb06867bdadd",
+          "excerpts": [
+            {
+              "first_line": 90,
+              "last_line": 100,
+              "text": "90:     def rematched(self, seat):\n91:         before = dict(self.rematch_stats)\n92:         started = time.perf_counter()\n93:         try:\n94:             return super().rematched(seat)\n95:         finally:\n96:             if self.rematch_record is not None:\n97:                 self.rematch_record(dict(origin=self.rematch_origin, R=seat.definition,\n98:                     slot=seat.slot, state=seat.state, reuse=self.reuse_store is not None,\n99:                     seconds=time.perf_counter()-started,\n100:                     **{k: v-before[k] for k, v in self.rematch_stats.items()}))"
+            }
+          ]
+        },
+        "tools/cstar_matcher.py": {
+          "sha256": "d80a4fa0b581be99bce883ddec93df0b4ca5041f216a7fdc4e32dcd1469e74c9",
+          "excerpts": [
+            {
+              "first_line": 62,
+              "last_line": 70,
+              "text": "62:         rng = self.rng if tie_seed is None else random.Random(tie_seed)\n63:         before = self._capture_rng_state() if tie_seed is None else {\n64:             \"policy\": \"call-seed-uniform-v1\" if getattr(self, \"tie_uniform\", False) else \"call-seed-v1\", \"seed\": tie_seed}\n65:         started = time.perf_counter()\n66:         result = CstarEngine(left, right, self.settings, rng, probabilities,\n67:                              tie_uniform=getattr(self, \"tie_uniform\", False), foundation=foundation).run()\n68:         if scope is not None:\n69:             stats['engine_calls'] += 1\n70:             stats['engine_seconds'] += time.perf_counter() - started"
+            }
+          ]
+        },
+        "tools/attnstage2_runtime.py": {
+          "sha256": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+          "excerpts": [
+            {
+              "first_line": 32,
+              "last_line": 40,
+              "text": "32:     if rematch_reuse and not diagnostic:\n33:         raise ValueError('照合の土台の使い回しはC*のSessionだけで使う')\n34:     def rematch_record(row):\n35:         ST['rematch_stream'].write(json.dumps({'trial':ST['rematch_trial'],**row},ensure_ascii=False)+'\\n')\n36:         total = ST['rematch_totals'].setdefault(row['origin'], {})\n37:         total['calls'] = total.get('calls', 0)+1\n38:         for key in ('seconds','match_calls','result_cache_hits','engine_calls',\n39:                     'engine_seconds','foundation_builds','foundation_hits'):\n40:             total[key] = total.get(key, 0)+row[key]"
+            },
+            {
+              "first_line": 118,
+              "last_line": 166,
+              "text": "118:         start = time.perf_counter();rows=[];work={'thinned_seats':0,'rerankings':0};reason='not_disclosed'\n119:         pre = ST.pop('pre')\n120:         ST['rematch_trial']=coin.t\n121:         # m1の誕生はこの会計の後。予測前の記憶をその時点まで残す。\n122:         ST['current_pre']=pre\n123:         if coin.f_fired:\n124:             ST['rematch_disclosed']+=1\n125:             ai,before,cfg,rng_before,observations,attention,door_task,ranked,answer = pre\n126:             fingerprint = repr(before)\n127:             session = accounting_session(ai,before,cfg,rng_before,observations,attention,\n128:                         mode=attnsme.ST['mode'],position=attnsme.ST['position'],door_task=door_task,\n129:                         ranked=ranked or None,epsilon=epsilon,readout_policy=readout_policy,\n130:                         feature_policy=feature_policy)\n131:             selected = session.choose(session.candidates,attention)\n132:             if (None if selected is None else selected.answer) != answer:\n133:                 raise RuntimeError(('第二段の元の回答が実際の回答と違う',coin.t,answer,\n134:                                     None if selected is None else selected.answer))\n135:             # 開示はこの損の評価だけに渡す。候補の答え・食い違いは既に確定。\n136:             correct = (revealed.predicate,tuple(revealed.arguments))\n137:             ell = B._ell(revealed.predicate,v39.code_lengths(before.p_hat))\n138:             seats = [T.Seat(d.name,row.slot_index,v39.seat_state(d,row,before.slot_history),\n139:                             before.v39_seats[d.name,row.slot_index].gen)\n140:                      for d in before.definitions.values() for row in d.constituents\n141:                      if v39.seat_state(d,row,before.slot_history)!='U']\n142:             seats=T.measurement_seats(seats,scope=scope,selected=None if selected is None else selected.name)\n143:             rows,work = T.compare_seats(session.candidates,attention,seats,session.rematched,None,\n144:                         correct=correct,ell=ell,mode=mode,choose=session.choose,\n145:                         background=getattr(session,'background',None),method='rematched')\n146:             reason = 'evaluated'\n147:             if repr(before) != fingerprint:\n148:                 raise RuntimeError(('第二段が予測前の記憶を変えた',coin.t))\n149:         measure_seconds = time.perf_counter()-start\n150:         after,account = original_accounting(state,output,scene,config,horizon,score,coin,revealed)\n151:         accumulation_start = time.perf_counter()\n152:         if rows:\n153:             seats,applied = T.accumulate(after.v39_seats,rows,coin.t)\n154:             after = replace(after,v39_seats=seats)\n155:         else:\n156:             applied = []\n157:         # 元の会計にかかった時間は追加時間から除き、総時間を別に残す。\n158:         seconds = measure_seconds+time.perf_counter()-accumulation_start\n159:         wrapper_seconds = time.perf_counter()-start\n160:         ST['trials']+=1;ST['scored_seats']+=len(applied);ST['seconds']+=seconds\n161:         ST['stream'].write(json.dumps({'trial':coin.t,'f_realized':coin.f_realized,'f_fired':bool(coin.f_fired),\n162:             'loss':mode,'temperature':T.LEARNING_TEMPERATURE,'epsilon':epsilon,'reason':reason,\n163:             'initial_mode':initial_mode,'scope':scope,'counterfactual_method':'rematch_affected_definition',\n164:             'question_counts':{'door':ST['question'].door,'other':ST['question'].other},\n165:             'rows':rows,'applied':[list(k) for k in applied],'seconds':seconds,\n166:             'wrapper_seconds':wrapper_seconds,**work},ensure_ascii=False)+'\\n')"
+            },
+            {
+              "first_line": 187,
+              "last_line": 200,
+              "text": "187:     ST['stream'].close()\n188:     if ST['initial_stream'] is not None:ST['initial_stream'].close()\n189:     if ST['rematch_stream'] is not None:\n190:         ST['rematch_stream'].close()\n191:         total=ST['rematch_totals'].get('disclosure',{})\n192:         Path(ST['path']+'.rematch.summary.json').write_text(json.dumps(dict(\n193:             reuse=ST['rematch_reuse'],disclosed_trials=ST['rematch_disclosed'],\n194:             totals=ST['rematch_totals'],\n195:             calls_per_disclosed_trial=total.get('calls',0)/ST['rematch_disclosed'] if ST['rematch_disclosed'] else None,\n196:             rematch_fraction_of_stage2_seconds=total.get('seconds',0)/ST['seconds'] if ST['seconds'] else None,\n197:             timing_is_diagnostic=True),ensure_ascii=False,indent=2)+'\\n')\n198:     summary = {k:ST[k] for k in ('trials','scored_seats','seconds','mode','epsilon','initial_mode','scope')}\n199:     summary['questions']={agent:questions.record() for agent,questions in ST['questions'].items()}\n200:     Path(ST['path']+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\\n')"
+            }
+          ]
+        },
+        "tools/attnstage2_birth.py": {
+          "sha256": "6baf9380ae5346f5caa10b5ddd8eb1a4194a7fe5445b10d2fa7d500eb653f4b6",
+          "excerpts": [
+            {
+              "first_line": 65,
+              "last_line": 69,
+              "text": "65: def birth_values(before, definition, first_material, second_visible, questions, trial,\n66:                  *, session_factory, loss_mode, length_of, measure_birth_hu=False):\n67:     \"\"\"session_factoryに正解は渡さない。仮の問いは頻度・履歴を更新しない。\"\"\"\n68:     import v39\n69:     start=time.perf_counter()"
+            },
+            {
+              "first_line": 118,
+              "last_line": 125,
+              "text": "118:     record={'kind':'stage2_birth_virtual','trial':trial,'R':fresh.name,\n119:           'loss':loss_mode,'question_counts':{'door':questions.door,'other':questions.other},\n120:           'virtual_counts':counts,'records':records,'delta_by_slot':totals,\n121:           'mass_by_slot':masses,'first_material_common_delta':0.,\n122:           'seconds':time.perf_counter()-start,**work}\n123:     if measure_birth_hu:\n124:         record.update(measure_birth_hu=True,hu_after_fh_delta_by_slot=hu_totals)\n125:     return initial,record"
+            }
+          ]
+        },
+        "tools/v3_run.py": {
+          "sha256": "1ffff060b78039403ecd6bb68edec5ce04fdd14aa9e460fa3554c8db11cc3422",
+          "excerpts": [
+            {
+              "first_line": 642,
+              "last_line": 653,
+              "text": "642:             sys.modules[\"smeonline\"].close()\n643:         if task.get(\"no_forget_exec\"):\n644:             sys.modules[\"calibration\"].close()\n645:         if task.get(\"sme_evict_trial_cache\"):\n646:             sys.modules[\"smeevict\"].close()\n647:     if task.get(\"attn_sme\"):\n648:         rec[\"attn_sme\"] = sys.modules[\"attnsme\"].close()\n649:     if task.get('stage2') == 'on':\n650:         rec['stage2'] = sys.modules['attnstage2_runtime'].close()\n651:     if task.get(\"v311c\") and \"v311c_allin\" in sys.modules:\n652:         sys.modules[\"v311c_allin\"].close()\n653:     if task.get(\"use_forget\") is not None:"
+            }
+          ]
+        },
+        "tools/v311c.py": {
+          "sha256": "3997d47a2381fb2a8cc01fd3805ca7bcd4b17e1db69fc10acab09434435be53c",
+          "excerpts": [
+            {
+              "first_line": 1020,
+              "last_line": 1030,
+              "text": "1020:                 elif not procs[i].is_alive():\n1021:                     done[i] = {\"type\": \"error\", \"error\": \"終わりの知らせが無いまま個体のプロセスが終わった\"}\n1022:             except EOFError:\n1023:                 done[i] = {\"type\": \"error\", \"error\": \"EOF\"}\n1024:     for p in procs:\n1025:         p.join()\n1026:     summ[\"agents\"] = [d.get(\"rec\") if d and d.get(\"type\") == \"done\" else d for d in done]\n1027:     fo.write(json.dumps({\"kind\": \"summary\", **summ}, ensure_ascii=False, default=str) + \"\\n\")\n1028:     fo.close()\n1029:     if audit_file is not None:\n1030:         audit_file.close()"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "side": 1,
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "files": {
+        "tools/attncstar.py": {
+          "sha256": "f1c3c1898b5953d3976d1decf4535332ae3ce5cd0e7384dad984bb06867bdadd",
+          "excerpts": [
+            {
+              "first_line": 90,
+              "last_line": 100,
+              "text": "90:     def rematched(self, seat):\n91:         before = dict(self.rematch_stats)\n92:         started = time.perf_counter()\n93:         try:\n94:             return super().rematched(seat)\n95:         finally:\n96:             if self.rematch_record is not None:\n97:                 self.rematch_record(dict(origin=self.rematch_origin, R=seat.definition,\n98:                     slot=seat.slot, state=seat.state, reuse=self.reuse_store is not None,\n99:                     seconds=time.perf_counter()-started,\n100:                     **{k: v-before[k] for k, v in self.rematch_stats.items()}))"
+            }
+          ]
+        },
+        "tools/cstar_matcher.py": {
+          "sha256": "d80a4fa0b581be99bce883ddec93df0b4ca5041f216a7fdc4e32dcd1469e74c9",
+          "excerpts": [
+            {
+              "first_line": 62,
+              "last_line": 70,
+              "text": "62:         rng = self.rng if tie_seed is None else random.Random(tie_seed)\n63:         before = self._capture_rng_state() if tie_seed is None else {\n64:             \"policy\": \"call-seed-uniform-v1\" if getattr(self, \"tie_uniform\", False) else \"call-seed-v1\", \"seed\": tie_seed}\n65:         started = time.perf_counter()\n66:         result = CstarEngine(left, right, self.settings, rng, probabilities,\n67:                              tie_uniform=getattr(self, \"tie_uniform\", False), foundation=foundation).run()\n68:         if scope is not None:\n69:             stats['engine_calls'] += 1\n70:             stats['engine_seconds'] += time.perf_counter() - started"
+            }
+          ]
+        },
+        "tools/attnstage2_runtime.py": {
+          "sha256": "9445e6d34c88b28d051cb2d1c75e4ebd1251d70d1e6aacbe40ae5e330a0e31c7",
+          "excerpts": [
+            {
+              "first_line": 32,
+              "last_line": 40,
+              "text": "32:     if rematch_reuse and not diagnostic:\n33:         raise ValueError('照合の土台の使い回しはC*のSessionだけで使う')\n34:     def rematch_record(row):\n35:         ST['rematch_stream'].write(json.dumps({'trial':ST['rematch_trial'],**row},ensure_ascii=False)+'\\n')\n36:         total = ST['rematch_totals'].setdefault(row['origin'], {})\n37:         total['calls'] = total.get('calls', 0)+1\n38:         for key in ('seconds','match_calls','result_cache_hits','engine_calls',\n39:                     'engine_seconds','foundation_builds','foundation_hits'):\n40:             total[key] = total.get(key, 0)+row[key]"
+            },
+            {
+              "first_line": 118,
+              "last_line": 166,
+              "text": "118:         start = time.perf_counter();rows=[];work={'thinned_seats':0,'rerankings':0};reason='not_disclosed'\n119:         pre = ST.pop('pre')\n120:         ST['rematch_trial']=coin.t\n121:         # m1の誕生はこの会計の後。予測前の記憶をその時点まで残す。\n122:         ST['current_pre']=pre\n123:         if coin.f_fired:\n124:             ST['rematch_disclosed']+=1\n125:             ai,before,cfg,rng_before,observations,attention,door_task,ranked,answer = pre\n126:             fingerprint = repr(before)\n127:             session = accounting_session(ai,before,cfg,rng_before,observations,attention,\n128:                         mode=attnsme.ST['mode'],position=attnsme.ST['position'],door_task=door_task,\n129:                         ranked=ranked or None,epsilon=epsilon,readout_policy=readout_policy,\n130:                         feature_policy=feature_policy)\n131:             selected = session.choose(session.candidates,attention)\n132:             if (None if selected is None else selected.answer) != answer:\n133:                 raise RuntimeError(('第二段の元の回答が実際の回答と違う',coin.t,answer,\n134:                                     None if selected is None else selected.answer))\n135:             # 開示はこの損の評価だけに渡す。候補の答え・食い違いは既に確定。\n136:             correct = (revealed.predicate,tuple(revealed.arguments))\n137:             ell = B._ell(revealed.predicate,v39.code_lengths(before.p_hat))\n138:             seats = [T.Seat(d.name,row.slot_index,v39.seat_state(d,row,before.slot_history),\n139:                             before.v39_seats[d.name,row.slot_index].gen)\n140:                      for d in before.definitions.values() for row in d.constituents\n141:                      if v39.seat_state(d,row,before.slot_history)!='U']\n142:             seats=T.measurement_seats(seats,scope=scope,selected=None if selected is None else selected.name)\n143:             rows,work = T.compare_seats(session.candidates,attention,seats,session.rematched,None,\n144:                         correct=correct,ell=ell,mode=mode,choose=session.choose,\n145:                         background=getattr(session,'background',None),method='rematched')\n146:             reason = 'evaluated'\n147:             if repr(before) != fingerprint:\n148:                 raise RuntimeError(('第二段が予測前の記憶を変えた',coin.t))\n149:         measure_seconds = time.perf_counter()-start\n150:         after,account = original_accounting(state,output,scene,config,horizon,score,coin,revealed)\n151:         accumulation_start = time.perf_counter()\n152:         if rows:\n153:             seats,applied = T.accumulate(after.v39_seats,rows,coin.t)\n154:             after = replace(after,v39_seats=seats)\n155:         else:\n156:             applied = []\n157:         # 元の会計にかかった時間は追加時間から除き、総時間を別に残す。\n158:         seconds = measure_seconds+time.perf_counter()-accumulation_start\n159:         wrapper_seconds = time.perf_counter()-start\n160:         ST['trials']+=1;ST['scored_seats']+=len(applied);ST['seconds']+=seconds\n161:         ST['stream'].write(json.dumps({'trial':coin.t,'f_realized':coin.f_realized,'f_fired':bool(coin.f_fired),\n162:             'loss':mode,'temperature':T.LEARNING_TEMPERATURE,'epsilon':epsilon,'reason':reason,\n163:             'initial_mode':initial_mode,'scope':scope,'counterfactual_method':'rematch_affected_definition',\n164:             'question_counts':{'door':ST['question'].door,'other':ST['question'].other},\n165:             'rows':rows,'applied':[list(k) for k in applied],'seconds':seconds,\n166:             'wrapper_seconds':wrapper_seconds,**work},ensure_ascii=False)+'\\n')"
+            },
+            {
+              "first_line": 187,
+              "last_line": 200,
+              "text": "187:     ST['stream'].close()\n188:     if ST['initial_stream'] is not None:ST['initial_stream'].close()\n189:     if ST['rematch_stream'] is not None:\n190:         ST['rematch_stream'].close()\n191:         total=ST['rematch_totals'].get('disclosure',{})\n192:         Path(ST['path']+'.rematch.summary.json').write_text(json.dumps(dict(\n193:             reuse=ST['rematch_reuse'],disclosed_trials=ST['rematch_disclosed'],\n194:             totals=ST['rematch_totals'],\n195:             calls_per_disclosed_trial=total.get('calls',0)/ST['rematch_disclosed'] if ST['rematch_disclosed'] else None,\n196:             rematch_fraction_of_stage2_seconds=total.get('seconds',0)/ST['seconds'] if ST['seconds'] else None,\n197:             timing_is_diagnostic=True),ensure_ascii=False,indent=2)+'\\n')\n198:     summary = {k:ST[k] for k in ('trials','scored_seats','seconds','mode','epsilon','initial_mode','scope')}\n199:     summary['questions']={agent:questions.record() for agent,questions in ST['questions'].items()}\n200:     Path(ST['path']+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\\n')"
+            }
+          ]
+        },
+        "tools/attnstage2_birth.py": {
+          "sha256": "6baf9380ae5346f5caa10b5ddd8eb1a4194a7fe5445b10d2fa7d500eb653f4b6",
+          "excerpts": [
+            {
+              "first_line": 65,
+              "last_line": 69,
+              "text": "65: def birth_values(before, definition, first_material, second_visible, questions, trial,\n66:                  *, session_factory, loss_mode, length_of, measure_birth_hu=False):\n67:     \"\"\"session_factoryに正解は渡さない。仮の問いは頻度・履歴を更新しない。\"\"\"\n68:     import v39\n69:     start=time.perf_counter()"
+            },
+            {
+              "first_line": 118,
+              "last_line": 125,
+              "text": "118:     record={'kind':'stage2_birth_virtual','trial':trial,'R':fresh.name,\n119:           'loss':loss_mode,'question_counts':{'door':questions.door,'other':questions.other},\n120:           'virtual_counts':counts,'records':records,'delta_by_slot':totals,\n121:           'mass_by_slot':masses,'first_material_common_delta':0.,\n122:           'seconds':time.perf_counter()-start,**work}\n123:     if measure_birth_hu:\n124:         record.update(measure_birth_hu=True,hu_after_fh_delta_by_slot=hu_totals)\n125:     return initial,record"
+            }
+          ]
+        },
+        "tools/v3_run.py": {
+          "sha256": "1ffff060b78039403ecd6bb68edec5ce04fdd14aa9e460fa3554c8db11cc3422",
+          "excerpts": [
+            {
+              "first_line": 642,
+              "last_line": 653,
+              "text": "642:             sys.modules[\"smeonline\"].close()\n643:         if task.get(\"no_forget_exec\"):\n644:             sys.modules[\"calibration\"].close()\n645:         if task.get(\"sme_evict_trial_cache\"):\n646:             sys.modules[\"smeevict\"].close()\n647:     if task.get(\"attn_sme\"):\n648:         rec[\"attn_sme\"] = sys.modules[\"attnsme\"].close()\n649:     if task.get('stage2') == 'on':\n650:         rec['stage2'] = sys.modules['attnstage2_runtime'].close()\n651:     if task.get(\"v311c\") and \"v311c_allin\" in sys.modules:\n652:         sys.modules[\"v311c_allin\"].close()\n653:     if task.get(\"use_forget\") is not None:"
+            }
+          ]
+        },
+        "tools/v311c.py": {
+          "sha256": "3997d47a2381fb2a8cc01fd3805ca7bcd4b17e1db69fc10acab09434435be53c",
+          "excerpts": [
+            {
+              "first_line": 1020,
+              "last_line": 1030,
+              "text": "1020:                 elif not procs[i].is_alive():\n1021:                     done[i] = {\"type\": \"error\", \"error\": \"終わりの知らせが無いまま個体のプロセスが終わった\"}\n1022:             except EOFError:\n1023:                 done[i] = {\"type\": \"error\", \"error\": \"EOF\"}\n1024:     for p in procs:\n1025:         p.join()\n1026:     summ[\"agents\"] = [d.get(\"rec\") if d and d.get(\"type\") == \"done\" else d for d in done]\n1027:     fo.write(json.dumps({\"kind\": \"summary\", **summ}, ensure_ascii=False, default=str) + \"\\n\")\n1028:     fo.close()\n1029:     if audit_file is not None:\n1030:         audit_file.close()"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "retained": "calls_per_disclosed_trial、totals内のcalls/match_calls/result_cache_hits/engine_calls/foundation_builds/foundation_hitsと全残余欄。指示21のrematch_fraction_of_stage2_secondsだけを時計同士の比として除く。"
+}
