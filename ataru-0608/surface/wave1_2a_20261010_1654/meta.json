@@ -1,0 +1,20 @@
+{
+  "made_at": "2026-10-10T18:16:16",
+  "rule": "受け箱の指示 44、理解の場の決定 1〜6、台帳 75 節",
+  "rng_seed": 20261009,
+  "rng_note": "比べごとに random.Random(f'{RNG_SEED}-{行}-{世界}-{量}') で選び直す",
+  "resamples": 4000,
+  "percentiles": [
+    2.5,
+    97.5
+  ],
+  "denominators": "全課題・全部の日",
+  "replay_adoption": "2a の再生は、status が ok の本と、replay_accept.json で採用した本（違いが flag.json の config の置き場の書き方だけ：本番は AWS の /home/ubuntu/wave1/...、再生はデスクトップの /home/tatsu/cloud/wave1/...。設定ファイルの中身の sha256 は各本で同じ）を使う",
+  "capable_definition": {
+    "2a 以外": "注意の記録の candidates に gate_passed かつ hit の候補がある",
+    "2a": "再生（selcands_sme）の候補の記録の correct_gate_passed"
+  },
+  "selection": "~/surface/wave1_view/selection.tsv（wave1_view.py の選び方）",
+  "runs_ok": 252,
+  "runs_total": 280
+}
