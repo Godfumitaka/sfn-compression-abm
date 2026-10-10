@@ -1,0 +1,11 @@
+--- instruction22/run_candidate_on200_01.py
++++ instruction22/run_candidate_on200_02.py
+@@ -4,7 +4,7 @@
+ from resource_census_02 import census
+ here=Path(__file__).resolve().parent
+ label=sys.argv[1]
+-spec=json.loads((here/'candidate_on200_commands_01.json').read_text())[label]
++spec=json.loads((here/'candidate_on200_commands_02.json').read_text())[label]
+ assert label in ('candidate_on_D_04_200_01','candidate_on_D_015_200_01')
+ off=json.loads(Path(spec['requires_off_comparison']).read_text())
+ assert off['passed'] and off['actual_files_excluded']==off['probe_rows_excluded']==0

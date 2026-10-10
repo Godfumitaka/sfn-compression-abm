@@ -1,0 +1,32 @@
+{
+  "at_jst": "2026-10-10T20:30:38.958622+09:00",
+  "reason": "原のpair_commonは台帳のprediction_orderを0〜99として原順で照合する。trialはD記録の欄で台帳には無い。比較前の読取だけを直し、全比較条件・全原記録・試験行・原TIMEを保持する。",
+  "old_stop": {
+    "status": "stopped",
+    "passed": false,
+    "files": [],
+    "metadata": [],
+    "baseline_reused_without_rerunning": true,
+    "actual_files_excluded": 0,
+    "probe_rows_excluded": 0,
+    "comparator_reference": {
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/instruction11_io.py": "2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/compare_probe100.py": "2368121c1c8b2211e39defe4fc96c9276a4e6bba426b10192cef77b9ae18a68a",
+      "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/pair_common.py": "4928b544e8b5d1d6db5e4065c7ccc9b39b5d0998d1abff7ca00085039cfb80d2"
+    },
+    "machine_boot_sha256": "773eeecfe3afc3ccc34847d05ee94097573d18caef28686fec53924894004b80",
+    "error": "KeyError('trial')",
+    "at_jst": "2026-10-10T20:29:33.990563+09:00",
+    "seconds": 0.872519625001587,
+    "max_rss_bytes": 121913344,
+    "policy": "原比較器と動詞26.1(a-c)の全名前・原順・字節・全manifest研究者辞書。既存TIMEだけ。試験行を含む。"
+  },
+  "reference_path": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth/pair_common.py",
+  "reference_sha256": "4928b544e8b5d1d6db5e4065c7ccc9b39b5d0998d1abff7ca00085039cfb80d2",
+  "files": {
+    "instruction22/compare_candidate_off100_01.py": "6c055100aa3498908d62124c3c0c0816efa6e09a9fb8c124bf7bf84a459653f4",
+    "instruction22/compare_candidate_off100_02.py": "c2f2cc7a471ee4de142be54edcadfe3ad2cc495faa38b2b63728d26aae085148",
+    "instruction23/launch_off100_comparison_01.py": "87d741502244c47edfe83cb35c33cd117b4bb8b2f739d3b03077525471da8d21",
+    "instruction23/launch_off100_comparison_02.py": "192036bfef249e98cc02851c5f8b3f885d7ae7e289579a95f20b6071465ec590"
+  }
+}

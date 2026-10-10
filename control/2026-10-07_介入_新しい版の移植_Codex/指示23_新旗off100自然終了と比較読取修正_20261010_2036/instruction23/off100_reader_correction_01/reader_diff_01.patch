@@ -1,0 +1,20 @@
+--- instruction22/compare_candidate_off100_01.py
++++ instruction22/compare_candidate_off100_02.py
+@@ -9,7 +9,7 @@
+ spec=json.loads((here/'candidate_off100_spec_01.json').read_text())
+ reference=json.loads((here.parent/'instruction13/comparator_reference.json').read_text())
+ for path,digest in reference.items():assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest
+-destination=here/'candidate_off100_comparison_01.json'
++destination=here/'candidate_off100_comparison_02.json'
+ assert not destination.exists(), '同じ比較を重複実行しない'
+ left_case=Path(spec['baseline_case']);right_case=Path(spec['destination'])
+ left=left_case/'output';right=right_case/'output'
+@@ -37,7 +37,7 @@
+         with gzip.open(ledger,'rt') as stream:
+             rows=[json.loads(line) for line in stream]
+         assert len(rows)==101
+-        assert [row['trial'] for row in rows[1:]]==list(range(100))
++        assert [row['prediction_order'] for row in rows[1:]]==list(range(100))
+         result['metadata'].append(dict(case=str(case),actual_commit=commit,completed_trials=100,
+             done_present=True,done_bytes=ledger.stat().st_size,model_rows=100,raw_order_verified=True))
+     assert (left/'flag.json').read_bytes()==(right/'flag.json').read_bytes()

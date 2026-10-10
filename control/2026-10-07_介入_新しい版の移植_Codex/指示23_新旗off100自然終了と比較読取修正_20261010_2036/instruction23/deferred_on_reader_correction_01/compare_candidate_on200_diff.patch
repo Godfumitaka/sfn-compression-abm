@@ -1,0 +1,47 @@
+--- instruction22/compare_candidate_on200_01.py
++++ instruction22/compare_candidate_on200_02.py
+@@ -4,14 +4,14 @@
+ here=Path(__file__).resolve().parent
+ native=Path('/Users/tatsu-admin/Documents/ChatGPT/New project/codex_verb_2026-10-04/newport_2026-10-07/instruction22_birth')
+ sys.path.insert(0,str(native))
+-from instruction11_io import names,compare_paths,without_time
++from instruction11_io import names,compare_paths,without_time,ROOTS
+ from compare_probe100 import required_paths,manifest_counts
+ label=sys.argv[1]
+-spec=json.loads((here/'candidate_on200_commands_01.json').read_text())[label]
++spec=json.loads((here/'candidate_on200_commands_02.json').read_text())[label]
+ assert label in ('candidate_on_D_04_200_01','candidate_on_D_015_200_01')
+ reference=json.loads((here.parent/'instruction13/comparator_reference.json').read_text())
+ for path,digest in reference.items():assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest
+-destination=here/(label+'_comparison_01.json')
++destination=here/(label+'_comparison_02.json')
+ assert not destination.exists(), '同じ比較を重複実行しない'
+ left_case=Path(spec['baseline_case']);right_case=Path(spec['destination'])
+ left=left_case/'output';right=right_case/'output'
+@@ -45,7 +45,7 @@
+         with gzip.open(ledger,'rt') as stream:
+             rows=[json.loads(line) for line in stream]
+         assert len(rows)==201
+-        assert [row['trial'] for row in rows[1:]]==list(range(200))
++        assert [row['prediction_order'] for row in rows[1:]]==list(range(200))
+         result['metadata'].append(dict(case=str(case),actual_commit=commit,completed_trials=200,
+             done_present=True,done_bytes=ledger.stat().st_size,model_rows=200,raw_order_verified=True))
+     left_flag=(left/'flag.json').read_bytes();right_flag=(right/'flag.json').read_bytes()
+@@ -59,7 +59,16 @@
+     b|={path.relative_to(right) for path in (right/'retention').rglob('*') if path.is_file()}
+     assert any(rel.parts[0]=='retention' for rel in a), '全D記録が無い'
+     result.update(file_names_identical=a==b,left_names=sorted(map(str,a)),right_names=sorted(map(str,b)))
+-    assert a==b and required_paths()<=a, '模型の全名前集合又は必要記録が異なる'
++    original_verification_path=here.parent/'instruction13/completed_A_verification_01.json'
++    original_verification=json.loads(original_verification_path.read_text())
++    assert original_verification['status']=='passed'
++    original_label='A_fixed_D_attention_04' if label=='candidate_on_D_04_200_01' else 'A_fixed_D_attention_015'
++    original_record=original_verification['runs'][original_label]
++    assert original_record['ledger_records']==original_record['retention_records']==200
++    assert original_record['all_D_state_and_record_bytes_unchanged'] and original_record['protected_unchanged']
++    original_names={Path(rel) for rel in original_record['output_sha256'] if Path(rel).parts[0] in ROOTS|{'retention'} and Path(rel).suffix!='.done'}
++    assert a==b==original_names, '原94の全実在D模型記録と両側の全名前集合が異なる'
++    result['original_required_names_reference']=dict(path=str(original_verification_path),sha256=hashlib.sha256(original_verification_path.read_bytes()).hexdigest(),label=original_label,names=sorted(map(str,original_names)),all_actual_files_retained=True)
+     for rel in sorted(a):
+         row=compare_paths(rel,left/rel,right/rel)
+         result['files'].append(row)

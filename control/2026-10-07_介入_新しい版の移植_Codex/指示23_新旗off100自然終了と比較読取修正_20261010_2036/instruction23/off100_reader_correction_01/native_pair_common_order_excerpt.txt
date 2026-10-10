@@ -1,0 +1,5 @@
+    with gzip.open(output / 'ledgers/cells' / CELL / 'seed001.jsonl.gz', 'rt') as ledger:
+        orders = [row['prediction_order'] for line in ledger
+                  if 'prediction_order' in (row := json.loads(line))]
+    assert orders == list(range(100))
+    return dict(source_commit=SOURCE, completed_trials=100, configured_trial_count=5000,
