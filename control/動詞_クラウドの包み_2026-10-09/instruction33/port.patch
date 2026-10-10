@@ -1,0 +1,769 @@
+diff --git a/tests/test_cstar_cache_prune.py b/tests/test_cstar_cache_prune.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..ba4b24a3024a8f71564753e5f12616fd4efb4fa8
+--- /dev/null
++++ b/tests/test_cstar_cache_prune.py
+@@ -0,0 +1,119 @@
++"""指示26。試行の種の分離、順序、旧キーの検出、反実仮想の復元を検査する。"""
++from pathlib import Path
++from random import Random
++import json
++import sys
++sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'tools'),str(Path(__file__).resolve().parents[1])]
++import pytest
++from cstar_cache_prune import PruneGuard
++from cstar_matcher import CstarMatcher
++from sme2017 import Graph,Node,Settings
++import cstar_runtime as C
++import smeshared as S
++import attncstar as N
++import attnstage2 as T
++from attnstage2_distribution import Readout
++from test_attncstar import cstar
++from test_sme2017_connection import separate
++from test_attnstage2_connection import build,retained_U_structure
++import v39
++
++
++def graphs():
++    left=Graph((Node('a','entity'),Node('r','relation',frozenset({'p'}),('a',))))
++    right=Graph((Node('b','entity'),Node('s','relation',frozenset({'p'}),('b',))))
++    return left,right,{'r':{'p':1.}}
++
++
++def test_prune_preserves_current_order_unseeded_self_and_rng():
++    e=CstarMatcher(Settings(),tie_seed=3,tie_uniform=True); e.cache_prune_guard=g=PruneGuard()
++    a,b,p=graphs();g.begin_trial(e,0)
++    old=e.match(a,b,probabilities=p,tie_seed=4)
++    e.match(a,b,probabilities=p,tie_seed=5)
++    e.match(a,b,probabilities=p);e.self_score(a)
++    unseeded={k:v for k,v in e.cache.items() if g.seed(k) is None}
++    self_before=dict(e.self_cache);rng=e.rng.getstate()
++    g.begin_trial(e,1)
++    assert e.cache==unseeded and e.self_cache==self_before and e.rng.getstate()==rng
++    assert g.removed=={'cache':2,'cache_rng':2}
++    now=e.match(a,b,probabilities=p,tie_seed=6)
++    assert now==old
++    order=list(e.cache);g.begin_trial(e,1);assert list(e.cache)==order
++
++
++def test_monitor_catches_old_seed_before_a_result_can_be_reused():
++    e=CstarMatcher(Settings(),tie_seed=3);e.cache_prune_guard=g=PruneGuard()
++    a,b,p=graphs();g.begin_trial(e,0);e.match(a,b,probabilities=p,tie_seed=4);g.begin_trial(e,1)
++    key=e.match_key(a,b,4,probabilities=p)
++    with pytest.raises(RuntimeError,match='過去'):
++        g.request(key,1,'mapping')
++    assert g.forbidden_reads==1
++    with pytest.raises(RuntimeError,match='過去'):
++        e.match(a,b,probabilities=p,tie_seed=4)
++    assert g.forbidden_reads==2
++
++
++def test_unknown_origin_and_wrong_trial_stop():
++    e=CstarMatcher(Settings());g=PruneGuard();a,b,p=graphs()
++    e.match(a,b,probabilities=p,tie_seed=4)
++    with pytest.raises(RuntimeError,match='由来'):g.begin_trial(e,1)
++    g.begin_trial(CstarMatcher(Settings()),0)
++    with pytest.raises(RuntimeError,match='文脈'):g.request(('call-seed-v1',4),1,'mapping')
++
++
++def test_audit_keeps_zero_and_actual_failure_counts(tmp_path):
++    e=CstarMatcher(Settings());e.cache_prune_guard=g=PruneGuard(tmp_path/'audit.jsonl.gz')
++    a,b,p=graphs();g.begin_trial(e,0);e.match(a,b,probabilities=p,tie_seed=4);g.begin_trial(e,1)
++    summary=g.close(True)
++    assert summary['forbidden_reads']==0 and summary['removed']['cache']==1
++    assert json.loads((tmp_path/'audit.jsonl.gz.summary.json').read_text())==summary
++
++
++@pytest.mark.parametrize('mode',['alpha','top1','mixture'])
++def test_real_Cstar_all_seats_and_state_rng_unchanged(cstar,retained_U_structure,monkeypatch,mode):
++    state,cfg,obs,ai=build();state,_=v39._convert(state,'FH','R',1,2)
++    def measured():
++        session=N.Session(ai,state,cfg,Random(1).getstate(),obs,{},mode='global',position='k2',door_task=True,
++                          epsilon=.01,readout_policy=Readout(),feature_policy=N.Features())
++        seats=[T.Seat(d.name,row.slot_index,v39.seat_state(d,row,state.slot_history),state.v39_seats[d.name,row.slot_index].gen)
++               for d in state.definitions.values() for row in d.constituents]
++        rows,work=T.compare_seats(session.candidates,{},seats,session.rematched,session.exact,
++                                  correct=('hold',('x',)),ell=4.,mode=mode,choose=session.choose,
++                                  background=session.background,method='rematched')
++        return rows,{k:v for k,v in work.items() if k!='seconds'}
++    before=repr(state),repr(obs.__dict__),S.ENGINE.rng.getstate(),C.ENGINE.rng.getstate()
++    old=measured();guard=PruneGuard();monkeypatch.setattr(C.ENGINE,'cache_prune_guard',guard,raising=False)
++    guard.begin_trial(C.ENGINE,S.CTX['trial'])
++    snap=C.snapshot();new=measured()
++    assert new==old and C.snapshot()==snap
++    assert (repr(state),repr(obs.__dict__),S.ENGINE.rng.getstate(),C.ENGINE.rng.getstate())==before
++    assert guard.forbidden_reads==0
++
++
++def test_guard_trial_restored_inside_nested_snapshot(cstar,monkeypatch):
++    guard=PruneGuard();monkeypatch.setattr(C.ENGINE,'cache_prune_guard',guard,raising=False)
++    guard.begin_trial(C.ENGINE,0);saved=C.snapshot()
++    guard.begin_trial(C.ENGINE,1);C.restore(saved)
++    assert guard.trial==0 and len(C.snapshot())==4
++
++
++@pytest.mark.parametrize('mode',['alpha','top1','mixture'])
++def test_real_birth_FH_then_HU_values_unchanged(cstar,retained_U_structure,monkeypatch,mode):
++    from dataclasses import replace
++    from attnstage2_initial import VirtualInitial
++    from attnstage2_questions import Snapshot
++    state,cfg,obs,ai=build()
++    d=replace(state.definitions['R'],name='fresh',registered_at=2)
++    context=dict(definition=d,row=d.constituents[0],first_material=ai.base_graph,
++                 second_visible=ai.target_graph_partial,trial=2,base_age=1,
++                 pre=(ai,state,cfg,Random(1).getstate(),obs,{},True,(),None),
++                 questions=Snapshot(1,1,frozenset({'hold'}),frozenset(),True))
++    def measured():
++        policy=VirtualInitial(loss_mode=mode,mode='global',position='k2',epsilon=.01,
++                              readout_policy=Readout(),feature_policy=N.Features(),
++                              measure_birth_hu=True,session_class=N.Session)
++        return policy(v39.SeatRec(0,'F',2,2,v39.ZERO4,v39.ZERO4),'birth',context)
++    old=measured()
++    guard=PruneGuard();monkeypatch.setattr(C.ENGINE,'cache_prune_guard',guard,raising=False)
++    guard.begin_trial(C.ENGINE,S.CTX['trial']);snap=C.snapshot()
++    assert measured()==old and C.snapshot()==snap and guard.forbidden_reads==0
+diff --git a/tests/test_stage2_speed_basic.py b/tests/test_stage2_speed_basic.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..177b9d733a2ef8989a476758b0cd0708630ac118
+--- /dev/null
++++ b/tests/test_stage2_speed_basic.py
+@@ -0,0 +1,194 @@
++"""指示25。分布・全席の値・同点・保存状態を元の部品と厳密に比べる。"""
++from dataclasses import replace
++from pathlib import Path
++from random import Random
++from types import SimpleNamespace as NS
++import json
++import sys
++
++sys.path[:0] = [str(Path(__file__).resolve().parents[1] / 'tools'),
++               str(Path(__file__).resolve().parents[1])]
++import pytest
++from abm.definition import Constituent, FrequencyTable
++from abm.domains import Entity, Relation, RelationGraph
++from abm.filling import _predicate_has_signature, slot_signature
++from test_attncstar import cstar
++from test_attnstage2_connection import build, retained_U_structure
++from test_sme2017_connection import separate
++import attncstar as N
++import attnstage2 as T
++import cstar_runtime as C
++import cstar_probability as CP
++import sme2017
++import smereplay
++import smeshared as S
++import strictpc
++import v310be as B
++import v39
++from smeprobpool import signature_index, signature_pool
++from attnstage2_distribution import Readout
++
++
++def enable(monkeypatch):
++    monkeypatch.setitem(C.CFG, 'exact_speed', True)
++    monkeypatch.setitem(v39.CFG, 'cstar_exact_speed', True)
++    monkeypatch.setattr(CP, 'BACKGROUND_SOURCE', B.background_probabilities)
++    monkeypatch.setattr(sme2017, 'FINGERPRINT_MEMO', True)
++    monkeypatch.setattr(S, 'EXACT_SPEED', True)
++    monkeypatch.setattr(S, 'TYPED_GRAPH_MEMO', {})
++    monkeypatch.setattr(S, 'TYPED_GRAPH_TRIAL', None)
++
++
++def test_signature_pool_matches_original_with_target_typed_definition_occurrences():
++    rng = Random(25)
++    names = tuple(f'p{i}' for i in range(7))
++    for _ in range(100):
++        def graph(label):
++            rows = []
++            for i in range(rng.randrange(1, 6)):
++                available = ['a', 'b'] + [f'r{j}' for j in range(i)]
++                rows.append(Relation(f'r{i}', rng.choice(names), tuple(
++                    rng.choice(available) for _ in range(rng.randrange(3)))))
++            return RelationGraph(label, (Entity('a'), Entity('b')), tuple(rows))
++        scene, definition = graph('scene'), graph('definition')
++        index = signature_index(scene, definition)
++        vocabulary = frozenset((*names, 'unseen'))
++        for row in definition.relations:
++            sig = slot_signature(row, definition)
++            old = frozenset(p for p in vocabulary
++                           if _predicate_has_signature(p, sig, scene, definition))
++            new = signature_pool(vocabulary, sig, index)
++            assert old == new and tuple(old) == tuple(new)
++
++
++@pytest.mark.parametrize('empty', [False, True])
++def test_background_and_U_answer_keep_order_probabilities_and_ties(cstar, monkeypatch, empty):
++    state, cfg, obs, ai = build()
++    if empty:
++        state = replace(state, p_hat=FrequencyTable({}, 0, .1, frozenset()))
++    original = CP.BACKGROUND_SOURCE
++    definition = state.definitions['R']
++    old = [(original(definition, row, state, ai.target_graph_partial, cfg)['U'],
++            v39.u_answer(definition, row, ai.target_graph_partial, state.p_hat,
++                         cfg.higher_order_predicates)) for row in definition.constituents]
++    enable(monkeypatch)
++    new = [(B.background_probabilities(definition, row, state, ai.target_graph_partial, cfg)['U'],
++            v39.u_answer(definition, row, ai.target_graph_partial, state.p_hat,
++                         cfg.higher_order_predicates)) for row in definition.constituents]
++    assert json.dumps(old) == json.dumps(new)
++
++
++@pytest.mark.parametrize('match_eps', [0, 'shared'])
++def test_Cstar_F_H_U_and_visible_trace_match_original(cstar, retained_U_structure, monkeypatch, match_eps):
++    state, cfg, obs, ai = build()
++    state, _ = v39._convert(state, 'FH', 'R', 1, 2)
++    state, _ = v39._convert(state, 'FH', 'R', 2, 2)
++    state, _ = v39._convert(state, 'HU', 'R', 2, 2)
++    monkeypatch.setitem(C.CFG, 'match_eps', match_eps)
++    raw = replace(ai.base_graph, graph_id='definition:R')
++    typed = S.typed_graph(raw)
++    def measure():
++        with C.phase(state, cfg, ai.target_graph_partial, True):
++            return [C.probabilities_for_graph(raw, typed, ai.target_graph_partial),
++                    C.probabilities_for_graph(ai.base_graph, typed, ai.target_graph_partial),
++                    N.common_bases(ai, state, cfg)]
++    old = measure()
++    enable(monkeypatch)
++    assert json.dumps(measure()) == json.dumps(old)
++
++
++def test_F_shortcut_never_skips_shared_probability(cstar, monkeypatch):
++    state, cfg, obs, ai = build()
++    enable(monkeypatch)
++    real = C.distributions
++    calls = []
++    def counted(*args):
++        calls.append(args[1].slot_index)
++        return real(*args)
++    monkeypatch.setattr(C, 'distributions', counted)
++    with C.phase(state, cfg, ai.target_graph_partial, True):
++        monkeypatch.setitem(C.CFG, 'match_eps', 0)
++        C.probabilities_for_graph(ai.base_graph, S.typed_graph(ai.base_graph), ai.target_graph_partial)
++        assert not calls
++        monkeypatch.setitem(C.CFG, 'match_eps', 'shared')
++        C.probabilities_for_graph(ai.base_graph, S.typed_graph(ai.base_graph), ai.target_graph_partial)
++        assert len(calls) == len(ai.base_graph.relations)
++
++
++def test_fingerprint_memo_preserves_hash_encoding_and_equal_graphs(monkeypatch):
++    graph = sme2017.Graph((sme2017.Node('a', 'entity'),
++                          sme2017.Node('r', 'relation', frozenset({'p'}), ('a',))))
++    before = graph.fingerprint(), hash(graph), smereplay.encode(graph)
++    monkeypatch.setattr(sme2017, 'FINGERPRINT_MEMO', True)
++    for _ in range(3):
++        assert (graph.fingerprint(), hash(graph), smereplay.encode(graph)) == before
++    assert graph == replace(graph)
++    assert '_fingerprint_memo' in graph.__dict__
++    assert '_fingerprint_memo' not in replace(graph).__dict__
++
++
++def test_typed_graph_memo_respects_registration_trial_and_object_identity(separate, monkeypatch):
++    graph = RelationGraph('visible', (Entity('a'),), (Relation('r', 'p', ('a',)),))
++    old = S.typed_graph(graph)
++    monkeypatch.setattr(S, 'EXACT_SPEED', True)
++    monkeypatch.setattr(S, 'TYPED_GRAPH_MEMO', {})
++    monkeypatch.setattr(S, 'TYPED_GRAPH_TRIAL', None)
++    first = S.typed_graph(graph)
++    assert first == old and S.typed_graph(graph) is first
++    monkeypatch.setitem(v39.REG, id(graph), (graph, {'r': frozenset({'q'})}))
++    changed = S.typed_graph(graph)
++    assert changed.by_id['r'].state == 'H' and changed.by_id['r'].names == frozenset({'q'})
++    monkeypatch.delitem(v39.REG, id(graph))
++    monkeypatch.setitem(strictpc.RELPOS, id(graph), frozenset())
++    assert S.typed_graph(graph) is not first
++    monkeypatch.delitem(strictpc.RELPOS, id(graph))
++    monkeypatch.setitem(S.CTX, 'trial', 4)
++    second = S.typed_graph(graph)
++    assert second == first and second is not first
++    assert S.TYPED_GRAPH_MEMO[id(graph)][0] is graph
++
++
++@pytest.mark.parametrize('mode', ['alpha', 'top1', 'mixture'])
++@pytest.mark.parametrize('match_eps', [0, 'shared'])
++def test_all_seat_rematch_and_Cstar_state_are_identical(cstar, retained_U_structure, monkeypatch, mode, match_eps):
++    state, cfg, obs, ai = build()
++    state, _ = v39._convert(state, 'FH', 'R', 1, 2)
++    monkeypatch.setitem(C.CFG, 'match_eps', match_eps)
++    before = repr(state), repr(obs.__dict__), S.ENGINE.rng.getstate(), C.snapshot(), dict(S.STATS)
++    def measure():
++        session = N.Session(ai, state, cfg, Random(1).getstate(), obs, {}, mode='global',
++                            position='k2', door_task=True, epsilon=.01,
++                            readout_policy=Readout(), feature_policy=N.Features())
++        seats = [T.Seat(d.name, row.slot_index, v39.seat_state(d, row, state.slot_history),
++                        state.v39_seats[d.name, row.slot_index].gen)
++                 for d in state.definitions.values() for row in d.constituents]
++        rows, work = T.compare_seats(session.candidates, {}, seats, session.rematched,
++            session.exact, correct=('hold', ('x',)), ell=4., mode=mode, choose=session.choose,
++            background=session.background, method='rematched')
++        work.pop('seconds')
++        return rows, work
++    old = measure()
++    enable(monkeypatch)
++    assert measure() == old
++    assert (repr(state), repr(obs.__dict__), S.ENGINE.rng.getstate(), C.snapshot(), dict(S.STATS)) == before
++
++
++def test_real_two_step_birth_uses_same_questions_and_values(cstar, retained_U_structure, monkeypatch):
++    from attnstage2_initial import VirtualInitial
++    from attnstage2_questions import Snapshot
++    state, cfg, obs, ai = build()
++    definition = replace(state.definitions['R'], name='fresh', registered_at=2)
++    context = dict(definition=definition, row=definition.constituents[0], first_material=ai.base_graph,
++        second_visible=ai.target_graph_partial, trial=2, base_age=1,
++        pre=(ai, state, cfg, Random(1).getstate(), obs, {}, True, (), None),
++        questions=Snapshot(1, 1, frozenset({'hold'}), frozenset(), True))
++    def measure():
++        policy = VirtualInitial(loss_mode='top1', mode='global', position='k2', epsilon=.01,
++            readout_policy=Readout(), feature_policy=N.Features(), measure_birth_hu=True,
++            session_class=N.Session)
++        return policy(v39.SeatRec(0, 'F', 2, 2, v39.ZERO4, v39.ZERO4), 'birth', context)
++    saved = repr(state), repr(obs.__dict__), C.snapshot()
++    old = measure()
++    enable(monkeypatch)
++    assert measure() == old
++    assert (repr(state), repr(obs.__dict__), C.snapshot()) == saved
+diff --git a/tools/attncstar.py b/tools/attncstar.py
+index 4aa53e00c6d20dbc651971df38055db2bb062699..733543920d380b43551bebbc16dece0afcf770cf 100644
+--- a/tools/attncstar.py
++++ b/tools/attncstar.py
+@@ -15,10 +15,16 @@ def common_bases(ai, state, config):
+     rows=tuple(SimpleNamespace(relation=r,slot_index=i) for i,r in enumerate(scene.relations))
+     visible=SimpleNamespace(name='attention-visible',constituents=rows)
+     bases={}
++    import cstar_runtime as C
++    index = None
++    if C.CFG.get('exact_speed'):
++        from smeprobpool import signature_index, signature_pool
++        index = signature_index(scene, scene)
+     for row in rows:
+         signature=slot_signature(row.relation,scene)
+-        pool=frozenset(p for p in state.p_hat.alive_vocab
+-                       if _predicate_has_signature(p,signature,scene,scene))
++        pool = (signature_pool(state.p_hat.alive_vocab, signature, index) if index is not None
++                else frozenset(p for p in state.p_hat.alive_vocab
++                               if _predicate_has_signature(p,signature,scene,scene)))
+         pool=v39._order_pool(pool,visible,row,config.higher_order_predicates)
+         b=dict(_distribution(pool,state.p_hat))
+         bases[row.relation.relation_id]=b if b and sum(b.values())>0 else {None:1.}
+diff --git a/tools/cstar_cache_prune.py b/tools/cstar_cache_prune.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..25439ef11520df366b946fe04ab63710388a0afa
+--- /dev/null
++++ b/tools/cstar_cache_prune.py
+@@ -0,0 +1,75 @@
++"""指示26。過去の呼び出し種の控えだけを試行境界で捨て、再参照を止める。"""
++from pathlib import Path
++import gzip
++import json
++
++
++class PruneGuard:
++    def __init__(self, path=None):
++        self.trial = None
++        # 深い対応や値は持たない。捨てた鍵の種の由来だけを見張りに残す。
++        self.origins = {}
++        self.requests = {'mapping':0, 'engine':0}
++        self.forbidden_reads = 0
++        self.boundaries = 0
++        self.removed = {'cache':0, 'cache_rng':0}
++        self.path = Path(path) if path else None
++        self.stream = gzip.open(self.path,'xt',encoding='utf-8') if self.path else None
++
++    def record(self, row):
++        if self.stream:
++            self.stream.write(json.dumps(row,ensure_ascii=False,separators=(',',':'))+'\n')
++            self.stream.flush()
++
++    def snapshot(self):
++        # 試行の文脈は反実仮想で復元する。監査の回数・由来は診断として残す。
++        return self.trial
++
++    def restore(self, trial):
++        self.trial = trial
++
++    @staticmethod
++    def seed(key):
++        return key[-1] if isinstance(key,tuple) and len(key)>=2 and key[-2]=='call-seed-v1' else None
++
++    def request(self, key, trial, where):
++        seed = self.seed(key)
++        if seed is None: return
++        self.requests[where] += 1
++        if trial != self.trial:
++            raise RuntimeError(('C*の試行の文脈が不一致',self.trial,trial))
++        origin = self.origins.get(seed,trial)
++        if origin != trial:
++            self.forbidden_reads += 1
++            self.record(dict(kind='forbidden_read',trial=trial,origin=origin,seed=seed,where=where,
++                             forbidden_reads=self.forbidden_reads))
++            raise RuntimeError('過去の呼び出し種の控えを参照した')
++        self.origins[seed] = trial
++
++    def begin_trial(self, engine, trial):
++        if self.trial == trial: return
++        removed = {}
++        for name in ('cache','cache_rng'):
++            table = getattr(engine,name)
++            dead = []
++            for key in table:
++                seed = self.seed(key)
++                if seed is not None:
++                    if seed not in self.origins:
++                        raise RuntimeError('C*の控えの種に由来の記録が無い')
++                    if self.origins[seed] != trial: dead.append(key)
++            for key in dead: del table[key]
++            removed[name] = len(dead); self.removed[name] += len(dead)
++        self.trial = trial; self.boundaries += 1
++        self.record(dict(kind='trial_boundary',trial=trial,removed=removed,
++                         cache_count=len(engine.cache),cache_rng_count=len(engine.cache_rng),
++                         self_cache_count=len(engine.self_cache),forbidden_reads=self.forbidden_reads))
++
++    def close(self, native_loop_returned):
++        summary = dict(enabled=True,trial=self.trial,boundaries=self.boundaries,requests=self.requests,
++                       removed=self.removed,forbidden_reads=self.forbidden_reads,
++                       remembered_seed_origins=len(self.origins),native_loop_returned=native_loop_returned)
++        if self.stream:
++            self.record(dict(kind='summary',**summary)); self.stream.close(); self.stream=None
++            Path(str(self.path)+'.summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
++        return summary
+diff --git a/tools/cstar_matcher.py b/tools/cstar_matcher.py
+index 4a1357e094190cf1c7a0773b6fe75572b99747ec..c58b89b886c7eea36de25af3bf2951e1227cf39f 100644
+--- a/tools/cstar_matcher.py
++++ b/tools/cstar_matcher.py
+@@ -46,6 +46,9 @@ class CstarMatcher(Matcher):
+         if self.settings.max_local_score is not None:
+             raise ValueError("C*は上限なしの点の伝達")
+         key = self.match_key(left, right, tie_seed, probabilities=probabilities)
++        guard = getattr(self, 'cache_prune_guard', None)
++        if guard is not None:
++            guard.request(key, guard.trial, 'engine')
+         scope = getattr(self, '_stage2_scope', None)
+         foundation = None
+         if scope is not None:
+diff --git a/tools/cstar_runtime.py b/tools/cstar_runtime.py
+index 759eb06e4fa73ebedb7411ff4689a770a627f3cd..d1d9463a9cb7bc47920965181dc767c3e4059e6f 100644
+--- a/tools/cstar_runtime.py
++++ b/tools/cstar_runtime.py
+@@ -49,8 +49,17 @@ def probabilities_for_graph(raw, graph, scene):
+         if node.kind in ('entity', 'unknown'):
+             continue
+         row = rows[node.key]
+-        values = distributions(d, row, state, scene, config)
+-        st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
++        if CFG.get('exact_speed'):
++            st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
++            # q_Fは固定名の一点分布。Pを使うsharedでは元の分布を作る。
++            if CFG['match_eps'] != 'shared' and st == 'F':
++                out[node.key] = {row.relation.predicate: 1.0}
++                continue
++            values = distributions(d, row, state, scene, config)
++        else:
++            # 旗offの呼び出し順も元のままにする。
++            values = distributions(d, row, state, scene, config)
++            st = v39.seat_state(d, row, state.slot_history) if name in state.definitions else 'F'
+         out[node.key] = values['P' if CFG['match_eps'] == 'shared' else 'q'][st]
+     return out
+ 
+@@ -130,14 +139,18 @@ def initialize(d, row, state, base, target, trial, base_age, config):
+ 
+ 
+ def snapshot():
+-    return ENGINE.snapshot(),dict(CTX),dict(STATS)
++    saved = ENGINE.snapshot(),dict(CTX),dict(STATS)
++    guard = getattr(ENGINE,'cache_prune_guard',None)
++    return saved+(guard.snapshot(),) if guard is not None else saved
+ 
+ 
+ def restore(saved):
+-    engine,context,stats = saved
++    engine,context,stats = saved[:3]
+     ENGINE.restore(engine)
+     CTX.clear(); CTX.update(context)
+     STATS.clear(); STATS.update(stats)
++    if len(saved)==4:
++        ENGINE.cache_prune_guard.restore(saved[3])
+ 
+ 
+ def install(**options):
+@@ -151,7 +164,21 @@ def install(**options):
+     CFG.clear(); CFG.update(options)
+     CTX.clear(); STATS.clear()
+     ENGINE = CstarMatcher(smeshared.ENGINE.settings,tie_seed=0,tie_uniform=smeshared.CTX.get('tie_uniform',False))
++    if options.get('cache_prune_path'):
++        from cstar_cache_prune import PruneGuard
++        ENGINE.cache_prune_guard = PruneGuard(options['cache_prune_path'])
++        original_input = loop._agent_input
++        def agent_input(trial,before):
++            ENGINE.cache_prune_guard.begin_trial(ENGINE,trial.trial)
++            return original_input(trial,before)
++        loop._agent_input = agent_input
+     cstar_probability.BACKGROUND_SOURCE = v310be.probabilities
++    if options.get('exact_speed'):
++        original = cstar_probability.BACKGROUND_SOURCE
++        if original.__module__ != 'v310be' or original.__name__ != 'probabilities':
++            raise RuntimeError('C*の基底の入口が指定版と異なる')
++        cstar_probability.BACKGROUND_SOURCE = v310be.background_probabilities
++        v39.CFG['cstar_exact_speed'] = True
+     if v310be.CFG.get('score_logp'):
+         v310be.STATS['cfg']['epsilon'] = options['logp_eps']
+     if options.get('h_dirichlet') or options['logp_eps'] != .5:
+diff --git a/tools/sme2017.py b/tools/sme2017.py
+index 03dfbadeb7977722120ecb54e71a2854e0918f75..3428549c0428261748af0219460a2806f50057fb 100644
+--- a/tools/sme2017.py
++++ b/tools/sme2017.py
+@@ -15,6 +15,7 @@ import math
+ import random
+ 
+ VERSION = "sme2017-ordered-component-1"
++FINGERPRINT_MEMO = False
+ 
+ 
+ @dataclass(frozen=True)
+@@ -84,9 +85,15 @@ class Graph:
+         return {n.key: n for n in self.nodes}
+ 
+     def fingerprint(self):
++        if FINGERPRINT_MEMO and '_fingerprint_memo' in self.__dict__:
++            return self.__dict__['_fingerprint_memo']
+         data = [(n.key, n.kind, sorted(n.names), n.args, n.state, n.ubiquitous)
+                 for n in sorted(self.nodes, key=lambda x: x.key)]
+-        return hashlib.sha256(json.dumps(data, separators=(",", ":")).encode()).hexdigest()
++        value = hashlib.sha256(json.dumps(data, separators=(",", ":")).encode()).hexdigest()
++        if FINGERPRINT_MEMO:
++            # Graphのdataclass項目・等値・hash・保存形式は変えない。
++            object.__setattr__(self, '_fingerprint_memo', value)
++        return value
+ 
+     def heights(self):
+         by = self.by_id
+diff --git a/tools/smeprobpool.py b/tools/smeprobpool.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..4bc2bad9bcc11f5faaae590a5355484a70166cb9
+--- /dev/null
++++ b/tools/smeprobpool.py
+@@ -0,0 +1,20 @@
++"""既存の署名判定と同じ範囲を、可視の関係の索引から作る。"""
++
++
++def signature_index(target, definition_graph):
++    """候補側の出現も従来どおりtargetの引数型で判定する。"""
++    relation_ids = {row.relation_id for row in target.relations}
++    index = {}
++    for row in (*target.relations, *definition_graph.relations):
++        signature = (len(row.arguments), tuple(
++            'relation' if argument in relation_ids else 'entity'
++            for argument in row.arguments))
++        index.setdefault(row.predicate, []).append(signature)
++    return index
++
++
++def signature_pool(vocabulary, signature, index):
++    """語彙の巡回順・出現しない名前の扱いを既存の式とそろえる。"""
++    return frozenset(predicate for predicate in vocabulary
++                     if predicate not in index or any(
++                         seen == signature for seen in index[predicate]))
+diff --git a/tools/smeshared.py b/tools/smeshared.py
+index 36d96b301c7545915afa5916a1b47a714e8eb3c0..b3de1f87d5d2d487e3d2f95fdac273996de95528 100644
+--- a/tools/smeshared.py
++++ b/tools/smeshared.py
+@@ -27,6 +27,9 @@ CHOICES: dict = {}
+ STATS: dict = {}
+ LOG: dict = {}
+ CTX: dict = {}
++EXACT_SPEED = False
++TYPED_GRAPH_MEMO: dict = {}
++TYPED_GRAPH_TRIAL = None
+ 
+ 
+ def active_version():
+@@ -72,7 +75,18 @@ class SharedAlignment(Alignment):
+ 
+ def typed_graph(g):
+     """登録された許容名・忘れた引数を読む。図の名前や物のラベルは使わない。"""
++    global TYPED_GRAPH_TRIAL
+     v39 = sys.modules.get("v39")
++    sp = sys.modules.get('strictpc')
++    memoize = (EXACT_SPEED and id(g) not in getattr(v39, 'REG', {})
++               and id(g) not in getattr(sp, 'RELPOS', {}))
++    if EXACT_SPEED and TYPED_GRAPH_TRIAL != CTX.get('trial'):
++        TYPED_GRAPH_MEMO.clear()
++        TYPED_GRAPH_TRIAL = CTX.get('trial')
++    if memoize:
++        saved = TYPED_GRAPH_MEMO.get(id(g))
++        if saved is not None and saved[0] is g:
++            return saved[1]
+     entry = getattr(v39, "REG", {}).get(id(g))
+     hallow = entry[1] if entry is not None and entry[0] is g else {}
+     us = sys.modules.get("ustruct")
+@@ -91,7 +105,11 @@ def typed_graph(g):
+     present = entities | set(all_rels)
+     missing = {a for r in all_rels.values() for a in r.arguments if a not in present}
+     nodes.extend(Node(k, "unknown", args=None) for k in missing)
+-    return Graph(tuple(nodes))
++    graph = Graph(tuple(nodes))
++    if memoize:
++        # 強い参照でidの再使用を防ぎ、登録のある定義は毎回作り直す。
++        TYPED_GRAPH_MEMO[id(g)] = (g, graph)
++    return graph
+ 
+ 
+ @lru_cache(maxsize=4096)
+@@ -222,6 +240,9 @@ def map_graphs(base_graph, target_graph_partial, params=None, *, prototype=None,
+     probability = cstar.probabilities_for_graph(base_graph,left,target_graph_partial) if expected else None
+     key = (engine.match_key(left,right,seed,probabilities=probability) if expected
+            else engine.match_key(left,right,seed))
++    if expected and getattr(engine,'cache_prune_guard',None) is not None:
++        # RESULTSが先に返る時も、過去の呼び出し種の参照を見逃さない。
++        engine.cache_prune_guard.request(key,CTX['trial'],'mapping')
+     STATS["requests"] = STATS.get("requests", 0) + 1
+     if key in RESULTS:
+         STATS["reused"] = STATS.get("reused", 0) + 1
+@@ -452,8 +473,13 @@ def restore(snap):
+         current.update(saved)
+ 
+ 
+-def install(path, *, tie_seed, call_seed=False, tie_uniform=False):
+-    global ENGINE, OLD_MAP
++def install(path, *, tie_seed, call_seed=False, tie_uniform=False, exact_speed=False):
++    global ENGINE, OLD_MAP, EXACT_SPEED, TYPED_GRAPH_TRIAL
++    import sme2017
++    EXACT_SPEED = exact_speed
++    sme2017.FINGERPRINT_MEMO = exact_speed
++    TYPED_GRAPH_MEMO.clear()
++    TYPED_GRAPH_TRIAL = None
+     import abm.sme as sme
+     import probeworld
+     import v39
+diff --git a/tools/v310be.py b/tools/v310be.py
+index 1aa885260859e2d3ae3684c8744022b0013f67bf..10377dc7646b585fa2e090129fb3698444102077 100644
+--- a/tools/v310be.py
++++ b/tools/v310be.py
+@@ -71,6 +71,22 @@ def probabilities(d, row, state, scene, config):
+             "F": {n: (1-EPSILON)*(n == row.relation.predicate)+EPSILON*b.get(n, 0.0) for n in names}}
+ 
+ 
++def background_probabilities(d, row, state, scene, config):
++    """C*がUだけを読む場合に、同じbを同じ正規化順で作る。"""
++    import v39
++    from abm.domains import RelationGraph
++    from abm.filling import _distribution, slot_signature
++    from smeprobpool import signature_index, signature_pool
++    dg = RelationGraph('definition', relations=tuple(c.relation for c in d.constituents))
++    sig = slot_signature(row.relation, dg)
++    pool = signature_pool(state.p_hat.alive_vocab, sig, signature_index(scene, dg))
++    pool = v39._order_pool(pool, d, row, config.higher_order_predicates)
++    b = dict(_distribution(pool, state.p_hat))
++    if not b or sum(b.values()) == 0:
++        b = {None: 1.0}
++    return {'U': b}
++
++
+ def log_cost(distribution, predicate, L):
+     """未経験名を含め確率0は L_of の既存の規則で払う。"""
+     p = distribution.get(predicate, 0.0)
+diff --git a/tools/v39.py b/tools/v39.py
+index 87f6f23edebf1406ae38090d9141520ca43cdcc1..fc342d1e918cb9424c59044c8d56042c94c02c30 100644
+--- a/tools/v39.py
++++ b/tools/v39.py
+@@ -385,7 +385,11 @@ def u_answer(d, row, scene, p_hat, hop):
+         return None, "U は棄権"
+     dg = RelationGraph("definition", relations=tuple(c.relation for c in d.constituents))
+     sig = slot_signature(row.relation, dg)
+-    pool = frozenset(p for p in p_hat.alive_vocab if _predicate_has_signature(p, sig, scene, dg))
++    if CFG.get('cstar_exact_speed'):
++        from smeprobpool import signature_index, signature_pool
++        pool = signature_pool(p_hat.alive_vocab, sig, signature_index(scene, dg))
++    else:
++        pool = frozenset(p for p in p_hat.alive_vocab if _predicate_has_signature(p, sig, scene, dg))
+     pool = _order_pool(pool, d, row, hop)
+     if not pool:
+         return None, "適合する名なし"
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index f794de82f826926ced68d4943f0232ee13d41e4a..8803959acc54e71cea17fb9c63790d669172dbc7 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -491,7 +491,8 @@ def worker(task: dict) -> dict:
+     if task.get("sme2017"):
+         import smeshared
+         smeshared.install(side_dir / f"seed{task['seed']:03d}.sme.jsonl.gz", tie_seed=int(task["seed"]), call_seed=task.get("sme_call_seed", False),
+-                          **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}))
++                          **({"tie_uniform": True} if task.get("sme_tie_uniform") else {}),
++                          **({'exact_speed': True} if task.get('stage2_speed') else {}))
+         if task.get("sme_reuse") or task.get("sme_prune"):
+             import smeopt
+             smeopt.install(reuse=task.get("sme_reuse", False), prune=task.get("sme_prune", False))
+@@ -504,7 +505,10 @@ def worker(task: dict) -> dict:
+                             tombstone=task.get("sme_evict_tombstone", False))
+         if task.get("cstar_options"):
+             import cstar_runtime
+-            cstar_runtime.install(**task["cstar_options"])
++            cstar_runtime.install(**task["cstar_options"],
++                                  **({'exact_speed': True} if task.get('stage2_speed') else {}),
++                                  **({'cache_prune_path':out_root.parent/'p10_cache_guard.jsonl.gz'}
++                                     if task.get('stage2_cache_prune') else {}))
+     if task.get("shop_world"):
+         # ★ お店の世界（2026-10-01 未明の予約の委任書「手がかりの世界」）：tools/shopworld.py。世界を作る前、試験の旗より前に入れる。
+         #   v39 の固定辞書に新しい述語を足す
+@@ -635,8 +639,10 @@ def worker(task: dict) -> dict:
+     if task.get("verb_timing"):
+         import verbtiming
+         verbtiming.install(out_root / "timing" / f"seed{task['seed']:03d}.jsonl")
++    native_loop_returned = False
+     try:
+         rec = sweep.run_one(task)
++        native_loop_returned = True
+     except Exception as e:  # noqa
+         if task.get("v39") and type(e).__name__ == "Unfit":
+             # ★ 容量不適合（仕様 8 節）：走行を止めて記録する。台帳は途中まで（完走分だけで成功を主張しない）
+@@ -647,6 +653,8 @@ def worker(task: dict) -> dict:
+     finally:
+         if old_gc_threshold is not None:
+             gc.set_threshold(*old_gc_threshold)
++        if task.get('stage2_cache_prune'):
++            sys.modules['cstar_runtime'].ENGINE.cache_prune_guard.close(native_loop_returned)
+     if "v39" in sys.modules:
+         rec["v39"] = dict(sys.modules["v39"].STATS)
+     if task.get("sme2017"):
+@@ -876,6 +884,10 @@ def main() -> None:
+     ap.add_argument('--stage2-init',choices=('virtual','zero','A'),default='virtual',help='第二段の誕生の初期値：仮の問い（主）、0、局所A（比べ）')
+     ap.add_argument('--stage2-scope',choices=('all','chosen'),default='all',help='最終損の差を測る席：全定義（主）、実際に選ばれた定義だけ（Cの新しい版）')
+     ap.add_argument('--stage2-reuse',choices=('off','on'),default='off',help='C*の第二段で点に依らない照合の土台を試行内で使い回す')
++    ap.add_argument('--stage2-speed', choices=('off','on'), default='off',
++                    help='C*の第二段の同じ分布・グラフを索引と試行内の控えで作る（P10は別旗）')
++    ap.add_argument('--stage2-cache-prune',choices=('off','on'),default='off',
++                    help='指示26のP10：過去の呼び出し種のC*控えだけを捨て、再参照なら止める')
+     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
+     ap.add_argument('--stage2-birth-workers',type=int,default=0,help='出生の仮の問いだけをforkの子N本で解く（0は既存の直列、親子とも模型枠で数える）')
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+@@ -1096,6 +1108,12 @@ def main() -> None:
+         raise SystemExit('第二段をほかの保持の置換と合算しない')
+     if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
+         raise SystemExit('--stage2-reuse onはC*・全部入り・第二段onと一緒に使う')
++    if args.stage2_speed == 'on' and not (args.stage2 == 'on' and args.attn_allin
++                                        and args.match_cstar and args.sme_call_seed):
++        raise SystemExit('--stage2-speed onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
++    if args.stage2_cache_prune == 'on' and not (args.stage2 == 'on' and args.attn_allin
++                                              and args.match_cstar and args.sme_call_seed):
++        raise SystemExit('--stage2-cache-prune onはC*・全部入り・第二段on・呼び出し種と一緒に使う')
+     if args.stage2_birth_hu == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+         raise SystemExit('--stage2-birth-hu onは第二段on・virtual初期値と一緒に使う')
+     if not 0 <= args.stage2_birth_workers <= 7:
+@@ -1112,6 +1130,8 @@ def main() -> None:
+         if args.stage2 == 'on':
+             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
+             if args.stage2_reuse == 'on':task['stage2_reuse']=True
++            if args.stage2_speed == 'on':task['stage2_speed']=True
++            if args.stage2_cache_prune == 'on':task['stage2_cache_prune']=True
+             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
+             if args.stage2_birth_workers:task['stage2_birth_workers']=args.stage2_birth_workers
+         if args.logp_eps != .5:
+@@ -1150,6 +1170,8 @@ def main() -> None:
+                                                     **cstar_options,
+                                                     **({'attn_allin':True} if args.attn_allin else {}),
+                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
++                                                    **({'stage2_speed':True} if args.stage2_speed=='on' else {}),
++                                                    **({'stage2_cache_prune':True} if args.stage2_cache_prune=='on' else {}),
+                                                     **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
+                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
+                                                     **({"attn_sme": args.attn_sme, "attn_position": args.attn_position,

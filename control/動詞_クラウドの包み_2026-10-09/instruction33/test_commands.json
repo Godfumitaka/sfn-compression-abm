@@ -1,0 +1,65 @@
+{
+  "serial": {
+    "command": [
+      "$PYTHON",
+      "-B",
+      "$PACKAGE/run_structural.py",
+      "$SOURCE",
+      "$NEW_TEST_RUNTIME_SERIAL",
+      "--test-python",
+      "$TEST_PYTHON",
+      "--receipt",
+      "$RECEIPT33_34",
+      "--mode",
+      "serial"
+    ],
+    "memory_gib": 0.5,
+    "cpu_slots": 1,
+    "model_slots": 0,
+    "actual_passed": null,
+    "same_machine_fresh_resources_required": true,
+    "do_not_rerun_completed_or_waiting": true
+  },
+  "extra": {
+    "command": [
+      "$PYTHON",
+      "-B",
+      "$PACKAGE/run_extra_structural.py",
+      "$SOURCE",
+      "$NEW_TEST_RUNTIME_EXTRA",
+      "--test-python",
+      "$TEST_PYTHON",
+      "--receipt",
+      "$RECEIPT33_34",
+      "--mode",
+      "serial"
+    ],
+    "memory_gib": 0.5,
+    "cpu_slots": 1,
+    "model_slots": 0,
+    "actual_passed": null,
+    "same_machine_fresh_resources_required": true,
+    "do_not_rerun_completed_or_waiting": true
+  },
+  "birth": {
+    "command": [
+      "$PYTHON",
+      "-B",
+      "$PACKAGE/run_structural.py",
+      "$SOURCE",
+      "$NEW_TEST_RUNTIME_BIRTH",
+      "--test-python",
+      "$TEST_PYTHON",
+      "--receipt",
+      "$RECEIPT33_34",
+      "--mode",
+      "birth"
+    ],
+    "memory_gib": 0.5,
+    "cpu_slots": 5,
+    "model_slots": 0,
+    "actual_passed": null,
+    "same_machine_fresh_resources_required": true,
+    "do_not_rerun_completed_or_waiting": true
+  }
+}
