@@ -38,7 +38,7 @@ def test_native_collective_probe_does_not_enter_D(installed, monkeypatch):
 def test_eight_real_processes_have_disjoint_D_and_audit_files(tmp_path):
     # 模型は走らせない。八個体を別のPython過程で順に作り、親の控えへ戻らないことも点検。
     before = N.probe_snapshot()
-    native = """
+    native = r"""
 import json,os,sys
 from pathlib import Path
 import useforget as D
