@@ -1,0 +1,45 @@
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1754.1 MB、今 1746.1 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1798.8 MB、今 1798.8 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1798.8 MB、今 1798.8 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1798.8 MB、今 1786.1 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1798.8 MB、今 1786.1 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1798.8 MB、今 1788.6 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1598.8 MB → 最大 1855.7 MB、今 1855.7 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1724.1 MB → 最大 1855.7 MB、今 1855.7 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1754.1 MB → 最大 1855.7 MB、今 1841.6 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1754.1 MB → 最大 1855.7 MB、今 1825.6 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1798.8 MB → 最大 1855.7 MB、今 1825.6 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1798.8 MB → 最大 1855.7 MB、今 1834.2 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1786.1 MB → 最大 1855.7 MB、今 1834.2 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1786.1 MB → 最大 1855.7 MB、今 1834.2 MB）
+拒む：
+  - スワップが直近 10 分で増えた（窓の最初 1788.6 MB → 最大 1855.7 MB、今 1840.2 MB）
+受け付けた：PID 85534、担当 intervention-instruction25-saved-tau04-comparison01、見込み 1.0 GB（表の合計 20.0 / 24 GB）。スワップは直近 10 分で増えていない（1855.7 MB → 今 1840.2 MB）
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/compare_saved_tau04_01.py", line 28, in <module>
+    before_sha={str(case):{rel:digest(case/'output'/rel) for rel in ver['output_sha256']} for case,ver in saved_cases}
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'str' object is not callable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction25/compare_saved_tau04_01.py", line 107, in <module>
+    after_sha={str(case):{rel:digest(case/'output'/rel) for rel in ver['output_sha256']} for case,ver in saved_cases}
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'str' object is not callable
+消した：PID 85534

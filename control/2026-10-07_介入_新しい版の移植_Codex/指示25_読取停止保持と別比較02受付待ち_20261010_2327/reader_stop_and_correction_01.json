@@ -1,0 +1,21 @@
+{
+  "at_jst": "2026-10-10T23:27:22.825250+09:00",
+  "status": "reader_stopped_before_output_comparison",
+  "receipt_delivery_unchanged": true,
+  "original_entry_sha256": "87ed85714a8bd9ccaba5a5d0c05ce3f5fcdf34dff7428ad12ff49d212fd3a991",
+  "corrected_entry_sha256": "03b545bc214eda6ddcc937e1999b563c01c5095064faead5f129f56dabc289ae",
+  "old_log_sha256": "8847e137d6d52641488734a434da72fbe7b765448bf999ed332c1d978b17355f",
+  "jobs_pid": 85534,
+  "exit_code": 1,
+  "exception": "TypeError: 'str' object is not callable",
+  "first_entry_line": 28,
+  "cause": "固定比較器のSHA参照ループの値変数digestが、同名のSHA関数digestを上書きした。",
+  "correction_scope": "指示6：別名のexpected_digestに替えるだけ。実比較条件・全記録・原順・指定二欄・各側試験前後不変と成分代替を減らさない。別結果02へ保存する。",
+  "model_runs": 0,
+  "old_entry_and_stop_preserved": true,
+  "new_entry_syntax_passed": true,
+  "other_changes": "結果名・新受付名・新保存名のみ。受付と予約の決まりは維持する。",
+  "independent_admission_wait_seconds": null,
+  "independent_cpu_wait_seconds": null,
+  "elapsed_submission_to_outer_end_seconds": 927.1433768272399
+}
