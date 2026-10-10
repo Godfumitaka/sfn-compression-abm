@@ -135,8 +135,10 @@ def registered(case, clearance=None):
     # ここだけが開始直前の全機械ps。開始後の常駐停止/再開機構は作らない。
     raw = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,rss=,stat=,args='], text=True)
     counts = start_counts(raw)
-    # 子20は親を含め21。現行の8模型の規則は指示28の準備でも外さない。
-    assert counts['model_process_count']+children+1 <= 8 and counts['unknown_active_spawn'] == 0
+    # 指示32の直接承認。専用Google Cloud機械だけを既存受付の確認で特定する。
+    dedicated_gcp = linux and proof.get('dedicated_google_cloud_gate_and_production_machine') is True
+    model_limit = limit if dedicated_gcp else 8
+    assert counts['model_process_count']+children+1 <= model_limit and counts['unknown_active_spawn'] == 0
     assert counts['outside_heavy']+children+2 <= limit
     free = shutil.disk_usage(case).free
     assert free >= 20*2**30

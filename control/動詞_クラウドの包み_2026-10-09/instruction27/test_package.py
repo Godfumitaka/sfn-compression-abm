@@ -123,7 +123,7 @@ def test_observer_is_fixed_instruction26_bytes():
 def test_runner_never_stops_or_resumes_running_production_and_guards_before_launch():
     source = (HERE/'run_registered.py').read_text()
     assert 'SIGSTOP' not in source and 'SIGCONT' not in source and 'killpg' not in source
-    assert source.index("assert counts['model_process_count']+children+1 <= 8") < source.index('child = subprocess.Popen')
+    assert source.index("assert counts['model_process_count']+children+1 <= model_limit") < source.index('child = subprocess.Popen')
     assert source.index("assert counts['outside_heavy']+children+2 <= limit") < source.index('child = subprocess.Popen')
     assert source.index("assert spec['ready_to_start'] is True") < source.index('child = subprocess.Popen')
     tree = ast.parse(source)
