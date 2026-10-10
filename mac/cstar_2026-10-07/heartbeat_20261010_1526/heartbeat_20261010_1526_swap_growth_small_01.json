@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-10T15:26:56.130284+09:00",
+  "fetched_commit": "10d2292be23ca6ae3f45caf37a472b1a3e2b2e7d",
+  "previous_confirmation": {
+    "at": "2026-10-10T14:56:57.750099+09:00",
+    "confirmation_at": "2026-10-10T14:56:57.748977+09:00",
+    "fetched_commit": "6c0a5325d1dc63648fec2af2bc2e564e2a41723b",
+    "resources": {
+      "at": "2026-10-10T14:56:57.750099+09:00",
+      "free_bytes": 182026829824,
+      "swap_grew": true,
+      "thermal_warning": null,
+      "swap_mb": 529.94
+    },
+    "swap": {
+      "exit": 0,
+      "out": "vm.swapusage: total = 1024.00M  used = 521.94M  free = 502.06M  (encrypted)\n",
+      "err": ""
+    }
+  },
+  "current_confirmation": {
+    "at": "2026-10-10T15:26:56.134950+09:00",
+    "confirmation_at": "2026-10-10T15:26:56.130284+09:00",
+    "resources": {
+      "at": "2026-10-10T15:26:56.134950+09:00",
+      "free_bytes": 180881039360,
+      "swap_grew": false,
+      "thermal_warning": null,
+      "swap_mb": 921.69
+    },
+    "swap": {
+      "exit": 0,
+      "out": "vm.swapusage: total = 2048.00M  used = 921.69M  free = 1126.31M  (encrypted)\n",
+      "err": ""
+    },
+    "thermal": {
+      "exit": 0,
+      "out": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "err": ""
+    }
+  },
+  "increase_mb": "391.75",
+  "model_counts": {
+    "own_compute_count": 4,
+    "external_count": 3,
+    "total_compute_count": 7,
+    "cap": 8
+  },
+  "observed_own_state": "running",
+  "admission_pid": 49493,
+  "controller_pid": 49499,
+  "model_group": 49509,
+  "memory_reservation_gib": 10,
+  "rss_warning_tail_unchanged": true,
+  "production_stopped": false,
+  "new_followup_models_on_hold": true,
+  "new_models_started": 0,
+  "source_flags_observer_reservation_changed": false,
+  "causal_attribution": null,
+  "measurement_note": "資源条件のswap_mbはjobs/swap.tsvの直近10分の最後の保存標本で、今回921.69MB・前回529.94MB・差391.75MB。別のsysctlの直接表示は今回921.69MB・前回521.94MB。今回の資源条件swap_grewは偽で、直近10分の保存標本の最大と最初の比較による判定。30分の二つの確認の差と同じ判定ではない。14:56の小さい表の「資源条件の直接確認」はsamplerの保存標本を指し、別に読んだsysctlの値と区別する。元の標本・判定・過去の記録は保存し、監督と受付の規則を変更していない。"
+}
