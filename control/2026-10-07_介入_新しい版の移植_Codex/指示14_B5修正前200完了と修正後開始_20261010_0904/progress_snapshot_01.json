@@ -1,0 +1,514 @@
+{
+  "at_jst": "2026-10-10T09:08:53.307661+09:00",
+  "state": "B5_on200_before_verified_after_running",
+  "before": {
+    "state": "completed",
+    "started_at_jst": "2026-10-10T04:08:25.429738+09:00",
+    "wrapper_pid": 50889,
+    "command": {
+      "name": "B5_on200_before",
+      "commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+      "models": 1,
+      "parallel": false,
+      "phase": "on1",
+      "seeds": [
+        1
+      ],
+      "model_argv": [
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline/tools/v3_run.py",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before/output",
+        "--nohash",
+        "--vt",
+        "0.3842",
+        "--extend-rule",
+        "none",
+        "--charge1",
+        "d32",
+        "--fast",
+        "--no-public-history",
+        "--dump-slot-history",
+        "--fix2-full",
+        "--fix-order2",
+        "--proj-first",
+        "--fill-norestate",
+        "--no-charge2",
+        "--own-evidence",
+        "--v39",
+        "--v39-budget",
+        "inf",
+        "--v39-decay",
+        "actr",
+        "--v310-be",
+        "--hist-role",
+        "--score-role",
+        "--nsim",
+        "0.7",
+        "--ident-rho",
+        "0.5",
+        "--ident-argmax",
+        "--ident-commons",
+        "--u-struct",
+        "--relearn-init",
+        "--tie-struct",
+        "--amb-local",
+        "--dump-answers",
+        "--dump-routing",
+        "--answer-gap",
+        "--strict-pc",
+        "--probe-world",
+        "--cells",
+        "f0.1000_th2.1000_first_order",
+        "--no-compare",
+        "--shop-world",
+        "2",
+        "--shop-exc",
+        "0.2",
+        "--trial-count",
+        "200",
+        "--v39-price",
+        "0.01873710622997919",
+        "--e-price",
+        "0.01873710622997919",
+        "--workers",
+        "1",
+        "--seeds",
+        "1",
+        "--sme2017",
+        "--sme-call-seed",
+        "--sme-tie-uniform",
+        "--v311c",
+        "--v311c-f",
+        "0.1",
+        "--v311c-groups",
+        "0",
+        "--v311c-runs",
+        "1",
+        "--v311c-q",
+        "0",
+        "--v311c-m",
+        "0",
+        "--v311c-recv",
+        "A",
+        "--v311c-b-n",
+        "8",
+        "--v311c-probe-shop",
+        "--v311c-lineage",
+        "--v311c-probe-every",
+        "100",
+        "--sme-intern-cache",
+        "--sme-evict-trial-cache",
+        "--sme-evict-tombstone",
+        "--score-logp",
+        "--score-arg-order",
+        "--match-cstar",
+        "--match-cstar-e",
+        "--h-dirichlet",
+        "1",
+        "--birth-score",
+        "seq",
+        "--logp-eps",
+        "0.01",
+        "--match-eps",
+        "0",
+        "--attn-sme",
+        "global",
+        "--attn-position",
+        "k2",
+        "--attn-eta",
+        "0.1",
+        "--attn-allin",
+        "--stage2",
+        "on",
+        "--stage2-loss",
+        "top1",
+        "--stage2-init",
+        "virtual",
+        "--stage2-scope",
+        "all",
+        "--stage2-birth-hu",
+        "on",
+        "--v311c-serial",
+        "--v311c-no-tags",
+        "--v311c-audit"
+      ],
+      "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+      "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+      "reservation_gb": 3,
+      "requires": [
+        "gate-off8.json",
+        "gate-components.json"
+      ],
+      "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline",
+      "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+      "export_final": true,
+      "production_started": false,
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_on1_200.json",
+      "reference_sha256": "a47c87cb19629a98f09fcbe15cf5c35b482c184cadba411fab3252da92c8c565",
+      "deadline_jst": "2026-10-13T09:00:00+09:00"
+    },
+    "admission_wait_seconds": 0.18999814987182617,
+    "cpu_wait_seconds": 0.06601995800156146,
+    "production_started": false,
+    "model_parent_pid": 50896,
+    "exit_code": 0,
+    "ended_at_jst": "2026-10-10T08:52:14.208414+09:00",
+    "model_seconds": 17028.644930167007,
+    "protected_unchanged": true,
+    "peak_children_rss_bytes": 2738421760
+  },
+  "after_at_check": {
+    "state": "running",
+    "started_at_jst": "2026-10-10T08:52:21.477498+09:00",
+    "wrapper_pid": 85048,
+    "command": {
+      "name": "B5_on200_after",
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 1,
+      "parallel": false,
+      "phase": "on1",
+      "seeds": [
+        1
+      ],
+      "model_argv": [
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5/tools/v3_run.py",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+        "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after/output",
+        "--nohash",
+        "--vt",
+        "0.3842",
+        "--extend-rule",
+        "none",
+        "--charge1",
+        "d32",
+        "--fast",
+        "--no-public-history",
+        "--dump-slot-history",
+        "--fix2-full",
+        "--fix-order2",
+        "--proj-first",
+        "--fill-norestate",
+        "--no-charge2",
+        "--own-evidence",
+        "--v39",
+        "--v39-budget",
+        "inf",
+        "--v39-decay",
+        "actr",
+        "--v310-be",
+        "--hist-role",
+        "--score-role",
+        "--nsim",
+        "0.7",
+        "--ident-rho",
+        "0.5",
+        "--ident-argmax",
+        "--ident-commons",
+        "--u-struct",
+        "--relearn-init",
+        "--tie-struct",
+        "--amb-local",
+        "--dump-answers",
+        "--dump-routing",
+        "--answer-gap",
+        "--strict-pc",
+        "--probe-world",
+        "--cells",
+        "f0.1000_th2.1000_first_order",
+        "--no-compare",
+        "--shop-world",
+        "2",
+        "--shop-exc",
+        "0.2",
+        "--trial-count",
+        "200",
+        "--v39-price",
+        "0.01873710622997919",
+        "--e-price",
+        "0.01873710622997919",
+        "--workers",
+        "1",
+        "--seeds",
+        "1",
+        "--sme2017",
+        "--sme-call-seed",
+        "--sme-tie-uniform",
+        "--v311c",
+        "--v311c-f",
+        "0.1",
+        "--v311c-groups",
+        "0",
+        "--v311c-runs",
+        "1",
+        "--v311c-q",
+        "0",
+        "--v311c-m",
+        "0",
+        "--v311c-recv",
+        "A",
+        "--v311c-b-n",
+        "8",
+        "--v311c-probe-shop",
+        "--v311c-lineage",
+        "--v311c-probe-every",
+        "100",
+        "--sme-intern-cache",
+        "--sme-evict-trial-cache",
+        "--sme-evict-tombstone",
+        "--score-logp",
+        "--score-arg-order",
+        "--match-cstar",
+        "--match-cstar-e",
+        "--h-dirichlet",
+        "1",
+        "--birth-score",
+        "seq",
+        "--logp-eps",
+        "0.01",
+        "--match-eps",
+        "0",
+        "--attn-sme",
+        "global",
+        "--attn-position",
+        "k2",
+        "--attn-eta",
+        "0.1",
+        "--attn-allin",
+        "--stage2",
+        "on",
+        "--stage2-loss",
+        "top1",
+        "--stage2-init",
+        "virtual",
+        "--stage2-scope",
+        "all",
+        "--stage2-birth-hu",
+        "on",
+        "--v311c-serial",
+        "--v311c-no-tags",
+        "--v311c-audit"
+      ],
+      "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+      "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+      "reservation_gb": 3,
+      "requires": [
+        "gate-off8.json",
+        "gate-components.json"
+      ],
+      "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5",
+      "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+      "export_final": true,
+      "production_started": false,
+      "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_on1_200.json",
+      "reference_sha256": "a47c87cb19629a98f09fcbe15cf5c35b482c184cadba411fab3252da92c8c565",
+      "deadline_jst": "2026-10-13T09:00:00+09:00"
+    },
+    "admission_wait_seconds": 17023.62489914894,
+    "cpu_wait_seconds": 0.07973574998322874,
+    "production_started": false,
+    "model_parent_pid": 85055
+  },
+  "verification": {
+    "at_jst": "2026-10-10T09:04:31.651751+09:00",
+    "state": "passed",
+    "case": "B5_on200_before",
+    "passed": true,
+    "production_started": false,
+    "trial_count": 200,
+    "ledger_rows": 200,
+    "source_commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+    "machine_boot_sha256": "773eeecfe3afc3ccc34847d05ee94097573d18caef28686fec53924894004b80",
+    "manifest_records": 1,
+    "communication_errors": 0,
+    "agent_errors": 0,
+    "dictionary_checks": 400,
+    "rng_records": {
+      "model-rng.jsonl": 200,
+      "rng.jsonl": 200
+    },
+    "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+    "protected_unchanged": true,
+    "peak_agent_rss_bytes": 1149583360,
+    "peak_children_rss_bytes": 2738421760,
+    "admission_wait_seconds": 0.18999814987182617,
+    "cpu_wait_seconds": 0.06601995800156146,
+    "model_seconds": 17028.644930167007,
+    "completed_at_jst": "2026-10-10T08:52:14.208414+09:00"
+  },
+  "verification_case_files": {
+    "agent0.probe-times.jsonl": {
+      "sha256": "3793d54e01c0806f468548a21e6a60cf902361903549155a716f54ca3031beac",
+      "bytes": 551
+    },
+    "agent0.rng.jsonl": {
+      "sha256": "e92e7f311353fa6aace327d5495ddad2de59c6d3dd63659ffc7810e11c33d587",
+      "bytes": 1475890
+    },
+    "protected_before.json": {
+      "sha256": "2ab25e1abb433c2b651e612f3073c42533d8b937d0982370abadc34be860b0a4",
+      "bytes": 42715
+    },
+    "runtime.json": {
+      "sha256": "451cf0f5d0b323878fc418f9848a17771181cf274f0ca8400b596abcf8ccbc3e",
+      "bytes": 6073
+    },
+    "protected_after.json": {
+      "sha256": "2ab25e1abb433c2b651e612f3073c42533d8b937d0982370abadc34be860b0a4",
+      "bytes": 42715
+    },
+    "agent0.performance.jsonl": {
+      "sha256": "0f2742bfb834a2e859c6f4d9f1e421bee8f3dd55fced206b5d3f13e11076b45c",
+      "bytes": 71505
+    },
+    "agent0.cstar-final.json": {
+      "sha256": "802caa210b972ba21c6167d5b839ea1e894b6e9001c93993f1aa7fa4df6080b0",
+      "bytes": 183160820
+    },
+    "agent0.boundaries.jsonl": {
+      "sha256": "8c911848c46d1dc069d22716a8591cfa8fddaade0fdc880dcc37327deb414259",
+      "bytes": 728
+    },
+    "agent0.model-rng.jsonl": {
+      "sha256": "e92e7f311353fa6aace327d5495ddad2de59c6d3dd63659ffc7810e11c33d587",
+      "bytes": 1475890
+    },
+    "before_start.json": {
+      "sha256": "6db57cabaf7e0494afe22b2151722d58aaf75b18e059167fa350bb7d5db4a079",
+      "bytes": 1575
+    },
+    "agent0.pid.json": {
+      "sha256": "3a50436fbf87021daaa2b667a2cc6b75ef355187a30220821d8275017f81a9fb",
+      "bytes": 26
+    },
+    "model.log": {
+      "sha256": "75aa3881614a1e5f237fc4cb32eeb6a3806d44be70536142f4389cab89d39203",
+      "bytes": 654
+    },
+    "agent0.final-sme.jsonl.gz": {
+      "sha256": "0eabc5cf45b788dcdf00a6a1383a91665e684c59701926c84c1fdda7d83cafa0",
+      "bytes": 325978
+    },
+    "agent0.validation.jsonl": {
+      "sha256": "dd39c537aea5fa97f34dadb1d2a93378a7974f59bf0314f033ca164151b3498b",
+      "bytes": 202
+    },
+    "status.json": {
+      "sha256": "24458b3e724bd5f1549f268d2c9db047336228668c98d2d00f0ed8150a2f2807",
+      "bytes": 4200
+    },
+    "output/manifest.jsonl": {
+      "sha256": "7116d0eba253a57c7b5a08d61f45b4bf1b4177a080dbff519ccdbaef760cb5d7",
+      "bytes": 14309
+    },
+    "output/flag.json": {
+      "sha256": "01c3b57e41d9b13dbacefcf35f22d351261bb06462c6077913d1aa6e128bb8b5",
+      "bytes": 2095
+    },
+    "output/comm/run001.lineage.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "output/comm/run001.summary.json": {
+      "sha256": "030cded7cf0ca665e5d4381d0f2194cc4c9df8e630c4ef6dcaeb43fa30a7bcb0",
+      "bytes": 14656
+    },
+    "output/comm/run001.jsonl": {
+      "sha256": "e3fa14f5098cda68f80c77e53bec1e64468b4576248bc9dbdb8608ef5a3d5023",
+      "bytes": 49227
+    },
+    "output/comm/run001.jsonl.state.jsonl": {
+      "sha256": "883302ca69e76dabd8e23a575aa4762f1876b369f3344f45628fedb86ded7968",
+      "bytes": 69237
+    },
+    "output/attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "c9830262615e35a3eac1ea220e8d0c8d93d6a0ca845e532d0307be7643056dd5",
+      "bytes": 403030
+    },
+    "output/attention/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json": {
+      "sha256": "1951bd2d508f36b35d8dd35475a9282692f122c72e7b8a0a63bfd0e66ef76634",
+      "bytes": 2931
+    },
+    "output/evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz": {
+      "sha256": "49a483aa90197336043320c560c9f28f2661621a3fcbec5521faefd1b039657c",
+      "bytes": 1549207
+    },
+    "output/evictions/f0.1000_th2.1000_vt0.3842_first_order/seed001.keys.jsonl.gz.summary.json": {
+      "sha256": "01efbd85e1979fc48fc9d0cb7f68351dff83b5209df8bd6994cd9abb70626565",
+      "bytes": 277
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.jsonl.gz": {
+      "sha256": "e04f406b5bbb4d62a4f7b0301986c124d2355088b658889544709ed35005dcfc",
+      "bytes": 4700214
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.diagnostics.jsonl.gz": {
+      "sha256": "4a4f45a0771c4f46863d33dc2758a9c36c2f28e9dd6ad2dc5f24301d1500f755",
+      "bytes": 1561416
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.probe.jsonl": {
+      "sha256": "017094773d7c7cf4ba58d3fb38b73991ae25e978c079ea3e60ce62362c830e95",
+      "bytes": 48111
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.shop.jsonl": {
+      "sha256": "926fee3c645cd765eae3db33697f94f4606906af3ccb8dafb25a84b55ac0c294",
+      "bytes": 116354
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.ambig.csv": {
+      "sha256": "76feb738f79339e18819558163f3543427b864a89289d9160666918d21b3cfa3",
+      "bytes": 677
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.answers.csv": {
+      "sha256": "e7cc2b2cc070f26783264b7fd43f34ea482de69d6006832465031c27585785e6",
+      "bytes": 1629
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.routing.jsonl": {
+      "sha256": "c20f79fba00f2c682cc142defc2d7f0b3a586bbc58c4c06d6a5ca180d7a192ad",
+      "bytes": 1510606
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.collective-runtime.jsonl.gz": {
+      "sha256": "f59456c30f913f585950bf0f24e529565b712fe8461c6c1cf9876c6a61921e82",
+      "bytes": 26577284
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl": {
+      "sha256": "a17d03c59a97d5bad5760739b87cbc862b1ca3301853b5d1f331df1761aca4d8",
+      "bytes": 741018
+    },
+    "output/side/f0.1000_th2.1000_vt0.3842_first_order/seed001.sme.states.jsonl.gz": {
+      "sha256": "c649c453ef5e69aeb189f0c6bd21e7bf87675afad73ec419b5846ac5ceff1dd2",
+      "bytes": 14574737
+    },
+    "output/ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "87116f84e8628fc2b1272dbba1c20ae70082db1c7f54ff4f0134ada4bbbfa3ee",
+      "bytes": 1803531
+    },
+    "output/ledgers/cells/f0.1000_th2.1000_vt0.3842_first_order/seed001.done": {
+      "sha256": "96657b5a04d7fd1f0ec0d2469381568f1bbde410b6238edf31061389250383d5",
+      "bytes": 580
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz": {
+      "sha256": "45d395558629ef9c4685295e05037dbdb0f5c570f2423986fb00a8cc35c206f0",
+      "bytes": 10731
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.summary.json": {
+      "sha256": "6d74560ab8bd18a17d7bb1f2c0499ee4132210b2a07b8a472d365b0c5abc36e0",
+      "bytes": 501
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.jsonl.gz": {
+      "sha256": "84dba0a7ada2a349d77d98441336839bf54ad6868df173d0d691909e5f480e7f",
+      "bytes": 1942816
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.rematch.summary.json": {
+      "sha256": "dd0bbcd6b8c7f238f41e7344d6dba181168b2b266a505d9975f04095c2576b2b",
+      "bytes": 733
+    },
+    "output/stage2/f0.1000_th2.1000_vt0.3842_first_order/seed001.jsonl.gz.initial.jsonl.gz": {
+      "sha256": "f5c9c717a58f1937a051455a897f6524229893e01bb9259167d6a9acf9847205",
+      "bytes": 1604744
+    }
+  },
+  "native_comparison_started": false,
+  "B5_accepted": false,
+  "B6_started": false,
+  "cloud_B5b_started": false,
+  "instruction15_index_wait": true,
+  "next_action": "修正前ON200は通常受付87004の完了点検済み。修正後は同じ受付50927・3GBから自然に開始した一本の自然終了を読む。再登録・予約変更・模型再起動をしない。終了後は既存verify_case_dependency01.pyを通常受付owner明示・mem0.3・実出力先で一度点検し、両側の必要記録が揃ってから原比較器を残した別入口に指示16の範囲を適用する。全模型欄・原順・試験行・控え/乱数・必須メタデータを減らさず、一件でも不一致なら最初のファイル/行を保存して停止。B5(b)は同じ機械の元関門待ち。B5全体未合格、B6は始めない。"
+}

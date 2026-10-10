@@ -1,0 +1,13 @@
+{
+  "at_jst": "2026-10-10T09:07:11.290866+09:00",
+  "action": "additional_read_of_agent0.cstar-final.json_without_admission",
+  "used_admission": false,
+  "read_completed": true,
+  "production_or_output_changed": false,
+  "excluded_from_gate_evidence": true,
+  "resource_reservation_gb": null,
+  "peak_rss_bytes": null,
+  "cause": "最終控えを小さい辞書と誤認してjson.loadsとlist(value)の表示を行い、実際には183160820バイトの型付きリスト全体を展開した",
+  "observed_tool_output_tokens": 44036092,
+  "remedy": "再実行しない。大きい控えの追加解析は実測予約と通常受付へ通す。通常受付87004の既存完了点検とは分ける。"
+}

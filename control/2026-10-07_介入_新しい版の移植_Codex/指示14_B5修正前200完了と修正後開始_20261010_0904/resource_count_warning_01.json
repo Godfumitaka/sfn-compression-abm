@@ -1,0 +1,63 @@
+{
+  "at_jst": "2026-10-10T09:07:30.906489+09:00",
+  "reason": "旧RSS閾値の計数に実在するB5個体PIDを含める警告点検",
+  "old_entry_count": 6,
+  "known_model_pid": 85060,
+  "known_pid_in_old_entry": false,
+  "active": 7,
+  "paused": 0,
+  "excluded_parents": [],
+  "processes": [
+    {
+      "pid": 534,
+      "parent": 519,
+      "stat": "R",
+      "rss": 1328832,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "parent": 562,
+      "stat": "R",
+      "rss": 3085264,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 85060,
+      "parent": 85059,
+      "stat": "R",
+      "rss": 57248,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after/runtime.json"
+    },
+    {
+      "pid": 85391,
+      "parent": 49513,
+      "stat": "R",
+      "rss": 1423344,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 85392,
+      "parent": 49513,
+      "stat": "R",
+      "rss": 1079568,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 85393,
+      "parent": 49513,
+      "stat": "R",
+      "rss": 1074848,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 85394,
+      "parent": 49513,
+      "stat": "R",
+      "rss": 1081904,
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "free_disk_bytes": 177283768320,
+  "admission_or_model_settings_changed": false
+}
