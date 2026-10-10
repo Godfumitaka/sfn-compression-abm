@@ -17,7 +17,8 @@ from run_registered import start_counts
 def test_all_40_only_seed_B_price_and_birth_children_change():
     flags = json.loads((HERE/'mac_flags.json').read_text())['flags']
     plan = json.loads((HERE/'plan.json').read_text())
-    assert len(plan['commands']) == 40
+    assert len(plan['commands']) == 70
+    assert sum(s['arm'] in ('#19', '#19L25', '#19L90') for s in plan['commands'].values()) == 40
     groups = {'#19':(range(1, 11), '0.00035129738499384776'),
               '#19L25':(range(1, 6), '0.00010926774617357411'),
               '#19L90':(range(1, 6), '0.00699330963316462')}
@@ -115,9 +116,14 @@ def test_real_worker_census_does_not_add_parent_supervisor_tracker_T_Z():
 
 
 def test_observer_is_fixed_instruction26_bytes():
-    original = HERE.parent/'instruction26_production/tools'
-    for p in (HERE/'tools').rglob('*.py'):
-        assert p.read_bytes() == (original/p.relative_to(HERE/'tools')).read_bytes()
+    original = {
+        'tools/confirmed_hash.py':'d340b030c3a1906bdaefa443b4b1fdc492473913d7c59344e467fad177f5b77e',
+        'tools/checkpoint_observer.py':'f789566f0846375cf7bb5f6e92d16875737483813f103080cf590d82535c6abb',
+        'tools/instruction11_io.py':'2db2c8bb0ede284e7071979dda3b1189fe6db2745a31f3e288f153c75ab8871e',
+        'tools/timing100_observer.py':'635916dbde8cca3dc2ac085e53cdf385a1fd1a18d77b5561633e382e481c866a',
+        'tools/production/measurement_driver.py':'b3f6222fd3d01dfcfebfe46bcd199af5cbadfb3a94962a3c404e4730125397ad'}
+    for rel, digest in original.items():
+        assert hashlib.sha256((HERE/rel).read_bytes()).hexdigest() == digest
 
 
 def test_runner_never_stops_or_resumes_running_production_and_guards_before_launch():
@@ -132,15 +138,22 @@ def test_runner_never_stops_or_resumes_running_production_and_guards_before_laun
 
 
 def test_manifest_same_original_function_structure():
-    old = (HERE.parent/'instruction22_birth/compare_probe100.py').read_text()
     new = (HERE/'manifest_counts.py').read_text()
     fn = lambda s: next(n for n in ast.parse(s).body if isinstance(n, ast.FunctionDef) and n.name == 'manifest_counts')
-    assert ast.dump(fn(old)) == ast.dump(fn(new))
+    assert hashlib.sha256(ast.dump(fn(new)).encode()).hexdigest() == 'c3cb6ad5e1627eeb1d0cebc1a49f10245612c74865adbc5b5d217ef78f9dc844'
 
 
 def test_start_waiter_resources_must_allow_five_models_and_six_cpu(monkeypatch):
-    import wait_for_start as waiter
     import types
+    import re
+    from datetime import datetime
+    # 公開包みはMac専用nightの絶対配置に依存しない。固定関数そのものを隔離して検査する。
+    fn = next(n for n in ast.parse((HERE/'wait_for_start.py').read_text()).body
+              if isinstance(n, ast.FunctionDef) and n.name == 'available_snapshot')
+    scope = dict(start_counts=start_counts, subprocess=types.SimpleNamespace(check_output=None),
+                 shutil=types.SimpleNamespace(disk_usage=None), re=re, datetime=datetime, CASE=HERE)
+    exec(compile(ast.Module(body=[fn], type_ignores=[]), 'fixed available_snapshot', 'exec'), scope)
+    waiter = types.SimpleNamespace(**scope)
     table = {'models':4, 'thermal':'No thermal warning level has been recorded\n'}
     def output(argv, **kw):
         if argv[0] == '/bin/ps':
@@ -252,3 +265,163 @@ def test_cloud_pilot_after_same_machine_gate_before_M1_for_seeds3_to10():
     for guard in ("claim['cloud_gate_comparison_path']", "comparison['passed']", "comparison['machine_boot_sha256'] == boot",
                   "claim['cloud_pilot_authorized'] if spec['seed'] in (1, 2) else claim['Claude_M1_confirmed']"):
         assert text.index(guard)<launch
+
+
+@pytest.mark.parametrize('limit', [100, 1000])
+def test_production_prefix_keeps5000_len_no1001_and_native_once(tmp_path, monkeypatch, limit):
+    from tools.production.prefix_measurement_driver import partial_worker
+    from tools.timing100_observer import observe_timing
+    from contextlib import contextmanager
+    from dataclasses import dataclass
+    from types import SimpleNamespace
+    import tools.production.prefix_measurement_driver as driver
+    @dataclass
+    class Result:
+        trial_count: int
+    class Ledger:
+        def append(self, row):
+            written.append(row['prediction_order'])
+    written, checkpoints, m1 = [], [], []
+    ledger = Ledger()
+    @contextmanager
+    def observation(out, active, **flags):
+        assert flags == {'attention_enabled':True, 'stage2_enabled':True}
+        native = active.append
+        def append(row):
+            value = native(row)
+            if row['prediction_order'] == 500:
+                m1.append(501)
+            if (row['prediction_order']+1)%500 == 0:
+                checkpoints.append(row['prediction_order']+1)
+            return value
+        active.append = append
+        try:
+            yield
+        finally:
+            del active.append
+    world = SimpleNamespace(trials=list(range(5000)), world_hash='unchanged')
+    def longitudinal(prefix, **kw):
+        assert len(prefix.trials) == 5000 and prefix.world_hash == world.world_hash
+        for t in prefix.trials:
+            kw['ledger'].append({'prediction_order':t})
+        return Result(5000)
+    sweep = SimpleNamespace(run_longitudinal=longitudinal)
+    def worker(task):
+        result = sweep.run_longitudinal(world, ledger=ledger)
+        return {'trial_count':result.trial_count}
+    monkeypatch.setattr(driver.subprocess, 'check_output', lambda *a, **kw: 'fixed-source\n')
+    task = dict(cfg=dict(trial_count=5000, agent_ids=['agent']), seed=3, out_root=str(tmp_path), attn_sme='global', stage2='on')
+    result = partial_worker(task, limit, tmp_path, sweep, worker, longitudinal, observation, observe_timing)
+    assert written == list(range(limit)) and world.trials == list(range(5000))
+    assert checkpoints == ([500, 1000] if limit == 1000 else [])
+    assert m1 == ([501] if limit == 1000 else [])
+    assert sweep.run_longitudinal is longitudinal and 'append' not in vars(ledger)
+    assert result['completed_trials'] == result['trial_count'] == limit
+    marker = json.loads((tmp_path/'measurement/partial_done.json').read_text())
+    assert marker['configured_trial_count'] == marker['horizon'] == 5000 and marker['full_5000_completed'] is False
+    times = [json.loads(x) for x in (tmp_path/'timing100.jsonl').read_text().splitlines()]
+    assert [x['completed_trials'] for x in times] == list(range(100, limit+1, 100))
+
+
+def test_partial_failure_keeps_exception_no_completion_and_restores_entry(tmp_path):
+    from tools.production.prefix_measurement_driver import partial_worker, count_written
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+    class Ledger:
+        def append(self, row):
+            raise ValueError('original-model-exception')
+    ledger = Ledger()
+    observed = []
+    with pytest.raises(ValueError, match='original-model-exception'):
+        with count_written(ledger, observed.append):
+            ledger.append({'prediction_order':0})
+    assert not observed and 'append' not in vars(ledger)
+    original = lambda *a, **kw: None
+    sweep = SimpleNamespace(run_longitudinal=original)
+    def broken(task):
+        raise ValueError('original-model-exception')
+    task = dict(cfg=dict(trial_count=5000, agent_ids=['agent']), seed=1, out_root=str(tmp_path))
+    with pytest.raises(ValueError, match='original-model-exception'):
+        partial_worker(task, 1000, tmp_path, sweep, broken, original, lambda *a, **kw:nullcontext(), lambda *a:nullcontext())
+    assert sweep.run_longitudinal is original and not (tmp_path/'measurement/partial_done.json').exists()
+
+
+def test_partial1000_plan_only_seeds3_to10_flags_preserved():
+    plan = json.loads((HERE/'plan.json').read_text())
+    assert len(plan['partial_commands']) == 16 and len(plan['prefix_gate_commands']) == 3
+    for label, value in plan['partial_commands'].items():
+        old = plan['commands'][label.removesuffix('_partial1000')]
+        assert value['seed'] in range(3, 11) and value['flags'] == old['flags']
+        assert value['measurement_limit'] == 1000 and value['configured_trial_count'] == value['horizon'] == 5000
+        assert value['command'][3] == '1000' and value['command'][6:] == old['flags']
+        assert not value['ready_to_start'] and not value['cloud_start_authorized'] and not value['full_5000_requested']
+        assert value['cpu_start_slots'] == old['cpu_start_slots'] and value['model_start_slots'] == old['model_start_slots']
+    for value in plan['prefix_gate_commands'].values():
+        assert value['measurement_limit'] == 100 and value['command'][3] == '100'
+
+
+@pytest.mark.parametrize('change_probe', [False, True])
+def test_prefix_entry100_compares_all_probe_rows_same_flags_and_machine(tmp_path, change_probe):
+    from prefix_gate_compare import compare, CELL
+    old = synthetic_gate_case(tmp_path/'old', 4)
+    new = synthetic_gate_case(tmp_path/'new', 4)
+    path = new/'spec.json'; spec = json.loads(path.read_text())
+    spec['driver_relative'] = 'tools/production/prefix_measurement_driver.py'
+    path.write_text(json.dumps(spec))
+    (new/'output/timing100.jsonl').write_text(json.dumps({'completed_trials':100})+'\n')
+    if change_probe:
+        probe = new/f'output/side/{CELL}/seed001.probe.jsonl'
+        probe.write_bytes(probe.read_bytes().replace(b'"post"', b'"pre"', 1))
+    dest = tmp_path/'comparisons/prefix_gate_birth4.json'
+    assert compare(old, new, dest) == int(change_probe)
+    result = json.loads(dest.read_text())
+    assert result['actual_files_excluded'] == result['probe_rows_excluded'] == 0
+    assert result['mismatching_files'] == int(change_probe) and result['entry_limit'] == 100
+    if change_probe:
+        row = next(r for r in result['files'] if not r['equal'])
+        assert 'post' in row['example']['left'] and 'pre' in row['example']['right']
+    with pytest.raises(AssertionError):
+        compare(old, new, dest)
+
+
+def test_partial1000_runner_requires_prefix_proof_and_existing_production_guards():
+    text = (HERE/'run_registered_partial.py').read_text()
+    launch = text.index('child = subprocess.Popen')
+    for guard in ("claim['prefix_gate_comparison_path']", "claim['prefix_gate_published_commit']",
+                  "claim['Claude_M1_confirmed']", "claim['cloud_gate_comparison_path']",
+                  "counts['model_process_count']+children+1 <= model_limit", "counts['outside_heavy']+children+2 <= limit"):
+        assert text.index(guard) < launch
+    assert "state=f'completed_partial{measurement_limit}'" in text
+    assert 'SIGSTOP' not in text and 'SIGCONT' not in text and 'killpg' not in text
+
+
+def test_desktop_prefix_preparation_requires_exact_old_flags(tmp_path, monkeypatch):
+    import prepare_desktop_prefix as module
+    old = synthetic_gate_case(tmp_path/'old', 4)
+    calls = []
+    def prepare(source, root, label):
+        calls.append(label)
+        case = Path(root)/label; case.mkdir(parents=True)
+        return dict(case=str(case), ready_to_start=False, model_starts=0)
+    monkeypatch.setattr(module, 'prepare', prepare)
+    result = module.prepare_from_gate(tmp_path/'source', tmp_path/'new', old)
+    assert calls == ['prefix_gate100_birth4'] and result['model_starts'] == 0
+    proof = json.loads((Path(result['case'])/'original_gate_and_comparison.draft.json').read_text())
+    assert proof['original_boot'] == 'same' and not proof['comparison_executed']
+    spec_path = old/'spec.json'; spec = json.loads(spec_path.read_text())
+    spec['flags'][spec['flags'].index('--e-price')+1] = '0.00035'
+    spec_path.write_text(json.dumps(spec))
+    with pytest.raises(AssertionError):
+        module.prepare_from_gate(tmp_path/'source', tmp_path/'wrong', old)
+    assert calls == ['prefix_gate100_birth4']
+
+
+def test_comparison_requires_fresh_admission_before_ps_or_heavy_read(tmp_path, monkeypatch):
+    import run_prefix_comparison as module
+    import time
+    monkeypatch.setattr(module.sys, 'platform', 'linux')
+    proof = tmp_path/'clearance.json'
+    proof.write_text(json.dumps(dict(checked_epoch=time.time()-61)))
+    with pytest.raises(AssertionError):
+        module.admitted_compare(tmp_path/'old', tmp_path/'new', tmp_path/'compare/result.json', proof)
+    assert not (tmp_path/'compare').exists()

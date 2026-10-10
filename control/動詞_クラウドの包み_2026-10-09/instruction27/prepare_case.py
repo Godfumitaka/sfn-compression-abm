@@ -12,17 +12,19 @@ HERE = Path(__file__).resolve().parent
 def prepare(source, output_root, label):
     source, output_root = Path(source).resolve(), Path(output_root).resolve()
     plan = json.loads((HERE/'plan.json').read_text())
-    draft = {**plan['commands'], **plan['gate_commands']}[label]
+    draft = {**plan['commands'], **plan['gate_commands'], **plan.get('partial_commands', {}), **plan.get('prefix_gate_commands', {})}[label]
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip() == draft['source_commit']
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=source, text=True).strip() == draft.get('source_tree',plan['source_tree'])
     assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=source)
     case = output_root/label
     case.mkdir(parents=True, exist_ok=False)
     files = {str(HERE/rel):sha for rel, sha in plan['observer_files'].items()}
-    driver = HERE/('gate/measurement_driver.py' if draft.get('measurement_limit') == 100 else 'tools/production/measurement_driver.py')
+    driver = HERE/draft.get('driver_relative', 'gate/measurement_driver.py' if draft.get('measurement_limit') == 100 else 'tools/production/measurement_driver.py')
+    if draft.get('driver_relative'):
+        files[str(driver)] = hashlib.sha256(driver.read_bytes()).hexdigest()
     prefix = [sys.executable, str(driver), str(source)]
-    if draft.get('measurement_limit') == 100:
-        prefix.append('100')
+    if draft.get('measurement_limit') in (100, 1000):
+        prefix.append(str(draft['measurement_limit']))
     runner = HERE/draft.get('runner_relative', 'run_registered.py')
     spec = {**draft, 'machine':'x86', 'cwd':str(source), 'output':str(case/'output'),
         'observer_files':files, 'runner_sha256':hashlib.sha256(runner.read_bytes()).hexdigest(),

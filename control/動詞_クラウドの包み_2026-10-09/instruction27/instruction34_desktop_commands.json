@@ -1,0 +1,80 @@
+{
+  "instruction": 34,
+  "machines": {
+    "d": {
+      "prepare_command": [
+        "$PYTHON",
+        "$PACKAGE/prepare_desktop_prefix.py",
+        "--source",
+        "$SOURCE",
+        "--output-root",
+        "$NEW_OUTPUT_ROOT/d",
+        "--existing-gate-case",
+        "$EXISTING_GATE100_D"
+      ],
+      "admission_command_location": "$NEW_OUTPUT_ROOT/d/prefix_gate100_birthN/admission_command.draft.json",
+      "comparison_command_location": "$NEW_OUTPUT_ROOT/d/prefix_gate100_birthN/original_gate_and_comparison.draft.json",
+      "child_count": "同じ機械の原gate100の全旗から0/4/20を実確認して選択。推測で割当てない。",
+      "executed": false
+    },
+    "d2": {
+      "prepare_command": [
+        "$PYTHON",
+        "$PACKAGE/prepare_desktop_prefix.py",
+        "--source",
+        "$SOURCE",
+        "--output-root",
+        "$NEW_OUTPUT_ROOT/d2",
+        "--existing-gate-case",
+        "$EXISTING_GATE100_D2"
+      ],
+      "admission_command_location": "$NEW_OUTPUT_ROOT/d2/prefix_gate100_birthN/admission_command.draft.json",
+      "comparison_command_location": "$NEW_OUTPUT_ROOT/d2/prefix_gate100_birthN/original_gate_and_comparison.draft.json",
+      "child_count": "同じ機械の原gate100の全旗から0/4/20を実確認して選択。推測で割当てない。",
+      "executed": false
+    },
+    "d3": {
+      "prepare_command": [
+        "$PYTHON",
+        "$PACKAGE/prepare_desktop_prefix.py",
+        "--source",
+        "$SOURCE",
+        "--output-root",
+        "$NEW_OUTPUT_ROOT/d3",
+        "--existing-gate-case",
+        "$EXISTING_GATE100_D3"
+      ],
+      "admission_command_location": "$NEW_OUTPUT_ROOT/d3/prefix_gate100_birthN/admission_command.draft.json",
+      "comparison_command_location": "$NEW_OUTPUT_ROOT/d3/prefix_gate100_birthN/original_gate_and_comparison.draft.json",
+      "child_count": "同じ機械の原gate100の全旗から0/4/20を実確認して選択。推測で割当てない。",
+      "executed": false
+    }
+  },
+  "production_partial1000_labels": [
+    "19_seed003_birth4_partial1000",
+    "19_seed003_birth20_partial1000",
+    "19_seed004_birth4_partial1000",
+    "19_seed004_birth20_partial1000",
+    "19_seed005_birth4_partial1000",
+    "19_seed005_birth20_partial1000",
+    "19_seed006_birth4_partial1000",
+    "19_seed006_birth20_partial1000",
+    "19_seed007_birth4_partial1000",
+    "19_seed007_birth20_partial1000",
+    "19_seed008_birth4_partial1000",
+    "19_seed008_birth20_partial1000",
+    "19_seed009_birth4_partial1000",
+    "19_seed009_birth20_partial1000",
+    "19_seed010_birth4_partial1000",
+    "19_seed010_birth20_partial1000"
+  ],
+  "sequence": [
+    "最新報告枝と固定SHAを確認",
+    "同機械の原正常100・固定6e4/全旗を確認して準備",
+    "正式な関門取得・開始前連絡を通常pushしspec/claimを固定",
+    "既存受付jobs・実測予約・fresh clearanceの全条件で新入口100を一度実行",
+    "原終了100・48回答・保存復元を確認後にjobs0.3GiBとfresh比較clearanceで一度比較",
+    "実比較と通常push40桁確認後だけ、正式列・M1・全条件を満たす種3〜10の1000へ"
+  ],
+  "model_starts": 0
+}

@@ -1,0 +1,94 @@
+........F.FF.............                                                [100%]
+=================================== FAILURES ===================================
+__________________ test_observer_is_fixed_instruction26_bytes __________________
+
+    def test_observer_is_fixed_instruction26_bytes():
+        original = HERE.parent/'instruction26_production/tools'
+        for rel in json.loads((HERE/'plan.json').read_text())['observer_files']:
+            if rel.startswith('tools/'):
+                p = HERE/rel
+>               assert p.read_bytes() == (original/p.relative_to(HERE/'tools')).read_bytes()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_package.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('$WORKSPACE/report-results/control/動詞_クラウドの包み_2026-10-09/instruction26_production/tools/confirmed_hash.py')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '$WORKSPACE/report-results/control/動詞_クラウドの包み_2026-10-09/instruction26_production/tools/confirmed_hash.py'
+
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: FileNotFoundError
+________________ test_manifest_same_original_function_structure ________________
+
+    def test_manifest_same_original_function_structure():
+>       old = (HERE.parent/'instruction22_birth/compare_probe100.py').read_text()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_package.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('$WORKSPACE/report-results/control/動詞_クラウドの包み_2026-10-09/instruction22_birth/compare_probe100.py')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '$WORKSPACE/report-results/control/動詞_クラウドの包み_2026-10-09/instruction22_birth/compare_probe100.py'
+
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: FileNotFoundError
+________ test_start_waiter_resources_must_allow_five_models_and_six_cpu ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10a669e50>
+
+    def test_start_waiter_resources_must_allow_five_models_and_six_cpu(monkeypatch):
+>       import wait_for_start as waiter
+
+test_package.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+wait_for_start.py:27: in <module>
+    night = importlib.util.module_from_spec(spec_module); spec_module.loader.exec_module(night)
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1132: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x10a669d60>
+path = '$WORKSPACE/report-results/control/source/tools/verb/night.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '$WORKSPACE/report-results/control/source/tools/verb/night.py'
+
+<frozen importlib._bootstrap_external>:1190: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_package.py::test_observer_is_fixed_instruction26_bytes - FileNotF...
+FAILED test_package.py::test_manifest_same_original_function_structure - File...
+FAILED test_package.py::test_start_waiter_resources_must_allow_five_models_and_six_cpu
+3 failed, 22 passed in 1.26s

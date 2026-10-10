@@ -3302,3 +3302,16 @@ python ~/jobs/jobs.py run --wait --owner 動詞28-M1 --mem 0.3 --disk-path "$VER
 この上限変更はクラウド専用機械の枠だけの承認。子20の開始には最大21模型/CPU22枠/初回42GiBと既存の全条件が必要。三本同時なら最大27模型/CPU30枠/初回54GiB。台本の改版を走行開始/関門合格/費用承認に置き換えず、このチャットからクラウド模型は起動しない。すでに走行中の機械のimport/台本/版/旗/観察/出力は替えない。次の新規開始にだけ最新の台本を使う。模型と観察器の固定SHA、旧結果/例外の原本は変更無し。
 
 差分はcap.patch、3台本の前後SHAはversions.json、現行の全固定SHAはinstruction27/fixed_tools.jsonに記す。instruction32_review_onlyは以前の未適用草稿の履歴で、現行の台本はinstruction27の3ファイル。この変更だけを新しい機械へ反映する場合も、台本とfixed_tools.jsonのSHAを同時に確認する。デスクトップへの受け渡しは承認済みresults-2026-09-27の通常pushによる。
+
+
+指示34：先頭1000の自然な部分完了の包み（2026-10-10）
+
+設定・len・horizonは5000のまま、tools/production/prefix_measurement_driver.pyが先頭100又は1000だけを反復する。元の本番の5観察ファイルと旧gate入口のSHAは不変。模型/旗/設定/乱数/問い/状態の規則は変更しない。元appendを一度呼んだ後だけ数え、模型の例外はそのまま返し、入口をfinallyで戻す。1000はcompleted_partial1000、timing100の100〜1000の10行、partial_doneの1000/configured5000/horizon5000/full=false、500/1000の原確定SHA/状態/RNG/cacheと501の原M1を保存する。全5000とはしない。
+
+plan.jsonのpartial_commandsは種3〜10×出生4/20の16命令。既存70本と元関門3本は不変。prefix_gate_commandsの新入口100は、各機械の既存gate100と全旗を同一にする。機械d/d2/d3用の命令はinstruction34_desktop_commands.json。prepare_desktop_prefix.pyはその機械の原正常100から子数を実確認してspecと受付/比較草稿を作る。模型を起動せずready=falseを維持する。実パス化はprepare_case.py。
+
+実行は草稿内のjobs.py run --wait --mem（新しい実測に合わせる）--disk-path（実出力）を使い、正式列と開始前連絡の通常push成功をqueue_claim_published.jsonへ記録した後だけready=trueとする。100の関門はcloud_gate_authorized、1000の本番はClaude_M1_confirmed/元の同機械出生関門/新入口100のprefix_gate比較passedと各40桁送信コミット/SHAを全て要求する。fresh Linux clearanceは元run_registered.pyと同じ実確認に従う。専用Google Cloudというbool Trueの実証拠がある機械だけphysical_cpu_count−2へ模型上限を広げ、他機械8/CPU/未知0/記憶/10分swap/熱/空き20GiB/期限を残す。元走行の途中変更や停止はしない。
+
+prefix_gate_compare.pyは同機械boot、同固定版、種1、同全旗、正常100、48問/48回答/復元を先に確認し、既存の実在原名前集合と全内容、全manifest研究者辞書を比べる。試験行/模型ファイル除外0、既定stage2 TIMEと非模型verbtimingの原実時間だけ従来定義。比較はrun_prefix_comparison.pyをjobs0.3GiBで受付し、fresh比較clearance（checked_epoch60秒以内/memory_reservation_gb0.3/memory_admission_ok/swap_stable_10min/thermal_ok/warning=false/cpu_budget=physical−2/boot一致）を渡す。結果フォルダと資源runtimeを分け、先行不一致を後の一致で上書きせず、同じ出力へ再投入しない。
+
+非模型27検査passed・19命令の実パス展開passed。初回3失敗は公開包みから参照できない旧ローカル検査依存の配置であり、原ログを保持して公開包みで独立して確認できる固定SHA/AST検査へ揃えた。模型起動0。新しい入口の実100比較は未確認。Macの開始前原分類9/CPU外側8に必要5模型/6CPUが入らないため、指示34の指定に従いd/d2/d3へこの命令と比較台本を渡す。
