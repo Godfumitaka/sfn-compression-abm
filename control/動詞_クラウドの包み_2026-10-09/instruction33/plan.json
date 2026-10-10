@@ -223,14 +223,18 @@
         "on",
         "--stage2-birth-workers",
         "4"
-      ]
+      ],
+      "machine": "Google Cloud d3",
+      "machine_type": "c2d-standard-16",
+      "machine_assignment_instruction": 36,
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
     },
     "speed_off": {
       "instruction": 33,
       "arm": "#19-speed-gate",
       "seed": 1,
-      "source_commit": "fe89c0128fc6a26589460745563e2716ae2d33f0",
-      "source_tree": "c86dd84acdce0716fe405d93fbf166f2309a3897",
+      "source_commit": "ddb119f5eb7e78c2bd39de2a932390688914a664",
+      "source_tree": "a1be6fb59738f78dcdf08a79f6b091d1a6053e17",
       "flags": [
         "--nohash",
         "--vt",
@@ -455,14 +459,18 @@
         "off",
         "--stage2-cache-prune",
         "off"
-      ]
+      ],
+      "machine": "Google Cloud d3",
+      "machine_type": "c2d-standard-16",
+      "machine_assignment_instruction": 36,
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
     },
     "speed_on": {
       "instruction": 33,
       "arm": "#19-speed-gate",
       "seed": 1,
-      "source_commit": "fe89c0128fc6a26589460745563e2716ae2d33f0",
-      "source_tree": "c86dd84acdce0716fe405d93fbf166f2309a3897",
+      "source_commit": "ddb119f5eb7e78c2bd39de2a932390688914a664",
+      "source_tree": "a1be6fb59738f78dcdf08a79f6b091d1a6053e17",
       "flags": [
         "--nohash",
         "--vt",
@@ -687,12 +695,22 @@
         "on",
         "--stage2-cache-prune",
         "on"
-      ]
+      ],
+      "machine": "Google Cloud d3",
+      "machine_type": "c2d-standard-16",
+      "machine_assignment_instruction": 36,
+      "machine_assignment_receipt_commit": "15d10bc3b2e0ba8c399bff3a0bc34885cd10f0fb"
     }
   },
   "model_starts": 0,
   "structural_tests_passed": null,
   "actual_100_comparisons_passed": null,
   "clock_ratio": null,
-  "CPU_ratio": null
+  "CPU_ratio": null,
+  "instruction35_small_flags": {
+    "defaults": "off",
+    "on_gate_passed": null,
+    "use_before_on_gate": false,
+    "followup_commands_pending_primary_gate": true
+  }
 }

@@ -9,7 +9,7 @@ import sys
 HERE=Path(__file__).resolve().parent
 
 
-def prepare(base, candidate, case_root, machine='Mac'):
+def prepare(base, candidate, case_root, machine='Google Cloud d3'):
     base,candidate,case_root=map(lambda p:Path(p).resolve(),(base,candidate,case_root))
     plan=json.loads((HERE/'plan.json').read_text())['commands']
     made=[]
@@ -35,5 +35,5 @@ def prepare(base, candidate, case_root, machine='Mac'):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('base');p.add_argument('candidate');p.add_argument('case_root');p.add_argument('--machine',default='Mac')
+    p.add_argument('base');p.add_argument('candidate');p.add_argument('case_root');p.add_argument('--machine',default='Google Cloud d3')
     a=p.parse_args();print(json.dumps(prepare(a.base,a.candidate,a.case_root,a.machine),ensure_ascii=False))

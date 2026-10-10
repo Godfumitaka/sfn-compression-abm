@@ -20,8 +20,9 @@ SERIAL = [
     'test_attnstage2_runtime.py', 'test_cstar_stage2_reuse.py', 'test_attnstage2_readout.py',
     'test_attnstage2_questions.py', 'test_attnstage2_initial.py', 'test_attnstage2_scope.py',
     'test_attnstage2_calibration.py', 'test_verb_snapshot_append_only.py', 'test_smeshared_json_log.py',
+    'test_birth_observation_view_instruction35.py',
 ]
-BIRTH = ['test_birth_workers_instruction22.py']
+BIRTH = ['test_birth_workers_instruction22.py','test_birth_gc_freeze_instruction35.py']
 
 
 def write(path, value):

@@ -32,6 +32,9 @@ def registered(case, clearance=None):
     case=Path(case).resolve();spec=read(case/'spec.json');plan=read(HERE/'plan.json')['commands']
     assert spec['instruction']==33 and spec['ready_to_start'] is True and case.name in plan
     expected=plan[case.name];HEAD=expected['source_commit'];TREE=expected['source_tree']
+    assigned=read(HERE/'machine_assignment36.json')
+    assert spec['machine']==expected['machine']==assigned['machine']=='Google Cloud d3'
+    assert spec['machine_type']==assigned['machine_type']=='c2d-standard-16'
     children=4;measurement_limit=100;partial=True
     assert spec['seed']==1 and spec['flags']==expected['flags'] and spec['source_commit']==HEAD
     assert spec['cpu_start_slots']==6 and spec['model_start_slots']==5 and spec['memory_reservation_gb']>=10
@@ -48,6 +51,7 @@ def registered(case, clearance=None):
     assert claim['instruction']==33 and claim['spec_sha256']==sha(case/'spec.json')
     if spec['machine']!='Mac':
         assert claim['Claude_machine_assigned'] is True and len(claim['machine_assignment_commit'])==40
+        assert claim['machine_assignment_commit']==assigned['receipt_commit'] and assigned['normal_receipt_push_succeeded'] is True
     assert sha(__file__)==spec['runner_sha256']
     for file,digest in spec['observer_files'].items(): assert sha(file)==digest
     for file,digest in read(HERE/'fixed_tools.json').items(): assert sha(HERE/file)==digest

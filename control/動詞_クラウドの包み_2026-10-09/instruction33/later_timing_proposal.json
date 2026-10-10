@@ -1,0 +1,15 @@
+{
+  "instructions": [
+    35,
+    36
+  ],
+  "status": "proposal_only_after_primary100_passed",
+  "model_starts": 0,
+  "method": "同じd3・同じ新模型・種1・設定/len/horizon5000で、速度二旗off/onを別の新出力へ先頭600まで自然終了。500/600の確定timing100原行を用い、501〜600のwall/user/sysと群RSSを並べる。出生4・他旗は同じ、負荷/予約/警告も添える。",
+  "no_existing_production_state_restore": true,
+  "no_existing_production_record_mutation": true,
+  "new_source_flags_are_fixed_at_start": true,
+  "start_authorization_and_resources_still_required": true,
+  "comparison_policy": "先頭100で全内容一致/P10三条件を先に確認。600は測定であり全5000合格ではない。後の不一致又は例外を100の一致で消さない。",
+  "reason": "本番checkpointには全観測・全側表・開いた出力口の再開契約が無いため、試行500状態を途中へ差し込まない。後区間でも100と同じ倍率とは仮定しない。"
+}

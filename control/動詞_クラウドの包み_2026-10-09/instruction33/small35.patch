@@ -1,0 +1,458 @@
+diff --git a/tests/test_birth_gc_freeze_instruction35.py b/tests/test_birth_gc_freeze_instruction35.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..ab6bd9abf1d9dc0430ed977e07d957191fca62a9
+--- /dev/null
++++ b/tests/test_birth_gc_freeze_instruction35.py
+@@ -0,0 +1,43 @@
++"""GCの有効状態・例外復元と、fork後の全原記録・研究者の数えを検査する。"""
++from pathlib import Path
++import sys
++sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'tools')]
++import pytest
++import attnstage2_birth_parallel as P
++from test_birth_workers_instruction22 import test_parallel_matches_original_order_counts_and_gzip as _check_original
++
++
++@pytest.mark.parametrize('initial',[False,True])
++def test_gc_state_restored_on_pool_exception(monkeypatch,initial):
++    calls=[];state={'enabled':initial,'frozen':0}
++    monkeypatch.setattr(P.gc,'get_freeze_count',lambda:state['frozen'])
++    monkeypatch.setattr(P.gc,'isenabled',lambda:state['enabled'])
++    def disable():state['enabled']=False;calls.append('disable')
++    def enable():state['enabled']=True;calls.append('enable')
++    def freeze():state['frozen']=1;calls.append('freeze')
++    def unfreeze():state['frozen']=0;calls.append('unfreeze')
++    monkeypatch.setattr(P.gc,'disable',disable);monkeypatch.setattr(P.gc,'enable',enable)
++    monkeypatch.setattr(P.gc,'freeze',freeze);monkeypatch.setattr(P.gc,'unfreeze',unfreeze)
++    with pytest.raises(ValueError,match='pool'):
++        with P.frozen_for_fork() as enabled:
++            assert enabled==initial and not state['enabled'] and state['frozen']==1
++            raise ValueError('pool')
++    assert state=={'enabled':initial,'frozen':0}
++    assert calls==['disable','freeze','unfreeze']+(['enable'] if initial else [])
++
++
++def test_preexisting_frozen_generation_is_not_unfrozen(monkeypatch):
++    monkeypatch.setattr(P.gc,'get_freeze_count',lambda:3)
++    monkeypatch.setattr(P.gc,'unfreeze',lambda:pytest.fail('他の固定を外さない'))
++    with pytest.raises(RuntimeError,match='既にGC'):
++        with P.frozen_for_fork():pytest.fail('重ねない')
++
++
++@pytest.mark.parametrize('workers',[1,4])
++@pytest.mark.parametrize('hu',[False,True])
++def test_freeze_keeps_original_fork_order_all_counts_and_rng(monkeypatch,tmp_path,workers,hu):
++    before=(P.gc.isenabled(),P.gc.get_freeze_count())
++    assert before[1]==0
++    monkeypatch.setattr(P,'_FREEZE',True)
++    _check_original(monkeypatch,tmp_path,workers,hu)
++    assert (P.gc.isenabled(),P.gc.get_freeze_count())==before
+diff --git a/tests/test_birth_observation_view_instruction35.py b/tests/test_birth_observation_view_instruction35.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..13215a334c08213d0c2811c7b96ed61c19f039e7
+--- /dev/null
++++ b/tests/test_birth_observation_view_instruction35.py
+@@ -0,0 +1,82 @@
++"""読取窓の権限、元の全欄hash、実際の局所Sessionの一致を検査する。"""
++from copy import deepcopy
++from dataclasses import replace
++from pathlib import Path
++from random import Random
++import sys
++sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'tools'),str(Path(__file__).resolve().parents[1])]
++import pytest
++from test_sme2017_connection import separate
++from attnsme_features import Observations
++from attnstage2_observation_view import ReadOnlyObservations, fingerprint, unchanged
++
++
++def observation():
++    o=Observations();o.entities.update(('x','y'));o.arguments[1]=('x','y')
++    o.parents[3].append((1,0));o.shapes['p'].add(('shape',));o.table[('k',)]={'p':3}
++    o.events.append({'trial':2,'visible_names':['p']});o.names.add('p');o.last_trial=2
++    return o
++
++
++def test_reads_preserve_order_values_and_default_without_mutation():
++    o=observation();before=fingerprint(o);v=ReadOnlyObservations(o)
++    assert tuple(v.arguments)==tuple(o.arguments) and v.arguments[1]==o.arguments[1]
++    assert v.parents[3]==tuple(o.parents[3]) and v.parents[999]==()
++    assert v.shapes['absent']==frozenset() and v.shapes.get('absent') is None
++    assert 999 not in v.parents and 'absent' not in v.shapes
++    assert v.table[('k',)]['p']==3 and v.last_trial==2
++    assert fingerprint(o)==before
++
++
++@pytest.mark.parametrize('change',[
++    lambda v:setattr(v,'last_trial',4),
++    lambda v:v.arguments.__setitem__(1,()),
++    lambda v:v.entities.add('z'),
++    lambda v:v.events[0].__setitem__('trial',4),
++    lambda v:v.parents[3].append((2,0)),
++])
++def test_nested_and_top_level_writes_are_rejected(change):
++    o=observation();before=fingerprint(o)
++    with pytest.raises((TypeError,AttributeError)):change(ReadOnlyObservations(o))
++    assert fingerprint(o)==before
++
++
++def test_hash_guard_catches_backdoor_change_and_keeps_failure():
++    o=observation();before=fingerprint(o)
++    with pytest.raises(RuntimeError,match='hash'):
++        with unchanged(o,before):o.table[('k',)]['p']=4
++    assert o.table[('k',)]['p']==4  # 差を直して合格にしない。
++    with pytest.raises(RuntimeError,match='hash'):
++        with unchanged(o,before):pass
++
++
++@pytest.mark.parametrize('loss_mode',['alpha','top1','mixture'])
++def test_native_local_birth_bytes_state_rng_equal_with_readonly(separate,loss_mode,monkeypatch):
++    import attnstage2_initial as I
++    import smeshared as S
++    import ustruct
++    import v39
++    import v310be as L
++    from attnstage2_distribution import Readout
++    from attnstage2_questions import Snapshot
++    from test_attnstage2_connection import build
++    import json
++    restore=ustruct.install_matching()
++    try:
++        state,cfg,obs,ai=build();definition=replace(state.definitions['R'],name='new',registered_at=2)
++        pre=(ai,state,cfg,Random(1).getstate(),obs,{},True,(),None)
++        ctx={'definition':definition,'row':definition.constituents[0],'first_material':ai.base_graph,
++             'second_visible':ai.target_graph_partial,'trial':2,'base_age':1,'pre':pre,
++             'questions':Snapshot(1,1,frozenset({'hold'}),frozenset(),True)}
++        monkeypatch.setattr(L,'EPSILON',.5)
++        saved=(repr(state),fingerprint(obs),S.ENGINE.rng.getstate(),Random(1).getstate())
++        outputs=[]
++        for flag in (False,True):
++            policy=I.VirtualInitial(loss_mode=loss_mode,mode='binary',position='k2',epsilon=.5,
++                                   readout_policy=Readout(),observation_view=flag)
++            value=policy(v39.SeatRec(0,'F',2,2,v39.ZERO4,v39.ZERO4),'birth',ctx)
++            rows=policy.drain_records();rows[0].pop('seconds')
++            outputs.append((value,json.dumps(rows,ensure_ascii=False)))
++            assert (repr(state),fingerprint(obs),S.ENGINE.rng.getstate(),pre[3])==saved
++        assert outputs[0]==outputs[1]
++    finally:restore()
+diff --git a/tools/attnstage2_birth_parallel.py b/tools/attnstage2_birth_parallel.py
+index 14a86284c0e5a521a014a47c91e20aecf40cef88..3c8e6417da5f11df1e4ac3c1f0a5958d2e5368e8 100644
+--- a/tools/attnstage2_birth_parallel.py
++++ b/tools/attnstage2_birth_parallel.py
+@@ -7,6 +7,8 @@ from copy import deepcopy
+ from dataclasses import replace
+ import json
+ import multiprocessing as mp
++import gc
++from contextlib import contextmanager
+ import time
+ import attnstage2_birth as B
+ import attnstage2 as T
+@@ -15,6 +17,7 @@ import attnstage2_runtime as RT
+ _JOB = {}
+ _KEEP = []
+ _WORKERS = 0
++_FREEZE = False
+ _ORIGINAL = B.birth_values
+ _KEYS = ('seconds', 'match_calls', 'result_cache_hits', 'engine_calls', 'engine_seconds',
+          'foundation_builds', 'foundation_hits')
+@@ -116,6 +119,30 @@ def _replay(lines):
+             total[key] = total.get(key, 0) + row[key]
+ 
+ 
++@contextmanager
++def frozen_for_fork():
++    # 他の処理が固定した世代をunfreezeしない。offではこの入口へ来ない。
++    if gc.get_freeze_count():
++        raise RuntimeError('既にGC固定中なら出生のGC旗を重ねない')
++    enabled = gc.isenabled()
++    gc.disable()
++    try:
++        gc.freeze()
++        yield enabled
++    finally:
++        gc.unfreeze()
++        if enabled:
++            gc.enable()
++
++
++def child_gc(enabled):
++    # 固定済みの古い世代は触らず、子の新しい循環だけ元の有効状態で集める。
++    if enabled:
++        gc.enable()
++    else:
++        gc.disable()
++
++
+ def birth_values(before, definition, first_material, second_visible, questions, trial,
+                  *, session_factory, loss_mode, length_of, measure_birth_hu=False):
+     import strictpc
+@@ -142,8 +169,14 @@ def birth_values(before, definition, first_material, second_visible, questions,
+     results = {}
+     try:
+         if todo:
+-            with mp.get_context('fork').Pool(min(_WORKERS, len(todo))) as pool:
+-                results = dict(zip(todo, pool.map(_one, todo, chunksize=1)))
++            if _FREEZE:
++                with frozen_for_fork() as enabled:
++                    with mp.get_context('fork').Pool(min(_WORKERS, len(todo)),
++                            initializer=child_gc,initargs=(enabled,)) as pool:
++                        results = dict(zip(todo, pool.map(_one, todo, chunksize=1)))
++            else:
++                with mp.get_context('fork').Pool(min(_WORKERS, len(todo))) as pool:
++                    results = dict(zip(todo, pool.map(_one, todo, chunksize=1)))
+     finally:
+         _JOB.clear()
+     # 浮動小数の足す順も、原記録・数えの新しい鍵の順も問いの元順。
+@@ -188,10 +221,14 @@ def birth_values(before, definition, first_material, second_visible, questions,
+     return initial, record
+ 
+ 
+-def install(workers):
+-    global _WORKERS
++def install(workers, *, freeze_before_fork=False):
++    global _WORKERS, _FREEZE
+     if not isinstance(workers, int) or isinstance(workers, bool) or not 0 <= workers <= 7:
+         raise ValueError('出生の子の数は0〜7（親と合わせて模型8本まで）')
++    if type(freeze_before_fork) is not bool:
++        raise TypeError('GC固定の旗はboolだけ')
++    if freeze_before_fork and workers == 0:
++        raise ValueError('GC固定は出生forkの前だけ')
+     if workers == 0:
+         return
+     if 'fork' not in mp.get_all_start_methods():
+@@ -199,4 +236,5 @@ def install(workers):
+     if B.birth_values not in (_ORIGINAL, birth_values):
+         raise RuntimeError('別の出生の入口へ重ねて接続しない')
+     _WORKERS = workers
++    _FREEZE = freeze_before_fork
+     B.birth_values = birth_values
+diff --git a/tools/attnstage2_initial.py b/tools/attnstage2_initial.py
+index 969da28bc9e87dc398c42817b04c8dc38c877698..89330cbe336c2b1e6187f7585b079af13264fa6a 100644
+--- a/tools/attnstage2_initial.py
++++ b/tools/attnstage2_initial.py
+@@ -11,11 +11,12 @@ from attnstage2_sme import Session
+ 
+ class VirtualInitial:
+     def __init__(self, *, loss_mode, mode, position, epsilon, readout_policy=None,
+-                 feature_policy=None, session_class=Session,measure_birth_hu=False):
++                 feature_policy=None, session_class=Session,measure_birth_hu=False,observation_view=False):
+         self.loss_mode,self.mode,self.position,self.epsilon=loss_mode,mode,position,epsilon
+         self.readout_policy,self.feature_policy=readout_policy,feature_policy
+         self.session_class=session_class
+         self.measure_birth_hu=measure_birth_hu
++        self.observation_view=observation_view
+         self.cache={}
+         self.records=[]
+ 
+@@ -43,19 +44,37 @@ class VirtualInitial:
+             # 可視構造だけを仮の問いへ使う。観察の頻度表は更新しない。
+             frozen_observations=deepcopy(observations)
+             frozen_attention=dict(attention)
+-            def factory(state, visible, door_task):
+-                return self.session_class(replace(ai,target_graph_partial=visible),state,config,
+-                    rng_state,deepcopy(frozen_observations),dict(frozen_attention),
+-                    mode=self.mode,position=self.position,door_task=door_task,
+-                    epsilon=self.epsilon,readout_policy=self.readout_policy,
+-                    feature_policy=self.feature_policy)
++            if self.observation_view:
++                from attnstage2_observation_view import ReadOnlyObservations, fingerprint, unchanged
++                frozen_hash=fingerprint(frozen_observations)
++                observation_reader=ReadOnlyObservations(frozen_observations)
++                def factory(state, visible, door_task):
++                    with unchanged(frozen_observations,frozen_hash):
++                        return self.session_class(replace(ai,target_graph_partial=visible),state,config,
++                            rng_state,observation_reader,dict(frozen_attention),
++                            mode=self.mode,position=self.position,door_task=door_task,
++                            epsilon=self.epsilon,readout_policy=self.readout_policy,
++                            feature_policy=self.feature_policy)
++            else:
++                def factory(state, visible, door_task):
++                    return self.session_class(replace(ai,target_graph_partial=visible),state,config,
++                        rng_state,deepcopy(frozen_observations),dict(frozen_attention),
++                        mode=self.mode,position=self.position,door_task=door_task,
++                        epsilon=self.epsilon,readout_policy=self.readout_policy,
++                        feature_policy=self.feature_policy)
+             import v39
+             lengths=v39.code_lengths(before.p_hat)
+-            values,record=B.birth_values(before,definition,context['first_material'],
+-                context['second_visible'],context['questions'],trial,
+-                session_factory=factory,loss_mode=self.loss_mode,
+-                length_of=lambda name:float(v39.L_of(name,lengths)),
+-                **({'measure_birth_hu':True} if self.measure_birth_hu else {}))
++            def evaluate():
++                return B.birth_values(before,definition,context['first_material'],
++                    context['second_visible'],context['questions'],trial,
++                    session_factory=factory,loss_mode=self.loss_mode,
++                    length_of=lambda name:float(v39.L_of(name,lengths)),
++                    **({'measure_birth_hu':True} if self.measure_birth_hu else {}))
++            if self.observation_view:
++                with unchanged(frozen_observations,frozen_hash):
++                    values,record=evaluate()
++            else:
++                values,record=evaluate()
+             self.cache[key]=values
+             record.update(base_age=context['base_age'],
+                           first_material_name_limit=True,
+diff --git a/tools/attnstage2_observation_view.py b/tools/attnstage2_observation_view.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..66fc095576fca0b165c27fd7f3edc4d0fd93cc07
+--- /dev/null
++++ b/tools/attnstage2_observation_view.py
+@@ -0,0 +1,84 @@
++"""指示35：既存の観測だけを読む窓と、元の全欄のhash見張り。"""
++from collections import defaultdict
++from collections.abc import Mapping
++from contextlib import contextmanager
++import hashlib
++import pickle
++
++
++def fingerprint(observations):
++    # 表の値・順・型・全欄をそのまま含める。抽選・模型の記録を更新しない。
++    return hashlib.sha256(pickle.dumps(vars(observations), protocol=5)).digest()
++
++
++def readonly(value):
++    if isinstance(value, dict):
++        return ReadOnlyMap(value)
++    if isinstance(value, list):
++        return tuple(readonly(item) for item in value)
++    if isinstance(value, tuple):
++        return tuple(readonly(item) for item in value)
++    if isinstance(value, set):
++        return frozenset(readonly(item) for item in value)
++    if isinstance(value, frozenset):
++        return frozenset(readonly(item) for item in value)
++    if value is None or isinstance(value, (str, int, float, bool, bytes)):
++        return value
++    raise TypeError('観測に未知の可変型を渡さない')
++
++
++class ReadOnlyMap(Mapping):
++    __slots__ = ('_source',)
++
++    def __init__(self, source):
++        object.__setattr__(self, '_source', source)
++
++    def __setattr__(self, name, value):
++        raise TypeError('観測の読取窓へ書き込まない')
++
++    def __getitem__(self, key):
++        source = self._source
++        if key in source:
++            return readonly(source[key])
++        if isinstance(source, defaultdict) and source.default_factory in (list, set, dict):
++            # 元の局所deepcopyの欠落値と同じ読み。元表へ鍵を足さない。
++            return readonly(source.default_factory())
++        raise KeyError(key)
++
++    def __iter__(self):
++        return iter(self._source)
++
++    def __len__(self):
++        return len(self._source)
++
++    def __contains__(self, key):
++        return key in self._source
++
++    def get(self, key, default=None):
++        return readonly(self._source[key]) if key in self._source else default
++
++
++class ReadOnlyObservations:
++    __slots__ = ('_source',)
++
++    def __init__(self, source):
++        object.__setattr__(self, '_source', source)
++
++    def __setattr__(self, name, value):
++        raise TypeError('観測の読取窓へ書き込まない')
++
++    def __getattr__(self, name):
++        if name not in vars(self._source):
++            raise AttributeError(name)
++        return readonly(vars(self._source)[name])
++
++
++@contextmanager
++def unchanged(observations, expected):
++    if fingerprint(observations) != expected:
++        raise RuntimeError('出生の観測のhashが変わった')
++    try:
++        yield
++    finally:
++        if fingerprint(observations) != expected:
++            raise RuntimeError('出生の観測のhashが変わった')
+diff --git a/tools/attnstage2_runtime.py b/tools/attnstage2_runtime.py
+index 8cc9652f75f4f463de5686e0ddba3d566cfdf745..16657dd44703bd01f7f7b1954fee9328ce34635c 100644
+--- a/tools/attnstage2_runtime.py
++++ b/tools/attnstage2_runtime.py
+@@ -17,7 +17,7 @@ ST = {}
+ 
+ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_policy=None,
+             readout_policy=None,scope='all',feature_policy=None,session_class=None,rematch_reuse=False,
+-            measure_birth_hu=False):
++            measure_birth_hu=False,birth_observation_view=False):
+     import abm.loop as loop
+     import attnsme
+     import smeshared as S
+@@ -54,7 +54,8 @@ def install(path, *, loss_mode, epsilon=.5, initial_mode='virtual', initial_poli
+         initial_policy=VirtualInitial(loss_mode=mode,mode=attnsme.ST['mode'],
+             position=attnsme.ST['position'],epsilon=epsilon,readout_policy=readout_policy,
+             feature_policy=feature_policy,session_class=birth_session,
+-            **({'measure_birth_hu':True} if measure_birth_hu else {}))
++            **({'measure_birth_hu':True} if measure_birth_hu else {}),
++            **({'observation_view':True} if birth_observation_view else {}))
+     Path(path).parent.mkdir(parents=True,exist_ok=True)
+     ST.clear();ST.update(stream=S._text_gzip(path),path=str(path),mode=mode,epsilon=epsilon,
+                         trials=0,scored_seats=0,seconds=0.,pre=None,initial_mode=initial_mode,
+diff --git a/tools/v3_run.py b/tools/v3_run.py
+index 8803959acc54e71cea17fb9c63790d669172dbc7..8263fa2ecc6d823e071a230a03068dfbf1b349eb 100644
+--- a/tools/v3_run.py
++++ b/tools/v3_run.py
+@@ -621,12 +621,14 @@ def worker(task: dict) -> dict:
+         import attnstage2_runtime
+         if task.get('stage2_birth_workers', 0):
+             import attnstage2_birth_parallel
+-            attnstage2_birth_parallel.install(task['stage2_birth_workers'])
++            attnstage2_birth_parallel.install(task['stage2_birth_workers'],
++                **({'freeze_before_fork':True} if task.get('stage2_birth_gc_freeze') else {}))
+         attnstage2_runtime.install(out_root/'stage2'/task['cell']/f"seed{task['seed']:03d}.jsonl.gz",
+                                   loss_mode=task['stage2_loss'],epsilon=task.get('logp_eps',.5),
+                                   initial_mode=task['stage2_init'],scope=task['stage2_scope'],**connection,
+                                   rematch_reuse=task.get('stage2_reuse',False),
+                                   **({'measure_birth_hu':True} if task.get('stage2_birth_hu') else {}),
++                                  **({'birth_observation_view':True} if task.get('stage2_birth_observation_view') else {}),
+                                   **(dict(session_class=attncstar.Session) if task.get('attn_allin') else {}))
+     if task.get('verb_world') and task.get('probe_world') and task.get('attn_sme'):
+         verbworld.connect_attention_probes(probeworld,attnsme)
+@@ -889,6 +891,8 @@ def main() -> None:
+     ap.add_argument('--stage2-cache-prune',choices=('off','on'),default='off',
+                     help='指示26のP10：過去の呼び出し種のC*控えだけを捨て、再参照なら止める')
+     ap.add_argument('--stage2-birth-hu',choices=('off','on'),default='off',help='準備の旗：出生のF席をHにした後のH→Uの差も同じ仮問いで測る（使用は別承認）')
++    ap.add_argument('--stage2-birth-observation-view',choices=('off','on'),default='off',help='出生の既存観測を読取窓で重ね、全欄hashが変われば止める')
++    ap.add_argument('--stage2-birth-gc-freeze',choices=('off','on'),default='off',help='出生fork前だけGCを固定し、親の元の状態へ戻す')
+     ap.add_argument('--stage2-birth-workers',type=int,default=0,help='出生の仮の問いだけをforkの子N本で解く（0は既存の直列、親子とも模型枠で数える）')
+     ap.add_argument("--sme-tie-uniform", action="store_true", help="構造の鍵で同点を狭めず、照合・定義・逐語の残った同点全体を一様抽選する（--sme-call-seedと一緒に）")
+     ap.add_argument("--sme-gc-threshold", type=int, default=None,
+@@ -1120,6 +1124,10 @@ def main() -> None:
+         raise SystemExit('--stage2-birth-workersは0〜7（親と合わせて模型8本まで）')
+     if args.stage2_birth_workers and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
+         raise SystemExit('--stage2-birth-workersは第二段on・virtual初期値と一緒に使う')
++    if args.stage2_birth_observation_view == 'on' and not (args.stage2 == 'on' and args.stage2_init == 'virtual'):
++        raise SystemExit('--stage2-birth-observation-view onは第二段on・virtualだけ')
++    if args.stage2_birth_gc_freeze == 'on' and not args.stage2_birth_workers:
++        raise SystemExit('--stage2-birth-gc-freeze onは出生forkと一緒に使う')
+     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
+         raise SystemExit('--logp-epsは0以上1以下')
+     for task in tasks:
+@@ -1134,6 +1142,8 @@ def main() -> None:
+             if args.stage2_cache_prune == 'on':task['stage2_cache_prune']=True
+             if args.stage2_birth_hu == 'on':task['stage2_birth_hu']=True
+             if args.stage2_birth_workers:task['stage2_birth_workers']=args.stage2_birth_workers
++            if args.stage2_birth_observation_view == 'on':task['stage2_birth_observation_view']=True
++            if args.stage2_birth_gc_freeze == 'on':task['stage2_birth_gc_freeze']=True
+         if args.logp_eps != .5:
+             task['logp_eps'] = args.logp_eps
+         if args.use_forget is not None:
