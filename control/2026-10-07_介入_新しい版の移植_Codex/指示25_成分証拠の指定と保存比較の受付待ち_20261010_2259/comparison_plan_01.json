@@ -1,0 +1,14 @@
+{
+  "instruction": 25,
+  "before_run": true,
+  "model_rerun": false,
+  "old_stops_overwritten": false,
+  "comparison": "保存94と70dfの全15記録・全manifest研究者辞書、原順・試験行と全必須メタデータ。",
+  "only_specified_new_fields": [
+    "retention/*.probe_checks.json:before_sha256",
+    "retention/*.probe_checks.json:after_sha256"
+  ],
+  "substitution": "指示24の全8原成分比較と各側前後不変を現在のSHAと原字節で照合。全非記録口キー・記録口位置/原字節/型/mode/encoding/closedを必須。",
+  "stop": "指定二欄以外の最初の不一致で停止。sideの別SHA欄などを推測で除かない。",
+  "reference_sha256": "24415905969130c030ea3986a1ee9c0a4ef4275f0f0c4a5a5a3d885f627932b3"
+}
