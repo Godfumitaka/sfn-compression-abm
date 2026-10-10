@@ -1,0 +1,198 @@
+{
+  "at_jst": "2026-10-11T00:18:52.061219+09:00",
+  "new_model_starts": 0,
+  "projections": {
+    "B5_c4_on200": {
+      "observed_model_hours": 4.730179147268613,
+      "first100_hours": 2.177208768275288,
+      "second100_hours": 2.542925860301119,
+      "second_over_first": 1.1679752063076339,
+      "observed_last_snapshot_tail_seconds": 36.16026729193982,
+      "constant_200_average_full_hours": 41.15255858123693,
+      "constant_second100_after_200_full_hours": 43.891237395905854,
+      "linear_100_block_growth_full_hours": 90.11787782797089,
+      "quadratic_cumulative_stress_hours": 358.02725965676126,
+      "formula_linear": "17.4*a+142.8*(b-a)+observed_tail",
+      "checkpoint_trial100_seconds": 91.55817895790096,
+      "checkpoint_trial200_seconds": 68.4802208750043,
+      "probe_only_seconds": "未測定：上記は実試行と試験を合わせた値",
+      "actual_8_agent_1740": "未測定",
+      "source_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before"
+    },
+    "B5_929_on200": {
+      "observed_model_hours": 4.627524420034735,
+      "first100_hours": 2.1637702933680782,
+      "second100_hours": 2.4534525691666444,
+      "second_over_first": 1.1338784790078864,
+      "observed_last_snapshot_tail_seconds": 37.08560700004455,
+      "constant_200_average_full_hours": 40.259462454302195,
+      "constant_second100_after_200_full_hours": 42.410693985201064,
+      "linear_100_block_growth_full_hours": 79.02653364613984,
+      "quadratic_cumulative_stress_hours": 350.257323352429,
+      "formula_linear": "17.4*a+142.8*(b-a)+observed_tail",
+      "checkpoint_trial100_seconds": 88.12241791700944,
+      "checkpoint_trial200_seconds": 58.29216654202901,
+      "probe_only_seconds": "未測定：上記は実試行と試験を合わせた値",
+      "actual_8_agent_1740": "未測定",
+      "source_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after"
+    },
+    "B6_e96_flags_off_on200": {
+      "observed_model_hours": 5.313558887418896,
+      "first100_hours": 2.381918971342481,
+      "second100_hours": 2.9214141721991798,
+      "second_over_first": 1.2264960342259805,
+      "observed_last_snapshot_tail_seconds": 36.81267795804888,
+      "constant_200_average_full_hours": 46.22796232054439,
+      "constant_second100_after_200_full_hours": 50.30333713928626,
+      "linear_100_block_growth_full_hours": 118.49553052757298,
+      "quadratic_cumulative_stress_hours": 402.1832721887362,
+      "formula_linear": "17.4*a+142.8*(b-a)+observed_tail",
+      "checkpoint_trial100_seconds": 114.50410983304027,
+      "checkpoint_trial200_seconds": 57.4823087080149,
+      "probe_only_seconds": "未測定：上記は実試行と試験を合わせた値",
+      "actual_8_agent_1740": "未測定",
+      "source_root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03"
+    }
+  },
+  "schedule_assumptions": {
+    "start_jst": "2026-10-11T09:00:00+09:00",
+    "deadlines_jst": [
+      "2026-10-12T09:00:00+09:00",
+      "2026-10-13T09:00:00+09:00"
+    ],
+    "hours": [
+      24,
+      48
+    ],
+    "available_hosts": 1,
+    "cpu_per_host": 8,
+    "one_eight_agent_group_per_host": true,
+    "gates_and_receipt_required": true,
+    "admission_gate_preparation_seconds": "未測定、控除していない",
+    "number_of_free_eligible_hosts": "未測定",
+    "eta": "同時に八体を動かした際の一体あたり速度/一体のみの速度。未測定。同期・通信・I/Oの増分は別。",
+    "full_window": "1740",
+    "draft_price_B": "{L50_ref} unresolved",
+    "selected_seeds": null
+  },
+  "human_D_reference_only": {
+    "D_q": {
+      "model_seconds_200": 53.352362500038,
+      "constant_average_1740_seconds": 464.16555375033056,
+      "quadratic_stress_1740_seconds": 4038.2403176278754,
+      "collective_8_agent_prediction": null,
+      "reason": "旧お店一体f0.5、通信なしのD診断。新版八体f0.1/f0.9 q0.2 m0.1の実測へ代用しない。"
+    },
+    "D_attention": {
+      "model_seconds_200": 55.01866695901845,
+      "constant_average_1740_seconds": 478.6624025434605,
+      "quadratic_stress_1740_seconds": 4164.362902128105,
+      "collective_8_agent_prediction": null,
+      "reason": "旧お店一体f0.5、通信なしのD診断。新版八体f0.1/f0.9 q0.2 m0.1の実測へ代用しない。"
+    }
+  },
+  "counts_sensitivity_only": {
+    "full_current_assumed": {
+      "hours_fast": 40,
+      "hours_slow": 120,
+      "by_deadline": [
+        {
+          "available_hours": 24,
+          "completed_slow": 0,
+          "completed_fast": 0
+        },
+        {
+          "available_hours": 48,
+          "completed_slow": 0,
+          "completed_fast": 1
+        }
+      ],
+      "conditions": "関門と取得が完了し10/11 09:00開始、八体CPU8専有の一台。準備/受付待ち/新たな通信費用を未控除。速度倍率とetaは未測定、保証しない。"
+    },
+    "full_if_measured_speed2": {
+      "hours_fast": 20,
+      "hours_slow": 60,
+      "by_deadline": [
+        {
+          "available_hours": 24,
+          "completed_slow": 0,
+          "completed_fast": 1
+        },
+        {
+          "available_hours": 48,
+          "completed_slow": 0,
+          "completed_fast": 2
+        }
+      ],
+      "conditions": "関門と取得が完了し10/11 09:00開始、八体CPU8専有の一台。準備/受付待ち/新たな通信費用を未控除。速度倍率とetaは未測定、保証しない。"
+    },
+    "full_if_measured_speed4_2": {
+      "hours_fast": 9.523809523809524,
+      "hours_slow": 28.57142857142857,
+      "by_deadline": [
+        {
+          "available_hours": 24,
+          "completed_slow": 0,
+          "completed_fast": 2
+        },
+        {
+          "available_hours": 48,
+          "completed_slow": 1,
+          "completed_fast": 5
+        }
+      ],
+      "conditions": "関門と取得が完了し10/11 09:00開始、八体CPU8専有の一台。準備/受付待ち/新たな通信費用を未控除。速度倍率とetaは未測定、保証しない。"
+    },
+    "prefix200_eta1": {
+      "hours_fast": 4.627524420034735,
+      "hours_slow": 5.313558887418896,
+      "by_deadline": [
+        {
+          "available_hours": 24,
+          "completed_slow": 4,
+          "completed_fast": 5
+        },
+        {
+          "available_hours": 48,
+          "completed_slow": 9,
+          "completed_fast": 10
+        }
+      ],
+      "conditions": "関門と取得が完了し10/11 09:00開始、八体CPU8専有の一台。準備/受付待ち/新たな通信費用を未控除。速度倍率とetaは未測定、保証しない。"
+    },
+    "prefix200_eta0_5": {
+      "hours_fast": 9.25504884006947,
+      "hours_slow": 10.627117774837792,
+      "by_deadline": [
+        {
+          "available_hours": 24,
+          "completed_slow": 2,
+          "completed_fast": 2
+        },
+        {
+          "available_hours": 48,
+          "completed_slow": 4,
+          "completed_fast": 5
+        }
+      ],
+      "conditions": "関門と取得が完了し10/11 09:00開始、八体CPU8専有の一台。準備/受付待ち/新たな通信費用を未控除。速度倍率とetaは未測定、保証しない。"
+    }
+  },
+  "human_actual_collective_counts_by_deadline": "未測定",
+  "fewer_runs_option": {
+    "original_total": 20,
+    "hypothetical_total": 6,
+    "each_family_runs": 3,
+    "changes_first_run_duration": false,
+    "relative_total_work_if_same_mixture": 0.3,
+    "seed_and_f_allocation": "Astra判断待ち。選択・命令変更なし。"
+  },
+  "input_sha256": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction26/existing_times_analysis_02.json": "ee4503bf05766d20707e6d7521a05ca493b959ba257d0c211083467eccee9953",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction9/D_q/status.json": "a74c06d65780c893ed6396e7f1926dc99cb1eed5a0d4bc8f3996c154464fcfb7",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction9/D_attention/status.json": "8e17b4a9375ae1c4afa2b29712974100f97687d09413684ab961a4a847b3005c"
+  },
+  "input_unchanged": true,
+  "seconds": 0.008500457974150777,
+  "max_rss_bytes": 19218432
+}

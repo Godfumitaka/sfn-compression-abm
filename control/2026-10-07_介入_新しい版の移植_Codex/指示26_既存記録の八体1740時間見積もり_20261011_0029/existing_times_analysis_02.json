@@ -1,0 +1,3210 @@
+{
+  "at_jst": "2026-10-11T00:08:42.175069+09:00",
+  "cases": {
+    "B5_c4_on200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before",
+      "status": {
+        "state": "completed",
+        "started_at_jst": "2026-10-10T04:08:25.429738+09:00",
+        "wrapper_pid": 50889,
+        "command": {
+          "name": "B5_on200_before",
+          "commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+          "models": 1,
+          "parallel": false,
+          "phase": "on1",
+          "seeds": [
+            1
+          ],
+          "model_argv": [
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline/tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--probe-world",
+            "--cells",
+            "f0.1000_th2.1000_first_order",
+            "--no-compare",
+            "--shop-world",
+            "2",
+            "--shop-exc",
+            "0.2",
+            "--trial-count",
+            "200",
+            "--v39-price",
+            "0.01873710622997919",
+            "--e-price",
+            "0.01873710622997919",
+            "--workers",
+            "1",
+            "--seeds",
+            "1",
+            "--sme2017",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--v311c",
+            "--v311c-f",
+            "0.1",
+            "--v311c-groups",
+            "0",
+            "--v311c-runs",
+            "1",
+            "--v311c-q",
+            "0",
+            "--v311c-m",
+            "0",
+            "--v311c-recv",
+            "A",
+            "--v311c-b-n",
+            "8",
+            "--v311c-probe-shop",
+            "--v311c-lineage",
+            "--v311c-probe-every",
+            "100",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--score-arg-order",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--match-eps",
+            "0",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-birth-hu",
+            "on",
+            "--v311c-serial",
+            "--v311c-no-tags",
+            "--v311c-audit"
+          ],
+          "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+          "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+          "reservation_gb": 3,
+          "requires": [
+            "gate-off8.json",
+            "gate-components.json"
+          ],
+          "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline",
+          "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+          "export_final": true,
+          "production_started": false,
+          "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_on1_200.json",
+          "reference_sha256": "a47c87cb19629a98f09fcbe15cf5c35b482c184cadba411fab3252da92c8c565",
+          "deadline_jst": "2026-10-13T09:00:00+09:00"
+        },
+        "admission_wait_seconds": 0.18999814987182617,
+        "cpu_wait_seconds": 0.06601995800156146,
+        "production_started": false,
+        "model_parent_pid": 50896,
+        "exit_code": 0,
+        "ended_at_jst": "2026-10-10T08:52:14.208414+09:00",
+        "model_seconds": 17028.644930167007,
+        "protected_unchanged": true,
+        "peak_children_rss_bytes": 2738421760
+      },
+      "records": 200,
+      "blocks": [
+        {
+          "trials_zero_based": [
+            0,
+            99
+          ],
+          "count": 100,
+          "elapsed_delta": 7837.951565791038,
+          "trial_seconds_including_wait_and_probe_sum": 7836.89452408778,
+          "checkpoint_seconds_including_trial": 91.55817895790096,
+          "noncheckpoint_seconds": 7745.336345129879,
+          "checkpoint_rows": [
+            {
+              "trial": 99,
+              "seconds_including_wait_and_probe": 91.55817895790096,
+              "peak_rss_bytes": 618463232,
+              "active_seconds": 7837.367502672365,
+              "timer_totals": {
+                "learning_fingerprint": 31.353918708045967,
+                "snapshot": 0.00615362508688122,
+                "restore": 0.006500165909528732,
+                "trial_audit": 1.8866717118071392
+              },
+              "time": "2026-10-10T06:19:03.480144+09:00",
+              "elapsed_seconds": 7837.951565791038
+            }
+          ],
+          "last_noncheckpoint_mean20": 80.75694686874631,
+          "active_seconds_increments": [
+            7837.367502672365,
+            0
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 31.353918708045967,
+            "snapshot": 0.00615362508688122,
+            "restore": 0.006500165909528732,
+            "trial_audit": 1.8866717118071392
+          }
+        },
+        {
+          "trials_zero_based": [
+            100,
+            199
+          ],
+          "count": 100,
+          "elapsed_delta": 9154.53309708403,
+          "trial_seconds_including_wait_and_probe_sum": 9154.011150212144,
+          "checkpoint_seconds_including_trial": 68.4802208750043,
+          "noncheckpoint_seconds": 9085.53092933714,
+          "checkpoint_rows": [
+            {
+              "trial": 199,
+              "seconds_including_wait_and_probe": 68.4802208750043,
+              "peak_rss_bytes": 1149583360,
+              "active_seconds": 16991.705893302453,
+              "timer_totals": {
+                "learning_fingerprint": 91.0535375829786,
+                "snapshot": 0.02172500011511147,
+                "restore": 0.01751974888611585,
+                "trial_audit": 3.7406954679172486
+              },
+              "time": "2026-10-10T08:51:38.085076+09:00",
+              "elapsed_seconds": 16992.484662875067
+            }
+          ],
+          "last_noncheckpoint_mean20": 96.15417359999265,
+          "active_seconds_increments": [
+            16991.705893302453,
+            7837.367502672365
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 91.0535375829786,
+            "snapshot": 0.02172500011511147,
+            "restore": 0.01751974888611585,
+            "trial_audit": 3.7406954679172486
+          }
+        }
+      ],
+      "first": {
+        "trial": 0,
+        "seconds_including_wait_and_probe": 0.01177179196383804,
+        "peak_rss_bytes": 35389440,
+        "active_seconds": 0.17946533299982548,
+        "timer_totals": {
+          "learning_fingerprint": 0.0,
+          "snapshot": 0.0,
+          "restore": 0.0,
+          "trial_audit": 0.004335207981057465
+        },
+        "time": "2026-10-10T04:08:26.110357+09:00",
+        "elapsed_seconds": 0.6432452501030639
+      },
+      "last": {
+        "trial": 199,
+        "seconds_including_wait_and_probe": 68.4802208750043,
+        "peak_rss_bytes": 1149583360,
+        "active_seconds": 16991.705893302453,
+        "timer_totals": {
+          "learning_fingerprint": 91.0535375829786,
+          "snapshot": 0.02172500011511147,
+          "restore": 0.01751974888611585,
+          "trial_audit": 3.7406954679172486
+        },
+        "time": "2026-10-10T08:51:38.085076+09:00",
+        "elapsed_seconds": 16992.484662875067
+      },
+      "record_time_basis": "個体のelapsed_secondsは実時間。seconds_including_wait_and_probeは試行の待ちと試験も含む。active_secondsを純模型CPUと仮定しない。"
+    },
+    "B5_929_on200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after",
+      "status": {
+        "state": "completed",
+        "started_at_jst": "2026-10-10T08:52:21.477498+09:00",
+        "wrapper_pid": 85048,
+        "command": {
+          "name": "B5_on200_after",
+          "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+          "models": 1,
+          "parallel": false,
+          "phase": "on1",
+          "seeds": [
+            1
+          ],
+          "model_argv": [
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5/tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--probe-world",
+            "--cells",
+            "f0.1000_th2.1000_first_order",
+            "--no-compare",
+            "--shop-world",
+            "2",
+            "--shop-exc",
+            "0.2",
+            "--trial-count",
+            "200",
+            "--v39-price",
+            "0.01873710622997919",
+            "--e-price",
+            "0.01873710622997919",
+            "--workers",
+            "1",
+            "--seeds",
+            "1",
+            "--sme2017",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--v311c",
+            "--v311c-f",
+            "0.1",
+            "--v311c-groups",
+            "0",
+            "--v311c-runs",
+            "1",
+            "--v311c-q",
+            "0",
+            "--v311c-m",
+            "0",
+            "--v311c-recv",
+            "A",
+            "--v311c-b-n",
+            "8",
+            "--v311c-probe-shop",
+            "--v311c-lineage",
+            "--v311c-probe-every",
+            "100",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--score-arg-order",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--match-eps",
+            "0",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-birth-hu",
+            "on",
+            "--v311c-serial",
+            "--v311c-no-tags",
+            "--v311c-audit"
+          ],
+          "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+          "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+          "reservation_gb": 3,
+          "requires": [
+            "gate-off8.json",
+            "gate-components.json"
+          ],
+          "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_B5",
+          "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+          "export_final": true,
+          "production_started": false,
+          "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_on1_200.json",
+          "reference_sha256": "a47c87cb19629a98f09fcbe15cf5c35b482c184cadba411fab3252da92c8c565",
+          "deadline_jst": "2026-10-13T09:00:00+09:00"
+        },
+        "admission_wait_seconds": 17023.62489914894,
+        "cpu_wait_seconds": 0.07973574998322874,
+        "production_started": false,
+        "model_parent_pid": 85055,
+        "exit_code": 0,
+        "ended_at_jst": "2026-10-10T13:30:00.694795+09:00",
+        "model_seconds": 16659.087912125047,
+        "protected_unchanged": true,
+        "peak_children_rss_bytes": 2750889984
+      },
+      "records": 200,
+      "blocks": [
+        {
+          "trials_zero_based": [
+            0,
+            99
+          ],
+          "count": 100,
+          "elapsed_delta": 7789.573056125082,
+          "trial_seconds_including_wait_and_probe_sum": 7788.441000619321,
+          "checkpoint_seconds_including_trial": 88.12241791700944,
+          "noncheckpoint_seconds": 7700.318582702312,
+          "checkpoint_rows": [
+            {
+              "trial": 99,
+              "seconds_including_wait_and_probe": 88.12241791700944,
+              "peak_rss_bytes": 608763904,
+              "active_seconds": 7788.876850539353,
+              "timer_totals": {
+                "learning_fingerprint": 35.890436459099874,
+                "snapshot": 0.007903374964371324,
+                "restore": 0.012251749983988702,
+                "trial_audit": 1.7639528770232573
+              },
+              "time": "2026-10-10T11:02:11.149946+09:00",
+              "elapsed_seconds": 7789.573056125082
+            }
+          ],
+          "last_noncheckpoint_mean20": 65.53430345202796,
+          "active_seconds_increments": [
+            7788.876850539353,
+            0
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 35.890436459099874,
+            "snapshot": 0.007903374964371324,
+            "restore": 0.012251749983988702,
+            "trial_audit": 1.7639528770232573
+          }
+        },
+        {
+          "trials_zero_based": [
+            100,
+            199
+          ],
+          "count": 100,
+          "elapsed_delta": 8832.42924899992,
+          "trial_seconds_including_wait_and_probe_sum": 8831.865902196383,
+          "checkpoint_seconds_including_trial": 58.29216654202901,
+          "noncheckpoint_seconds": 8773.573735654354,
+          "checkpoint_rows": [
+            {
+              "trial": 199,
+              "seconds_including_wait_and_probe": 58.29216654202901,
+              "peak_rss_bytes": 1149747200,
+              "active_seconds": 16620.992317286436,
+              "timer_totals": {
+                "learning_fingerprint": 86.23067550023552,
+                "snapshot": 0.027644791873171926,
+                "restore": 0.02935733401682228,
+                "trial_audit": 3.3909911310765892
+              },
+              "time": "2026-10-10T13:29:23.646590+09:00",
+              "elapsed_seconds": 16622.002305125003
+            }
+          ],
+          "last_noncheckpoint_mean20": 78.96494851245662,
+          "active_seconds_increments": [
+            16620.992317286436,
+            7788.876850539353
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 86.23067550023552,
+            "snapshot": 0.027644791873171926,
+            "restore": 0.02935733401682228,
+            "trial_audit": 3.3909911310765892
+          }
+        }
+      ],
+      "first": {
+        "trial": 0,
+        "seconds_including_wait_and_probe": 0.012404375011101365,
+        "peak_rss_bytes": 35766272,
+        "active_seconds": 0.18432541692163795,
+        "timer_totals": {
+          "learning_fingerprint": 0.0,
+          "snapshot": 0.0,
+          "restore": 0.0,
+          "trial_audit": 0.004382833954878151
+        },
+        "time": "2026-10-10T08:52:22.150246+09:00",
+        "elapsed_seconds": 0.6349511250155047
+      },
+      "last": {
+        "trial": 199,
+        "seconds_including_wait_and_probe": 58.29216654202901,
+        "peak_rss_bytes": 1149747200,
+        "active_seconds": 16620.992317286436,
+        "timer_totals": {
+          "learning_fingerprint": 86.23067550023552,
+          "snapshot": 0.027644791873171926,
+          "restore": 0.02935733401682228,
+          "trial_audit": 3.3909911310765892
+        },
+        "time": "2026-10-10T13:29:23.646590+09:00",
+        "elapsed_seconds": 16622.002305125003
+      },
+      "record_time_basis": "個体のelapsed_secondsは実時間。seconds_including_wait_and_probeは試行の待ちと試験も含む。active_secondsを純模型CPUと仮定しない。"
+    },
+    "B5_c4_on20": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01",
+      "status": {
+        "state": "completed",
+        "started_at_jst": "2026-10-10T03:40:06.923133+09:00",
+        "wrapper_pid": 46817,
+        "command": {
+          "name": "B5_pilot20_before_dependency01",
+          "commit": "c4cfed12a3944071951775b2c9373ca27705fb25",
+          "models": 1,
+          "parallel": false,
+          "phase": "pilot",
+          "seeds": [
+            1
+          ],
+          "model_argv": [
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline/tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--probe-world",
+            "--cells",
+            "f0.1000_th2.1000_first_order",
+            "--no-compare",
+            "--shop-world",
+            "2",
+            "--shop-exc",
+            "0.2",
+            "--trial-count",
+            "20",
+            "--v39-price",
+            "0.01873710622997919",
+            "--e-price",
+            "0.01873710622997919",
+            "--workers",
+            "1",
+            "--seeds",
+            "1",
+            "--sme2017",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--v311c",
+            "--v311c-f",
+            "0.1",
+            "--v311c-groups",
+            "0",
+            "--v311c-runs",
+            "1",
+            "--v311c-q",
+            "0",
+            "--v311c-m",
+            "0",
+            "--v311c-recv",
+            "A",
+            "--v311c-b-n",
+            "8",
+            "--v311c-probe-shop",
+            "--v311c-lineage",
+            "--v311c-probe-every",
+            "100",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--score-arg-order",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--match-eps",
+            "0",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-birth-hu",
+            "on",
+            "--v311c-serial",
+            "--v311c-no-tags",
+            "--v311c-audit"
+          ],
+          "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+          "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+          "reservation_gb": 1,
+          "requires": [
+            "gate-off8.json",
+            "gate-components.json"
+          ],
+          "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_instruction12_baseline",
+          "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+          "export_final": true,
+          "production_started": false,
+          "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_pilot20.json",
+          "reference_sha256": "b1d2a947cfc88d16d476e2c55801678a270379d88427b49104aa6d700cf087ac",
+          "deadline_jst": "2026-10-13T09:00:00+09:00"
+        },
+        "admission_wait_seconds": 0.16116905212402344,
+        "cpu_wait_seconds": 0.05529270798433572,
+        "production_started": false,
+        "model_parent_pid": 46824,
+        "exit_code": 0,
+        "ended_at_jst": "2026-10-10T03:54:21.820177+09:00",
+        "model_seconds": 854.8900301669491,
+        "protected_unchanged": true,
+        "peak_children_rss_bytes": 243974144
+      },
+      "records": 20,
+      "blocks": [
+        {
+          "trials_zero_based": [
+            0,
+            19
+          ],
+          "count": 20,
+          "elapsed_delta": 853.5439439580077,
+          "trial_seconds_including_wait_and_probe_sum": 852.9804353342624,
+          "checkpoint_seconds_including_trial": 0,
+          "noncheckpoint_seconds": 852.9804353342624,
+          "checkpoint_rows": [],
+          "last_noncheckpoint_mean20": 42.64902176671312,
+          "active_seconds_increments": [
+            853.1367909978144,
+            0
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 0.0,
+            "snapshot": 0.0,
+            "restore": 0.0,
+            "trial_audit": 0.2572970830369741
+          }
+        }
+      ],
+      "first": {
+        "trial": 0,
+        "seconds_including_wait_and_probe": 0.01530145900323987,
+        "peak_rss_bytes": 34717696,
+        "active_seconds": 0.12573766591958702,
+        "timer_totals": {
+          "learning_fingerprint": 0.0,
+          "snapshot": 0.0,
+          "restore": 0.0,
+          "trial_audit": 0.0037999579217284918
+        },
+        "time": "2026-10-10T03:40:07.476633+09:00",
+        "elapsed_seconds": 0.5211191249545664
+      },
+      "last": {
+        "trial": 19,
+        "seconds_including_wait_and_probe": 102.320867082919,
+        "peak_rss_bytes": 87801856,
+        "active_seconds": 853.1367909978144,
+        "timer_totals": {
+          "learning_fingerprint": 0.0,
+          "snapshot": 0.0,
+          "restore": 0.0,
+          "trial_audit": 0.2572970830369741
+        },
+        "time": "2026-10-10T03:54:20.506206+09:00",
+        "elapsed_seconds": 853.5439439580077
+      },
+      "record_time_basis": "個体のelapsed_secondsは実時間。seconds_including_wait_and_probeは試行の待ちと試験も含む。active_secondsを純模型CPUと仮定しない。"
+    },
+    "B6_e96_flags_off_on200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03",
+      "status": {
+        "state": "completed",
+        "started_at_jst": "2026-10-10T15:26:46.906743+09:00",
+        "wrapper_pid": 31888,
+        "command": {
+          "name": "B6_off_on200_candidate02",
+          "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+          "models": 1,
+          "parallel": false,
+          "phase": "on1",
+          "seeds": [
+            1
+          ],
+          "model_argv": [
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_D_instruction20/tools/v3_run.py",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+            "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03/output",
+            "--nohash",
+            "--vt",
+            "0.3842",
+            "--extend-rule",
+            "none",
+            "--charge1",
+            "d32",
+            "--fast",
+            "--no-public-history",
+            "--dump-slot-history",
+            "--fix2-full",
+            "--fix-order2",
+            "--proj-first",
+            "--fill-norestate",
+            "--no-charge2",
+            "--own-evidence",
+            "--v39",
+            "--v39-budget",
+            "inf",
+            "--v39-decay",
+            "actr",
+            "--v310-be",
+            "--hist-role",
+            "--score-role",
+            "--nsim",
+            "0.7",
+            "--ident-rho",
+            "0.5",
+            "--ident-argmax",
+            "--ident-commons",
+            "--u-struct",
+            "--relearn-init",
+            "--tie-struct",
+            "--amb-local",
+            "--dump-answers",
+            "--dump-routing",
+            "--answer-gap",
+            "--strict-pc",
+            "--probe-world",
+            "--cells",
+            "f0.1000_th2.1000_first_order",
+            "--no-compare",
+            "--shop-world",
+            "2",
+            "--shop-exc",
+            "0.2",
+            "--trial-count",
+            "200",
+            "--v39-price",
+            "0.01873710622997919",
+            "--e-price",
+            "0.01873710622997919",
+            "--workers",
+            "1",
+            "--seeds",
+            "1",
+            "--sme2017",
+            "--sme-call-seed",
+            "--sme-tie-uniform",
+            "--v311c",
+            "--v311c-f",
+            "0.1",
+            "--v311c-groups",
+            "0",
+            "--v311c-runs",
+            "1",
+            "--v311c-q",
+            "0",
+            "--v311c-m",
+            "0",
+            "--v311c-recv",
+            "A",
+            "--v311c-b-n",
+            "8",
+            "--v311c-probe-shop",
+            "--v311c-lineage",
+            "--v311c-probe-every",
+            "100",
+            "--sme-intern-cache",
+            "--sme-evict-trial-cache",
+            "--sme-evict-tombstone",
+            "--score-logp",
+            "--score-arg-order",
+            "--match-cstar",
+            "--match-cstar-e",
+            "--h-dirichlet",
+            "1",
+            "--birth-score",
+            "seq",
+            "--logp-eps",
+            "0.01",
+            "--match-eps",
+            "0",
+            "--attn-sme",
+            "global",
+            "--attn-position",
+            "k2",
+            "--attn-eta",
+            "0.1",
+            "--attn-allin",
+            "--stage2",
+            "on",
+            "--stage2-loss",
+            "top1",
+            "--stage2-init",
+            "virtual",
+            "--stage2-scope",
+            "all",
+            "--stage2-birth-hu",
+            "on",
+            "--v311c-serial",
+            "--v311c-no-tags",
+            "--v311c-audit"
+          ],
+          "config": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/shop_f0.1.json",
+          "config_sha256": "294b1ad7b32458cd854e8f2801d8e77857a6cb2b5899c08f0a9b5911f34e80aa",
+          "reservation_gb": 3,
+          "requires": [
+            "gate-off8.json",
+            "gate-components.json"
+          ],
+          "cwd": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/source_coll_D_instruction20",
+          "observer_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+          "export_final": true,
+          "production_started": false,
+          "reference": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/reference_on1_200.json",
+          "reference_sha256": "a47c87cb19629a98f09fcbe15cf5c35b482c184cadba411fab3252da92c8c565",
+          "deadline_jst": "2026-10-13T09:00:00+09:00"
+        },
+        "admission_wait_seconds": 801.3731307983398,
+        "cpu_wait_seconds": 0.8606189580168575,
+        "production_started": false,
+        "model_parent_pid": 31910,
+        "exit_code": 0,
+        "ended_at_jst": "2026-10-10T20:45:35.864931+09:00",
+        "model_seconds": 19128.811994708027,
+        "protected_unchanged": true,
+        "peak_children_rss_bytes": 2745794560
+      },
+      "records": 200,
+      "blocks": [
+        {
+          "trials_zero_based": [
+            0,
+            99
+          ],
+          "count": 100,
+          "elapsed_delta": 8574.908296832931,
+          "trial_seconds_including_wait_and_probe_sum": 8571.07292287494,
+          "checkpoint_seconds_including_trial": 114.50410983304027,
+          "noncheckpoint_seconds": 8456.5688130419,
+          "checkpoint_rows": [
+            {
+              "trial": 99,
+              "seconds_including_wait_and_probe": 114.50410983304027,
+              "peak_rss_bytes": 321585152,
+              "active_seconds": 8573.03011279786,
+              "timer_totals": {
+                "learning_fingerprint": 49.651037583942525,
+                "snapshot": 0.020441625034436584,
+                "restore": 0.02364029106684029,
+                "trial_audit": 1.8520740426611155
+              },
+              "time": "2026-10-10T17:49:42.069462+09:00",
+              "elapsed_seconds": 8574.908296832931
+            }
+          ],
+          "last_noncheckpoint_mean20": 85.02827367915889,
+          "active_seconds_increments": [
+            8573.03011279786,
+            0
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 49.651037583942525,
+            "snapshot": 0.020441625034436584,
+            "restore": 0.02364029106684029,
+            "trial_audit": 1.8520740426611155
+          }
+        },
+        {
+          "trials_zero_based": [
+            100,
+            199
+          ],
+          "count": 100,
+          "elapsed_delta": 10517.091019917047,
+          "trial_seconds_including_wait_and_probe_sum": 10513.820423168596,
+          "checkpoint_seconds_including_trial": 57.4823087080149,
+          "noncheckpoint_seconds": 10456.338114460581,
+          "checkpoint_rows": [
+            {
+              "trial": 199,
+              "seconds_including_wait_and_probe": 57.4823087080149,
+              "peak_rss_bytes": 1149911040,
+              "active_seconds": 19088.811073545483,
+              "timer_totals": {
+                "learning_fingerprint": 99.35222195892129,
+                "snapshot": 0.03326979198027402,
+                "restore": 0.0349132081028074,
+                "trial_audit": 3.807632458396256
+              },
+              "time": "2026-10-10T20:44:59.268355+09:00",
+              "elapsed_seconds": 19091.999316749978
+            }
+          ],
+          "last_noncheckpoint_mean20": 96.8538762729324,
+          "active_seconds_increments": [
+            19088.811073545483,
+            8573.03011279786
+          ],
+          "last_timer_totals": {
+            "learning_fingerprint": 99.35222195892129,
+            "snapshot": 0.03326979198027402,
+            "restore": 0.0349132081028074,
+            "trial_audit": 3.807632458396256
+          }
+        }
+      ],
+      "first": {
+        "trial": 0,
+        "seconds_including_wait_and_probe": 0.02528958290349692,
+        "peak_rss_bytes": 35553280,
+        "active_seconds": 0.3491741669131443,
+        "timer_totals": {
+          "learning_fingerprint": 0.0,
+          "snapshot": 0.0,
+          "restore": 0.0,
+          "trial_audit": 0.0046119579346850514
+        },
+        "time": "2026-10-10T15:26:48.525622+09:00",
+        "elapsed_seconds": 1.4128422909416258
+      },
+      "last": {
+        "trial": 199,
+        "seconds_including_wait_and_probe": 57.4823087080149,
+        "peak_rss_bytes": 1149911040,
+        "active_seconds": 19088.811073545483,
+        "timer_totals": {
+          "learning_fingerprint": 99.35222195892129,
+          "snapshot": 0.03326979198027402,
+          "restore": 0.0349132081028074,
+          "trial_audit": 3.807632458396256
+        },
+        "time": "2026-10-10T20:44:59.268355+09:00",
+        "elapsed_seconds": 19091.999316749978
+      },
+      "record_time_basis": "個体のelapsed_secondsは実時間。seconds_including_wait_and_probeは試行の待ちと試験も含む。active_secondsを純模型CPUと仮定しない。"
+    }
+  },
+  "old8": {
+    "sme-evict-20261007/q0_8_evict200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200",
+      "agents": {
+        "agent0.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 483.666800957988,
+              "active_seconds": 63.773427585256286,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.7386675829766318,
+                "peak_rss_bytes": 29212672,
+                "active_seconds": 0.10389916697749868,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007599207980092615
+                },
+                "time": "2026-10-06T18:24:23.984275+09:00",
+                "elapsed_seconds": 1.3253011250053532
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 39.995969250041526,
+                "peak_rss_bytes": 115081216,
+                "active_seconds": 63.773427585256286,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7695745829842053,
+                  "snapshot": 0.0005711250123567879,
+                  "restore": 0.00767062499653548,
+                  "trial_audit": 11.413420080032665
+                },
+                "time": "2026-10-06T18:32:26.329612+09:00",
+                "elapsed_seconds": 483.666800957988
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 710.1537570829969,
+              "active_seconds": 163.2111567936954,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 34.22992399998475,
+                "peak_rss_bytes": 117817344,
+                "active_seconds": 64.5926201272523,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7695745829842053,
+                  "snapshot": 0.0005711250123567879,
+                  "restore": 0.00767062499653548,
+                  "trial_audit": 11.591794079984538
+                },
+                "time": "2026-10-06T18:33:00.564556+09:00",
+                "elapsed_seconds": 517.9017112499569
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 49.293366458965465,
+                "peak_rss_bytes": 162283520,
+                "active_seconds": 163.2111567936954,
+                "timer_totals": {
+                  "learning_fingerprint": 4.415342583029997,
+                  "snapshot": 0.0015056670526973903,
+                  "restore": 0.015181291964836419,
+                  "trial_audit": 28.33923170855269
+                },
+                "time": "2026-10-06T18:44:16.488598+09:00",
+                "elapsed_seconds": 1193.820558040985
+              }
+            }
+          ]
+        },
+        "agent1.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 492.55346704099793,
+              "active_seconds": 52.19222233473556,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.6754176670219749,
+                "peak_rss_bytes": 29097984,
+                "active_seconds": 0.10712550097377971,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007897458970546722
+                },
+                "time": "2026-10-06T18:24:24.017467+09:00",
+                "elapsed_seconds": 1.3586341249756515
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 48.32822520902846,
+                "peak_rss_bytes": 95748096,
+                "active_seconds": 52.19222233473556,
+                "timer_totals": {
+                  "learning_fingerprint": 1.5913897500140592,
+                  "snapshot": 0.0005580830038525164,
+                  "restore": 0.0055252910242415965,
+                  "trial_audit": 9.301706792146433
+                },
+                "time": "2026-10-06T18:32:35.216058+09:00",
+                "elapsed_seconds": 492.55346704099793
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 712.0909506249591,
+              "active_seconds": 137.13730866566766,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 25.966421624994837,
+                "peak_rss_bytes": 97484800,
+                "active_seconds": 52.83889062667731,
+                "timer_totals": {
+                  "learning_fingerprint": 1.5913897500140592,
+                  "snapshot": 0.0005580830038525164,
+                  "restore": 0.0055252910242415965,
+                  "trial_audit": 9.433464750181884
+                },
+                "time": "2026-10-06T18:33:01.187657+09:00",
+                "elapsed_seconds": 518.5247933749924
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 59.51338475005468,
+                "peak_rss_bytes": 144064512,
+                "active_seconds": 137.13730866566766,
+                "timer_totals": {
+                  "learning_fingerprint": 4.185289375076536,
+                  "snapshot": 0.0014461660175584257,
+                  "restore": 0.013959624047856778,
+                  "trial_audit": 23.381830163358245
+                },
+                "time": "2026-10-06T18:44:27.312635+09:00",
+                "elapsed_seconds": 1204.644417665957
+              }
+            }
+          ]
+        },
+        "agent2.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 497.7075227079913,
+              "active_seconds": 67.44308542157523,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.6110854159924202,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.10564279195386916,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.008551500970497727
+                },
+                "time": "2026-10-06T18:24:24.047558+09:00",
+                "elapsed_seconds": 1.3887318329652771
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 52.74676495901076,
+                "peak_rss_bytes": 113229824,
+                "active_seconds": 67.44308542157523,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6748895419877954,
+                  "snapshot": 0.0005639580194838345,
+                  "restore": 0.008029624994378537,
+                  "trial_audit": 12.31270225008484
+                },
+                "time": "2026-10-06T18:32:40.370202+09:00",
+                "elapsed_seconds": 497.7075227079913
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 701.1086932920152,
+              "active_seconds": 156.20826304267393,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 21.522674625040963,
+                "peak_rss_bytes": 116260864,
+                "active_seconds": 68.22017858852632,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6748895419877954,
+                  "snapshot": 0.0005639580194838345,
+                  "restore": 0.008029624994378537,
+                  "trial_audit": 12.474419417034369
+                },
+                "time": "2026-10-06T18:33:01.898237+09:00",
+                "elapsed_seconds": 519.2351835829904
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 53.05070383398561,
+                "peak_rss_bytes": 165068800,
+                "active_seconds": 156.20826304267393,
+                "timer_totals": {
+                  "learning_fingerprint": 4.153451791964471,
+                  "snapshot": 0.0017322080093435943,
+                  "restore": 0.013936584000475705,
+                  "trial_audit": 27.04459946148563
+                },
+                "time": "2026-10-06T18:44:21.484370+09:00",
+                "elapsed_seconds": 1198.8162160000065
+              }
+            }
+          ]
+        },
+        "agent3.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 502.52396266598953,
+              "active_seconds": 63.579719752655365,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.5558199170045555,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.10075912496540695,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0074838330037891865
+                },
+                "time": "2026-10-06T18:24:24.082399+09:00",
+                "elapsed_seconds": 1.423584749980364
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 56.390836749982554,
+                "peak_rss_bytes": 99794944,
+                "active_seconds": 63.579719752655365,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7327944160206243,
+                  "snapshot": 0.0006008340278640389,
+                  "restore": 0.008155540970619768,
+                  "trial_audit": 11.450142864778172
+                },
+                "time": "2026-10-06T18:32:45.186891+09:00",
+                "elapsed_seconds": 502.52396266598953
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 707.8607440419728,
+              "active_seconds": 144.6315519992495,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 17.232178875012323,
+                "peak_rss_bytes": 102531072,
+                "active_seconds": 64.23252258665161,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7327944160206243,
+                  "snapshot": 0.0006008340278640389,
+                  "restore": 0.008155540970619768,
+                  "trial_audit": 11.589344156789593
+                },
+                "time": "2026-10-06T18:33:02.423537+09:00",
+                "elapsed_seconds": 519.7605567499995
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 64.09527216700371,
+                "peak_rss_bytes": 135135232,
+                "active_seconds": 144.6315519992495,
+                "timer_totals": {
+                  "learning_fingerprint": 4.253332749009132,
+                  "snapshot": 0.0014498340315185487,
+                  "restore": 0.01551074895542115,
+                  "trial_audit": 24.358787198958453
+                },
+                "time": "2026-10-06T18:44:33.052714+09:00",
+                "elapsed_seconds": 1210.3847067079623
+              }
+            }
+          ]
+        },
+        "agent4.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 488.0888692080043,
+              "active_seconds": 66.36280496272957,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.5056052500149235,
+                "peak_rss_bytes": 29310976,
+                "active_seconds": 0.09997529198881239,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007897458039224148
+                },
+                "time": "2026-10-06T18:24:24.121633+09:00",
+                "elapsed_seconds": 1.4627960000070743
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 42.598604124970734,
+                "peak_rss_bytes": 94453760,
+                "active_seconds": 66.36280496272957,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6736669169622473,
+                  "snapshot": 0.0007130000158213079,
+                  "restore": 0.005550708039663732,
+                  "trial_audit": 10.308712955273222
+                },
+                "time": "2026-10-06T18:32:30.751548+09:00",
+                "elapsed_seconds": 488.0888692080043
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 732.7244955420028,
+              "active_seconds": 157.04535620467504,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 32.32041433296399,
+                "peak_rss_bytes": 97501184,
+                "active_seconds": 67.02515900373692,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6736669169622473,
+                  "snapshot": 0.0007130000158213079,
+                  "restore": 0.005550708039663732,
+                  "trial_audit": 10.449502621253487
+                },
+                "time": "2026-10-06T18:33:03.077727+09:00",
+                "elapsed_seconds": 520.4146357079735
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 73.93006066599628,
+                "peak_rss_bytes": 133120000,
+                "active_seconds": 157.04535620467504,
+                "timer_totals": {
+                  "learning_fingerprint": 4.336055083957035,
+                  "snapshot": 0.0020524999708868563,
+                  "restore": 0.01294945809058845,
+                  "trial_audit": 23.014108875242528
+                },
+                "time": "2026-10-06T18:44:43.481677+09:00",
+                "elapsed_seconds": 1220.8133647500072
+              }
+            }
+          ]
+        },
+        "agent5.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 507.0620458329795,
+              "active_seconds": 68.59933854098199,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.44345070800045505,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.10335795802529901,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.006131374975666404
+                },
+                "time": "2026-10-06T18:24:24.153657+09:00",
+                "elapsed_seconds": 1.4950452909688465
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 60.418623416975606,
+                "peak_rss_bytes": 97746944,
+                "active_seconds": 68.59933854098199,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6633308340096846,
+                  "snapshot": 0.0006181250209920108,
+                  "restore": 0.00446645898045972,
+                  "trial_audit": 10.942568668629974
+                },
+                "time": "2026-10-06T18:32:49.724795+09:00",
+                "elapsed_seconds": 507.0620458329795
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 708.6985097919824,
+              "active_seconds": 164.68748550012242,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 14.03483254101593,
+                "peak_rss_bytes": 101187584,
+                "active_seconds": 69.43582620704547,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6633308340096846,
+                  "snapshot": 0.0006181250209920108,
+                  "restore": 0.00446645898045972,
+                  "trial_audit": 11.09064221061999
+                },
+                "time": "2026-10-06T18:33:03.765708+09:00",
+                "elapsed_seconds": 521.1029122910113
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 68.08114320901223,
+                "peak_rss_bytes": 141000704,
+                "active_seconds": 164.68748550012242,
+                "timer_totals": {
+                  "learning_fingerprint": 4.205599209002685,
+                  "snapshot": 0.001657417044043541,
+                  "restore": 0.011516041995491832,
+                  "trial_audit": 25.05865479883505
+                },
+                "time": "2026-10-06T18:44:38.428844+09:00",
+                "elapsed_seconds": 1215.7605556249619
+              }
+            }
+          ]
+        },
+        "agent6.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 511.0046676250058,
+              "active_seconds": 55.742655751877464,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.2781221670447849,
+                "peak_rss_bytes": 29261824,
+                "active_seconds": 0.11428866599453613,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007796666992362589
+                },
+                "time": "2026-10-06T18:24:24.184912+09:00",
+                "elapsed_seconds": 1.5261024159844965
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 63.66735424997751,
+                "peak_rss_bytes": 89751552,
+                "active_seconds": 55.742655751877464,
+                "timer_totals": {
+                  "learning_fingerprint": 1.5781007910263725,
+                  "snapshot": 0.0005985000170767307,
+                  "restore": 0.007095624983776361,
+                  "trial_audit": 8.298162497929297
+                },
+                "time": "2026-10-06T18:32:53.667680+09:00",
+                "elapsed_seconds": 511.0046676250058
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 721.2792700830032,
+              "active_seconds": 139.4496882511885,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 10.73536641697865,
+                "peak_rss_bytes": 90505216,
+                "active_seconds": 56.43825212592492,
+                "timer_totals": {
+                  "learning_fingerprint": 1.5781007910263725,
+                  "snapshot": 0.0005985000170767307,
+                  "restore": 0.007095624983776361,
+                  "trial_audit": 8.42419774789596
+                },
+                "time": "2026-10-06T18:33:04.407056+09:00",
+                "elapsed_seconds": 521.7439615409821
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 82.9530168750207,
+                "peak_rss_bytes": 134135808,
+                "active_seconds": 139.4496882511885,
+                "timer_totals": {
+                  "learning_fingerprint": 4.17758287495235,
+                  "snapshot": 0.0015639170305803418,
+                  "restore": 0.013640958932228386,
+                  "trial_audit": 19.827215828292537
+                },
+                "time": "2026-10-06T18:44:54.952617+09:00",
+                "elapsed_seconds": 1232.283937708009
+              }
+            }
+          ]
+        },
+        "agent7.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 515.4794359160005,
+              "active_seconds": 74.06199692666996,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.4187197499559261,
+                "peak_rss_bytes": 29212672,
+                "active_seconds": 0.10696329205529764,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.006658290978521109
+                },
+                "time": "2026-10-06T18:24:24.225611+09:00",
+                "elapsed_seconds": 1.5666668330086395
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 67.5736332089873,
+                "peak_rss_bytes": 96927744,
+                "active_seconds": 74.06199692666996,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6617329999571666,
+                  "snapshot": 0.0006417089607566595,
+                  "restore": 0.004614792007487267,
+                  "trial_audit": 11.538442911813036
+                },
+                "time": "2026-10-06T18:32:58.142453+09:00",
+                "elapsed_seconds": 515.4794359160005
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 711.0705406669877,
+              "active_seconds": 166.45882209163392,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 6.7359049579827115,
+                "peak_rss_bytes": 98648064,
+                "active_seconds": 74.99057492660359,
+                "timer_totals": {
+                  "learning_fingerprint": 1.6617329999571666,
+                  "snapshot": 0.0006417089607566595,
+                  "restore": 0.004614792007487267,
+                  "trial_audit": 11.688872702769004
+                },
+                "time": "2026-10-06T18:33:04.883119+09:00",
+                "elapsed_seconds": 522.2200554999872
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 77.98762858298142,
+                "peak_rss_bytes": 136790016,
+                "active_seconds": 166.45882209163392,
+                "timer_totals": {
+                  "learning_fingerprint": 4.277793040964752,
+                  "snapshot": 0.001929249963723123,
+                  "restore": 0.010439042060170323,
+                  "trial_audit": 24.93175754143158
+                },
+                "time": "2026-10-06T18:44:49.218593+09:00",
+                "elapsed_seconds": 1226.5499765829882
+              }
+            }
+          ]
+        }
+      },
+      "comparable_to_allin": false,
+      "reason": "旧版又は新旗off、価格・通信・監査条件差。全部入りの倍率には代用しない。"
+    },
+    "sme-evict-20261007/q0_8_plain200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200",
+      "agents": {
+        "agent0.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 769.2335974160233,
+              "active_seconds": 106.45786754426081,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.7286885830108076,
+                "peak_rss_bytes": 29114368,
+                "active_seconds": 0.10557079093996435,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007675916014704853
+                },
+                "time": "2026-10-06T17:37:12.258567+09:00",
+                "elapsed_seconds": 1.3423075000173412
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 357.9067298330483,
+                "peak_rss_bytes": 646938624,
+                "active_seconds": 106.45786754426081,
+                "timer_totals": {
+                  "learning_fingerprint": 48.07448687503347,
+                  "snapshot": 0.0006477499846369028,
+                  "restore": 0.008111917006317526,
+                  "trial_audit": 9.802256873867009
+                },
+                "time": "2026-10-06T17:50:00.155764+09:00",
+                "elapsed_seconds": 769.2335974160233
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1973.2361547499895,
+              "active_seconds": 382.53405437641777,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 33.158216750016436,
+                "peak_rss_bytes": 646938624,
+                "active_seconds": 107.67897900228854,
+                "timer_totals": {
+                  "learning_fingerprint": 48.07448687503347,
+                  "snapshot": 0.0006477499846369028,
+                  "restore": 0.008111917006317526,
+                  "trial_audit": 9.972841540875379
+                },
+                "time": "2026-10-06T17:50:33.318860+09:00",
+                "elapsed_seconds": 802.3964076249977
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1181.88740633399,
+                "peak_rss_bytes": 1562542080,
+                "active_seconds": 382.53405437641777,
+                "timer_totals": {
+                  "learning_fingerprint": 203.43264645902673,
+                  "snapshot": 0.002022499975282699,
+                  "restore": 0.01986262504942715,
+                  "trial_audit": 28.127032830088865
+                },
+                "time": "2026-10-06T18:22:53.406149+09:00",
+                "elapsed_seconds": 2742.4697521660128
+              }
+            }
+          ]
+        },
+        "agent1.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 774.2076697080047,
+              "active_seconds": 83.60743725975044,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.6685012500383891,
+                "peak_rss_bytes": 29097984,
+                "active_seconds": 0.10013412596890703,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.006484957993961871
+                },
+                "time": "2026-10-06T17:37:12.288820+09:00",
+                "elapsed_seconds": 1.3724470000015572
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 362.279472833965,
+                "peak_rss_bytes": 528482304,
+                "active_seconds": 83.60743725975044,
+                "timer_totals": {
+                  "learning_fingerprint": 36.50048741698265,
+                  "snapshot": 0.000544707989320159,
+                  "restore": 0.006728207983542234,
+                  "trial_audit": 7.997535460453946
+                },
+                "time": "2026-10-06T17:50:05.130060+09:00",
+                "elapsed_seconds": 774.2076697080047
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1891.002072458039,
+              "active_seconds": 300.97006396664074,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 28.728285458986647,
+                "peak_rss_bytes": 528482304,
+                "active_seconds": 84.32943488383899,
+                "timer_totals": {
+                  "learning_fingerprint": 36.50048741698265,
+                  "snapshot": 0.000544707989320159,
+                  "restore": 0.006728207983542234,
+                  "trial_audit": 8.16396904445719
+                },
+                "time": "2026-10-06T17:50:33.862567+09:00",
+                "elapsed_seconds": 802.9400657910155
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1103.5556912499596,
+                "peak_rss_bytes": 1296318464,
+                "active_seconds": 300.97006396664074,
+                "timer_totals": {
+                  "learning_fingerprint": 152.2943203339819,
+                  "snapshot": 0.002096123935189098,
+                  "restore": 0.0167887500138022,
+                  "trial_audit": 23.445917091681622
+                },
+                "time": "2026-10-06T18:21:36.145855+09:00",
+                "elapsed_seconds": 2665.2097421660437
+              }
+            }
+          ]
+        },
+        "agent2.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 783.7911955000018,
+              "active_seconds": 114.45956050686073,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.606600666011218,
+                "peak_rss_bytes": 29573120,
+                "active_seconds": 0.10038854094455019,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.008016457955818623
+                },
+                "time": "2026-10-06T17:37:12.316075+09:00",
+                "elapsed_seconds": 1.399888958025258
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 371.24742808396695,
+                "peak_rss_bytes": 646152192,
+                "active_seconds": 114.45956050686073,
+                "timer_totals": {
+                  "learning_fingerprint": 53.02699062501779,
+                  "snapshot": 0.0006465840269811451,
+                  "restore": 0.006934416014701128,
+                  "trial_audit": 10.554624959535431
+                },
+                "time": "2026-10-06T17:50:14.713561+09:00",
+                "elapsed_seconds": 783.7911955000018
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1906.6983827080112,
+              "active_seconds": 379.2199759288924,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 19.869869165995624,
+                "peak_rss_bytes": 646152192,
+                "active_seconds": 115.11569563188823,
+                "timer_totals": {
+                  "learning_fingerprint": 53.02699062501779,
+                  "snapshot": 0.0006465840269811451,
+                  "restore": 0.006934416014701128,
+                  "trial_audit": 10.694638459535781
+                },
+                "time": "2026-10-06T17:50:34.588559+09:00",
+                "elapsed_seconds": 803.6660411250195
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1128.145940916962,
+                "peak_rss_bytes": 1508704256,
+                "active_seconds": 379.2199759288924,
+                "timer_totals": {
+                  "learning_fingerprint": 210.2716239169822,
+                  "snapshot": 0.0019217090448364615,
+                  "restore": 0.015755750064272434,
+                  "trial_audit": 26.67498266894836
+                },
+                "time": "2026-10-06T18:22:01.426207+09:00",
+                "elapsed_seconds": 2690.489578208013
+              }
+            }
+          ]
+        },
+        "agent3.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 778.850387500017,
+              "active_seconds": 109.28090179758146,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.5515261250548065,
+                "peak_rss_bytes": 29245440,
+                "active_seconds": 0.09809008199954405,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007744542032014579
+                },
+                "time": "2026-10-06T17:37:12.349408+09:00",
+                "elapsed_seconds": 1.4331813750322908
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 365.8828588749748,
+                "peak_rss_bytes": 618348544,
+                "active_seconds": 109.28090179758146,
+                "timer_totals": {
+                  "learning_fingerprint": 51.16356179199647,
+                  "snapshot": 0.000685208011418581,
+                  "restore": 0.007865999999921769,
+                  "trial_audit": 9.82925745821558
+                },
+                "time": "2026-10-06T17:50:09.772679+09:00",
+                "elapsed_seconds": 778.850387500017
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1856.9379029999836,
+              "active_seconds": 352.9213933373685,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 25.399365166027565,
+                "peak_rss_bytes": 618348544,
+                "active_seconds": 109.95561979757622,
+                "timer_totals": {
+                  "learning_fingerprint": 51.16356179199647,
+                  "snapshot": 0.000685208011418581,
+                  "restore": 0.007865999999921769,
+                  "trial_audit": 9.95945587521419
+                },
+                "time": "2026-10-06T17:50:35.176747+09:00",
+                "elapsed_seconds": 804.254143750004
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1072.8597789159976,
+                "peak_rss_bytes": 1371701248,
+                "active_seconds": 352.9213933373685,
+                "timer_totals": {
+                  "learning_fingerprint": 197.68781695899088,
+                  "snapshot": 0.0028924160287715495,
+                  "restore": 0.01892708399100229,
+                  "trial_audit": 24.212932544061914
+                },
+                "time": "2026-10-06T18:21:06.724325+09:00",
+                "elapsed_seconds": 2635.7882905000006
+              }
+            }
+          ]
+        },
+        "agent4.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 792.1124248330016,
+              "active_seconds": 95.78562274639262,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.3828863750095479,
+                "peak_rss_bytes": 29409280,
+                "active_seconds": 0.12474762502824888,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007526291010435671
+                },
+                "time": "2026-10-06T17:37:12.385084+09:00",
+                "elapsed_seconds": 1.46889291604748
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 378.7376081669936,
+                "peak_rss_bytes": 512557056,
+                "active_seconds": 95.78562274639262,
+                "timer_totals": {
+                  "learning_fingerprint": 36.04839974996867,
+                  "snapshot": 0.0006672500167042017,
+                  "restore": 0.006256666034460068,
+                  "trial_audit": 8.896176245529205
+                },
+                "time": "2026-10-06T17:50:23.034628+09:00",
+                "elapsed_seconds": 792.1124248330016
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1926.8211168330163,
+              "active_seconds": 318.2004361675354,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 12.86422720795963,
+                "peak_rss_bytes": 512557056,
+                "active_seconds": 96.48994083044818,
+                "timer_totals": {
+                  "learning_fingerprint": 36.04839974996867,
+                  "snapshot": 0.0006672500167042017,
+                  "restore": 0.006256666034460068,
+                  "trial_audit": 9.018618453585077
+                },
+                "time": "2026-10-06T17:50:35.904031+09:00",
+                "elapsed_seconds": 804.9814949160209
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1153.1723813340068,
+                "peak_rss_bytes": 1174372352,
+                "active_seconds": 318.2004361675354,
+                "timer_totals": {
+                  "learning_fingerprint": 152.73748579097446,
+                  "snapshot": 0.002658125013113022,
+                  "restore": 0.016496791038662195,
+                  "trial_audit": 23.128650700557046
+                },
+                "time": "2026-10-06T18:22:29.870251+09:00",
+                "elapsed_seconds": 2718.933541666018
+              }
+            }
+          ]
+        },
+        "agent5.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 788.0063188330387,
+              "active_seconds": 99.31722274690401,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.527937209000811,
+                "peak_rss_bytes": 29179904,
+                "active_seconds": 0.09859504195628688,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.005636957997921854
+                },
+                "time": "2026-10-06T17:37:12.415054+09:00",
+                "elapsed_seconds": 1.4989124580170028
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 373.3335396249895,
+                "peak_rss_bytes": 526090240,
+                "active_seconds": 99.31722274690401,
+                "timer_totals": {
+                  "learning_fingerprint": 37.384611709043384,
+                  "snapshot": 0.0008425829582847655,
+                  "restore": 0.006325291993562132,
+                  "trial_audit": 9.47379935416393
+                },
+                "time": "2026-10-06T17:50:18.928724+09:00",
+                "elapsed_seconds": 788.0063188330387
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 2003.256545000011,
+              "active_seconds": 342.08930515463,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 17.682503457996063,
+                "peak_rss_bytes": 526090240,
+                "active_seconds": 100.20186566392658,
+                "timer_totals": {
+                  "learning_fingerprint": 37.384611709043384,
+                  "snapshot": 0.0008425829582847655,
+                  "restore": 0.006325291993562132,
+                  "trial_audit": 9.596172979159746
+                },
+                "time": "2026-10-06T17:50:36.616480+09:00",
+                "elapsed_seconds": 805.6939301250386
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1226.5960576250218,
+                "peak_rss_bytes": 1199308800,
+                "active_seconds": 342.08930515463,
+                "timer_totals": {
+                  "learning_fingerprint": 166.21216662600636,
+                  "snapshot": 0.0025484159705229104,
+                  "restore": 0.015208750031888485,
+                  "trial_audit": 24.800333323830273
+                },
+                "time": "2026-10-06T18:23:42.200288+09:00",
+                "elapsed_seconds": 2791.26286383305
+              }
+            }
+          ]
+        },
+        "agent6.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 795.9399527080241,
+              "active_seconds": 80.83332438085927,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.3480437499820255,
+                "peak_rss_bytes": 29097984,
+                "active_seconds": 0.10447708400897682,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.00759695895249024
+                },
+                "time": "2026-10-06T17:37:12.443496+09:00",
+                "elapsed_seconds": 1.5273085830267519
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 381.92648345802445,
+                "peak_rss_bytes": 392757248,
+                "active_seconds": 80.83332438085927,
+                "timer_totals": {
+                  "learning_fingerprint": 31.471387166995555,
+                  "snapshot": 0.0006797920214012265,
+                  "restore": 0.005035332986153662,
+                  "trial_audit": 7.316419962968212
+                },
+                "time": "2026-10-06T17:50:26.862499+09:00",
+                "elapsed_seconds": 795.9399527080241
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 1975.7968920830172,
+              "active_seconds": 272.9312939287629,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 10.441484249953646,
+                "peak_rss_bytes": 392757248,
+                "active_seconds": 81.4094102557865,
+                "timer_totals": {
+                  "learning_fingerprint": 31.471387166995555,
+                  "snapshot": 0.0006797920214012265,
+                  "restore": 0.005035332986153662,
+                  "trial_audit": 7.41504858789267
+                },
+                "time": "2026-10-06T17:50:37.307702+09:00",
+                "elapsed_seconds": 806.3851530410466
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1207.8240015000338,
+                "peak_rss_bytes": 1085243392,
+                "active_seconds": 272.9312939287629,
+                "timer_totals": {
+                  "learning_fingerprint": 129.735665458953,
+                  "snapshot": 0.0026580420089885592,
+                  "restore": 0.015088207961525768,
+                  "trial_audit": 19.800799749034923
+                },
+                "time": "2026-10-06T18:23:22.673908+09:00",
+                "elapsed_seconds": 2771.736844791041
+              }
+            }
+          ]
+        },
+        "agent7.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 800.1914618330193,
+              "active_seconds": 106.03053374862066,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.294547249970492,
+                "peak_rss_bytes": 29097984,
+                "active_seconds": 0.10202191706048325,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.007265832973644137
+                },
+                "time": "2026-10-06T17:37:12.482390+09:00",
+                "elapsed_seconds": 1.5661657910095528
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 385.0198588750209,
+                "peak_rss_bytes": 536395776,
+                "active_seconds": 106.03053374862066,
+                "timer_totals": {
+                  "learning_fingerprint": 39.1954442919814,
+                  "snapshot": 0.0007461660425178707,
+                  "restore": 0.005459125037305057,
+                  "trial_audit": 10.102062331163324
+                },
+                "time": "2026-10-06T17:50:31.113893+09:00",
+                "elapsed_seconds": 800.1914618330193
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 2013.1511579580256,
+              "active_seconds": 331.9270110440557,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 6.785939167020842,
+                "peak_rss_bytes": 536395776,
+                "active_seconds": 106.93574737256858,
+                "timer_totals": {
+                  "learning_fingerprint": 39.1954442919814,
+                  "snapshot": 0.0007461660425178707,
+                  "restore": 0.005459125037305057,
+                  "trial_audit": 10.238554247189313
+                },
+                "time": "2026-10-06T17:50:37.904728+09:00",
+                "elapsed_seconds": 806.9820912910509
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 1246.759062499972,
+                "peak_rss_bytes": 1195966464,
+                "active_seconds": 331.9270110440557,
+                "timer_totals": {
+                  "learning_fingerprint": 155.72357795899734,
+                  "snapshot": 0.002397541014943272,
+                  "restore": 0.015988417027983814,
+                  "trial_audit": 24.69282440963434
+                },
+                "time": "2026-10-06T18:24:04.279999+09:00",
+                "elapsed_seconds": 2813.342619791045
+              }
+            }
+          ]
+        }
+      },
+      "comparable_to_allin": false,
+      "reason": "旧版又は新旗off、価格・通信・監査条件差。全部入りの倍率には代用しない。"
+    },
+    "new-port-20261007/off_q0_8_200": {
+      "root": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200",
+      "agents": {
+        "agent0.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 194.85600237501785,
+              "active_seconds": 25.68623249657685,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.2706464580260217,
+                "peak_rss_bytes": 29179904,
+                "active_seconds": 0.044544875039719045,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.002748251019511372
+                },
+                "time": "2026-10-09T07:34:51.186034+09:00",
+                "elapsed_seconds": 0.5147566249943338
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 15.574829625023995,
+                "peak_rss_bytes": 127893504,
+                "active_seconds": 25.68623249657685,
+                "timer_totals": {
+                  "learning_fingerprint": 0.7202695000451058,
+                  "snapshot": 0.00028970802668482065,
+                  "restore": 0.00336066703312099,
+                  "trial_audit": 4.703008207958192
+                },
+                "time": "2026-10-09T07:38:05.528857+09:00",
+                "elapsed_seconds": 194.85600237501785
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 311.7176256249659,
+              "active_seconds": 69.26209420291707,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 13.285947041993495,
+                "peak_rss_bytes": 131022848,
+                "active_seconds": 26.02579924557358,
+                "timer_totals": {
+                  "learning_fingerprint": 0.7202695000451058,
+                  "snapshot": 0.00028970802668482065,
+                  "restore": 0.00336066703312099,
+                  "trial_audit": 4.779541498981416
+                },
+                "time": "2026-10-09T07:38:18.816935+09:00",
+                "elapsed_seconds": 208.14395866700215
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 21.623574875004124,
+                "peak_rss_bytes": 205258752,
+                "active_seconds": 69.26209420291707,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8682494169916026,
+                  "snapshot": 0.0008061660337261856,
+                  "restore": 0.007238167047034949,
+                  "trial_audit": 12.390812915866263
+                },
+                "time": "2026-10-09T07:43:17.248959+09:00",
+                "elapsed_seconds": 506.5736279999837
+              }
+            }
+          ]
+        },
+        "agent1.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 198.61332112498349,
+              "active_seconds": 21.03361233480973,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.2482840419979766,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.03836483304621652,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0023907909635454416
+                },
+                "time": "2026-10-09T07:34:51.198407+09:00",
+                "elapsed_seconds": 0.5270420419983566
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 19.11283633299172,
+                "peak_rss_bytes": 90275840,
+                "active_seconds": 21.03361233480973,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6062403740361333,
+                  "snapshot": 0.00028141599614173174,
+                  "restore": 0.0029671670054085553,
+                  "trial_audit": 3.8631849107914604
+                },
+                "time": "2026-10-09T07:38:09.286206+09:00",
+                "elapsed_seconds": 198.61332112498349
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 310.28119491704274,
+              "active_seconds": 58.36042587889824,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 9.983788457990158,
+                "peak_rss_bytes": 90308608,
+                "active_seconds": 21.29157304385444,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6062403740361333,
+                  "snapshot": 0.00028141599614173174,
+                  "restore": 0.0029671670054085553,
+                  "trial_audit": 3.9242090368061326
+                },
+                "time": "2026-10-09T07:38:19.272140+09:00",
+                "elapsed_seconds": 208.5991728330264
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 23.65449704095954,
+                "peak_rss_bytes": 140017664,
+                "active_seconds": 58.36042587889824,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7609250820241868,
+                  "snapshot": 0.0007942909724079072,
+                  "restore": 0.00723287503933534,
+                  "trial_audit": 10.408831952547189
+                },
+                "time": "2026-10-09T07:43:19.569873+09:00",
+                "elapsed_seconds": 508.8945160420262
+              }
+            }
+          ]
+        },
+        "agent2.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 196.87737441703212,
+              "active_seconds": 27.293968543584924,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.24776945903431624,
+                "peak_rss_bytes": 29179904,
+                "active_seconds": 0.038518916990142316,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0024301669909618795
+                },
+                "time": "2026-10-09T07:34:51.232978+09:00",
+                "elapsed_seconds": 0.5616134169977158
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 17.096006540989038,
+                "peak_rss_bytes": 99385344,
+                "active_seconds": 27.293968543584924,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6705971260089427,
+                  "snapshot": 0.000303666980471462,
+                  "restore": 0.002773165993858129,
+                  "trial_audit": 5.056752621545456
+                },
+                "time": "2026-10-09T07:38:07.550230+09:00",
+                "elapsed_seconds": 196.87737441703212
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 314.0038346249494,
+              "active_seconds": 66.8028673689114,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 11.505087875004392,
+                "peak_rss_bytes": 99516416,
+                "active_seconds": 27.607380334520712,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6705971260089427,
+                  "snapshot": 0.000303666980471462,
+                  "restore": 0.002773165993858129,
+                  "trial_audit": 5.12207953853067
+                },
+                "time": "2026-10-09T07:38:19.057691+09:00",
+                "elapsed_seconds": 208.3847196670249
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 25.33674208301818,
+                "peak_rss_bytes": 240435200,
+                "active_seconds": 66.8028673689114,
+                "timer_totals": {
+                  "learning_fingerprint": 1.7605563339893706,
+                  "snapshot": 0.0008258329471573234,
+                  "restore": 0.006329790980089456,
+                  "trial_audit": 11.83622804126935
+                },
+                "time": "2026-10-09T07:43:21.556582+09:00",
+                "elapsed_seconds": 510.8812090419815
+              }
+            }
+          ]
+        },
+        "agent3.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 200.44398583302973,
+              "active_seconds": 25.740643669851124,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.24168337503215298,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.03807337599573657,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.002402332960627973
+                },
+                "time": "2026-10-09T07:34:51.261327+09:00",
+                "elapsed_seconds": 0.5900043330038898
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 19.922924916958436,
+                "peak_rss_bytes": 94552064,
+                "active_seconds": 25.740643669851124,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6655728749465197,
+                  "snapshot": 0.0003240410005673766,
+                  "restore": 0.0024908329942263663,
+                  "trial_audit": 4.656656130042393
+                },
+                "time": "2026-10-09T07:38:11.116897+09:00",
+                "elapsed_seconds": 200.44398583302973
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 312.60308574995724,
+              "active_seconds": 61.26314987294609,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 8.95608091703616,
+                "peak_rss_bytes": 94568448,
+                "active_seconds": 26.013782836846076,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6655728749465197,
+                  "snapshot": 0.0003240410005673766,
+                  "restore": 0.0024908329942263663,
+                  "trial_audit": 4.71131163003156
+                },
+                "time": "2026-10-09T07:38:20.075111+09:00",
+                "elapsed_seconds": 209.40214500000002
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 26.62737558403751,
+                "peak_rss_bytes": 132448256,
+                "active_seconds": 61.26314987294609,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8138819589512423,
+                  "snapshot": 0.0008504160214215517,
+                  "restore": 0.0060849160072393715,
+                  "trial_audit": 10.697007004229818
+                },
+                "time": "2026-10-09T07:43:23.722448+09:00",
+                "elapsed_seconds": 513.047071582987
+              }
+            }
+          ]
+        },
+        "agent4.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 205.67488050000975,
+              "active_seconds": 26.567762079357635,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.1674469580175355,
+                "peak_rss_bytes": 29196288,
+                "active_seconds": 0.03839599993079901,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0027139990706928074
+                },
+                "time": "2026-10-09T07:34:51.221569+09:00",
+                "elapsed_seconds": 0.5502005000016652
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 24.952218874997925,
+                "peak_rss_bytes": 92291072,
+                "active_seconds": 26.567762079357635,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6478344579809345,
+                  "snapshot": 0.00032112502958625555,
+                  "restore": 0.0020617920090444386,
+                  "trial_audit": 4.214472371793818
+                },
+                "time": "2026-10-09T07:38:16.347814+09:00",
+                "elapsed_seconds": 205.67488050000975
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 309.307311291981,
+              "active_seconds": 66.028744990821,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 3.461975457961671,
+                "peak_rss_bytes": 92291072,
+                "active_seconds": 26.838284870318603,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6478344579809345,
+                  "snapshot": 0.00032112502958625555,
+                  "restore": 0.0020617920090444386,
+                  "trial_audit": 4.272873413807247
+                },
+                "time": "2026-10-09T07:38:19.811969+09:00",
+                "elapsed_seconds": 209.138999583025
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 28.311744000006,
+                "peak_rss_bytes": 123813888,
+                "active_seconds": 66.028744990821,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8518261660356075,
+                  "snapshot": 0.0008954170043580234,
+                  "restore": 0.005650583014357835,
+                  "trial_audit": 10.15148163359845
+                },
+                "time": "2026-10-09T07:43:25.657598+09:00",
+                "elapsed_seconds": 514.9821917919908
+              }
+            }
+          ]
+        },
+        "agent5.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 203.95753916702233,
+              "active_seconds": 27.440687293594237,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.1214134999900125,
+                "peak_rss_bytes": 29179904,
+                "active_seconds": 0.03873458405723795,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0027111240196973085
+                },
+                "time": "2026-10-09T07:34:51.210346+09:00",
+                "elapsed_seconds": 0.5389850420178846
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 23.965926125005353,
+                "peak_rss_bytes": 94765056,
+                "active_seconds": 27.440687293594237,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6640204999712296,
+                  "snapshot": 0.0003220419748686254,
+                  "restore": 0.0022475410369224846,
+                  "trial_audit": 4.454342630633619
+                },
+                "time": "2026-10-09T07:38:14.630460+09:00",
+                "elapsed_seconds": 203.95753916702233
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 313.01228583295597,
+              "active_seconds": 69.41717417351902,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 4.902038333995733,
+                "peak_rss_bytes": 94846976,
+                "active_seconds": 27.78108620963758,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6640204999712296,
+                  "snapshot": 0.0003220419748686254,
+                  "restore": 0.0022475410369224846,
+                  "trial_audit": 4.514666922623292
+                },
+                "time": "2026-10-09T07:38:19.534891+09:00",
+                "elapsed_seconds": 208.86194366699783
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 31.19286537496373,
+                "peak_rss_bytes": 128581632,
+                "active_seconds": 69.41717417351902,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8369440840324387,
+                  "snapshot": 0.0008902089903131127,
+                  "restore": 0.006608791067264974,
+                  "trial_audit": 10.891939293418545
+                },
+                "time": "2026-10-09T07:43:27.645247+09:00",
+                "elapsed_seconds": 516.9698249999783
+              }
+            }
+          ]
+        },
+        "agent6.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 207.21460862498498,
+              "active_seconds": 22.423137075908016,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.12142733298242092,
+                "peak_rss_bytes": 29212672,
+                "active_seconds": 0.03945241600740701,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.002404208993539214
+                },
+                "time": "2026-10-09T07:34:51.246213+09:00",
+                "elapsed_seconds": 0.5748961670324206
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 26.235605707974173,
+                "peak_rss_bytes": 83263488,
+                "active_seconds": 22.423137075908016,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6490360000170767,
+                  "snapshot": 0.0003179169725626707,
+                  "restore": 0.0019128749845549464,
+                  "trial_audit": 3.42213537247153
+                },
+                "time": "2026-10-09T07:38:17.887554+09:00",
+                "elapsed_seconds": 207.21460862498498
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 313.9200657500187,
+              "active_seconds": 58.73666382365627,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 2.4448163750348613,
+                "peak_rss_bytes": 83279872,
+                "active_seconds": 22.702539199846797,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6490360000170767,
+                  "snapshot": 0.0003179169725626707,
+                  "restore": 0.0019128749845549464,
+                  "trial_audit": 3.4707107474678196
+                },
+                "time": "2026-10-09T07:38:20.334327+09:00",
+                "elapsed_seconds": 209.66136025002925
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 34.1252075000084,
+                "peak_rss_bytes": 126009344,
+                "active_seconds": 58.73666382365627,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8416147090028971,
+                  "snapshot": 0.0008859580266289413,
+                  "restore": 0.005406874988693744,
+                  "trial_audit": 8.686973706178833
+                },
+                "time": "2026-10-09T07:43:31.810117+09:00",
+                "elapsed_seconds": 521.1346743750037
+              }
+            }
+          ]
+        },
+        "agent7.performance": {
+          "count": 200,
+          "blocks": [
+            {
+              "count": 100,
+              "elapsed_delta": 202.15770583302947,
+              "active_seconds": 29.467159038817044,
+              "first": {
+                "trial": 0,
+                "seconds_including_wait_and_probe": 0.11496049998095259,
+                "peak_rss_bytes": 29212672,
+                "active_seconds": 0.03900258400244638,
+                "timer_totals": {
+                  "learning_fingerprint": 0.0,
+                  "snapshot": 0.0,
+                  "restore": 0.0,
+                  "trial_audit": 0.0024404170108027756
+                },
+                "time": "2026-10-09T07:34:51.275276+09:00",
+                "elapsed_seconds": 0.6039346249890514
+              },
+              "last": {
+                "trial": 99,
+                "seconds_including_wait_and_probe": 21.900991833012085,
+                "peak_rss_bytes": 90570752,
+                "active_seconds": 29.467159038817044,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6366295829648152,
+                  "snapshot": 0.00033779197838157415,
+                  "restore": 0.0022415000130422413,
+                  "trial_audit": 4.720474321686197
+                },
+                "time": "2026-10-09T07:38:12.830608+09:00",
+                "elapsed_seconds": 202.15770583302947
+              }
+            },
+            {
+              "count": 100,
+              "elapsed_delta": 316.881503416982,
+              "active_seconds": 69.84376837982563,
+              "first": {
+                "trial": 100,
+                "seconds_including_wait_and_probe": 7.71131649997551,
+                "peak_rss_bytes": 90587136,
+                "active_seconds": 29.826160122815054,
+                "timer_totals": {
+                  "learning_fingerprint": 0.6366295829648152,
+                  "snapshot": 0.00033779197838157415,
+                  "restore": 0.0022415000130422413,
+                  "trial_audit": 4.782086696708575
+                },
+                "time": "2026-10-09T07:38:20.544151+09:00",
+                "elapsed_seconds": 209.8711703750305
+              },
+              "last": {
+                "trial": 199,
+                "seconds_including_wait_and_probe": 32.93462675000774,
+                "peak_rss_bytes": 132366336,
+                "active_seconds": 69.84376837982563,
+                "timer_totals": {
+                  "learning_fingerprint": 1.8551233749603853,
+                  "snapshot": 0.0009296249481849372,
+                  "restore": 0.005658707988914102,
+                  "trial_audit": 10.847121945931576
+                },
+                "time": "2026-10-09T07:43:29.714659+09:00",
+                "elapsed_seconds": 519.0392092500115
+              }
+            }
+          ]
+        }
+      },
+      "comparable_to_allin": false,
+      "reason": "旧版又は新旗off、価格・通信・監査条件差。全部入りの倍率には代用しない。"
+    }
+  },
+  "production_drafts": {
+    "cloud_human8_f0.1_seed01_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        1
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.1_seed02_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        2
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.1_seed03_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        3
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.1_seed04_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        4
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.1_seed05_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        5
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.9_seed01_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        1
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.9_seed02_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        2
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.9_seed03_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        3
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.9_seed04_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        4
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_human8_f0.9_seed05_draft.json": {
+      "commit": "e96ce25fc24ebe70b68a51218262e08de9eb753f",
+      "models": 8,
+      "seeds": [
+        5
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "off",
+      "birth_hu": "off",
+      "tau": "0.4",
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.1_seed01_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        1
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.1_seed02_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        2
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.1_seed03_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        3
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.1_seed04_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        4
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.1_seed05_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        5
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.9_seed01_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        1
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.9_seed02_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        2
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.9_seed03_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        3
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.9_seed04_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        4
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    },
+    "cloud_prod8_f0.9_seed05_draft.json": {
+      "commit": "92913206f5d3b4b4cfbcd1015e0aebf5351bf567",
+      "models": 8,
+      "seeds": [
+        5
+      ],
+      "serial": false,
+      "parallel_metadata": true,
+      "stage2": "on",
+      "birth_hu": "on",
+      "tau": null,
+      "f": "0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9",
+      "q": "0.2",
+      "m": "0.1",
+      "B": "{L50_ref}",
+      "E": "0.01873710622997919",
+      "trial_count": "1740",
+      "horizon": "1740",
+      "probe_every": "100"
+    }
+  },
+  "input_sha256": {
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before/status.json": "24458b3e724bd5f1549f268d2c9db047336228668c98d2d00f0ed8150a2f2807",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_before/agent0.performance.jsonl": "0f2742bfb834a2e859c6f4d9f1e421bee8f3dd55fced206b5d3f13e11076b45c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after/status.json": "052978a4cd70bc6d7e21c9622a42cd0f73611ec724501b5a31a2ec825be6bf70",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_on200_after/agent0.performance.jsonl": "8b330e1827f8775af3c3b21b46a35bda36e72c2587645f371a728a020cea1a8c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01/status.json": "162e6392dd0267774adeb68466daa042b4d55547c092ea25e58546ee77cef1df",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction12/B5/B5_pilot20_before_dependency01/agent0.performance.jsonl": "e75bccfa4da552065afb76df462456bd5fb990df37f550651a6bc46278a3f989",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03/status.json": "4aabca9788044476bbd1d930fee091e8221184db6ca29375d4990570fdf9e884",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03/agent0.performance.jsonl": "031bb86bafcbb136ff3933cf35a87f0bded800802e4f5f147189587c0e2d6d27",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent0.performance.jsonl": "b5c6e94d54eeffd9a93c2ee30a7d5a8f139e2845da77022e1e3568193204cca6",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent1.performance.jsonl": "4b8ed71afedf09afca33146b5881d0bf49d581d8a7f61249d647ebe714f939fc",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent2.performance.jsonl": "0fdf4ae35354ff1a736780b7d18650646f2d701b3427d231f98a584f969d988b",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent3.performance.jsonl": "0ac00545d071e430f5c03572d074ee22e1c693f03aaa336058935de66614f8d9",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent4.performance.jsonl": "4812f801ebcdea85c4f361c7b738e00d0162a94304a1aeae774ed3a96261d64c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent5.performance.jsonl": "ca927086b9bfeaadb28c523469eaa02ab5cb4dfe5d5a94f94941169e3eab3ec7",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent6.performance.jsonl": "b22050adf4aa72e568ec57902aabe6be6151d40795836c25ce24c723c6605095",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_evict200/agent7.performance.jsonl": "58ca15293e72a47f91a7ce542af28ec8664ca9f8194e98ecf5dfd5667e126eba",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent0.performance.jsonl": "87bd9f6655e2b93f41019d1d531090e82732bc4ffc6c3042e895816429db77e8",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent1.performance.jsonl": "2caea1d334e9085110095d3fdd81df13917310daf7e0eca15cc45519e85826aa",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent2.performance.jsonl": "5c03485f0d196584e0d47d001d4c9fcf493b62a39435e9607b8560192f06902a",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent3.performance.jsonl": "c3ea5509adcebe219ef678b58436d303924edc215249f37a85b6206365177b72",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent4.performance.jsonl": "234f4aabe510872ea1c8c26813c97bfa524a9a4cb39a4bd0f8fffa247c8c66c4",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent5.performance.jsonl": "3a9d10e266c9f2108d8a7818c0a80f08d90a071c246de6d8dc5cbb6c1e62b585",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent6.performance.jsonl": "edb5dbd6206d8daad6ce66c0379025ae119989638fbe7f4e205fdd517dc0d866",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/sme-evict-20261007/q0_8_plain200/agent7.performance.jsonl": "d3693fde2250691e662afb540a751c00d3c56e78fe31df14555216b7a1da79f8",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent0.performance.jsonl": "bafb7d5b1c2152d47c62f5af35672f4b7da4f7449a1df31413929ace19b3831c",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent1.performance.jsonl": "e1c66fc20114a984cbc80744d51086612a306876f57802ee27fed2ded85830af",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent2.performance.jsonl": "8bf3c52b064a403b3b40b5b367e6df29c9db1782a9817bc46aadce994a9ffa90",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent3.performance.jsonl": "8c01ae5aaaf50d7f53e8c8bf2412b1f239b2a0a8a73ee1d750f95e3928560ce0",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent4.performance.jsonl": "04a27870c25254ed5cfd0bc55a843c451d5b53372daebc77f107bd1cfe7b9d83",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent5.performance.jsonl": "7bc2773b909e0cb2737e46acee7c318d18bcb5dcf17ccbb5904c2799f04f7f2d",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent6.performance.jsonl": "a4238f9c952a07e96bfe225fea567db090d98677254f60e9cdec5be32dc402a5",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_coll8_2026-10-03/evidence/new-port-20261007/off_q0_8_200/agent7.performance.jsonl": "b3be3756dc385f06a894ab3010ad6ba6d123f1841ad17910187af2134b910682",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.1_seed01_draft.json": "aaca072e264f6ecc0d7ad9673f8a94a334caa053204338db830f72e8eb2ba9c6",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.1_seed02_draft.json": "14013dbe240e4aabe2c2a24e184b8fd45d2a630859f6d9d75775305312d6e1ea",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.1_seed03_draft.json": "7847e3c9af0e86f368e8ae988b13a9f8d5352ef87210faaae88e36eb61ed45ec",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.1_seed04_draft.json": "ff2ca6008b3b4f9c39d8eb72a90db4698b0bf47247f220a6be8c8b840049185f",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.1_seed05_draft.json": "32486a75655fd087fd3c4e388f8318e2fd2c6c44a19cafbfdd0ed32560925005",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.9_seed01_draft.json": "a76649f5f68d5b0f405fd25aa7351fd8de0e086e61a0d36c21b0942e7a74a25f",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.9_seed02_draft.json": "7decd7c91ea5b471d3484669cb37bc7a386a86e2aeefd968014799594253b545",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.9_seed03_draft.json": "c9d74d6c3e41e51a5a193e9b15521b267862e8a09b876ffd9fcec977c7f48b49",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.9_seed04_draft.json": "01582e7a1ce018f989da0bb80993a7177e940bded9bdb383d8d0ad0d47ab7239",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_human8_f0.9_seed05_draft.json": "00522fdce46b27f0fff809cb49dc2eb288163bb071809e1358d1773832b790e8",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.1_seed01_draft.json": "c3d762af61012d05c98582120f0f66e83acd2e704d777438a751e5b6ce552fc6",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.1_seed02_draft.json": "d1509da347a7892baaac3549a466a04ed3ce2e44711a6549cef222435e818b06",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.1_seed03_draft.json": "fddd8f31ce60d743738acc0adbe33029ee12a0990070a844a59664ef457214c3",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.1_seed04_draft.json": "93515f3623c35c5eac193e8fae9d27775799fcff121ae3016fd961a93a1493e9",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.1_seed05_draft.json": "58f4beb2686b904cdd851e4b90a27e1164cba9dad5260f14148e427caeb6122d",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.9_seed01_draft.json": "4dff34ac0277bcf0f1c4801bb129ae8ef755c6fb8cd77b9e724e877ae2f3f97a",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.9_seed02_draft.json": "8e167f612c705be7badc867874940ebc922510009025c50dc0cd3a535f63695b",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.9_seed03_draft.json": "b99bf0fbc14c7b45af3113977d906b60ae56c144aac144fe48354ff4240abf5b",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.9_seed04_draft.json": "2bf8d4d8fc3574d999527480db89c619f4f2dc8d0af018f48c728210cb7ef658",
+    "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/production_specs_01/cloud_prod8_f0.9_seed05_draft.json": "50022cbbf72ec6c3722676bf2053e9a24da9b825b0e7549224ec1e98db1e842a"
+  },
+  "input_unchanged": true,
+  "new_model_starts": 0,
+  "seconds": 0.12074891594238579,
+  "max_rss_bytes": 20480000,
+  "cloud_A_B2_per100": "未測定：当地に実performance原記録が無い。公開報告の全200実時間だけ別に読む。",
+  "allin_eight_body_parallel_efficiency": "未測定",
+  "human_D_on_collective200": "未測定"
+}
