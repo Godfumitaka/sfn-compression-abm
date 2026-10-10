@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-10T22:56:53.873465+09:00",
+  "fetched_commit": "7192bbeda25e9e6c456758e38a490c9e88408666",
+  "previous_confirmation": {
+    "at": "2026-10-10T22:31:06.591035+09:00",
+    "confirmation_at": "2026-10-10T22:31:06.590520+09:00",
+    "commit": "660a73aefdec7aebf369d7917b8917ac6ad517bf",
+    "resources": {
+      "at": "2026-10-10T22:31:06.591035+09:00",
+      "free_bytes": 178931109888,
+      "swap_grew": false,
+      "thermal_warning": null,
+      "swap_mb": 1598.75
+    },
+    "swap": {
+      "exit": 0,
+      "out": "vm.swapusage: total = 2048.00M  used = 1598.75M  free = 449.25M  (encrypted)\n",
+      "err": ""
+    }
+  },
+  "current_confirmation": {
+    "at": "2026-10-10T22:56:53.879297+09:00",
+    "confirmation_at": "2026-10-10T22:56:53.873465+09:00",
+    "resources": {
+      "at": "2026-10-10T22:56:53.879297+09:00",
+      "free_bytes": 178762964992,
+      "swap_grew": true,
+      "thermal_warning": null,
+      "swap_mb": 1724.06
+    },
+    "swap": {
+      "exit": 0,
+      "out": "vm.swapusage: total = 2048.00M  used = 1754.06M  free = 293.94M  (encrypted)\n",
+      "err": ""
+    },
+    "thermal": {
+      "exit": 0,
+      "out": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+      "err": ""
+    }
+  },
+  "increase_mb": "125.31",
+  "model_counts": {
+    "own_compute_count": 4,
+    "external_count": 2,
+    "total_compute_count": 6,
+    "cap": 8
+  },
+  "observed_own_state": "running",
+  "admission_pid": 49493,
+  "controller_pid": 49499,
+  "model_group": 49509,
+  "memory_reservation_gib": 10,
+  "rss_warning_tail_unchanged": true,
+  "production_stopped": false,
+  "new_followup_models_on_hold": true,
+  "new_models_started": 0,
+  "source_flags_observer_reservation_changed": false,
+  "causal_attribution": null,
+  "measurement_note": "資源条件のswap_mbはjobs/swap.tsvの最新標本で、前回1598.75MB・今回1724.06MB、差125.31MB。別に保存したsysctlの原表示は前回1598.75MB・今回1754.06MB。二つの読み取りは同時ではなく、sysctlの実行時刻は独立して記録していない。今回のswap_grewは直近10分の標本による判定が真で、22:31と22:56の二つの継続確認の差とは観測期間が異なる。原因や回復を判定せず、後続の保留を維持。"
+}
