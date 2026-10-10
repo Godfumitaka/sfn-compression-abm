@@ -567,10 +567,21 @@ def worker(task: dict) -> dict:
         sys.path.insert(0, str(ROOT / "tools"))
         import routelog
         routelog.install(str(side_dir / f"seed{task['seed']:03d}.routing.jsonl"))
+    if task.get('use_forget') is not None and task.get('v311c', {}).get('serial'):
+        raise ValueError('指示12：Dと集団化の直列の形を一緒に使わない')
     if task.get("use_forget") is not None:
         import useforget
         useforget.install(str(side_dir / f"seed{task['seed']:03d}.useforget.jsonl"),
                           tau=float(task["use_forget"]), horizon=int(task["cfg"]["trial_count"]))
+        if task.get('use_forget_q') or task.get('use_forget_attn'):
+            import useforget_cstar
+            retention_dir = out_root / 'retention' / task['cell']
+            retention_dir.mkdir(parents=True, exist_ok=True)
+            useforget_cstar.install(retention_dir / f"seed{task['seed']:03d}.jsonl",
+                                   expected_usage=task.get('use_forget_q', False),
+                                   attention_usage=task.get('use_forget_attn', False))
+            if task.get('probe_world'):
+                useforget_cstar.install_probe_guard()
     if task.get("sme2017"):
         import smereplay
         researcher_dir = out_root / "researcher" / task["cell"]
@@ -615,6 +626,9 @@ def worker(task: dict) -> dict:
     if task.get("v311c") and (task.get("cstar_options") or task.get("attn_sme") or task.get("stage2") == "on"):
         import v311c_allin
         v311c_allin.install(task, side_dir)
+    if task.get('use_forget') is not None:
+        import useforget_evaluation
+        useforget_evaluation.install(side_dir / f"seed{task['seed']:03d}.useforget.evaluation_checks.json")
     # 指示14で取り込んだ高速化枝の探索旗。既定はGC閾値を変えない。
     old_gc_threshold = None
     if task.get("sme_gc_threshold") is not None:
@@ -652,6 +666,8 @@ def worker(task: dict) -> dict:
         sys.modules["v311c_allin"].close()
     if task.get("use_forget") is not None:
         rec["useforget"] = sys.modules["useforget"].close()
+        if task.get('use_forget_q') or task.get('use_forget_attn'):
+            sys.modules['useforget_cstar'].close()
     if task.get("select_n3"):
         rec["select_n3"] = sys.modules["selectn3"].close()
     if task.get("v310_be"):
@@ -936,6 +952,8 @@ def main() -> None:
     ap.add_argument("--sme-online-check", action="store_true", help="候補の記録の逆順・二回の一致を毎試行で検査する")
     ap.add_argument("--no-forget-exec", action="store_true", help="本番と同じVと参照H→Uを記録し、F→H・H→Uの実行だけを止める較正の旗")
     ap.add_argument("--use-forget", type=float, default=None, help="既存のD-最小fe8d567の名前の使用による忘却、強さの門τ")
+    ap.add_argument('--use-forget-q', action='store_true', help='指示9：C*の照合と同じqをDの使用量にする（既定off）')
+    ap.add_argument('--use-forget-attn', action='store_true', help='指示9：Dの照合使用をk2の注意で重みづける（既定off）')
     ap.add_argument("--shop-scatter", action="store_true", help="お店の四葉を二経路の物の配置にする（--shop-worldと一緒に）")
     ap.add_argument("--v311c", action="store_true", help="v3.11c：集団化・事例伝達（tools/v311c.py）。B＋E の旗一式と一緒に")
     ap.add_argument("--v311c-f", default="0.5,0.5", help="v3.11c：個体ごとの f（開示の確率）。個体の数はこの並びの長さ")
@@ -1120,6 +1138,12 @@ def main() -> None:
         raise SystemExit('--attn-allinはglobal・k2・eta0.1・logp-eps0.01で使う')
     if args.stage2 == 'on' and not (args.attn_sme and args.v310_be):
         raise SystemExit('--stage2 onは--attn-smeと--v310-beと一緒に使う')
+    if args.use_forget_q and not (args.use_forget is not None and args.match_cstar):
+        raise SystemExit('--use-forget-qは--use-forgetと--match-cstarと一緒に使う')
+    if args.use_forget_attn and not (args.use_forget is not None and args.attn_sme and args.attn_position == 'k2'):
+        raise SystemExit('--use-forget-attnは--use-forgetとk2の注意と一緒に使う')
+    if args.use_forget is not None and args.v311c_serial:
+        raise SystemExit('指示12：Dと集団化の直列の形を一緒に使わない')
     if args.stage2 == 'on' and (args.cf_learn or args.cf_value or args.use_forget is not None):
         raise SystemExit('第二段をほかの保持の置換と合算しない')
     if args.stage2_reuse == 'on' and not (args.stage2 == 'on' and args.attn_allin and args.match_cstar):
@@ -1143,6 +1167,10 @@ def main() -> None:
             if not (args.v39 and args.v310_be):
                 raise SystemExit("--use-forgetは--v39 --v310-beと一緒に使う")
             task["use_forget"] = args.use_forget
+            if args.use_forget_q:
+                task['use_forget_q'] = True
+            if args.use_forget_attn:
+                task['use_forget_attn'] = True
         if args.sme2017:
             task["sme2017"] = True
             for opt in ("sme_reuse", "sme_prune", "sme_intern_cache", "sme_evict_trial_cache", "sme_evict_tombstone"):
@@ -1182,6 +1210,8 @@ def main() -> None:
                                                     **({"sme_tie_uniform": True} if args.sme_tie_uniform else {}),
                                                     **({"select_n3": True} if args.select_n3 else {}),
                                                     **({"use_forget": args.use_forget} if args.use_forget is not None else {}),
+                                                    **({'use_forget_q':True} if args.use_forget_q else {}),
+                                                    **({'use_forget_attn':True} if args.use_forget_attn else {}),
                                                     **({"shop_scatter": True} if args.shop_scatter else {}),
                                                     **({"score_arg_order": True} if args.score_arg_order else {}), "nohash": args.nohash, "nsim": args.nsim, "vt": args.vt,
                                                     "greedy": args.greedy, "extgreedy": args.extgreedy, "lowmem": args.lowmem,
