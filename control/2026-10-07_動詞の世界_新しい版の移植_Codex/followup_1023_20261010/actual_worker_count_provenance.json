@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-10T10:24:23.821437+09:00",
+  "original_classifier_model_count": 9,
+  "actual_model_worker_count": 8,
+  "actual_model_workers": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "pgid": 517,
+      "rss_bytes": 3173826560,
+      "state": "R",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "pgid": 558,
+      "rss_bytes": 1393623040,
+      "state": "R",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 49513,
+      "ppid": 49511,
+      "pgid": 49509,
+      "rss_bytes": 11239424,
+      "state": "S",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 85060,
+      "ppid": 85059,
+      "pgid": 50924,
+      "rss_bytes": 138706944,
+      "state": "R",
+      "worker_kind": "fork"
+    },
+    {
+      "pid": 96906,
+      "ppid": 49513,
+      "pgid": 49509,
+      "rss_bytes": 1850228736,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 96907,
+      "ppid": 49513,
+      "pgid": 49509,
+      "rss_bytes": 1449721856,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 96908,
+      "ppid": 49513,
+      "pgid": 49509,
+      "rss_bytes": 1279934464,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 96909,
+      "ppid": 49513,
+      "pgid": 49509,
+      "rss_bytes": 1283424256,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    }
+  ],
+  "own_slow19_model_count": 2,
+  "excluded_coordinator_pid": 85059,
+  "B5_actual_agent_pid": 85060,
+  "birth_children": [
+    96906,
+    96907,
+    96908,
+    96909
+  ],
+  "original_ps_sha256": "fa5cb3ef96dfd288fb2786d6d5cc8a037c845d613e9467efb79a72f227504298",
+  "original_pid_record_sha256": "7a9e5508328abbce97a1c76f4724e6e2911b875f4337703218ce60d3a13b7853",
+  "code_provenance": [
+    {
+      "path": "$PROJECTS/codex_intervention_port_2026-10-07/instruction12/B5/observe.py",
+      "sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af"
+    },
+    {
+      "path": "$PROJECTS/codex_intervention_port_2026-10-07/source_coll_instruction12_B5/tools/v311c.py",
+      "sha256": "3997d47a2381fb2a8cc01fd3805ca7bcd4b17e1db69fc10acab09434435be53c"
+    },
+    {
+      "path": "$PROJECTS/codex_intervention_port_2026-10-07/source_coll_instruction12_B5/tools/v3_run.py",
+      "sha256": "1ffff060b78039403ecd6bb68edec5ce04fdd14aa9e460fa3554c8db11cc3422"
+    }
+  ],
+  "counting_rule": "原B5のagent0.pidの85060が本人、85059はまとめ役。実本人534/564/49513/85060と、49513の同命令を継承する実在出生子96906〜96909の8。Sの親模型49513は存続中の本人として1、T/Z・監督・time・driver・tracker・まとめ役は個体へ足さない。原分類9と受付条件を変更しない。",
+  "shared_classifier_changed": false,
+  "registry_changed": false,
+  "model_starts": 0
+}

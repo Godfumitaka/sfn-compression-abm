@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-10T10:26:02.600150+09:00",
+  "cases": {
+    "slow_seed001": {
+      "status": {
+        "at": "2026-10-09T21:12:06.984006+09:00",
+        "runner_pid": 495,
+        "state": "running",
+        "production_started": true,
+        "model_group": 517,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "spec_sha256": "8eb6c689a8c21749ed9b92353fbba930c68738c70ce249cc80d9d98eaf829f43",
+      "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+      "result_present": false,
+      "timing": {
+        "completed_trials": 700,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "wall_seconds": 35466.69214783306,
+        "interval_seconds": 9693.698103333008,
+        "user_cpu_seconds": 34476.303306,
+        "system_cpu_seconds": 88.728614,
+        "max_worker_rss_bytes": 5363384320,
+        "epoch_seconds": 1791583395.281991
+      },
+      "confirmed_checkpoints": [
+        "completed_0500"
+      ],
+      "warning_count": 1
+    },
+    "slow_seed002": {
+      "status": {
+        "at": "2026-10-09T21:12:07.219205+09:00",
+        "runner_pid": 520,
+        "state": "running",
+        "production_started": true,
+        "model_group": 558,
+        "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619"
+      },
+      "spec_sha256": "d117832b7b603ffd355870e84bfff1c2d438ccece85e404c0ac52b5493a872c5",
+      "source_commit": "9c9dd0e650f765ccdadca6029e81da4efc3cc619",
+      "result_present": false,
+      "timing": {
+        "completed_trials": 600,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "wall_seconds": 41120.24869562499,
+        "interval_seconds": 13469.877095208969,
+        "user_cpu_seconds": 37989.188982,
+        "system_cpu_seconds": 109.225038,
+        "max_worker_rss_bytes": 3208937472,
+        "epoch_seconds": 1791589049.151381
+      },
+      "confirmed_checkpoints": [
+        "completed_0500"
+      ],
+      "warning_count": 2
+    },
+    "SME19p": {
+      "status": {
+        "state": "running",
+        "production_started": true,
+        "at": "2026-10-10T04:03:09.791024+09:00",
+        "runner_pid": 49499,
+        "model_group": 49509
+      },
+      "spec_sha256": "c81d44f5511c9e6520d72110ce3ec97b1aa68b571b5ab56b0a905695bdd0394e",
+      "source_commit": "6e4bcba94874a4f49c5a1bae11d385534504e2e5",
+      "result_present": false,
+      "timing": {
+        "completed_trials": 700,
+        "configured_trial_count": 5000,
+        "horizon": 5000,
+        "wall_seconds": 21625.552909249905,
+        "interval_seconds": 4579.000765874982,
+        "user_cpu_seconds": 13144.14975,
+        "system_cpu_seconds": 50.898349,
+        "max_worker_rss_bytes": 4889821184,
+        "epoch_seconds": 1791594216.74101
+      },
+      "confirmed_checkpoints": [
+        "completed_0500"
+      ],
+      "warning_count": 1
+    }
+  },
+  "known_checkpoint500_comparison": "$WORKSPACE/newport_2026-10-07/instruction31/results_attempt2/checkpoint_0500.json",
+  "existing_checkpoint500_passed": true,
+  "archive_completed_commit": "6a82540b8fb183967f6a6bf94e9428060957aeeb",
+  "new_model_starts": 0,
+  "new_admissions": 0,
+  "new_comparisons": 0,
+  "new_aggregations": 0,
+  "new_tests": 0,
+  "signals_sent": 0,
+  "repeated_archive_or_deletion": 0,
+  "flagged_results_usable": false,
+  "lambda_provisional": true
+}
