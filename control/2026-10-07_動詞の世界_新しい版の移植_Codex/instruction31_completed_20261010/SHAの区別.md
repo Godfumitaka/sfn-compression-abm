@@ -1,0 +1,1 @@
+original_evidence_sha256.jsonは非公開原控えのSHA。public_files_sha256.jsonは個人パスを別名化した公開ファイル（一覧自身を除く）のSHA。全Mac原psは公開せず、その原SHAと数え方だけを残した。比較の模型欄、時間、値、行、順は不変。
