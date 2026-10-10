@@ -1,0 +1,496 @@
+{
+  "at": "2026-10-11T07:17:45.029624+09:00",
+  "actual_free_bytes": 168187039744,
+  "actual_free_sample_at": "2026-10-11T07:16:53.058098+09:00",
+  "reference_actual_volumes": {
+    "1": {
+      "completed_trials": 1000,
+      "raw_bytes": 10893307257,
+      "gzip_bytes": 1283360230
+    },
+    "2": {
+      "completed_trials": 500,
+      "raw_bytes": 4441778042,
+      "gzip_bytes": 504252908
+    }
+  },
+  "seconds_per_trial_from_last_two_original_intervals": {
+    "1": 320.75897125791465,
+    "2": 208.14624497333483
+  },
+  "original_timing": {
+    "1": {
+      "path": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output/timing100.jsonl",
+      "original_rows": [
+        "{\"completed_trials\": 900, \"configured_trial_count\": 5000, \"horizon\": 5000, \"wall_seconds\": 87141.47146370809, \"interval_seconds\": 30302.849903833005, \"user_cpu_seconds\": 71064.106452, \"system_cpu_seconds\": 6806.115404, \"max_worker_rss_bytes\": 5363384320, \"epoch_seconds\": 1791635070.462671}\n",
+        "{\"completed_trials\": 1000, \"configured_trial_count\": 5000, \"horizon\": 5000, \"wall_seconds\": 120990.41581145802, \"interval_seconds\": 33848.94434774993, \"user_cpu_seconds\": 87777.576179, \"system_cpu_seconds\": 15039.771627, \"max_worker_rss_bytes\": 5674532864, \"epoch_seconds\": 1791668919.671409}\n"
+      ],
+      "original_sha256": "bb78ca53c1725b1b20b373fffd597a9b25e45502910aff44bb7a861921e018bc",
+      "latest_completed": 1000
+    },
+    "2": {
+      "path": "$WORKSPACE/newport_2026-10-07/instruction23_production/19_seed002_score_e_off/output/timing100.jsonl",
+      "original_rows": [
+        "{\"completed_trials\": 800, \"configured_trial_count\": 5000, \"horizon\": 5000, \"wall_seconds\": 64993.225827165996, \"interval_seconds\": 14576.433767957962, \"user_cpu_seconds\": 57540.392274, \"system_cpu_seconds\": 2639.634918, \"max_worker_rss_bytes\": 4328603648, \"epoch_seconds\": 1791612922.3161721}\n",
+        "{\"completed_trials\": 900, \"configured_trial_count\": 5000, \"horizon\": 5000, \"wall_seconds\": 92046.041053875, \"interval_seconds\": 27052.815226709004, \"user_cpu_seconds\": 69062.43018, \"system_cpu_seconds\": 10733.442611, \"max_worker_rss_bytes\": 5532762112, \"epoch_seconds\": 1791639975.3400269}\n"
+      ],
+      "original_sha256": "82cc037c9e1e3a4dec7567c638be2aba4ea21fcd025eabf2dfeaf9794b7f7ac9",
+      "latest_completed": 900
+    }
+  },
+  "assumptions": [
+    "現在時刻から最後の実完了数を出発点とし、その後の速度は各種の直近二つの原100区間/200と仮定。進行中の試行の進みは未確認。",
+    "将来の履歴量は各種の最後の実容量を基準にnまたはn²に比例し、gzip率も最後の実率のまま。種2の1000容量は未確認。",
+    "毎500で原写しと新gzipが一時共存し、受付待ちなく検証・削除できるという条件付きの算術。",
+    "今後のnative出力・STATE/RNG/cache・他出力・APFS増分・速度/成長/圧縮率の変化を除外。安全な期限や上下限ではない。",
+    "10/13 09:00以降の圧縮・削除等の新しい開始は承認されていない。期限後のイベントは継続承認が別途ある場合の参考算術だけで開始許可ではない。"
+  ],
+  "scenarios": [
+    {
+      "history_volume_power": 1,
+      "first_transient_below_30GB": null,
+      "first_retained_below_30GB": null,
+      "events": [
+        {
+          "seed": 2,
+          "completed_trials": 1000,
+          "epoch": 1791691479.6541214,
+          "JST": "2026-10-11T13:04:39.654121+09:00",
+          "projected_raw_bytes": 8883556084.0,
+          "projected_gzip_bytes": 1008505816.0,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 158294977844.0,
+          "remaining_after_verified_raw_deletion": 167178533928.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 1500,
+          "epoch": 1791795552.776608,
+          "JST": "2026-10-12T17:59:12.776608+09:00",
+          "projected_raw_bytes": 13325334126.0,
+          "projected_gzip_bytes": 1512758724.0,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 152340441078.0,
+          "remaining_after_verified_raw_deletion": 165665775204.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 1500,
+          "epoch": 1791831044.5152528,
+          "JST": "2026-10-13T03:50:44.515253+09:00",
+          "projected_raw_bytes": 16339960885.5,
+          "projected_gzip_bytes": 1925040345.0,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 147400773973.5,
+          "remaining_after_verified_raw_deletion": 163740734859.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 2000,
+          "epoch": 1791899625.8990946,
+          "JST": "2026-10-13T22:53:45.899095+09:00",
+          "projected_raw_bytes": 17767112168.0,
+          "projected_gzip_bytes": 2017011632.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 143956611059.0,
+          "remaining_after_verified_raw_deletion": 161723723227.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 2000,
+          "epoch": 1791991424.000882,
+          "JST": "2026-10-15T00:23:44.000882+09:00",
+          "projected_raw_bytes": 21786614514.0,
+          "projected_gzip_bytes": 2566720460.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 137370388253.0,
+          "remaining_after_verified_raw_deletion": 159157002767.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 2500,
+          "epoch": 1792003699.0215814,
+          "JST": "2026-10-15T03:48:19.021581+09:00",
+          "projected_raw_bytes": 22208890210.0,
+          "projected_gzip_bytes": 2521264540.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 134426848017.0,
+          "remaining_after_verified_raw_deletion": 156635738227.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 3000,
+          "epoch": 1792107772.144068,
+          "JST": "2026-10-16T08:42:52.144068+09:00",
+          "projected_raw_bytes": 26650668252.0,
+          "projected_gzip_bytes": 3025517448.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 126959552527.0,
+          "remaining_after_verified_raw_deletion": 153610220779.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 2500,
+          "epoch": 1792151803.4865108,
+          "JST": "2026-10-16T20:56:43.486511+09:00",
+          "projected_raw_bytes": 27233268142.5,
+          "projected_gzip_bytes": 3208400575.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 123168552061.5,
+          "remaining_after_verified_raw_deletion": 150401820204.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 3500,
+          "epoch": 1792211845.2665546,
+          "JST": "2026-10-17T13:37:25.266555+09:00",
+          "projected_raw_bytes": 31092446294.0,
+          "projected_gzip_bytes": 3529770356.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 115779603554.0,
+          "remaining_after_verified_raw_deletion": 146872049848.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 3000,
+          "epoch": 1792312182.9721398,
+          "JST": "2026-10-18T17:29:42.972140+09:00",
+          "projected_raw_bytes": 32679921771.0,
+          "projected_gzip_bytes": 3850080690.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 110342047387.0,
+          "remaining_after_verified_raw_deletion": 143021969158.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 4000,
+          "epoch": 1792315918.3890414,
+          "JST": "2026-10-18T18:31:58.389041+09:00",
+          "projected_raw_bytes": 35534224336.0,
+          "projected_gzip_bytes": 4034023264.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 103453721558.0,
+          "remaining_after_verified_raw_deletion": 138987945894.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 4500,
+          "epoch": 1792419991.511528,
+          "JST": "2026-10-19T23:26:31.511528+09:00",
+          "projected_raw_bytes": 39976002378.0,
+          "projected_gzip_bytes": 4538276172.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 94473667344.0,
+          "remaining_after_verified_raw_deletion": 134449669722.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 3500,
+          "epoch": 1792472562.4577687,
+          "JST": "2026-10-20T14:02:42.457769+09:00",
+          "projected_raw_bytes": 38126575399.5,
+          "projected_gzip_bytes": 4491760805.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 91831333517.5,
+          "remaining_after_verified_raw_deletion": 129957908917.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 5000,
+          "epoch": 1792524064.6340146,
+          "JST": "2026-10-21T04:21:04.634015+09:00",
+          "projected_raw_bytes": 44417780420.0,
+          "projected_gzip_bytes": 5042529080.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 80497599417.0,
+          "remaining_after_verified_raw_deletion": 124915379837.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 4000,
+          "epoch": 1792632941.9433978,
+          "JST": "2026-10-22T10:35:41.943398+09:00",
+          "projected_raw_bytes": 43573229028.0,
+          "projected_gzip_bytes": 5133440920.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 76208709889.0,
+          "remaining_after_verified_raw_deletion": 119781938917.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 4500,
+          "epoch": 1792793321.4290266,
+          "JST": "2026-10-24T07:08:41.429027+09:00",
+          "projected_raw_bytes": 49019882656.5,
+          "projected_gzip_bytes": 5775121035.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 64986935225.5,
+          "remaining_after_verified_raw_deletion": 114006817882.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 5000,
+          "epoch": 1792953700.9146557,
+          "JST": "2026-10-26T03:41:40.914656+09:00",
+          "projected_raw_bytes": 54466536285.0,
+          "projected_gzip_bytes": 6416801150.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 53123480447.0,
+          "remaining_after_verified_raw_deletion": 107590016732.0
+        }
+      ]
+    },
+    {
+      "history_volume_power": 2,
+      "first_transient_below_30GB": {
+        "seed": 2,
+        "completed_trials": 2500,
+        "epoch": 1792003699.0215814,
+        "JST": "2026-10-15T03:48:19.021581+09:00",
+        "projected_raw_bytes": 111044451050.0,
+        "projected_gzip_bytes": 12606322700.0,
+        "projection_only": true,
+        "after_new_work_deadline": true,
+        "remaining_during_raw_plus_gzip": 21891930224.5,
+        "remaining_after_verified_raw_deletion": 132936381274.5
+      },
+      "first_retained_below_30GB": {
+        "seed": 2,
+        "completed_trials": 4500,
+        "epoch": 1792419991.511528,
+        "JST": "2026-10-19T23:26:31.511528+09:00",
+        "projected_raw_bytes": 359784021402.0,
+        "projected_gzip_bytes": 40844485548.0,
+        "projection_only": true,
+        "after_new_work_deadline": true,
+        "remaining_during_raw_plus_gzip": -362397052475.0,
+        "remaining_after_verified_raw_deletion": -2613031073.0
+      },
+      "events": [
+        {
+          "seed": 2,
+          "completed_trials": 1000,
+          "epoch": 1791691479.6541214,
+          "JST": "2026-10-11T13:04:39.654121+09:00",
+          "projected_raw_bytes": 17767112168.0,
+          "projected_gzip_bytes": 2017011632.0,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 148402915944.0,
+          "remaining_after_verified_raw_deletion": 166170028112.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 1500,
+          "epoch": 1791795552.776608,
+          "JST": "2026-10-12T17:59:12.776608+09:00",
+          "projected_raw_bytes": 39976002378.0,
+          "projected_gzip_bytes": 4538276172.0,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 121655749562.0,
+          "remaining_after_verified_raw_deletion": 161631751940.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 1500,
+          "epoch": 1791831044.5152528,
+          "JST": "2026-10-13T03:50:44.515253+09:00",
+          "projected_raw_bytes": 24509941328.25,
+          "projected_gzip_bytes": 2887560517.5,
+          "projection_only": true,
+          "after_new_work_deadline": false,
+          "remaining_during_raw_plus_gzip": 134234250094.25,
+          "remaining_after_verified_raw_deletion": 158744191422.5
+        },
+        {
+          "seed": 2,
+          "completed_trials": 2000,
+          "epoch": 1791899625.8990946,
+          "JST": "2026-10-13T22:53:45.899095+09:00",
+          "projected_raw_bytes": 71068448672.0,
+          "projected_gzip_bytes": 8068046528.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 79607696222.5,
+          "remaining_after_verified_raw_deletion": 150676144894.5
+        },
+        {
+          "seed": 1,
+          "completed_trials": 2000,
+          "epoch": 1791991424.000882,
+          "JST": "2026-10-15T00:23:44.000882+09:00",
+          "projected_raw_bytes": 43573229028.0,
+          "projected_gzip_bytes": 5133440920.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 101969474946.5,
+          "remaining_after_verified_raw_deletion": 145542703974.5
+        },
+        {
+          "seed": 2,
+          "completed_trials": 2500,
+          "epoch": 1792003699.0215814,
+          "JST": "2026-10-15T03:48:19.021581+09:00",
+          "projected_raw_bytes": 111044451050.0,
+          "projected_gzip_bytes": 12606322700.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 21891930224.5,
+          "remaining_after_verified_raw_deletion": 132936381274.5
+        },
+        {
+          "seed": 2,
+          "completed_trials": 3000,
+          "epoch": 1792107772.144068,
+          "JST": "2026-10-16T08:42:52.144068+09:00",
+          "projected_raw_bytes": 159904009512.0,
+          "projected_gzip_bytes": 18153104688.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -45120732925.5,
+          "remaining_after_verified_raw_deletion": 114783276586.5
+        },
+        {
+          "seed": 1,
+          "completed_trials": 2500,
+          "epoch": 1792151803.4865108,
+          "JST": "2026-10-16T20:56:43.486511+09:00",
+          "projected_raw_bytes": 68083170356.25,
+          "projected_gzip_bytes": 8021001437.5,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": 38679104792.75,
+          "remaining_after_verified_raw_deletion": 106762275149.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 3500,
+          "epoch": 1792211845.2665546,
+          "JST": "2026-10-17T13:37:25.266555+09:00",
+          "projected_raw_bytes": 217647124058.0,
+          "projected_gzip_bytes": 24708392492.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -135593241401.0,
+          "remaining_after_verified_raw_deletion": 82053882657.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 3000,
+          "epoch": 1792312182.9721398,
+          "JST": "2026-10-18T17:29:42.972140+09:00",
+          "projected_raw_bytes": 98039765313.0,
+          "projected_gzip_bytes": 11550242070.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -27536124726.0,
+          "remaining_after_verified_raw_deletion": 70503640587.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 4000,
+          "epoch": 1792315918.3890414,
+          "JST": "2026-10-18T18:31:58.389041+09:00",
+          "projected_raw_bytes": 284273794688.0,
+          "projected_gzip_bytes": 32272186112.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -246042340213.0,
+          "remaining_after_verified_raw_deletion": 38231454475.0
+        },
+        {
+          "seed": 2,
+          "completed_trials": 4500,
+          "epoch": 1792419991.511528,
+          "JST": "2026-10-19T23:26:31.511528+09:00",
+          "projected_raw_bytes": 359784021402.0,
+          "projected_gzip_bytes": 40844485548.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -362397052475.0,
+          "remaining_after_verified_raw_deletion": -2613031073.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 3500,
+          "epoch": 1792472562.4577687,
+          "JST": "2026-10-20T14:02:42.457769+09:00",
+          "projected_raw_bytes": 133443013898.25,
+          "projected_gzip_bytes": 15721162817.5,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -151777207788.75,
+          "remaining_after_verified_raw_deletion": -18334193890.5
+        },
+        {
+          "seed": 2,
+          "completed_trials": 5000,
+          "epoch": 1792524064.6340146,
+          "JST": "2026-10-21T04:21:04.634015+09:00",
+          "projected_raw_bytes": 444177804200.0,
+          "projected_gzip_bytes": 50425290800.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -512937288890.5,
+          "remaining_after_verified_raw_deletion": -68759484690.5
+        },
+        {
+          "seed": 1,
+          "completed_trials": 4000,
+          "epoch": 1792632941.9433978,
+          "JST": "2026-10-22T10:35:41.943398+09:00",
+          "projected_raw_bytes": 174292916112.0,
+          "projected_gzip_bytes": 20533763680.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -263586164482.5,
+          "remaining_after_verified_raw_deletion": -89293248370.5
+        },
+        {
+          "seed": 1,
+          "completed_trials": 4500,
+          "epoch": 1792793321.4290266,
+          "JST": "2026-10-24T07:08:41.429027+09:00",
+          "projected_raw_bytes": 220589471954.25,
+          "projected_gzip_bytes": 25988044657.5,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -335870764982.25,
+          "remaining_after_verified_raw_deletion": -115281293028.0
+        },
+        {
+          "seed": 1,
+          "completed_trials": 5000,
+          "epoch": 1792953700.9146557,
+          "JST": "2026-10-26T03:41:40.914656+09:00",
+          "projected_raw_bytes": 272332681425.0,
+          "projected_gzip_bytes": 32084005750.0,
+          "projection_only": true,
+          "after_new_work_deadline": true,
+          "remaining_during_raw_plus_gzip": -419697980203.0,
+          "remaining_after_verified_raw_deletion": -147365298778.0
+        }
+      ]
+    }
+  ],
+  "model_starts": 0,
+  "future_values_are_not_completion": true
+}
