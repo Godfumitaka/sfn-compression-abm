@@ -622,6 +622,9 @@ def worker(task: dict) -> dict:
                         research_record=instruction_world.attention_record,
                         **(dict(learning_policy=attncstar.learn,prediction_context=attncstar.prediction_context)
                            if task.get('attn_allin') else {}))
+    if task.get('attn_probe_name_receipts'):
+        import attn_probe_names_instruction22
+        attn_probe_names_instruction22.install(attnsme)
     if task.get('stage2') == 'on':
         import attnstage2_runtime
         if task.get('stage2_birth_workers', 0):
@@ -884,6 +887,8 @@ def main() -> None:
     ap.add_argument("--attn-position", choices=("k1", "k2"), default="k1", help="祖先の鍵／採用済みSME対応先の鍵")
     ap.add_argument("--attn-eta", type=float, default=0.1, help="位置の注意の更新幅")
     ap.add_argument('--attn-allin',action='store_true',help='指示8の共通基底・主の分布・mixture学習を接続する別版')
+    ap.add_argument('--attn-probe-name-receipts', action='store_true',
+                    help='指示22：固定試験のassertに実入力・実開示の名の受領を接続（既定off）')
     ap.add_argument("--attn-fixed-zero", action="store_true", help="費用を測るがa=0を保つ全バイト一致の検査")
     ap.add_argument('--stage2',choices=('off','on'),default='off',help='全候補の答えの損の差で保持を値付けする')
     ap.add_argument('--stage2-loss',choices=('alpha','top1','mixture','arm'),default='arm',help='第二段の損：0/ℓ、選んだ席の分布、混合分布、土台の採点に従う')
@@ -1124,11 +1129,14 @@ def main() -> None:
         raise SystemExit('--stage2-birth-workersは第二段on・virtual初期値と一緒に使う')
     if args.logp_eps is not None and not 0 <= args.logp_eps <= 1:
         raise SystemExit('--logp-epsは0以上1以下')
+    if args.attn_probe_name_receipts and not (args.attn_sme and args.probe_world and args.use_forget is not None):
+        raise SystemExit('--attn-probe-name-receiptsは注意・固定試験・Dと一緒に使う')
     for task in tasks:
         for opt in ("sme_online_candidates", "sme_online_check", "no_forget_exec"):
             if getattr(args, opt):
                 task[opt] = True
         if args.attn_allin:task['attn_allin']=True
+        if args.attn_probe_name_receipts:task['attn_probe_name_receipts']=True
         if args.stage2 == 'on':
             task.update(stage2='on',stage2_loss=args.stage2_loss,stage2_init=args.stage2_init,stage2_scope=args.stage2_scope)
             if args.stage2_reuse == 'on':task['stage2_reuse']=True
@@ -1173,6 +1181,7 @@ def main() -> None:
                                                     **({"score_logp": True, "score_logp_e": args.score_logp_e, "score_logp_epsilon": args.logp_eps} if args.score_logp else {}),
                                                     **cstar_options,
                                                     **({'attn_allin':True} if args.attn_allin else {}),
+                                                    **({'attn_probe_name_receipts':True} if args.attn_probe_name_receipts else {}),
                                                     **({'stage2_reuse':True} if args.stage2_reuse=='on' else {}),
                                                     **({'stage2_birth_hu':True} if args.stage2_birth_hu=='on' else {}),
                                                     **({'stage2':'on','stage2_loss':args.stage2_loss,'stage2_init':args.stage2_init,'stage2_scope':args.stage2_scope} if args.stage2=='on' else {}),
