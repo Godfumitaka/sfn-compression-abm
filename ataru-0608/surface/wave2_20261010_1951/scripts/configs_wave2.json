@@ -1,0 +1,806 @@
+{
+ "_説明": [
+  "groups の一つが一つの出力先（root）。arms は root の下のディレクトリ名 → 構成名・世界・λ の札。root/<arm>/seedNNN/ に ledgers/cells/*/seedNNN.done がある本だけを読む。種 21〜40 は読まない。",
+  "family：pairs.json の \"*\"（相手以外の全部）を同じ family の中だけで広げる。版の違う構成を混ぜないため。",
+  "replay_dir：候補の記録の置き場。<replay_dir>/<arm>/seedNNN/{replay.json, sme.candidates.jsonl.gz}（replay.json の status が ok のものだけ使う）。無ければ本番の side の sme.candidates.jsonl.gz を探し、それも無ければ候補の記録を使う欄を NA にする。",
+  "replay（任意）：replay.py が新しい版の本を tools/selcands_sme.py で再生するための設定。src＝その版のきれいな作業場所、commit＝その HEAD、commands＝一本ずつの命令（command[3] が本の出力先と一致するもの）を探す glob。src に tools/selcands_sme.py が無い、本番の side に sme.states.jsonl.gz が無いときは再生せず NA のまま。",
+  "todo: true の群は飛ばす。新しい版の走行が始まったら、走行の列の「版・旗・出力先」から root を書き、todo を外す。arm の名は build_commands.py の q<#>_w<世界>。",
+  "absent_basis：正答できる定義の不在の数え方。gate＝門を通って正しく答える定義が無い（既定。選び間違い・区別の喪失と同じ基準）、any＝門を見ず、正しく答える候補が一つも無い。",
+  "memory：記憶のビットの読み方。side の jsonl の kind の記録の fields。新しい版で記録の形が変われば群ごとに memory を書き換える。",
+  "effort：手間の列の数え方。none＝反実仮想の評価が無い（0）、gate_FH＝開示の試行で門を通った全候補の F・H の席の数（第二段・誤り駆動）、selected_FH＝選ばれた定義（R_used）の F・H の席の数（C）。記録（side の cflearn.jsonl）があればその行の数を使う。未設定（TODO）は NA。",
+  "prob：確率で答えた場合の正答率の設定。status に、計算しない理由を書く（記録に P・π があり、読み方が決まったら計算を足す）。prob_approx: true の構成（D・D＋注意・基準）は表に「近似」と書く。",
+  "results_hold: true の群は、成績の表（per_run・pairs・memory_bits_vs_errors・seal_states・effort）に出さず、仕組みの表（mechanism.py の mechanism_<構成>.csv）だけを出す。Claude が仕組みの表を確かめたら外す（受け箱の指示 11）。",
+  "time_log：/usr/bin/time -v の記録の場所（{run_dir}・{seed} が使える）。あれば仕組みの表の最大常駐（M5）に使う。無ければ manifest.jsonl の peak_rss_mb を使う。"
+ ],
+ "absent_basis": "gate",
+ "memory": {
+  "kind": "v39",
+  "fields": {
+   "bits": "bits_after",
+   "defs": "defs",
+   "F": "F",
+   "H": "H",
+   "U": "U"
+  }
+ },
+ "order": [
+  "A_L50",
+  "A_zero",
+  "C_L50",
+  "D_tau04",
+  "全部入り_L50",
+  "基準_L50",
+  "注意を外す_L50",
+  "第二段をCに_L50",
+  "C*を外す_L50",
+  "logPを外す_L50",
+  "名前の忘却なし",
+  "全部入り_L25",
+  "全部入り_L90",
+  "D_τ0.4",
+  "D_τ0.15",
+  "D＋注意_τ0.4",
+  "D＋注意_τ0.15",
+  "誤り駆動",
+  "全部入り_L50_例外0.1",
+  "全部入り_L50_例外0.3",
+  "D＋注意_τ0.4_例外0.1",
+  "D＋注意_τ0.4_例外0.3"
+ ],
+ "groups": [
+  {
+   "name": "古い主の条件（(a) 版、160 本）",
+   "family": "古い主の条件",
+   "root": "~/smeprod_a/sme",
+   "replay_dir": "~/sme_analysis/replay",
+   "replay": {
+    "src": "~/sfn/audit/_read/smeevict",
+    "commit": "10cd8bdd46416aff55d0015e9072fc2186deed83",
+    "commands": "~/smeprod_a/plan/sme.commands.evict.json",
+    "ignore_flags": [
+     "sme_intern_cache",
+     "sme_evict_trial_cache"
+    ]
+   },
+   "arms": {
+    "w2_A_L50": {
+     "config": "A_L50",
+     "world": 2,
+     "lambda": "L50",
+     "effort": "none"
+    },
+    "w2_A_zero": {
+     "config": "A_zero",
+     "world": 2,
+     "lambda": "0",
+     "effort": "none"
+    },
+    "w2_D_tau04": {
+     "config": "D_tau04",
+     "world": 2,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "w2_C_L50": {
+     "config": "C_L50",
+     "world": 2,
+     "lambda": "L50",
+     "effort": "selected_FH"
+    },
+    "w1_A_L50": {
+     "config": "A_L50",
+     "world": 1,
+     "lambda": "L50",
+     "effort": "none"
+    },
+    "w1_A_zero": {
+     "config": "A_zero",
+     "world": 1,
+     "lambda": "0",
+     "effort": "none"
+    },
+    "w1_D_tau04": {
+     "config": "D_tau04",
+     "world": 1,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "w1_C_L50": {
+     "config": "C_L50",
+     "world": 1,
+     "lambda": "L50",
+     "effort": "selected_FH"
+    }
+   },
+   "prob": {
+    "status": "空欄：記録に P・π が無い。古い版（858f708・10cd8bd）は log P の旗が無い 0/ℓ の採点で、名前の確率 P_d を作らず、定義の選びは N3 の一位で温度 1 の確率 π も作らない。候補の記録（selcands_sme）も候補ごとの点の答え（名前一つ）しか持たない",
+    "short": "空欄：記録に P・π が無い（理由は meta.json）"
+   }
+  },
+  {
+   "name": "新しい版 #1a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/1a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q1a_w1": {
+     "config": "全部入り_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q1a_w2": {
+     "config": "全部入り_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #1b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/1b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q1b_w1": {
+     "config": "全部入り_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q1b_w2": {
+     "config": "全部入り_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #2a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/2a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q2a_w1": {
+     "config": "基準_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
+    },
+    "q2a_w2": {
+     "config": "基準_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #2b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/2b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q2b_w1": {
+     "config": "基準_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
+    },
+    "q2b_w2": {
+     "config": "基準_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "TODO",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #3a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/3a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q3a_w1": {
+     "config": "注意を外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q3a_w2": {
+     "config": "注意を外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #3b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/3b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q3b_w1": {
+     "config": "注意を外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q3b_w2": {
+     "config": "注意を外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #4a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/4a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q4a_w1": {
+     "config": "第二段をCに_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
+    },
+    "q4a_w2": {
+     "config": "第二段をCに_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #4b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/4b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q4b_w1": {
+     "config": "第二段をCに_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
+    },
+    "q4b_w2": {
+     "config": "第二段をCに_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "selected_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #5a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/5a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q5a_w1": {
+     "config": "C*を外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q5a_w2": {
+     "config": "C*を外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #5b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/5b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q5b_w1": {
+     "config": "C*を外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q5b_w2": {
+     "config": "C*を外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #6a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/6a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q6a_w1": {
+     "config": "logPを外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q6a_w2": {
+     "config": "logPを外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #6b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/6b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q6b_w1": {
+     "config": "logPを外す_L50",
+     "world": 1,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    },
+    "q6b_w2": {
+     "config": "logPを外す_L50",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #7a",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/7a",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q7a_w1": {
+     "config": "名前の忘却なし",
+     "world": 1,
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
+    },
+    "q7a_w2": {
+     "config": "名前の忘却なし",
+     "world": 2,
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #7b",
+   "family": "新しい版",
+   "root": "~/surface/wave1_view/7b",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q7b_w1": {
+     "config": "名前の忘却なし",
+     "world": 1,
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
+    },
+    "q7b_w2": {
+     "config": "名前の忘却なし",
+     "world": 2,
+     "lambda": "なし（忘却の実行を止める旗）",
+     "effort": "TODO"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave1": "10/09 指示 44：root を第 1 波の写しの見え方（wave1_view.py の選び方）にした。results_hold は 10/10 06:00 に外す"
+  },
+  {
+   "name": "新しい版 #8",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/8",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q8_w1": {
+     "config": "全部入り_L25",
+     "world": 1,
+     "lambda": "L25_ref",
+     "effort": "gate_FH"
+    },
+    "q8_w2": {
+     "config": "全部入り_L25",
+     "world": 2,
+     "lambda": "L25_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 c7921598）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #9",
+   "todo": true,
+   "family": "新しい版",
+   "root": "TODO：走行の列 #9 の「版・旗・出力先」の出力先（build_commands.py の dest）",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q9_w1": {
+     "config": "全部入り_L90",
+     "world": 1,
+     "lambda": "L90_ref",
+     "effort": "gate_FH"
+    },
+    "q9_w2": {
+     "config": "全部入り_L90",
+     "world": 2,
+     "lambda": "L90_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   }
+  },
+  {
+   "name": "新しい版 #10",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/10",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q10_w1": {
+     "config": "D_τ0.4",
+     "world": 1,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "q10_w2": {
+     "config": "D_τ0.4",
+     "world": 2,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #11",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/11",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q11_w1": {
+     "config": "D_τ0.15",
+     "world": 1,
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "q11_w2": {
+     "config": "D_τ0.15",
+     "world": 2,
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #12",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/12",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q12_w1": {
+     "config": "D＋注意_τ0.4",
+     "world": 1,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "q12_w2": {
+     "config": "D＋注意_τ0.4",
+     "world": 2,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #13",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/13",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q13_w1": {
+     "config": "D＋注意_τ0.15",
+     "world": 1,
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
+    },
+    "q13_w2": {
+     "config": "D＋注意_τ0.15",
+     "world": 2,
+     "lambda": "なし（τ0.15）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #14",
+   "todo": true,
+   "family": "新しい版",
+   "root": "TODO：走行の列 #14 の「版・旗・出力先」の出力先（build_commands.py の dest）",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q14_w1": {
+     "config": "誤り駆動",
+     "world": 1,
+     "lambda": "TODO",
+     "effort": "gate_FH"
+    },
+    "q14_w2": {
+     "config": "誤り駆動",
+     "world": 2,
+     "lambda": "TODO",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   }
+  },
+  {
+   "name": "新しい版 #15",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/15",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q15_w2": {
+     "config": "全部入り_L50_例外0.1",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 c7921598）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #16",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/16",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q16_w2": {
+     "config": "全部入り_L50_例外0.3",
+     "world": 2,
+     "lambda": "L50_ref",
+     "effort": "gate_FH"
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 c7921598）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #17",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/17",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q17_w2": {
+     "config": "D＋注意_τ0.4_例外0.1",
+     "world": 2,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  },
+  {
+   "name": "新しい版 #18",
+   "family": "新しい版",
+   "root": "~/surface/wave2_view/18",
+   "replay_dir": "~/surface/replay",
+   "arms": {
+    "q18_w2": {
+     "config": "D＋注意_τ0.4_例外0.3",
+     "world": 2,
+     "lambda": "なし（τ0.4）",
+     "effort": "none",
+     "prob_approx": true
+    }
+   },
+   "prob": {
+    "status": "TODO：新しい版の記録（候補の記録を含む）に P_d(y)・π_d の欄があるか、版が関門を通ったら確かめる。無ければ空欄",
+    "short": "空欄：TODO（理由は meta.json）"
+   },
+   "results_hold": false,
+   "time_log": null,
+   "note_wave2": "10/10 指示 68 の 1・84 の 3：root を第 2 波の写しの見え方（wave2_view.py の選び方、版 daf69efd）にした。results_hold は理解の場の決定 11:06 で外してよい"
+  }
+ ],
+ "m6_reference": {
+  "_説明": "仕組みの表の M6 の参照の欄（m6_ref_calib16_*）。注意の係の較正 16 本（世界 1・2 × 種 41〜48、忘却を実行しない条件）の V の正・0・負の割合を、その集計から写す。世界ごとに分かれていれば 世界ごと の \"1\"・\"2\" に、一つなら 全体 に。出どころにファイル名を書く。",
+  "全体": {
+   "pos": null,
+   "zero": null,
+   "neg": null
+  },
+  "世界ごと": {
+   "1": {
+    "pos": null,
+    "zero": null,
+    "neg": null
+   },
+   "2": {
+    "pos": null,
+    "zero": null,
+    "neg": null
+   }
+  },
+  "出どころ": "",
+  "印": "注意の係の集計待ち"
+ }
+}
