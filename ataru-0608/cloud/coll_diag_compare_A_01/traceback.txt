@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/mnt/coll_gate_gcp/resume_spawn15_A/diag_compare_01/diag.py", line 8, in <module>
+    r = compare.compare(__import__("pathlib").Path(sys.argv[2]), "on1-f0.1")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/results-coll-gate/control/集団化_クラウドの包み_2026-10-09/compare.py", line 164, in compare
+    checks.append(byte_check(key,*values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/results-coll-gate/control/集団化_クラウドの包み_2026-10-09/compare.py", line 27, in byte_check
+    for i,pair in enumerate(itertools.zip_longest(a,b),1):
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/results-coll-gate/control/集団化_クラウドの包み_2026-10-09/compare.py", line 56, in normalized
+    x=read(p);assert 'seconds' in x;x.pop('seconds');yield encode(x);return
+                     ^^^^^^^^^^^^^^
+AssertionError
