@@ -1,0 +1,422 @@
+{
+  "at": "2026-10-10T09:48:50.873509+09:00",
+  "actual_free_bytes": 184406253568,
+  "actual_free_sample_at": "2026-10-10T09:47:24.011568+09:00",
+  "gzip_compressed_actual_bytes": {
+    "1": 444250112,
+    "2": 504252908
+  },
+  "raw500_actual_bytes": {
+    "1": 3873491726,
+    "2": 4441778042
+  },
+  "seconds_per_trial_from_two_original_intervals": {
+    "1": 73.27142218291527,
+    "2": 102.19149772625009
+  },
+  "assumptions": [
+    "Future raw volume follows each seed actual500 volume times (n/500)**p; p=1 or2",
+    "Each seed compression fraction remains its actual500 fraction",
+    "The current500 gzip is already reflected in measured free space",
+    "Each future raw copy plus its gzip coexists before verification/deletion; archive immediately after every confirmed500 without admission delay",
+    "Original native outputs, STATE/RNG/cache, other users outputs, APFS increments, future speed and compression changes are excluded; this is not a safe bound or deadline"
+  ],
+  "scenarios": [
+    {
+      "history_volume_power": 1,
+      "first_transient_below_30GB": null,
+      "first_retained_below_30GB": null,
+      "projected_retained_new_gzip_bytes_to5000": 51219163080.0,
+      "events": [
+        {
+          "JST": "2026-10-10T13:09:36.708646+09:00",
+          "seed": 1,
+          "completed_trials": 1000,
+          "projected_raw_bytes": 7746983452.0,
+          "projected_gzip_bytes": 888500224.0,
+          "remaining_during_raw_plus_gzip": 175770769892.0,
+          "remaining_after_verified_raw_deletion": 183517753344.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-10T19:58:45.750472+09:00",
+          "seed": 2,
+          "completed_trials": 1000,
+          "projected_raw_bytes": 8883556084.0,
+          "projected_gzip_bytes": 1008505816.0,
+          "remaining_during_raw_plus_gzip": 173625691444.0,
+          "remaining_after_verified_raw_deletion": 182509247528.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-10T23:20:12.419737+09:00",
+          "seed": 1,
+          "completed_trials": 1500,
+          "projected_raw_bytes": 11620475178.0,
+          "projected_gzip_bytes": 1332750336.0,
+          "remaining_during_raw_plus_gzip": 169556022014.0,
+          "remaining_after_verified_raw_deletion": 181176497192.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T09:30:48.130829+09:00",
+          "seed": 1,
+          "completed_trials": 2000,
+          "projected_raw_bytes": 15493966904.0,
+          "projected_gzip_bytes": 1777000448.0,
+          "remaining_during_raw_plus_gzip": 163905529840.0,
+          "remaining_after_verified_raw_deletion": 179399496744.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T10:10:21.499335+09:00",
+          "seed": 2,
+          "completed_trials": 1500,
+          "projected_raw_bytes": 13325334126.0,
+          "projected_gzip_bytes": 1512758724.0,
+          "remaining_during_raw_plus_gzip": 164561403894.0,
+          "remaining_after_verified_raw_deletion": 177886738020.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T19:41:23.841920+09:00",
+          "seed": 1,
+          "completed_trials": 2500,
+          "projected_raw_bytes": 19367458630.0,
+          "projected_gzip_bytes": 2221250560.0,
+          "remaining_during_raw_plus_gzip": 156298028830.0,
+          "remaining_after_verified_raw_deletion": 175665487460.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T00:21:57.248198+09:00",
+          "seed": 2,
+          "completed_trials": 2000,
+          "projected_raw_bytes": 17767112168.0,
+          "projected_gzip_bytes": 2017011632.0,
+          "remaining_during_raw_plus_gzip": 155881363660.0,
+          "remaining_after_verified_raw_deletion": 173648475828.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T05:51:59.553012+09:00",
+          "seed": 1,
+          "completed_trials": 3000,
+          "projected_raw_bytes": 23240950356.0,
+          "projected_gzip_bytes": 2665500672.0,
+          "remaining_during_raw_plus_gzip": 147742024800.0,
+          "remaining_after_verified_raw_deletion": 170982975156.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T14:33:32.997061+09:00",
+          "seed": 2,
+          "completed_trials": 2500,
+          "projected_raw_bytes": 22208890210.0,
+          "projected_gzip_bytes": 2521264540.0,
+          "remaining_during_raw_plus_gzip": 146252820406.0,
+          "remaining_after_verified_raw_deletion": 168461710616.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T16:02:35.264103+09:00",
+          "seed": 1,
+          "completed_trials": 3500,
+          "projected_raw_bytes": 27114442082.0,
+          "projected_gzip_bytes": 3109750784.0,
+          "remaining_during_raw_plus_gzip": 138237517750.0,
+          "remaining_after_verified_raw_deletion": 165351959832.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T02:13:10.975195+09:00",
+          "seed": 1,
+          "completed_trials": 4000,
+          "projected_raw_bytes": 30987933808.0,
+          "projected_gzip_bytes": 3554000896.0,
+          "remaining_during_raw_plus_gzip": 130810025128.0,
+          "remaining_after_verified_raw_deletion": 161797958936.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T04:45:08.745924+09:00",
+          "seed": 2,
+          "completed_trials": 3000,
+          "projected_raw_bytes": 26650668252.0,
+          "projected_gzip_bytes": 3025517448.0,
+          "remaining_during_raw_plus_gzip": 132121773236.0,
+          "remaining_after_verified_raw_deletion": 158772441488.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T12:23:46.686286+09:00",
+          "seed": 1,
+          "completed_trials": 4500,
+          "projected_raw_bytes": 34861425534.0,
+          "projected_gzip_bytes": 3998251008.0,
+          "remaining_during_raw_plus_gzip": 119912764946.0,
+          "remaining_after_verified_raw_deletion": 154774190480.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T18:56:44.494787+09:00",
+          "seed": 2,
+          "completed_trials": 3500,
+          "projected_raw_bytes": 31092446294.0,
+          "projected_gzip_bytes": 3529770356.0,
+          "remaining_during_raw_plus_gzip": 120151973830.0,
+          "remaining_after_verified_raw_deletion": 151244420124.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T22:34:22.397377+09:00",
+          "seed": 1,
+          "completed_trials": 5000,
+          "projected_raw_bytes": 38734917260.0,
+          "projected_gzip_bytes": 4442501120.0,
+          "remaining_during_raw_plus_gzip": 108067001744.0,
+          "remaining_after_verified_raw_deletion": 146801919004.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-14T09:08:20.243650+09:00",
+          "seed": 2,
+          "completed_trials": 4000,
+          "projected_raw_bytes": 35534224336.0,
+          "projected_gzip_bytes": 4034023264.0,
+          "remaining_during_raw_plus_gzip": 107233671404.0,
+          "remaining_after_verified_raw_deletion": 142767895740.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-14T23:19:55.992513+09:00",
+          "seed": 2,
+          "completed_trials": 4500,
+          "projected_raw_bytes": 39976002378.0,
+          "projected_gzip_bytes": 4538276172.0,
+          "remaining_during_raw_plus_gzip": 98253617190.0,
+          "remaining_after_verified_raw_deletion": 138229619568.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-15T13:31:31.741376+09:00",
+          "seed": 2,
+          "completed_trials": 5000,
+          "projected_raw_bytes": 44417780420.0,
+          "projected_gzip_bytes": 5042529080.0,
+          "remaining_during_raw_plus_gzip": 88769310068.0,
+          "remaining_after_verified_raw_deletion": 133187090488.0,
+          "projection_only": true
+        }
+      ]
+    },
+    {
+      "history_volume_power": 2,
+      "first_transient_below_30GB": {
+        "JST": "2026-10-12T05:51:59.553012+09:00",
+        "seed": 1,
+        "completed_trials": 3000,
+        "projected_raw_bytes": 139445702136.0,
+        "projected_gzip_bytes": 15993004032.0,
+        "remaining_during_raw_plus_gzip": -9645292980.0,
+        "remaining_after_verified_raw_deletion": 129800409156.0,
+        "projection_only": true
+      },
+      "first_retained_below_30GB": {
+        "JST": "2026-10-13T12:23:46.686286+09:00",
+        "seed": 1,
+        "completed_trials": 4500,
+        "projected_raw_bytes": 313752829806.0,
+        "projected_gzip_bytes": 35984259072.0,
+        "remaining_during_raw_plus_gzip": -300896369766.0,
+        "remaining_after_verified_raw_deletion": 12856460040.0,
+        "projection_only": true
+      },
+      "projected_retained_new_gzip_bytes_to5000": 364225159680.0,
+      "events": [
+        {
+          "JST": "2026-10-10T13:09:36.708646+09:00",
+          "seed": 1,
+          "completed_trials": 1000,
+          "projected_raw_bytes": 15493966904.0,
+          "projected_gzip_bytes": 1777000448.0,
+          "remaining_during_raw_plus_gzip": 167135286216.0,
+          "remaining_after_verified_raw_deletion": 182629253120.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-10T19:58:45.750472+09:00",
+          "seed": 2,
+          "completed_trials": 1000,
+          "projected_raw_bytes": 17767112168.0,
+          "projected_gzip_bytes": 2017011632.0,
+          "remaining_during_raw_plus_gzip": 162845129320.0,
+          "remaining_after_verified_raw_deletion": 180612241488.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-10T23:20:12.419737+09:00",
+          "seed": 1,
+          "completed_trials": 1500,
+          "projected_raw_bytes": 34861425534.0,
+          "projected_gzip_bytes": 3998251008.0,
+          "remaining_during_raw_plus_gzip": 141752564946.0,
+          "remaining_after_verified_raw_deletion": 176613990480.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T09:30:48.130829+09:00",
+          "seed": 1,
+          "completed_trials": 2000,
+          "projected_raw_bytes": 61975867616.0,
+          "projected_gzip_bytes": 7108001792.0,
+          "remaining_during_raw_plus_gzip": 107530121072.0,
+          "remaining_after_verified_raw_deletion": 169505988688.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T10:10:21.499335+09:00",
+          "seed": 2,
+          "completed_trials": 1500,
+          "projected_raw_bytes": 39976002378.0,
+          "projected_gzip_bytes": 4538276172.0,
+          "remaining_during_raw_plus_gzip": 124991710138.0,
+          "remaining_after_verified_raw_deletion": 164967712516.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-11T19:41:23.841920+09:00",
+          "seed": 1,
+          "completed_trials": 2500,
+          "projected_raw_bytes": 96837293150.0,
+          "projected_gzip_bytes": 11106252800.0,
+          "remaining_during_raw_plus_gzip": 57024166566.0,
+          "remaining_after_verified_raw_deletion": 153861459716.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T00:21:57.248198+09:00",
+          "seed": 2,
+          "completed_trials": 2000,
+          "projected_raw_bytes": 71068448672.0,
+          "projected_gzip_bytes": 8068046528.0,
+          "remaining_during_raw_plus_gzip": 74724964516.0,
+          "remaining_after_verified_raw_deletion": 145793413188.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T05:51:59.553012+09:00",
+          "seed": 1,
+          "completed_trials": 3000,
+          "projected_raw_bytes": 139445702136.0,
+          "projected_gzip_bytes": 15993004032.0,
+          "remaining_during_raw_plus_gzip": -9645292980.0,
+          "remaining_after_verified_raw_deletion": 129800409156.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T14:33:32.997061+09:00",
+          "seed": 2,
+          "completed_trials": 2500,
+          "projected_raw_bytes": 111044451050.0,
+          "projected_gzip_bytes": 12606322700.0,
+          "remaining_during_raw_plus_gzip": 6149635406.0,
+          "remaining_after_verified_raw_deletion": 117194086456.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-12T16:02:35.264103+09:00",
+          "seed": 1,
+          "completed_trials": 3500,
+          "projected_raw_bytes": 189801094574.0,
+          "projected_gzip_bytes": 21768255488.0,
+          "remaining_during_raw_plus_gzip": -94375263606.0,
+          "remaining_after_verified_raw_deletion": 95425830968.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T02:13:10.975195+09:00",
+          "seed": 1,
+          "completed_trials": 4000,
+          "projected_raw_bytes": 247903470464.0,
+          "projected_gzip_bytes": 28432007168.0,
+          "remaining_during_raw_plus_gzip": -180909646664.0,
+          "remaining_after_verified_raw_deletion": 66993823800.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T04:45:08.745924+09:00",
+          "seed": 2,
+          "completed_trials": 3000,
+          "projected_raw_bytes": 159904009512.0,
+          "projected_gzip_bytes": 18153104688.0,
+          "remaining_during_raw_plus_gzip": -111063290400.0,
+          "remaining_after_verified_raw_deletion": 48840719112.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T12:23:46.686286+09:00",
+          "seed": 1,
+          "completed_trials": 4500,
+          "projected_raw_bytes": 313752829806.0,
+          "projected_gzip_bytes": 35984259072.0,
+          "remaining_during_raw_plus_gzip": -300896369766.0,
+          "remaining_after_verified_raw_deletion": 12856460040.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T18:56:44.494787+09:00",
+          "seed": 2,
+          "completed_trials": 3500,
+          "projected_raw_bytes": 217647124058.0,
+          "projected_gzip_bytes": 24708392492.0,
+          "remaining_during_raw_plus_gzip": -229499056510.0,
+          "remaining_after_verified_raw_deletion": -11851932452.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-13T22:34:22.397377+09:00",
+          "seed": 1,
+          "completed_trials": 5000,
+          "projected_raw_bytes": 387349172600.0,
+          "projected_gzip_bytes": 44425011200.0,
+          "remaining_during_raw_plus_gzip": -443626116252.0,
+          "remaining_after_verified_raw_deletion": -56276943652.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-14T09:08:20.243650+09:00",
+          "seed": 2,
+          "completed_trials": 4000,
+          "projected_raw_bytes": 284273794688.0,
+          "projected_gzip_bytes": 32272186112.0,
+          "remaining_during_raw_plus_gzip": -372822924452.0,
+          "remaining_after_verified_raw_deletion": -88549129764.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-14T23:19:55.992513+09:00",
+          "seed": 2,
+          "completed_trials": 4500,
+          "projected_raw_bytes": 359784021402.0,
+          "projected_gzip_bytes": 40844485548.0,
+          "remaining_during_raw_plus_gzip": -489177636714.0,
+          "remaining_after_verified_raw_deletion": -129393615312.0,
+          "projection_only": true
+        },
+        {
+          "JST": "2026-10-15T13:31:31.741376+09:00",
+          "seed": 2,
+          "completed_trials": 5000,
+          "projected_raw_bytes": 444177804200.0,
+          "projected_gzip_bytes": 50425290800.0,
+          "remaining_during_raw_plus_gzip": -623996710312.0,
+          "remaining_after_verified_raw_deletion": -179818906112.0,
+          "projection_only": true
+        }
+      ]
+    }
+  ],
+  "model_starts": 0,
+  "actual_future_trials_inferred": false
+}
