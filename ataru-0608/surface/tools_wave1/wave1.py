@@ -30,6 +30,7 @@ from pathlib import Path
 
 V = Path.home() / "surface/wave1_view"
 REPLAY = Path.home() / "surface/replay"
+ACCEPT = json.loads((Path.home() / "surface/replay_accept.json").read_text()) if (Path.home() / "surface/replay_accept.json").exists() else {}
 RNG_SEED = 20261009
 B = 4000
 METRICS = ("selection_error", "absent")
@@ -69,7 +70,9 @@ def capable_from_replay(arm, seed):
     if not rj.exists():
         return None, "再生の記録が無い"
     rep = json.loads(rj.read_text())
-    if rep.get("status") != "ok" or not (d / "sme.candidates.jsonl.gz").exists():
+    # 指示 73 の 1：status が failed でも、replay_accept.py の確かめ（違いが設定の置き場の文字列だけで中身の sha256 が同じ）で採用した本は使う。
+    acc = ACCEPT.get(f"{arm}/seed{seed:03d}", {})
+    if not (rep.get("status") == "ok" or acc.get("adopted")) or not (d / "sme.candidates.jsonl.gz").exists():
         return None, f"再生が ok でない（{rep.get('status')}）"
     cap = {}
     for r in rows_gz(d / "sme.candidates.jsonl.gz"):
@@ -219,7 +222,8 @@ def main():
     meta = dict(made_at=datetime.now().isoformat(timespec="seconds"), rule="受け箱の指示 44、理解の場の決定 1〜6、台帳 75 節",
                 rng_seed=RNG_SEED, rng_note="比べごとに random.Random(f'{RNG_SEED}-{行}-{世界}-{量}') で選び直す",
                 resamples=B, percentiles=[2.5, 97.5], denominators="全課題・全部の日",
-                capable_definition={"2a 以外": "注意の記録の candidates に gate_passed かつ hit の候補がある",
+                replay_adoption="2a の再生は、status が ok の本と、replay_accept.json で採用した本（違いが flag.json の config の置き場の書き方だけ：本番は AWS の /home/ubuntu/wave1/...、再生はデスクトップの /home/tatsu/cloud/wave1/...。設定ファイルの中身の sha256 は各本で同じ）を使う",
+                                capable_definition={"2a 以外": "注意の記録の candidates に gate_passed かつ hit の候補がある",
                                     "2a": "再生（selcands_sme）の候補の記録の correct_gate_passed"},
                 selection="~/surface/wave1_view/selection.tsv（wave1_view.py の選び方）",
                 runs_ok=sum(1 for p in per if p["status"] == "ok"), runs_total=len(per))
