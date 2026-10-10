@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-10T08:57:10.627174+09:00",
+  "raw_ps_sha256": "a0f2922505b8c595235c4d6040df5050e672fab35d1dac5ffec4a6534421fe3e",
+  "original_classifier_count": 9,
+  "original_classifier_models": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "pgid": 517,
+      "state": "R",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "pgid": 558,
+      "state": "R",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 49513,
+      "ppid": 49511,
+      "pgid": 49509,
+      "state": "S",
+      "worker_kind": "spawn"
+    },
+    {
+      "pid": 85059,
+      "ppid": 85055,
+      "pgid": 50924,
+      "state": "S",
+      "worker_kind": "fork"
+    },
+    {
+      "pid": 85060,
+      "ppid": 85059,
+      "pgid": 50924,
+      "state": "R",
+      "worker_kind": "fork"
+    },
+    {
+      "pid": 85391,
+      "ppid": 49513,
+      "pgid": 49509,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 85392,
+      "ppid": 49513,
+      "pgid": 49509,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 85393,
+      "ppid": 49513,
+      "pgid": 49509,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    },
+    {
+      "pid": 85394,
+      "ppid": 49513,
+      "pgid": 49509,
+      "state": "R",
+      "worker_kind": "fork_birth"
+    }
+  ],
+  "actual_worker_pids": [
+    534,
+    564,
+    49513,
+    85060,
+    85391,
+    85392,
+    85393,
+    85394
+  ],
+  "actual_worker_count": 8,
+  "own_actual_worker_pids": [
+    534,
+    564
+  ],
+  "excluded_coordinator_pid": 85059,
+  "actual_B5_agent_pid": 85060,
+  "actual_B5_agent_pid_original_sha256": "7a9e5508328abbce97a1c76f4724e6e2911b875f4337703218ce60d3a13b7853",
+  "counting_rule": "原psとB5の原agent0.pid.jsonを照合。85059はまとめ役、85060が本人。実在する49513の同命令出生fork子85391〜85394を一個体ずつ数え、親/監督/time/tracker/T/Zを稼働個体へ加えない。",
+  "shared_classifier_unchanged": true,
+  "resource_guard_kept_original_classifier_count": true,
+  "comparison_not_started": true
+}
