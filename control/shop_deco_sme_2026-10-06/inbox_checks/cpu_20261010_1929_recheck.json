@@ -1,0 +1,81 @@
+{
+  "time_jst": "2026-10-10T19:31:10.114133+09:00",
+  "model_workers": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "rss_kib": 1492016,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "rss_kib": 1036784,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41835,
+      "ppid": 49513,
+      "rss_kib": 1246656,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41836,
+      "ppid": 49513,
+      "rss_kib": 1140480,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41837,
+      "ppid": 49513,
+      "rss_kib": 1688256,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41838,
+      "ppid": 49513,
+      "rss_kib": 843024,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 49513,
+      "ppid": 49511,
+      "rss_kib": 6896,
+      "state": "S",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 56223,
+      "ppid": 56218,
+      "rss_kib": 147184,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "other_heavy_R": [
+    {
+      "pid": 31925,
+      "ppid": 31919,
+      "rss_kib": 161472,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03/runtime.json"
+    }
+  ],
+  "admission_count": 9,
+  "own": [
+    {
+      "pid": 61154,
+      "ppid": 52419,
+      "rss_kib": 12208,
+      "state": "Ss",
+      "command": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python report_priority25/control/shop_independent_2026-10-07/cpu_guard.py --record inbox_checks/cpu_heartbeat_20261010_1929_recheck.json -- /usr/bin/true"
+    }
+  ],
+  "rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB"
+}

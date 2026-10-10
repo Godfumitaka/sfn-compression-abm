@@ -1,0 +1,400 @@
+{
+  "time_jst": "2026-10-10T19:31:49.469584+09:00",
+  "scheduled_time_jst": "2026-10-10T19:29:27.815+09:00",
+  "deadline_jst": "2026-10-13T09:00:00+09:00",
+  "pulled_commit": "f233efaf971aa7ef4058b25e0cb4a236158fbd7a",
+  "file_sha256": {
+    "control/受け箱/README.md": "af61f3ecd21f049761d412b5f7a90ce91ab1a345a141f1ebdba31b338444cb0c",
+    "control/受け箱/飾りの係.md": "f87c572a93de29379cf235bf403e185358e6c33f89f571c8707a98d87c7ffa65",
+    "control/走行の列_2026-10-08.md": "eb1c361671c3e03829670a49d88236b253676c95d4cd40b407aa969255228cb4"
+  },
+  "changed_files": [
+    "control/走行の列_2026-10-08.md"
+  ],
+  "unreceived": [],
+  "pending_queue_rows": [
+    {
+      "number": "E1",
+      "machine": "デスクトップの手元（WSL）。急がない",
+      "effective_machine": "デスクトップの手元（WSL）。急がない",
+      "version_flags_output_cell": "第 1 波の 1a と同じ版 c79215980a913cc426a63f25048e0dfc6fd1f758・同じ命令（種 1・2 は第 1 波の 1a の種 1・2、種 3〜5 は instruction35 の 1a の命令）から、`--e-price` だけを 0.00035129738499384776 に替える。ほかは全部同じ（--v39-price 0.00035129738499384776、--match-eps 0、--logp-eps 0.01、--trial-count 1740 など）。出力は wave1e_1a_w<世界>_s<種>_c792",
+      "status": "未着手（10/10 10:10、デスクトップ 74）"
+    },
+    {
+      "number": "E2",
+      "machine": "同上",
+      "effective_machine": "デスクトップの手元（WSL）。急がない",
+      "version_flags_output_cell": "第 1 波の 2a と同じ版 c57467eab13ee9ef84277059024ab892756fd2f8・同じ命令から、`--e-price` だけを 0.00035129738499384776 に替える。出力は wave1e_2a_w<世界>_s<種>_c574",
+      "status": "未着手（10/10 10:10、デスクトップ 74）"
+    }
+  ],
+  "eligible_queue_rows": [],
+  "queue_rows": [
+    {
+      "number": "00",
+      "machine": "世界 1 はデスクトップ。世界 2 は種 41〜44 がマック、種 45〜48 がデスクトップ（10/8 11:05 に分け直した、台帳 D-07χ）",
+      "effective_machine": "世界 1 はデスクトップ。世界 2 は種 41〜44 がマック、種 45〜48 がデスクトップ（10/8 11:05 に分け直した、台帳 D-07χ）",
+      "version_flags_output_cell": "準備版 e9ed84a（codex/attn-preparation-2026-10-08）、全部入り＋--no-forget-exec＋--stage2-birth-hu on、出力先は各係の報告",
+      "status": "走行中（10/8、受け箱の直接の指示：注意の係 18・20、デスクトップ 10・12）"
+    },
+    {
+      "number": "0",
+      "machine": "どちらでも",
+      "effective_machine": "どちらでも",
+      "version_flags_output_cell": "",
+      "status": "較正待ち"
+    },
+    {
+      "number": "1a / 1b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "4ceadf63・旗 on（種 3〜20 と 1a・3a・4a の種 1 は、記録の直しを入れた c792159。D-07βχ）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は S3・D:（小さい記録は GitHub）",
+      "status": "1a の種 1 は記録の直しを入れた版（c7921598・旗あり と c57467ea・旗なし）で走行中（クラウド・10/09 07:55 開始、各 2 本、指示 37）。 世界 2・種 2 も c7921598 で走行中（クラウド・10/09 08:54 開始、指示 39）。1a の種 1・2 は e9ed84a でも走行中（クラウド・10/09 05:25 開始、4 本、指示 35。結果と仕組みの表には e9ed84a の本を使う）。 e9ed84a の種 1 の 2 本も止まり（10/09 05:54、研究者の記録を書く所の誤り、指示 36）。種 2 の 2 本は走行中。直した版と Claude の指示を待つ。1a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。 種 1 の 2 本（世界 1・2）は止まり（10/09 04:03、4ceadf63 で試行 5 の途中に個体の過程が落ちる、決まって起きる、2026-10-08_クラウドの開始_走行の係.md）。種 2 の世界 2 も止まり（10/09 04:54、試行 145 の途中、同じ落ち方）。種 2 の世界 1 は走行中。種 3〜10 は Claude の指示を待つ）（種 1・2 から。忘却ありの関門は 10/9 03:29 に合格）、1b は仕組みの表の後"
+    },
+    {
+      "number": "2a / 2b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "e9ed84a・旗なし（種 3〜20 は直しを入れた c57467e。第二段 off は旗の条件の外）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "2a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。種 3〜10 は Claude の指示を待つ）（種 1・2 から）、2b は仕組みの表の後"
+    },
+    {
+      "number": "3a / 3b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "4ceadf63・旗 on（種 3〜20 と 1a・3a・4a の種 1 は、記録の直しを入れた c792159。D-07βχ）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "3a の種 1 は記録の直しを入れた版（c7921598・旗あり と c57467ea・旗なし）で走行中（クラウド・10/09 07:55 開始、各 2 本、指示 37）。 世界 2・種 2 も c7921598 で走行中（クラウド・10/09 08:54 開始、指示 39）。3a の種 1・2 は e9ed84a でも走行中（クラウド・10/09 05:25 開始、4 本、指示 35。結果と仕組みの表には e9ed84a の本を使う）。 e9ed84a の種 1 の 2 本も止まり（10/09 05:54、研究者の記録を書く所の誤り、指示 36）。種 2 の 2 本は走行中。直した版と Claude の指示を待つ。3a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。 種 1 の 2 本（世界 1・2）は止まり（10/09 04:03、4ceadf63 で試行 5 の途中に個体の過程が落ちる、決まって起きる、2026-10-08_クラウドの開始_走行の係.md）。種 2 の世界 2 も止まり（10/09 04:54、試行 145 の途中、同じ落ち方）。種 2 の世界 1 は走行中。種 3〜10 は Claude の指示を待つ）（種 1・2 から。忘却ありの関門は 10/9 03:29 に合格）、3b は仕組みの表の後"
+    },
+    {
+      "number": "4a / 4b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "4ceadf63・旗 on（種 3〜20 と 1a・3a・4a の種 1 は、記録の直しを入れた c792159。D-07βχ）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "4a の種 1 は記録の直しを入れた版（c7921598・旗あり と c57467ea・旗なし）で走行中（クラウド・10/09 07:55 開始、各 2 本、指示 37）。 世界 2・種 2 も c7921598 で走行中（クラウド・10/09 08:54 開始、指示 39）。4a の種 1・2 は e9ed84a でも走行中（クラウド・10/09 05:25 開始、4 本、指示 35。結果と仕組みの表には e9ed84a の本を使う）。 e9ed84a の種 1 の 2 本も止まり（10/09 05:54、研究者の記録を書く所の誤り、指示 36）。種 2 の 2 本は走行中。直した版と Claude の指示を待つ。4a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。 種 1 の 2 本（世界 1・2）は止まり（10/09 04:03、4ceadf63 で試行 5 の途中に個体の過程が落ちる、決まって起きる、2026-10-08_クラウドの開始_走行の係.md）。種 2 の世界 2 も止まり（10/09 04:24、試行 145 の途中、同じ落ち方）。種 2 の世界 1 は走行中。種 3〜10 は Claude の指示を待つ）（種 1・2 から。忘却ありの関門は 10/9 03:29 に合格）、4b は仕組みの表の後"
+    },
+    {
+      "number": "5a / 5b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "e9ed84a・旗なし（種 3〜20 は直しを入れた c57467e。C* off は旗の条件の外）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "5a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。種 3〜10 は Claude の指示を待つ）（種 1・2 から）、5b は仕組みの表の後"
+    },
+    {
+      "number": "6a / 6b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "4ceadf63・旗 on（種 3〜20 と 1a・3a・4a の種 1 は、記録の直しを入れた c792159。D-07βχ）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "6a の種 1・2 は e9ed84a でも走行中（クラウド・10/09 05:25 開始、4 本、指示 35。結果と仕組みの表には e9ed84a の本を使う）。6a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。種 3〜10 は Claude の指示を待つ）（種 1・2 から。忘却ありの関門は 10/9 03:29 に合格）、6b は仕組みの表の後"
+    },
+    {
+      "number": "7a / 7b",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "4ceadf63・旗 on（較正の命令で全長の関門に合格、D-07βζ）、L50_ref＝0.00035129738499384776（--v39-price）、--e-price 0.01873710622997919（D-01e）、出力は同上",
+      "status": "7a は走行中（クラウド i-0edf5697853141268・10/09 03:57 開始、種 1・2 の 4 本。種 3〜10 は Claude の指示を待つ）（種 1・2 から）、7b は仕組みの表の後"
+    },
+    {
+      "number": "E1",
+      "machine": "デスクトップの手元（WSL）。急がない",
+      "effective_machine": "デスクトップの手元（WSL）。急がない",
+      "version_flags_output_cell": "第 1 波の 1a と同じ版 c79215980a913cc426a63f25048e0dfc6fd1f758・同じ命令（種 1・2 は第 1 波の 1a の種 1・2、種 3〜5 は instruction35 の 1a の命令）から、`--e-price` だけを 0.00035129738499384776 に替える。ほかは全部同じ（--v39-price 0.00035129738499384776、--match-eps 0、--logp-eps 0.01、--trial-count 1740 など）。出力は wave1e_1a_w<世界>_s<種>_c792",
+      "status": "未着手（10/10 10:10、デスクトップ 74）"
+    },
+    {
+      "number": "E2",
+      "machine": "同上",
+      "effective_machine": "デスクトップの手元（WSL）。急がない",
+      "version_flags_output_cell": "第 1 波の 2a と同じ版 c57467eab13ee9ef84277059024ab892756fd2f8・同じ命令から、`--e-price` だけを 0.00035129738499384776 に替える。出力は wave1e_2a_w<世界>_s<種>_c574",
+      "status": "未着手（10/10 10:10、デスクトップ 74）"
+    },
+    {
+      "number": "8",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "版 c79215980a913cc426a63f25048e0dfc6fd1f758（旗あり、1a と同じ命令）。1a の命令の --v39-price だけを L25_ref＝0.00010926774617357411 に（--e-price 0.01873710622997919 のまま）。出力はクラウドの第 1 波と同じ形",
+      "status": "走行中（クラウド・10/09 21:29 から芯と記憶が空いた機械に順に、c7921598、世界 1・2 の種 1〜10 の 20 本と、旗なし（c57467ea）の世界 1・種 1 の写し、指示 55）"
+    },
+    {
+      "number": "9",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "版 c79215980a913cc426a63f25048e0dfc6fd1f758（旗あり、1a と同じ命令）。1a の命令の --v39-price だけを L90_ref＝0.00699330963316462 に（--e-price 0.01873710622997919 のまま）。出力は同上",
+      "status": "走行中（クラウド・10/09 21:29 から芯と記憶が空いた機械に順に、c7921598、世界 1・2 の種 1〜10 の 20 本、指示 55）"
+    },
+    {
+      "number": "10",
+      "machine": "Google Cloud（足りなければデスクトップの手元、AWS）",
+      "effective_machine": "Google Cloud（足りなければデスクトップの手元、AWS）",
+      "version_flags_output_cell": "版 daf69efd196db28b29f1e564ebf6dc57c6c39f60（枝 codex/retention-d-attn-instruction9-2026-10-09、c7921598 に D の q と D＋注意の旗を足した版。介入の係の関門に合格、指示 57）。1a の同じ世界・種の命令から、第二段を外す（--stage2 off --stage2-birth-hu off --stage2-speed off --stage2-cache-prune off）、--use-forget 0.4 --use-forget-q を足す。ほかは 1a のまま（--v39-price 0.00035129738499384776、--e-price 0.01873710622997919、--match-eps 0、--logp-eps 0.01、--trial-count 1740、--horizon 1740）。出力は wave2_10_w<世界>_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57）"
+    },
+    {
+      "number": "11",
+      "machine": "Google Cloud（同上）",
+      "effective_machine": "Google Cloud（同上）",
+      "version_flags_output_cell": "版 daf69efd196db28b29f1e564ebf6dc57c6c39f60（枝 codex/retention-d-attn-instruction9-2026-10-09、c7921598 に D の q と D＋注意の旗を足した版。介入の係の関門に合格、指示 57）。1a の同じ世界・種の命令から、第二段を外す（--stage2 off --stage2-birth-hu off --stage2-speed off --stage2-cache-prune off）、--use-forget 0.15 --use-forget-q を足す。ほかは #10 と同じ。出力は wave2_11_w<世界>_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57）"
+    },
+    {
+      "number": "12",
+      "machine": "Google Cloud（同上）",
+      "effective_machine": "Google Cloud（同上）",
+      "version_flags_output_cell": "版 daf69efd196db28b29f1e564ebf6dc57c6c39f60（枝 codex/retention-d-attn-instruction9-2026-10-09、c7921598 に D の q と D＋注意の旗を足した版。介入の係の関門に合格、指示 57）。1a の同じ世界・種の命令から、第二段を外す（--stage2 off --stage2-birth-hu off --stage2-speed off --stage2-cache-prune off）、--use-forget 0.4 --use-forget-q --use-forget-attn を足す。ほかは #10 と同じ。出力は wave2_12_w<世界>_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57。この行から取る）"
+    },
+    {
+      "number": "13",
+      "machine": "Google Cloud（同上）",
+      "effective_machine": "Google Cloud（同上）",
+      "version_flags_output_cell": "版 daf69efd196db28b29f1e564ebf6dc57c6c39f60（枝 codex/retention-d-attn-instruction9-2026-10-09、c7921598 に D の q と D＋注意の旗を足した版。介入の係の関門に合格、指示 57）。1a の同じ世界・種の命令から、第二段を外す（--stage2 off --stage2-birth-hu off --stage2-speed off --stage2-cache-prune off）、--use-forget 0.15 --use-forget-q --use-forget-attn を足す。ほかは #10 と同じ。出力は wave2_13_w<世界>_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57）"
+    },
+    {
+      "number": "14",
+      "machine": "どちらでも",
+      "effective_machine": "どちらでも",
+      "version_flags_output_cell": "",
+      "status": "実装待ち（仕様は 10/7 に確定、D-07g・D-07j）"
+    },
+    {
+      "number": "14b",
+      "machine": "どちらでも",
+      "effective_machine": "どちらでも",
+      "version_flags_output_cell": "",
+      "status": "#14 の後に判定"
+    },
+    {
+      "number": "15",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "版 c79215980a913cc426a63f25048e0dfc6fd1f758（旗あり、1a と同じ命令）。1a の世界 2 の命令に --shop-exc 0.1 を足す（既定 0.2）。λ は L50_ref。出力は同上",
+      "status": "走行中（クラウド・10/09 21:29 から芯と記憶が空いた機械に順に、c7921598、世界 2 の種 1〜10 の 10 本と、旗なし（c57467ea）の種 1 の写し、指示 55）"
+    },
+    {
+      "number": "16",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "版 c79215980a913cc426a63f25048e0dfc6fd1f758（旗あり、1a と同じ命令）。1a の世界 2 の命令に --shop-exc 0.3 を足す（既定 0.2）。λ は L50_ref。出力は同上",
+      "status": "走行中（クラウド・10/09 21:29 から芯と記憶が空いた機械に順に、c7921598、世界 2 の種 1〜10 の 10 本、指示 55）"
+    },
+    {
+      "number": "17",
+      "machine": "Google Cloud（同上）",
+      "effective_machine": "Google Cloud（同上）",
+      "version_flags_output_cell": "#12 の世界 2 の命令に --shop-exc 0.1 を足す（既定 0.2）。出力は wave2_17_w2_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57）"
+    },
+    {
+      "number": "18",
+      "machine": "Google Cloud（同上）",
+      "effective_machine": "Google Cloud（同上）",
+      "version_flags_output_cell": "#12 の世界 2 の命令に --shop-exc 0.3 を足す（既定 0.2）。出力は wave2_18_w2_s<種>_cdaf",
+      "status": "走行中（Google Cloud の c3d-standard-8・4、10/09 23:34 から順に、daf69efd、指示 57）。前の欄：未着手（指示 57）"
+    },
+    {
+      "number": "19",
+      "machine": "マック（10/9 に替えた。デスクトップはお店の第 1 波へ）",
+      "effective_machine": "マック（10/9 に替えた。デスクトップはお店の第 1 波へ）",
+      "version_flags_output_cell": "版9c9dd0e650f765ccdadca6029e81da4efc3cc619。指示23の1・2をこのチャットでアストラが直接承認。指示18の全命令から--score-logp-eだけ外す、他の全旗・E/B・観察を保持。全旗は control/動詞_クラウドの包み_2026-10-09/instruction23/19_seed001_score_e_off/spec.json・19_seed002_score_e_off/spec.json。新出力 newport_2026-10-07/instruction23_production/19_seed001_score_e_off/output・19_seed002_score_e_off/output。受付見込みは原実群最大RSSから種1 7GB・種2 2GB。 **10/10 16:36 追記（案 2、アストラ「案2かなぁ」、D-07επ）**：比べの窓は全種で**試行 1〜1000**（#19 と 22c の比べの結果を見る前に、速さだけから決めた）。種 1・2（Google Cloud の速い版）は止めずに全長の設定のまま続け、1000 を越えた分は探索として読む。種 3〜10 は、同じ旗・horizon 5000 のまま、**試行 1,000 で自然に終わる形**（関門の先頭 100 と同じ仕組みを 1,000 に広げる。動詞 34）で、d・d2・d3 に一台に一本ずつ（デスクトップ 82）。",
+      "status": "種1・2：走行中（22:07:53に直接承認で両群SIGSTOP、容量回復後22:20:31に種1群517をSIGCONT、出生N4の原終了と資源条件を確認後22:55:21.535907に種2の同じ群558もSIGCONT。同じ版・旗・観察・出力・PIDと7/2GBを保持。22:55の再開前は実模型1・未知0、CPU上限8、受付9/24GB、空き197692252160B・swap10分増加なし・熱警告なし。全5000と新しい旗on主本番は未完了。実施前の開始記録：Mac・指示23の再取得を通常push d6e07a3f7e65a3928f83840b148e15d3fcdf69a5／確認cd4faf48f1cd0f4cfbd491d4796c16553663a8ac後、種1は21:12:06.984006・種2は21:12:07.219205 JSTに実開始。受付99519/99520、監督495/520、群517/558）。旧17:22の二本は直接承認により停止、停止前確定台帳283/258、原出力保持。種3〜10は未取得、ClaudeのM1判断と正式指定待ち。 **10/10 00:03 追記（動詞 28・デスクトップ 59）**：本番の数は、クラウドの速い版の種 1〜10 で取る。種 1・2 は関門の組の後すぐ、種 3〜10 は M1 の後。マックの遅い種 1・2 は旗なしの手本として残す。**10/09 23:53 追記（動詞 27）**：種 3〜10 は、版 6e4bcba・V1 の写しの旗と出生の並列 4 を on（関門に合格、D-07δζ）で、クラウドで走らせる（包みは動詞の係が準備、Claude が M1 を確かめてから書く）。種 1 の旗つきの並べる一本をマックで（CPU 6 枠が空きしだい）。 **10/10 05:52 M1 確認（Claude、D-07βο）**：#19 の種 1・2 の M1（試行 200〜500 で定義 1 個以下の試行の割合）は、種 1・種 2 とも 0（301 試行中 0、止める基準に当たらない。動詞の係の報告 ed1289d2・145e9916）。**種 3〜10 を始めてよい**。クラウドの速い版（6e4bcba、V1 の旗 on、出生の並列 4）で。包みの決まり（関門と同じ機械、8 模型）の中で、Google Cloud の枠が許す数から、種の小さい順に。"
+    },
+    {
+      "number": "19p",
+      "machine": "Mac",
+      "effective_machine": "Mac",
+      "version_flags_output_cell": "版6e4bcba94874a4f49c5a1bae11d385534504e2e5。指示23の種1原全旗＋--verb-snap-append-only on＋--stage2-birth-workers 4のみ。E0.01873710622997919/B0.00035129738499384776/match-eps0/score-logp-eなし・速度二旗なし、26の固定SHA観察器（records複製なし）。全argvはcontrol/動詞_クラウドの包み_2026-10-09/instruction27/mac/spec.json。出力newport_2026-10-07/instruction27_production/19_seed001_flags_on/output。初回jobs10GiB/CPU6枠/実模型5枠、全資源条件を守り取得通常push後に開始。",
+      "status": "走行中（マック・SMEの係・列取得2026-10-10T04:03:06.024189+09:00、CPU6枠・実模型5枠・10GiB。通常push後に受付。開始控えcodex_cstar_pending_2026-10-06/queue19p_20261010/19_seed001_flags_on）"
+    },
+    {
+      "number": "19L25",
+      "machine": "クラウド（Google Cloud を先に）",
+      "effective_machine": "クラウド（Google Cloud を先に）",
+      "version_flags_output_cell": "版 6e4bcba94874a4f49c5a1bae11d385534504e2e5・V1 の写しの旗と出生の並列 4 を on（関門に合格、D-07δζ）、ほかは #19 の今の命令と同じ、λ だけ替える。包みは動詞の係が準備（動詞 27 の 4）",
+      "status": "包みの準備中（動詞 27・28）。クラウドの関門の組（off・子 4・子 20）が通ったら始める（デスクトップ 59。10/10 00:03 に Claude が決めた。アストラの答えは「どちらでもない」）"
+    },
+    {
+      "number": "19L90",
+      "machine": "クラウド（Google Cloud を先に）",
+      "effective_machine": "クラウド（Google Cloud を先に）",
+      "version_flags_output_cell": "同上",
+      "status": "同上"
+    },
+    {
+      "number": "19c",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "",
+      "status": "移植の関門待ち"
+    },
+    {
+      "number": "20",
+      "machine": "**クラウド**（一本約 25GB）",
+      "effective_machine": "**クラウド**（一本約 25GB）",
+      "version_flags_output_cell": "",
+      "status": "移植の関門待ち"
+    },
+    {
+      "number": "20h",
+      "machine": "クラウド",
+      "effective_machine": "クラウド",
+      "version_flags_output_cell": "介入の係が集団化の版へ D・D＋注意を移して関門を通した後に、Claude が書く（介入 12 の B）",
+      "status": "移植待ち"
+    },
+    {
+      "number": "21",
+      "machine": "マック（10/9 に替えた）",
+      "effective_machine": "マック（10/9 に替えた）",
+      "version_flags_output_cell": "**10/9 23:30 に差し替え：介入の係が 6e4bcba の上へ移す D・D＋注意の版で走らせる（介入 12 の A）。下の旧い指定は使わない。** 旧：版 9c9dd0e650f765ccdadca6029e81da4efc3cc619（指示 15 で関門を通した動詞の記録の直しの版、旗なし）。旗は instruction11/command_drafts のとおり、ただし --match-eps 0（D-07γζ）、--v39-price 0.00035129738499384776（お店の L50_ref）、#19 は --stage2-speed・--stage2-cache-prune を外す（動詞では旗の関門が済んでいない）。出力はマックの動詞の係の本番の置き場（報告に書く）",
+      "status": "種1・2：保留：アストラの承認待ち（2026-10-09T17:20:46+09:00、指定版9c9dd0eに--stage2-speed off・--stage2-cache-prune off・--use-forget-attnが未実装。指示18の二点以外を変更して始めない） **10/10 03:51 追記**：版 94dbebc259981eec86efab1864f61df86ec68dd3（介入の係が関門に合格、指示 13。旗 off で 6e4bcba と全バイト一致、試験の前後不変）。本番 argv は介入の係の報告 bcc5860a（production_A_argv_01.json）。置き場はクラウド（x86、#19 の速い版・#22 と同じ）、包みは動詞の係（動詞 30）。種 1・2 は包みができしだい、種 3〜10 は M1 の後。 **10/10 04:53 正式指定（Claude）**：クラウド（Google Cloud の x86）で**種 1・2 をパイロットとして始めてよい**。版 94dbebc259981eec86efab1864f61df86ec68dd3、全 argv は control/動詞_クラウドの包み_2026-10-09/instruction27/instruction30_full_argv.json の τ 0.4 の種 1・2（介入の係の production_A_argv_01.json と同じ旗の順と値）、出力は同じ包みの plan.json の case 名（OUTPUT_ROOT はデスクトップの出力根）。種 3〜10 は種 1・2 の M1 を Claude が確かめて書いてから。 **10/10 05:52 M1 確認（Claude、D-07βο）**：#19 の種 1・2 の M1（試行 200〜500 で定義 1 個以下の試行の割合）は、種 1・種 2 とも 0（301 試行中 0、止める基準に当たらない。動詞の係の報告 ed1289d2・145e9916）。**種 3〜10 を始めてよい**。包み instruction30_full_argv.json の τ 0.4 の種 3〜10。 | 種 1（21_seed001）は Google Cloud（sfn-verb-d）で走行中（10/10 11:26）。 種 2（21_seed002）は Google Cloud（sfn-verb-d）で走行中（10/10 11:37）。 種 1（21_seed001）は Google Cloud（sfn-verb-d）で走行中（10/10 12:54）。 種 3（21_seed003）は Google Cloud（sfn-verb-d）で走行中（10/10 13:44）。 種 9（21_seed009）は Google Cloud（sfn-verb-d3）で走行中（10/10 14:04）。 種 4（21_seed004）は Google Cloud（sfn-verb-d2）で走行中（10/10 14:04）。 種 10（21_seed010）は Google Cloud（sfn-verb-d3）で走行中（10/10 14:13）。 種 5（21_seed005）は Google Cloud（sfn-verb-d2）で走行中（10/10 14:13）。 種 6（21_seed006）は Google Cloud（sfn-verb-d2）で走行中（10/10 14:23）。 種 7（21_seed007）は Google Cloud（sfn-verb-d2）で走行中（10/10 14:33）。 種 8（21_seed008）は Google Cloud（sfn-verb-d2）で走行中（10/10 14:42）。"
+    },
+    {
+      "number": "21b",
+      "machine": "マック又はクラウド",
+      "effective_machine": "マック又はクラウド",
+      "version_flags_output_cell": "#21 と同じ版 94dbebc・同じ argv で、--use-forget 0.15（介入の係の報告 bcc5860a）。置き場・包みは #21 と同じ（動詞 30）",
+      "status": "包みの準備中（10/10 03:51）。種 1・2 は包みができしだい、種 3〜10 は M1 の後 **10/10 04:53 正式指定（Claude）**：クラウド（Google Cloud の x86）で**種 1・2 をパイロットとして始めてよい**。版 94dbebc259981eec86efab1864f61df86ec68dd3、全 argv は control/動詞_クラウドの包み_2026-10-09/instruction27/instruction30_full_argv.json の τ 0.15 の種 1・2（介入の係の production_A_argv_01.json と同じ旗の順と値）、出力は同じ包みの plan.json の case 名（OUTPUT_ROOT はデスクトップの出力根）。種 3〜10 は種 1・2 の M1 を Claude が確かめて書いてから。 **10/10 05:52 M1 確認（Claude、D-07βο）**：#19 の種 1・2 の M1（試行 200〜500 で定義 1 個以下の試行の割合）は、種 1・種 2 とも 0（301 試行中 0、止める基準に当たらない。動詞の係の報告 ed1289d2・145e9916）。**種 3〜10 を始めてよい**。包み instruction30_full_argv.json の τ 0.15 の種 3〜10。 | 種 1（21b_seed001）は Google Cloud（sfn-verb-d）で走行中（10/10 11:54）。 種 2（21b_seed002）は Google Cloud（sfn-verb-d）で走行中（10/10 12:21）。 種 3（21b_seed003）は Google Cloud（sfn-verb-d3）で走行中（10/10 14:23）。 種 4（21b_seed004）は Google Cloud（sfn-verb-d3）で走行中（10/10 14:33）。 種 5（21b_seed005）は Google Cloud（sfn-verb-d3）で走行中（10/10 14:42）。 種 6（21b_seed006）は Google Cloud（sfn-verb-d）で走行中（10/10 14:54）。 種 7（21b_seed007）は Google Cloud（sfn-verb-d3）で走行中（10/10 17:24）。 種 8（21b_seed008）は Google Cloud（sfn-verb-d3）で走行中（10/10 17:34）。 種 9（21b_seed009）は Google Cloud（sfn-verb-d3）で走行中（10/10 17:55）。 種 10（21b_seed010）は Google Cloud（sfn-verb-d3）で走行中（10/10 18:54）。"
+    },
+    {
+      "number": "22",
+      "machine": "マック（10/9 に替えた）",
+      "effective_machine": "マック（10/9 に替えた）",
+      "version_flags_output_cell": "版9c9dd0e650f765ccdadca6029e81da4efc3cc619。指示26の2で専用観察器のrecords複製をSHA/行数へ替え、非模型15検査合格。指示20の元全旗＋logp-eps0.01、全命令control/動詞_クラウドの包み_2026-10-09/instruction26/production/22_seed001_retry26/spec.json・22_seed002_retry26/spec.json。新出力newport_2026-10-07/instruction26_production/22_seed001_retry26/output・22_seed002_retry26/output。各jobs2GB、C*/第二段/出生HUoff・速度旗なし。",
+      "status": "種1・2：済み（原終了0・全5000。種1 2026-10-10T02:18:12.729150+09:00／種2 02:16:12.900142+09:00、実source9c9dd0e・全旗/観察/出力不変、原done・manifest5000・100時間50行・48問×50の2400回答/fingerprint50を確認。報告control/2026-10-07_動詞の世界_新しい版の移植_Codex.md。λは動詞較正まで仮。種3〜10はClaudeのM1判断と正式指定待ち）。開始時の記録：種1・2：走行中（Mac・列取得2026-10-09T23:40:18.916705+09:00、取得の通常push8555df3d成功後、種1は23:41:10.726504・種2は23:41:11.265233 JSTに実開始。受付18805/18826、監督18810/18830、群18821/18841、各2GB・表13/24GB、開始前模型2/3・未知0、CPU8枠・swap10分増加なし・熱警告なし・空き約197GB。全5000原結果未生成。指示26の正式決定で旧手当て待ちを解除、二本の新出力だけ）。旧記録：種1・2：止まり（2026-10-09T21:19:22 JST、両方終了3、原manifest OSError(28, No space left on device)、指示20retryのmanifest/log/100原時間と全checkpoint状態/RNG/cache/確定印を独立保存・SHA一致。22:13に直接承認で二本だけの106大容量記録を削除し約197GB回復。原失敗は保持、手当て決定まで再走行禁止、最後の確定100時間3400。全5000未完了、再投入無し）。旧指示19の二本の501行・終了3も保持。種3〜10は未取得・Claudeの#19 M1確認と正式指定待ち。"
+    },
+    {
+      "number": "22c",
+      "machine": "Google Cloud",
+      "effective_machine": "Google Cloud",
+      "version_flags_output_cell": "全 argv は control/動詞_クラウドの包み_2026-10-09/instruction27/ の #22 の命令（動詞 29）、出力は同じ包みの plan.json の case 名（OUTPUT_ROOT はデスクトップの出力根）",
+      "status": "**10/10 04:53 正式指定（Claude）**：種 1・2 をパイロットとして始めてよい。種 3〜10 は M1 の後 **10/10 05:52 M1 確認（Claude、D-07βο）**：#19 の種 1・2 の M1（試行 200〜500 で定義 1 個以下の試行の割合）は、種 1・種 2 とも 0（301 試行中 0、止める基準に当たらない。動詞の係の報告 ed1289d2・145e9916）。**種 3〜10 を始めてよい**。包み instruction27 の #22 の種 3〜10。 | 種 1（22_seed001_birth0）は Google Cloud（sfn-verb-gate）で走行中（10/10 13:24）。 種 2（22_seed002_birth0）は Google Cloud（sfn-verb-gate2）で走行中（10/10 13:34）。 種 3（22_seed003_birth0）は Google Cloud（sfn-verb-gate）で走行中（10/10 15:43）。 種 4（22_seed004_birth0）は Google Cloud（sfn-verb-gate2）で走行中（10/10 15:53）。 種 6（22_seed006_birth0）は Google Cloud（sfn-verb-gate2）で走行中（10/10 17:42）。 種 5（22_seed005_birth0）は Google Cloud（sfn-verb-gate）で走行中（10/10 18:01）。"
+    },
+    {
+      "number": "23",
+      "machine": "どちらでも",
+      "effective_machine": "どちらでも",
+      "version_flags_output_cell": "",
+      "status": "較正待ち"
+    },
+    {
+      "number": "24",
+      "machine": "どちらでも",
+      "effective_machine": "どちらでも",
+      "version_flags_output_cell": "",
+      "status": "38 番の関門待ち"
+    }
+  ],
+  "model_workers": [
+    {
+      "pid": 534,
+      "ppid": 519,
+      "rss_kib": 1514592,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 564,
+      "ppid": 562,
+      "rss_kib": 975104,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41835,
+      "ppid": 49513,
+      "rss_kib": 1149168,
+      "state": "U",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41836,
+      "ppid": 49513,
+      "rss_kib": 1183040,
+      "state": "U",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41837,
+      "ppid": 49513,
+      "rss_kib": 1732400,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 41838,
+      "ppid": 49513,
+      "rss_kib": 1147616,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 49513,
+      "ppid": 49511,
+      "rss_kib": 6896,
+      "state": "S",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    },
+    {
+      "pid": 56223,
+      "ppid": 56218,
+      "rss_kib": 118208,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=9, pipe_handle=17) --multiprocessing-fork"
+    }
+  ],
+  "model_worker_count": 8,
+  "other_heavy_R": [
+    {
+      "pid": 31925,
+      "ppid": 31919,
+      "rss_kib": 163280,
+      "state": "R",
+      "command": "/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/observe.py /Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/B6_off_on200_candidate03/runtime.json"
+    }
+  ],
+  "admission_count": 9,
+  "count_rule": "exclude T, jobs.py and resource_tracker; count non-T spawn_main plus other Python R with RSS>=100MiB",
+  "own_processes": [],
+  "own_registry": [],
+  "controller_64386_alive": false,
+  "preview_status": "stopped",
+  "preview_native_raw_completed": 1,
+  "preview_supervisor_completed": 0,
+  "preview_analyses_completed": 0,
+  "manifest_sha256": "641ef1c04b2e88a69d3a768719bcda46fd407e22c79dd390c5b71316386025f4",
+  "seed001_done_sha256": "574c22b39ade22ce9dcc61b78ea574ccdb1a14514f057c64e76f823452efc9ba",
+  "reference_fingerprint_unchanged": true,
+  "inbox_instruction_1": "done",
+  "inbox_instruction_2": "frozen reference and partial static/record checks preserved; actual independent comparisons and dynamic name-ID checks still pending",
+  "inbox_instruction_3": "done; no report commit/push for unchanged own work or inbox",
+  "inbox_instruction_4": "done, superseded by instruction5",
+  "inbox_instruction_5": "done; deadline extension previously verified",
+  "queue_19p": "走行中（マック・SMEの係・列取得2026-10-10T04:03:06.024189+09:00、CPU6枠・実模型5枠・10GiB。通常push後に受付。開始控えcodex_cstar_pending_2026-10-06/queue19p_20261010/19_seed001_flags_on）",
+  "queue_22": "種1・2：済み（原終了0・全5000。種1 2026-10-10T02:18:12.729150+09:00／種2 02:16:12.900142+09:00、実source9c9dd0e・全旗/観察/出力不変、原done・manifest5000・100時間50行・48問×50の2400回答/fingerprint50を確認。報告control/2026-10-07_動詞の世界_新しい版の移植_Codex.md。λは動詞較正まで仮。種3〜10はClaudeのM1判断と正式指定待ち）。開始時の記録：種1・2：走行中（Mac・列取得2026-10-09T23:40:18.916705+09:00、取得の通常push8555df3d成功後、種1は23:41:10.726504・種2は23:41:11.265233 JSTに実開始。受付18805/18826、監督18810/18830、群18821/18841、各2GB・表13/24GB、開始前模型2/3・未知0、CPU8枠・swap10分増加なし・熱警告なし・空き約197GB。全5000原結果未生成。指示26の正式決定で旧手当て待ちを解除、二本の新出力だけ）。旧記録：種1・2：止まり（2026-10-09T21:19:22 JST、両方終了3、原manifest OSError(28, No space left on device)、指示20retryのmanifest/log/100原時間と全checkpoint状態/RNG/cache/確定印を独立保存・SHA一致。22:13に直接承認で二本だけの106大容量記録を削除し約197GB回復。原失敗は保持、手当て決定まで再走行禁止、最後の確定100時間3400。全5000未完了、再投入無し）。旧指示19の二本の501行・終了3も保持。種3〜10は未取得・Claudeの#19 M1確認と正式指定待ち。",
+  "new_seed_1_2_delivery_runs": [],
+  "raw_input_paths_added_to_git": [],
+  "s3_read_only_retry": "session expired; aws login not performed; previous confirmation unanswered",
+  "own_progress_changed": false,
+  "repository_report_written": true,
+  "idle_role": true,
+  "other_heavy_R_classification": [
+    {
+      "pid": 31925,
+      "source": "/Users/tatsu-admin/Documents/ChatGPT/New project/codex_intervention_port_2026-10-07/instruction21/B6_gate_03/observe.py",
+      "source_sha256": "0f974470d9510ba0d4dc8de1702c6ca39f239335ff9facab46b40f248da163af",
+      "classification": "Invokes v3_run.main and real_run/real_worker; active computation, not a passive supervisor. Source read as resource-count evidence only; no import or execution."
+    }
+  ],
+  "cpu_gate": {
+    "scope": "admission of new own heavy computations",
+    "status": "no capacity",
+    "first_time_jst": "2026-10-10T19:29:52.576138+09:00",
+    "recheck_time_jst": "2026-10-10T19:31:10.114133+09:00",
+    "model_worker_count": 8,
+    "other_computation_count": 1,
+    "admission_count": 9,
+    "limit": 8,
+    "new_own_admission_attempted": false,
+    "existing_processes_stopped": false
+  },
+  "idle_time_jst": "2026-10-10T19:31:49.469584+09:00"
+}
